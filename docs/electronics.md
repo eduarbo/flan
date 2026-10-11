@@ -2,7 +2,7 @@
 
 Both revI boards are now routed. KiCad 10.0.6 reports **0 DRC violations, 0 unconnected items, 0 schematic parity issues and 0 ERC violations** on each serialized board and schematic. All 247 physical pads per half were checked, including duplicate pad numbers in the hot-swap footprints.
 
-These are prototype candidates. Exact connectors, supplied cell fit, printed retention, radio performance and electrical operation remain untested. Use the [parts guide](parts.md), [assembly sequence](build.md) and [firmware](firmware.md) together.
+These are prototype candidates for Eduardo Ruiz's original FLAN36 design. The [parts guide](parts.md) now selects the supplied nice!view connector and exact controller sockets/pins. Supplied-part fit, printed retention, radio performance and electrical operation remain physically untested. Use the [assembly sequence](build.md) and [firmware](firmware.md) together.
 
 | Half | Editable project | Prototype Gerbers and drills |
 |---|---|---|
@@ -10,6 +10,14 @@ These are prototype candidates. Exact connectors, supplied cell fit, printed ret
 | Right | [KiCad project](../hardware/revI/flan36-right.kicad_pro) | [Right ZIP](../hardware/revI/fabrication/flan36-right-revI-prototype.zip) |
 
 Download the repository to retain the relative libraries and 3D models. In KiCad, open the project, then PCB Editor; use **Alt+3** for the assembly view. The [FreeCAD workflow](freecad.md) remains the editable mechanical source.
+
+## Order the two PCBs
+
+Download the **[left Gerber/drill ZIP](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/flan36-left-revI-prototype.zip)** and **[right Gerber/drill ZIP](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/flan36-right-revI-prototype.zip)**. Open **[JLCPCB's PCB quotation page](https://cart.jlcpcb.com/quote)** and upload them as **two separate jobs in the same cart**. One keyboard needs one left and one right board; the usual minimum is five boards per job, so confirm the quantity shown by the current quote.
+
+Select **2 layers, FR4, 1.6 mm thickness, 1 oz copper and lead-free HASL**, with **no assembly and no stencil**. Both outlines measure **113.45 × 91.272757 mm**; let the Gerber importer detect them and inspect both outer contours and internal cutouts. The files already contain the separate plated and non-plated drill programs. No manual redraw or Piantor PCB substitution is needed. Shipping and the final price depend on the live quote and destination; no fabrication order or price is implied here.
+
+The public ZIPs were downloaded and matched against the local packages and their manifests during the 2026-10-10 purchasing review. Their CRCs, layer/drill file hashes and source PCB/schematic/project hashes matched. The connector-height correction changes the printed assembly, not these routed PCBs.
 
 ![Left PCB — actual copper and contour](images/revI-routed-left.svg)
 ![Right PCB — actual copper and contour](images/revI-routed-right.svg)

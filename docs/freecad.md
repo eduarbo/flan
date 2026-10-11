@@ -11,6 +11,8 @@
 
 The source opens and recomputes without StepUp, CadQuery or custom Python proxies. StepUp is only needed for exchange with KiCad. KLP keycaps and the 36 linked Choc v1 instances are meshes. The nano, display and standard switches have separate nominal visual parts; some connectors remain dimensional reserves. [Component sources and limits](../components/README.md).
 
+The current assembly uses the **7.00 mm socket/header pair supplied with nice!view**: display PCB underside **Z12.40 mm**, glass top **Z14.30 mm**, and frame/Level roof **Z14.50 mm**. The controller underside remains **Z8.20 mm**, supported 2.80 mm above the main PCB top at Z5.40 mm. This supersedes the 6.09 mm Samtec connector study and its 13.59 mm roof; use the [current purchasing and soldering instructions](parts.md#removable-connectors) with the current source.
+
 ## Navigate the assembly
 
 The tree contains **Parameters**, **Left** and **Right**. Select a part and press **Space** to hide or show it. Expand **Construction** for sketches and operations. Each half has an **ActiveFrame** link to one of six approved cover designs (historical alternatives remain under Construction); an **ActiveBattery** link selects Adafruit 1570 or 301230. Hidden alternatives do not represent extra installed parts.
@@ -58,7 +60,7 @@ The native assembly uses **X = KiCad X, Y = −KiCad Y**, with PCB top at **Z 5.
 
 Select a part and use **File → Export**. Store exports outside the reference folders and keep the edited FCStd. The generation scripts rebuild the reference from scratch and overwrite its files; do not run them over manual work.
 
-The project remains a digital prototype. Both routed boards have **zero DRC/ERC/parity violations and zero unconnected items**; the configured copper-to-edge clearance remains **0.50 mm**. Final cable/connector geometry, printed fit and retention, RF and power measurements remain open. [CAD reproduction and validation](cad.md).
+The project remains a digital prototype. Both routed boards have **zero DRC/ERC/parity violations and zero unconnected items**; the configured copper-to-edge clearance remains **0.50 mm**. The selected connector geometry is specified; actual cable routing forces, solder tolerances, printed fit and retention, RF and power measurements still require physical checks. [CAD reproduction and validation](cad.md).
 
 ## Interchangeable cases
 

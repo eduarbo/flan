@@ -140,7 +140,8 @@ def socket_status(obj):
     housing = [part for part in obj.VisualParts if part.Name.endswith('DisplaySocketHousing')]
     assert len(housing) == 1, (obj.PartID, 'retained socket housing missing')
     box = housing[0].Shape.cleaned().BoundBox
-    level = obj.Document.getObject('LevelStackReceipt') is not None
+    level = (obj.Document.getObject('LevelStackReceipt') is not None
+             and obj.Document.getObject('StockDisplayConnector') is None)
     height = 4.57 if level else 5.
     assert abs(box.ZMin - 5.4) < 1e-5 and abs(box.ZLength - height) < 1e-5, (
         obj.PartID, 'nominal socket height', box.ZMin, box.ZLength)
@@ -242,7 +243,9 @@ def main():
     G.getMainWindow().hide()
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from check_pcb_step_registration import calibrate, board_settings, check
-    source = R / 'mechanical/revI/Flan36.FCStd'
+    # Allow a verified staged native file while its mechanical exports finish.
+    source = Path(os.environ.get('FLAN36_COMPONENT_SOURCE',
+                                 R / 'mechanical/revI/Flan36.FCStd')).resolve()
     digest = sha(source)
     work = R / 'build/slim-flush/pcb-step-registration'
     calibration = calibrate(work / 'calibration')

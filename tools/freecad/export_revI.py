@@ -56,8 +56,8 @@ metadata=json.loads((ROOT/'design/revI.json').read_text())
 if 'analyzed_native_sha256' in metadata.get('export_execution',{}):
     metadata['historical_export_execution']=metadata.pop('export_execution')
 report={'scope':'Native PartID solids including nominal registered diodes and hot-swap sockets; switch/keycap meshes excluded; not a manufacturing release','halves':{},'unresolved':[
-    'No routed PCB or integrated firmware', 'Actual module/socket/contact dimensions and retention',
-    'Battery cable routing, strain relief and bending radii', 'Window tolerance and PCB copper-to-edge rule',
+    'Delivered module/socket/contact tolerances and physical retention',
+    'Physical battery lead flex and strain relief', 'Printed window and component fit',
     'Printed fits, insertion/extraction loads, charging, RF and measured power']}
 metadata['parts']={}
 metadata['frameVariants']={}
@@ -67,6 +67,9 @@ metadata['slim_flush']={'decoration':'flush co-print material volumes',
     'inlay_depth_mm':.4,'minimum_backing_mm':.8,'physical_acceptance':False}
 if doc.getObject('LevelStackReceipt'):
     metadata['level_stack']=json.loads(doc.LevelStackReceipt.RecipeJSON)
+if doc.getObject('StockDisplayConnector'):
+    metadata['stock_display_connector']=json.loads(doc.StockDisplayConnector.RecipeJSON)
+    metadata['level_stack']['status']='Historical 6.09 mm study, superseded by stock_display_connector and parameter_values_mm'
 if doc.getObject('ApprovedFrameMasterR4'):
     metadata['approved_frame_master_r4']=json.loads(doc.ApprovedFrameMasterR4.RecipeJSON)
     metadata['slim_flush']['r4_construction']={'ordinary_backing_mm':1.0,'collar_through_color_mm':.865,'header_cover_mm':.4,'glass_recess_mm':.2}
@@ -280,6 +283,9 @@ doc.recompute()
 metadata['inputs']=[{'path':p,'sha256':hashlib.sha256((ROOT/p).read_bytes()).hexdigest()} for p in [
     'tools/freecad/install_socket_clearance.py','tools/freecad/audit_repairs.py','tools/freecad/install_audit_repairs.py','tools/freecad/install_diode_models.py','tools/freecad/hotswap_geometry.py','tools/freecad/install_hotswap_models.py','tools/integrate_hanafuda.py','design/proposals/frame-redesign-r8/master.json','design/proposals/frame-redesign-r8/Artwork-R8.FCStd','design/approved-frame-master-r4.json','design/proposals/frame-master-r4/master.json','design/proposals/frame-master-r4/Artwork-R4.FCStd','design/proposals/frame-master-r4/geometry-check.json','tools/freecad/approved_frames.py','tools/freecad/install_approved_frames.py','design/level-case-workflow.json','tools/freecad/level_stack.py','tools/freecad/install_level_stack.py','design/cases.json','design/frame-finishes.json','design/frame-collection-workflow.json','design/frame-fidelity-workflow.json','tools/freecad/export_frame_domain.py','tools/check_frame_artwork.py','tools/build_frame_collection.py','tools/freecad/install_frame_collection.py','design/slim-flush-workflow.json','tools/freecad/flush_frames.py','tools/freecad/slim_stack.py','tools/freecad/install_slim_flush.py','tools/freecad/extra_frames.py','tools/freecad/install_extra_frames.py','tools/freecad/components.py','tools/freecad/switch_instances.py','components/switches.json','components/sources.json','tools/frame_finishes.py','tools/keycap_config.py','tools/freecad/configuration.py','design/layout.json','design/revI-profiles.json','design/revI-frame-profiles.json','keycaps/catalog.json','design/revI-mounts.json','design/batteries.json','design/revI-magnets.json','design/revI-wire-study.json','tools/freecad/build_revI.py','tools/freecad/export_revI.py']]
 metadata['fcstd_sha256']=hashlib.sha256((OUT/'Flan36.FCStd').read_bytes()).hexdigest()
+if doc.getObject('StockDisplayConnector'):
+    for p in ['tools/freecad/install_stock_display.py','tools/freecad/restore_stock_display_appearance.py']:
+        metadata['inputs'].append({'path':p,'sha256':hashlib.sha256((ROOT/p).read_bytes()).hexdigest()})
 if doc.getObject('DisplaySeamCorrection'):
     for p in ['design/proposals/display-seam-r1/master.json','design/proposals/display-seam-r1/Seam-candidate.FCStd',
               'design/proposals/display-seam-r1/geometry-check.json','tools/freecad/install_display_seam.py']:

@@ -10,7 +10,7 @@
 
 | Design | Geometry | Suggested finish |
 |---|---|---|
-| **Level** | Switch-covering removable upper shell at the 13.39 mm frame plane | Match upper shell and frame |
+| **Level** | Switch-covering removable upper shell at the 14.50 mm frame plane | Match upper shell and frame |
 | **Solid** | Full plate over a continuous sidewall | Deep teal |
 | **Color rim** | 0.9 mm wide rim flush with the plate, 1.1 mm plate inset, 0.2 mm joint | Red base + black plate |
 | **Terrace** | Two 0.25 mm deep, 0.6 mm high recessed side bands | Sage base + dark plate |
@@ -19,7 +19,7 @@ All four follow the same Flan36 key positions. Straight thumb faces stay paralle
 
 The shared outline is **116.75 × 94.57 mm per half**. Its 4.75 mm straight-face allowance protects the existing pads on both boards. The Color rim changes the visible plate edge without reducing that PCB budget. Terrace leaves at least 1.05 mm nominal sidewall away from intentional service openings; the 1.4 mm floor stays unchanged.
 
-The **Level** upper shell, frame and display glass share the **13.39 mm** plane. Its original 1.3 mm switch-retaining plate is incorporated into the same removable part, using the three existing screws. Remove the caps to reach them. Upper openings are sized from the admitted KLP travel envelopes; the selected caps still reach about 17.87 mm. [Stack dimensions and connector qualification](level-stack.md).
+The **Level** upper shell and frame share the **14.50 mm** plane; the display glass is recessed 0.20 mm at **14.30 mm**. The original 1.3 mm switch-retaining plate is incorporated into the same removable part, using the three existing screws. Remove the caps to reach them. Upper openings are sized from the admitted KLP travel envelopes; the selected caps still reach about 17.87 mm. [Stack dimensions and connector qualification](level-stack.md).
 
 ## Open or covered
 

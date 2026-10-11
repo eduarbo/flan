@@ -6,13 +6,14 @@ const root=path.resolve(__dirname,'..'),url=process.env.FLAN36_VIEWER_URL||'file
 const style=process.env.FLAN36_FRAME_STYLE||'gameboy';assert(['gameboy','hanafuda'].includes(style));
 const out=path.join(root,'build/frame-orientation',url.startsWith('http')?'public':'viewer',style);fs.mkdirSync(out,{recursive:true});
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+const frameTop=JSON.parse(fs.readFileSync(path.join(root,'design/revI.json'))).parameter_values_mm.FrameTop;
 function glb(bytes){
  const length=bytes.readUInt32LE(12),doc=JSON.parse(bytes.toString('utf8',20,20+length)),bin=bytes.subarray(28+length);
  const access=id=>{const a=doc.accessors[id],v=doc.bufferViews[a.bufferView],size=a.componentType===5126||a.componentType===5125?4:2,n=a.type==='VEC3'?3:1,stride=v.byteStride||size*n,start=(v.byteOffset||0)+(a.byteOffset||0);assert([5126,5125,5123].includes(a.componentType));return Array.from({length:a.count},(_,i)=>Array.from({length:n},(_,j)=>{const p=start+i*stride+j*size;return a.componentType===5126?bin.readFloatLE(p):size===4?bin.readUInt32LE(p):bin.readUInt16LE(p);}));};
  const moments=(side,role)=>{
   const node=doc.nodes.find(n=>n.extras?.group==='lid'&&n.extras?.side===side&&n.extras?.frame_style===style);assert(node,side);
   const p=doc.meshes[node.mesh].primitives[role],verts=access(p.attributes.POSITION),ids=access(p.indices).flat();let area=0,mx=0,mz=0;
-  for(let i=0;i<ids.length;i+=3){const t=ids.slice(i,i+3).map(k=>verts[k]);if(t.some(v=>Math.abs(v[1]-13.59)>.0001))continue;const [a,b,c]=t,w=Math.abs((b[0]-a[0])*(c[2]-a[2])-(b[2]-a[2])*(c[0]-a[0]))/2;area+=w;mx+=w*(a[0]+b[0]+c[0])/3;mz+=w*(a[2]+b[2]+c[2])/3;}
+  for(let i=0;i<ids.length;i+=3){const t=ids.slice(i,i+3).map(k=>verts[k]);if(t.some(v=>Math.abs(v[1]-frameTop)>.0001))continue;const [a,b,c]=t,w=Math.abs((b[0]-a[0])*(c[2]-a[2])-(b[2]-a[2])*(c[0]-a[0]))/2;area+=w;mx+=w*(a[0]+b[0]+c[0])/3;mz+=w*(a[2]+b[2]+c[2])/3;}
   assert(area>0);return {area,x:mx/area,z:mz/area};
  };
  for(const side of ['left','right']){

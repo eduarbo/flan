@@ -1,0 +1,477 @@
+{
+  "schema": "flan36-stock-display-appearance-1",
+  "input_sha256": "04a29d154350fe2520afcd23c5409673ff49cea5b4364efe5724843714056cd1",
+  "source_sha256": "62ee8d7556e553f4946584870a0fc746f2b9cba7085b0b50a13e9192691b1eea",
+  "baseline_sha256": "9901360f74052f3892c20c9b81e839aeec534747927e547d31bdb047c8481029",
+  "restorer_sha256": "92dd6237b91fe94545167c37bbdbe69686a3f0cb5bc9e2feafee93f6ee3473cc",
+  "passed": true,
+  "geometry_preserved": true,
+  "geometry_objects_checked": 2802,
+  "geometry_sha256": "759f372ea5dc87ab31bca2f86719046cfad5108d00ee7d2f185d43ce835211fa",
+  "serialized_geometry_verified": {
+    "geometry_entries": 2937,
+    "brep_roundtrip_entries": [
+      "L_Case_level_base.Shape.brp",
+      "L_Case_level_plate.Shape.brp",
+      "L_Cell_adafruit_1570.Shape.brp",
+      "L_Diode_D31.Shape.brp",
+      "L_Diode_D32.Shape.brp",
+      "L_Diodes.Shape.brp",
+      "L_FlushFrame_talavera_Final.Shape.brp",
+      "L_HotswapSockets.Shape.brp",
+      "L_HotswapVisual0.Shape.brp",
+      "L_Hotswap_K01.Shape.brp",
+      "L_Hotswap_K02.Shape.brp",
+      "L_Hotswap_K03.Shape.brp",
+      "L_Hotswap_K04.Shape.brp",
+      "L_Hotswap_K05.Shape.brp",
+      "L_Hotswap_K11.Shape.brp",
+      "L_Hotswap_K12.Shape.brp",
+      "L_Hotswap_K13.Shape.brp",
+      "L_Hotswap_K14.Shape.brp",
+      "L_Hotswap_K15.Shape.brp",
+      "L_Hotswap_K21.Shape.brp",
+      "L_Hotswap_K22.Shape.brp",
+      "L_Hotswap_K23.Shape.brp",
+      "L_Hotswap_K24.Shape.brp",
+      "L_Hotswap_K25.Shape.brp",
+      "L_Hotswap_K30.Shape.brp",
+      "L_Hotswap_K31.Shape.brp",
+      "L_Hotswap_K32.Shape.brp",
+      "L_LevelCradleCableExit.Shape.brp",
+      "L_PCBAllDrills.Shape.brp",
+      "L_PCBBatteryOpening.Shape.brp",
+      "L_PCBMount1.Shape.brp",
+      "L_PCBMount2.Shape.brp",
+      "L_PCBMount3.Shape.brp",
+      "L_PCBMount4.Shape.brp",
+      "L_PCBMount5.Shape.brp",
+      "L_PCBMount6.Shape.brp",
+      "L_PCBMount7.Shape.brp",
+      "L_PCBMount8.Shape.brp",
+      "L_PCBPad.Shape.brp",
+      "L_SlimPCBLeadNotch.Shape.brp",
+      "L_SteelTarget0.Shape.brp",
+      "L_SteelTarget1.Shape.brp",
+      "L_SteelTarget2.Shape.brp",
+      "L_WireStudy0.Shape.brp",
+      "L_WireStudy1.Shape.brp",
+      "R_Case_level_base.Shape.brp",
+      "R_Case_level_plate.Shape.brp",
+      "R_Cell_adafruit_1570.Shape.brp",
+      "R_Diodes.Shape.brp",
+      "R_FlushFrame_talavera_Final.Shape.brp",
+      "R_HotswapSockets.Shape.brp",
+      "R_HotswapVisual0.Shape.brp",
+      "R_Hotswap_K01.Shape.brp",
+      "R_Hotswap_K02.Shape.brp",
+      "R_Hotswap_K03.Shape.brp",
+      "R_Hotswap_K04.Shape.brp",
+      "R_Hotswap_K05.Shape.brp",
+      "R_Hotswap_K11.Shape.brp",
+      "R_Hotswap_K12.Shape.brp",
+      "R_Hotswap_K13.Shape.brp",
+      "R_Hotswap_K14.Shape.brp",
+      "R_Hotswap_K15.Shape.brp",
+      "R_Hotswap_K21.Shape.brp",
+      "R_Hotswap_K22.Shape.brp",
+      "R_Hotswap_K23.Shape.brp",
+      "R_Hotswap_K24.Shape.brp",
+      "R_Hotswap_K25.Shape.brp",
+      "R_Hotswap_K30.Shape.brp",
+      "R_Hotswap_K31.Shape.brp",
+      "R_Hotswap_K32.Shape.brp",
+      "R_LevelCradleCableExit.Shape.brp",
+      "R_PCBAllDrills.Shape.brp",
+      "R_PCBBatteryOpening.Shape.brp",
+      "R_PCBMount1.Shape.brp",
+      "R_PCBMount2.Shape.brp",
+      "R_PCBMount3.Shape.brp",
+      "R_PCBMount4.Shape.brp",
+      "R_PCBMount5.Shape.brp",
+      "R_PCBMount6.Shape.brp",
+      "R_PCBMount7.Shape.brp",
+      "R_PCBMount8.Shape.brp",
+      "R_PCBPad.Shape.brp",
+      "R_SlimPCBLeadNotch.Shape.brp",
+      "R_SteelTarget0.Shape.brp",
+      "R_SteelTarget1.Shape.brp",
+      "R_SteelTarget2.Shape.brp",
+      "R_WireStudy0.Shape.brp",
+      "R_WireStudy1.Shape.brp"
+    ],
+    "numeric_absolute_tolerance": 1e-10,
+    "ignored_tshape_state_flags": [
+      "Free",
+      "Modified",
+      "Checked"
+    ],
+    "ignored_xml_save_state": [
+      "Object.Touched",
+      "Property.status bit 0"
+    ],
+    "metadata_visibility_restored": [
+      {
+        "object": "StockDisplayConnector",
+        "property": "Visibility",
+        "before": true,
+        "after": false
+      }
+    ],
+    "checkpoint_document_label": [
+      {
+        "before": "Flan36",
+        "after": "appearance-diagnostic",
+        "scope": "document label only; delivered filename remains Flan36.FCStd"
+      }
+    ],
+    "native_properties_verified": [
+      "Objects",
+      "ObjectData",
+      "Properties except LastModifiedDate"
+    ]
+  },
+  "appearance_readback_verified": {
+    "view_providers": 2821,
+    "baseline_properties_checked": 38486,
+    "native_materials_checked": 128293,
+    "composite_readback": {
+      "L_NiceView": {
+        "method": "compound",
+        "faces": 89,
+        "native_palette_verified": true,
+        "material_sha256": "1e9d236ddad51f696818c7df83724202ee97851a38d342ebf9422effc2230aa0"
+      },
+      "L_ActiveFrame": {
+        "method": "rebuilt",
+        "faces": 102,
+        "native_palette_verified": true,
+        "material_sha256": "9a4f0eb6ee4bde6a9ceda5d694d46ec07eb7ded331f188c5c960d16d4a347ef1",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 102,
+          "operands_deep_copied": true
+        }
+      },
+      "R_NiceView": {
+        "method": "compound",
+        "faces": 89,
+        "native_palette_verified": true,
+        "material_sha256": "1e9d236ddad51f696818c7df83724202ee97851a38d342ebf9422effc2230aa0"
+      },
+      "R_ActiveFrame": {
+        "method": "rebuilt",
+        "faces": 102,
+        "native_palette_verified": true,
+        "material_sha256": "856a0b69003110dc8fd5a4b0c17bf991fa62c1535ad0cac31064bf860e814fff",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 102,
+          "operands_deep_copied": true
+        }
+      },
+      "L_SlimDisplaySocket": {
+        "method": "uniform",
+        "material_sha256": "50bb134f0e3b5813651faa1a7f11bb401c19e0af83d475db970f16c53e2cdb0e"
+      },
+      "R_SlimDisplaySocket": {
+        "method": "uniform",
+        "material_sha256": "50bb134f0e3b5813651faa1a7f11bb401c19e0af83d475db970f16c53e2cdb0e"
+      },
+      "L_FlushFrame_flan_Final": {
+        "method": "rebuilt",
+        "faces": 96,
+        "native_palette_verified": true,
+        "material_sha256": "d555028349735d196a034c2e9810100cc79b2a335bd6c5347b90a7da1bbfeacd",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 96,
+          "operands_deep_copied": true
+        }
+      },
+      "L_FlushFrame_tape_Final": {
+        "method": "rebuilt",
+        "faces": 103,
+        "native_palette_verified": true,
+        "material_sha256": "b5d9d40254f6934cae6a974f2a3b87e9e8238266ec486504a081daac24ac2a40",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 103,
+          "operands_deep_copied": true
+        }
+      },
+      "L_FlushFrame_orbit_Final": {
+        "method": "rebuilt",
+        "faces": 95,
+        "native_palette_verified": true,
+        "material_sha256": "dcbf7ccd0dab9ad5e2c0e3dc73cbdb89abbe5a5f5da600e25155a839aea6b011",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 95,
+          "operands_deep_copied": true
+        }
+      },
+      "L_FlushFrame_manga_Final": {
+        "method": "rebuilt",
+        "faces": 100,
+        "native_palette_verified": true,
+        "material_sha256": "632576e165da0889fd5bbad7a1dd4bdea2a5d5813e9a133dd14c2e628f091a5e",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 100,
+          "operands_deep_copied": true
+        }
+      },
+      "L_FlushFrame_talavera_Final": {
+        "method": "rebuilt",
+        "faces": 102,
+        "native_palette_verified": true,
+        "material_sha256": "9a4f0eb6ee4bde6a9ceda5d694d46ec07eb7ded331f188c5c960d16d4a347ef1",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 102,
+          "operands_deep_copied": true
+        }
+      },
+      "L_FlushFrame_gameboy_Final": {
+        "method": "rebuilt",
+        "faces": 104,
+        "native_palette_verified": true,
+        "material_sha256": "61ca0069862b9bf09ee07d33eb0d81c11f4e2117a30c7c860e9294f471f76110",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 104,
+          "operands_deep_copied": true
+        }
+      },
+      "L_FlushFrame_nes_Final": {
+        "method": "rebuilt",
+        "faces": 98,
+        "native_palette_verified": true,
+        "material_sha256": "7c577bf7fc5ed9e036819e2dc3c64a172512ebdb30e4599996b6270a59e80840",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 98,
+          "operands_deep_copied": true
+        }
+      },
+      "L_FlushFrame_snes_Final": {
+        "method": "rebuilt",
+        "faces": 105,
+        "native_palette_verified": true,
+        "material_sha256": "e4fec52efb31d54541554e008fa985e32bbeaebb95ac4df2601290aba4831023",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 105,
+          "operands_deep_copied": true
+        }
+      },
+      "L_FlushFrame_phone_Final": {
+        "method": "rebuilt",
+        "faces": 110,
+        "native_palette_verified": true,
+        "material_sha256": "642d052591f7ab2331098dc56e2acc4a84800ec06ba2d4f4021e2ec6d954f4c3",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 110,
+          "operands_deep_copied": true
+        }
+      },
+      "L_FlushFrame_walkman_Final": {
+        "method": "rebuilt",
+        "faces": 102,
+        "native_palette_verified": true,
+        "material_sha256": "894bc61bf671cae0af0adda0170c9ea3812bfdb1a0709563146bbf2b7f2d1ebf",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 102,
+          "operands_deep_copied": true
+        }
+      },
+      "L_FlushFrame_ipod_Final": {
+        "method": "rebuilt",
+        "faces": 101,
+        "native_palette_verified": true,
+        "material_sha256": "def4fa1a45c82aeb0ebf508a85b8ce594a79592e8e2bff144c414e29c51d10ab",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 101,
+          "operands_deep_copied": true
+        }
+      },
+      "R_FlushFrame_flan_Final": {
+        "method": "rebuilt",
+        "faces": 96,
+        "native_palette_verified": true,
+        "material_sha256": "5e274ca3bedad7114db31a18da50f2fb76f6043b4dc3d8f5b4fb05494807c215",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 96,
+          "operands_deep_copied": true
+        }
+      },
+      "R_FlushFrame_tape_Final": {
+        "method": "rebuilt",
+        "faces": 103,
+        "native_palette_verified": true,
+        "material_sha256": "00f41faa7e5a3dcef3ea5c116dfe574919e474e5b66e2501cf22aa828247e11a",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 103,
+          "operands_deep_copied": true
+        }
+      },
+      "R_FlushFrame_orbit_Final": {
+        "method": "rebuilt",
+        "faces": 95,
+        "native_palette_verified": true,
+        "material_sha256": "80a1a7709feab7ccfbf066c3338bed381e1ac4a8debadd54ac3e4fac448b7601",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 95,
+          "operands_deep_copied": true
+        }
+      },
+      "R_FlushFrame_manga_Final": {
+        "method": "rebuilt",
+        "faces": 100,
+        "native_palette_verified": true,
+        "material_sha256": "da7c0193b68c40e808c0bbd9da3f7643048e5cdf431f573380c408e1fdd3ab46",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 100,
+          "operands_deep_copied": true
+        }
+      },
+      "R_FlushFrame_talavera_Final": {
+        "method": "rebuilt",
+        "faces": 102,
+        "native_palette_verified": true,
+        "material_sha256": "856a0b69003110dc8fd5a4b0c17bf991fa62c1535ad0cac31064bf860e814fff",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 102,
+          "operands_deep_copied": true
+        }
+      },
+      "R_FlushFrame_gameboy_Final": {
+        "method": "rebuilt",
+        "faces": 104,
+        "native_palette_verified": true,
+        "material_sha256": "d781d88e6277f9136fa191f66c99a2fdbec24edb2b2b1f2e7462164f7822e057",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 104,
+          "operands_deep_copied": true
+        }
+      },
+      "R_FlushFrame_nes_Final": {
+        "method": "rebuilt",
+        "faces": 98,
+        "native_palette_verified": true,
+        "material_sha256": "e49a4949341029aa0ce105d99f0e27794a672803f43da16623fa33b47327c351",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 98,
+          "operands_deep_copied": true
+        }
+      },
+      "R_FlushFrame_snes_Final": {
+        "method": "rebuilt",
+        "faces": 105,
+        "native_palette_verified": true,
+        "material_sha256": "cf912c0dae1fb6870499b7d35b8ecce38a6394319b2cce64b6d09f3ddb9ffbdd",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 105,
+          "operands_deep_copied": true
+        }
+      },
+      "R_FlushFrame_phone_Final": {
+        "method": "rebuilt",
+        "faces": 110,
+        "native_palette_verified": true,
+        "material_sha256": "3feae5d6fc5c420bc674cc6178ae03f941ed98f7a7b7ca8331e3a24a850cbb8f",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 110,
+          "operands_deep_copied": true
+        }
+      },
+      "R_FlushFrame_walkman_Final": {
+        "method": "rebuilt",
+        "faces": 102,
+        "native_palette_verified": true,
+        "material_sha256": "0a44ee6204a2ecc3ab85659d9089160a364407d4877bfff164bf7c0854240bd4",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 102,
+          "operands_deep_copied": true
+        }
+      },
+      "R_FlushFrame_ipod_Final": {
+        "method": "rebuilt",
+        "faces": 101,
+        "native_palette_verified": true,
+        "material_sha256": "83ead3019aff53fa699fe5d6af53d115a091786465c80b5d61f28d76f3f1d3bc",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 101,
+          "operands_deep_copied": true
+        }
+      },
+      "L_Diodes": {
+        "method": "rigid",
+        "material_sha256": "0a5fd404b05ce65053bc6d2f2b35d061e324820fe36a9bebaf5e863edeb20015"
+      },
+      "R_Diodes": {
+        "method": "rigid",
+        "material_sha256": "0a5fd404b05ce65053bc6d2f2b35d061e324820fe36a9bebaf5e863edeb20015"
+      },
+      "L_FlushFrame_hanafuda_Final": {
+        "method": "rebuilt",
+        "faces": 105,
+        "native_palette_verified": true,
+        "material_sha256": "9c40d631ea8828173b629f23afa647955244b758f69481f88d2f088a45b8d09e",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 105,
+          "operands_deep_copied": true
+        }
+      },
+      "R_FlushFrame_hanafuda_Final": {
+        "method": "rebuilt",
+        "faces": 105,
+        "native_palette_verified": true,
+        "material_sha256": "d1d68e3e78f19f043cbd2124f24358a25ba30cb631b1977b8bce668b7ec25b31",
+        "per_face_owner_mapping": {
+          "method": "saved_material_to_uniform_native_owner_full_face_area",
+          "faces_verified": 105,
+          "operands_deep_copied": true
+        }
+      },
+      "L_HotswapSockets": {
+        "method": "uniform",
+        "material_sha256": "50bb134f0e3b5813651faa1a7f11bb401c19e0af83d475db970f16c53e2cdb0e"
+      },
+      "R_HotswapSockets": {
+        "method": "uniform",
+        "material_sha256": "50bb134f0e3b5813651faa1a7f11bb401c19e0af83d475db970f16c53e2cdb0e"
+      }
+    },
+    "view_state_sha256": "db6994a9e4d725bcd6bda435dea431fb72f11bfae49d86dc6953266844180377"
+  },
+  "geometry_recompute_called": false,
+  "baseline_unchanged": true,
+  "source_unchanged": true,
+  "source_unchanged_ref": "baseline",
+  "recovery_method": "validated_saved_checkpoint",
+  "checkpoint_sha256": "62ee8d7556e553f4946584870a0fc746f2b9cba7085b0b50a13e9192691b1eea",
+  "calculation_log_sha256": "5c40439374328e2e6177c920d8ab73afcc0d011adea8d3e8669a5180e4eccc7c",
+  "dynamic_aggregates_excluded": [
+    "L_Construction",
+    "L_Half",
+    "R_Construction",
+    "R_Half"
+  ]
+}

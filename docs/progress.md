@@ -7,8 +7,8 @@
 | 36 Piantor key centers and angles | Checked | [Layout](../design/layout.json), upstream files and checker |
 | Editable source and CAD exchange | Available | Native FCStd, parameters and [FreeCAD/StepUp examples](freecad.md) |
 | KLP catalog and themed frames | RevI digital study | 38 source variants, 28 with qualified positions; six installed approved frame styles, per-key colors and configuration export/import |
-| Wireless electronics and displays | Routed prototype | Both halves: DRC/ERC/parity 0, unconnected 0; exact connectors and hardware tests pending |
-| Firmware and fabrication files | Digital candidate | Three compiled UF2 variants and source-bound Gerber/drill packages; supplied parts and physical acceptance pending |
+| Wireless electronics and displays | Routed prototype | Both halves: DRC/ERC/parity 0, unconnected 0; purchase references selected; physical hardware tests pending |
+| Firmware and fabrication files | Digital candidate | Three compiled UF2 variants and source-bound Gerber/drill packages; complete purchasing list; physical acceptance pending |
 | Printing and assembly | Pending | Fit coupon, sample caps and actual component measurements |
 | Working keyboard | Pending | All keys, BLE, charging, sleep/wake and measured consumption |
 

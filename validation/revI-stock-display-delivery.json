@@ -1,0 +1,88 @@
+{
+  "schema": "flan36-stock-display-delivery-1",
+  "date": "2026-10-10",
+  "scope": "Close the supplied nice!view connector, purchasing BOM and digital fabrication package after the premature completion claim. Physical assembly is a separate, unperformed acceptance step.",
+  "baseline_commit": "4d7a52b4a19ef7779524e9ffab901d8fd33492ed",
+  "artifacts": [
+    {
+      "path": "mechanical/revI/Flan36.FCStd",
+      "sha256": "62ee8d7556e553f4946584870a0fc746f2b9cba7085b0b50a13e9192691b1eea"
+    },
+    {
+      "path": "design/revI.json",
+      "sha256": "1a18b2e1f291a055d14034b059dc8062aae1ff68467ca82976553cbecc9e9dfa"
+    },
+    {
+      "path": "validation/revI-stock-display-installation.json",
+      "sha256": "dfcac1b875a0bc388551cd74aa2b5a2243d40925394c0b32caf9677547f1baa8"
+    },
+    {
+      "path": "validation/revI-stock-display-appearance.json",
+      "sha256": "78f3f7017a91274df4f0f1f49aab448ea4c54d977d5b93cb10738566e497f503"
+    },
+    {
+      "path": "validation/revI-stock-display-readback.json",
+      "sha256": "659870f87d439d76a1acbc72583d7b301c2e8a7580e6c8bfca80a165fb80e9e3"
+    },
+    {
+      "path": "validation/revI-stock-display-mechanical.json",
+      "sha256": "22fc20603f1a2cf4910eff77476bf1dfa9367b6a027a2dc8c32c8ec4d22d598a"
+    },
+    {
+      "path": "validation/revI-stock-display-adoption.json",
+      "sha256": "a8447b75b4a8ee90924fd3b233c84e6495358eeafedd2110e22958ba59cf3e61"
+    },
+    {
+      "path": "validation/revI-pcb-component-models.json",
+      "sha256": "10b1eb91cd9604183e013629e7521b46c66176b7753d9cd81c532a8be3897763"
+    },
+    {
+      "path": "validation/revI-bottom-reset-step.json",
+      "sha256": "be68f737defa6ed67ead42423834f0f0464b6911421c4d14d49fcc23bf1fe5e3"
+    },
+    {
+      "path": "validation/revI-stock-print.json",
+      "sha256": "23a9efd7ce58f33a8941075cf5064164ae329331b08786bb7545014fae82e710"
+    },
+    {
+      "path": "validation/revI-viewer.json",
+      "sha256": "3e2d3f3d523702e782b10dee0604f55491aed07930192b4bf71659faea9418e6"
+    },
+    {
+      "path": "validation/revI-render.json",
+      "sha256": "63cfd9da20e95c093f72d56a53c7da767ff2e43c0b90d2d93a9bf13fa0ee46bc"
+    },
+    {
+      "path": "hardware/revI/fabrication/flan36-left-revI-prototype.zip",
+      "sha256": "468bf9ce0f6f806a9651153aa023a776de25a9ec8da788caa9023470265058d5"
+    },
+    {
+      "path": "hardware/revI/fabrication/flan36-right-revI-prototype.zip",
+      "sha256": "14044e39912999dc4ddc59ffcfec6cb97be6ff42d05aa62a66d1ba2de9959b08"
+    }
+  ],
+  "digital_checks_passed": true,
+  "physical_acceptance": false,
+  "checks": {
+    "independent_native_readback": "Both halves, 36 fixed solids, 41 key mesh poses, five-pin row and solder/cover clearance",
+    "native_appearance": "26 rebuilt composites / 2646 face-owner material checks; saved/reopened GUI and serialized geometry/XML preservation",
+    "mechanical": "Closed printable meshes, no nominal assembly collisions, four case variants and both battery profiles",
+    "kicad": "11 reimported STEP models; actual KiCad CLI registration on both boards; routed PCB files unchanged",
+    "printing": "Six complete current Level/frame kits; every STL byte and translated 3MF triangle matched",
+    "viewer": "220 objects rebuilt; mobile 390x844 DOM width390, model visible, Design and Files panels open/close, no warning/error logs",
+    "renders": "Seven images regenerated; Level and side renders visually inspected"
+  },
+  "review": {
+    "independent_domain": "Accepted supplied connector geometry, preservation and exact Level/active plate alias",
+    "independent_adversarial": "Accepted final appearance face mapping, bounded adoption and adopted artifact hash chain",
+    "unresolved_material_objections": []
+  },
+  "retrospective": {
+    "trigger": "User was already purchasing after a completion claim despite an unresolved display connector substitution.",
+    "cause": "Catalog mating dimensions had been treated as a qualified nice!view hole fit; digital milestones had been conflated with procurement closure.",
+    "correction": "Use the included connector, raise display/frame/Level roof0.91mm, select exact BOM references and expose both PCB fabrication ZIPs.",
+    "prevention": "Bind installer, appearance, readback, exporter, adoption, viewer and print kits by hashes; separate digital delivery from physical acceptance.",
+    "remaining_limit": "No delivered hardware, printed interface, soldering, radio, charging or operation has been physically tested."
+  },
+  "native_metadata_note": "The recovered native document retains cosmetic Document.Label appearance-diagnostic; delivered filename is Flan36.FCStd. The exact label exception is recorded in the appearance receipt."
+}

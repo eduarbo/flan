@@ -117,7 +117,7 @@ def render(kind):
     if kind=='level':sub=f"Frame + upper shell / {m['parameter_values_mm']['FrameTop']:g} mm / Glass recessed 0.20 mm"
     if kind=='corner':sub='Color rim + selected frame / Shared R2.4 corner / Actual CAD meshes'
     if kind!='corner':label(sub,108,1334,25,(.37,.44,.41))
-    label('RevI CAD study. Wiring, final connectors, fit and operation remain untested.',108,60,24,(.36,.42,.39))
+    label('RevI routed prototype. Supplied connector selected; physical fit and operation untested.',108,60,24,(.36,.42,.39))
     cam=ren.GetActiveCamera();cam.ParallelProjectionOn()
     if kind=='assembled':focal=(160,-44,7);pos=(182,-255,360);up=(0,0,1);scale=99
     elif kind=='top':focal=(160,-43,5);pos=(160,-43,450);up=(0,1,0);scale=99
@@ -129,10 +129,10 @@ def render(kind):
     cam.SetFocalPoint(*focal);cam.SetPosition(*pos);cam.SetViewUp(*up);cam.SetParallelScale(scale);ren.ResetCameraClippingRange();win.Render()
     if kind=='side':
         label(f"Level shell + frame: {m['parameter_values_mm']['FrameTop']:g} mm / Glass: {m['parameter_values_mm']['DisplayBottom']+1.9:g} mm",105,1235,29)
-        label('Heights above base; feet add 1.2 mm. Switch retention plate remains at 7.6 mm.',105,170,24,(.37,.44,.41))
+        label('Heights above base. Illustrated feet: 1.2 mm; selected RBS-5BK feet: 1.6 mm.',105,170,24,(.37,.44,.41))
     if kind=='stack':
         label('nice!view  /  nice!nano  /  LiPo 100 mAh',105,1230,27)
-        label('PCB with battery opening; unrouted',105,170,24,(.37,.44,.41))
+        label('Routed PCB with battery opening; physical assembly untested',105,170,24,(.37,.44,.41))
     win.Render();f=vtk.vtkWindowToImageFilter();f.SetInput(win);f.SetInputBufferTypeToRGB();f.ReadFrontBufferOff();f.Update()
     writer=vtk.vtkPNGWriter();writer.SetFileName(str(IMAGE_DIR/f'revI-{kind}.png'));writer.SetInputConnection(f.GetOutputPort());writer.Write();win.Finalize()
     views[kind]={'keys':18*len(sides),'halves':sides,'exploded':kind=='stack','image_sha256':hashlib.sha256((IMAGE_DIR/f'revI-{kind}.png').read_bytes()).hexdigest()}
@@ -148,5 +148,5 @@ receipt={'revision':'I','model_sha256':hashlib.sha256((ROOT/'design/revI.json').
          'meshes':[{'path':p,'sha256':h} for p,h in used.items()],
          'views':views,'geometry_source':'generated CAD, no image retouching',
          'illustrative':['component envelopes','feet','screen artwork','unmeasured cap stem-tip datum Z=11.7'],
-         'unresolved':['battery cable routing','routed PCB','purchased component tolerances','physical fit and tests']}
+         'unresolved':['physical battery lead flex','purchased component tolerances','physical fit and tests']}
 (ROOT/'validation/revI-render.json').write_text(json.dumps(receipt,indent=2)+'\n')

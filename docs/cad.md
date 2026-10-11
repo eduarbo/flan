@@ -6,8 +6,8 @@ The current mechanical source is [`mechanical/revI/Flan36.FCStd`](../mechanical/
 
 | Nominal measure | Revision I |
 |---|---:|
-| Frame and Level shell height | 13.59 mm, including flush decoration |
-| Display glass | 13.39 mm; recessed 0.20 mm |
+| Frame and Level shell height | 14.50 mm, including flush decoration |
+| Display glass | 14.30 mm; recessed 0.20 mm |
 | Display opening | 13.90 × 30.50 mm; 0.10 mm nominal glass clearance |
 | Battery underside / case floor top | 1.4 mm |
 | Selected flat KLP keycap top | About 17.87 mm, unchanged |
@@ -19,7 +19,7 @@ The current mechanical source is [`mechanical/revI/Flan36.FCStd`](../mechanical/
 | Battery aperture | 12.5 × 34.4 mm plus local rear lead notch |
 | North overhang past adjacent cap | 0 mm nominal |
 
-The frame is **1.21 mm lower** than the previous 14.8 mm design; this does not reduce the selected keycaps' overall height. The [Samtec display connection](level-stack.md#what-makes-the-lower-display-possible) remains a dimensional candidate with unmeasured nice!view hole tolerances. Heights exclude the illustrative 1.2 mm feet. USB is only 0.045 mm behind the adjacent keycap’s north edge: this is a nominal alignment, not a physical tolerance guarantee.
+The frame is **0.30 mm lower** than the previous 14.8 mm design; this does not reduce the selected keycaps' overall height. The [current display connection](level-stack.md) uses the supplied 5 mm socket and 2 mm header. Heights exclude the feet; the purchased RBS-5BK feet add 1.6 mm externally, while the historical CAD feet are illustrative 1.2 mm envelopes. USB is only 0.045 mm behind the adjacent keycap’s north edge: this is a nominal alignment, not a physical tolerance guarantee.
 
 The local H3 support relief provides **0.25 mm nominal K30 socket clearance** on both halves while preserving the outer contour, floor and stack height. Remaining pilot material measures **1.336 mm left / 1.248 mm right**. [Saved/reopened geometry evidence](../validation/revI-socket-clearance.json); physical fit remains unqualified.
 
@@ -83,7 +83,7 @@ The macOS helper uses an existing FreeCAD installation. It disables optional `fl
 
 After an authorized publication, `python3 tools/check_public_delivery.py COMMIT_SHA` checks an anonymous full source ZIP against every Git blob and compares public Pages with that commit. Its ZIP and receipt are reproducible under `build/revI/`; it does not publish anything.
 
-The current parameter check inspects twelve approved frame assemblies at reference, moved-display, expanded-window, raised-roof and combined settings, including save/reopen and unsupported-edit rejection. The exporter also checks retained historical frame bodies. The earlier height and service studies retain their historical scope. The R4 readback checks the translated contacts, PCB drills and guides; the exporter checks nominal assembled collisions and cap travel. Neither study qualifies a physical assembly. `build/corner-stack/` contains ignored regenerable logs and staging for these commands.
+The parameter-check command exercises twelve approved frame assemblies at reference, moved-display, expanded-window, raised-roof and combined settings, including save/reopen and unsupported-edit rejection. Its historical receipt predates the supplied-connector migration. The current stock-display readback and geometry export check the new default assembly; they do not claim a repeated edited-state matrix. The exporter also checks retained historical frame bodies. The earlier height and service studies retain their historical scope. The R4 readback checks the translated contacts, PCB drills and guides; the exporter checks nominal assembled collisions and cap travel. Neither study qualifies a physical assembly. `build/corner-stack/` contains ignored regenerable logs and staging for these commands.
 
 The browser check needs Playwright and a Chromium-compatible browser. Set `FLAN36_PLAYWRIGHT_MODULE` and `FLAN36_BROWSER` if they are not on the usual path. It tests the generated file with HTTP(S) requests blocked; `FLAN36_VIEWER_URL` instead selects the published URL.
 
@@ -137,4 +137,4 @@ python3 tools/freecad/run_macos.py tools/freecad/check_revI.py
 
 `build/keycolors/` and `build/themes-print/` are ignored, reproducible test outputs: JSON/GLB downloads, palette collections, print ZIPs, screenshots and a native save/reopen copy. Native frame comparisons are included in `install_level_stack.py`; the earlier slim/flush installer and raised-frame sources are historical. The [mount study](slim-mount-study.md) produces separately named experimental geometry and a measured report under `build/`.
 
-The [approved R4 frame implementation](frames-extra.md) supersedes the 13.39 mm shared-roof snapshot. The [slim/flush delivery receipt](../validation/revI-slim-flush.json) records the previous 14.8 mm stack and its nine print kits. It does not establish acceptance of the current 13.59 mm R4 update; use the current installation, geometry and export/viewer readbacks in the [approved-frame guide](frames-extra.md). The older `check_frame_collection.py`, `check_level_stack.py` and `check_print_kit.py` describe their historical geometries and palettes. Previous [customization](../validation/revI-customization.json) and [Label-only identity](../validation/revI-document-label.json) receipts retain their historical hashes. These digital checks do not qualify the keyboard for manufacturing.
+The [approved R4 frame implementation](frames-extra.md) supersedes the 13.39 mm shared-roof snapshot. The [slim/flush delivery receipt](../validation/revI-slim-flush.json) records the previous 14.8 mm stack and its nine print kits. It does not establish acceptance of the historical 13.59 mm R4 update; use the current installation, geometry and export/viewer readbacks in the [approved-frame guide](frames-extra.md). The older `check_frame_collection.py`, `check_level_stack.py` and `check_print_kit.py` describe their historical geometries and palettes. Previous [customization](../validation/revI-customization.json) and [Label-only identity](../validation/revI-document-label.json) receipts retain their historical hashes. These digital checks do not qualify the keyboard for manufacturing.

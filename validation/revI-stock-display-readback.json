@@ -1,0 +1,913 @@
+{
+  "schema": "flan36-stock-display-readback-1",
+  "source_sha256": "62ee8d7556e553f4946584870a0fc746f2b9cba7085b0b50a13e9192691b1eea",
+  "baseline_sha256": "9901360f74052f3892c20c9b81e839aeec534747927e547d31bdb047c8481029",
+  "checker_sha256": "b0cbb4eaf03dbc03f1ed19bae76525af1f853ddfa6d8acbe309d85bf54703e36",
+  "opened_from_saved_files": true,
+  "physical_acceptance": false,
+  "halves": {
+    "left": {
+      "actual_bounds_mm": {
+        "NiceViewVisual0": [
+          116.0,
+          -52.099999999999994,
+          12.4,
+          130.0,
+          -16.099999999999994,
+          13.4
+        ],
+        "NiceViewVisual2": [
+          116.15,
+          -48.95,
+          13.4,
+          129.85,
+          -18.65,
+          14.3
+        ],
+        "SlimDisplaySocketHousing": [
+          116.4,
+          -52.3,
+          5.4,
+          129.60000000000002,
+          -49.3,
+          10.4
+        ],
+        "SlimDisplaySocketPins": [
+          117.62,
+          -51.099999999999994,
+          2.8,
+          128.38,
+          -50.5,
+          7.1
+        ],
+        "SlimDisplayMaleSpacer": [
+          116.4,
+          -52.3,
+          10.4,
+          129.60000000000002,
+          -49.3,
+          12.4
+        ],
+        "SlimDisplayMaleContacts": [
+          117.62,
+          -51.099999999999994,
+          7.1,
+          128.38,
+          -50.5,
+          13.7
+        ],
+        "LevelDisplaySolderReserve": [
+          117.12,
+          -51.599999999999994,
+          13.4,
+          128.88,
+          -50.0,
+          13.9
+        ],
+        "LevelHeaderServiceWell": [
+          116.15,
+          -52.6,
+          11.81,
+          129.85,
+          -49.1,
+          14.1
+        ]
+      },
+      "board_separation_mm": 7.0,
+      "J2_hole_diameter_mm": 1.0,
+      "J2_actual_hole_centers_mm": [
+        [
+          117.92,
+          -50.8
+        ],
+        [
+          120.46,
+          -50.8
+        ],
+        [
+          123.0,
+          -50.8
+        ],
+        [
+          125.54,
+          -50.8
+        ],
+        [
+          128.08,
+          -50.8
+        ]
+      ],
+      "frames": {
+        "talavera": {
+          "roof_mm": 14.5,
+          "pin_cover_bounds_mm": [
+            [
+              117.12,
+              -51.599999999999994,
+              14.1,
+              118.72,
+              -50.0,
+              14.5
+            ],
+            [
+              119.66000000000001,
+              -51.599999999999994,
+              14.1,
+              121.26,
+              -50.0,
+              14.5
+            ],
+            [
+              122.2,
+              -51.599999999999994,
+              14.1,
+              123.8,
+              -50.0,
+              14.5
+            ],
+            [
+              124.74000000000001,
+              -51.599999999999994,
+              14.1,
+              126.34,
+              -50.0,
+              14.5
+            ],
+            [
+              127.28000000000002,
+              -51.599999999999994,
+              14.1,
+              128.88000000000002,
+              -50.0,
+              14.5
+            ]
+          ],
+          "solder_clearance_mm": 0.1999999999999993
+        },
+        "gameboy": {
+          "roof_mm": 14.5,
+          "pin_cover_bounds_mm": [
+            [
+              117.12,
+              -51.599999999999994,
+              14.1,
+              118.72,
+              -50.0,
+              14.5
+            ],
+            [
+              119.66000000000001,
+              -51.599999999999994,
+              14.1,
+              121.26,
+              -50.0,
+              14.5
+            ],
+            [
+              122.2,
+              -51.599999999999994,
+              14.1,
+              123.8,
+              -50.0,
+              14.5
+            ],
+            [
+              124.74000000000001,
+              -51.599999999999994,
+              14.1,
+              126.34,
+              -50.0,
+              14.5
+            ],
+            [
+              127.28000000000002,
+              -51.599999999999994,
+              14.1,
+              128.88000000000002,
+              -50.0,
+              14.5
+            ]
+          ],
+          "solder_clearance_mm": 0.1999999999999993
+        },
+        "snes": {
+          "roof_mm": 14.5,
+          "pin_cover_bounds_mm": [
+            [
+              117.12,
+              -51.599999999999994,
+              14.1,
+              118.72,
+              -50.0,
+              14.5
+            ],
+            [
+              119.66000000000001,
+              -51.599999999999994,
+              14.1,
+              121.26,
+              -50.0,
+              14.5
+            ],
+            [
+              122.2,
+              -51.599999999999994,
+              14.1,
+              123.8,
+              -50.0,
+              14.5
+            ],
+            [
+              124.74000000000001,
+              -51.599999999999994,
+              14.1,
+              126.34,
+              -50.0,
+              14.5
+            ],
+            [
+              127.28000000000002,
+              -51.599999999999994,
+              14.1,
+              128.88000000000002,
+              -50.0,
+              14.5
+            ]
+          ],
+          "solder_clearance_mm": 0.1999999999999993
+        },
+        "phone": {
+          "roof_mm": 14.5,
+          "pin_cover_bounds_mm": [
+            [
+              117.12,
+              -51.599999999999994,
+              14.1,
+              118.72,
+              -50.0,
+              14.5
+            ],
+            [
+              119.66000000000001,
+              -51.599999999999994,
+              14.1,
+              121.26,
+              -50.0,
+              14.5
+            ],
+            [
+              122.2,
+              -51.599999999999994,
+              14.1,
+              123.8,
+              -50.0,
+              14.5
+            ],
+            [
+              124.74000000000001,
+              -51.599999999999994,
+              14.1,
+              126.34,
+              -50.0,
+              14.5
+            ],
+            [
+              127.28000000000002,
+              -51.599999999999994,
+              14.1,
+              128.88000000000002,
+              -50.0,
+              14.5
+            ]
+          ],
+          "solder_clearance_mm": 0.1999999999999993
+        },
+        "ipod": {
+          "roof_mm": 14.5,
+          "pin_cover_bounds_mm": [
+            [
+              117.12,
+              -51.599999999999994,
+              14.1,
+              118.72,
+              -50.0,
+              14.5
+            ],
+            [
+              119.66000000000001,
+              -51.599999999999994,
+              14.1,
+              121.26,
+              -50.0,
+              14.5
+            ],
+            [
+              122.2,
+              -51.599999999999994,
+              14.1,
+              123.8,
+              -50.0,
+              14.5
+            ],
+            [
+              124.74000000000001,
+              -51.599999999999994,
+              14.1,
+              126.34,
+              -50.0,
+              14.5
+            ],
+            [
+              127.28000000000002,
+              -51.599999999999994,
+              14.1,
+              128.88000000000002,
+              -50.0,
+              14.5
+            ]
+          ],
+          "solder_clearance_mm": 0.1999999999999993
+        },
+        "hanafuda": {
+          "roof_mm": 14.5,
+          "pin_cover_bounds_mm": [
+            [
+              117.12,
+              -51.599999999999994,
+              14.1,
+              118.72,
+              -50.0,
+              14.5
+            ],
+            [
+              119.66000000000001,
+              -51.599999999999994,
+              14.1,
+              121.26,
+              -50.0,
+              14.5
+            ],
+            [
+              122.2,
+              -51.599999999999994,
+              14.1,
+              123.8,
+              -50.0,
+              14.5
+            ],
+            [
+              124.74000000000001,
+              -51.599999999999994,
+              14.1,
+              126.34,
+              -50.0,
+              14.5
+            ],
+            [
+              127.28000000000002,
+              -51.599999999999994,
+              14.1,
+              128.88000000000002,
+              -50.0,
+              14.5
+            ]
+          ],
+          "solder_clearance_mm": 0.1999999999999993
+        }
+      },
+      "native_expression_count": 15
+    },
+    "right": {
+      "actual_bounds_mm": {
+        "NiceViewVisual0": [
+          30.0,
+          -52.099999999999994,
+          12.4,
+          44.0,
+          -16.099999999999994,
+          13.4
+        ],
+        "NiceViewVisual2": [
+          30.15,
+          -48.95,
+          13.4,
+          43.85,
+          -18.65,
+          14.3
+        ],
+        "SlimDisplaySocketHousing": [
+          30.400000000000002,
+          -52.3,
+          5.4,
+          43.599999999999994,
+          -49.3,
+          10.4
+        ],
+        "SlimDisplaySocketPins": [
+          31.620000000000005,
+          -51.099999999999994,
+          2.8,
+          42.379999999999995,
+          -50.5,
+          7.1
+        ],
+        "SlimDisplayMaleSpacer": [
+          30.400000000000002,
+          -52.3,
+          10.4,
+          43.599999999999994,
+          -49.3,
+          12.4
+        ],
+        "SlimDisplayMaleContacts": [
+          31.620000000000005,
+          -51.099999999999994,
+          7.1,
+          42.379999999999995,
+          -50.5,
+          13.7
+        ],
+        "LevelDisplaySolderReserve": [
+          31.120000000000005,
+          -51.599999999999994,
+          13.4,
+          42.879999999999995,
+          -50.0,
+          13.9
+        ],
+        "LevelHeaderServiceWell": [
+          30.150000000000002,
+          -52.6,
+          11.81,
+          43.85,
+          -49.1,
+          14.1
+        ]
+      },
+      "board_separation_mm": 7.0,
+      "J2_hole_diameter_mm": 1.0,
+      "J2_actual_hole_centers_mm": [
+        [
+          31.92,
+          -50.8
+        ],
+        [
+          34.46,
+          -50.8
+        ],
+        [
+          37.0,
+          -50.8
+        ],
+        [
+          39.54,
+          -50.8
+        ],
+        [
+          42.08,
+          -50.8
+        ]
+      ],
+      "frames": {
+        "talavera": {
+          "roof_mm": 14.5,
+          "pin_cover_bounds_mm": [
+            [
+              31.12,
+              -51.599999999999994,
+              14.1,
+              32.72,
+              -50.0,
+              14.5
+            ],
+            [
+              33.660000000000004,
+              -51.599999999999994,
+              14.1,
+              35.26,
+              -50.0,
+              14.5
+            ],
+            [
+              36.2,
+              -51.599999999999994,
+              14.1,
+              37.8,
+              -50.0,
+              14.5
+            ],
+            [
+              38.74,
+              -51.599999999999994,
+              14.1,
+              40.339999999999996,
+              -50.0,
+              14.5
+            ],
+            [
+              41.28,
+              -51.599999999999994,
+              14.1,
+              42.879999999999995,
+              -50.0,
+              14.5
+            ]
+          ],
+          "solder_clearance_mm": 0.1999999999999993
+        },
+        "gameboy": {
+          "roof_mm": 14.5,
+          "pin_cover_bounds_mm": [
+            [
+              31.12,
+              -51.599999999999994,
+              14.1,
+              32.72,
+              -50.0,
+              14.5
+            ],
+            [
+              33.660000000000004,
+              -51.599999999999994,
+              14.1,
+              35.26,
+              -50.0,
+              14.5
+            ],
+            [
+              36.2,
+              -51.599999999999994,
+              14.1,
+              37.8,
+              -50.0,
+              14.5
+            ],
+            [
+              38.74,
+              -51.599999999999994,
+              14.1,
+              40.339999999999996,
+              -50.0,
+              14.5
+            ],
+            [
+              41.28,
+              -51.599999999999994,
+              14.1,
+              42.879999999999995,
+              -50.0,
+              14.5
+            ]
+          ],
+          "solder_clearance_mm": 0.1999999999999993
+        },
+        "snes": {
+          "roof_mm": 14.5,
+          "pin_cover_bounds_mm": [
+            [
+              31.12,
+              -51.599999999999994,
+              14.1,
+              32.72,
+              -50.0,
+              14.5
+            ],
+            [
+              33.660000000000004,
+              -51.599999999999994,
+              14.1,
+              35.26,
+              -50.0,
+              14.5
+            ],
+            [
+              36.2,
+              -51.599999999999994,
+              14.1,
+              37.8,
+              -50.0,
+              14.5
+            ],
+            [
+              38.74,
+              -51.599999999999994,
+              14.1,
+              40.339999999999996,
+              -50.0,
+              14.5
+            ],
+            [
+              41.28,
+              -51.599999999999994,
+              14.1,
+              42.879999999999995,
+              -50.0,
+              14.5
+            ]
+          ],
+          "solder_clearance_mm": 0.1999999999999993
+        },
+        "phone": {
+          "roof_mm": 14.5,
+          "pin_cover_bounds_mm": [
+            [
+              31.12,
+              -51.599999999999994,
+              14.1,
+              32.72,
+              -50.0,
+              14.5
+            ],
+            [
+              33.660000000000004,
+              -51.599999999999994,
+              14.1,
+              35.26,
+              -50.0,
+              14.5
+            ],
+            [
+              36.2,
+              -51.599999999999994,
+              14.1,
+              37.8,
+              -50.0,
+              14.5
+            ],
+            [
+              38.74,
+              -51.599999999999994,
+              14.1,
+              40.339999999999996,
+              -50.0,
+              14.5
+            ],
+            [
+              41.28,
+              -51.599999999999994,
+              14.1,
+              42.879999999999995,
+              -50.0,
+              14.5
+            ]
+          ],
+          "solder_clearance_mm": 0.1999999999999993
+        },
+        "ipod": {
+          "roof_mm": 14.5,
+          "pin_cover_bounds_mm": [
+            [
+              31.12,
+              -51.599999999999994,
+              14.1,
+              32.72,
+              -50.0,
+              14.5
+            ],
+            [
+              33.660000000000004,
+              -51.599999999999994,
+              14.1,
+              35.26,
+              -50.0,
+              14.5
+            ],
+            [
+              36.2,
+              -51.599999999999994,
+              14.1,
+              37.8,
+              -50.0,
+              14.5
+            ],
+            [
+              38.74,
+              -51.599999999999994,
+              14.1,
+              40.339999999999996,
+              -50.0,
+              14.5
+            ],
+            [
+              41.28,
+              -51.599999999999994,
+              14.1,
+              42.879999999999995,
+              -50.0,
+              14.5
+            ]
+          ],
+          "solder_clearance_mm": 0.1999999999999993
+        },
+        "hanafuda": {
+          "roof_mm": 14.5,
+          "pin_cover_bounds_mm": [
+            [
+              31.12,
+              -51.599999999999994,
+              14.1,
+              32.72,
+              -50.0,
+              14.5
+            ],
+            [
+              33.660000000000004,
+              -51.599999999999994,
+              14.1,
+              35.26,
+              -50.0,
+              14.5
+            ],
+            [
+              36.2,
+              -51.599999999999994,
+              14.1,
+              37.8,
+              -50.0,
+              14.5
+            ],
+            [
+              38.74,
+              -51.599999999999994,
+              14.1,
+              40.339999999999996,
+              -50.0,
+              14.5
+            ],
+            [
+              41.28,
+              -51.599999999999994,
+              14.1,
+              42.879999999999995,
+              -50.0,
+              14.5
+            ]
+          ],
+          "solder_clearance_mm": 0.1999999999999993
+        }
+      },
+      "native_expression_count": 15
+    }
+  },
+  "preserved": {
+    "left-pcb": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "left-mcu": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "left-battery": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "left-cradle": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "left-mcu-riser": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "left-mcu-sockets": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "left-jst": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "left-reset": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "left-slider": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "left-tray": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "left-hotswap-sockets": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "left-diodes": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "left-magnet-0": {
+      "geometry_signature_equal": true,
+      "placement_equal": true,
+      "solid_difference_mm3": 0.0
+    },
+    "left-magnet-1": {
+      "geometry_signature_equal": true,
+      "placement_equal": true,
+      "solid_difference_mm3": 0.0
+    },
+    "left-magnet-2": {
+      "geometry_signature_equal": true,
+      "placement_equal": true,
+      "solid_difference_mm3": 0.0
+    },
+    "left-frame-target-0": {
+      "geometry_signature_equal": true,
+      "placement_equal": true,
+      "solid_difference_mm3": 0.0
+    },
+    "left-frame-target-1": {
+      "geometry_signature_equal": true,
+      "placement_equal": true,
+      "solid_difference_mm3": 0.0
+    },
+    "left-frame-target-2": {
+      "geometry_signature_equal": true,
+      "placement_equal": true,
+      "solid_difference_mm3": 0.0
+    },
+    "right-pcb": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "right-mcu": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "right-battery": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "right-cradle": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "right-mcu-riser": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "right-mcu-sockets": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "right-jst": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "right-reset": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "right-slider": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "right-tray": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "right-hotswap-sockets": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "right-diodes": {
+      "geometry_signature_equal": true,
+      "placement_equal": true
+    },
+    "right-magnet-0": {
+      "geometry_signature_equal": true,
+      "placement_equal": true,
+      "solid_difference_mm3": 0.0
+    },
+    "right-magnet-1": {
+      "geometry_signature_equal": true,
+      "placement_equal": true,
+      "solid_difference_mm3": 0.0
+    },
+    "right-magnet-2": {
+      "geometry_signature_equal": true,
+      "placement_equal": true,
+      "solid_difference_mm3": 0.0
+    },
+    "right-frame-target-0": {
+      "geometry_signature_equal": true,
+      "placement_equal": true,
+      "solid_difference_mm3": 0.0
+    },
+    "right-frame-target-1": {
+      "geometry_signature_equal": true,
+      "placement_equal": true,
+      "solid_difference_mm3": 0.0
+    },
+    "right-frame-target-2": {
+      "geometry_signature_equal": true,
+      "placement_equal": true,
+      "solid_difference_mm3": 0.0
+    }
+  },
+  "preserved_key_mesh_placements": 41,
+  "source_files_unchanged": true,
+  "passed": true
+}

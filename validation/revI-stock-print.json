@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "method": "Production printKit in Node; every STL byte and every translated 3MF triangle compared with native exports",
+  "scene_sha256": "aef932aad596114a050b051b02bbcce13fa25eae4f0a41cfc98ac8fd801d54cc",
+  "checker_sha256": "03307c9a71ebec0add383f1707077dd50ccd07e9d00f6420f21542d2343e2a98",
+  "frame_top_mm": 14.5,
+  "kits": [
+    {
+      "style": "talavera",
+      "parts": 20,
+      "materials": 26,
+      "sha256": "a6f96e7157d54fb35f5dc9fe07b9a25d2ff3d68e5c2a73bb159c2505734ae64b"
+    },
+    {
+      "style": "gameboy",
+      "parts": 20,
+      "materials": 26,
+      "sha256": "d305104ff49de8fe8b0f73f533e6eaa37e07192c874675208001974cf61b1866"
+    },
+    {
+      "style": "snes",
+      "parts": 20,
+      "materials": 26,
+      "sha256": "c8d76d609d87719615b755f4c3842fc13025442a5715faa217872b6a3f1ec6cf"
+    },
+    {
+      "style": "phone",
+      "parts": 20,
+      "materials": 26,
+      "sha256": "ff9b93d100bda5740527f3ef188da207c55e17d686eccf46dc69b84c85fb7323"
+    },
+    {
+      "style": "ipod",
+      "parts": 20,
+      "materials": 26,
+      "sha256": "7f40193e7e29a23f9fce4d15bdf0e0903e41295e493f582c133ca7a8c959edb6"
+    },
+    {
+      "style": "hanafuda",
+      "parts": 20,
+      "materials": 26,
+      "sha256": "71bdcf107ca3cd1529ac9c4d50a5338cfa0f6c09fb7243eebe8c2468ac6f1aef"
+    }
+  ],
+  "browser_download_tested": false,
+  "physical_acceptance": false
+}

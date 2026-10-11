@@ -24,14 +24,16 @@ on the right. The right shell retains its own mounting geometry and corner radii
 
 | Feature | Dimension |
 |---|---:|
-| Frame face / Level upper shell | Z13.59 mm |
-| Display glass | Z13.39 mm; recessed 0.20 mm |
-| Pin cover | 0.40 mm; underside Z13.19 mm |
+| Frame face / Level upper shell | Z14.50 mm |
+| Display glass | Z14.30 mm; recessed 0.20 mm |
+| Pin cover | 0.40 mm; underside Z14.10 mm |
 | Nominal solder clearance | 0.20 mm |
 | Glass opening | 13.90 × 30.50 mm; 0.10 mm nominal glass clearance |
 | Approved bezel width | 2.40 mm, exact outward offset |
 | Ordinary inlay / remaining backing | 0.40 / 1.00 mm |
 | Thin display collar | 0.865 mm through-color volume |
+
+The current [supplied-connector adaptation](level-stack.md) raises the display and its cover by 0.91 mm while preserving the approved artwork in XY.
 
 R4 centered the complete display chain by +0.20 mm X on the left and −0.20 mm on the right, including contacts, guides, native PCB drills and KiCad J2. The subsequent [seam correction](../design/display-seam-implementation.md) closes the exposed side bands and centers the opening vertically. It adds no further display translation or height. Key centers, MCU, battery and mounting datums stay fixed. Heights start at the case underside, excluding feet.
 
@@ -45,7 +47,7 @@ The 0.40 mm cover targets a standard 0.4 mm nozzle workflow. Thickness and digit
 
 ## Reproduce the approved migration
 
-For the current assembly, follow the [seam correction commands](../design/display-seam-implementation.md#reproduce). The commands below reproduce the earlier R4 snapshot. Use the preserved pre-R4 native file from commit `2de168b54146c2b135a6438bb1d6a5b30bcc0141` as the input, in an ignored build directory. Keep the approved master unchanged.
+For the current assembly, follow the [supplied-connector reproduction commands](level-stack.md#reproduce-the-current-supplied-connector-installation). The [seam correction commands](../design/display-seam-implementation.md#reproduce) describe an earlier snapshot. The commands below reproduce the earlier R4 snapshot. Use the preserved pre-R4 native file from commit `2de168b54146c2b135a6438bb1d6a5b30bcc0141` as the input, in an ignored build directory. Keep the approved master unchanged.
 
 ```sh
 mkdir -p build/approved-r4/source

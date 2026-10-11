@@ -1,21 +1,27 @@
 # Build status
 
-The current design is a routed digital prototype. [Gerber/drill packages](electronics.md) and [compiled UF2 firmware](firmware.md) are available. Both boards pass DRC, ERC and schematic parity with no disconnected nets. Connectors, printed fit, retention and operation have not been physically qualified; the BOM remains a candidate until supplied parts are measured.
+The current design is a routed digital prototype. [Gerber/drill packages and ordering instructions](electronics.md#order-the-two-pcbs) and [compiled UF2 firmware](firmware.md) are available. Both boards pass DRC, ERC and schematic parity with no disconnected nets. The [purchasing BOM](parts.md) specifies the supplied nice!view connector and exact Mill-Max controller sockets/pins. Printed fit, retention and electrical operation have not been physically qualified.
 
 The intended sequence is:
 
-1. Close the BOM and measure the actual components.
+1. Use the selected BOM and inspect the delivered components, dimensions and battery polarity.
 2. Print a Choc fit coupon and three KLP Lamé samples. Check stem fit, return and comfort before printing the full set.
-3. After confirming the actual connector/pack fit, use the matching prototype PCB package. Solder the small parts, then sockets/connectors; check continuity and polarity before fitting either controller.
+3. Order the matching left and right prototype PCB packages. Solder the small parts, then sockets/connectors using the heights below; check continuity and polarity before fitting either controller.
 4. Follow the [firmware guide](firmware.md) to flash each half and test all 36 keys, combinations, layers and key releases.
 5. Install the supported battery, controller, display and frames without loading the pouch or glass.
 6. Verify BLE, charging, sleep/wake and measured power use.
 
 PLA Basic and PETG HF are available for prototype trials; ABS is another case material. No filament/profile is qualified for the final parts yet. Print orientation and stem tolerances need physical tests. [Parts and alternatives](parts.md).
 
+## Install the selected connectors
+
+Cut the Mill-Max **315-43-164-41-003000** 64-position strip into **four 12-contact strips**, allowing sacrificial contacts at the cuts. Use **48 of the 50 supplied 3320-0-00-15-00-00-03-0 round pins**. The 6.35 mm pin length is not the installed board separation: hold the controller level on its printed support before soldering, with its PCB underside at **Z8.20 mm**, **2.80 mm above the main PCB top at Z5.40 mm**. Inspect seating, engagement and insulation before power-up.
+
+Use the **5 mm socket and 2 mm header supplied with each nice!view**. The display PCB underside is **Z12.40 mm**, giving **7.00 mm** board separation; its glass top is **Z14.30 mm** under the **Z14.50 mm** frame and Level roof. Insert the male header's short solder tails into the display and its long mating posts into the socket. Trim **only free solder tails** to at most **0.30 mm above the display PCB**, with a **0.50 mm maximum joint envelope**; keep the mating posts intact. The socket's free tails may protrude at most **1.00 mm below the main PCB**. Inspect for solder bridges and test frame clearance before final assembly.
+
 ## Inspect the layout now
 
-`design/layout.json` contains each half’s 18 key centers and angles in millimeters. The original Piantor boards and provenance are under `sources/` and [ATTRIBUTION.md](../ATTRIBUTION.md).
+`design/layout.json` contains each half’s 18 key centers and angles in millimeters. The Flan36 CAD is Eduardo Ruiz's original design. Historical Piantor reference boards and their provenance are retained under `sources/` and [ATTRIBUTION.md](../ATTRIBUTION.md).
 
 ```sh
 python3 tools/check_layout.py
@@ -36,9 +42,13 @@ The frame is cosmetic and removable. The five internal structural screws per hal
 
 For the nominal assembly, seat the open-bottom locator, cell directly on the **1.4 mm case floor**, and cage before lowering the PCB over the cell. The cage’s wider feet remain below the board. Install the three plate spacers and structural screws, then the removable modules and frame. Do not compress the pouch. Actual lead exit and strain relief remain to be qualified.
 
+Use **three Huyett DOWMH-020-004 Ø2 × 4 mm alloy-steel targets per frame**. Fit the **eight Essentra RBS-5BK adhesive feet** on the external case underside, clear of reset access and screw holes. Their 1.6 mm height changes the external height only, not the internal assembly datums.
+
+Use the selected **Olimex KAPTON-TAPE10MM** for local electrical isolation, keeping connector contacts accessible and avoiding pressure on the battery pouch. The printed cage provides retention. The **Adafruit 4199 USB-C to USB-C data cable** connects directly to a USB-C computer for firmware transfer and charging; one cable serves both halves in sequence. Check that the plug seats fully without forcing the case.
+
 For service, power off and disconnect USB first. Lift the magnetic frame and use the [inherited nominal removal sequence](slim-flush.md) to expose and unplug the battery connector. Remove the caps, then the three plate screws and plate/Level upper shell, then the two short PCB screws and PCB before withdrawing the captured cage. The magnetic cover alone does not release the battery. Cable flex, connector grip and actual removal still need a physical trial. Reset is operated from the underside with a small tool through the recessed access hole.
 
-The [historical support study](slim-mount-study.md) records why the earlier closed cable tunnels prevented display/sled removal. The [current Level stack](level-stack.md) retains the open-bottom support relief and lowers both battery-specific cable routes with the cell. Its glass remains at 13.39 mm beneath the 13.59 mm frame/shell plane and relies on an unqualified Samtec connector substitution; the stock display connector belongs to the previous taller stack. Digital checks do not qualify bending forces or real terminal tolerances.
+The [historical support study](slim-mount-study.md) records why the earlier closed cable tunnels prevented display/sled removal. The [current Level stack](level-stack.md) retains the open-bottom support relief and lowered battery routes. The supplied 7.00 mm display connector puts the glass at **14.30 mm**, recessed 0.20 mm beneath the **14.50 mm** frame/shell plane. It supersedes the lower Samtec study without changing the battery, controller, key positions or PCB. Digital checks do not qualify bending forces or real terminal tolerances.
 
 ## Hardware acceptance
 
@@ -46,7 +56,7 @@ No item below has been physically accepted. Record the supplied part number, mea
 
 | Test | Acceptance evidence |
 |---|---|
-| Actual parts | Cell envelope, protection wrapping, lead exit and polarity; 301230 charge limit; controller/display connector fit and installed height |
+| Actual parts | Selected Adafruit 1570 envelope, protection wrapping, lead exit and polarity; specified controller/display connector seating and installed heights |
 | Printed interfaces | Choc stem/return, screw engagement, captive magnet/pin retention, frame peel/sliding and battery service without pouch or glass loading |
 | Bare assembly | Continuity, no power short, diode orientation and 36 unique switches without stuck/reversed keys |
 | Firmware and displays | Correct half images, four layers, simultaneous keys, both screens or selected single-screen option, reset and wake recovery |

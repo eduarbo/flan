@@ -22,7 +22,8 @@ def run():
     digest=sha(args.source);doc=A.openDocument(str(args.source));assert doc.getObject('AuditRepairs20261007')
     for prefix in ['L_','R_']:doc.getObject(prefix+'Half').Placement=A.Placement()
     doc.recompute();reference={k:float(getattr(doc.Parameters,k)) for k in ['DisplayShiftY','WindowMargin','FrameTop','FrameRoof']}
-    assert reference=={'DisplayShiftY':2.4,'WindowMargin':.1,'FrameTop':13.59,'FrameRoof':1.4}
+    roof=14.5 if doc.getObject('StockDisplayConnector') else 13.59
+    assert reference=={'DisplayShiftY':2.4,'WindowMargin':.1,'FrameTop':roof,'FrameRoof':1.4}
     names=['NiceViewVisual0','NiceViewVisual1','NiceViewVisual2','NiceViewVisual3','GlassWindow','SlimDisplayMaleSpacer','SlimDisplayMaleContacts','SlimDisplaySocketHousing','SlimDisplaySocketPins','LevelDisplaySolderReserve','LevelDisplayPCBRelief','LevelHeaderServiceWell','SlimDisplayHeaderClearance']
     chain={p+n:bounds(doc.getObject(p+n).Shape) for p in ['L_','R_'] for n in names}
     styles=[*M.APPROVED,'hanafuda'];targets=[doc.getObject(p+'FlushFrame_'+s+'_Final') for p in ['L_','R_'] for s in styles]
@@ -38,7 +39,7 @@ def run():
         b=bounds(diodes.Shape);assert abs(b[2]-2.54)<1e-6 and abs(b[5]-3.8)<1e-6
         report['diodes'][side]={'count':18,'underside_bounds_mm':b,'nominal_floor_z_mm':1.4,'nominal_floor_gap_mm':b[2]-1.4}
     log('Both halves: all 16 case parts clear USB; 36 diode bounds checked')
-    for label,edits in [('reference',{}),('display',{'DisplayShiftY':3.4}),('window',{'WindowMargin':.3}),('roof',{'FrameTop':13.99}),('combined',{'DisplayShiftY':3.4,'WindowMargin':.3,'FrameTop':13.99})]:
+    for label,edits in [('reference',{}),('display',{'DisplayShiftY':3.4}),('window',{'WindowMargin':.3}),('roof',{'FrameTop':roof+.4}),('combined',{'DisplayShiftY':3.4,'WindowMargin':.3,'FrameTop':roof+.4})]:
         for name,value in {**reference,**edits}.items():doc.Parameters.set(doc.Parameters.getCellFromAlias(name),str(value)+' mm')
         doc.recompute(targets)
         state={}

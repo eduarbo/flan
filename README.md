@@ -2,7 +2,7 @@
 
 **36 keys. Original design. Your keycaps, your frames.**
 
-**[Explore and customize in 3D →](https://eduarbo.github.io/flan36/)** · **[Parts and buying links →](docs/parts.md)** · **[Edit in FreeCAD →](docs/freecad.md)**
+**[Explore and customize in 3D →](https://eduarbo.github.io/flan36/)** · **[Parts and buying links →](docs/parts.md)** · **[Order PCBs →](docs/electronics.md#order-the-two-pcbs)** · **[Edit in FreeCAD →](docs/freecad.md)**
 
 ![Flan36 revI with interchangeable display frames and original KLP Lamé keycaps](docs/images/revI-assembled.png)
 
@@ -10,7 +10,7 @@
 
 **[Themes and print kits](docs/themes-printing.md)** — Twenty-eight coordinated themes, personal keycap palettes, linked rim/frame colors and selected STL/3MF parts.
 
-**[Lower, level stack](docs/level-stack.md)** — The frame and removable switch-covering shell reach 13.59 mm; the glass sits 0.20 mm below them. Connector fit remains unqualified.
+**[Lower, level stack](docs/level-stack.md)** — The frame and removable switch-covering shell reach 14.50 mm; the glass sits 0.20 mm below them. The display uses its supplied 5 mm socket + 2 mm header; physical assembly remains to be tested.
 
 **[Case variants](docs/cases.md)** — Level, Solid, Color rim and Terrace; actual meshes in the explorer.
 

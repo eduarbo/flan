@@ -163,9 +163,13 @@ def validate_materials(doc,side,smooth,obj,output_dir=None):
     import MeshPart
     M.use_document(doc);params=doc.Parameters;roof=float(params.FrameTop)
     values={k:float(getattr(params,k)) for k in ['FrameTop','FrameRoof','WindowMargin','DisplayShiftY']}
-    for name,lo,hi in [('FrameTop',13.59,13.99),('FrameRoof',1.2,1.4),('WindowMargin',.1,.3),('DisplayShiftY',2.4,3.4)]:
+    stock=doc.getObject('StockDisplayConnector') is not None
+    roof_min=14.5 if stock else 13.59
+    if stock and abs(float(params.DisplayBottom)-12.4)>1e-7:
+        raise ValueError('Supplied nice!view connector requires DisplayBottom=12.4 mm')
+    for name,lo,hi in [('FrameTop',roof_min,roof_min+.4),('FrameRoof',1.2,1.4),('WindowMargin',.1,.3),('DisplayShiftY',2.4,3.4)]:
         if not lo-1e-8<=values[name]<=hi+1e-8:
-            raise ValueError(f'{name}={values[name]} mm is outside the checked study interval {lo}..{hi} mm; requalify geometry before export')
+            raise ValueError(f'{name}={values[name]} mm is outside the permitted study interval {lo}..{hi} mm; requalify geometry before export')
     whole=obj.Shape;blank=smooth.Shape
     assert whole.isValid() and len(whole.Solids)==1,(obj.Name,'frame disconnected')
     removed=blank.cut(whole).Volume;added=whole.cut(blank).Volume
@@ -176,7 +180,7 @@ def validate_materials(doc,side,smooth,obj,output_dir=None):
     gap=whole.distToShape(glass)[0]
     assert abs(gap-values['WindowMargin'])<1e-6,(obj.Name,'glass margin',gap)
     top=M.top_faces(blank,roof);flat=M.regions(side,obj.FrameStyle,uncut=True)
-    reference=all(abs(values[k]-v)<1e-7 for k,v in {'FrameTop':13.59,'FrameRoof':1.4,'WindowMargin':.1,'DisplayShiftY':2.4}.items())
+    reference=all(abs(values[k]-v)<1e-7 for k,v in {'FrameTop':roof_min,'FrameRoof':1.4,'WindowMargin':.1,'DisplayShiftY':2.4}.items())
     frozen=M.frozen_regions(side,obj.FrameStyle) if reference else None
     relief=doc.getObject(prefix+'LevelDisplayPCBRelief').Shape.optimalBoundingBox(False,False)
     exclusion=Part.makeBox(relief.XLength,relief.YLength,30,A.Vector(relief.XMin,relief.YMin,0))

@@ -19,7 +19,9 @@ FreeCAD, the web viewer and the revI KiCad relative STEP models share this nomin
 
 The controller support has scalloped upper ledges. These keep clear of a 1.05 mm radius reserve around the underside pads. They do not establish solder tolerance or retention force.
 
-The lowest modeled nice!view PCB sits 6.09 mm above the main PCB using a nominal Samtec SLW/TLW pair. The row follows the official 1.3 mm end offset. Commercial finished-hole/post fit, actual mating and solder tolerances remain unqualified. The stock 7 mm pair belongs to the preceding taller reference. [Stack dimensions and limits](../docs/level-stack.md).
+The nice!view PCB sits **7.00 mm above the main PCB**, using the **5 mm socket and 2 mm header supplied with the display**. Its PCB underside is **Z12.40 mm**, glass top **Z14.30 mm**, and frame/Level roof **Z14.50 mm**. The contact row follows the official 1.3 mm end offset. Free display solder tails are limited to 0.30 mm above the PCB with a 0.50 mm solder envelope; mating posts stay intact. Free socket tails remain within 1.00 mm below the main PCB. Actual solder tolerances and printed fit require assembly inspection. The earlier 6.09 mm Samtec SLW/TLW study was superseded because its square-post/finished-hole tolerance was not established. [Stack dimensions and history](../docs/level-stack.md).
+
+The selected controller connectors are **four 12-contact sections cut from one Mill-Max 315-43-164-41-003000 64-position strip**, plus **48 installed 3320-0-00-15-00-00-03-0 round pins** (50 purchased). Sacrificial contacts at each cut preserve the retained socket bodies. The printed support holds the nice!nano PCB underside at **Z8.20 mm**, 2.80 mm above the main PCB, before soldering; the loose pin's 6.35 mm length does not set this separation. [Exact parts and assembly orientation](../docs/parts.md#removable-connectors).
 
 ![Nominal nice!nano v2 reconstruction in the explorer](../docs/images/revI-nano-v2.png)
 

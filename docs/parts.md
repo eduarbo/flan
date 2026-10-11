@@ -2,30 +2,43 @@
 
 **One complete 36-key split. Quantities cover both halves.**
 
-This is a planning BOM for the revI mechanical study and PCB outline. **It is not a verified build kit:** the PCBs are routed and digitally checked, but exact connectors, magnetic retention and printed threads still need physical tests. Store links identify actual products; they do not certify interchangeability.
+This is the selected purchasing BOM for the routed revI prototype, an original design by Eduardo Ruiz. The display uses the connector supplied with nice!view; the controller sockets and pins are specified below. **Physical assembly has not been qualified:** supplied-part tolerances, printed fit, magnetic retention and electrical operation still need the [build checks](build.md).
 
 [Custom PCBs](electronics.md) · [Typeractive shopping list](#typeractive-shopping-list) · [Controllers](#controllers) · [Displays](#displays) · [Switches](#switches-and-hot-swap) · [Battery](#battery) · [Connectors](#removable-connectors) · [Small parts](#small-electrical-parts) · [Printed parts](#printed-parts)
 
-**Custom PCBs: 1 left + 1 right**, two layers, 1.6 mm FR4, nominal 1 oz copper. Use the [matched prototype fabrication packages](electronics.md), after checking the exact connector and battery fit. The supplied pin maps differ between halves; neither board is interchangeable with Piantor or the historical placement studies.
+**Custom PCBs: 1 left + 1 right**, two layers, 1.6 mm FR4, nominal 1 oz copper. Download the [left fabrication ZIP](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/flan36-left-revI-prototype.zip) and [right fabrication ZIP](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/flan36-right-revI-prototype.zip), then follow the [ordering settings](electronics.md#order-the-two-pcbs). The supplied pin maps differ between halves; neither board is interchangeable with Piantor or the historical placement studies.
 
 ## Typeractive shopping list
 
-| Item | Quantity / store selection | Fit status |
+| Item | Quantity / store selection | Assembly note |
 |---|---|---|
-| [nice!nano v2](https://typeractive.xyz/products/nice-nano) | **2 units** | Selected controller; final socket height pending |
-| [nice!view](https://typeractive.xyz/products/nice-view) | **2 units**, or 1 for the fallback | Selected display; included connector does not establish stack fit |
+| [nice!nano v2](https://typeractive.xyz/products/nice-nano) | **2 units** | Install with the specified Mill-Max sockets/pins at Z8.20 mm |
+| [nice!view](https://typeractive.xyz/products/nice-view) | **2 units** | Use each display's supplied 5-pin socket and header; 7.00 mm board separation |
 | [Choc v1 switches](https://typeractive.xyz/products/choc-switches) | **4 packs of 10**; Pro Red baseline | 36 required, 4 spares |
 | [Kailh hot-swap sockets](https://typeractive.xyz/products/hotswap-sockets) | **4 packs of 10; select Choc** | Do not select MX |
 | [1N4148W SMD diodes](https://typeractive.xyz/products/smd-diodes) | **4 packs of 10** | SOD-123 family; verify supplied marking/footprint |
-| [Machine sockets and pins](https://typeractive.xyz/products/machine-sockets-and-pins) | **2 kits** | Store uses Mill-Max **310**, study references **315**; substitution needs height/pin check |
-| [EZ-Solder sockets/headers](https://typeractive.xyz/products/ez-machine-sockets-and-headers) | **2 kits**, instead of the preceding kits | Easier header handling; taller, not qualified in this stack |
-| [5-pin sockets](https://typeractive.xyz/products/5-pin-sockets) | Optional **1 pack of 2** | Extras; nice!view includes sockets/pins. Stock alternative for the previous taller stack; the current prototype uses the Samtec candidate below |
-| [110 mAh battery](https://typeractive.xyz/products/lithium-battery-110mah) | **2**, connector variant to resolve | Supported nominal envelope in the shared 12.5 mm aperture; physical pack fit pending |
-| [Battery jack](https://typeractive.xyz/products/battery-jack) | **1 pack of 2** | JST S2B-PH-K-S side-entry reference; 2 mm nominal footprint |
-| [Power switch](https://typeractive.xyz/products/power-switch) | **1 pack of 2** | Alps part differs from the C&K reference; footprint change/check required |
-| [Reset button](https://typeractive.xyz/products/reset-button) | **1 pack of 2** | Panasonic part differs from the E-Switch reference; not a drop-in approval |
+| [Battery jack](https://typeractive.xyz/products/battery-jack) | **1 pack of 2; white** | JST S2B-PH-K-S side-entry reference; 2 mm nominal footprint |
 
-The selected Adafruit battery, custom PCB and printed parts are outside this store list. Prices, stock and shipping eligibility can change; check the selected variant and delivery destination at checkout. No purchases have been made.
+No additional display connector pack is needed. The selected controller connectors, battery, power switch and reset button are in the following list; the similarly named Typeractive alternatives are not the selected parts.
+
+## DigiKey shopping list
+
+| Item | Quantity | Selection |
+|---|---:|---|
+| [Adafruit 1570](https://www.digikey.com/en/products/detail/adafruit-industries-llc/1570/5054546) | **2** | Protected 1S 100 mAh LiPo; keep the nice!nano BOOST jumper open |
+| [C&K PCM12SMTR](https://www.digikey.com/en/products/detail/c-k/PCM12SMTR/1640112) | **2** | Exact power-switch reference; cut tape |
+| [E-Switch TL3342F160QG/TR](https://www.digikey.com/en/products/detail/e-switch/TL3342F160QG-TR/379003) | **2** | Exact reset-button reference; cut tape |
+| [Mill-Max 315-43-164-41-003000](https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/315-43-164-41-003000/1212143) | **1 strip of 64** | Cut four 12-contact strips, using sacrificial contacts at the cuts |
+| [Mill-Max 3320-0-00-15-00-00-03-0](https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/3320-0-00-15-00-00-03-0/4147392) | **50** | Round pins; 48 used, 2 spares |
+| [Essentra RBS-5BK](https://www.digikey.com/en/products/detail/essentra-components/RBS-5BK/1878940) | **8** | Adhesive feet, Ø12.7 × 1.6 mm; DigiKey RPC1381-ND |
+| [Adafruit 4199](https://www.digikey.com/en/products/detail/adafruit-industries-llc/4199/10230016) | **1** | USB-C to USB-C data cable, 1 m; DigiKey 1528-4199-ND; $9.95 when checked |
+| [Olimex KAPTON-TAPE10MM](https://www.digikey.com/en/products/detail/olimex-ltd/KAPTON-TAPE10MM/19204468) | **1 roll** | Insulating tape, 10 mm × 30 m; DigiKey 1188-KAPTON-TAPE10MM-ND; $2.88 when checked |
+
+The 64-position strip replaces the unavailable 12-position version in the same 315 family and suffix. The PCM12SMTR is obsolete but was stocked when this list was checked; a different switch requires a footprint check. Prices and availability were checked on October 10, 2026 and can change at checkout. Lithium batteries require an eligible US ground service; do not select an air or prohibited postal service. Custom PCBs and printed parts are separate.
+
+## Frame steel targets
+
+The two frames require **6 × Huyett DOWMH-020-004**, Ø2 × 4 mm hardened alloy-steel dowel pins to attract the base magnets. [Fix Supply's exact part](https://www.fixsupply.com/zpin-dw-903-hardened-dowel-pin-alloy-steel-2-mm-dia-x-4-mm-length) uses DIN 6325 alloy steel. Its current minimum is **25 pins at $0.73 each, $18.25 before shipping/tax**; the listing showed an estimated **October 30, 2026 ship date** when checked. Six are installed and nineteen remain for spare frames. This is the selected source; its lead time is separate from the electronics shipment.
 
 ## Controllers
 
@@ -88,17 +101,18 @@ These are nominal clearances, not maximum finished-pack tolerances. Confirm prot
 
 ## Removable connectors
 
-<a href="https://typeractive.xyz/products/machine-sockets-and-pins"><img src="https://cdn.shopify.com/s/files/1/0618/5674/3655/products/sockets-and-pins-small.jpg?v=1671314084" width="210" alt="Machine Sockets and Pins — supplier product photo"></a>
 
-**Controller study reference:** 4 × 12-position Mill-Max **315-43-112-41-003000** strips and 48 compatible round pins, plus spares. [Manufacturer-authored datasheet, distributor mirror](https://static6.arrow.com/aropdfconversion/2e225be7d9212620894362dafa7ce735623fe9ca/315-43-112-41-003000.pdf).
+**Selected controller connectors:** 1 × 64-position Mill-Max **315-43-164-41-003000** strip, cut into **four 12-contact strips**, and **50 × 3320-0-00-15-00-00-03-0** round pins. Reserve sacrificial contacts at each cut; 64 positions cover the 48 installed contacts and cut losses. The strip has the same 315-family geometry and suffix as the earlier 315-43-112-41-003000 reference. [315-family drawing](https://media.digikey.com/pdf/Data%20Sheets/Mill%20Max%20PDFs/310,%20311,%20315%20Series%20(in.).pdf) · [3320 pin drawing](https://www.mouser.com/datasheet/2/273/3320-0-00-15-00-00-03-0-780142.pdf).
 
-**Store alternative:** [Typeractive machine sockets/pins](https://typeractive.xyz/products/machine-sockets-and-pins), **2 kits**, each for one controller. The listing specifies Mill-Max **310**; do not treat it as the modeled 315 part. [EZ-Solder](https://typeractive.xyz/products/ez-machine-sockets-and-headers) trades loose pins for headers and a slightly taller assembly. Exact mating height and pin selection remain open for both alternatives. Do not force square pins into turned sockets.
+The round pin is nominally Ø0.020 in (0.508 mm), within the socket's Ø0.015–0.022 in accepted range. Its **6.35 mm length does not set the board separation**. Before soldering, use the printed controller support to hold the nice!nano underside at **Z8.20 mm**, **2.80 mm above the main PCB top at Z5.40 mm**, with the controller level. Verify engagement and insulation before applying power. The Typeractive 310 and taller EZ-Solder kits are not selected substitutes; do not force square pins into turned sockets.
 
 <a href="https://typeractive.xyz/products/5-pin-sockets"><img src="https://cdn.shopify.com/s/files/1/0618/5674/3655/products/nice-view-sockets.jpg?v=1671232737" width="210" alt="5-Pin Sockets — supplier product photo"></a>
 
-**Current low-stack display connector candidate:** 2 × Samtec **SLW-105-01-L-S** sockets and 2 × **TLW-105-06-G-S** headers. Their 4.57 + 1.52 mm bodies give a nominal **6.09 mm** board separation. Manufacturer drawings: [SLW](https://suddendocs.samtec.com/catalog_english/slw.pdf) and [TLW](https://suddendocs.samtec.com/catalog_english/tlw_th.pdf). This is a dimensional candidate, not a purchasable qualified BOM: stock was not checked, and the toleranced square post must be matched against measured nice!view holes. The display solder tails require trimming. [Exact assumptions and service well](level-stack.md).
+**Selected display connectors:** the **two supplied nice!view socket/header pairs**, one per display. The stated **5 mm socket + 2 mm header** gives **7.00 mm** board separation. The current display PCB underside is **Z12.40 mm**, glass top **Z14.30 mm**, and frame/Level roof **Z14.50 mm**. [Stack dimensions and service well](level-stack.md).
 
-**Stock alternative:** [Typeractive 5-pin sockets](https://typeractive.xyz/products/5-pin-sockets), included with nice!view and sold separately in pairs. Their stated 5 + 2 mm installed height belongs to the previous taller stack; they cannot simply replace the Samtec candidate inside the lowered frame.
+Put the male header's **short solder tails into the display PCB** and its long mating posts into the supplied socket. Trim only the free solder tails to **at most 0.30 mm above the display PCB**, with a **0.50 mm maximum solder-joint envelope**. Do not shorten the mating posts. Trim the main-board socket's free solder tails to **at most 1.00 mm below the main PCB**. Check the joints and clearances before fitting the frame. [Supplier connector reference](https://typeractive.xyz/products/5-pin-sockets).
+
+**Superseded study:** the Samtec SLW-105-01-L-S / TLW-105-06-G-S pair proposed a 6.09 mm stack, but its square post had no established tolerance allowance in the nice!view's undimensioned finished holes. It is no longer the purchasing recommendation. The frame and Level roof were raised 0.91 mm to use the supplied connector instead.
 
 [No-solder spring headers](https://typeractive.xyz/products/no-solder-spring-headers) require the supplier’s specified **0.8–0.9 mm holes** and different installed heights. They are not qualified for the current Flan36 hole/contact geometry. Do not buy them as an assumed shortcut.
 
@@ -112,13 +126,11 @@ These are nominal clearances, not maximum finished-pack tolerances. Confirm prot
 
 **2 × battery jacks.** [Typeractive JST PH 2.0 mm](https://typeractive.xyz/products/battery-jack) · [JST S2B-PH-K drawing](https://cdn.shopify.com/s/files/1/0618/5674/3655/files/JST-S2B-PH-K.pdf?v=1670451309). The PCB study now uses a 2 mm side-entry footprint and the CAD uses a nominal mated header/PHR-2 envelope. Check the purchased pack's polarity and terminal dimensions before assembly.
 
-<a href="https://typeractive.xyz/products/power-switch"><img src="https://cdn.shopify.com/s/files/1/0618/5674/3655/products/switch-both.jpg?v=1670366180" width="210" alt="Power Switch — supplier product photo"></a>
 
-**2 × power switches.** CAD/PCB reference: **C&K PCM12SMTR**, [manufacturer datasheet](https://www.ckswitches.com/media/1424/pcm.pdf). Typeractive sells **Alps SSSS811101**, [product information](https://typeractive.xyz/products/power-switch) · [Alps datasheet](https://cdn.shopify.com/s/files/1/0618/5674/3655/files/ALPS-SSSS811101.pdf?v=1670451309). The photo is the **Alps alternative**. Different part/footprint; not approved as interchangeable.
+**2 × C&K PCM12SMTR power switches**, selected from [DigiKey](https://www.digikey.com/en/products/detail/c-k/PCM12SMTR/1640112). [Manufacturer datasheet](https://www.ckswitches.com/media/1424/pcm.pdf). Typeractive's **Alps SSSS811101** has a different footprint and is not the selected part.
 
-<a href="https://typeractive.xyz/products/reset-button"><img src="https://cdn.shopify.com/s/files/1/0618/5674/3655/products/reset-button-both.jpg?v=1670365788" width="210" alt="Reset Button — supplier product photo"></a>
 
-**2 × reset buttons.** Reference: **E-Switch TL3342F160QG**, [full product information](https://www.e-switch.com/product/tl3342-series-low-profile-smt-tactile-switch/) · [datasheet](https://configured-product-images.s3.amazonaws.com/2D/specs/TL3342F160QG.pdf). Typeractive sells **Panasonic EVQPUC02K**, [product information](https://typeractive.xyz/products/reset-button) · [Panasonic datasheet](https://cdn.shopify.com/s/files/1/0618/5674/3655/files/PANASONIC-EVQPUC02K.pdf?v=1670451309). The photo is the **Panasonic alternative**. The E-Switch reference is mounted below the PCB with recessed tool access through the case floor. Footprint, actuation height and underside clearance must be reviewed before substituting the Panasonic part.
+**2 × E-Switch TL3342F160QG/TR reset buttons**, selected from [DigiKey](https://www.digikey.com/en/products/detail/e-switch/TL3342F160QG-TR/379003). [Full product information](https://www.e-switch.com/product/tl3342-series-low-profile-smt-tactile-switch/) · [datasheet](https://configured-product-images.s3.amazonaws.com/2D/specs/TL3342F160QG.pdf). Typeractive's **Panasonic EVQPUC02K** is not the selected part. The E-Switch reference is mounted below the PCB with recessed tool access through the case floor; a different switch requires footprint, actuation-height and clearance checks.
 
 ## Printed parts
 
@@ -128,7 +140,7 @@ These are nominal clearances, not maximum finished-pack tolerances. Confirm prot
 |---|---:|---|
 | KLP Lamé keycaps | 36 | [Variant guide](customize.md); [38 source STLs](../keycaps/variants); original preset: 28 Normal + 2 Homing + 6 Thumb |
 | Case bases and key plates / upper shells | 2 each | Level, Solid, Color rim or Terrace; [editable CAD, STEP and STL](cad.md) |
-| Display frames | 2 | Six selectable approved designs; 13.59 mm shared roof, separate color per half |
+| Display frames | 2 | Six selectable approved designs; 14.50 mm shared roof, separate color per half |
 | Battery locators and retainers | 2 each | Open-bottom locator and rigid cage; cell on the floor, cage feet captured under PCB |
 | Controller supports and display sleds | 2 each | Independent from the cover |
 | Printed spacers/washers | 6 | Check printed dimensions and screw fit |
@@ -139,15 +151,15 @@ These are nominal clearances, not maximum finished-pack tolerances. Confirm prot
 
 - **6 × M2 × 6 low-head screws:** nominal NBK SLH envelope, Ø3.8 × 1.3 mm head. [Drawing](https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SLH-TZB/SLH-TZB_1.pdf). **4 × M2 × 4:** NBK SSH envelope, Ø4 × 1.1 mm head. [Drawing](https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SSH/SSH_1.pdf). Tap the printed Ø1.7 mm pilots M2; engagement is 2.2–2.4 mm. Thread strength remains untested.
 - **6 × Ø2 × 3 mm neodymium magnets:** S-02-03-N reference, N45. [Full product information](https://www.supermagnete.de/stabmagnete-neodym-rund/stabmagnet-2mm-3mm_S-02-03-N) · [Datasheet](https://www.supermagnete.fr/data_sheet_S-02-03-N.pdf). Three stay in each base. Test the capture process without exceeding the specified 80°C magnet temperature.
-- **6 × Ø2 × 4 mm ferromagnetic steel pins:** three per frame. The exact supplier/grade is still open; nonmagnetic stainless is unsuitable. Every additional pair of frames needs six more pins; the base magnets stay in place.
-- **8 adhesive rubber feet:** approximately 1–1.5 mm. Their height adds to the case.
-- **Insulation and removable retention:** small quantity; avoid loading the battery pouch. The rigid cage and captive inserts are digitally modeled; printed retention is untested.
-- **1–2 USB-C data cables:** charging and firmware transfer. [Typeractive’s silicone cable](https://typeractive.xyz/products/silicone-usb-c-cable) is listed for power; its page does not establish data support. Do not assume it can flash firmware. Check plug dimensions against the opening.
+- **6 × Huyett DOWMH-020-004 steel targets:** Ø2 × 4 mm hardened alloy steel, three per frame; use the [selected Fix Supply source](#frame-steel-targets). Every additional pair of frames needs six more pins; the base magnets stay in place. Nonmagnetic stainless is unsuitable.
+- **8 × Essentra RBS-5BK adhesive feet:** Ø12.7 × 1.6 mm, [DigiKey RPC1381-ND](https://www.digikey.com/en/products/detail/essentra-components/RBS-5BK/1878940). The checked eight-piece line was $1.30. Their 1.6 mm height adds externally without changing the internal stack; place them clear of reset access and screw holes.
+- **1 roll Olimex KAPTON-TAPE10MM:** 10 mm × 30 m insulating tape for local electrical isolation. [Manufacturer specifications](https://www.olimex.com/Products/Tools/Soldering/KAPTON-TAPE10MM/) give 20 µm thickness. Do not cover connector contacts or use tape to compress the battery pouch; the printed locator and cage provide mechanical retention. Printed retention remains untested.
+- **1 × Adafruit 4199 USB-C to USB-C data cable, 1 m:** [manufacturer information](https://www.adafruit.com/product/4199). Use it to flash and charge each half in sequence from a USB-C computer. The cable carries data as well as power; inspect complete plug insertion without forcing the case. No second cable or USB-A adapter is required for that sequence. Omit this purchase only if an equivalent USB-C data cable is already available.
 - Fine-tip soldering iron, solder, flux, tweezers, cutters and a multimeter. The printer makes mechanical parts; the custom PCB needs fabrication. [Routed prototype files and remaining checks](electronics.md).
 
 ## Sources and images
 
-Original store links and pack quantities were checked on **2026-09-21**; battery specifications and magnetic hardware sources were revisited on **2026-09-22**. The current automated link check could not read the Arrow socket PDF (timeout) or the C&K PDF (403); those historical technical references remain listed, not freshly verified. Manufacturer/supplier documentation takes precedence over approximate CAD envelopes. Missing exact datasheets and unresolved substitutions are explicitly identified above.
+The selected Typeractive and DigiKey products and pack quantities were checked during the **2026-10-10** procurement review. Earlier battery and magnetic hardware references date from **2026-09-22**. Manufacturer/supplier documentation takes precedence over approximate CAD envelopes; the assembly checks apply to delivered parts, not merely their catalog names.
 
 Product photos are embedded from Typeractive/Adafruit and linked to their original listings. They remain the property of their respective owners; they are not relicensed under this repository’s license. They need internet access and are not bundled in the offline 3D viewer. Flan36 renders have separate [attribution](../ATTRIBUTION.md).
 
