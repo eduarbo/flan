@@ -21,15 +21,22 @@
   "magnet_diameter": 2,
   "magnet_height": 3,
   "magnet_z": 3.2,
-  "steel_diameter": 2,
-  "steel_height": 4,
-  "steel_z": 7.1,
   "nominal_axial_gap": 0.9,
   "pocket_float_gap_range": [
     0.7,
     1.1
   ],
   "magnet_source": "https://www.supermagnete.de/stabmagnete-neodym-rund/stabmagnet-2mm-3mm_S-02-03-N",
-  "assembly": "Pause and insert before closing the captive pocket; print process and actual magnet temperature require a coupon. No adhesive-only retention. Steel pins must be ferromagnetic, not austenitic stainless.",
-  "acceptance": "Digital clearance and vertical release only; measured north-edge peel, hold, sliding, insertion capture and cycling remain physical gates."
+  "assembly": "Pause and insert before closing both captive pockets. Keep magnets below the next nozzle path and secure against movement during resume. Qualify capture and actual thermal exposure with the existing coupon; use the temperature rating of the actual magnets. No adhesive-only retention.",
+  "acceptance": "Digital clearance and vertical release only; measured north-edge peel, hold, sliding, insertion capture and cycling remain physical gates.",
+  "frame_magnet_diameter": 2,
+  "frame_magnet_height": 4,
+  "frame_magnet_z": 7.1,
+  "base_magnet_count": 6,
+  "frame_magnet_count": 6,
+  "magnetization": "axial",
+  "material": "neodymium; grade and thermal rating must be checked against actual stock",
+  "polarity": "All base mating faces use the same pole; every frame mating face uses the opposite pole. Verify each pair attracts in final assembled orientation before closing either pocket. Frames may print inverted: refer to the final mating face, not printer-up.",
+  "purchase": "Use existing magnet kit: six diameter 2 x 3 mm and six diameter 2 x 4 mm magnets; no steel targets. Each extra pair of frames needs six more diameter 2 x 4 mm magnets.",
+  "legacy_ids": "SteelTarget object names and frame-target PartIDs are stable historical identifiers; current visible labels and this specification define frame magnets."
 }

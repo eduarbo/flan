@@ -201,3 +201,7 @@ RevF’s CAD/StepUp exchange, anonymous source download and public viewer were c
 On September 22, 2026, Eduardo selected **Flan36** and the **Outline** logo. The current presentation shows only that selection. On September 23, the rename was extended to the repository, Pages site, current native filenames and new configuration exports. Legacy configuration imports remain supported. Geometry and unfinished electrical/physical requirements are unchanged.
 
 The LCD-flank/curved-thumb and viewer correction is published. Anonymous source readback verified all **788 implementation files**; public browser checks passed for individual visibility, Solo/Show all, temporary X-ray hover, fixed View controls and mobile layouts. [Publication receipt](../validation/revI-lcd-curve-publication.json). Physical assembly and electronics acceptance remain open.
+
+## 2026-10-11 — All-magnet frame closure
+
+The six Ø2 × 4 mm steel targets are superseded by six axial neodymium magnets of the same dimensions, paired with the six Ø2 × 3 mm base magnets. Native visible labels, the BOM, viewer and print-kit joining instructions now agree. Printed geometry is unchanged; historical magnet/steel descriptions above record earlier revisions. [Identity and delivery evidence](../validation/revI-all-magnets-delivery.json). Polarity, print-in capture/temperature and whole-frame holding force still require physical checks.

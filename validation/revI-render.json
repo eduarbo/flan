@@ -1,12 +1,12 @@
 {
   "revision": "I",
-  "model_sha256": "1a18b2e1f291a055d14034b059dc8062aae1ff68467ca82976553cbecc9e9dfa",
+  "model_sha256": "e0855d7975377f3a0e3fba62bf819c537720c7c4417ed1d2513e9375904a19b0",
   "layout_sha256": "7c250ff02fb09d913379783bce71d7fc18e037e93ae33a8006cf40280c4d6af3",
   "renderer_sha256": "279652af01356b3087753da653714adbcbfd6d910f7589ec4b391de6dd6e7ef6",
   "sources": [
     {
       "path": "design/revI.json",
-      "sha256": "1a18b2e1f291a055d14034b059dc8062aae1ff68467ca82976553cbecc9e9dfa"
+      "sha256": "e0855d7975377f3a0e3fba62bf819c537720c7c4417ed1d2513e9375904a19b0"
     },
     {
       "path": "design/layout.json",

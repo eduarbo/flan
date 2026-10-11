@@ -37,9 +37,9 @@ The [historical support study](slim-mount-study.md) retains its original rejecte
 
 ### Magnetic frame, independent structure
 
-Three captive **Ø2 × 3 mm magnets** in the base attract three captive **Ø2 × 4 mm steel pins** in each frame. Shallow guides locate the cover; it lifts vertically. The frame carries no battery or display load. Five internal M2 fasteners per half retain the plate/PCB independently, with no added perimeter lobes. Three use 6 mm shafts; the two hidden under the frame use 4 mm shafts.
+Three captive **Ø2 × 3 mm axial magnets** in the base attract three captive **Ø2 × 4 mm axial magnets** in each frame. Both halves use twelve magnets from existing stock; each additional pair of frames needs six more Ø2 × 4 mm magnets. The printed pockets and insert envelopes are unchanged. Shallow guides locate the cover; it lifts vertically. The frame carries no battery or display load. Five internal M2 fasteners per half retain the plate/PCB independently, with no added perimeter lobes. Three use 6 mm shafts; the two hidden under the frame use 4 mm shafts.
 
-The inserts are enclosed by a pause-and-insert print sequence. Force through the nominal **0.9 mm gap**, north-edge peel, print capture and magnet temperature remain physical tests. [Assembly sequence and coupons](build.md#magnetic-frame-and-service).
+The magnets are enclosed by a pause-and-insert print sequence. Check every pair's attraction in its final assembled orientation before capture. Force through the nominal **0.9 mm gap**, north-edge peel, print capture and thermal qualification of the actual magnet stock remain physical tests. [Assembly sequence and coupons](build.md#magnetic-frame-and-service).
 
 ## One or two displays
 

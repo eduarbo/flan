@@ -13,6 +13,9 @@ from viewer_frame_selection import selected_catalog, selected_preset
 
 ROOT = Path(__file__).resolve().parents[1]
 model = json.loads((ROOT/'design/revI.json').read_text())
+magnetic = json.loads((ROOT/'design/revI-magnets.json').read_text())
+base_magnet_size = f'Ø{magnetic["magnet_diameter"]:g} × {magnetic["magnet_height"]:g} mm'
+frame_magnet_size = f'Ø{magnetic["frame_magnet_diameter"]:g} × {magnetic["frame_magnet_height"]:g} mm'
 layout = json.loads((ROOT/'design/layout.json').read_text())
 scene = {'revision':'I', 'units':'mm', 'geometries':{}, 'parts':[], 'sources':[], 'batteryLeadProfiles':{}}
 scene['frameArtwork']=model.get('frame_artwork',{'mode':'historical-mirrored'})
@@ -163,8 +166,8 @@ for side,keys in layout['halves'].items():
             scene['parts'][-1]['materials']=colors
     for i in range(1,6):add(f'Structural screw {i}',side,'fasteners','#56615b',[offset,0,0],9,mesh(f'mechanical/revI/{side}-screw-{i}.stl'))
     for i in range(3):
-        add(f'Captive magnet {i+1}',side,'fasteners','#8c9597',[offset,0,0],0,mesh(f'mechanical/revI/{side}-magnet-{i}.stl'))
-        add(f'Captive frame target {i+1}',side,'lid','#899193',[offset,0,0],72,mesh(f'mechanical/revI/{side}-frame-target-{i}.stl'))
+        add(f'Captive base magnet {i+1} · {base_magnet_size}',side,'fasteners','#8c9597',[offset,0,0],0,mesh(f'mechanical/revI/{side}-magnet-{i}.stl'))
+        add(f'Captive frame magnet {i+1} · {frame_magnet_size}',side,'lid','#899193',[offset,0,0],72,mesh(f'mechanical/revI/{side}-frame-target-{i}.stl'))
     for i in range(2):
         profile=model['batteryLeadProfiles'][f'{side}-{cfg["batteries"][side]}']
         lead=next(part for part in profile if part['index']==i)
@@ -194,7 +197,9 @@ for v in catalog['variants']:
 # Exact native bytes; never derive printable parts from the presentation scene.
 printing={'assets':{},'supports':['cradle','battery-retainer','mcu-riser','display-sled','washer-1','washer-2','washer-3'],
  'joining':{'case':'3 M2x6 + 2 M2x4 per half; tap the 1.7 mm pilots to M2',
- 'installed_frame':'3 captive diameter 2 x 3 mm magnets and 3 ferromagnetic diameter 2 x 4 mm pins per half',
+ 'installed_frame':f'Per half: 3 captive base magnets {base_magnet_size} and 3 captive frame magnets {frame_magnet_size}; all axially magnetized',
+ 'polarity':'Opposite poles must face each other in the final assembly. Mark the mating faces and check attraction at every station before embedding. Keep the same base orientation and matching frame orientation across interchangeable frames. When printing a frame upside down, use its final mating face, not the face pointing upward on the printer.',
+ 'capture':'For both base and frame magnets, inspect the sliced cavities and pause before closure. Confirm every insert remains below the next nozzle path. Qualify capture, actual thermal exposure and removal cycles with the actual magnets and filament; use the temperature limit for those magnets, not an assumed grade.',
  'clips':False,'acceptance':'Physical fit, thread strength, retention force and insertion process untested'}}
 for side in ['left','right']:
     names=[f'{side}-case-{style}-{group}' for style in catalog['case_styles'] for group in ['base','plate']]
@@ -223,7 +228,7 @@ scene['measurements']={'bay_width_mm':24,'plate_top_mm':7.6,'cover_top_mm':frame
                        'decoration_relief_mm':0,'frame_materials':'Native recessed co-print volumes; flush top',
                        'cover_ahead_of_top_cap_mm':round(max(0,top_key-hood_min),3),
                        'cover_ahead_of_adjacent_cap_mm':round(max(0,adjacent-hood_min),3)}
-for path in ['design/revI.json','design/layout.json','tools/build_viewer_revI.py','tools/viewer_frame_selection.py','design/frame-selection.json','design/frame-finishes.json','components/switches.json','components/sources.json','keycaps/catalog.json']:
+for path in ['design/revI.json','design/revI-magnets.json','design/layout.json','tools/build_viewer_revI.py','tools/viewer_frame_selection.py','design/frame-selection.json','design/frame-finishes.json','components/switches.json','components/sources.json','keycaps/catalog.json']:
     scene['sources'].append({'path':path,'sha256':digest(path)})
 scene['limits']=['Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md', 'Routed PCB candidate; physical electrical, connector and RF qualification pending',
                  'Nominal lead-storage paths; actual terminations, insulation and finished-pack tolerances unverified', 'PCB aperture 12.5 mm; both nominal cells fit. Magnetic force, print-in capture/temperature and physical fit need coupons',

@@ -188,10 +188,12 @@ for side in ('left', 'right'):
         locator=cyl('MagnetLocator'+str(i),x,y,6.3,1.4,.3)
         tray=fuse('TrayMagnetPost'+str(i),[tray,post,locator])
         tray=cut('MagnetPocket'+str(i),tray,cyl('MagnetPocketTool'+str(i),x,y,3.1,1.15,3.2))
-        magnet=cyl('Magnet'+str(i),x,y,3.2,1,3)
+        magnet=cyl('Magnet'+str(i),x,y,magnetic['magnet_z'],magnetic['magnet_diameter']/2,magnetic['magnet_height'])
         done('magnet-'+str(i),magnet,'Captive magnet 2 x 3 mm','fasteners',(.57,.6,.62))
-        target=cyl('SteelTarget'+str(i),x,y,7.1,1,4)
-        done('frame-target-'+str(i),target,'Captive steel pin 2 x 4 mm','lid',(.53,.56,.58))
+        # Retain legacy names for stable configuration links; both inserts are magnets.
+        target=cyl('SteelTarget'+str(i),x,y,magnetic['frame_magnet_z'],magnetic['frame_magnet_diameter']/2,magnetic['frame_magnet_height'])
+        done('frame-target-'+str(i),target,'Captive frame magnet 2 x 4 mm','lid',(.53,.56,.58))
+        target.Label2='Axially magnetized neodymium; opposite mating pole to base; verify attraction before embedding. Physical retention untested.'
         holes.append(cyl('MagnetBoardDrill'+str(i),x,y,3.7,2.05,2))
     power_slot = box('PowerAccess',128.3,55.4,140,63.9,5.1,4.1)
     tray = cut('TrayPowerCut',tray,power_slot)

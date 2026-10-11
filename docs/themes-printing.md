@@ -24,7 +24,7 @@ To update an existing design to these colors, select its theme or cap palette ag
 
 The [current collection checks](../validation/revI-approved-selection.json) cover native material exports, configuration migration and viewer behavior. The earlier [thumb-palette receipt](../validation/revI-thumb-themes.json) records the previous palette set.
 
-Eye, Solo, camera and exploded views are inspection controls. They do not remove parts from the print kit. Unchecking **Printed display cover** does remove that cover and its targets from the selected assembly.
+Eye, Solo, camera and exploded views are inspection controls. They do not remove parts from the print kit. Unchecking **Printed display cover** does remove that cover and its three frame magnets from the selected assembly.
 
 ## Printable parts and joining
 
@@ -33,7 +33,8 @@ Eye, Solo, camera and exploded views are inspection controls. They do not remove
 The [historical support study](slim-mount-study.md) includes experimental plates with integrated washers and bases with integrated saddles. These reduce loose parts, not height. They predate the current floor-mounted battery and Level shell; their separate downloads are comparison geometry, not replacements in the current print kit.
 
 - The structural case uses three M2 × 6 and two M2 × 4 screws per half. Tap the 1.7 mm pilot holes to M2.
-- Each installed frame uses three captive Ø2 × 3 mm magnets and three Ø2 × 4 mm ferromagnetic pins.
+- Each installed frame uses three captive Ø2 × 4 mm axial magnets, paired with three Ø2 × 3 mm axial magnets retained in its base. Use existing stock; each extra pair of frames needs six more Ø2 × 4 mm magnets.
+- Check every pair's attraction in its final assembled orientation before capture; a frame printed upside down reverses the printing orientation. Follow the [polarity and heat checks](build.md#magnetic-frame-and-service).
 - Cavities, guides and screw holes belong to the CAD geometry. Plan insertion pauses for captive hardware before slicing.
 - There is no clip variant yet. A color or theme does not change the joining method.
 

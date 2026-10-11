@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 
 export const partInfo={
-  lid:{name:'Display frame',short:'Frame',info:'Magnetic frame with captive steel targets and vertical release. Pick a design below; PCB and battery remain mechanically secured.'},
+  lid:{name:'Display frame',short:'Frame',info:'Removable frame with three captive Ø2 × 4 mm magnets per half. Opposite poles face the base magnets; check attraction before embedding. PCB and battery remain mechanically secured.'},
   keycaps:{name:'KLP Lamé keycaps',short:'Caps',info:'Original Choc-stem meshes. Choose a shape preset; color all keys, rows, columns or individual keys.'},
   display:{name:'nice!view display',short:'Display',info:'14 × 36 × 2.9 mm nominal nice!view. Illustrative screen content; flush frame details. Uses the supplied 7.00 mm connector pair. Glass sits 0.20 mm below the frame; physical fit remains untested.'},
   base:{name:'Printed base',short:'Base',info:'Key-aligned local curves and a shared contour. Use Customize this part to choose a case. Native parts are editable in FreeCAD.'},
@@ -13,7 +13,7 @@ export const partInfo={
   mcu:{name:'nice!nano v2 controller',short:'MCU',info:'Nominal v2 reconstruction with separate PCB, ENIG pads, mid-mount USB-C, ICs and passives. Community outline dimensions; package detail inferred from official photos.'},
   supports:{name:'Insulating supports',short:'Mounts',info:'Cradle, display sled and controller supports. Retention is a nominal CAD proposal.'},
   connectors:{name:'Connectors & controls',short:'Ports',info:'Supplied nice!view connectors, specified Mill-Max controller sockets, battery connector, reset and power switch. Exact purchasing references are in the build guide; verify delivered dimensions and solder clearances during assembly.'},
-  fasteners:{name:'Fasteners & feet',short:'Feet',info:'Five internal M2 structural screws per half, three captive magnet stations and steel frame targets. Printed threads and magnetic holding force need coupons.'}
+  fasteners:{name:'Fasteners & feet',short:'Feet',info:'Per half: five internal M2 screws, three captive Ø2 × 3 mm base magnets and three Ø2 × 4 mm frame magnets. All magnets are axial. Printed threads, magnetic holding force and capture need physical tests.'}
 };
 
 export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,requestRender}){

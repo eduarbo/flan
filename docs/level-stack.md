@@ -16,7 +16,7 @@ The five-pin contact row retains the official **1.3 mm end offset**, and the who
 
 ![Current Level assembly with the supplied display connector](images/revI-level.png)
 
-The [current digital delivery receipt](../validation/revI-stock-display-delivery.json) binds the native CAD, exports, KiCad models, viewer, renders and [six complete print-kit checks](../validation/revI-stock-print.json). The independent saved-file checks passed on both halves. Physical assembly and operation remain untested.
+The [display-stack digital delivery receipt](../validation/revI-stock-display-delivery.json) binds the native CAD, exports, KiCad models, viewer, renders and [six complete print-kit checks](../validation/revI-stock-print.json). The independent saved-file checks passed on both halves. The later [all-magnet closure](../validation/revI-all-magnets-delivery.json) preserves this geometry and replaces the six frame inserts with same-size Ø2 × 4 mm magnets. Physical assembly and operation remain untested.
 
 ## Historical Level and R4 dimensions
 

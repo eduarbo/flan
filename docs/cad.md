@@ -42,6 +42,12 @@ The local H3 support relief provides **0.25 mm nominal K30 socket clearance** on
 
 Parts retain assembly coordinates. Screw envelopes and nominal engagement are modeled; physical fits, printing orientation and final slicing settings are not qualified. Historical revE/revF/revG/revH sources and receipts remain available for comparison. To rebuild an older viewer, use its historical Git commit; the current shared viewer code targets revI.
 
+## All-magnet frame closure
+
+The frame now uses six axial neodymium Ø2 × 4 mm magnets, paired with the six Ø2 × 3 mm base magnets. The pocket geometry, all printable exports and KiCad models are unchanged. Only six native labels and their secondary material/polarity descriptions change; `SteelTarget` object IDs stay stable. The [native identity receipt](../validation/revI-all-magnets-native.json) proves all other XML and opaque native members match commit `881735e`, and the [FreeCAD reopen check](../validation/revI-all-magnets-reopen.json) verifies the saved inserts. Earlier geometry checks remain evidence for the identical geometry, not new physical acceptance.
+
+To reproduce this bounded migration from that commit (or verify the already migrated native), run `python3 tools/freecad/apply_frame_magnets.py`, then `python3 tools/freecad/run_macos.py tools/freecad/check_frame_magnets.py`. Rebuild the viewer below, then run `python3 tools/check_stock_print.py` and `python3 tools/check_all_magnets_delivery.py`: `build/stock-print/` contains ignored, reproducible kits and the exact STL/3MF plus all-magnet instruction checks. The [current delivery receipt](../validation/revI-all-magnets-delivery.json) binds these outputs.
+
 ## Rebuild the reference
 
 For the isolated migration from the preserved source, use the [floor/level reproduction commands](level-stack.md#reproduce). This keeps manual edits and the published source intact.

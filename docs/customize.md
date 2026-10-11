@@ -56,7 +56,7 @@ The controls are decorative. No logos, extra switches or LEDs are required. All 
 | Plain and decorated top | Same height; see the [current stack](level-stack.md) |
 | Structural roof / side wall | 1.4 / 1.2 mm |
 | Glass margin, each side | 0.10 mm |
-| Magnet / steel pin | Ø2 × 3 / Ø2 × 4 mm |
+| Base magnet / frame magnet, both axial | Ø2 × 3 / Ø2 × 4 mm |
 | Magnetic gap / guide radial clearance | 0.9 / 0.2 mm nominal |
 | R4 surface inlay / backing | 0.4 / 1.0 mm outside display relief; co-print aligned volumes |
 
@@ -76,7 +76,7 @@ Start with **one frame in PLA Basic** as a fit sample. Keep all material volumes
 
 Use the multipart 3MF for multicolor printing, assigning its body, detail, accent and secondary parts to your filaments. The aligned material STLs offer the same geometry. These volumes are for co-printing; they do not include the clearance or retention needed for separately printed press-fit inserts. GLB and the FreeCAD configuration macro preserve the visual palette. Printer profiles and finished toolpaths are not included.
 
-Print capture, magnet temperature, holding force and extraction still require a physical trial. Use the [small coupons and assembly sequence](build.md#magnetic-frame-and-service) first. The reset opening takes a tool. A nominal 12 × 5 mm USB plug and straight insertion corridor clear each theme; cable housings vary.
+Use magnets from existing stock; each additional pair of frames needs six Ø2 × 4 mm magnets while the six Ø2 × 3 mm base magnets stay installed. Check attraction for every pair in its final assembled orientation before closing its pocket, including when the frame prints upside down. Print capture, actual magnet grade and temperature limit, holding force and extraction still require a physical trial. Use the [small coupons and assembly sequence](build.md#magnetic-frame-and-service) first. The reset opening takes a tool. A nominal 12 × 5 mm USB plug and straight insertion corridor clear each theme; cable housings vary.
 
 The [new frame recipes](frames-extra.md) are editable native features. The [slim support study](slim-mount-study.md) separates fewer loose parts from lower stack height.
 
@@ -98,7 +98,7 @@ Configurations are tagged revision I. Older revision H JSON is not silently conv
 
 ## Case geometry
 
-Choose **Base → Solid / Color rim / Terrace** in the explorer. Each half has its own `cases` entry, for example `"left": {"style": "rim", "cover": false}`. `cover: false` omits the printed display cover and its steel targets; it retains the display and supports. JSON import validates both halves before changing anything. Older configurations without `cases` use Solid with covers. [Geometry, files and printing](cases.md).
+Choose **Base → Solid / Color rim / Terrace** in the explorer. Each half has its own `cases` entry, for example `"left": {"style": "rim", "cover": false}`. `cover: false` omits the printed display cover and its three frame magnets; it retains the display, supports and base magnets. JSON import validates both halves before changing anything. Older configurations without `cases` use Solid with covers. [Geometry, files and printing](cases.md).
 
 ## Coordinated themes and print kits
 

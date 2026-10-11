@@ -36,9 +36,11 @@ No additional display connector pack is needed. The selected controller connecto
 
 The 64-position strip replaces the unavailable 12-position version in the same 315 family and suffix. The PCM12SMTR is obsolete but was stocked when this list was checked; a different switch requires a footprint check. Prices and availability were checked on October 10, 2026 and can change at checkout. Lithium batteries require an eligible US ground service; do not select an air or prohibited postal service. Custom PCBs and printed parts are separate.
 
-## Frame steel targets
+## Magnets from existing stock
 
-The two frames require **6 × Huyett DOWMH-020-004**, Ø2 × 4 mm hardened alloy-steel dowel pins to attract the base magnets. [Fix Supply's exact part](https://www.fixsupply.com/zpin-dw-903-hardened-dowel-pin-alloy-steel-2-mm-dia-x-4-mm-length) uses DIN 6325 alloy steel. Its current minimum is **25 pins at $0.73 each, $18.25 before shipping/tax**; the listing showed an estimated **October 30, 2026 ship date** when checked. Six are installed and nineteen remain for spare frames. This is the selected source; its lead time is separate from the electronics shipment.
+Use **12 axially magnetized neodymium magnets from existing stock: 6 × Ø2 × 3 mm in the bases and 6 × Ø2 × 4 mm in the frames**, three of each per half. No magnetic hardware purchase is required. Each additional pair of frames needs six more Ø2 × 4 mm magnets; the base magnets stay in place. Measure the actual magnets before printing; the existing pocket geometry is unchanged.
+
+Before closing any captive pocket, verify that every matching pair attracts in its final assembled orientation. Keep the same mating-face polarity across the bases and the opposite mating-face polarity across all interchangeable frames. Use the [polarity, capture and heat checks](build.md#magnetic-frame-and-service); the stock's grade, temperature limit and holding force have not been qualified.
 
 ## Controllers
 
@@ -150,8 +152,8 @@ Put the male header's **short solder tails into the display PCB** and its long m
 ## Fasteners, cable and tools
 
 - **6 × M2 × 6 low-head screws:** nominal NBK SLH envelope, Ø3.8 × 1.3 mm head. [Drawing](https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SLH-TZB/SLH-TZB_1.pdf). **4 × M2 × 4:** NBK SSH envelope, Ø4 × 1.1 mm head. [Drawing](https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SSH/SSH_1.pdf). Tap the printed Ø1.7 mm pilots M2; engagement is 2.2–2.4 mm. Thread strength remains untested.
-- **6 × Ø2 × 3 mm neodymium magnets:** S-02-03-N reference, N45. [Full product information](https://www.supermagnete.de/stabmagnete-neodym-rund/stabmagnet-2mm-3mm_S-02-03-N) · [Datasheet](https://www.supermagnete.fr/data_sheet_S-02-03-N.pdf). Three stay in each base. Test the capture process without exceeding the specified 80°C magnet temperature.
-- **6 × Huyett DOWMH-020-004 steel targets:** Ø2 × 4 mm hardened alloy steel, three per frame; use the [selected Fix Supply source](#frame-steel-targets). Every additional pair of frames needs six more pins; the base magnets stay in place. Nonmagnetic stainless is unsuitable.
+- **6 × Ø2 × 3 mm axial neodymium magnets from existing stock:** three stay in each base. The original S-02-03-N, N45 reference has [product information](https://www.supermagnete.de/stabmagnete-neodym-rund/stabmagnet-2mm-3mm_S-02-03-N) and a [datasheet](https://www.supermagnete.fr/data_sheet_S-02-03-N.pdf); its 80°C limit does not establish the grade or thermal limit of the actual stock. Qualify the capture process using the actual magnets.
+- **6 × Ø2 × 4 mm axial neodymium magnets from existing stock:** three per frame; see [magnet quantities and polarity](#magnets-from-existing-stock). Every additional pair of frames needs six more. No steel targets are required.
 - **8 × Essentra RBS-5BK adhesive feet:** Ø12.7 × 1.6 mm, [DigiKey RPC1381-ND](https://www.digikey.com/en/products/detail/essentra-components/RBS-5BK/1878940). The checked eight-piece line was $1.30. Their 1.6 mm height adds externally without changing the internal stack; place them clear of reset access and screw holes.
 - **1 roll Olimex KAPTON-TAPE10MM:** 10 mm × 30 m insulating tape for local electrical isolation. [Manufacturer specifications](https://www.olimex.com/Products/Tools/Soldering/KAPTON-TAPE10MM/) give 20 µm thickness. Do not cover connector contacts or use tape to compress the battery pouch; the printed locator and cage provide mechanical retention. Printed retention remains untested.
 - **1 × Adafruit 4199 USB-C to USB-C data cable, 1 m:** [manufacturer information](https://www.adafruit.com/product/4199). Use it to flash and charge each half in sequence from a USB-C computer. The cable carries data as well as power; inspect complete plug insertion without forcing the case. No second cable or USB-A adapter is required for that sequence. Omit this purchase only if an equivalent USB-C data cable is already available.

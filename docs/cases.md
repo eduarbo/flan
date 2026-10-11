@@ -23,7 +23,7 @@ The **Level** upper shell and frame share the **14.50 mm** plane; the display gl
 
 ## Open or covered
 
-Uncheck **Printed display cover** to expose the current stack. The display, controller, battery and structural supports remain; the printed cover and its three steel targets are omitted. Choose any display frame to reinstall it. This is the wireless nice!nano/nice!view stack, not the Raspberry Pi Pico arrangement in the inspiration photo.
+Uncheck **Printed display cover** to expose the current stack. The display, controller, battery and structural supports remain; the printed cover and its three Ø2 × 4 mm frame magnets are omitted. The three Ø2 × 3 mm base magnets stay in place. Choose any display frame to reinstall it. This is the wireless nice!nano/nice!view stack, not the Raspberry Pi Pico arrangement in the inspiration photo.
 
 ![Color rim with the display stack exposed](images/revI-case-rim-open.png)
 
