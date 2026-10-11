@@ -12,3 +12,35 @@ condition = "AND"
 paths = ['''^design/revI\.json$''']
 regexTarget = "line"
 regexes = ['''^\s*"keycap_geometry": "4e749ea8bfeecb3150147e8a15b7d3fdcb859fabb5796f83fda083511e2f326a"\s*,?\s*$''']
+
+[[allowlists]]
+description = "Verified active Level plate geometry: left-key-plate.step"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''^validation/(revI-mechanical|revI-stock-display-mechanical|revI-stock-display-adoption)\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"left\-key\-plate\.step": "a2d227020dff3561397a7759a66ecd76112acd9ff1f603b0d065b18af2e32f00"\s*,?\s*$''']
+
+[[allowlists]]
+description = "Verified active Level plate geometry: left-key-plate.stl"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''^validation/(revI-mechanical|revI-stock-display-mechanical|revI-stock-display-adoption)\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"left\-key\-plate\.stl": "dd257618d144a2621c503425beaf6851b9e6857fc9c41c495e3ca0d76599502e"\s*,?\s*$''']
+
+[[allowlists]]
+description = "Verified active Level plate geometry: right-key-plate.step"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''^validation/(revI-mechanical|revI-stock-display-mechanical|revI-stock-display-adoption)\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"right\-key\-plate\.step": "72779af7049054d59df129044faa2c0c282e7a8322ecda745579a9d3e95c3f26"\s*,?\s*$''']
+
+[[allowlists]]
+description = "Verified active Level plate geometry: right-key-plate.stl"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''^validation/(revI-mechanical|revI-stock-display-mechanical|revI-stock-display-adoption)\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"right\-key\-plate\.stl": "e9123abda29aa61df071fb4ae5214423094101fd0df63d30e7e580acc10ddfd8"\s*,?\s*$''']

@@ -26,6 +26,30 @@ def run():
         ('additional_field', 'design/revI.json', line.rstrip() + ', "api_key": "' + changed + '"\n', True),
         ('other_line_same_file', 'design/revI.json', line + '"api_key": "' + changed + '"\n', True),
     ]
+    manifests = {
+        'validation/revI-mechanical.json': 'exported_files',
+        'validation/revI-stock-display-mechanical.json': 'exported_files',
+        'validation/revI-stock-display-adoption.json': 'final_exported_files',
+    }
+    plate_hashes = {}
+    for side in ('left', 'right'):
+        for extension in ('step', 'stl'):
+            name = f'{side}-key-plate.{extension}'
+            plate_digest = hashlib.sha256((ROOT / 'mechanical/revI' / name).read_bytes()).hexdigest()
+            plate_hashes[name] = plate_digest
+            altered = ('0' if plate_digest[0] != '0' else '1') + plate_digest[1:]
+            for path, field in manifests.items():
+                assert json.loads((ROOT / path).read_text())[field][name] == plate_digest
+                exact = f'    "{name}": "{plate_digest}"\n'
+                prefix = f'{side}_{extension}_{Path(path).stem}_'
+                cases.extend([
+                    (prefix + 'exact', path, exact, False),
+                    (prefix + 'different_path', 'validation/control.json', exact, True),
+                    (prefix + 'different_field', path, exact.replace(name, 'api_key'), True),
+                    (prefix + 'different_value', path, exact.replace(plate_digest, altered), True),
+                    (prefix + 'additional_field', path, exact.rstrip() + ', "api_key": "' + altered + '"\n', True),
+                    (prefix + 'other_line', path, exact + '"api_key": "' + altered + '"\n', True),
+                ])
     results = []
     with tempfile.TemporaryDirectory(prefix='flan36-checksum-policy-') as temp:
         for name, path, text, detect in cases:
@@ -50,9 +74,10 @@ def run():
         'scanner_version': subprocess.check_output(['gitleaks', 'version'], text=True).strip(),
         'config_sha256': hashlib.sha256((ROOT / '.gitleaks.toml').read_bytes()).hexdigest(),
         'recomputed_geometry_sha256': digest,
+        'recomputed_plate_sha256': plate_hashes,
         'controls': results,
     }, indent=2) + '\n')
-    print('PASS: geometry checksum reproduced; exact exception and five detection controls verified')
+    print(f'PASS: geometry checksums reproduced; {len(results)} exact exception/detection controls verified')
 
 
 if __name__ == '__main__':
