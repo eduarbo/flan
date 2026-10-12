@@ -31,16 +31,18 @@ let step='launch',browser;
  async function ready(){await p.waitForFunction(()=>{try{return Object.values(localStorage).some(v=>{try{return JSON.parse(v)?.schema==='flan36-config-1';}catch{return false;}});}catch{return false;}},null,{timeout:60000});await p.waitForFunction(()=>document.querySelectorAll('[data-cap-key]').length===36,null,{timeout:60000});}
  async function saved(){await p.evaluate(()=>new Promise(requestAnimationFrame));await p.evaluate(()=>window.flan36.idle());return p.evaluate(()=>{for(const value of Object.values(localStorage)){try{const c=JSON.parse(value);if(c?.schema==='flan36-config-1')return c;}catch{}}throw Error('No persisted Flan36 configuration');});}
  async function library(){await p.evaluate(()=>new Promise(requestAnimationFrame));await p.evaluate(()=>window.flan36.idle());return p.evaluate(()=>{for(const value of Object.values(localStorage)){try{const c=JSON.parse(value);if(c?.schema==='flan36-keycap-palettes-1')return c;}catch{}}return null;});}
- async function caps(){await activate('#part-keycaps');}
+ async function panel(mode){if(await p.locator('body').getAttribute('data-panel-open')!=='true'||await p.locator('body').getAttribute('data-mode')!==mode||await p.locator('body').getAttribute('data-detail')==='true')await activate('#nav-'+mode);}
+ async function category(name){await panel('customize');await activate('#editor-tabs [data-panel="'+name+'"]');assert.equal(await p.locator('#panel-'+name).isVisible(),true);}
+ async function caps(){await category('keycaps');assert.equal(await p.locator('#cap-colors').evaluate(e=>Boolean(e.closest('details'))),false,'Key colors are an inline editor');}
  async function libraryOpen(){await caps();await openDetails('#cap-palette-name');}
  async function download(selector,filename){const pending=p.waitForEvent('download');await activate(selector);const d=await pending,file=path.join(out,filename);await d.saveAs(file);assert.equal(await d.failure(),null);return fs.readFileSync(file);}
- async function configDownload(filename){await activate('#nav-files');return JSON.parse((await download('#save-config',filename)).toString());}
- async function importConfig(c,name='configuration.json'){await activate('#nav-files');await p.locator('#load-config').setInputFiles({name,mimeType:'application/json',buffer:Buffer.from(JSON.stringify(c))});await p.waitForFunction(()=>document.querySelector('#load-config').value==='');}
+ async function configDownload(filename){await panel('files');return JSON.parse((await download('#save-config',filename)).toString());}
+ async function importConfig(c,name='configuration.json'){await panel('files');await p.locator('#load-config').setInputFiles({name,mimeType:'application/json',buffer:Buffer.from(JSON.stringify(c))});await p.waitForFunction(()=>document.querySelector('#load-config').value==='');}
  // The self-contained page exceeds Chromium's response-body cache. Read the
  // same source directly instead of relying on the inspector retaining 47 MiB.
  const viewerBytes=url.startsWith('file:')?fs.readFileSync(new URL(url)):Buffer.from(await(await fetch(url)).arrayBuffer());
  const viewerSha=crypto.createHash('sha256').update(viewerBytes).digest('hex');
- await p.goto(url+(url.includes('?')?'&':'?')+'diagnostics');await p.waitForFunction(()=>document.querySelector('#status').textContent.includes('visible components'));await p.evaluate(()=>document.querySelector('#default-config').click());await ready();
+ await p.goto(url+(url.includes('?')?'&':'?')+'diagnostics');await p.waitForFunction(()=>document.querySelector('#status').textContent.includes('visible components'));await panel('files');await activate('#default-config');await ready();
  const scene=await p.evaluate(async()=>{const bytes=Uint8Array.from(atob(document.querySelector('#scene-data').textContent),c=>c.charCodeAt(0));return JSON.parse(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text());});
  const layout=scene.catalog.layout;
  assert.deepEqual(Object.keys(layout).sort(),['left','right']);
@@ -52,7 +54,7 @@ let step='launch',browser;
 
  // Expected sets derive directly from layout metadata, independently of the UI resolver.
  function wanted(side,mode,value){return Object.entries(layout).flatMap(([s,keys])=>keys.filter(k=>(side==='both'||s===side)&&(mode==='all'||mode==='row'&&k.row===value||mode==='column'&&k.row!==3&&k.col===value||mode==='key'&&k.ref===value)).map(k=>[s,k.ref]));}
- async function select(side,mode,value){await caps();await activate(`#cap-side [data-side="${side}"]`);await p.selectOption('#cap-mode',mode);if(mode==='row')await p.selectOption('#cap-row',String(value));if(mode==='column')await p.selectOption('#cap-column',String(value));if(mode==='key')await activate(`[data-cap-side="${side}"][data-cap-key="${value}"]`);}
+ async function select(side,mode,value){await caps();await activate(`#cap-side [data-side="${side}"]`);await activate('#cap-mode [data-value="'+mode+'"]');if(mode==='row')await activate('#cap-row [data-value="'+value+'"]');if(mode==='column')await activate('#cap-column [data-value="'+value+'"]');if(mode==='key')await activate(`[data-cap-side="${side}"][data-cap-key="${value}"]`);}
  async function paint(side,mode,value,color){
   step=`paint ${side}/${mode}/${value??''}`;const before=await saved(),expected=clone(before),targets=wanted(side,mode,value);
   await select(side,mode,value);
@@ -87,7 +89,7 @@ let step='launch',browser;
  assert.deepEqual(geometry(sculpted).keycaps,geometry({...sculpted,keycaps:scene.presets[preset].keycaps}).keycaps);
  checks.push(step);
 
- step='global themes color caps and preserve every selected geometry';await activate('#nav-themes');
+ step='global themes color caps and preserve every selected geometry';await category('themes');
  await activate('#theme-target [data-side="both"]');
  const themeIds=await p.locator('[data-theme]').evaluateAll(es=>es.map(e=>e.dataset.theme));assert(themeIds.length>=2);
  await activate(`[data-theme="${themeIds[0]}"]`);const themed=await saved();
@@ -128,7 +130,7 @@ let step='launch',browser;
  step='invalid keycap color import is atomic';const badConfig=clone(distinct);badConfig.keycaps.right[layout.right[0].ref].color='red';await importConfig(badConfig,'bad-key-color.json');
  assert.equal(await p.locator('#config-status').getAttribute('data-error'),'true');assert.deepEqual(await saved(),distinct);assert.deepEqual(await configDownload('after-invalid-config.json'),distinct);checks.push(step);
 
- step='GLB contains exact 36 configured colors';await activate('#nav-files');const bytes=await download('#glb','distinct-colors.glb');
+ step='GLB contains exact 36 configured colors';await panel('files');const bytes=await download('#glb','distinct-colors.glb');
  assert.equal(bytes.toString('ascii',0,4),'glTF');assert.equal(bytes.readUInt32LE(4),2);assert.equal(bytes.readUInt32LE(8),bytes.length);assert.equal(bytes.readUInt32LE(16),0x4e4f534a);
  const gltf=JSON.parse(bytes.toString('utf8',20,20+bytes.readUInt32LE(12)));const assembly=gltf.nodes.find(n=>n.extras?.configuration);assert(assembly);assert.deepEqual(assembly.extras.configuration,distinct);
  const nodes=gltf.nodes.filter(n=>n.extras?.group==='keycaps');assert.equal(nodes.length,36);const seen=new Set();

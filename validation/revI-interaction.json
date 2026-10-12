@@ -1,0 +1,113 @@
+{
+  "schema": "flan36-interaction-review-1",
+  "passed": true,
+  "method": "Direct task-integrated browser CUA interactions, DOM readbacks and visual screenshots; not execution of the Playwright CLI suites.",
+  "viewport_matrix": [
+    {
+      "width": 320,
+      "height": 568,
+      "min_canvas": [
+        320,
+        444
+      ],
+      "max_canvas": [
+        320,
+        72
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "min_canvas": [
+        390,
+        720
+      ],
+      "max_canvas": [
+        390,
+        72
+      ]
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "min_canvas": [
+        564,
+        338
+      ],
+      "max_canvas": [
+        240,
+        338
+      ]
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "min_canvas": [
+        768,
+        900
+      ],
+      "max_canvas": [
+        768,
+        72
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 960,
+      "min_canvas": [
+        1160,
+        908
+      ],
+      "max_canvas": [
+        240,
+        908
+      ]
+    }
+  ],
+  "checks": [
+    "No document horizontal overflow; Close is hit-test reachable at both panel bounds in every viewport",
+    "Actual pointer drag on390x844 snaps to72px peek and720px full; keyboard ArrowDown returns shared size",
+    "Peek hides/inerts editor content; full panel leaves72px real canvas; desktop resizes horizontally",
+    "Case/Frame/Keys/Colors/Battery tabs and flat color sections visible; retired View/Expand/select/advanced-shape controls absent",
+    "Hide base changes220 to218 visible components; Solo frames yields8; Showall restores220 and0 separation",
+    "Part row opens exclusive detail page at scroll0 with Back; Back restores Parts",
+    "Actual canvas click onleftK01 opens key detail; Back restores previous Frame category",
+    "Inside yields70 visible components; Stack yields30 and55percent separation; both within Components",
+    "Left frame installation off yields216 visible components; restored installation yields220",
+    "Undo GameBoy returnsTalavera; Redo returnsGameBoy; Hanafuda selection visibly changes actual frame geometry",
+    "Key coloring:10 top-row keys,6thumbs,1individual; HEX334455 appears onleftK01 and persists after reload",
+    "Reset selects3D camera while keeping base hidden and218components",
+    "Top\u2192Magnets selects3D, shows12 individually named magnets with base/frame diameters and allthree stations perhalf",
+    "SoloPCB and SoloMCU do not incorrectly activateInside/Stack presets",
+    "No browser error log entries during exercised paths",
+    "Visual review corrected model occlusion under floating tools, duplicate Components heading and excess introductory text",
+    "122 JS/Python malformed-config and migration fixtures, recovery, serialized saves and history coalescing passed via node viewer/config-contract-check.cjs"
+  ],
+  "sources": [
+    {
+      "path": "viewer/app.js",
+      "sha256": "96055ecf9127a57109e67a5ba6e4f55324caceeae1f584b6b8d763dd8dc01b76"
+    },
+    {
+      "path": "viewer/explorer.js",
+      "sha256": "91bb00d55b89b825abccffceafba001c64ca5d6abfb2e0254e48d4ca58bf00dc"
+    },
+    {
+      "path": "viewer/keycap-colors.js",
+      "sha256": "d29876ae3a4026348f4ad35305d084470a2efa6a10db0ffb1522feacc4455c2a"
+    },
+    {
+      "path": "viewer/template.html",
+      "sha256": "5afd6a8470f3a9bfdb59f8613b87f83d2538dfb634ec2889a8aa899f93b82797"
+    },
+    {
+      "path": "viewer/style.css",
+      "sha256": "961bebeefc17533d7bcce557113f643dece73ae9ee2b9ec3bab14115ac0da1c5"
+    }
+  ],
+  "limitations": [
+    "No physical iPhone/Safari touch hardware tested",
+    "Adapted responsive-check.cjs and keycolors-check.cjs were syntax-checked but their CLI browser suites were not executed",
+    "Physical assembly and printed port/magnet acceptance remain separate"
+  ]
+}

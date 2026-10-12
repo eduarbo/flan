@@ -6,15 +6,15 @@ Open the **[3D configurator](https://eduarbo.github.io/flan36/)**. No account or
 
 ![Keycap color editor using the actual KLP meshes](images/revI-key-colors.png)
 
-Open **Caps → Colors**. Choose **Both / Left / Right**, then **All keys, Row, Column or Individual key**. Tap the key map to select a key or its group; pick a color to apply it immediately. Finger columns exclude thumbs. The **Thumbs** row colors all three thumb keys on the selected halves.
+Open **Design → Keys** and use the inline **Colors** section. Choose **Both / Left / Right**, then the **All / Row / Column / Key** segmented control. Tap the key map to select a key or its group; pick a color to apply it immediately. Finger columns exclude thumbs. The **Thumbs** row colors all three thumb keys on the selected halves.
 
-Eight keycap palettes provide starting points with coordinated thumb accents and a whole-row Sunset option. None gives the pinky column a separate color. They change key colors only. **My palettes** saves the exact colors of all 36 keys, with JSON import/export for sharing or another device. **Themes** applies a coordinated palette to the case, frame and keys. Changing keycap shape or rotation preserves its color.
+Eight keycap palettes provide starting points with coordinated thumb accents and a whole-row Sunset option. None gives the pinky column a separate color. They change key colors only. **My palettes** saves the exact colors of all 36 keys, with JSON import/export for sharing or another device. **Design → Colors** applies a coordinated palette to the case, frame and keys. Selecting a keycap shape preset preserves its colors; imported JSON also retains valid per-key variants and rotations.
 
 Configuration JSON, GLB and the FreeCAD import/export macro retain individual key colors. STL has no color data: assign filament per key or paint in the slicer. The case/frame print kit does not include keycap toolpaths; use the unchanged KLP source meshes for those.
 
 ## KLP Lamé
 
-Open **Caps** in the directory, then click a preset preview to apply a complete set. Open **Edit keys** to choose a row, all thumbs or one key. Select a variant and rotation, then **Apply to these keys**. Each change checks the complete configuration, including neighboring keycaps and the frame.
+Open **Design → Keys**, then click **Original**, **Sculpted Normal** or **Sculpted Saddle** to apply a complete set. The viewer exposes these curated presets; the previous advanced shape/rotation form has been removed. Existing valid per-key variants and rotations remain in saved or imported configuration JSON. Configuration changes still check the complete combination, including neighboring keycaps and the frame.
 
 | Choc-stem family | Files | Qualified reference positions |
 |---|---:|---|
@@ -36,7 +36,7 @@ For the lowest profile, start with the flat variants. At the common nominal seat
 
 Presets: **Original**, **Sculpted Normal** and **Sculpted Saddle**. The sculpted presets place the high edges away from the home row: top row **180°**, bottom row **0°**, on both halves. Their previews show the actual three-row side profile at the shared stem seating datum. They are starting points for comfort trials, not an ergonomic prescription.
 
-Older saved configurations keep their explicit rotations. In **Caps**, **Fix top/bottom slopes** turns only the reversed, unrotated-stem Tilted caps in the finger rows. Colors, custom cap variants, home keys, thumbs and other components stay as selected. Alternatively, select either corrected sculpted preset to replace the complete cap arrangement while retaining your colors. [Directional geometry and export checks](../validation/revI-cap-rows.json).
+Older saved configurations keep their explicit rotations. In **Design → Keys**, **Fix top/bottom slopes** turns only the reversed, unrotated-stem Tilted caps in the finger rows. Colors, custom cap variants, home keys, thumbs and other components stay as selected. Alternatively, select either corrected sculpted preset to replace the complete cap arrangement while retaining your colors. [Directional geometry and export checks](../validation/revI-cap-rows.json).
 
 ![Corrected Sculpted Normal, actual viewer side profile](images/revI-sculpted-normal.png)
 
@@ -44,7 +44,7 @@ Older saved configurations keep their explicit rotations. In **Caps**, **Fix top
 
 ![Six approved native frame designs](images/revI-frame-gallery.png)
 
-Open **Frame** in the directory, then choose Both halves, Left or Right, then click a theme thumbnail to apply it immediately. Each preview shows that actual mesh with its original palette. Switching shapes preserves customized colors. Use **Restore design colors** to apply the original palette. **Body** changes the shell color without changing the accent colors; **Restore design colors** restores the palette for the selected half or halves. You can also select the frame directly on the model to open its sidebar options for that half.
+Open **Design → Frame**, choose **Both halves / Left / Right**, then click a frame thumbnail to apply it immediately. **Colors & finish** stays visible below the previews, without a collapsible card. Each preview shows that actual mesh with its original palette. Switching shapes preserves customized colors. Use **Restore design colors** to apply the original palette. **Body** changes the shell color without changing the accent colors; **Restore design colors** restores the palette for the selected half or halves. You can also select a frame in the model, then use **Customize this part** on its detail page to open the Frame tab for that half. **Back** in the detail header returns to the previous panel.
 
 See the [six installed frame designs](frames-extra.md): Talavera, Game Boy, SNES, 2000s Phone, iPod and Hanafuda. All use solid colors, with Talavera as the default.
 
@@ -82,8 +82,8 @@ The [new frame recipes](frames-extra.md) are editable native features. The [slim
 
 ## Save a configuration for FreeCAD
 
-1. In the viewer, choose caps, rotations, frame styles and colors. In **Battery**, select Adafruit 1570 or 301230.
-2. Open **Files** and click **Save configuration** to download `Flan36-config.json`.
+1. In **Design**, choose keycap presets, frame styles and colors. Under **Battery**, select Adafruit 1570 or 301230. Previously imported per-key choices remain until explicitly replaced.
+2. Open **Files** and click **Save JSON** to download `Flan36-config.json`, or enter a design name first.
 3. Download and unzip the full repository. Open `mechanical/revI/Flan36.FCStd` in FreeCAD.
 4. Use **Macro → Macros → Execute** on `tools/freecad/Configure.FCMacro`. Keep the macro beside its companion files in the repository.
 5. Choose **Import viewer configuration**, select the JSON and use **Save As**.
@@ -98,7 +98,7 @@ Configurations are tagged revision I. Older revision H JSON is not silently conv
 
 ## Case geometry
 
-Choose **Base → Solid / Color rim / Terrace** in the explorer. Each half has its own `cases` entry, for example `"left": {"style": "rim", "cover": false}`. `cover: false` omits the printed display cover and its three frame magnets; it retains the display, supports and base magnets. JSON import validates both halves before changing anything. Older configurations without `cases` use Solid with covers. [Geometry, files and printing](cases.md).
+Open **Design → Case** and choose **Level / Solid / Color rim / Terrace**. Colors and finish controls sit directly below the previews. Use **Parts → Frame → Installed display frames** to omit or reinstall either printed display frame; the row eye is only a preview visibility toggle. Each half has its own `cases` entry, for example `"left": {"style": "rim", "cover": false}`. `cover: false` omits the printed display cover and its three frame magnets; it retains the display, supports and base magnets. JSON import validates both halves before changing anything. Older configurations without `cases` use Solid with covers. [Geometry, files and printing](cases.md).
 
 ## Coordinated themes and print kits
 
@@ -116,18 +116,20 @@ The flat reference caps share their switches' centers. In the source meshes, pai
 
 Reproduce the registration check and this diagram with `python tools/check_keycap_registration.py` in the CAD Python environment with `tools/requirements-registration.txt` installed. Results: [registration measurements](../validation/revI-keycap-registration.json).
 
-Focused viewer check (disposable Chromium profile):
+The current interface is documented in the [viewer guide](viewer.md); current CUA browser evidence belongs to [the interaction receipt](../validation/revI-interaction.json). The following older checks and gallery images retain their original scope. They do not establish acceptance of the redesigned controls. The responsive and key-color suites have been adapted, but this delivery does not claim a CLI browser run.
+
+Historical focused viewer check (disposable Chromium profile; confirm its selectors match the target revision before running):
 
 ```sh
 node viewer/build.mjs
 FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/hex-check.cjs
 ```
 
-This regenerates ignored `build/hex-check/` screenshots and `result.json`. It must exit successfully with no runtime errors; the result's viewer SHA-256 must match `docs/offline.html`. `node viewer/keycolors-check.cjs` with the same environment checks color targets, palettes, persistence and GLB colors in ignored `build/keycolors/`. Rebuild the ignored scene first with `python tools/build_viewer_revI.py` if its source hashes are stale.
+The historical command regenerates ignored `build/hex-check/` screenshots and `result.json`. It must exit successfully with no runtime errors; the result's viewer SHA-256 must match `docs/offline.html`. `node viewer/keycolors-check.cjs` with the same environment checks color targets, palettes, persistence and GLB colors in ignored `build/keycolors/`. Rebuild the ignored scene first with `python tools/build_viewer_revI.py` if its source hashes are stale.
 
-Check sculpted direction with `python3 tools/freecad/run_macos.py tools/freecad/check_cap_rows.py` and `node viewer/cap-rows-check.cjs` (same browser environment). They measure actual cap edges in reopened CAD and exported GLB, reject the former reversed arrangement, and verify explicit repair, custom choices and reload. The native copies, screenshots and reports in `build/cap-row-fix/` are ignored and reproducible. Source STL geometry and seating are unchanged.
+The sculpted-direction workflow uses `python3 tools/freecad/run_macos.py tools/freecad/check_cap_rows.py` and `node viewer/cap-rows-check.cjs` (same browser environment). They measure actual cap edges in reopened CAD and exported GLB, reject the former reversed arrangement, and verify explicit repair, custom choices and reload. The native copies, screenshots and reports in `build/cap-row-fix/` are ignored and reproducible. Source STL geometry and seating are unchanged.
 
-Run the broader UI check in a disposable mirror so its screenshots do not overwrite the published gallery:
+For historical gallery reproduction, run its matching broader UI check in a disposable mirror so screenshots do not overwrite the published gallery. Do not copy new images into the gallery until the matching check succeeds:
 
 ```sh
 mkdir -p build/cap-row-fix/full-ui/{viewer,docs/images,design,validation}

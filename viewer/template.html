@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src 'self'; base-uri 'none'; form-action 'none'">
-<meta name="theme-color" content="#f4f3ee">
+<meta name="theme-color" content="#eef0f3">
 <title>Flan36 · Explore in 3D</title>
 <style>/*__STYLE__*/</style>
 </head>
@@ -12,8 +12,7 @@
 <nav class="app-nav" aria-label="Viewer tools">
   <button id="nav-customize" data-mode="customize" aria-expanded="false" aria-controls="workspace"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16M8 4v6m8 4v6"/></svg><span>Design</span></button>
   <button id="nav-inspect" data-mode="inspect" aria-expanded="false" aria-controls="workspace"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5"/></svg><span>Parts</span></button>
-  <button id="view-options" aria-haspopup="dialog" aria-controls="view-dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 5v8l-8 5-8-5V8l8-5Zm0 10v8M4 8l8 5 8-5M12 3v10"/></svg><span>View</span></button>
-  <button id="fit" aria-describedby="view-feedback" title="Fit visible parts, keeping your viewing angle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5m6 0h5v5M4 15v5h5m6 0h5v-5"/><circle cx="12" cy="12" r="3"/></svg><span>Fit</span></button>
+  <button id="reset" aria-label="Reset camera view" title="Reset camera view"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10a9 9 0 1 1 2.7 8.4M3 4v6h6"/></svg><span>Reset</span></button>
   <button id="nav-files" data-mode="files" aria-expanded="false" aria-controls="workspace"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H5V3h2Zm7 0v6h5M9 13h6m-6 4h6"/></svg><span>Files</span></button>
   <button id="nav-about" data-mode="about" aria-expanded="false" aria-controls="workspace"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-11v2"/></svg><span>About</span></button>
 </nav>
@@ -22,68 +21,81 @@
 <section class="stage" aria-label="3D keyboard view">
   <p id="loading" role="status">Loading model…</p>
   <canvas id="canvas" aria-label="Drag to rotate; pinch or scroll to zoom; tap a part to inspect"></canvas>
+  <div class="camera-widget" aria-label="Camera controls">
+    <div id="camera-views" class="camera-views" role="group" aria-label="Camera view">
+      <button data-view="iso" aria-pressed="true" title="Perspective view">3D</button><button data-view="top" aria-pressed="false">Top</button><button data-view="front" aria-pressed="false">Front</button><button data-view="right" aria-pressed="false" aria-label="Right side view">Right</button><button data-view="left" aria-pressed="false" aria-label="Left side view">Left</button><button data-view="back" aria-pressed="false">Back</button><button data-view="bottom" aria-pressed="false">Bottom</button>
+    </div>
+  </div>
+  <div class="stage-tools">
+    <button id="fit" class="floating-button" aria-label="Fit visible parts" aria-describedby="view-feedback" title="Fit visible parts, keeping your viewing angle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5m6 0h5v5M4 15v5h5m6 0h5v-5"/><circle cx="12" cy="12" r="3"/></svg></button>
+    <div class="explode-widget">
+      <label for="explode" title="Separate layers"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 16l9 5 9-5"/></svg><span class="sr-only">Separate layers</span></label>
+      <input id="explode" type="range" min="0" max="100" value="0" step="1" aria-orientation="vertical">
+      <output id="explosion" for="explode">0 %</output>
+    </div>
+  </div>
   <p id="view-feedback" role="status" class="sr-only">Drag to orbit · Pinch or scroll to zoom</p>
   <div id="error" role="alert" hidden></div>
 </section>
 <aside id="workspace" aria-label="Keyboard editor" hidden>
   <div id="panel-resize" role="separator" tabindex="0" aria-label="Resize editor" aria-orientation="horizontal" aria-valuemin="20" aria-valuemax="85" aria-valuenow="40"><span aria-hidden="true"></span></div>
   <div class="panel-tools">
-    <label for="editor-category" class="sr-only">Design category</label>
-    <select id="editor-category"><option value="cases">Case</option><option value="frames">Frame</option><option value="keycaps">Keys</option><option value="themes">Colors</option><option value="battery">Battery</option></select>
-    <strong id="workspace-title" hidden>Parts</strong>
-    <div class="history-controls" aria-label="Design history"><button id="undo" aria-label="Undo design change" title="Undo design change (Ctrl/Cmd Z)" disabled>↶</button><button id="redo" aria-label="Redo design change" title="Redo design change (Ctrl/Cmd Shift Z)" disabled>↷</button></div>
-    <button id="panel-expand" aria-label="Expand editor" title="Expand editor">Expand</button>
-    <button id="panel-close" aria-label="Close editor" title="Close editor">×</button>
+    <button id="panel-back" class="icon-button" aria-label="Back to previous panel" title="Back" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 5-7 7 7 7M3 12h18"/></svg></button>
+    <strong id="workspace-title">Design</strong>
+    <button id="show-all" class="header-action" title="Show all installed components" hidden>Show all</button>
+    <div class="history-controls" aria-label="Design history"><button id="undo" class="icon-button" aria-label="Undo design change" title="Undo design change (Ctrl/Cmd Z)" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 14-5-5 5-5M4 9h10a6 6 0 0 1 0 12h-2"/></svg></button><button id="redo" class="icon-button" aria-label="Redo design change" title="Redo design change (Ctrl/Cmd Shift Z)" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 14 5-5-5-5M20 9H10a6 6 0 0 0 0 12h2"/></svg></button></div>
+    <button id="panel-close" class="icon-button" aria-label="Close editor" title="Close editor"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
   </div>
+  <nav id="editor-tabs" class="editor-tabs" role="tablist" aria-label="Design category">
+    <button role="tab" data-panel="cases" aria-selected="true" aria-controls="panel-cases">Case</button><button role="tab" data-panel="frames" aria-selected="false" tabindex="-1" aria-controls="panel-frames">Frame</button><button role="tab" data-panel="keycaps" aria-selected="false" tabindex="-1" aria-controls="panel-keycaps">Keys</button><button role="tab" data-panel="themes" aria-selected="false" tabindex="-1" aria-controls="panel-themes">Colors</button><button role="tab" data-panel="battery" aria-selected="false" tabindex="-1" aria-controls="panel-battery">Battery</button>
+  </nav>
   <div id="inspector" class="inspector" tabindex="-1">
     <section id="panel-inspect" hidden aria-labelledby="parts-title">
-      <h2 id="parts-title">Components</h2><p id="status" class="micro" role="status">Loading geometry…</p>
-      <p class="hint">Select a part for details. Use its eye to show or hide it.</p>
+      <h2 id="parts-title" class="sr-only">Components</h2><p id="status" class="micro" role="status">Loading geometry…</p>
+      <div class="component-presets" role="group" aria-label="Component previews"><button id="inside" aria-pressed="false">Inside</button><button id="stack" aria-pressed="false">Stack</button><button id="locate-magnets" aria-pressed="false">Magnets</button></div>
       <nav class="directory" aria-label="Components"><div id="layers" tabindex="0" aria-label="Component directory"></div></nav>
-    <section id="selection" class="selection" role="region" aria-live="polite" aria-label="Selected component" hidden><button id="clear-selection" aria-label="Clear selected component">×</button><p id="selection-meta" class="eyebrow"></p><h2 id="selection-title"></h2><p id="selection-info"></p><p id="selection-visibility" class="micro"></p><div class="selection-actions"><button id="toggle-selection">Hide</button><button id="isolate-selection" title="Hide everything except this selection">Solo</button><button id="show-all" title="Restore every part and both halves">Show all</button></div><details id="individual-parts"><summary>Individual parts <span id="individual-count"></span></summary><div id="part-visibility-list"></div></details><button id="edit-selection" class="primary">Customize this part →</button></section>
     </section>
-  <section id="panel-cases" aria-label="Case options">
+    <section id="selection" class="selection" role="region" aria-live="polite" aria-label="Selected component" hidden>
+      <p id="selection-meta" class="eyebrow"></p><h2 id="selection-title"></h2><p id="selection-info"></p><p id="selection-visibility" class="micro"></p>
+      <section id="frame-install-options" class="inline-section" aria-labelledby="frame-install-title" hidden><h3 id="frame-install-title">Installed display frames</h3><p class="micro">Choose the frames included in your design and print kit.</p><label class="cover-option"><input type="checkbox" id="install-frame-left"> Left frame</label><label class="cover-option"><input type="checkbox" id="install-frame-right"> Right frame</label></section>
+      <div class="part-list-heading"><h3>Individual parts</h3><span id="individual-count"></span></div><div id="part-visibility-list"></div>
+      <button id="edit-selection" class="primary">Customize this part →</button>
+    </section>
+  <section id="panel-cases" role="tabpanel" aria-label="Case options">
     <div class="panel-heading"><h2>Case style</h2><span id="case-current"></span></div>
 
     <div id="case-target" class="segments" role="group" aria-label="Apply case changes to"><button data-side="both" aria-pressed="true">Both halves</button><button data-side="left" aria-pressed="false">Left</button><button data-side="right" aria-pressed="false">Right</button></div>
     <div id="case-grid" class="preview-grid case-grid" role="group" aria-label="Case styles"></div>
-    <details class="option-group"><summary>Colors &amp; finish</summary><div id="case-colors" class="color-fields"></div><label class="cover-option"><input type="checkbox" id="case-link-colors"> Match frame and rim</label></details>
-    <details class="option-group"><summary>Display cover</summary><label class="cover-option"><input type="checkbox" id="case-cover" checked> Printed display cover <small id="cover-state"></small></label>
-    <p class="micro">Remove the printed cover while keeping the display installed.</p></details>
+    <section class="inline-section" aria-labelledby="case-color-title"><h3 id="case-color-title">Colors &amp; finish</h3><div id="case-colors" class="color-fields"></div><label class="cover-option"><input type="checkbox" id="case-link-colors"> Match frame and rim</label></section>
     <a class="case-guide" href="https://github.com/eduarbo/flan36/blob/main/docs/cases.md">Case files &amp; printing guide ↗</a>
   </section>
-  <section id="panel-frames" aria-label="Frame options">
+  <section id="panel-frames" role="tabpanel" aria-label="Frame options">
     <div class="panel-heading"><h2>Frame style</h2><span id="frame-current"></span></div>
 
     <div id="frame-target" class="segments" role="group" aria-label="Apply frame changes to"><button data-side="both" aria-pressed="true">Both halves</button><button data-side="left" aria-pressed="false">Left</button><button data-side="right" aria-pressed="false">Right</button></div>
     <div id="frame-grid" class="preview-grid" role="group" aria-label="Frame styles"></div>
-    <details class="option-group"><summary>Colors &amp; finish</summary><div class="finish-row"><span>Body <small id="color-current" hidden></small></span><div id="swatches" role="group" aria-label="Frame body colors"></div></div><div class="color-field"><input type="color" id="frame-color" value="#304d4e" aria-label="Frame body color"></div>
+    <section class="inline-section" aria-labelledby="frame-color-title"><h3 id="frame-color-title">Colors &amp; finish</h3><div class="finish-row"><span>Body <small id="color-current" hidden></small></span><div id="swatches" role="group" aria-label="Frame body colors"></div></div><div class="color-field"><input type="color" id="frame-color" value="#304d4e" aria-label="Frame body color"></div>
     <div id="theme-palette" class="color-fields" aria-label="Frame accent colors"></div><label class="cover-option"><input type="checkbox" id="frame-link-colors"> Match frame and rim</label>
     <button id="theme-colors" class="palette-reset">Restore design colors</button>
-    <p class="micro">Previews show original palettes. Custom colors are saved with your parts. All frame details sit flush with the top.</p></details>
+    <p class="micro">Previews show original palettes. Custom colors are saved with your parts. All frame details sit flush with the top.</p></section>
     <a class="case-guide" href="https://eduarbo.github.io/flan36/frame-proposals/" target="_blank" rel="noopener">Six selected designs ↗</a>
   </section>
-  <section id="panel-themes" aria-label="Color themes" hidden><div class="panel-heading"><h2>Color palette</h2><span id="theme-current"></span></div><div id="theme-target" class="segments" aria-label="Apply theme to"><button data-side="both" aria-pressed="true">Both halves</button><button data-side="left" aria-pressed="false">Left</button><button data-side="right" aria-pressed="false">Right</button></div><div id="themes-grid" class="preview-grid" aria-label="Color themes"></div><p id="theme-preview-note" class="micro"></p></section>
-  <section id="panel-keycaps" aria-label="Keycap options" hidden>
+  <section id="panel-themes" role="tabpanel" aria-label="Color themes" hidden><div class="panel-heading"><h2>Color palette</h2><span id="theme-current"></span></div><div id="theme-target" class="segments" aria-label="Apply theme to"><button data-side="both" aria-pressed="true">Both halves</button><button data-side="left" aria-pressed="false">Left</button><button data-side="right" aria-pressed="false">Right</button></div><div id="themes-grid" class="preview-grid" aria-label="Color themes"></div><p id="theme-preview-note" class="micro"></p></section>
+  <section id="panel-keycaps" role="tabpanel" aria-label="Keycap options" hidden>
     <div class="panel-heading"><h2>Keycaps</h2><span>KLP Lamé</span></div>
 
-    <details id="cap-colors" class="option-group"><summary>Colors <span>all / row / column / key</span></summary>
+    <section id="cap-colors" class="inline-section" aria-labelledby="cap-color-title"><h3 id="cap-color-title">Colors</h3>
 <div id="cap-side" class="segments" aria-label="Keycap color half"><button data-side="both" aria-pressed="true">Both</button><button data-side="left">Left</button><button data-side="right">Right</button></div>
-<label>Paint<select id="cap-mode"><option value="all">All keys</option><option value="row">Row</option><option value="column">Column</option><option value="key">Individual key</option></select></label>
-<label id="cap-row-label" hidden>Row<select id="cap-row"><option value="0">Top</option><option value="1">Home</option><option value="2">Bottom</option><option value="3">Thumbs</option></select></label>
-<label id="cap-column-label" hidden>Column<select id="cap-column"><option value="1">1 · outer</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5 · inner</option></select></label>
+<div class="field-label">Apply color to</div><div id="cap-mode" class="segments" role="group" aria-label="Keycap color target"><button data-value="all" aria-pressed="true">All</button><button data-value="row" aria-pressed="false">Row</button><button data-value="column" aria-pressed="false">Column</button><button data-value="key" aria-pressed="false">Key</button></div>
+<div id="cap-row-label" hidden><div class="field-label">Row</div><div id="cap-row" class="segments" role="group" aria-label="Keycap row"><button data-value="0" aria-pressed="true">Top</button><button data-value="1" aria-pressed="false">Home</button><button data-value="2" aria-pressed="false">Bottom</button><button data-value="3" aria-pressed="false">Thumbs</button></div></div>
+<div id="cap-column-label" hidden><div class="field-label">Column · outside to inside</div><div id="cap-column" class="segments" role="group" aria-label="Keycap column"><button data-value="1" aria-pressed="true">1</button><button data-value="2" aria-pressed="false">2</button><button data-value="3" aria-pressed="false">3</button><button data-value="4" aria-pressed="false">4</button><button data-value="5" aria-pressed="false">5</button></div></div>
 <div id="cap-map" class="cap-maps" aria-label="Select keys to color"></div><p id="cap-selection" class="micro"></p>
 <div class="color-field"><span>Key color</span><input id="cap-color" type="color" value="#e9dfc6" aria-label="Selected keycap color"></div>
 <p class="micro">Tap a key to choose it, or to select its row or column. Columns exclude the thumb row.</p><div id="cap-palettes" class="cap-palettes" aria-label="Keycap color presets"></div>
-<details><summary>My palettes <span>save / import / export</span></summary><label>Palette name<input id="cap-palette-name" maxlength="40" placeholder="My palette"></label><button id="save-cap-palette">Save current key colors</button><p id="cap-library-empty" class="micro">Save both halves as a reusable palette.</p><div id="custom-cap-palettes"></div><div class="config-actions"><button id="export-cap-palettes">Export palettes</button><button id="import-cap-palettes">Import palettes</button><input id="cap-palette-file" type="file" accept=".json,application/json" hidden></div></details></details>
+<details><summary>My palettes <span>save / import / export</span></summary><label>Palette name<input id="cap-palette-name" maxlength="40" placeholder="My palette"></label><button id="save-cap-palette">Save current key colors</button><p id="cap-library-empty" class="micro">Save both halves as a reusable palette.</p><div id="custom-cap-palettes"></div><div class="config-actions"><button id="export-cap-palettes">Export palettes</button><button id="import-cap-palettes">Import palettes</button><input id="cap-palette-file" type="file" accept=".json,application/json" hidden></div></details></section>
 <div id="key-presets" class="preview-grid key-presets" role="group" aria-label="Keycap presets"></div>
-    <details id="key-details" class="option-group"><summary>Shape &amp; rotation <span>Advanced</span></summary>
-      <label>Positions<select id="key-target"></select></label><label>Variant<select id="key-variant"></select></label><label>Rotation relative to switch<select id="key-rotation"></select></label>
-      <p id="key-fit" class="micro"></p><button id="apply-keys" class="primary">Apply to these keys</button>
-      <p class="micro">38 source variants; 28 qualify somewhere. No 1.5U reference configuration qualifies. Physical fit remains untested.</p>
-    </details>
   </section>
-  <section id="panel-battery" aria-label="Battery options" hidden><div class="panel-heading"><h2>Battery profile</h2><span id="battery-current"></span></div><div id="battery-target" class="segments" role="group" aria-label="Apply battery changes to"><button data-side="both" aria-pressed="true">Both halves</button><button data-side="left" aria-pressed="false">Left</button><button data-side="right" aria-pressed="false">Right</button></div><div id="battery-options" class="segments" aria-label="Battery profiles"></div><p class="hint">Both nominal sizes sit on the insulated case floor inside the same retaining cage.</p><p class="micro">Check the finished pack, insulation and leads before assembly.</p></section>
+  <section id="panel-battery" role="tabpanel" aria-label="Battery options" hidden><div class="panel-heading"><h2>Battery profile</h2><span id="battery-current"></span></div><div id="battery-target" class="segments" role="group" aria-label="Apply battery changes to"><button data-side="both" aria-pressed="true">Both halves</button><button data-side="left" aria-pressed="false">Left</button><button data-side="right" aria-pressed="false">Right</button></div><div id="battery-options" class="segments" aria-label="Battery profiles"></div><p class="hint">Both nominal sizes sit on the insulated case floor inside the same retaining cage.</p><p class="micro">Check the finished pack, insulation and leads before assembly.</p></section>
   <section id="panel-files" aria-labelledby="files-title" hidden>
     <p class="eyebrow">Keep, share, build</p><h2 id="files-title">Your design files</h2><p class="hint">Save a design to revisit it, or export the parts you chose.</p>
     <section class="content-card" id="project-menu"><h3>Save your design</h3><p class="hint">A small JSON file keeps all your choices.</p>
@@ -108,20 +120,8 @@
   </div>
   <p id="config-status" class="config-status" role="status"></p>
 </aside>
-<svg id="leader-lines" aria-hidden="true"><path id="part-link" hidden></path><circle id="part-link-dot" r="2.5" hidden></circle></svg>
 </main>
 <dialog id="licenses" aria-labelledby="licenses-title"><div class="dialog-heading"><h2 id="licenses-title">Credits &amp; licenses</h2><button id="close-credits" aria-label="Close credits">Close</button></div><div class="dialog-body"><!--__LICENSES__--></div></dialog>
-<dialog id="view-dialog" aria-labelledby="view-title"><div class="dialog-heading"><h2 id="view-title">View settings</h2><button id="close-view">Done</button></div><div class="dialog-body">    <div class="view-settings"><div class="presets" role="group" aria-label="Assembly views"><button id="complete" aria-pressed="true">Assembled</button><button id="inside" aria-pressed="false">Inside</button><button id="stack" aria-pressed="false">Stack</button></div>
-    <div class="toolbar-secondary">
-      <label class="toolbar-select"><span>Half</span><select id="half"><option value="both">Both</option><option value="left">Left</option><option value="right">Right</option></select></label>
-      <button id="reset" aria-label="Reset view and visible layers" title="Reset view and layers; keep your parts">Reset view</button>
-
-      <label class="toolbar-select"><span>View</span><select id="view"><option value="iso">3D</option><option value="top">Top</option><option value="front">Front</option><option value="right">Right side</option><option value="left">Left side</option><option value="back">Back</option><option value="bottom">Bottom</option></select></label>
-      <button id="annotations" aria-pressed="true" aria-describedby="view-feedback" title="Show lines between visible parts and their explorer entries">Part links</button>
-    </div>
-    <div class="toolbar-explode"><label for="explode">Separate layers</label><input id="explode" type="range" min="0" max="100" value="0" step="1"><output id="explosion" for="explode">0 %</output></div>
-    </div>
-</div></dialog>
 <script id="print-data" type="application/octet-stream">/*__PRINT__*/</script>
 <script id="scene-data" type="application/octet-stream">/*__DATA__*/</script>
 <script>/*__APP__*/</script>

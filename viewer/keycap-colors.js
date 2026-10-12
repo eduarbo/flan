@@ -52,8 +52,8 @@ export function createKeycapColors({$,catalog,get,apply,message,storageNotice=me
   $('cap-library-empty').hidden=custom.length>0;
  }
  for(const b of $('cap-side').children)b.onclick=()=>{selection.side=b.dataset.side;if(selection.mode==='key'){if(selection.side==='both')selection.mode='all';else selection.keySide=selection.side;}sync();};
- $('cap-mode').onchange=e=>{selection.mode=e.target.value;if(selection.mode==='key'){selection.side=selection.keySide;}sync();};
- $('cap-row').onchange=e=>{selection.row=Number(e.target.value);sync();};$('cap-column').onchange=e=>{selection.column=Number(e.target.value);sync();};
+ for(const b of $('cap-mode').querySelectorAll('[data-value]'))b.onclick=()=>{selection.mode=b.dataset.value;if(selection.mode==='key')selection.side=selection.keySide;sync();};
+ for(const b of $('cap-row').querySelectorAll('[data-value]'))b.onclick=()=>{selection.row=Number(b.dataset.value);sync();};for(const b of $('cap-column').querySelectorAll('[data-value]'))b.onclick=()=>{selection.column=Number(b.dataset.value);sync();};
  let pending=0;const paint=()=>{pending=0;apply(paintKeys(get(),resolved(),$('cap-color').value));};
  $('cap-color').oninput=()=>{if(!pending)pending=requestAnimationFrame(paint);};$('cap-color').onchange=()=>{if(pending)cancelAnimationFrame(pending);paint();};
  $('save-cap-palette').onclick=()=>{if(custom.length>=24){message('Export or remove a palette before adding more (24 maximum).',true);return;}const name=$('cap-palette-name').value.trim()||`My palette ${custom.length+1}`;const c=get();custom.push({name:name.slice(0,40),colors:Object.fromEntries(sides.map(side=>[side,Object.fromEntries(catalog.layout[side].map(k=>[k.ref,c.keycaps[side][k.ref].color]))]))});const saved=remember();renderCustom();$('cap-palette-name').value='';if(saved)message('Keycap palette saved. Shape and rotation are kept separately.');};
@@ -64,7 +64,7 @@ export function createKeycapColors({$,catalog,get,apply,message,storageNotice=me
   const c=get(),targets=resolved(),ids=new Set(targets.map(([s,k])=>s+':'+k.ref));
   for(const {b,side,k} of buttons){const color=c.keycaps[side][k.ref].color||defaultCapColor(k);b.style.setProperty('--cap-color',color);const value=parseInt(color.slice(1),16),l=((value>>16)*.2126+(value>>8&255)*.7152+(value&255)*.0722);b.style.color=l>140?'#23332e':'#fff';b.setAttribute('aria-pressed',String(ids.has(side+':'+k.ref)));}
   for(const b of $('cap-side').children)b.setAttribute('aria-pressed',String(b.dataset.side===selection.side));
-  $('cap-mode').value=selection.mode;$('cap-row').value=String(selection.row);$('cap-column').value=String(selection.column);$('cap-row-label').hidden=selection.mode!=='row';$('cap-column-label').hidden=selection.mode!=='column';
+  for(const [id,value] of [['cap-mode',selection.mode],['cap-row',selection.row],['cap-column',selection.column]])for(const b of $(id).querySelectorAll('[data-value]'))b.setAttribute('aria-pressed',String(b.dataset.value===String(value)));$('cap-row-label').hidden=selection.mode!=='row';$('cap-column-label').hidden=selection.mode!=='column';
   const colors=targets.map(([s,k])=>c.keycaps[s][k.ref].color||defaultCapColor(k));$('cap-color').value=colors[0]||'#e9dfc6';colorHex.sync(colors);$('cap-selection').textContent=`${targets.length} ${targets.length===1?'key':'keys'} · ${selection.side==='both'?'both halves':selection.side+' half'}`;
  }
  renderCustom();sync();

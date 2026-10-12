@@ -2,20 +2,22 @@
 
 [Open Flan36](https://eduarbo.github.io/flan36/) · [Download the complete offline viewer](https://eduarbo.github.io/flan36/offline.html)
 
-Drag to orbit, scroll or pinch to zoom, and right-drag or use two fingers to pan. **Fit view** recenters the visible parts. Open **View** for angle, half, layer separation, part links and reset. Changing a case, frame, keycap, color or battery keeps your camera, hidden parts and layer separation. Resizing or rotating the screen preserves your viewing angle, pan and zoom; the projection adapts to the available canvas so a fitted model stays framed.
+Drag to orbit, scroll or pinch to zoom, and right-drag or use two fingers to pan. The floating camera buttons choose **3D, Top, Front, Right, Left, Back or Bottom**. The adjacent fit icon recenters visible parts without changing the viewing angle; the vertical **Separate layers** slider opens the assembly. **Reset** in the bottom navigation resets the camera only, preserving visibility, separation and your design.
 
-The viewer opens with the editor closed. The canvas occupies the workspace above one compact bottom tool strip; there is no header or floating toolbar.
+The viewer opens with the editor closed so the model fills the workspace above the compact bottom navigation. Camera controls float within the model area; they collapse out of the way when the drawer leaves only a small model strip.
 
-- **Design** opens the editor. Choose Case, Frame, Keys, Colors or Battery from its category selector. **Expand / Compact** changes its size, the grip lets you resize it, and **×** closes it. On portrait screens it opens as a compact bottom panel; on wider screens it opens as a narrow side panel. Secondary colors, finishes and key-shape controls expand on demand.
-- **Parts** opens the twelve component groups and visibility controls. Select a part for details, then use **Customize this part** to edit it. Tapping an editable part directly in the model while in Design opens its editor and targets that half/key.
-- **View** contains Assembled, Inside and Stack presets, viewing angles, half selection, layer separation, part links and reset. **Fit** is directly available on the tool strip.
-- **Files** opens JSON, print kit, GLB, offline download and recovery. **About** contains original design and CAD by Eduardo Ruiz, dimensions, resources and credits. Full license texts expand individually; their close button remains visible.
+- **Design** opens the **Case / Frame / Keys / Colors / Battery** tabs. Case and Frame colors and finishes sit directly below their previews; Keys has curated shape presets followed by its color controls. Use Left/Right arrows or Home/End while a category tab is focused to switch tabs.
+- **Parts** shows component rows with an eye for Hide/Show and a **Solo** toggle. **Show all** in the sidebar header restores every installed component and closes separated layers. **Inside** and **Stack** are component previews in this panel.
+- **Magnets** in Parts opens a location preview and its detail page. Three paired stations form a triangle around each electronics bay, beneath the removable frame. Six Ø2 × 3 mm base magnets meet six Ø2 × 4 mm frame magnets. They are enclosed in plastic; the preview highlights their locations through the surrounding geometry and separates the pairs.
+- **Files** contains JSON, print kit, GLB, offline download and recovery. **About** contains original design and CAD by Eduardo Ruiz, dimensions, resources and credits. Full license texts expand individually; their close button remains visible.
 
-Selecting the already-open destination closes its panel. Closing and reopening preserves the current category, scroll position and panel size for this session. Destinations, resizing and orientation changes preserve the camera, design, visibility and history. Files and About initially open larger on portrait screens and can be compacted or closed. A short text-entry viewport temporarily enlarges the editor while retaining the canvas.
+Selecting a component row or tapping a part in the model replaces the drawer content with that part's detail page. Its individual pieces have their own visibility and Solo controls. **Back** in the header restores the previous page, scroll position and drawer size. **Customize this part** opens the appropriate Design tab and targets that half or key when applicable.
 
-The resize grip also works with arrow keys and Home/End. Escape first dismisses an open dialog, then closes an open editor while preserving selection; with both closed it clears selection. Closing restores focus to the opener. Hover or focus a component in Parts to highlight it; its connection line hides when its entry is clipped or its panel is closed.
+On mobile and portrait screens, drag the top grip between three stops: **model focus**, **shared screen**, and **panel focus**. The canvas resizes with the drawer. On wider screens, drag the sidebar edge to choose its width. The grip also works with arrow keys and Home/End: Up/Down selects mobile stops, Left/Right adjusts desktop width, and Home/End chooses the minimum/maximum. **×** closes the editor. Selecting the already-open navigation destination also closes it. Categories share your chosen drawer size; closing and reopening retains session position and scrolling. A short text-entry viewport temporarily enlarges the editor while retaining the canvas.
 
-The eye controls affect visibility. Open **Individual parts** to toggle one piece. **Show all** restores the assembly. **Solo** isolates the selected component. Case, frame and battery controls have explicit **Both / Left / Right** targets; the battery target follows the component you select.
+Escape dismisses an open dialog; otherwise it returns from a selected-part detail page before closing the editor. Closing restores focus to the opener. Hover or keyboard-focus a component row to highlight it in the model. Resizing and orientation changes preserve your viewing angle, pan and relative zoom while fitting the available canvas.
+
+Visibility is a preview choice, separate from what your design includes. To omit or reinstall a display frame and its three frame magnets, open **Parts → Frame → Installed display frames** and change Left or Right. This changes the saved configuration and print kit. **Show all** reveals installed parts; it does not reinstall an omitted frame. Case, frame and battery edits retain explicit **Both / Left / Right** targets.
 
 **Undo / Redo** keeps 40 design steps during the current session. Ctrl/Cmd Z and Ctrl/Cmd Shift Z work outside text fields. One continuous color gesture is one step. View changes are separate from design history.
 
@@ -39,33 +41,33 @@ GLB exports all installed parts assembled, regardless of hidden layers or explod
 
 Both use the same full-resolution geometry. Print kits preserve the exact native STL files; 3MF retains the registered material volumes. These checks do not qualify physical fit, electronics or a print process.
 
-## Reproduce the checks
+## Verification and reproduction
 
-With the locked viewer dependencies installed:
+The current redesign's browser evidence is recorded in [the interaction receipt](../validation/revI-interaction.json), including its CUA method, exercised viewports and limitations. Earlier [canvas workspace](reviews/canvas-workspace.md) and [reliability](../validation/revI-reliability.json) receipts describe their stated revisions; they are historical evidence, not acceptance of this interface.
+
+With the locked viewer dependencies installed, rebuild and run the non-browser configuration checks:
 
 ```sh
 node viewer/build.mjs
 node viewer/config-contract-check.cjs
 node viewer/rebrand-check.cjs
-FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/responsive-check.cjs
-FLAN36_ENGINE=webkit FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright node viewer/responsive-check.cjs
-FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/reliability-check.cjs
-FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/loading-check.cjs
 ```
 
-Outputs under `build/reliability-fix/` are ignored, reproducible test artifacts. The [execution plan](reviews/reliability-plan.md) and [reliability receipt](../validation/revI-reliability.json) record scope and results at their stated revision. Historical delivery receipts retain their original hashes and scope.
+`responsive-check.cjs` and `keycolors-check.cjs` have been adapted to the new controls. They remain reproducibility tools; this redesign's delivery does not claim a CLI browser run. To run them independently in an environment that permits that browser runner:
 
-After publication, pass the exact published commit to both readbacks:
+```sh
+FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/responsive-check.cjs
+FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/keycolors-check.cjs
+```
+
+Outputs under `build/canvas-review/`, `build/reliability-fix/` and `build/keycolors/` are ignored test artifacts. A passing run must identify the current built viewer and contain no runtime errors. Browser emulation does not constitute a physical iPhone test. The [reliability plan](reviews/reliability-plan.md) and its original receipts retain their historical scope and hashes; `python3 tools/restore_reliability_review.py` restores their ignored advisory artifacts.
+
+After publication, compare the anonymous source archive and served viewer assets with the exact published commit:
 
 ```sh
 python3 tools/check_public_delivery.py <published-commit>
-FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/public-check.cjs <published-commit>
 ```
 
-The first matches the anonymous source archive and served viewer assets against Git. The second checks the actual public scene, camera continuity, configuration export and native print-kit hashes in a disposable browser profile. `python3 tools/restore_reliability_review.py` restores the ignored advisory review artifacts from their committed receipt.
+This checks delivered bytes. The interaction receipt separately records functional browser evidence; neither substitutes for physical keyboard testing.
 
 Save serialization uses the browser [Web Locks API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API). Without it, the viewer preserves a separate recovery draft and offers JSON export instead of overwriting shared saved state.
-
-## Responsive design verification
-
-The [canvas workspace audit](reviews/canvas-workspace.md) supersedes the earlier mobile layout, which the user rejected for reserving too little space for the model. `responsive-check.cjs` measures unobstructed canvas area and rendered model pixels, panel close/reopen/resize, focus and scroll continuity, five editor categories, dialogs, editing, visibility, undo/redo and touch gestures through seven viewport sizes. Outputs under `build/canvas-review/` and `build/reliability-fix/` are ignored and reproducible with the commands above. Browser emulation is not a physical iPhone test.
