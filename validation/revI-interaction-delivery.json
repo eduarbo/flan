@@ -47,7 +47,7 @@
     },
     {
       "path": "validation/revI-viewer.json",
-      "sha256": "552067fea635f99bb463cb3eabedb90d74678119166b7b816a44c9bec3c3c870"
+      "sha256": "a7cb2e0856e4f501afe82f7af72fcfd2ea0fdbc89c0cccbe74d207fc70954097"
     },
     {
       "path": "validation/revI-render.json",
@@ -55,7 +55,7 @@
     },
     {
       "path": "validation/revI-interaction.json",
-      "sha256": "d1f4df739a6585c7d7faaf3d99680bc6834c75c23927ff52001407a4f5f55f3e"
+      "sha256": "eb98e901922c472b5ead8cce09f09577900275e0b675719adffbeea8dbb7c26c"
     },
     {
       "path": "viewer/printing.js",

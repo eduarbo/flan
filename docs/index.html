@@ -73,22 +73,38 @@ body[data-panel-open=true] main { grid-template-columns: minmax(0,1fr) var(--pan
 #canvas { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; touch-action: none; }
 #loading { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: var(--muted); pointer-events: none; }
 .camera-widget { position: absolute; z-index: 2; top: max(12px,env(safe-area-inset-top)); left: max(12px,env(safe-area-inset-left)); max-width: calc(100% - 24px); }
-.camera-views { display: flex; overflow-x: auto; scrollbar-width: none; padding: 3px; border: 1px solid #dce1e9; border-radius: 12px; background: #fffffff2; box-shadow: var(--shadow); }
-.camera-views button { flex: 1 0 44px; min-width: 44px; min-height: 44px; padding: 6px 10px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 11px; }
+.camera-views { display: grid; grid-template-columns: repeat(7,44px); gap: 2px; padding: 4px; border: 1px solid #dce1e9; border-radius: 12px; background: #fffffff2; box-shadow: var(--shadow); }
+.camera-views button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 44px; min-width: 44px; min-height: 48px; padding: 4px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 10px; line-height: 12px; }
+.camera-views svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.camera-views .view-face { fill: currentColor; fill-opacity: .25; }
+.camera-views button:hover { background: var(--soft); color: var(--ink); }
+.camera-views button:focus-visible { outline-offset: -2px; }
 .camera-views button[aria-pressed=true] { background: var(--ink); color: white; }
-.stage-tools { position: absolute; z-index: 2; top: 72px; right: max(12px,env(safe-area-inset-right)); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.stage-tools { position: absolute; z-index: 2; top: 82px; right: max(12px,env(safe-area-inset-right)); display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .floating-button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; background: #fffffff2; border: 1px solid #dce1e9; box-shadow: var(--shadow); }
 .explode-widget { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 44px; padding: 9px 0 8px; border: 1px solid #dce1e9; border-radius: 12px; background: #fffffff2; box-shadow: var(--shadow); }
 .explode-widget label { display: grid; place-items: center; color: var(--muted); }
 .explode-widget svg { width: 18px; height: 18px; }
 #explode { writing-mode: vertical-lr; direction: rtl; width: 28px; height: clamp(60px,calc(100cqh - 210px),150px); min-height: 0; margin: 3px 0; padding: 0; accent-color: var(--accent); touch-action: none; }
 #explosion { color: var(--muted); font-size: 9px; white-space: nowrap; font-variant-numeric: tabular-nums; }
-@container stage (max-width: 430px) {
-  .camera-widget { right: max(12px,env(safe-area-inset-right)); }
-  .camera-views button { min-width: 44px; min-height: 44px; padding: 6px 3px; font-size: 10.5px; }
+/* Keep every view reachable when a narrow screen or the drawer shrinks the scene. */
+@container stage (max-width: 353px) {
+  .camera-views { grid-template-columns: repeat(4,44px); }
+  .camera-views [data-view=iso] { grid-row: span 2; }
+  .stage-tools { top: 12px; }
+}
+@container stage (max-width: 280px) {
+  .stage-tools { top: 132px; }
+  #explode { height: clamp(32px,calc(100cqh - 256px),150px); }
+}
+@container stage (max-width: 280px) and (max-height: 320px) {
+  .explode-widget { display: none; }
+}
+@container stage (max-width: 280px) and (max-height: 187px) {
+  .stage-tools { display: none; }
 }
 @container stage (max-height: 280px) {
-  .stage-tools { top: 65px; right: 8px; gap: 5px; }
+  .stage-tools { right: 8px; gap: 5px; }
   .explode-widget { padding: 5px 0; }
   .explode-widget label { display: none; }
   #explode { height: 62px; }
@@ -342,7 +358,13 @@ dialog details > summary { font-size: 12px; }
   <canvas id="canvas" aria-label="Drag to rotate; pinch or scroll to zoom; tap a part to inspect"></canvas>
   <div class="camera-widget" aria-label="Camera controls">
     <div id="camera-views" class="camera-views" role="group" aria-label="Camera view">
-      <button data-view="iso" aria-pressed="true" title="Perspective view">3D</button><button data-view="top" aria-pressed="false">Top</button><button data-view="front" aria-pressed="false">Front</button><button data-view="right" aria-pressed="false" aria-label="Right side view">Right</button><button data-view="left" aria-pressed="false" aria-label="Left side view">Left</button><button data-view="back" aria-pressed="false">Back</button><button data-view="bottom" aria-pressed="false">Bottom</button>
+      <button data-view="iso" aria-pressed="true" aria-label="3D view" title="3D view"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3 21 8v8l-9 5-9-5V8l9-5ZM3 8l9 5 9-5M12 13v8"/></svg><span>3D</span></button>
+      <button data-view="top" aria-pressed="false" aria-label="Top view" title="Top view"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="view-face" d="M12 3 21 8l-9 5-9-5Z"/><path d="M12 3 21 8v8l-9 5-9-5V8l9-5ZM3 8l9 5 9-5M12 13v8"/></svg><span>Top</span></button>
+      <button data-view="front" aria-pressed="false" aria-label="Front view" title="Front view"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="view-face" d="M3 8l9 5v8l-9-5Z"/><path d="M12 3 21 8v8l-9 5-9-5V8l9-5ZM3 8l9 5 9-5M12 13v8"/></svg><span>Front</span></button>
+      <button data-view="right" aria-pressed="false" aria-label="Right side view" title="Right side view"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="view-face" d="M12 13l9-5v8l-9 5Z"/><path d="M12 3 21 8v8l-9 5-9-5V8l9-5ZM3 8l9 5 9-5M12 13v8"/></svg><span>Right</span></button>
+      <button data-view="left" aria-pressed="false" aria-label="Left side view" title="Left side view"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="view-face" d="M3 8l9-5v8l-9 5Z"/><path d="M12 3 21 8v8l-9 5-9-5V8l9-5ZM3 8l9 5 9-5M12 13v8"/><path d="M3 16l9-5 9 5M12 3v8" stroke-dasharray="2 2"/></svg><span>Left</span></button>
+      <button data-view="back" aria-pressed="false" aria-label="Back view" title="Back view"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="view-face" d="M12 3l9 5v8l-9-5Z"/><path d="M12 3 21 8v8l-9 5-9-5V8l9-5ZM3 8l9 5 9-5M12 13v8"/><path d="M3 16l9-5 9 5M12 3v8" stroke-dasharray="2 2"/></svg><span>Back</span></button>
+      <button data-view="bottom" aria-pressed="false" aria-label="Bottom view" title="Bottom view"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="view-face" d="M3 16l9-5 9 5-9 5Z"/><path d="M12 3 21 8v8l-9 5-9-5V8l9-5ZM3 8l9 5 9-5M12 13v8"/><path d="M3 16l9-5 9 5M12 3v8" stroke-dasharray="2 2"/></svg><span>Bottom</span></button>
     </div>
   </div>
   <div class="stage-tools">

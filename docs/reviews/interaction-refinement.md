@@ -145,3 +145,27 @@ bound receipt upgrade revalidated all 448 exports and retained its preceding
 receipt/executor hashes. The secret scanner then accepted that receipt without
 changing scanner rules or allowlists. Dependent metadata, scene, viewer and
 verification receipts were rebuilt; no native or exported geometry changed.
+
+
+## Camera selector follow-up · 2026-10-12
+
+The reported cramped Bottom button came from seven minimum-width buttons plus
+tray padding exceeding the available mobile width. The selector now uses original
+SVG cube-face icons with visible labels, equal44×48px targets,2px gaps and4px
+tray padding. Below354px of actual stage width, it uses four columns with3D
+spanning two rows. No view is hidden in a horizontally scrolling strip. Adjacent
+tools move to keep clear of the tray; a very short/narrow stage hides tools that
+cannot fit. Keyboard names, focus and selected state remain explicit.
+
+The scoped CUA regression in `validation/revI-interaction.json` covers320/375/390px
+phones,844px landscape including a240px-wide stage,1440px desktop, and the
+240×168px edge caught by independent review. All seven buttons were reachable,
+Bottom activated with Enter and Space, and no camera/tool overlap or horizontal
+overflow was observed. Prior CAD, printing and interaction evidence is retained
+under its original snapshot; it is not claimed as rerun for this markup/CSS fix.
+Rebuild with `node viewer/build.mjs`, serve using the local command above, and
+repeat those camera/drawer cases. The existing delivery checker binds the final
+source and page hashes without regenerating unchanged CAD or print kits.
+For this UI-only follow-up, verify the anonymous public index/offline SHA-256
+against `validation/revI-viewer.json`; the unchanged source archive and printing
+payload do not need another download.

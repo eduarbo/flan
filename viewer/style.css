@@ -65,22 +65,38 @@ body[data-panel-open=true] main { grid-template-columns: minmax(0,1fr) var(--pan
 #canvas { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; touch-action: none; }
 #loading { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: var(--muted); pointer-events: none; }
 .camera-widget { position: absolute; z-index: 2; top: max(12px,env(safe-area-inset-top)); left: max(12px,env(safe-area-inset-left)); max-width: calc(100% - 24px); }
-.camera-views { display: flex; overflow-x: auto; scrollbar-width: none; padding: 3px; border: 1px solid #dce1e9; border-radius: 12px; background: #fffffff2; box-shadow: var(--shadow); }
-.camera-views button { flex: 1 0 44px; min-width: 44px; min-height: 44px; padding: 6px 10px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 11px; }
+.camera-views { display: grid; grid-template-columns: repeat(7,44px); gap: 2px; padding: 4px; border: 1px solid #dce1e9; border-radius: 12px; background: #fffffff2; box-shadow: var(--shadow); }
+.camera-views button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; width: 44px; min-width: 44px; min-height: 48px; padding: 4px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 10px; line-height: 12px; }
+.camera-views svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.camera-views .view-face { fill: currentColor; fill-opacity: .25; }
+.camera-views button:hover { background: var(--soft); color: var(--ink); }
+.camera-views button:focus-visible { outline-offset: -2px; }
 .camera-views button[aria-pressed=true] { background: var(--ink); color: white; }
-.stage-tools { position: absolute; z-index: 2; top: 72px; right: max(12px,env(safe-area-inset-right)); display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.stage-tools { position: absolute; z-index: 2; top: 82px; right: max(12px,env(safe-area-inset-right)); display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .floating-button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; background: #fffffff2; border: 1px solid #dce1e9; box-shadow: var(--shadow); }
 .explode-widget { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 44px; padding: 9px 0 8px; border: 1px solid #dce1e9; border-radius: 12px; background: #fffffff2; box-shadow: var(--shadow); }
 .explode-widget label { display: grid; place-items: center; color: var(--muted); }
 .explode-widget svg { width: 18px; height: 18px; }
 #explode { writing-mode: vertical-lr; direction: rtl; width: 28px; height: clamp(60px,calc(100cqh - 210px),150px); min-height: 0; margin: 3px 0; padding: 0; accent-color: var(--accent); touch-action: none; }
 #explosion { color: var(--muted); font-size: 9px; white-space: nowrap; font-variant-numeric: tabular-nums; }
-@container stage (max-width: 430px) {
-  .camera-widget { right: max(12px,env(safe-area-inset-right)); }
-  .camera-views button { min-width: 44px; min-height: 44px; padding: 6px 3px; font-size: 10.5px; }
+/* Keep every view reachable when a narrow screen or the drawer shrinks the scene. */
+@container stage (max-width: 353px) {
+  .camera-views { grid-template-columns: repeat(4,44px); }
+  .camera-views [data-view=iso] { grid-row: span 2; }
+  .stage-tools { top: 12px; }
+}
+@container stage (max-width: 280px) {
+  .stage-tools { top: 132px; }
+  #explode { height: clamp(32px,calc(100cqh - 256px),150px); }
+}
+@container stage (max-width: 280px) and (max-height: 320px) {
+  .explode-widget { display: none; }
+}
+@container stage (max-width: 280px) and (max-height: 187px) {
+  .stage-tools { display: none; }
 }
 @container stage (max-height: 280px) {
-  .stage-tools { top: 65px; right: 8px; gap: 5px; }
+  .stage-tools { right: 8px; gap: 5px; }
   .explode-widget { padding: 5px 0; }
   .explode-widget label { display: none; }
   #explode { height: 62px; }

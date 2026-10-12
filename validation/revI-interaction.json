@@ -99,11 +99,11 @@
     },
     {
       "path": "viewer/template.html",
-      "sha256": "75fcddae763a4535719a0646b5b08a9a057b51ed3568aadc5166be6e90890513"
+      "sha256": "f6c702dba95bd75de78a29a05d981d9275fb8cc8c705b02da17cfe0f2c01961b"
     },
     {
       "path": "viewer/style.css",
-      "sha256": "961bebeefc17533d7bcce557113f643dece73ae9ee2b9ec3bab14115ac0da1c5"
+      "sha256": "fc9edfd1a360c82751524e72d7d039733c45a88288d157dcf788f53e8bc0741d"
     }
   ],
   "limitations": [
@@ -169,18 +169,187 @@
     }
   ],
   "final_build_smoke": {
-    "method": "Direct CUA reload of the completed local build at 390x844; screenshot and DOM readback",
-    "viewer_sha256": "ca62ed47cd509d2a90a0eba44b9817f429817bb72853d6ba49897149e08069c2",
+    "method": "Direct CUA reload of final local build; camera controls and narrow/short-stage regression",
+    "viewer_sha256": "4d2a90ecfa78deb137efc33fc8899fe7205b355a49c22680eb99fe4b9bee0eb8",
     "scene_sha256": "212a9add70d3ebf7f7e0c7ef6c5a57a8b241ccfeb3a2d21576b67c746f7e7486",
     "native_sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399",
-    "changes_since_preceding_snapshot": "Screen-sized magnet locator dots only; no layout, configuration, persistence or export logic changes",
+    "changes_since_preceding_snapshot": "Camera SVG/label markup, equal button spacing, responsive grid and adjacent tool positioning only; app.js unchanged",
     "checks": [
-      "Twelve blue locator dots remain visible through the base/frame at65percent layer separation",
-      "Show all returns220components and0percent separation",
-      "Files exposes half/content segmented buttons; no select elements and no document overflow",
-      "No browser error logs on final reload, locator, Showall or Files paths"
+      "All seven camera views activated with exactly one selected aria-pressed button and no UI error",
+      "Bottom keyboard activation passed Tab, Enter and Space; visible focus outline is inset and unclipped",
+      "Every camera button hit-tests successfully, is at least44px wide and48px high, and retains an accessible name and visible label",
+      "No document horizontal overflow or camera/tools intersection in the checked viewports; Bottom has5px between button edge and tray edge",
+      "Compact tray is192x108px; single-row tray is330x58px; all labels remain visible",
+      "Top then Parts/Magnets selects3D; Showall returns assembled layer state",
+      "At240x168px stage, side tools hide instead of clipping; camera buttons remain reachable",
+      "No browser error log entries during exercised paths"
     ],
-    "preceding_build_sha256": "9abfe0699518e333e35b78c09209b693807f8a16b7b489d04687af4a4a25d709",
-    "metadata_rebuild_smoke": "Repeated CUA reload after receipt-only metadata rebuild:12named magnet rows,65percent separation,Showall220components,Files0selects,nooverflow,noerrorlogs; native/export bytes unchanged"
+    "preceding_build_sha256": "ca62ed47cd509d2a90a0eba44b9817f429817bb72853d6ba49897149e08069c2"
+  },
+  "camera_selector_baseline": {
+    "commit": "c2580f0f88c19bab8688d33add2d563b5968e296",
+    "sources": [
+      {
+        "path": "viewer/app.js",
+        "sha256": "bd75dcf2cc3af64fd0e0aba82391434cbf77877de009d79f67b050e31ff9f9cf"
+      },
+      {
+        "path": "viewer/explorer.js",
+        "sha256": "4d2d5a606a8fb21c406cf213a70e228ee29b31854dbb094b73d2402b35835f36"
+      },
+      {
+        "path": "viewer/keycap-colors.js",
+        "sha256": "d29876ae3a4026348f4ad35305d084470a2efa6a10db0ffb1522feacc4455c2a"
+      },
+      {
+        "path": "viewer/template.html",
+        "sha256": "75fcddae763a4535719a0646b5b08a9a057b51ed3568aadc5166be6e90890513"
+      },
+      {
+        "path": "viewer/style.css",
+        "sha256": "961bebeefc17533d7bcce557113f643dece73ae9ee2b9ec3bab14115ac0da1c5"
+      }
+    ],
+    "final_build_smoke": {
+      "method": "Direct CUA reload of the completed local build at 390x844; screenshot and DOM readback",
+      "viewer_sha256": "ca62ed47cd509d2a90a0eba44b9817f429817bb72853d6ba49897149e08069c2",
+      "scene_sha256": "212a9add70d3ebf7f7e0c7ef6c5a57a8b241ccfeb3a2d21576b67c746f7e7486",
+      "native_sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399",
+      "changes_since_preceding_snapshot": "Screen-sized magnet locator dots only; no layout, configuration, persistence or export logic changes",
+      "checks": [
+        "Twelve blue locator dots remain visible through the base/frame at65percent layer separation",
+        "Show all returns220components and0percent separation",
+        "Files exposes half/content segmented buttons; no select elements and no document overflow",
+        "No browser error logs on final reload, locator, Showall or Files paths"
+      ],
+      "preceding_build_sha256": "9abfe0699518e333e35b78c09209b693807f8a16b7b489d04687af4a4a25d709",
+      "metadata_rebuild_smoke": "Repeated CUA reload after receipt-only metadata rebuild:12named magnet rows,65percent separation,Showall220components,Files0selects,nooverflow,noerrorlogs; native/export bytes unchanged"
+    },
+    "scope": "The top-level checks, viewport_matrix and download_smoke remain historical evidence of this baseline. The camera refinement below is the current scoped regression check."
+  },
+  "camera_selector_refinement": {
+    "request": "User2026-10-12: styling issues and cramped Bottom camera button; use icons if possible",
+    "baseline_commit": "c2580f0f88c19bab8688d33add2d563b5968e296",
+    "passed": true,
+    "method": "Direct CUA interactions, screenshots and DOM rectangle/hit-test readbacks; no browser CLI suites",
+    "sources": [
+      {
+        "path": "viewer/app.js",
+        "sha256": "bd75dcf2cc3af64fd0e0aba82391434cbf77877de009d79f67b050e31ff9f9cf"
+      },
+      {
+        "path": "viewer/explorer.js",
+        "sha256": "4d2d5a606a8fb21c406cf213a70e228ee29b31854dbb094b73d2402b35835f36"
+      },
+      {
+        "path": "viewer/keycap-colors.js",
+        "sha256": "d29876ae3a4026348f4ad35305d084470a2efa6a10db0ffb1522feacc4455c2a"
+      },
+      {
+        "path": "viewer/template.html",
+        "sha256": "f6c702dba95bd75de78a29a05d981d9275fb8cc8c705b02da17cfe0f2c01961b"
+      },
+      {
+        "path": "viewer/style.css",
+        "sha256": "fc9edfd1a360c82751524e72d7d039733c45a88288d157dcf788f53e8bc0741d"
+      }
+    ],
+    "viewport_cases": [
+      {
+        "viewport": [
+          320,
+          568
+        ],
+        "stage": [
+          320,
+          516
+        ]
+      },
+      {
+        "viewport": [
+          320,
+          568
+        ],
+        "stage": [
+          320,
+          268.32
+        ]
+      },
+      {
+        "viewport": [
+          375,
+          812
+        ],
+        "stage": [
+          375,
+          395.2
+        ]
+      },
+      {
+        "viewport": [
+          390,
+          844
+        ],
+        "stage": [
+          390,
+          792
+        ]
+      },
+      {
+        "viewport": [
+          844,
+          390
+        ],
+        "stage": [
+          240,
+          338
+        ]
+      },
+      {
+        "viewport": [
+          844,
+          320
+        ],
+        "stage": [
+          240,
+          268
+        ]
+      },
+      {
+        "viewport": [
+          1440,
+          960
+        ],
+        "stage": [
+          1440,
+          908
+        ]
+      },
+      {
+        "viewport": [
+          844,
+          220
+        ],
+        "stage": [
+          240,
+          168
+        ]
+      }
+    ],
+    "checks": [
+      "All seven camera views activated with exactly one selected aria-pressed button and no UI error",
+      "Bottom keyboard activation passed Tab, Enter and Space; visible focus outline is inset and unclipped",
+      "Every camera button hit-tests successfully, is at least44px wide and48px high, and retains an accessible name and visible label",
+      "No document horizontal overflow or camera/tools intersection in the checked viewports; Bottom has5px between button edge and tray edge",
+      "Compact tray is192x108px; single-row tray is330x58px; all labels remain visible",
+      "Top then Parts/Magnets selects3D; Showall returns assembled layer state",
+      "At240x168px stage, side tools hide instead of clipping; camera buttons remain reachable",
+      "No browser error log entries during exercised paths"
+    ],
+    "review": "Independent read-only review found the extremely short-stage Fit clipping edge; corrected and verified at240x168px",
+    "limits": [
+      "Browser viewport emulation; no physical iPhone hardware tested",
+      "CAD, configuration and export behavior unchanged; prior checks retained, not represented as rerun"
+    ]
   }
 }
