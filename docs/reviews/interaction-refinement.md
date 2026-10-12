@@ -12,7 +12,7 @@ Request: user 2026-10-11, “pues abordalo”. Baseline: `b86574ae5366a4d0ee397d
 - **design**: Remove Shape and rotation and Case display-cover setting; inline Colors and Finish in Case/Frame/Keys; polished visual hierarchy and spacing.
 - **verification**: Validate phone, landscape, tablet and desktop interactions, persistence/history, model and print exports; commit and synchronize attributable changes and verify public delivery, without claiming physical qualification.
 
-Status: implementation in progress. Digital qualification does not establish physical fit or magnetic retention.
+Status: digital implementation and local verification complete. Public readback is generated after synchronization using the command below. Digital qualification does not establish physical fit or magnetic retention.
 
 ## Decision review
 
@@ -34,4 +34,114 @@ Implemented the complete navigation/visual requirement set. Direct CUA checks ar
 
 The review caught stale active camera/preset indicators; the corrected UI verifies Top → Magnets selects 3D, and Solo PCB/MCU do not mark Inside/Stack. A pre-existing character-range regex also erased individual part names; the corrected expression retains each named magnet and station. Camera framing now reserves the area occupied by the floating widgets. Duplicate Components headings and introductory text were removed after the first mobile screenshot showed they pushed the actual rows below the fold.
 
+Files also uses direct segmented choices for halves and kit contents. At 390 × 844,
+the page has no horizontal overflow and no remaining select elements. Actual
+downloaded left-shell and both-complete ZIPs contained 3 and 20 printed parts,
+respectively; ZIP CRC and every STL matched their sources. CUA's download-event
+wait did not report the file, so the check inspected the actual newly created
+Downloads files instead. Those test copies were moved to ignored
+`build/interaction-redesign/download-smoke/` after hash verification. Reproduce
+with Files → Left → Shells + frame, then Both → Complete kit; these copies verify
+the UI path before port replacement, while the final kit check binds new geometry.
+
 Physical keyboard acceptance remains separate from these digital UI and geometry outcomes.
+
+The mechanical checks exposed two verifier assumptions before native replacement:
+the switch's colored library object is a collection of faces, so the moving-tab
+envelope must come from its closed source solid; and a zero-volume Boolean delta
+can be a null shape, which must be handled as an empty set. The corrected guards
+retain the complete conservative actuator sweep and bounded-volume proof. A hashed
+native checkpoint avoids repeating recomputation after a validation failure. An invalid
+metadata node type also failed before save; its replacement was preflighted through
+create, property writes, compression, archive CRC and reopen before installation.
+
+## Mechanical result
+
+The saved native file passed reopen checks for both halves, all 24 decorated
+frame variants and all eight case components per half. The USB aperture is
+12.4 × 5.4 mm around the retained 12 × 5 mm insertion corridor. The controller
+relief stops 0.3 mm before the modeled PCB front. The power opening retains its
+8.5 mm length and reduces its height from 4.1 to 2.2 mm; the conservative actuator
+sweep and finger/nail approach remain unobstructed in the model.
+
+The ten bounded comparisons show approximately 64.524 mm³ restored to each frame
+blank, no removed material and no added material outside the port zones. The case
+variants in those comparisons have no geometric delta. All 62 unrelated part
+shapes and all twelve magnet shapes match the starting native document. Physical
+cable insertion, switch operation and printed tolerances remain unqualified.
+
+Three magnet pairs form a triangle around the electronics bay of each half.
+The six base magnets are Ø2 × 3 mm and the six mating frame magnets are Ø2 × 4 mm,
+captive inside the printed plastic. The Parts → Magnets route separates the
+layers and uses screen-sized blue location markers so these tiny parts remain
+visible on a phone without changing their geometry.
+
+## Mechanical reproduction and delivery
+
+The bounded installer refines the saved native document; it does not regenerate the
+keyboard from the original builder. Its source revision is pinned to the baseline
+above. The source backup under ignored `build/port-refinement/` is reproducible from
+`git show b86574ae5366a4d0ee397d3c3683c709b899a67d:mechanical/revI/Flan36.FCStd`;
+its SHA-256 must be
+`4d24734a8da5b14317b6d0f3a42778844883d71b53f25994ed19dfd3f575fc30`.
+
+From the repository root, using the installed FreeCAD Python environment:
+
+```sh
+python3 tools/freecad/run_macos.py tools/freecad/refine_ports.py
+python3 tools/freecad/run_macos.py tools/freecad/check_ports.py
+python3 tools/freecad/run_macos.py tools/freecad/export_revI.py
+python3 tools/preserve_export_bytes.py --apply
+/Applications/FreeCAD.app/Contents/Resources/bin/python tools/render_port_refinement.py
+/Applications/FreeCAD.app/Contents/Resources/bin/python tools/build_viewer_revI.py
+node viewer/build.mjs
+/Applications/FreeCAD.app/Contents/Resources/bin/python tools/render_revI.py
+python3 tools/check_stock_print.py
+python3 tools/check_interaction_delivery.py
+```
+
+The installer validates an already-refined native file without applying the
+modification twice. The current delivery check binds CAD, native reopen, mesh
+exports, scene, online/offline viewer, renders and all six complete Level print
+kits by hashes. Older all-magnet receipts remain evidence of their original
+revision; they are not rewritten to claim unchanged port geometry.
+
+The export preservation step retains baseline STEP bytes only when the sole
+difference is the `FILE_NAME` timestamp. Binary STL bytes are retained only after
+exact equality of every complete facet record, including normals, winding,
+attributes and duplicate counts. The current model and mechanical manifest bind
+the final bytes and the preservation receipt. This avoids timestamp-only churn
+and keeps unchanged key-plate checksums valid without altering historic evidence.
+
+After ordinary Git synchronization, run `python3 tools/check_public_delivery.py`
+with the full published commit. Its ignored `build/revI/public-readback.json`
+checks every anonymous source-archive entry and the exact public viewer,
+offline page and printing payload against that commit. The downloaded source ZIP
+is disposable after its hash and all entries pass.
+
+## Final local verification
+
+The saved native/reopen checks, both mechanical exports, seven CAD renders, port
+comparison and all six Level print kits passed. The kits preserve exact STL bytes
+and every registered color 3MF triangle. The checksum policy passed all 78
+exception/detection controls. Ninety-four of 448 exports retained baseline bytes
+after exact equality proof; the preservation checker rejects concurrent changes
+to noncandidate exports or bound source files before certifying a result. Twelve
+additional STEP files retain regenerated metadata: exact comparison found only the
+FILE_NAME timestamp and Open CASCADE PRODUCT export counter changed; geometry
+bytes remain identical.
+
+After the final build, a 390 × 844 CUA reload verified the twelve blue magnet
+markers, Show all returning 220 components and zero separation, and segmented
+Files choices without selects or document overflow. No browser errors appeared.
+The interaction receipt retains the preceding source snapshot and identifies the
+marker-only change and final smoke check, separately from the earlier viewport
+matrix. Port comparison: [before and after](../images/revI-port-refinement.png).
+
+Publication scanning initially classified eight geometry checksums under key-plate
+filename keys as possible credentials. The receipt now uses explicit `file` and
+`sha256` records, keeping every before/after digest and preservation proof. The
+bound receipt upgrade revalidated all 448 exports and retained its preceding
+receipt/executor hashes. The secret scanner then accepted that receipt without
+changing scanner rules or allowlists. Dependent metadata, scene, viewer and
+verification receipts were rebuilt; no native or exported geometry changed.

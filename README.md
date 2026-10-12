@@ -14,6 +14,8 @@
 
 **[Case variants](docs/cases.md)** — Level, Solid, Color rim and Terrace; actual meshes in the explorer.
 
+**[Viewer controls](docs/viewer.md)** — A draggable mobile drawer, direct component visibility controls and a magnet locator. [Port refinement and verification](docs/reviews/interaction-refinement.md) documents the restored frame wall around USB and power access, including the retained cable and switch clearances.
+
 Flan36 is a low-profile wireless split keyboard in development by [Eduardo Ruiz](https://github.com/eduarbo). Its original CAD is designed by Eduardo, with five columns and three thumb keys per half.
 
 - **KLP Lamé choices:** all 38 Choc-stem variants catalogued; 28 qualify in at least one position. The viewer checks complete combinations and exports a configuration for FreeCAD.

@@ -290,6 +290,10 @@ if doc.getObject('DisplaySeamCorrection'):
     for p in ['design/proposals/display-seam-r1/master.json','design/proposals/display-seam-r1/Seam-candidate.FCStd',
               'design/proposals/display-seam-r1/geometry-check.json','tools/freecad/install_display_seam.py']:
         metadata['inputs'].append({'path':p,'sha256':hashlib.sha256((ROOT/p).read_bytes()).hexdigest()})
+if doc.getObject('PortRefinement'):
+    metadata['port_refinement']=json.loads(doc.PortRefinement.RecipeJSON)
+    for p in ['design/revI-ports.json','tools/freecad/refine_ports.py','tools/freecad/check_ports.py']:
+        metadata['inputs'].append({'path':p,'sha256':hashlib.sha256((ROOT/p).read_bytes()).hexdigest()})
 orientation=doc.getObject('FrameArtworkOrientation')
 if orientation:
     metadata['frame_artwork']={'mode':orientation.Mode,'styles':json.loads(orientation.StylesJSON),

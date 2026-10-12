@@ -1,0 +1,412 @@
+{
+  "passed": true,
+  "native_sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399",
+  "checker_sha256": "ed797ea116bb7448a72efa5ce20ea471e6092c82bd97964edb12d87273678f4e",
+  "halves": {
+    "left": {
+      "usb_aperture_mm": [
+        12.4,
+        5.4
+      ],
+      "controller_relief_front_y_mm": -13.300000000000004,
+      "power_opening_mm": [
+        8.5,
+        2.2
+      ],
+      "actuator_sweep_checked_mm": 3.4,
+      "frame_blank_usb_collision_mm3": 0.0,
+      "frame_blank_actuator_collision_mm3": 0.0,
+      "frames": {
+        "flan": {
+          "volume_mm3": 2408.170884155754,
+          "valid_solid": true
+        },
+        "tape": {
+          "volume_mm3": 2408.1708841557543,
+          "valid_solid": true
+        },
+        "orbit": {
+          "volume_mm3": 2408.170884155747,
+          "valid_solid": true
+        },
+        "manga": {
+          "volume_mm3": 2408.1708841557543,
+          "valid_solid": true
+        },
+        "talavera": {
+          "volume_mm3": 2408.1705649971327,
+          "valid_solid": true
+        },
+        "gameboy": {
+          "volume_mm3": 2408.1708841557524,
+          "valid_solid": true
+        },
+        "nes": {
+          "volume_mm3": 2408.1708841557565,
+          "valid_solid": true
+        },
+        "snes": {
+          "volume_mm3": 2408.170884155751,
+          "valid_solid": true
+        },
+        "phone": {
+          "volume_mm3": 2408.1708841557565,
+          "valid_solid": true
+        },
+        "walkman": {
+          "volume_mm3": 2408.1708841557547,
+          "valid_solid": true
+        },
+        "ipod": {
+          "volume_mm3": 2408.1708841557515,
+          "valid_solid": true
+        },
+        "hanafuda": {
+          "volume_mm3": 2408.1708857807494,
+          "valid_solid": true
+        }
+      },
+      "cases": {
+        "solid-base": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 14507.686954223867
+        },
+        "solid-plate": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 4478.289143638068
+        },
+        "rim-base": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 14902.631823614838
+        },
+        "rim-plate": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 3996.5630626589004
+        },
+        "terrace-base": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 14383.092317352332
+        },
+        "terrace-plate": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 4478.289143638068
+        },
+        "level-base": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 14507.686954223867
+        },
+        "level-plate": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 14024.134892819266
+        }
+      }
+    },
+    "right": {
+      "usb_aperture_mm": [
+        12.4,
+        5.4
+      ],
+      "controller_relief_front_y_mm": -13.300000000000004,
+      "power_opening_mm": [
+        8.5,
+        2.2
+      ],
+      "actuator_sweep_checked_mm": 3.4,
+      "frame_blank_usb_collision_mm3": 0.0,
+      "frame_blank_actuator_collision_mm3": 0.0,
+      "frames": {
+        "flan": {
+          "volume_mm3": 2408.170884155755,
+          "valid_solid": true
+        },
+        "tape": {
+          "volume_mm3": 2408.1708841557574,
+          "valid_solid": true
+        },
+        "orbit": {
+          "volume_mm3": 2408.1708841557574,
+          "valid_solid": true
+        },
+        "manga": {
+          "volume_mm3": 2408.170884155755,
+          "valid_solid": true
+        },
+        "talavera": {
+          "volume_mm3": 2408.1705649971354,
+          "valid_solid": true
+        },
+        "gameboy": {
+          "volume_mm3": 2408.170884155753,
+          "valid_solid": true
+        },
+        "nes": {
+          "volume_mm3": 2408.170884155758,
+          "valid_solid": true
+        },
+        "snes": {
+          "volume_mm3": 2408.1708841557547,
+          "valid_solid": true
+        },
+        "phone": {
+          "volume_mm3": 2408.1708841557515,
+          "valid_solid": true
+        },
+        "walkman": {
+          "volume_mm3": 2408.170884155755,
+          "valid_solid": true
+        },
+        "ipod": {
+          "volume_mm3": 2408.1708841557565,
+          "valid_solid": true
+        },
+        "hanafuda": {
+          "volume_mm3": 2408.1708857863428,
+          "valid_solid": true
+        }
+      },
+      "cases": {
+        "solid-base": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 14507.332185406854
+        },
+        "solid-plate": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 4478.289143638064
+        },
+        "rim-base": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 14902.27705479784
+        },
+        "rim-plate": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 3996.563062658896
+        },
+        "terrace-base": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 14382.737548535262
+        },
+        "terrace-plate": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 4478.289143638064
+        },
+        "level-base": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 14507.332185406854
+        },
+        "level-plate": {
+          "usb_collision_mm3": 0.0,
+          "actuator_sweep_collision_mm3": 0.0,
+          "valid_solid": true,
+          "volume_mm3": 14024.483155577751
+        }
+      }
+    }
+  },
+  "magnets": [
+    {
+      "side": "left",
+      "station": 0,
+      "base_mm": [
+        2,
+        3
+      ],
+      "frame_mm": [
+        2,
+        4
+      ],
+      "gap_mm": 0.8999999999999995
+    },
+    {
+      "side": "left",
+      "station": 1,
+      "base_mm": [
+        2,
+        3
+      ],
+      "frame_mm": [
+        2,
+        4
+      ],
+      "gap_mm": 0.8999999999999995
+    },
+    {
+      "side": "left",
+      "station": 2,
+      "base_mm": [
+        2,
+        3
+      ],
+      "frame_mm": [
+        2,
+        4
+      ],
+      "gap_mm": 0.8999999999999995
+    },
+    {
+      "side": "right",
+      "station": 0,
+      "base_mm": [
+        2,
+        3
+      ],
+      "frame_mm": [
+        2,
+        4
+      ],
+      "gap_mm": 0.8999999999999995
+    },
+    {
+      "side": "right",
+      "station": 1,
+      "base_mm": [
+        2,
+        3
+      ],
+      "frame_mm": [
+        2,
+        4
+      ],
+      "gap_mm": 0.8999999999999995
+    },
+    {
+      "side": "right",
+      "station": 2,
+      "base_mm": [
+        2,
+        3
+      ],
+      "frame_mm": [
+        2,
+        4
+      ],
+      "gap_mm": 0.8999999999999995
+    }
+  ],
+  "magnet_count": 12,
+  "finger_nail_approach": {
+    "left": {
+      "lateral_reserve_mm": 0.4,
+      "height_mm": 2.2,
+      "collisions_mm3": {
+        "L_Frame_smooth_HeadRelief5": 0.0,
+        "L_Case_solid_base": 0.0,
+        "L_Case_solid_plate": 0.0,
+        "L_Case_rim_base": 0.0,
+        "L_Case_rim_plate": 0.0,
+        "L_Case_terrace_base": 0.0,
+        "L_Case_terrace_plate": 0.0,
+        "L_Case_level_base": 0.0,
+        "L_Case_level_plate": 0.0
+      }
+    },
+    "right": {
+      "lateral_reserve_mm": 0.4,
+      "height_mm": 2.2,
+      "collisions_mm3": {
+        "R_Frame_smooth_HeadRelief5": 0.0,
+        "R_Case_solid_base": 0.0,
+        "R_Case_solid_plate": 0.0,
+        "R_Case_rim_base": 0.0,
+        "R_Case_rim_plate": 0.0,
+        "R_Case_terrace_base": 0.0,
+        "R_Case_terrace_plate": 0.0,
+        "R_Case_level_base": 0.0,
+        "R_Case_level_plate": 0.0
+      }
+    }
+  },
+  "native_frame_materials": {
+    "L_FlushFrame_talavera_Final": {
+      "faces": 98,
+      "assignments": 98,
+      "verified": true
+    },
+    "L_FlushFrame_gameboy_Final": {
+      "faces": 100,
+      "assignments": 100,
+      "verified": true
+    },
+    "L_FlushFrame_snes_Final": {
+      "faces": 101,
+      "assignments": 101,
+      "verified": true
+    },
+    "L_FlushFrame_phone_Final": {
+      "faces": 106,
+      "assignments": 106,
+      "verified": true
+    },
+    "L_FlushFrame_ipod_Final": {
+      "faces": 97,
+      "assignments": 97,
+      "verified": true
+    },
+    "L_FlushFrame_hanafuda_Final": {
+      "faces": 101,
+      "assignments": 101,
+      "verified": true
+    },
+    "R_FlushFrame_talavera_Final": {
+      "faces": 98,
+      "assignments": 98,
+      "verified": true
+    },
+    "R_FlushFrame_gameboy_Final": {
+      "faces": 100,
+      "assignments": 100,
+      "verified": true
+    },
+    "R_FlushFrame_snes_Final": {
+      "faces": 101,
+      "assignments": 101,
+      "verified": true
+    },
+    "R_FlushFrame_phone_Final": {
+      "faces": 106,
+      "assignments": 106,
+      "verified": true
+    },
+    "R_FlushFrame_ipod_Final": {
+      "faces": 97,
+      "assignments": 97,
+      "verified": true
+    },
+    "R_FlushFrame_hanafuda_Final": {
+      "faces": 101,
+      "assignments": 101,
+      "verified": true
+    }
+  },
+  "physical_acceptance": false,
+  "method": "Reopen saved FreeCAD file without recompute; check actual solids, USB corridor, actuator sweep, approach path and owning-face color assignment."
+}

@@ -81,12 +81,75 @@
     "SoloPCB and SoloMCU do not incorrectly activateInside/Stack presets",
     "No browser error log entries during exercised paths",
     "Visual review corrected model occlusion under floating tools, duplicate Components heading and excess introductory text",
-    "122 JS/Python malformed-config and migration fixtures, recovery, serialized saves and history coalescing passed via node viewer/config-contract-check.cjs"
+    "122 JS/Python malformed-config and migration fixtures, recovery, serialized saves and history coalescing passed via node viewer/config-contract-check.cjs",
+    "Files uses segmented controls for half and content; 390x844 has no horizontal overflow or select elements. Real downloaded ZIPs contained3left shell parts and20complete parts, with CRC and every STL hash matching source; test copies moved from Downloads into ignored task artifacts."
   ],
   "sources": [
     {
       "path": "viewer/app.js",
-      "sha256": "96055ecf9127a57109e67a5ba6e4f55324caceeae1f584b6b8d763dd8dc01b76"
+      "sha256": "bd75dcf2cc3af64fd0e0aba82391434cbf77877de009d79f67b050e31ff9f9cf"
+    },
+    {
+      "path": "viewer/explorer.js",
+      "sha256": "4d2d5a606a8fb21c406cf213a70e228ee29b31854dbb094b73d2402b35835f36"
+    },
+    {
+      "path": "viewer/keycap-colors.js",
+      "sha256": "d29876ae3a4026348f4ad35305d084470a2efa6a10db0ffb1522feacc4455c2a"
+    },
+    {
+      "path": "viewer/template.html",
+      "sha256": "75fcddae763a4535719a0646b5b08a9a057b51ed3568aadc5166be6e90890513"
+    },
+    {
+      "path": "viewer/style.css",
+      "sha256": "961bebeefc17533d7bcce557113f643dece73ae9ee2b9ec3bab14115ac0da1c5"
+    }
+  ],
+  "limitations": [
+    "No physical iPhone/Safari touch hardware tested",
+    "Adapted responsive-check.cjs and keycolors-check.cjs were syntax-checked but their CLI browser suites were not executed",
+    "Physical assembly and printed port/magnet acceptance remain separate"
+  ],
+  "download_smoke": {
+    "passed": true,
+    "viewport": [
+      390,
+      844
+    ],
+    "select_elements": 0,
+    "event_wait_limitation": "CUA download wait timed out; actual files at the default Downloads path were independently verified and moved to ignored test artifacts",
+    "artifacts": [
+      {
+        "filename": "Flan36-left-shells.zip",
+        "half": "left",
+        "scope": "shells",
+        "part_count": 3,
+        "sha256": "6c20a21bc2293a62037e57856fad536c84d05756155579c98921a4f2f43699cc",
+        "zip_crc": true,
+        "all_stl_sources_exact": true
+      },
+      {
+        "filename": "Flan36-both-complete.zip",
+        "half": "both",
+        "scope": "complete",
+        "part_count": 20,
+        "sha256": "b81aaa064ad8689ecb34571eb51106e8f1f0ca743064173017db67d2dcaed73c",
+        "zip_crc": true,
+        "all_stl_sources_exact": true
+      }
+    ],
+    "source_sha256": {
+      "viewer/app.js": "bd75dcf2cc3af64fd0e0aba82391434cbf77877de009d79f67b050e31ff9f9cf",
+      "viewer/template.html": "75fcddae763a4535719a0646b5b08a9a057b51ed3568aadc5166be6e90890513",
+      "viewer/printing.js": "e0f6fa4ae83c9a6d88e83fb19906ab98e1bd9e68231f53663e8add8b2ba659b9"
+    },
+    "geometry_stage": "Before port-native replacement; final kit geometry verified separately by check_stock_print.py"
+  },
+  "preceding_source_snapshot": [
+    {
+      "path": "viewer/app.js",
+      "sha256": "bd75dcf2cc3af64fd0e0aba82391434cbf77877de009d79f67b050e31ff9f9cf"
     },
     {
       "path": "viewer/explorer.js",
@@ -98,16 +161,26 @@
     },
     {
       "path": "viewer/template.html",
-      "sha256": "5afd6a8470f3a9bfdb59f8613b87f83d2538dfb634ec2889a8aa899f93b82797"
+      "sha256": "75fcddae763a4535719a0646b5b08a9a057b51ed3568aadc5166be6e90890513"
     },
     {
       "path": "viewer/style.css",
       "sha256": "961bebeefc17533d7bcce557113f643dece73ae9ee2b9ec3bab14115ac0da1c5"
     }
   ],
-  "limitations": [
-    "No physical iPhone/Safari touch hardware tested",
-    "Adapted responsive-check.cjs and keycolors-check.cjs were syntax-checked but their CLI browser suites were not executed",
-    "Physical assembly and printed port/magnet acceptance remain separate"
-  ]
+  "final_build_smoke": {
+    "method": "Direct CUA reload of the completed local build at 390x844; screenshot and DOM readback",
+    "viewer_sha256": "ca62ed47cd509d2a90a0eba44b9817f429817bb72853d6ba49897149e08069c2",
+    "scene_sha256": "212a9add70d3ebf7f7e0c7ef6c5a57a8b241ccfeb3a2d21576b67c746f7e7486",
+    "native_sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399",
+    "changes_since_preceding_snapshot": "Screen-sized magnet locator dots only; no layout, configuration, persistence or export logic changes",
+    "checks": [
+      "Twelve blue locator dots remain visible through the base/frame at65percent layer separation",
+      "Show all returns220components and0percent separation",
+      "Files exposes half/content segmented buttons; no select elements and no document overflow",
+      "No browser error logs on final reload, locator, Showall or Files paths"
+    ],
+    "preceding_build_sha256": "9abfe0699518e333e35b78c09209b693807f8a16b7b489d04687af4a4a25d709",
+    "metadata_rebuild_smoke": "Repeated CUA reload after receipt-only metadata rebuild:12named magnet rows,65percent separation,Showall220components,Files0selects,nooverflow,noerrorlogs; native/export bytes unchanged"
+  }
 }

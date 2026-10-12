@@ -103,7 +103,8 @@
       <div class="config-actions"><button id="save-config" class="primary">Save JSON</button><button id="load-trigger">Open JSON</button><input id="load-config" type="file" accept=".json,application/json" hidden></div>
     </section>
     <section class="content-card"><h3>Print your parts</h3><p class="hint">Export the case, plate and selected frame, ready for your slicer.</p>
-      <div class="form-pair"><label>Halves<select id="print-half"><option value="both">Both halves</option><option value="left">Left</option><option value="right">Right</option></select></label><label>Include<select id="print-scope"><option value="shells">Shells + frame</option><option value="complete">Complete kit</option></select></label></div>
+      <div class="field-label">Halves</div><div id="print-half" class="segments" role="group" aria-label="Print halves"><button data-value="both" aria-pressed="true">Both</button><button data-value="left" aria-pressed="false">Left</button><button data-value="right" aria-pressed="false">Right</button></div>
+      <div class="field-label">Include</div><div id="print-scope" class="segments" role="group" aria-label="Print contents"><button data-value="shells" aria-pressed="true">Shells + frame</button><button data-value="complete" aria-pressed="false">Complete kit</button></div>
       <button id="print-kit" class="primary">Download print kit</button><p id="print-status" class="micro">ZIP · STL + color 3MF + part list. Set Bambu colors manually. Fit still requires physical testing.</p>
     </section>
     <section class="content-card"><h3>3D &amp; offline</h3><div class="downloads"><button id="glb">Download assembled GLB <span>3D model</span></button><a href="./offline.html" download="Flan36-revI.html">Download offline viewer <span>Self-contained HTML ↓</span></a><a href="https://github.com/eduarbo/flan36/blob/main/docs/freecad.md">Edit the source CAD <span>FreeCAD + KiCad ↗</span></a></div></section>

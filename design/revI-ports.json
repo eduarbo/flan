@@ -1,0 +1,36 @@
+{
+  "schema": "flan36-port-refinement-1",
+  "source_native_sha256": "4d24734a8da5b14317b6d0f3a42778844883d71b53f25994ed19dfd3f575fc30",
+  "units": "mm",
+  "usb": {
+    "insertion_envelope": [12, 5],
+    "aperture": [12.4, 5.4],
+    "per_side_reserve": 0.2,
+    "controller_relief_front_y_left": -13.3,
+    "controller_pcb_front_y_left": -13.6,
+    "pcb_front_reserve": 0.3,
+    "change": "Restore front wall removed by the overlong controller cavity; use the same USB cutter envelope in the frame and base. The connector remains recessed behind the plug-access opening."
+  },
+  "power": {
+    "opening_length": 8.5,
+    "opening_bottom_z": 5.1,
+    "opening_top_z": 7.3,
+    "previous_opening_top_z": 9.2,
+    "component_top_z": 6.9,
+    "top_reserve": 0.4,
+    "actuator_nominal_travel": 1.5,
+    "actuator_checked_travel": 1.7,
+    "sources": [
+      "https://www.ckswitches.com/media/1424/pcm.pdf",
+      "https://www.littelfuse.com/de/products/switches/slide-switches/pcm/pcm12smtr"
+    ],
+    "source_note": "C&K PCM series drawing, revision 2025-03-14, p.2, shows the actuator in position 2 and a 1.5 mm travel. Littelfuse product listing reports nominal 1.5 mm, maximum 1.7 mm electrical travel. The check conservatively sweeps the actuator in both directions from the library pose, retaining the existing full slot length.",
+    "change": "Lower the unnecessary slot roof by 1.9 mm; retain its full width and lower edge for switch access."
+  },
+  "physical_acceptance": false,
+  "physical_checks": [
+    "Full insertion and removal of the delivered USB cable",
+    "Actual printed clearance and ability to move the switch between both endpoints",
+    "Solder, module and printing tolerances"
+  ]
+}

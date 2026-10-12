@@ -1,0 +1,133 @@
+{
+  "schema": "flan36-port-interaction-delivery-1",
+  "baseline_commit": "b86574ae5366a4d0ee397d3c3683c709b899a67d",
+  "passed": true,
+  "physical_acceptance": false,
+  "scope": "Bounded USB/power aperture refinement and requested viewer navigation/visual redesign",
+  "artifacts": [
+    {
+      "path": "mechanical/revI/Flan36.FCStd",
+      "sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399"
+    },
+    {
+      "path": "design/revI.json",
+      "sha256": "939da95663f38b8668cf4f07eedbb38e40d04fc12d104720f165440c01a4a78b"
+    },
+    {
+      "path": "design/revI-ports.json",
+      "sha256": "45b4e088b7a64fdeffea3094af66a7f7db13f75913f8f3e3bb203d3dbe68d349"
+    },
+    {
+      "path": "design/revI-magnets.json",
+      "sha256": "abd1eddbe5f5b63de33a3b1404076af7f5e4d3a3f0ce0259cefc0ba969a0f8e9"
+    },
+    {
+      "path": "validation/revI-ports.json",
+      "sha256": "abb78c951d3c9c5fa035a8b5f788f8b81b260d04f2e7eb7b2c7eafe51132a2e3"
+    },
+    {
+      "path": "validation/revI-ports-reopen.json",
+      "sha256": "1d8f73b1f256a1e44a11117cb48270b06411cb96a907b23b7886382895ccc232"
+    },
+    {
+      "path": "validation/revI-port-render.json",
+      "sha256": "1f1fec7a560ff74c9652ea981c7bda6f31e0e5faa28e6bc503a410f2960a6cbe"
+    },
+    {
+      "path": "validation/revI-mechanical.json",
+      "sha256": "345da16031deea1985cc17bf8444c1b6f8256a048e8dcdcf806fb63d6e2d38a3"
+    },
+    {
+      "path": "validation/revI-export-preservation.json",
+      "sha256": "ea7750015b9769e25c66c57d375a2ccc2b5daef110503f489d703a79c3e80c3d"
+    },
+    {
+      "path": "tools/preserve_export_bytes.py",
+      "sha256": "366824fffaea90e5b6595f2e677bbf704595bd911bdfdd453cbd50f2e5d7633a"
+    },
+    {
+      "path": "validation/revI-viewer.json",
+      "sha256": "552067fea635f99bb463cb3eabedb90d74678119166b7b816a44c9bec3c3c870"
+    },
+    {
+      "path": "validation/revI-render.json",
+      "sha256": "3e383e13577f35830aaa3b80ae1c2dcb9224e93d0096ae3779f667f44a133c6b"
+    },
+    {
+      "path": "validation/revI-interaction.json",
+      "sha256": "d1f4df739a6585c7d7faaf3d99680bc6834c75c23927ff52001407a4f5f55f3e"
+    },
+    {
+      "path": "viewer/printing.js",
+      "sha256": "e0f6fa4ae83c9a6d88e83fb19906ab98e1bd9e68231f53663e8add8b2ba659b9"
+    },
+    {
+      "path": "tools/check_stock_print.py",
+      "sha256": "49eaf3c0c8d8bdf47937696ea994e794a2f2faf91901628d93f3078d9cb65696"
+    },
+    {
+      "path": "tools/check_interaction_delivery.py",
+      "sha256": "3f9313b2dbcd0548bc6d1652ee48a30def3e54e2ec534d6d2ba6530aa4d375f7"
+    }
+  ],
+  "checks": {
+    "native_access_and_appearance": "Saved native reopen; both halves and all case/frame variants",
+    "magnetic_closure": "All twelve magnet shapes retained; six base 2x3 and six frame 2x4 cylinders",
+    "printing": "Six complete Level kits; exact source STL bytes and all registered color 3MF triangles",
+    "browser": "Task-integrated browser CUA checks recorded separately; no claim of unexecuted Playwright suites"
+  },
+  "print_kits": {
+    "passed": true,
+    "method": "Production printKit in Node; every STL byte and every translated 3MF triangle compared with native exports",
+    "scene_sha256": "212a9add70d3ebf7f7e0c7ef6c5a57a8b241ccfeb3a2d21576b67c746f7e7486",
+    "checker_sha256": "49eaf3c0c8d8bdf47937696ea994e794a2f2faf91901628d93f3078d9cb65696",
+    "frame_top_mm": 14.5,
+    "kits": [
+      {
+        "style": "talavera",
+        "parts": 20,
+        "materials": 26,
+        "sha256": "5f1d25b759228ce9d5d8f4cdfbeabeffb7b1a4b5e715cc2cf553c67485b29e3b"
+      },
+      {
+        "style": "gameboy",
+        "parts": 20,
+        "materials": 26,
+        "sha256": "28d2072f4f9fa4c7b63e7b70063dfc705a413b0fad132ab3665a088379e81da1"
+      },
+      {
+        "style": "snes",
+        "parts": 20,
+        "materials": 26,
+        "sha256": "b260912230478914b2299e0178cb101037f531d9521727d5d62736994a67c222"
+      },
+      {
+        "style": "phone",
+        "parts": 20,
+        "materials": 26,
+        "sha256": "95540fccf89cf9f01a9f64ae7f83925946d98aecc6b6337061384ad20f12951a"
+      },
+      {
+        "style": "ipod",
+        "parts": 20,
+        "materials": 26,
+        "sha256": "4e073a31085ae881fcfcb6f7f5b3ad04bdfd756062fd0efc2c49a171564d8eba"
+      },
+      {
+        "style": "hanafuda",
+        "parts": 20,
+        "materials": 26,
+        "sha256": "f12ee31da7a43888c53f58ee6eb137ae8593037119cf817c802769801942b2fa"
+      }
+    ],
+    "all_magnet_joining_and_polarity_checked": true,
+    "browser_download_tested": false,
+    "physical_acceptance": false
+  },
+  "review": "docs/reviews/interaction-refinement.md",
+  "reproduction": "Follow docs/reviews/interaction-refinement.md; build/ artifacts are ignored and reproducible",
+  "limits": [
+    "Actual cable insertion and switch operation in an assembled print",
+    "Magnet polarity, temperature/capture and frame retention require physical acceptance"
+  ]
+}

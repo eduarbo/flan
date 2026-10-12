@@ -24,6 +24,14 @@ export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,req
   scene.add(overlay);
   const glow=new THREE.MeshBasicMaterial({color:'#4285e8',transparent:true,opacity:.25,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2});
   const xray=new THREE.MeshBasicMaterial({color:'#2785ff',transparent:true,opacity:.8,depthTest:false,depthWrite:false});
+  // Screen-sized locator dots remain legible when the 2 mm magnets are tiny.
+  // These are annotations; the actual magnet geometry stays unchanged.
+  const dotCanvas=document.createElement('canvas');dotCanvas.width=dotCanvas.height=64;
+  const dot=dotCanvas.getContext('2d');dot.fillStyle='#fff';dot.beginPath();dot.arc(32,32,30,0,Math.PI*2);dot.fill();dot.fillStyle='#3568ed';dot.beginPath();dot.arc(32,32,21,0,Math.PI*2);dot.fill();
+  const locatorTexture=new THREE.CanvasTexture(dotCanvas);locatorTexture.colorSpace=THREE.SRGBColorSpace;
+  const locatorGeometry=new THREE.BufferGeometry(),locator=new THREE.Points(locatorGeometry,new THREE.PointsMaterial({map:locatorTexture,toneMapped:false,size:12,sizeAttenuation:false,transparent:true,depthTest:false,depthWrite:false}));
+  locatorGeometry.setAttribute('position',new THREE.Float32BufferAttribute(new Float32Array(objects.filter(isMagnet).length*3),3));
+  locator.renderOrder=1001;locator.frustumCulled=false;locator.visible=false;overlay.add(locator);
   const match=(o,ref)=>o.userData.installed!==false&&matchesPart(o,ref);
   const key=ref=>ref?JSON.stringify(ref):'';
   const refOf=o=>({group:o.userData.group,side:o.userData.side,key:o.userData.key,objectIndex:o.userData.objectIndex});
@@ -62,6 +70,16 @@ export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,req
         let mesh=highlights.get(o);if(!mesh){mesh=new THREE.Mesh(o.geometry,glow);highlights.set(o,mesh);overlay.add(mesh);}
         const through=Boolean(hovered)||highlighted?.collection==='magnets';mesh.material=through?xray:glow;mesh.renderOrder=through?1000:0;mesh.geometry=o.geometry;mesh.position.copy(o.position);mesh.rotation.copy(o.rotation);mesh.scale.copy(o.scale);mesh.visible=true;
       }
+      const positions=[];
+      if(highlighted?.collection==='magnets'){
+        scene.updateMatrixWorld(true);
+        for(const o of objects)if(o.visible&&match(o,highlighted)){
+          if(!o.geometry.boundingBox)o.geometry.computeBoundingBox();
+          const center=o.geometry.boundingBox.getCenter(new THREE.Vector3()).applyMatrix4(o.matrixWorld);positions.push(center.x,center.y,center.z);
+        }
+      }
+      locator.visible=positions.length>0;
+      locatorGeometry.attributes.position.array.set(positions);locatorGeometry.attributes.position.needsUpdate=true;locatorGeometry.setDrawRange(0,positions.length/3);
       if(selected)$('selection-visibility').textContent=objects.some(o=>o.visible&&match(o,selected))?'':selected.group==='lid'&&!objects.some(o=>match(o,selected))?'Display frames are not installed. Use the installation controls below.':'This selection is hidden. Use the visibility control beside its name.';
     }
     if(activeKey!==key(active)){activeKey=key(active);for(const row of document.querySelectorAll('.part-row'))row.classList.toggle('is-highlighted',!active?.collection&&active?.group===row.dataset.group);}

@@ -7383,13 +7383,13 @@
       "bounds_mm": [
         111.0,
         -67.0,
-        6.299999999999994,
+        6.299999999999997,
         135.0,
         -11.0,
         14.5
       ],
       "visuals": [],
-      "stl_sha256": "b7b8bc95d11b2cf1d20cc86a2250e2ceff3f01657f7a418e4138d5b1b5ee12ea"
+      "stl_sha256": "66939074d88a15a3ebae8adee5c4d727af001fee93b047c2f18f6b2ab37ee672"
     },
     "left-pcb": {
       "object": "L_SlimPCBLeadNotch",
@@ -8120,13 +8120,13 @@
       "bounds_mm": [
         25.0,
         -67.0,
-        6.299999999999993,
+        6.299999999999998,
         49.0,
         -11.0,
         14.5
       ],
       "visuals": [],
-      "stl_sha256": "19bfd200e8d38b3cf5e6046c74af81914e80668f6dedae7e126ab9c1e8c9fbd5"
+      "stl_sha256": "97894ee083a17ffdd7514b5f15094e2372af1542a42f81082b9c156d6c5e5f5f"
     },
     "right-pcb": {
       "object": "R_SlimPCBLeadNotch",
@@ -8544,7 +8544,7 @@
     },
     {
       "path": "tools/freecad/export_revI.py",
-      "sha256": "26945323f83ca8d1fd39eb8928a1ad184439af618ebabb4d22c6ca97412b73ce"
+      "sha256": "9c52ac8363e1e1293253a42782dfa0fc1b78246ebb9700aaaa0e0efcc2f7a97d"
     },
     {
       "path": "tools/freecad/install_stock_display.py",
@@ -8571,15 +8571,27 @@
       "sha256": "e020a04074455bef73b39f71c8e4ddf86d4f83ef9c55e893af883d6f7192336f"
     },
     {
+      "path": "design/revI-ports.json",
+      "sha256": "45b4e088b7a64fdeffea3094af66a7f7db13f75913f8f3e3bb203d3dbe68d349"
+    },
+    {
+      "path": "tools/freecad/refine_ports.py",
+      "sha256": "a9e8448ce5fa0d069f3ee7b3c7685f81dd9940f9e5047d89286aadc21c296c76"
+    },
+    {
+      "path": "tools/freecad/check_ports.py",
+      "sha256": "ed797ea116bb7448a72efa5ce20ea471e6092c82bd97964edb12d87273678f4e"
+    },
+    {
       "path": "tools/freecad/install_frame_orientation.py",
       "sha256": "7f4e9f05998112c3b08bbc6ff1554616f315e58d9804b5f0b382535bc1e1dd0c"
     },
     {
-      "path": "tools/freecad/apply_frame_magnets.py",
-      "sha256": "d88eda70897b9796202f161f7b7e63980ed123cb0c855a9c7e6dc356f455d6e3"
+      "path": "tools/preserve_export_bytes.py",
+      "sha256": "366824fffaea90e5b6595f2e677bbf704595bd911bdfdd453cbd50f2e5d7633a"
     }
   ],
-  "fcstd_sha256": "4d24734a8da5b14317b6d0f3a42778844883d71b53f25994ed19dfd3f575fc30",
+  "fcstd_sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399",
   "identity_migration": {
     "baseline_commit": "819a01883b2faec3682ac457328bc361dc43e355",
     "method": "Only branding tokens in native Document.xml changed; shape and mesh members preserved byte for byte",
@@ -8596,9 +8608,9 @@
           "role": "body",
           "stl": "left-frame-flan-body.stl",
           "step": "left-frame-flan-body.step",
-          "stl_sha256": "800f83aa13ff099f44ac5c12aa8d882f5c8d7b3414153a6c3b6368733b1714b9",
-          "step_sha256": "ad90b56294e2a3f35be4ba30fc30a2d93560f082b2263a5525cd630edb0d1922",
-          "volume_mm3": 2248.410826970048,
+          "stl_sha256": "fadbe531af2d03ff3534fc33e2c403a62b81540d9b49d589e24a5184ac60e5b7",
+          "step_sha256": "353975770784ee7028a91c3de3e496fc040f21722964e17255ad247d2eaaebb3",
+          "volume_mm3": 2312.9349506028284,
           "solids": 1
         },
         {
@@ -8640,9 +8652,9 @@
           "role": "body",
           "stl": "left-frame-tape-body.stl",
           "step": "left-frame-tape-body.step",
-          "stl_sha256": "183f39a465f324e4a6a7e5ee6aac8161cc31d5a9f37214584e600d2ff5b64e4c",
-          "step_sha256": "c0ee4e96abcd8f1ebc23073603ed1e644e464a1fd65a51c54dc4f5643cba9908",
-          "volume_mm3": 2200.6654437415978,
+          "stl_sha256": "2597b78ca628ff61d0ac6f05b7d97480c0f8e99efbe293e1a3e48e97fd82566d",
+          "step_sha256": "b6c4327596b02ceae4b798e43a4c851b6da389fdd3fbc4bd1c0ce4b04ccdb4f4",
+          "volume_mm3": 2265.1895673743816,
           "solids": 1
         },
         {
@@ -8684,9 +8696,9 @@
           "role": "body",
           "stl": "left-frame-orbit-body.stl",
           "step": "left-frame-orbit-body.step",
-          "stl_sha256": "586e01916daf889e579b5e27c0667cdbc782fed75f3a726ada44fcab5186ee10",
-          "step_sha256": "5b50ee0367121e43131692bed6281dc40d6fa296204fdc3d857cd026c10bde99",
-          "volume_mm3": 2138.7527379530484,
+          "stl_sha256": "7f77fd24db8d49276b7b858fa72096fbd84f6a88aa1830abdc9f05b18e609057",
+          "step_sha256": "0b0e2ba731c1bd5e1927f74cb1610553aecdb650c7ecba1c3989be4d40af0ef7",
+          "volume_mm3": 2203.276861585834,
           "solids": 1
         },
         {
@@ -8728,9 +8740,9 @@
           "role": "body",
           "stl": "left-frame-manga-body.stl",
           "step": "left-frame-manga-body.step",
-          "stl_sha256": "5050f486fa382a6b2301e7b392c17aef3e3a5445483c7a14f16bf81c649fc44e",
-          "step_sha256": "dcd1f31502ec41c819a3b3c3517b3f33600d9f207ea99b1134cf5c0695264bad",
-          "volume_mm3": 2204.7117705198757,
+          "stl_sha256": "df1f227b629120a79b86de5fcb964f4c2e253523972ee371c2db1d6fc9fdbf58",
+          "step_sha256": "2591c0398911e0ace3d7449d89a3e008093f0af8f12cc274ff2bed0c0758fc7a",
+          "volume_mm3": 2269.235894152663,
           "solids": 1
         },
         {
@@ -8772,9 +8784,9 @@
           "role": "body",
           "stl": "left-frame-talavera-body.stl",
           "step": "left-frame-talavera-body.step",
-          "stl_sha256": "5830d6c0187c1fcb68b57a54b9116f198597076ce8e115920544be13395c893f",
-          "step_sha256": "b750ae1b785a9895846959f04f24855a890e16446ed3dc3590a9ef614af06afd",
-          "volume_mm3": 2164.520857959598,
+          "stl_sha256": "30de7ac95d2d9819109a8d113abb47902ee3014f0a6be0cb5f38c33eb9b3d04e",
+          "step_sha256": "3f98f69ac3f31507e699403e91b3ae3cfd5a717135483cb1c4ef0522af9da8b6",
+          "volume_mm3": 2229.044979967858,
           "solids": 1
         },
         {
@@ -8816,9 +8828,9 @@
           "role": "body",
           "stl": "left-frame-gameboy-body.stl",
           "step": "left-frame-gameboy-body.step",
-          "stl_sha256": "f969ea648907ec8f6a224f1d13700f058a61ef512ea2fe8c055e6c9ebbe2fd05",
-          "step_sha256": "340fc6e1a3952f501a34dd7e592f6b19dde73f45e6955607e86848cb2caed014",
-          "volume_mm3": 2175.724855375051,
+          "stl_sha256": "8481ade8308acb204cc7280e6515c27e8d6e4e33d617203d3d3a912ce776d213",
+          "step_sha256": "8a24bf228574b8fa294972fbbb6d5e158465c518645375e208b95afdfeb17de3",
+          "volume_mm3": 2240.248979007833,
           "solids": 1
         },
         {
@@ -8860,9 +8872,9 @@
           "role": "body",
           "stl": "left-frame-nes-body.stl",
           "step": "left-frame-nes-body.step",
-          "stl_sha256": "2a28e4a178963cdd27185762d293a5c579d2b19ffb2da63c198f11bcc9c5b048",
-          "step_sha256": "5c81de89f843c649f25651f1051055b52b5254ca39e6d99bda01e0b8a8aa02e2",
-          "volume_mm3": 2161.9350792948403,
+          "stl_sha256": "122b6d94b5ae45a5dcfc9ae9ebec799c8ee6bb4f04317c69a9570dd6e8d3b7b9",
+          "step_sha256": "06cc257fdfeb462f0aaba035d8d4f031a4af75d9a21657d1ef643944780129d1",
+          "volume_mm3": 2226.459202927626,
           "solids": 1
         },
         {
@@ -8904,9 +8916,9 @@
           "role": "body",
           "stl": "left-frame-snes-body.stl",
           "step": "left-frame-snes-body.step",
-          "stl_sha256": "4ceeb7bf0039ef54cb31143620625cbb8a9617d046bd10a471890a6642432574",
-          "step_sha256": "4d131e687ad32ec6f616eb490952afcba52fdee4a2d2e7dae8e237b4a1ec5f2f",
-          "volume_mm3": 2168.4235463019477,
+          "stl_sha256": "9ea8d4dc2f550446c1160a2f6835d5f8db46932d5b37da7898dd994a4351dbc6",
+          "step_sha256": "2576fe51b1cfa15063c94a4ada901523ad1927d07e0f0b56526ab03df24c717d",
+          "volume_mm3": 2232.9476699347274,
           "solids": 1
         },
         {
@@ -8948,9 +8960,9 @@
           "role": "body",
           "stl": "left-frame-phone-body.stl",
           "step": "left-frame-phone-body.step",
-          "stl_sha256": "2ec956044aa1d8b9695cee815040ffd1adc002860e3042bafef31c3ae5e48c64",
-          "step_sha256": "1c870ce6daff0cdf99edc4f382422dfe43597fed9d1391b5dc76084b1fe5615a",
-          "volume_mm3": 2156.3339532163604,
+          "stl_sha256": "2c14fe24ba1cee2064195729a9e00cbb31e669b4d1ac56ef16b46471c9c657e9",
+          "step_sha256": "d4102e058ec3b22a0c392412f8fef3d168326275004b536d2c2d5ba1f98c5f03",
+          "volume_mm3": 2220.858076849142,
           "solids": 1
         },
         {
@@ -8992,9 +9004,9 @@
           "role": "body",
           "stl": "left-frame-walkman-body.stl",
           "step": "left-frame-walkman-body.step",
-          "stl_sha256": "98775efb5fdfbe0e84edc5def4390060fc645e535b2c4ce5c7e1e1e92d52ccbe",
-          "step_sha256": "8f60c329db733cc6f318979ba1fe894d764e7822cf27e9a2f6dc696a050b7d4b",
-          "volume_mm3": 2194.9958936259263,
+          "stl_sha256": "4a6570806fa3081390d33306322b6590455c32904b3963872adb6c58fc0eb822",
+          "step_sha256": "9d2a4e58d28c2a9664afe90d742c3ba5723d84df612d73b1145a39e5694ecbd1",
+          "volume_mm3": 2259.520017258714,
           "solids": 1
         },
         {
@@ -9036,9 +9048,9 @@
           "role": "body",
           "stl": "left-frame-ipod-body.stl",
           "step": "left-frame-ipod-body.step",
-          "stl_sha256": "32b76e69ba5be3c0111d92b3f9df338c047c04e754650a24b776958ad646642a",
-          "step_sha256": "6e4434059862a42f57184b1d736366ece387830133d95032e8f8676959b634cb",
-          "volume_mm3": 2174.280219694788,
+          "stl_sha256": "7b776d0f3d2c91f9d2c615fda8becab507230ab67d99254bb6f5c413d356f8bf",
+          "step_sha256": "2f68a87107bb83e0d028fe2d1ecf504ce27c998ed4d048768de272ca96c596b5",
+          "volume_mm3": 2238.804343327571,
           "solids": 1
         },
         {
@@ -9080,9 +9092,9 @@
           "role": "body",
           "stl": "left-frame-hanafuda-body.stl",
           "step": "left-frame-hanafuda-body.step",
-          "stl_sha256": "ca24294d3103e454f0abf1bab7d79fb4d97b92b3988d9cf476cca9af9fd6c7b0",
-          "step_sha256": "dde2ae18910f4f9c3681f153c88a073db4b2a924278b566b347e49638faacd05",
-          "volume_mm3": 2123.5068507560377,
+          "stl_sha256": "c02d9762a6e0e1a34415f70dda7e3a3369d9508ced1c824a339f7b373015d9e7",
+          "step_sha256": "dfcb45f2d12fe9537cf242700a074d5fd04f6a6b5e2f08a457d90d2de8c233d9",
+          "volume_mm3": 2188.030974388821,
           "solids": 1
         },
         {
@@ -9124,9 +9136,9 @@
           "role": "body",
           "stl": "right-frame-flan-body.stl",
           "step": "right-frame-flan-body.step",
-          "stl_sha256": "c2cee290987c81ecc8481f8f671184f6f737be1e8e3161a7298f5a67b2ab08d8",
-          "step_sha256": "63c110500c1dbd8ee101e43fc123dfed152aff7fadf2b12ae930e17cadaa3710",
-          "volume_mm3": 2248.4108269700496,
+          "stl_sha256": "e377dbbb7a17e9f48ac59df93774d582c7f8afb9e44be3f82fb8cf03b69ae1c6",
+          "step_sha256": "c07d5cbc2d9eeb3fb506ed31baa08ec9ecbdb8a0ffcdcad76dd4f0419eece7dd",
+          "volume_mm3": 2312.9349506028343,
           "solids": 1
         },
         {
@@ -9168,9 +9180,9 @@
           "role": "body",
           "stl": "right-frame-tape-body.stl",
           "step": "right-frame-tape-body.step",
-          "stl_sha256": "150b04d24b91335b5ba225f0f0712057cd8d7453a656e1cb29e025971f9699eb",
-          "step_sha256": "d5e984f9b3abc37b17f8810a2627d8a73207444e716c4040a6537e6f68099627",
-          "volume_mm3": 2200.665443741602,
+          "stl_sha256": "329698be83ff9e4bbe393ffede679579f21cdfa6c3fa3994a82f11e6d0950151",
+          "step_sha256": "cda4b65106b6542a019bf38018509569afbb63e326effe4fb187d28600cc703d",
+          "volume_mm3": 2265.1895673743857,
           "solids": 1
         },
         {
@@ -9212,9 +9224,9 @@
           "role": "body",
           "stl": "right-frame-orbit-body.stl",
           "step": "right-frame-orbit-body.step",
-          "stl_sha256": "fef2ed3a5eb7b698713ec28a10f89a2d0a02a6354f6939315bf50bc477488a98",
-          "step_sha256": "9c2d5676b8c16ae98e637dcb75b4d0fb619a1ba7626f798cab673c020b4b8dd2",
-          "volume_mm3": 2138.7527379530457,
+          "stl_sha256": "e3a065fe2e240c67a7edb7ace7a195ef1ade2031a08e1bfff81328e3197aabea",
+          "step_sha256": "7a97af643c6ed2c98ef99f9eb1a5884ae025771b4170245ed53070c952bfcb55",
+          "volume_mm3": 2203.2768615858326,
           "solids": 1
         },
         {
@@ -9256,9 +9268,9 @@
           "role": "body",
           "stl": "right-frame-manga-body.stl",
           "step": "right-frame-manga-body.step",
-          "stl_sha256": "92d9e16e901e1d70c88414f2a9cee2263459774a4b9e03b715e5a156839dd0ff",
-          "step_sha256": "9d77d61ff76c01355ce7450f40ba5043e58c98ec964493309bcd3970620c244d",
-          "volume_mm3": 2204.711770519883,
+          "stl_sha256": "1b31541389894d82cdf7c2538ea4e715a59a04f7809c9402c243a24371fd8f50",
+          "step_sha256": "fa830dba20953a6504f63103fbd5990abdffe7177f2bb0953ff0669ac392855a",
+          "volume_mm3": 2269.2358941526686,
           "solids": 1
         },
         {
@@ -9300,9 +9312,9 @@
           "role": "body",
           "stl": "right-frame-talavera-body.stl",
           "step": "right-frame-talavera-body.step",
-          "stl_sha256": "e10b89175df69f559137a075bca1058c7dd6b00bcc57da464d5efff16b16a26a",
-          "step_sha256": "8890f2f74d0b1dd3ba4c3a95000b1c263610ba254f932c8ca363cb9b7f54e6da",
-          "volume_mm3": 2164.5208579596,
+          "stl_sha256": "602100c5e2714d98c16d8d25b7b74121fbb9beb637d3960473b2cb41c16ec31c",
+          "step_sha256": "d7f2eb06d39cd45baeb2848c76d4953bc6bc300849cefb458eeadb8f40e14f42",
+          "volume_mm3": 2229.044979967861,
           "solids": 1
         },
         {
@@ -9344,9 +9356,9 @@
           "role": "body",
           "stl": "right-frame-gameboy-body.stl",
           "step": "right-frame-gameboy-body.step",
-          "stl_sha256": "f94faf4151641350708fdfb9f048169cdc95e8812f3146b29a9433ac9a49de5e",
-          "step_sha256": "16fada58d48ec0d0460a50ad6d2acc95df2f7e1350d7d8250e721ebb486ff858",
-          "volume_mm3": 2175.72485537505,
+          "stl_sha256": "e6325899446a3a91a453510f843b0f961b846723000cbf0672668f316f873958",
+          "step_sha256": "11d1f2e48e6f40a1db7c99a3011cfeede2214d24af2dcbe79126f01848c62ffa",
+          "volume_mm3": 2240.2489790078375,
           "solids": 1
         },
         {
@@ -9388,9 +9400,9 @@
           "role": "body",
           "stl": "right-frame-nes-body.stl",
           "step": "right-frame-nes-body.step",
-          "stl_sha256": "cc8ef3d88ca149342ba687be141a3edb59834711be67d7b32b93593e28994f82",
-          "step_sha256": "9ce1f1264bf69103f318cf7a3ff54b650060bf94a777330e5745f8d6158f9f49",
-          "volume_mm3": 2161.935079294841,
+          "stl_sha256": "b0c184a5b6871221c0ed5d6357c42d79b9ebb012c1779fea0d2274ad94c2815c",
+          "step_sha256": "0d29284f07b7f2525cf965c237a68aa6adc385bae418ea1194e7272fa17e4803",
+          "volume_mm3": 2226.459202927631,
           "solids": 1
         },
         {
@@ -9432,9 +9444,9 @@
           "role": "body",
           "stl": "right-frame-snes-body.stl",
           "step": "right-frame-snes-body.step",
-          "stl_sha256": "76a2d0c7b6293c57e9e8140030284951ac4577c041fb5d9cd021ff8a68ca9e66",
-          "step_sha256": "52893225aea564861dc182148032b7b502d2d54d5d0aa772b27d58ea0ec04c5f",
-          "volume_mm3": 2168.4235463019486,
+          "stl_sha256": "c3ad9ab82523a4ea81910c40baaf9e95f581500c6c4753d9148457f52c4c44b9",
+          "step_sha256": "67565fbf07231b561c74677a71b2c3a1d478872df5697e6a20fbf33b9fb1c653",
+          "volume_mm3": 2232.9476699347315,
           "solids": 1
         },
         {
@@ -9476,9 +9488,9 @@
           "role": "body",
           "stl": "right-frame-phone-body.stl",
           "step": "right-frame-phone-body.step",
-          "stl_sha256": "d378d0323a3f5f710683fe9da3f2d0df2de1461260c6e2fae73b1a23905408a6",
-          "step_sha256": "8caad54e02225698a594c454ee00b21e2f6d9ff5351dcbc9ec39a76d8fe718d3",
-          "volume_mm3": 2156.333953216367,
+          "stl_sha256": "41663fd1f310f4eb0c0ec8adb223fc9d5c39e14dfd269a765b1554c1a97943cd",
+          "step_sha256": "9aa5404d243cd51239d4acfa2f0f892f19bdbd76deb8379fc8170815139e8ff8",
+          "volume_mm3": 2220.858076849151,
           "solids": 1
         },
         {
@@ -9520,9 +9532,9 @@
           "role": "body",
           "stl": "right-frame-walkman-body.stl",
           "step": "right-frame-walkman-body.step",
-          "stl_sha256": "d16a429d677847f88b4b51e3c076c735a8c4fa8844f9e5fdf9601792c93595d1",
-          "step_sha256": "10952b1f28fa7037703fb2ef8cb96ce3a9a4b9dedae5fe83d4dded6be89f4ded",
-          "volume_mm3": 2194.995893625933,
+          "stl_sha256": "17584fd8a94d23dc15eab2e1fb68a7453ce0bb3f8c2b1dce573dfa05667cdf74",
+          "step_sha256": "74793b6be714585fe4cc222a282e4d67df8b97fc674d65ab1ed4b59654fa113e",
+          "volume_mm3": 2259.5200172587133,
           "solids": 1
         },
         {
@@ -9564,9 +9576,9 @@
           "role": "body",
           "stl": "right-frame-ipod-body.stl",
           "step": "right-frame-ipod-body.step",
-          "stl_sha256": "51d62e32bee25725852ca52bcec8df3e29ff3c5c7cf0eacd12b06ac0df18c3ac",
-          "step_sha256": "38b39b1c0179b6fec04b773ddb10558e44cbb09d1e654cc7e6416a199e850c41",
-          "volume_mm3": 2174.280219694787,
+          "stl_sha256": "a9f4261f40690b40f3cf32cc402a05d4acca8677264753e5f1116d8f183f2f04",
+          "step_sha256": "fa7c0ca6d72b7757e6e7bd45369f4177ffce3b62a99ecc23889dc0e5107e2b0f",
+          "volume_mm3": 2238.8043433275684,
           "solids": 1
         },
         {
@@ -9608,9 +9620,9 @@
           "role": "body",
           "stl": "right-frame-hanafuda-body.stl",
           "step": "right-frame-hanafuda-body.step",
-          "stl_sha256": "73e3041b5e83c647e1a92837481239528eecd8c9d828078fc71943d5e68cd22e",
-          "step_sha256": "a59061b2c73356aa0822dcc1b3ba355cd8534c1c60ca3e93eff254f81dbf3309",
-          "volume_mm3": 2123.5068507608876,
+          "stl_sha256": "5fd6bebaed1ee28c3dfe28bb630fa1bed71ea573e781590f52ed6033db092457",
+          "step_sha256": "633333be080906838affca527194832bdfdd50f51255a5f69cd1f6cd9703f2d3",
+          "volume_mm3": 2188.0309743936714,
           "solids": 1
         },
         {
@@ -9716,14 +9728,6 @@
     }
   },
   "historical_export_execution": {
-    "source_template_sha256": "748d1c3dd5432c2bf0965ea09b9729b94bf4c10ee4ae576175544fb8978b2f5e",
-    "executed_sha256": "bab27ba066848f313259d519b2fd820076bef624abc7130a30ee58abfe90f555",
-    "optimization": "Exact conservative intersection pruning; same solid checks and tolerances",
-    "receipt": "validation/revI-native-export.json",
-    "analyzed_native_sha256": "c8102e4744f0f2ad22820e69d5daf109f2ad5d1e77ced8a8a6ab2179f1dd6a0f",
-    "document_label_preservation": "validation/revI-document-label.json"
-  },
-  "export_execution": {
     "native_sha256": "4d24734a8da5b14317b6d0f3a42778844883d71b53f25994ed19dfd3f575fc30",
     "analyzed_native_sha256": "62ee8d7556e553f4946584870a0fc746f2b9cba7085b0b50a13e9192691b1eea",
     "receipt": "validation/revI-mechanical.json",
@@ -10505,5 +10509,60 @@
     "polarity": "All base mating faces use the same pole; every frame mating face uses the opposite pole. Verify each pair attracts in final assembled orientation before closing either pocket. Frames may print inverted: refer to the final mating face, not printer-up.",
     "purchase": "Use existing magnet kit: six diameter 2 x 3 mm and six diameter 2 x 4 mm magnets; no steel targets. Each extra pair of frames needs six more diameter 2 x 4 mm magnets.",
     "legacy_ids": "SteelTarget object names and frame-target PartIDs are stable historical identifiers; current visible labels and this specification define frame magnets."
+  },
+  "port_refinement": {
+    "physical_acceptance": false,
+    "physical_checks": [
+      "Full insertion and removal of the delivered USB cable",
+      "Actual printed clearance and ability to move the switch between both endpoints",
+      "Solder, module and printing tolerances"
+    ],
+    "power": {
+      "actuator_checked_travel": 1.7,
+      "actuator_nominal_travel": 1.5,
+      "change": "Lower the unnecessary slot roof by 1.9 mm; retain its full width and lower edge for switch access.",
+      "component_top_z": 6.9,
+      "opening_bottom_z": 5.1,
+      "opening_length": 8.5,
+      "opening_top_z": 7.3,
+      "previous_opening_top_z": 9.2,
+      "source_note": "C&K PCM series drawing, revision 2025-03-14, p.2, shows the actuator in position 2 and a 1.5 mm travel. Littelfuse product listing reports nominal 1.5 mm, maximum 1.7 mm electrical travel. The check conservatively sweeps the actuator in both directions from the library pose, retaining the existing full slot length.",
+      "sources": [
+        "https://www.ckswitches.com/media/1424/pcm.pdf",
+        "https://www.littelfuse.com/de/products/switches/slide-switches/pcm/pcm12smtr"
+      ],
+      "top_reserve": 0.4
+    },
+    "schema": "flan36-port-refinement-1",
+    "source_native_sha256": "4d24734a8da5b14317b6d0f3a42778844883d71b53f25994ed19dfd3f575fc30",
+    "units": "mm",
+    "usb": {
+      "aperture": [
+        12.4,
+        5.4
+      ],
+      "change": "Restore front wall removed by the overlong controller cavity; use the same USB cutter envelope in the frame and base. The connector remains recessed behind the plug-access opening.",
+      "controller_pcb_front_y_left": -13.6,
+      "controller_relief_front_y_left": -13.3,
+      "insertion_envelope": [
+        12,
+        5
+      ],
+      "pcb_front_reserve": 0.3,
+      "per_side_reserve": 0.2
+    }
+  },
+  "export_execution": {
+    "native_sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399",
+    "exporter_sha256": "9c52ac8363e1e1293253a42782dfa0fc1b78246ebb9700aaaa0e0efcc2f7a97d",
+    "receipt": "validation/revI-mechanical.json",
+    "byte_preservation": {
+      "tool": "tools/preserve_export_bytes.py",
+      "sha256": "366824fffaea90e5b6595f2e677bbf704595bd911bdfdd453cbd50f2e5d7633a",
+      "receipt": "validation/revI-export-preservation.json",
+      "receipt_sha256": "ea7750015b9769e25c66c57d375a2ccc2b5daef110503f489d703a79c3e80c3d",
+      "baseline_commit": "b86574ae5366a4d0ee397d3c3683c709b899a67d",
+      "method": "Preserve exact baseline bytes only after timestamp-only STEP or complete binary STL facet-record equality proof"
+    }
   }
 }
