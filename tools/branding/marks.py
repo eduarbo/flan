@@ -3,7 +3,6 @@ import math
 from shapely.geometry import LineString, Point, Polygon, box
 from shapely.ops import unary_union
 from shapely import affinity
-from .lettering import arc
 
 def strokes(lines, sw):
     return unary_union([LineString(l).buffer(sw / 2, quad_segs=16) for l in lines])

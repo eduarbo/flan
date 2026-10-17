@@ -1,0 +1,27 @@
+{
+  "schema": "flan36-naming-r2-1",
+  "request": "User 2026-10-17: naming R1 results look poor; wanted something more elegant",
+  "supersedes": "design/naming-r1.json",
+  "changes": "Nopal dropped as the least elegant. Marks rebuilt as exact fine-line geometry with display and small constructions; wordmarks set in OFL typefaces instead of code-drawn lettering.",
+  "family_rule": "<Name> <keys>: 36 base (revI), 42 + outer pinky column, 46 + number row, 54 both",
+  "editions": ["Asanoha", "Kikkō", "Sayagata", "Seigaiha", "Meandro", "Vías"],
+  "collision_check": "design/naming-r1.json",
+  "candidates": [
+    {"name": "Kumi", "slug": "kumi", "display": "Kumi", "say": "ku·mi", "recommended": true,
+     "mark": "kumi", "alt_mark": "kumi-split", "alt_note": "Variante del símbolo: el mismo asanoha partido en las dos mitades del teclado.",
+     "typeface": "Zen Kaku Gothic New 400, caps, tracking 0.42 em (OFL)",
+     "meaning": "<b>組み, unir.</b> Es la raíz de kumiko, la celosía de piezas que encajan sin clavos. El teclado se arma igual: marcos, temas y variantes que se ensamblan. El símbolo es un asanoha con su marco más grueso que las piezas, como en la carpintería."},
+    {"name": "Seda", "slug": "seda", "display": "seda", "say": "se·da", "mark": "seda",
+     "typeface": "Cormorant Garamond 500 (OFL)",
+     "meaning": "<b>Serigrafía viene de seda.</b> Las olas seigaiha dentro de un círculo forman un emblema, como un mon, para un teclado de perfil bajo y tacto suave."},
+    {"name": "Telar", "slug": "telar", "display": "telar", "say": "te·lar", "mark": "telar",
+     "typeface": "Fraunces 300, SOFT 100 (OFL)",
+     "meaning": "<b>Urdimbre y trama.</b> Un teclado es un tejido: filas y columnas que se cruzan, con un diodo en cada cruce. Crecer es tejer más hilos. El símbolo es una tecla tejida en diagonal."}
+  ],
+  "discarded": [
+    {"name": "Nopal", "why": "Cálido pero juguetón; vuelve a ser comida, como flan."},
+    {"name": "Tesela", "why": "Se lee como Tesla."},
+    {"name": "Trama", "why": "En inglés suena a trauma."},
+    {"name": "Petate", "why": "En México, petatearse es morirse."}
+  ]
+}

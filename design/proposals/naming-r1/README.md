@@ -1,5 +1,7 @@
 # Naming R1 — a name that scales
 
+**Superseded by [R2](../naming-r2/)**: the owner found these results too crude and asked for something more elegant.
+
 **Proposal; the project is still Flan36.** The owner asked for a better name than Flan and logo options, and wants a family with a number row and extra pinky columns. Candidates, rationale and the collision check are in [`design/naming-r1.json`](../../naming-r1.json).
 
 | Name | Says | Marks |
