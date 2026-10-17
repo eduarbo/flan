@@ -1,0 +1,137 @@
+{
+  "schema": "flan36-naming-r3-1",
+  "request": "User 2026-10-17: torn between Kumi and Telar; asked for logo variants. Then: include Flan, a simple name and the owner's favourite dessert, as a cultural nod and a gag",
+  "names": {
+    "kumi": {
+      "name": "Kumi",
+      "marks": [
+        {
+          "id": "kumi",
+          "label": "Asanoha",
+          "idea": "La hoja de cáñamo en su hexágono: el marco más grueso que las piezas, como en el kumiko."
+        },
+        {
+          "id": "kumi-split",
+          "label": "Dos mitades",
+          "idea": "El mismo asanoha partido por el eje: las dos mitades del teclado."
+        },
+        {
+          "id": "kumi-key",
+          "label": "Tecla",
+          "idea": "Mitsukude, la unión de tres piezas, vista como un cubo: una tecla con un asanoha en la cara."
+        },
+        {
+          "id": "kumi-mon",
+          "label": "Mon",
+          "idea": "El asanoha dentro de un círculo, como un emblema familiar."
+        }
+      ],
+      "types": [
+        {
+          "id": "a",
+          "label": "Gótica",
+          "face": "Zen Kaku Gothic New 400, mayúsculas, espaciado 0.42 em"
+        },
+        {
+          "id": "b",
+          "label": "Mincho",
+          "face": "Shippori Mincho 500"
+        },
+        {
+          "id": "c",
+          "label": "Geométrica",
+          "face": "Jost 400; el punto de la i es un asanoha"
+        }
+      ]
+    },
+    "telar": {
+      "name": "Telar",
+      "marks": [
+        {
+          "id": "telar",
+          "label": "Diagonal",
+          "idea": "Una tecla tejida que se para en su punta: cintas que pasan por encima y por debajo."
+        },
+        {
+          "id": "telar-key",
+          "label": "Tecla",
+          "idea": "La tecla vista desde arriba, de esquinas suaves, con el tejido derecho."
+        },
+        {
+          "id": "telar-warp",
+          "label": "Urdimbre",
+          "idea": "Los hilos del telar con dos tramas a contrafase: el cruce de filas y columnas."
+        }
+      ],
+      "types": [
+        {
+          "id": "a",
+          "label": "Suave",
+          "face": "Fraunces 300, SOFT 100"
+        },
+        {
+          "id": "b",
+          "label": "Clásica",
+          "face": "Cormorant Garamond 600, mayúsculas, espaciado 0.3 em"
+        },
+        {
+          "id": "c",
+          "label": "Geométrica",
+          "face": "Jost 300"
+        }
+      ]
+    },
+    "flan": {
+      "name": "Flan",
+      "note": "El postre favorito del dueño y un clásico mexicano. El chiste se cuenta solo: una tecla Choc vista de lado ya tiene silueta de flan.",
+      "marks": [
+        {
+          "id": "flan",
+          "label": "Flan",
+          "idea": "De perfil, sobre su plato: el caramelo escurre en gotas por la cara."
+        },
+        {
+          "id": "flan-key",
+          "label": "Tecla-flan",
+          "idea": "Una tecla Choc de lado es un flan: superficie cóncava, caramelo y las dos patitas del switch."
+        },
+        {
+          "id": "flan-mon",
+          "label": "Desde arriba",
+          "idea": "Visto desde arriba dentro de un círculo, como un emblema: el borde del flan y el charco de caramelo."
+        },
+        {
+          "id": "flan-split",
+          "label": "Partido",
+          "idea": "El flan partido en dos, como el teclado."
+        },
+        {
+          "id": "flan-actual",
+          "label": "Actual",
+          "idea": "El logo actual (Outline), para comparar.",
+          "source": "docs/branding/outline/flan36-outline-symbol-black.svg"
+        }
+      ],
+      "types": [
+        {
+          "id": "a",
+          "label": "Suave",
+          "face": "Fraunces 300, SOFT 100"
+        },
+        {
+          "id": "b",
+          "label": "Itálica",
+          "face": "Cormorant Garamond 500 itálica"
+        },
+        {
+          "id": "c",
+          "label": "Geométrica",
+          "face": "Jost 400"
+        }
+      ]
+    }
+  },
+  "dropped": [
+    "telar-pair: two diamonds crowd at the centre and clip at the edges"
+  ]
+}
