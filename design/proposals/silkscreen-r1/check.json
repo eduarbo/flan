@@ -1,0 +1,217 @@
+{
+ "schema": "flan36-silkscreen-r1-1",
+ "sources": {
+  "right": {
+   "pcb": "hardware/revI/flan36-right.kicad_pcb",
+   "sha256": "362f58bad47711258a11dfa2d7dcf165b7345b12d5144d3c7fa9b998b0288f43"
+  },
+  "left": {
+   "pcb": "hardware/revI/flan36-left.kicad_pcb",
+   "sha256": "38c58eb3590e2dbb3abae645d75c264904683427476dbf514bda69849b4431a8"
+  }
+ },
+ "rules": {
+  "pad_clear": 0.2,
+  "hole_clear": 0.3,
+  "edge_clear": 0.4,
+  "existing_silk_clear": 0.15,
+  "min_art_stroke_mm": 0.17,
+  "min_gap_mm": 0.19,
+  "text_height_mm": 1.0,
+  "text_stroke_mm": 0.15
+ },
+ "concepts": {
+  "caramelo/right": {
+   "F": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.13,
+    "art_area_mm2": 69.28,
+    "thin_stroke_mm2": 0.0,
+    "narrow_gap_mm2": 0.002
+   },
+   "B": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.528,
+    "art_area_mm2": 21.58,
+    "thin_stroke_mm2": 0.0003,
+    "min_counter_mm": 0.461
+   },
+   "kicad_drc": {
+    "violations": {},
+    "unconnected": 0
+   },
+   "readback_shape_diff_mm2": {
+    "F": 0.0001,
+    "B": 0.2366
+   },
+   "svg_sha256": {
+    "F": "eee9e2cc4300b3d5ddcc0a3b677de760fa0c8822a68506575b4bc8d99fe4b3ee",
+    "B": "56910fbd4f9e6b5fd97dc5c8ac965843ee3bccb5098f88a28f155a132ea55bda"
+   }
+  },
+  "caramelo/left": {
+   "F": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.13,
+    "art_area_mm2": 69.28,
+    "thin_stroke_mm2": 0.0,
+    "narrow_gap_mm2": 0.002
+   },
+   "B": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 1.371,
+    "art_area_mm2": 21.04,
+    "thin_stroke_mm2": 0.0003,
+    "min_counter_mm": 0.461
+   },
+   "kicad_drc": {
+    "violations": {},
+    "unconnected": 0
+   },
+   "readback_shape_diff_mm2": {
+    "F": 0.0001,
+    "B": 0.2231
+   },
+   "svg_sha256": {
+    "F": "fabbcba5aae28c87e2e333f035a061343767fbb323cba086f7608735e80549fa",
+    "B": "fde0907a494d2113ce929ea736e937d9f5ac718dddd8ecde42c941f6f36190b9"
+   }
+  },
+  "contorno/right": {
+   "F": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.2,
+    "art_area_mm2": 182.91,
+    "thin_stroke_mm2": 0.0002,
+    "narrow_gap_mm2": 0.0534
+   },
+   "B": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.528,
+    "art_area_mm2": 21.58,
+    "thin_stroke_mm2": 0.0003,
+    "min_counter_mm": 0.461
+   },
+   "kicad_drc": {
+    "violations": {},
+    "unconnected": 0
+   },
+   "readback_shape_diff_mm2": {
+    "F": 0.0006,
+    "B": 0.2366
+   },
+   "svg_sha256": {
+    "F": "54adaa30dace05cd734b50bbd68eb2f2f8fd308b381962d08b5fd5d8b9a0c334",
+    "B": "56910fbd4f9e6b5fd97dc5c8ac965843ee3bccb5098f88a28f155a132ea55bda"
+   }
+  },
+  "contorno/left": {
+   "F": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.2,
+    "art_area_mm2": 182.91,
+    "thin_stroke_mm2": 0.0002,
+    "narrow_gap_mm2": 0.0534
+   },
+   "B": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 1.371,
+    "art_area_mm2": 21.04,
+    "thin_stroke_mm2": 0.0003,
+    "min_counter_mm": 0.461
+   },
+   "kicad_drc": {
+    "violations": {},
+    "unconnected": 0
+   },
+   "readback_shape_diff_mm2": {
+    "F": 0.0007,
+    "B": 0.2231
+   },
+   "svg_sha256": {
+    "F": "65be45103f866d5e72a2977cc39fd3e316590f81c8bbde156cfdfeeb7bd8583c",
+    "B": "fde0907a494d2113ce929ea736e937d9f5ac718dddd8ecde42c941f6f36190b9"
+   }
+  },
+  "barrido/right": {
+   "F": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.05,
+    "art_area_mm2": 82.72,
+    "thin_stroke_mm2": 0.0001,
+    "narrow_gap_mm2": 0.0376
+   },
+   "B": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.528,
+    "art_area_mm2": 21.58,
+    "thin_stroke_mm2": 0.0003,
+    "min_counter_mm": 0.461
+   },
+   "kicad_drc": {
+    "violations": {},
+    "unconnected": 0
+   },
+   "readback_shape_diff_mm2": {
+    "F": 0.0001,
+    "B": 0.2366
+   },
+   "svg_sha256": {
+    "F": "c09ff1aa7bb50e1739a4b065ef4157079e93cc53d4568eef6e153b2be24d3a06",
+    "B": "56910fbd4f9e6b5fd97dc5c8ac965843ee3bccb5098f88a28f155a132ea55bda"
+   }
+  },
+  "barrido/left": {
+   "F": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.05,
+    "art_area_mm2": 82.72,
+    "thin_stroke_mm2": 0.0001,
+    "narrow_gap_mm2": 0.0375
+   },
+   "B": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 1.371,
+    "art_area_mm2": 21.04,
+    "thin_stroke_mm2": 0.0003,
+    "min_counter_mm": 0.461
+   },
+   "kicad_drc": {
+    "violations": {},
+    "unconnected": 0
+   },
+   "readback_shape_diff_mm2": {
+    "F": 0.0001,
+    "B": 0.2231
+   },
+   "svg_sha256": {
+    "F": "4c33186f9e1756a3767022c9231b4043f11861707c3774a221802298a61c0682",
+    "B": "fde0907a494d2113ce929ea736e937d9f5ac718dddd8ecde42c941f6f36190b9"
+   }
+  }
+ }
+}
