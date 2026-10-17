@@ -12,6 +12,10 @@
 | Printing and assembly | Pending | Fit coupon, sample caps and actual component measurements |
 | Working keyboard | Pending | All keys, BLE, charging, sleep/wake and measured consumption |
 
+## Revision I — back silkscreen
+
+Both boards now carry the **Campo** back silkscreen: evenly spaced field lines from each controller to its keys, one composition across the two halves, with the Flan36 plate. Only `B_Silkscreen` changed in the Gerber packages. Routing check, DRC/ERC/parity and geometry against the routing baseline still pass. [Pattern and checks](../design/proposals/silkscreen-r2/README.md).
+
 ## Revision I — October audit corrections
 
 The current assembly adds the approved Hanafuda frame, repairs display/frame parameter dependencies and case USB access, and includes all 36 diodes and hot-swap sockets. Current delivery evidence and remaining prototype limits are recorded in the [audit correction report](reviews/2026-10-07-corrections.md).

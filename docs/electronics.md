@@ -17,7 +17,9 @@ Download the **[left Gerber/drill ZIP](https://raw.githubusercontent.com/eduarbo
 
 Select **2 layers, FR4, 1.6 mm thickness, 1 oz copper and lead-free HASL**, with **no assembly and no stencil**. Both outlines measure **113.45 × 91.272757 mm**; let the Gerber importer detect them and inspect both outer contours and internal cutouts. The files already contain the separate plated and non-plated drill programs. No manual redraw or Piantor PCB substitution is needed. Shipping and the final price depend on the live quote and destination; no fabrication order or price is implied here.
 
-The public ZIPs were downloaded and matched against the local packages and their manifests during the 2026-10-10 purchasing review. Their CRCs, layer/drill file hashes and source PCB/schematic/project hashes matched. The connector-height correction changes the printed assembly, not these routed PCBs.
+The back carries the **Campo** silkscreen: field lines from each controller to its keys, plus the Flan36 plate. It was added on 2026-10-17 and changed only `B_Silkscreen`; copper, mask, outline and drill files are identical apart from export dates. [Pattern, rules and checks](../design/proposals/silkscreen-r2/README.md) · [install receipt](../validation/revI-silkscreen.json). The connector-height correction changes the printed assembly, not these routed PCBs.
+
+![Back silkscreen, both halves from below](../design/proposals/silkscreen-r2/campo.png)
 
 ![Left PCB — actual copper and contour](images/revI-routed-left.svg)
 ![Right PCB — actual copper and contour](images/revI-routed-right.svg)
@@ -27,6 +29,7 @@ The public ZIPs were downloaded and matched against the local packages and their
 - Two copper layers; **1.6 mm FR4**, nominal **1 oz copper**.
 - Minimum routed track **0.20 mm**; netclass clearance **0.20 mm**; copper-to-edge **0.50 mm**.
 - ZIPs include both copper, mask and silkscreen layers, Edge.Cuts, separate plated/non-plated drills, drill maps, source hashes and a prototype notice. Internal battery/station openings belong to Edge.Cuts.
+- Back silkscreen strokes are 0.30 mm, ≥ 0.24 mm apart, 0.30 mm from pads and legends and 0.35 mm from holes. Check that the fabricator preview keeps the fine lines.
 - Inspect the fabricator's Gerber and drill preview, including internal cutouts and the narrow north bridge. No panelization or assembly service is specified here.
 
 The exact original key angles, all footprint/pad geometry, holes, model references and outer/internal contours were preserved against `fe8c7fd`. The FreeCAD case did not change. The router's sub-micron coordinate rounding was restored before the final checks.

@@ -64,6 +64,8 @@ def main():
     sources = {}
     for half in ("right", "left"):
         pcb = HW / f"flan36-{half}.kicad_pcb"
+        if '(group "silkscreen-art"' in pcb.read_text():
+            raise SystemExit(f"{pcb.name} already carries installed silkscreen art; run on a pre-install checkout")
         sources[half] = {"pcb": str(pcb.relative_to(ROOT)), "sha256": sha(pcb)}
         kpy([HELPERS / "kicad_extract.py", pcb, BUILD / f"geo-{half}.json"], a.kicad_python)
     cv = Canvas(BUILD)

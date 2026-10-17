@@ -1,12 +1,12 @@
 # Silkscreen R2 — all-over circuit patterns
 
-**Proposal, not installed.** Seven one-ink patterns that cover the whole back (socket side) of both revI boards. Each is drawn once on a shared sheet — both halves seen from below, controller sides adjacent — so the composition runs continuously across the pair. The routed PCBs and fabrication ZIPs are unchanged until one is chosen.
+**01 Campo is installed** on both revI boards (2026-10-17, [receipt](../../validation/revI-silkscreen.json)); the other six remain proposals. Seven one-ink patterns that cover the whole back (socket side) of both revI boards. Each is drawn once on a shared sheet — both halves seen from below, controller sides adjacent — so the composition runs continuously across the pair.
 
 R2 replaces [R1](../silkscreen-r1/): the owner wanted full-board patterns in the style of the Duetto sheets, not accent lines.
 
 | # | Pattern | Idea |
 |---|---|---|
-| 01 | **Campo** (recommended) | Evenly spaced electric field lines from each controller (source) to its 18 keys (sinks). |
+| 01 | **Campo** (installed) | Evenly spaced electric field lines from each controller (source) to its 18 keys (sinks). |
 | 02 | **Aislamiento** | Four isolation-milling passes, 0.80 mm apart, around every pad, hole, part and edge. |
 | 03 | **Ruteo** | Auto-router texture: long octilinear traces with 45° bends, ending in via rings. |
 | 04 | **Meandro** | Rows of length-tuning serpentines whose amplitude swells and dies in slow waves. |
@@ -35,9 +35,13 @@ For all 14 boards (7 patterns × 2 halves): zero overlap with the R1 fabrication
 
 ## Reproduce
 
+Run on boards without installed art, for example a checkout of `4e1bdb2`; the script refuses boards that already carry a `silkscreen-art` group.
+
 ```sh
 python3 -m venv .venv && .venv/bin/pip install -r tools/requirements-silkscreen.txt
 .venv/bin/python tools/prepare_silkscreen_r2.py --render3d
 ```
 
 `--only campo,bus` limits the run; `--render3d` ray-traces each half from below into the ignored `build/silkscreen-r2/`, which also holds every mask colour (navy, green, black, purple, white), the scratch boards and DRC reports.
+
+To install a pattern on boards without one: `python3 tools/install_silkscreen.py --pattern <name>`, then rerun `tools/check_routed_pcb.py` (KiCad Python) and `tools/export_fabrication.py`. The installer refuses stale art and a board that already has a `silkscreen-art` group; delete that group in KiCad to change patterns.

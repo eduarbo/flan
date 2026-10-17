@@ -31,6 +31,8 @@ For each concept and half: zero overlap with the keepouts above; KiCad 10.0.6 DR
 
 ## Reproduce
 
+Run on boards without installed art, for example a checkout of `266801e`.
+
 ```sh
 python3 -m venv .venv && .venv/bin/pip install -r tools/requirements-silkscreen.txt
 .venv/bin/python tools/prepare_silkscreen_r1.py --render3d
