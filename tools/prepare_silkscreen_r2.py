@@ -33,8 +33,8 @@ ORDER = ["campo", "aislamiento", "ruteo", "meandro", "vias", "bus", "senal"]
 MIN_STROKE = 0.17     # nothing thinner survives a morphological opening
 MIN_GAP = 0.24        # distinct strokes never come closer than this
 
-def text_polys(specs, kicad_py, tag):
-    src, dst = BUILD / f"texts-{tag}.json", BUILD / f"texts-{tag}-out.json"
+def text_polys(specs, kicad_py, tag, build):
+    src, dst = build / f"texts-{tag}.json", build / f"texts-{tag}-out.json"
     src.write_text(json.dumps(specs))
     kpy([HELPERS / "kicad_text.py", src, dst], kicad_py)
     return unary_union([polys(v) for v in json.loads(dst.read_text()).values()])
@@ -46,13 +46,19 @@ def components_merge(geom, gap):
     return len(parts) != len(getattr(grown, "geoms", [grown]))
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__)
+    run("r2", patterns.PATTERNS, ORDER, OUT, BUILD, strip_installed=False, doc=__doc__)
+
+def run(revision, registry, order, out, build, strip_installed, doc):
+    """Shared pipeline. With strip_installed, boards that carry an installed pattern are
+    first copied without it (kicad_strip_art.py), so every check runs on the routed board."""
+    OUT, BUILD = out, build
+    ap = argparse.ArgumentParser(description=doc)
     ap.add_argument("--kicad-python", default=KICAD_PY)
     ap.add_argument("--cli", default=KICAD_CLI)
     ap.add_argument("--only", help="comma-separated pattern names")
     ap.add_argument("--render3d", action="store_true", help="ray-trace each pattern from below (slow)")
     a = ap.parse_args()
-    names = a.only.split(",") if a.only else ORDER
+    names = a.only.split(",") if a.only else order
     BUILD.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
     boards = BUILD / "boards"
@@ -61,33 +67,40 @@ def main():
         if not (boards / name).exists():
             (boards / name).symlink_to(HW / name)
 
-    sources = {}
+    sources, src = {}, {}
     for half in ("right", "left"):
         pcb = HW / f"flan36-{half}.kicad_pcb"
-        if '(group "silkscreen-art"' in pcb.read_text():
+        installed = '(group "silkscreen-art"' in pcb.read_text()
+        if installed and not strip_installed:
             raise SystemExit(f"{pcb.name} already carries installed silkscreen art; run on a pre-install checkout")
+        src[half] = pcb
         sources[half] = {"pcb": str(pcb.relative_to(ROOT)), "sha256": sha(pcb)}
-        kpy([HELPERS / "kicad_extract.py", pcb, BUILD / f"geo-{half}.json"], a.kicad_python)
+        if installed:
+            src[half] = BUILD / f"base-{half}.kicad_pcb"
+            kpy([HELPERS / "kicad_strip_art.py", pcb, src[half]], a.kicad_python)
+            sources[half] = {"pcb": str(pcb.relative_to(ROOT)), "installed_sha256": sha(pcb),
+                             "sha256": sha(src[half]), "note": "checked on the board with its installed art removed"}
+        kpy([HELPERS / "kicad_extract.py", src[half], BUILD / f"geo-{half}.json"], a.kicad_python)
     cv = Canvas(BUILD)
 
     # the maker's plate sits in a cleared cartouche on each half
     plate, plate_full, specs, carto = {}, {}, {}, {}
     for half in cv.boards:
         shapes, sp = signature.plate(half)
-        full = shapes.union(text_polys(sp, a.kicad_python, half))
+        full = shapes.union(text_polys(sp, a.kicad_python, half, BUILD))
         x0, y0, x1, y1 = full.bounds
         plate[half], plate_full[half], specs[half] = shapes, full, sp
         carto[half] = box(x0, y0, x1, y1).buffer(1.3, join_style="round", quad_segs=8)
 
     report_path = OUT / "check.json"
     report = json.loads(report_path.read_text()) if report_path.exists() and a.only else {}
-    report.update({"schema": "flan36-silkscreen-r2-1", "sources": sources,
+    report.update({"schema": f"flan36-silkscreen-{revision}-1", "sources": sources,
                    "rules": {**CLEAR, "existing_silk_clear": SILK_CLEAR, "min_art_stroke_mm": MIN_STROKE,
                              "min_gap_mm": MIN_GAP, "pattern_halo_mm": {"pads": 0.30, "holes": 0.35, "legends": 0.30, "edge": 0.55}}})
     report.setdefault("patterns", {})
     for n in names:
         t0 = time.time()
-        art = patterns.PATTERNS[n](cv)
+        art = registry[n](cv)
         parts = patterns.compose(cv, art, cartouches=carto)
         entry = {}
         for half, b in cv.boards.items():
@@ -105,7 +118,7 @@ def main():
                                          "texts": specs[half]}))
             dst = boards / f"{n}-{half}.kicad_pcb"
             shutil.copy(HW / f"flan36-{half}.kicad_pro", dst.with_suffix(".kicad_pro"))
-            kpy([HELPERS / "kicad_inject.py", HW / f"flan36-{half}.kicad_pcb", kiart, dst], a.kicad_python)
+            kpy([HELPERS / "kicad_inject.py", src[half], kiart, dst], a.kicad_python)
             drc = boards / f"drc-{n}-{half}.json"
             subprocess.run([a.cli, "pcb", "drc", "--severity-all", "--format", "json", "-o", drc, dst],
                            check=True, capture_output=True)

@@ -2,7 +2,7 @@
 
 **01 Campo is installed** on both revI boards (2026-10-17, [receipt](../../validation/revI-silkscreen.json)); the other six remain proposals. Seven one-ink patterns that cover the whole back (socket side) of both revI boards. Each is drawn once on a shared sheet — both halves seen from below, controller sides adjacent — so the composition runs continuously across the pair.
 
-R2 replaces [R1](../silkscreen-r1/): the owner wanted full-board patterns in the style of the Duetto sheets, not accent lines.
+R2 replaces [R1](../silkscreen-r1/): the owner wanted full-board patterns in the style of the Duetto sheets, not accent lines. After review the owner kept only Meandro and Vías; [R3](../silkscreen-r3/) continues with kumiko and wagara.
 
 | # | Pattern | Idea |
 |---|---|---|
@@ -44,4 +44,6 @@ python3 -m venv .venv && .venv/bin/pip install -r tools/requirements-silkscreen.
 
 `--only campo,bus` limits the run; `--render3d` ray-traces each half from below into the ignored `build/silkscreen-r2/`, which also holds every mask colour (navy, green, black, purple, white), the scratch boards and DRC reports.
 
-To install a pattern on boards without one: `python3 tools/install_silkscreen.py --pattern <name>`, then rerun `tools/check_routed_pcb.py` (KiCad Python) and `tools/export_fabrication.py`. The installer refuses stale art and a board that already has a `silkscreen-art` group; delete that group in KiCad to change patterns.
+To install an R2 pattern: `python3 tools/install_silkscreen.py --proposal r2 --pattern <name>` (add `--replace` over an installed one), then rerun `tools/check_routed_pcb.py` (KiCad Python) and `tools/export_fabrication.py`.
+
+These outputs come from `4e1bdb2`. Later generator fixes (R3) trim clipped strokes locally instead of dropping them and repair invalid art without losing area, so a rerun fills a few gaps the committed sheets show.

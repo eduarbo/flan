@@ -290,27 +290,54 @@ PATTERNS = {
     "campo": campo, "vias": vias, "senal": senal,
 }
 
+def make_valid(g):
+    """Repair without losing area (buffer(0) can drop whole lobes of an invalid polygon)."""
+    import shapely
+    v = shapely.make_valid(g)
+    return unary_union([p for p in getattr(v, "geoms", [v]) if p.geom_type in ("Polygon", "MultiPolygon")])
+
 def compose(cv, art, cartouches=None, opening=0.21):
     """Clip canvas art to each board; returns {half: board-coordinate geometry}."""
     out = {}
+    if not art.is_valid:                      # boolean-heavy art (rings cut into lattices) can self-touch
+        art = make_valid(art)
     for h, b in cv.boards.items():
         keep = pattern_keepout(b)
         if cartouches and h in cartouches:
             keep = keep.union(cartouches[h])
-        a = cv.to_board(art, h).intersection(b.outline.buffer(-0.55)).difference(keep)
+        t = cv.to_board(art, h)
+        if not t.is_valid:                    # mirroring can tip near-touching ring/lattice edges into self-contact
+            t = make_valid(t)
+        a = t.intersection(b.outline.buffer(-0.55)).difference(keep)
         # drop clipping slivers thinner than the minimum stroke, round the cut ends
         a = a.buffer(-opening / 2, quad_segs=6).buffer(opening / 2, quad_segs=6)
         out[h] = spaced([p for p in getattr(a, "geoms", [a]) if p.area > 0.03])
     return out
 
-def spaced(parts, gap=0.26):
-    """Keep the larger of any two strokes that clipping left closer than gap."""
+def spaced(parts, gap=0.26, opening=0.21):
+    """Where clipping left two strokes closer than gap, trim the smaller one locally.
+
+    Only the stretch near the larger stroke is removed, so a continuous lattice keeps its
+    area. A trimmed stroke can split at a thin neck; its pieces go back into the queue so
+    they are checked against everything kept, each other included."""
+    import heapq
     from shapely.strtree import STRtree
-    kept = []
-    for p in sorted(parts, key=lambda g: -g.area):
+    kept, tree, dirty = [], None, False
+    queue = [(-g.area, i, g) for i, g in enumerate(parts)]
+    heapq.heapify(queue)
+    n = len(parts)
+    while queue:
+        _, _, p = heapq.heappop(queue)
         if kept:
-            tree = STRtree(kept)
-            if any(kept[j].distance(p) < gap for j in tree.query(p.buffer(gap))):
+            if dirty:
+                tree, dirty = STRtree(kept), False
+            near = [kept[j] for j in tree.query(p.buffer(gap)) if kept[j].distance(p) < gap]
+            if near:
+                p = p.difference(unary_union(near).buffer(gap, quad_segs=8))
+                p = p.buffer(-opening / 2, quad_segs=6).buffer(opening / 2, quad_segs=6)
+                for q in getattr(p, "geoms", [p]):
+                    if q.geom_type == "Polygon" and q.area > 0.03:
+                        heapq.heappush(queue, (-q.area, n, q)); n += 1
                 continue
-        kept.append(p)
+        kept.append(p); dirty = True
     return unary_union(kept)
