@@ -1,0 +1,267 @@
+{
+ "schema": "flan36-silkscreen-r2-1",
+ "sources": {
+  "right": {
+   "pcb": "hardware/revI/flan36-right.kicad_pcb",
+   "sha256": "362f58bad47711258a11dfa2d7dcf165b7345b12d5144d3c7fa9b998b0288f43"
+  },
+  "left": {
+   "pcb": "hardware/revI/flan36-left.kicad_pcb",
+   "sha256": "38c58eb3590e2dbb3abae645d75c264904683427476dbf514bda69849b4431a8"
+  }
+ },
+ "rules": {
+  "pad_clear": 0.2,
+  "hole_clear": 0.3,
+  "edge_clear": 0.4,
+  "existing_silk_clear": 0.15,
+  "min_art_stroke_mm": 0.17,
+  "min_gap_mm": 0.24,
+  "pattern_halo_mm": {
+   "pads": 0.3,
+   "holes": 0.35,
+   "legends": 0.3,
+   "edge": 0.55
+  }
+ },
+ "patterns": {
+  "campo": {
+   "right": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.069,
+    "art_area_mm2": 615.64,
+    "pattern_area_mm2": 594.1,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.2382
+   },
+   "left": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.08,
+    "art_area_mm2": 587.4,
+    "pattern_area_mm2": 566.4,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.2252
+   }
+  },
+  "aislamiento": {
+   "right": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.069,
+    "art_area_mm2": 1380.92,
+    "pattern_area_mm2": 1359.3,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.2406
+   },
+   "left": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.069,
+    "art_area_mm2": 1327.53,
+    "pattern_area_mm2": 1306.5,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.227
+   }
+  },
+  "ruteo": {
+   "right": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.15,
+    "art_area_mm2": 608.6,
+    "pattern_area_mm2": 587.0,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.2378
+   },
+   "left": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.049,
+    "art_area_mm2": 626.55,
+    "pattern_area_mm2": 605.5,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.2246
+   }
+  },
+  "meandro": {
+   "right": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.049,
+    "art_area_mm2": 602.69,
+    "pattern_area_mm2": 581.1,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.2386
+   },
+   "left": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.049,
+    "art_area_mm2": 550.34,
+    "pattern_area_mm2": 529.3,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.2252
+   }
+  },
+  "vias": {
+   "right": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.049,
+    "art_area_mm2": 795.35,
+    "pattern_area_mm2": 773.8,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.239
+   },
+   "left": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.049,
+    "art_area_mm2": 631.48,
+    "pattern_area_mm2": 610.4,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.225
+   }
+  },
+  "bus": {
+   "right": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.049,
+    "art_area_mm2": 566.37,
+    "pattern_area_mm2": 544.8,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.2379
+   },
+   "left": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.049,
+    "art_area_mm2": 566.12,
+    "pattern_area_mm2": 545.1,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.2245
+   }
+  },
+  "senal": {
+   "right": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.049,
+    "art_area_mm2": 561.68,
+    "pattern_area_mm2": 540.1,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.2379
+   },
+   "left": {
+    "keepout_overlap_mm2": 0.0,
+    "existing_silk_overlap_mm2": 0.0,
+    "outside_edge_clearance_mm2": 0.0,
+    "min_distance_to_keepout_mm": 0.049,
+    "art_area_mm2": 574.09,
+    "pattern_area_mm2": 553.1,
+    "largest_thin_piece_mm2": 0.0,
+    "strokes_closer_than_min_gap": false,
+    "plate_min_counter_mm": 0.461,
+    "kicad_drc": {
+     "violations": {},
+     "unconnected": 0
+    },
+    "readback_diff_mm2": 0.2244
+   }
+  }
+ }
+}

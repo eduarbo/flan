@@ -1,5 +1,7 @@
 # Silkscreen R1 — circuit-language legends
 
+**Superseded by [R2](../silkscreen-r2/)** — the owner wanted all-over patterns, not accent lines. Kept as history.
+
 **Proposal, not installed.** Three front-side treatments for both revI boards plus one shared back plate. The routed PCBs and fabrication ZIPs are unchanged; one concept must be chosen before integration.
 
 Each design speaks the board's own language: constant-width traces, 45° routing, vias, a differential pair. All art sits on F.SilkS/B.SilkS only, in the free channels between switches, so it stays visible with switches fitted. The case covers the PCB once assembled; this is for the bare board and the builder.
