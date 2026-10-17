@@ -171,5 +171,21 @@
       "sha256_before": "f6c702dba95bd75de78a29a05d981d9275fb8cc8c705b02da17cfe0f2c01961b",
       "sha256_after": "c792cba17c39c142ef78dd5c35db7cf45ea4d2fafacda84a8f3497b756d52c72"
     }
+  },
+  "executed": {
+    "date": "2026-10-17",
+    "method": "GitHub REST PATCH /repos/eduarbo/flan36 name=flan, homepage and description updated",
+    "readback": {
+      "repository_id": 1380608588,
+      "full_name": "eduarbo/flan",
+      "pages_source": "main:/docs",
+      "pages_serves_commit": "2832f681b482573d43dfb26900787f5e7a719be7 (docs/index.html blob matches)",
+      "old_repository_url": "301 to https://github.com/eduarbo/flan",
+      "old_git_remote": "resolves to the renamed repository",
+      "old_raw_url": "200",
+      "old_pages_url": "404 (expected; Pages project URLs are not redirected)",
+      "public_zips": "base and edition ZIPs on raw.githubusercontent.com/eduarbo/flan match local bytes"
+    },
+    "reviews": "Two independent read-only reviews (constructive, adversarial): proceed with changes; applied: commit pending work first, anchored URL-only substitution with byte proof, accept and document the Pages URL break (no user-site repository exists for a redirect)"
   }
 }
