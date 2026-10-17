@@ -21,7 +21,7 @@ The case outline, 36 key positions and angles, magnetic frame interface and exis
 
 All seven decorative styles—Handheld, Retro TV, Cyberpunk, Cartridge, Arcade, Mecha and Kintsugi—use real complementary material volumes. No decorative part rises above the roof. Smooth, Bevel and Facet were the plain options at that revision. The [current collection](frames-extra.md) replaces these designs.
 
-Choose a style and palette in the [configurator](https://eduarbo.github.io/flan36/), then download its print kit. Multipart 3MF and individual material STLs keep the colors registered to the same origin. Assign actual filaments in your slicer. Use compatible colors of the same material and test their bonding before a full print.
+Choose a style and palette in the [configurator](https://eduarbo.github.io/flan/), then download its print kit. Multipart 3MF and individual material STLs keep the colors registered to the same origin. Assign actual filaments in your slicer. Use compatible colors of the same material and test their bonding before a full print.
 
 The complete single-material STL has a continuous plain surface because the inlays fill their recesses. The `*-body.stl` file exposes the recesses. Separate press-fit inserts are **not** qualified. [Themes and print workflow](themes-printing.md).
 

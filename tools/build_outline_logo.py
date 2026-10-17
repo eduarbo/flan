@@ -187,7 +187,7 @@ def package():
     paths=[MASTER,*[OUT/f'flan36-outline-{name}.svg' for name in ['black','symbol-black','wordmark-black']]]+[OUT/'preview.svg',OUT/'README.md']
     assert all(p.exists() for p in paths),'The kit requires its integration README'
     manifest={'master':'flan36-outline-master.svg','units':'mm','files':[{ 'path':p.name,'sha256':sha(p)} for p in paths],
-        'manufacturing_qualified':False,'repository':'https://github.com/eduarbo/flan36',
+        'manufacturing_qualified':False,'repository':'https://github.com/eduarbo/flan',
         'note':'SVG art and import guide. No placed PCB logo, case cut, toolpath or G-code.'}
     with zipfile.ZipFile(OUT/'flan36-outline-svg-kit.zip','w',zipfile.ZIP_DEFLATED) as z:
         for name,data in [(p.name,p.read_bytes()) for p in paths]+[('LICENSE.txt',(ROOT/'LICENSE').read_bytes()),('manifest.json',(json.dumps(manifest,indent=2)+'\n').encode())]:

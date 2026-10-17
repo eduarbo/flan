@@ -17,7 +17,7 @@ fs.mkdirSync(out,{recursive:true});
   await page.click('#isolate-selection');
   await page.check('#layer-display');await page.check('#layer-supports');
   await page.selectOption('#half','left');
-  assert.equal(await page.locator('#panel-frames a.case-guide').getAttribute('href'),'https://eduarbo.github.io/flan36/frame-proposals/');
+  assert.equal(await page.locator('#panel-frames a.case-guide').getAttribute('href'),'https://eduarbo.github.io/flan/frame-proposals/');
   await page.click('#annotations');await page.mouse.move(1430,15);
   const images={};
   for(const view of ['top','iso']){

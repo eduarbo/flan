@@ -12,6 +12,10 @@
 | Printing and assembly | Pending | Fit coupon, sample caps and actual component measurements |
 | Working keyboard | Pending | All keys, BLE, charging, sleep/wake and measured consumption |
 
+## Repository renamed to eduarbo/flan
+
+On 2026-10-17 the repository moved from `eduarbo/flan36` to **[eduarbo/flan](https://github.com/eduarbo/flan)** so it can hold the whole family (Flan 36, 42, 46, 54). The repository id is unchanged and GitHub redirects old repository, clone and raw-file links. The old site address `eduarbo.github.io/flan36` no longer works; the viewer is now at **[eduarbo.github.io/flan](https://eduarbo.github.io/flan/)**. [Rename record](../design/rename-flan.json).
+
 ## Revision I — Flan logo and silkscreen editions
 
 **Flan** is the name and the logo is the three-quarter tecla-flan with “flan” in Fraunces ([logo](branding.md)). Both boards carry it on the back as a signature with `REV I · 2026` and `eduarbo.com`. Six back-silkscreen editions (Asanoha, Kikkō, Sayagata, Seigaiha, Meandro and Vías) ship as separate Gerber packages; each differs from the base package only in `B_Silkscreen`. Routing, DRC/ERC/parity and geometry against the routing baseline still pass. Campo was installed and removed the same day. [Editions](electronics.md#editions).

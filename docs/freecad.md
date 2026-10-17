@@ -4,7 +4,7 @@
 
 ## Start here
 
-1. Download the [complete repository ZIP](https://github.com/eduarbo/flan36/archive/refs/heads/main.zip) and unzip it.
+1. Download the [complete repository ZIP](https://github.com/eduarbo/flan/archive/refs/heads/main.zip) and unzip it.
 2. Install [FreeCAD](https://www.freecad.org/downloads.php) and [KiCad](https://www.kicad.org/download/).
 3. In FreeCAD’s Addon Manager, install [KiCad StepUp](https://github.com/easyw/kicadStepUpMod).
 4. Open [`mechanical/revI/Flan36.FCStd`](../mechanical/revI/Flan36.FCStd). Importing STEP instead loses the editable history.

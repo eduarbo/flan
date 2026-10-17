@@ -8,7 +8,7 @@ import hashlib,json,subprocess,sys,urllib.request,zipfile
 ROOT=Path(__file__).resolve().parents[1];out=ROOT/'build/revI';out.mkdir(parents=True,exist_ok=True)
 commit=sys.argv[1] if len(sys.argv)>1 else subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
 assert len(commit)==40 and all(c in '0123456789abcdef' for c in commit)
-url='https://codeload.github.com/eduarbo/flan36/zip/'+commit
+url='https://codeload.github.com/eduarbo/flan/zip/'+commit
 path=out/'public-source.zip'
 with urllib.request.urlopen(url,timeout=60) as remote,path.open('wb') as local:
     while data:=remote.read(1048576):local.write(data)
@@ -25,7 +25,7 @@ with zipfile.ZipFile(path) as archive:
         raw=archive.read(prefix+name)
         assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==digest,name
 print('Anonymous archive verified:',len(expected),'files',flush=True)
-pageurl='https://eduarbo.github.io/flan36/'
+pageurl='https://eduarbo.github.io/flan/'
 html=urllib.request.urlopen(pageurl+'?rev='+commit,timeout=60).read()
 assert hashlib.sha1(b'blob '+str(len(html)).encode()+b'\0'+html).hexdigest()==expected['docs/index.html'],'Pages is not yet the published source revision'
 extra={}

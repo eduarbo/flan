@@ -23,7 +23,7 @@ def run(css):
     # Only the explicitly rejected public previews are retired. Historical source stays intact.
     for name in ['evangelion.png','evangelion-card.png','evangelion-dimensioned.png','evangelion-preview.svg','evangelion.svg','native-review.png','native-top.png']:
         (dest/name).unlink(missing_ok=True)
-    base='https://github.com/eduarbo/flan36/blob/main/design/'
+    base='https://github.com/eduarbo/flan/blob/main/design/'
     def palette(s):
         return '<div class="palette">'+''.join(f'<span><i style="background:{c}"></i><code>{c}</code></span>' for c in s['palette'].values())+'</div>'
     def preview(key):

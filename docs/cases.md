@@ -1,6 +1,6 @@
 # Pick a case
 
-[Open the 3D explorer](https://eduarbo.github.io/flan36/) → **Base** or **Plate** → choose a thumbnail. Apply a design to both halves or mix them.
+[Open the 3D explorer](https://eduarbo.github.io/flan/) → **Base** or **Plate** → choose a thumbnail. Apply a design to both halves or mix them.
 
 ![Level case with flush glass and frame](images/revI-level.png)
 

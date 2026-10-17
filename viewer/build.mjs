@@ -21,9 +21,9 @@ const licenses=[['LICENSE','Flan36 · GPL-3.0'],['LICENSES/CC-BY-SA-4.0.txt','Ke
 const credits=`<dl class="credit-list">
 <div><dt>Original keyboard &amp; CAD</dt><dd>Designed by Eduardo Ruiz. Piantor by beekeeb was an inspiration for the number of keys. Flan36 is not affiliated with beekeeb.</dd></div>
 <div><dt>KLP Lamé keycaps</dt><dd>braindefender · CC-BY-SA-4.0. Original meshes, placed and colored. <a href="https://github.com/braindefender/KLP-Lame-Keycaps/tree/4a67a824232d3054c61599ea047c56a340faaba2">Pinned source ↗</a></dd></div>
-<div><dt>Component models</dt><dd>KiSwitch Choc v1 · MIT. KiCad library models · CC-BY-SA-4.0 with library exception. <a href="https://github.com/eduarbo/flan36/blob/main/components/README.md">Per-file sources &amp; changes ↗</a></dd></div>
+<div><dt>Component models</dt><dd>KiSwitch Choc v1 · MIT. KiCad library models · CC-BY-SA-4.0 with library exception. <a href="https://github.com/eduarbo/flan/blob/main/components/README.md">Per-file sources &amp; changes ↗</a></dd></div>
 <div><dt>Viewer libraries</dt><dd>Three.js 0.180.0 and fflate · MIT.</dd></div>
-</dl><p><a href="https://github.com/eduarbo/flan36/blob/main/ATTRIBUTION.md">All source notices and reference-file provenance ↗</a></p><h3>Full license texts</h3>`;
+</dl><p><a href="https://github.com/eduarbo/flan/blob/main/ATTRIBUTION.md">All source notices and reference-file provenance ↗</a></p><h3>Full license texts</h3>`;
 const template=fs.readFileSync(path.join(here,'template.html'),'utf8');
 // Share byte-identical meshes without changing any vertex, normal or triangle.
 const geometryAliases={},unique={},seen=new Map();

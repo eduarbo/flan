@@ -39,4 +39,4 @@ CairoSVG needs the Cairo system library for PNG rendering and raster readback. O
 
 `--trace` intentionally recreates the master from the selected concept and **replaces manual master edits**. Normal regeneration omits that flag. The vector trace uses the bottom-left monochrome reference from `docs/images/branding/flan36-caramel-outline.png`; earlier concept boards remain historical references.
 
-The kit contains SVG art, this guide, a hash manifest and the repository license. It contains no placed PCB artwork, case cut, G-code or print-process approval. [Source and provenance](https://github.com/eduarbo/flan36/blob/main/design/branding-outline-vectors.json).
+The kit contains SVG art, this guide, a hash manifest and the repository license. It contains no placed PCB artwork, case cut, G-code or print-process approval. [Source and provenance](https://github.com/eduarbo/flan/blob/main/design/branding-outline-vectors.json).

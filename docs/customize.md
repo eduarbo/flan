@@ -1,6 +1,6 @@
 # Choose your keycaps and frames
 
-Open the **[3D configurator](https://eduarbo.github.io/flan36/)**. No account or paid software is required.
+Open the **[3D configurator](https://eduarbo.github.io/flan/)**. No account or paid software is required.
 
 ## Keycap colors
 

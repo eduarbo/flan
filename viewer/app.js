@@ -320,11 +320,11 @@ $('glb').onclick=async()=>{
   try{
     const assembly=new THREE.Group();assembly.name=`Flan36 rev${data.revision} · nominal`;assembly.scale.setScalar(.001);
     for(const object of objects){if(object.userData.installed===false)continue;const clone=object.clone();clone.visible=true;clone.position.fromArray(object.userData.base);assembly.add(clone);}
-    assembly.userData={configuration:copy(configuration),units:'metres',source:'https://github.com/eduarbo/flan36',limitations:data.limits,
+    assembly.userData={configuration:copy(configuration),units:'metres',source:'https://github.com/eduarbo/flan',limitations:data.limits,
       attribution:'Flan36 / Eduardo Ruiz, original keyboard and CAD design; Piantor by beekeeb inspired the key count; KLP Lame keycaps by braindefender (CC-BY-SA-4.0), unchanged meshes, placed and coloured. Choc models by keyswitch-kicad-library contributors (MIT); reset and power switch geometry by KiCad (CC-BY-SA-4.0 with library exception).',
       licenses:['https://www.gnu.org/licenses/gpl-3.0.html','https://creativecommons.org/licenses/by-sa/4.0/'],
-      component_sources:'https://github.com/eduarbo/flan36/blob/main/components/sources.json',
-      component_licenses:'https://github.com/eduarbo/flan36/blob/main/components/README.md',
+      component_sources:'https://github.com/eduarbo/flan/blob/main/components/sources.json',
+      component_licenses:'https://github.com/eduarbo/flan/blob/main/components/README.md',
       keycap_source:'https://github.com/braindefender/KLP-Lame-Keycaps/tree/4a67a824232d3054c61599ea047c56a340faaba2'};
     const buffer=await new GLTFExporter().parseAsync(assembly,{binary:true,onlyVisible:true});
     const url=URL.createObjectURL(new Blob([buffer],{type:'model/gltf-binary'}));const link=document.createElement('a');

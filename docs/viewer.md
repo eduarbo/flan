@@ -1,6 +1,6 @@
 # Using the viewer
 
-[Open Flan36](https://eduarbo.github.io/flan36/) · [Download the complete offline viewer](https://eduarbo.github.io/flan36/offline.html)
+[Open Flan36](https://eduarbo.github.io/flan/) · [Download the complete offline viewer](https://eduarbo.github.io/flan/offline.html)
 
 Drag to orbit, scroll or pinch to zoom, and right-drag or use two fingers to pan. The floating camera buttons choose **3D, Top, Front, Right, Left, Back or Bottom**. The adjacent fit icon recenters visible parts without changing the viewing angle; the vertical **Separate layers** slider opens the assembly. **Reset** in the bottom navigation resets the camera only, preserving visibility, separation and your design.
 

@@ -51,7 +51,7 @@ def export(cli):
             'No panelization or assembly service is specified. Inspect Gerber and drill previews.\n'
             'Digital DRC/ERC/netlist checks passed. This is not a physically qualified build kit.\n'
             'Check exact connectors, cell dimensions/polarity, printed fit and retention before ordering.\n'
-            'Build, BOM and hardware acceptance: https://github.com/eduarbo/flan36/blob/main/docs/build.md\n')
+            'Build, BOM and hardware acceptance: https://github.com/eduarbo/flan/blob/main/docs/build.md\n')
         package = out / (stem+'-revI-prototype.zip')
         with zipfile.ZipFile(package,'w',zipfile.ZIP_DEFLATED) as z:
             for file in sorted(directory.iterdir()): z.write(file,file.name)

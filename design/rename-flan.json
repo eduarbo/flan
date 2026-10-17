@@ -1,0 +1,175 @@
+{
+  "schema": "flan-rename-1",
+  "repository_id": 1380608588,
+  "old": "eduarbo/flan36",
+  "new": "eduarbo/flan",
+  "pages": {
+    "old": "https://eduarbo.github.io/flan36/",
+    "new": "https://eduarbo.github.io/flan/",
+    "note": "GitHub redirects repository, git, raw and codeload URLs after a rename, not Pages project URLs"
+  },
+  "kept_historical": [
+    "validation/",
+    "design/proposals/",
+    "design/rebrand.json",
+    "design/branding.json"
+  ],
+  "fabrication_zips": "Existing packages keep a github.com/eduarbo/flan36 link in README.txt, which redirects; the exporters now write the new URL",
+  "files": {
+    "README.md": {
+      "replacements": 1,
+      "sha256_before": "d15947793c5c301a78f0f0893482d7379ff46c7c3af94c3ffc08ed80bd7f2325",
+      "sha256_after": "4024f49cdcf4ed5716733e660a831c9d781335efef6a6b3bda2b6eb0519789b3"
+    },
+    "docs/branding.html": {
+      "replacements": 2,
+      "sha256_before": "8c458c9ef9f236f87da64c606c7de787cd9b9ca6b37abd900a2af03669a87e6a",
+      "sha256_after": "c5d4b1e50265eb4062334d20453c7165732c13e2c0d1e92621ea98ec974b746b"
+    },
+    "docs/branding.md": {
+      "replacements": 4,
+      "sha256_before": "dd4d610cf09861edd270827f3a31fb64be2b816fd15c50730e967d72b6a4290b",
+      "sha256_after": "216fd698b4f1197de1cb3042255f20c4f7e20bbc824cae67c760cd163efac4d5"
+    },
+    "docs/branding/outline/README.md": {
+      "replacements": 1,
+      "sha256_before": "ebbca90d068de0d81bac0ff0430c149383735d7f2044070f4f807f8de8e91f82",
+      "sha256_after": "60aad1b19d22655a6c8f17c2f812c8e419478b6cc4cfd9bcc91d9a31a467c8e6"
+    },
+    "docs/cad.md": {
+      "replacements": 1,
+      "sha256_before": "24ef8a641820e922540e608b852b5f9e6f7d41aa42336f2ce88c7fc4421080db",
+      "sha256_after": "205f1777ef53b1ecf7c6047cf320cfd93becb36f93fe0936af58ff88fd5c4fd4"
+    },
+    "docs/cases.md": {
+      "replacements": 1,
+      "sha256_before": "eb6bff399885e217528b4d2ece55e5b7dabd31d045ddca7740b6f759c84aaab6",
+      "sha256_after": "80c8bb60adccc180d5de884d89b8f71c4d64676968af88dce69015cbb13e08b2"
+    },
+    "docs/customize.md": {
+      "replacements": 1,
+      "sha256_before": "5a6a343c74a3a6b7e94675d92b47ca4d8f21746154347f4120c71f094f4ab897",
+      "sha256_after": "41d2c07af8490547b2df37ac8b85fe6ed6771267fdd0935aefaaaf66b88220e3"
+    },
+    "docs/electronics.md": {
+      "replacements": 14,
+      "sha256_before": "999fefc98ff67ead949b981c3e03a457558a2946caf5c1a128a8a55b18f79ef9",
+      "sha256_after": "64bd2f1cfc5ad3d1079df5d0bc69b1c58b34df494313130eea638e0fdd44186e"
+    },
+    "docs/frame-proposals.md": {
+      "replacements": 1,
+      "sha256_before": "2ca05f1f8f315cdb9bde4268e72583a9cf52738c4e6a53b29636f6847984ac2a",
+      "sha256_after": "416445975166bfc9606d30316adef8134ba6c1a900493bad4ec6acf634692e3e"
+    },
+    "docs/frame-proposals/index.html": {
+      "replacements": 1,
+      "sha256_before": "8f7cbf784c07646961c75620043100e6e6c453b7f34ad3908e8cc49fc02b6e96",
+      "sha256_after": "705ee04798d39bbfd57ee32d197a3ad14cc6569e207888582bfdd16726e3d459"
+    },
+    "docs/frames-extra.md": {
+      "replacements": 1,
+      "sha256_before": "3cf36191dc9bf6dfb75362cda0d19272eee04db87b3ddbfe71216b0cad89ddad",
+      "sha256_after": "17fc2bab66a521ef215e10fff558a4b4229430761bb88b96c07f13438af279ef"
+    },
+    "docs/freecad.md": {
+      "replacements": 1,
+      "sha256_before": "849e7a6f4de18280da7f79881cf6b1fdf13ec3ef0b7d1e12161ead957ba643df",
+      "sha256_after": "9fd4a1a321fc9194ecfacc8047a03c509529e53bb983d82d2eaa75fe1dc22ada"
+    },
+    "docs/index.html": {
+      "replacements": 13,
+      "sha256_before": "4d2a90ecfa78deb137efc33fc8899fe7205b355a49c22680eb99fe4b9bee0eb8",
+      "sha256_after": "a2ea780f88da0850c79f19374bc8e9103afb1da385db08f77409f7a98e4eb2b4"
+    },
+    "docs/offline.html": {
+      "replacements": 13,
+      "sha256_before": "8b5a4ae4c809bd07bceb2aac82fed6b8d8f4db251b8a6af2315d6745e89405fb",
+      "sha256_after": "b5b0835f561fafbc4e23f9710b25214a26f1aa197b587a045cd35444df44721f"
+    },
+    "docs/parts.md": {
+      "replacements": 2,
+      "sha256_before": "4d8a883c59687c8a3b57c88427905548ca92a861a366776c61c7a7aee6fa4472",
+      "sha256_after": "81ad54684e7427d4da8296f9519d60340bc491678e064db0c6987b22c3ffb720"
+    },
+    "docs/slim-flush.md": {
+      "replacements": 1,
+      "sha256_before": "d408437a045cb566631aa2eeb2694503dd15d1a01aa927a6a9414201d3dc553f",
+      "sha256_after": "700df60031af23de40cdf5460369b52579c9fcf03c99d45d3c03b9a2c3a54977"
+    },
+    "docs/themes-printing.md": {
+      "replacements": 1,
+      "sha256_before": "8865256ba2b23defd87de6637212862a415c2ebc77d25bec0f5e2b0d5a83ca9e",
+      "sha256_after": "65971f6ea8f655b1a85f8a3e79743ae2a2e9e27b048631fa71ff20c16f4504ab"
+    },
+    "docs/viewer.md": {
+      "replacements": 2,
+      "sha256_before": "6f0109faf4d598ef83b38f93894fcdfa85d95874acf5feb553a2e3d09f282b40",
+      "sha256_after": "6a1e52003c03cae9e266118b4126a711dfc71c975f59bd3a41ab21161835bb8c"
+    },
+    "tools/build_frame_review_page.py": {
+      "replacements": 2,
+      "sha256_before": "065fd1e408c6f7b5d9f321d822b7321bb3f621b75c51b1338d48e7733d26f6fc",
+      "sha256_after": "302d9a19e79e9636c80d9bf0367928119caf1006900b05e63da8fc3168564325"
+    },
+    "tools/build_frame_review_r8.py": {
+      "replacements": 1,
+      "sha256_before": "2ee73103bbe733eca28ba5024c8e4f6d050ea0a3e21657f55b4336a44db4de4e",
+      "sha256_after": "0670e9736d831b270f0b6aca8c71cd31bedacb3fbf222e09fcfd1a415f447b02"
+    },
+    "tools/build_outline_logo.py": {
+      "replacements": 1,
+      "sha256_before": "baa4fb96004dd9c38c50e25e18f28d2807791e93c6f8b3305ed49964731ce14b",
+      "sha256_after": "1015de63d0dc4e50adc78a3f1f53723936f8ae5c274e3951714185fb5dad21d5"
+    },
+    "tools/check_frame_review_public.py": {
+      "replacements": 4,
+      "sha256_before": "1477de2fb76fcbb7e22d7bb523587164c30ba538b12dd2944a123e3326943716",
+      "sha256_after": "e82aa63a3f00468bca3191454c8b869279e865e09b47b9bd76306f769e653e38"
+    },
+    "tools/check_public_delivery.py": {
+      "replacements": 2,
+      "sha256_before": "89946cf3a44a034f51e2fe6968cda28c93e1138f152a0d8fcf2044500edd3cbe",
+      "sha256_after": "a47b8abfde36172cef1dc13c6e7cf79583c84b0b0d02121b83d080d5c80a6f5e"
+    },
+    "tools/export_editions.py": {
+      "replacements": 1,
+      "sha256_before": "970e3d9ad6f0b1ff067df089cf8fc7da39ecdb755a6ffe382e1f967f2b4e740e",
+      "sha256_after": "1a5d273ead8d4466106752ec3dc8baf288721828a482cde7d1563e46a00f6256"
+    },
+    "tools/export_fabrication.py": {
+      "replacements": 1,
+      "sha256_before": "6fbdb80fe063698b898919f88e3addd4bd3f82cdf7f0056a524a900e2173d165",
+      "sha256_after": "509e5fb3658dd273fc2bde5748ba596dcd300c54917422a08af06632137ae57f"
+    },
+    "viewer/app.js": {
+      "replacements": 3,
+      "sha256_before": "bd75dcf2cc3af64fd0e0aba82391434cbf77877de009d79f67b050e31ff9f9cf",
+      "sha256_after": "074382627b8031883d57923fbe711ab13e65e35090e08511d89511c8cb8b7dff"
+    },
+    "viewer/build.mjs": {
+      "replacements": 2,
+      "sha256_before": "eca81f94e6551f57bd5cacd659cb0d2ee83b54bbef5324ed4c67c1452a8e6707",
+      "sha256_after": "4feb856a4e7eaacdc6450e02234012e3dfcc835253110ea0e5f1fa779323c421"
+    },
+    "viewer/display-seam-check.cjs": {
+      "replacements": 1,
+      "sha256_before": "83ccdfa7473216f9c6197d3b310292dda7f1c7f8d40208594e41700ada0bf9a1",
+      "sha256_after": "3bbff7dbf465ddb0df903e4d6d9a3a32612a34ddb7f3a44f920845d72be7cebe"
+    },
+    "viewer/printing.js": {
+      "replacements": 2,
+      "sha256_before": "e0f6fa4ae83c9a6d88e83fb19906ab98e1bd9e68231f53663e8add8b2ba659b9",
+      "sha256_after": "0cbfb93a39e03be3a79a4a1aaa599d9c6a96c64e0d49debb6306e0cb9364d038"
+    },
+    "viewer/public-check.cjs": {
+      "replacements": 2,
+      "sha256_before": "04c11a9f5ae55bdcd8971ee15400d49373e696e92fcdeedd86f2b4f46ad27853",
+      "sha256_after": "85c6d264ae5532b4c777bb0d12d49466e0acfc8f29452c074dc6a0a00a64cfea"
+    },
+    "viewer/template.html": {
+      "replacements": 6,
+      "sha256_before": "f6c702dba95bd75de78a29a05d981d9275fb8cc8c705b02da17cfe0f2c01961b",
+      "sha256_after": "c792cba17c39c142ef78dd5c35db7cf45ea4d2fafacda84a8f3497b756d52c72"
+    }
+  }
+}

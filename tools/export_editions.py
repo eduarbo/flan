@@ -129,7 +129,7 @@ def main():
                 "Same copper, mask, outline and drills as the base package; only the back silkscreen differs.\n"
                 "Two copper layers, 1.6 mm FR4, nominal 1 oz copper. Inspect Gerber and drill previews.\n"
                 "Digital DRC/ERC/netlist checks passed. This is not a physically qualified build kit.\n"
-                "Build, BOM and hardware acceptance: https://github.com/eduarbo/flan36/blob/main/docs/build.md\n")
+                "Build, BOM and hardware acceptance: https://github.com/eduarbo/flan/blob/main/docs/build.md\n")
             package = OUT / f"{stem}-revI-{ed}.zip"
             with zipfile.ZipFile(package, "w", zipfile.ZIP_DEFLATED) as z:
                 for f in sorted(gerb.iterdir()):

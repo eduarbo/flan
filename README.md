@@ -4,7 +4,7 @@
 
 **36 keys. Original design. Your keycaps, your frames.**
 
-**[Explore and customize in 3D →](https://eduarbo.github.io/flan36/)** · **[Parts and buying links →](docs/parts.md)** · **[Order PCBs →](docs/electronics.md#order-the-two-pcbs)** · **[Edit in FreeCAD →](docs/freecad.md)**
+**[Explore and customize in 3D →](https://eduarbo.github.io/flan/)** · **[Parts and buying links →](docs/parts.md)** · **[Order PCBs →](docs/electronics.md#order-the-two-pcbs)** · **[Edit in FreeCAD →](docs/freecad.md)**
 
 ![Flan36 revI with interchangeable display frames and original KLP Lamé keycaps](docs/images/revI-assembled.png)
 

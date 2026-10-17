@@ -6,7 +6,7 @@ This is the selected purchasing BOM for the routed revI prototype, an original d
 
 [Custom PCBs](electronics.md) · [Typeractive shopping list](#typeractive-shopping-list) · [Controllers](#controllers) · [Displays](#displays) · [Switches](#switches-and-hot-swap) · [Battery](#battery) · [Connectors](#removable-connectors) · [Small parts](#small-electrical-parts) · [Printed parts](#printed-parts)
 
-**Custom PCBs: 1 left + 1 right**, two layers, 1.6 mm FR4, nominal 1 oz copper. Download the [left fabrication ZIP](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/flan36-left-revI-prototype.zip) and [right fabrication ZIP](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/flan36-right-revI-prototype.zip), then follow the [ordering settings](electronics.md#order-the-two-pcbs). The supplied pin maps differ between halves; neither board is interchangeable with Piantor or the historical placement studies.
+**Custom PCBs: 1 left + 1 right**, two layers, 1.6 mm FR4, nominal 1 oz copper. Download the [left fabrication ZIP](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/revI/fabrication/flan36-left-revI-prototype.zip) and [right fabrication ZIP](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/revI/fabrication/flan36-right-revI-prototype.zip), then follow the [ordering settings](electronics.md#order-the-two-pcbs). The supplied pin maps differ between halves; neither board is interchangeable with Piantor or the historical placement studies.
 
 ## Typeractive shopping list
 
