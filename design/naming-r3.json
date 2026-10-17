@@ -133,5 +133,12 @@
   },
   "dropped": [
     "telar-pair: two diamonds crowd at the centre and clip at the edges"
-  ]
+  ],
+  "decision": {
+    "date": "2026-10-17",
+    "name": "Flan",
+    "by": "owner",
+    "note": "Logo still open; tecla-flan redrawn in naming R4",
+    "next": "design/proposals/naming-r4"
+  }
 }
