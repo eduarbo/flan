@@ -1,0 +1,45 @@
+{
+  "schema": "flan36-naming-r1-1",
+  "request": "User 2026-10-17: choose a better name than Flan and offer logo options; the keyboard should scale to a number row and extra pinky columns",
+  "current_name": "Flan36",
+  "family": {
+    "rule": "<Name> <keys>: the number is the key count of the whole keyboard",
+    "variants": [
+      {"keys": 36, "layout": "5 columns x 3 rows + 3 thumbs per half (current revI)"},
+      {"keys": 42, "layout": "+1 outer pinky column (3 keys) per half"},
+      {"keys": 46, "layout": "+1 number row (5 keys) per half"},
+      {"keys": 54, "layout": "+pinky column and number row (6 columns x 4 rows + 3 thumbs) per half"}
+    ],
+    "editions": "Back silkscreen editions keep their pattern names: Asanoha, Kikko, Sayagata, Seigaiha, Meandro, Vias",
+    "status": "Naming scheme only; the 42/46/54 boards are not designed"
+  },
+  "collision_check": {
+    "date": "2026-10-17",
+    "method": "Web search for '<name> keyboard', GitHub repository search for '<name> keyboard', local qmk_firmware keyboards/ directory (fork synced 2026-08)",
+    "result": "No keyboard project found under Telar, Seda, Kumi, Nopal, Tesela, Lienzo, Trama, Hilo or Nudo",
+    "limits": "Not a trademark search"
+  },
+  "candidates": [
+    {"name": "Kumi", "slug": "kumi", "say": "KU-mi", "recommended": true, "marks": ["kumi-asanoha", "kumi-split"],
+     "meaning": "組み: unir, ensamblar. Es la raíz de kumiko, la celosía de piezas encajadas, y de kumihimo, el trenzado de hilos.",
+     "pros": "Corta y suena igual en español, inglés y japonés. Cuenta lo que es el teclado: piezas que se ensamblan (marcos, temas, variantes) y la serigrafía kumiko que ya elegiste.",
+     "cons": "Es una palabra japonesa y también un nombre propio; conviene usarla con su significado y sin imitar caracteres."},
+    {"name": "Telar", "slug": "telar", "say": "te-LAR", "marks": ["telar-weave"],
+     "meaning": "El telar cruza urdimbre y trama. Un teclado hace lo mismo: filas y columnas cruzadas, con un diodo en cada cruce.",
+     "pros": "Español y con oficio. Crecer es tejer más hilos: más filas para la fila numérica, más columnas para el meñique.",
+     "cons": "En inglés no dice nada por sí sola; hay que contarla."},
+    {"name": "Nopal", "slug": "nopal", "say": "no-PAL", "marks": ["nopal-pair"],
+     "meaning": "El nopal crece agregando pencas. Dos pencas son las dos mitades.",
+     "pros": "Mexicana, cálida y memorable, en la línea de la Talavera por defecto.",
+     "cons": "Vuelve a ser comida, como flan, y el tono es más juguetón."},
+    {"name": "Seda", "slug": "seda", "say": "SE-da", "marks": ["seda-raimon"],
+     "meaning": "Serigrafía viene de seda. El raimon es una greca japonesa de un solo hilo, prima del meandro.",
+     "pros": "Suave como el perfil bajo; une la serigrafía, los patrones textiles y el meandro que te gustó.",
+     "cons": "Es una palabra común y menos distintiva como marca."}
+  ],
+  "discarded": [
+    {"name": "Tesela", "why": "Se lee como Tesla."},
+    {"name": "Trama", "why": "En inglés suena a trauma."},
+    {"name": "Petate", "why": "En México, petatearse es morirse."}
+  ]
+}
