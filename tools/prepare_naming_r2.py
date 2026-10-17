@@ -228,7 +228,8 @@ def main():
     ap.add_argument("--page", type=Path)
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
-    for key in fine.MARKS:
+    own = [c["mark"] for c in DATA["candidates"]] + [c["alt_mark"] for c in DATA["candidates"] if c.get("alt_mark")]
+    for key in own:                       # only R2's marks; later rounds add their own
         (OUT / f"{key}.svg").write_text(master(fine.MARKS[key](), f"{key} mark (display)", 40, False))
         (OUT / f"{key}-small.svg").write_text(master(fine.SMALL[key](), f"{key} mark (6–10 mm)", 8, True))
     print("wrote", len(list(OUT.glob("*.svg"))), "marks to", OUT.relative_to(ROOT))
