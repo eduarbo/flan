@@ -17,9 +17,26 @@ Download the **[left Gerber/drill ZIP](https://raw.githubusercontent.com/eduarbo
 
 Select **2 layers, FR4, 1.6 mm thickness, 1 oz copper and lead-free HASL**, with **no assembly and no stencil**. Both outlines measure **113.45 × 91.272757 mm**; let the Gerber importer detect them and inspect both outer contours and internal cutouts. The files already contain the separate plated and non-plated drill programs. No manual redraw or Piantor PCB substitution is needed. Shipping and the final price depend on the live quote and destination; no fabrication order or price is implied here.
 
-The back carries the **Campo** silkscreen: field lines from each controller to its keys, plus the Flan36 plate. It was added on 2026-10-17 and changed only `B_Silkscreen`; copper, mask, outline and drill files are identical apart from export dates. [Pattern, rules and checks](../design/proposals/silkscreen-r2/README.md) · [install receipt](../validation/revI-silkscreen.json). The connector-height correction changes the printed assembly, not these routed PCBs.
+The back of both boards carries the **Flan signature**: the logo, `REV I · 2026 · RIGHT/LEFT` and `eduarbo.com` ([logo](branding.md), [receipt](../validation/revI-signature.json)). The base ZIPs above have the signature and no pattern.
 
-![Back silkscreen, both halves from below](../design/proposals/silkscreen-r2/campo.png)
+The connector-height correction changes the printed assembly, not these routed PCBs.
+
+### Editions
+
+Each edition adds an all-over back-silkscreen pattern, drawn as one design across both halves and kept clear of the signature. To order an edition, upload its two ZIPs instead of the base ones; everything else above is the same.
+
+| Edition | Both halves from below | Gerber/drill ZIPs |
+|---|---|---|
+| **Asanoha** | [preview](images/editions/asanoha.png) | [left](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/editions/flan36-left-revI-asanoha.zip) · [right](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/editions/flan36-right-revI-asanoha.zip) |
+| **Kikkō** | [preview](images/editions/kikko.png) | [left](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/editions/flan36-left-revI-kikko.zip) · [right](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/editions/flan36-right-revI-kikko.zip) |
+| **Sayagata** | [preview](images/editions/sayagata.png) | [left](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/editions/flan36-left-revI-sayagata.zip) · [right](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/editions/flan36-right-revI-sayagata.zip) |
+| **Seigaiha** | [preview](images/editions/seigaiha.png) | [left](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/editions/flan36-left-revI-seigaiha.zip) · [right](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/editions/flan36-right-revI-seigaiha.zip) |
+| **Meandro** | [preview](images/editions/meandro.png) | [left](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/editions/flan36-left-revI-meandro.zip) · [right](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/editions/flan36-right-revI-meandro.zip) |
+| **Vías** | [preview](images/editions/vias.png) | [left](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/editions/flan36-left-revI-vias.zip) · [right](https://raw.githubusercontent.com/eduarbo/flan36/main/hardware/revI/fabrication/editions/flan36-right-revI-vias.zip) |
+
+Every edition and half passes KiCad DRC with schematic parity (0 violations, 0 unconnected, 0 parity issues) and reads back from the saved board. Apart from export dates, every file matches the base package except `B_Silkscreen`, so copper, mask, outline and drills are identical. [Edition receipt](../validation/revI-editions.json) · [patterns and rules](../design/proposals/silkscreen-r3/README.md).
+
+![Asanoha edition, both halves from below](images/editions/asanoha.png)
 
 ![Left PCB — actual copper and contour](images/revI-routed-left.svg)
 ![Right PCB — actual copper and contour](images/revI-routed-right.svg)
@@ -29,7 +46,7 @@ The back carries the **Campo** silkscreen: field lines from each controller to i
 - Two copper layers; **1.6 mm FR4**, nominal **1 oz copper**.
 - Minimum routed track **0.20 mm**; netclass clearance **0.20 mm**; copper-to-edge **0.50 mm**.
 - ZIPs include both copper, mask and silkscreen layers, Edge.Cuts, separate plated/non-plated drills, drill maps, source hashes and a prototype notice. Internal battery/station openings belong to Edge.Cuts.
-- Back silkscreen strokes are 0.30 mm, ≥ 0.24 mm apart, 0.30 mm from pads and legends and 0.35 mm from holes. Check that the fabricator preview keeps the fine lines.
+- Back silkscreen: signature lines ≥ 0.17 mm and text 1.0 mm; edition patterns 0.22–0.30 mm, ≥ 0.24 mm apart, 0.30 mm from pads and legends, 0.35 mm from holes and 1.3 mm from the signature. Check that the fabricator preview keeps the fine lines.
 - Inspect the fabricator's Gerber and drill preview, including internal cutouts and the narrow north bridge. No panelization or assembly service is specified here.
 
 The exact original key angles, all footprint/pad geometry, holes, model references and outer/internal contours were preserved against `fe8c7fd`. The FreeCAD case did not change. The router's sub-micron coordinate rounding was restored before the final checks.
@@ -52,6 +69,7 @@ Run from the repository root with KiCad 10.0.6 and its Python module. On macOS:
 KICAD_PY=/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3
 "$KICAD_PY" tools/check_routed_pcb.py
 python3 tools/export_fabrication.py
+python3 tools/export_editions.py      # needs tools/requirements-silkscreen.txt
 python3 tools/check_layout.py
 ```
 

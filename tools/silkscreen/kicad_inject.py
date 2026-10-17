@@ -1,8 +1,9 @@
 """Add a concept's silkscreen to a copy of a routed board (run with KiCad's Python).
 
 Art arrives as hole-free polygons (prims.dehole) so KiCad stores each outline exactly;
-credit lines are added as native, editable KiCad text. Everything is grouped as
-"silkscreen-art" so it can be selected, moved or deleted in one step.
+credit lines are added as native, editable KiCad text. Everything is grouped (default
+"silkscreen-art"; the signature uses "flan-signature") so it can be selected, moved or
+deleted in one step. Usage: kicad_inject.py SRC ART.json OUT [GROUP]
 """
 import json, sys
 import pcbnew
@@ -41,11 +42,11 @@ def add_text(board, t):
     board.Add(pt)
     return pt
 
-def main(src, art_path, out):
+def main(src, art_path, out, name="silkscreen-art"):
     b = pcbnew.LoadBoard(src)
     art = json.load(open(art_path))
     group = pcbnew.PCB_GROUP(b)
-    group.SetName("silkscreen-art")
+    group.SetName(name)
     b.Add(group)
     n = 0
     for side, layer in (("F", pcbnew.F_SilkS), ("B", pcbnew.B_SilkS)):
@@ -59,4 +60,4 @@ def main(src, art_path, out):
     print("added", n, "items to", out)
 
 if __name__ == "__main__":
-    main(*sys.argv[1:4])
+    main(*sys.argv[1:5])

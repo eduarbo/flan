@@ -12,9 +12,9 @@
 | Printing and assembly | Pending | Fit coupon, sample caps and actual component measurements |
 | Working keyboard | Pending | All keys, BLE, charging, sleep/wake and measured consumption |
 
-## Revision I — back silkscreen
+## Revision I — Flan logo and silkscreen editions
 
-Both boards now carry the **Campo** back silkscreen: evenly spaced field lines from each controller to its keys, one composition across the two halves, with the Flan36 plate. Only `B_Silkscreen` changed in the Gerber packages. Routing check, DRC/ERC/parity and geometry against the routing baseline still pass. [Pattern and checks](../design/proposals/silkscreen-r2/README.md).
+**Flan** is the name and the logo is the three-quarter tecla-flan with “flan” in Fraunces ([logo](branding.md)). Both boards carry it on the back as a signature with `REV I · 2026` and `eduarbo.com`. Six back-silkscreen editions (Asanoha, Kikkō, Sayagata, Seigaiha, Meandro and Vías) ship as separate Gerber packages; each differs from the base package only in `B_Silkscreen`. Routing, DRC/ERC/parity and geometry against the routing baseline still pass. Campo was installed and removed the same day. [Editions](electronics.md#editions).
 
 ## Revision I — October audit corrections
 

@@ -1,3 +1,5 @@
+<img src="docs/images/branding/flan-lockup.png" alt="Flan" width="300">
+
 # Flan36
 
 **36 keys. Original design. Your keycaps, your frames.**
@@ -7,6 +9,8 @@
 ![Flan36 revI with interchangeable display frames and original KLP Lamé keycaps](docs/images/revI-assembled.png)
 
 *RevI: key-aligned local curves, four interchangeable cases, optional exposed display stack, magnetic frames and a floor-mounted cell in either battery size. Physical fit untested.*
+
+**[Silkscreen editions](docs/electronics.md#editions)** — Asanoha, Kikkō, Sayagata, Seigaiha, Meandro and Vías: six all-over back patterns around the Flan signature, one Gerber package each.
 
 **[Themes and print kits](docs/themes-printing.md)** — Twenty-eight coordinated themes, personal keycap palettes, linked rim/frame colors and selected STL/3MF parts.
 

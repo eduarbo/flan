@@ -1,12 +1,12 @@
 # Silkscreen R2 — all-over circuit patterns
 
-**01 Campo is installed** on both revI boards (2026-10-17, [receipt](../../validation/revI-silkscreen.json)); the other six remain proposals. Seven one-ink patterns that cover the whole back (socket side) of both revI boards. Each is drawn once on a shared sheet — both halves seen from below, controller sides adjacent — so the composition runs continuously across the pair.
+**History.** 01 Campo was installed on both revI boards on 2026-10-17 and removed the same day. The owner kept Meandro and Vías, now carried by [R3](../silkscreen-r3/), and patterns became [per-edition packages](../../docs/electronics.md#editions). Seven one-ink patterns that cover the whole back (socket side) of both revI boards. Each is drawn once on a shared sheet — both halves seen from below, controller sides adjacent — so the composition runs continuously across the pair.
 
 R2 replaces [R1](../silkscreen-r1/): the owner wanted full-board patterns in the style of the Duetto sheets, not accent lines. After review the owner kept only Meandro and Vías; [R3](../silkscreen-r3/) continues with kumiko and wagara.
 
 | # | Pattern | Idea |
 |---|---|---|
-| 01 | **Campo** (installed) | Evenly spaced electric field lines from each controller (source) to its 18 keys (sinks). |
+| 01 | **Campo** (removed) | Evenly spaced electric field lines from each controller (source) to its 18 keys (sinks). |
 | 02 | **Aislamiento** | Four isolation-milling passes, 0.80 mm apart, around every pad, hole, part and edge. |
 | 03 | **Ruteo** | Auto-router texture: long octilinear traces with 45° bends, ending in via rings. |
 | 04 | **Meandro** | Rows of length-tuning serpentines whose amplitude swells and dies in slow waves. |

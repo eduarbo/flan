@@ -29,3 +29,48 @@ def plate(name):
         {"id": f"{name}-l3", "text": HAND[name], "x": tx, "y": cy + 1.55, "w": 1.0, "h": 1.0, "t": 0.15, "layer": "B", "mirror": True, "hj": "left"},
     ]
     return logo.union(rule), texts
+
+# ---------------------------------------------------------------------------- Flan signature (2026-10-17)
+# Free back-side rectangles of the routed revI boards (space.rects on the board without art):
+# the lockup and its edition lines go in the largest one, the maker's URL in a second one.
+FLAN_PLATE = {"right": (82.6, 54.3, 105.0, 60.5), "left": (53.7, 54.1, 77.1, 60.5)}
+FLAN_URL = {"right": (60.6, 59.1, 76.8, 62.9), "left": (87.1, 59.1, 97.3, 64.3)}
+FLAN_EM = 4.6          # wordmark em (mm): the mark is 5.5 mm tall, no hairline under 0.17 mm at wght 450
+FLAN_TEXT = {"w": 1.0, "h": 1.0, "t": 0.15}
+URL = "eduarbo.com"
+
+def flan_plate(name, font_path):
+    """The Flan lockup, a rule and REV I / 2026 / RIGHT|LEFT, plus the maker's URL elsewhere.
+
+    Built in reading coordinates (as seen from below) and mirrored onto B.SilkS. Returns
+    (shapes, KiCad text specs, cartouche zones)."""
+    from shapely.geometry import box
+    from shapely.ops import unary_union
+    from branding.lockup import lockup
+    x0, y0, x1, y1 = FLAN_PLATE[name]
+    cy = (y0 + y1) / 2
+    g, met = lockup(font_path, small=True)
+    g = affinity.scale(g, FLAN_EM, FLAN_EM, origin=(0, 0))
+    lw, lh = met["width_em"] * FLAN_EM, met["mark_em"] * FLAN_EM
+    lines = ["REV I", "2026", HAND[name]]
+    pitch = 1.5
+    block_h = 1.16 + pitch * (len(lines) - 1)
+    widest = 4.11                                  # "RIGHT" in KiCad's stroke font at 1.0 mm
+    rule_gap = 0.9
+    total = lw + rule_gap + 0.2 + rule_gap + widest
+    left = (x1 - x0 - total) / 2                   # centred in the free rectangle
+    # reading x -> board x: the reading left edge is the board's right edge
+    rx = lambda r: x1 - r
+    g = affinity.translate(g, left, cy - lh / 2)
+    shapes = [affinity.scale(g, -1, 1, origin=(0, 0)).buffer(0)]
+    shapes[0] = affinity.translate(shapes[0], x1, 0)
+    rule_r = left + lw + rule_gap + 0.1
+    shapes.append(LineString([(rx(rule_r), cy - block_h / 2), (rx(rule_r), cy + block_h / 2)]).buffer(0.1, cap_style="flat"))
+    tx = rx(rule_r + 0.1 + rule_gap)
+    texts = [{"id": f"{name}-{i}", "text": t, "x": tx, "y": cy - block_h / 2 + 0.62 + pitch * i, **FLAN_TEXT,
+              "layer": "B", "mirror": True, "hj": "left"} for i, t in enumerate(lines)]
+    ux0, uy0, ux1, uy1 = FLAN_URL[name]
+    ucx, ucy = (ux0 + ux1) / 2, (uy0 + uy1) / 2
+    texts.append({"id": f"{name}-url", "text": URL, "x": ucx, "y": ucy, **FLAN_TEXT, "layer": "B", "mirror": True})
+    zones = [box(rx(left + total), cy - lh / 2, rx(left), cy + lh / 2), box(ucx - 4.65, ucy - 0.62, ucx + 4.65, ucy + 0.53)]
+    return unary_union(shapes), texts, zones

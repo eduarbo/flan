@@ -1,6 +1,6 @@
 # Naming R4 — Flan, tecla-flan marks
 
-**Name chosen: Flan** (2026-10-17). The owner kept the name for its simplicity, as their favourite dessert and as a cultural nod. They liked the tecla-flan idea from [R3](../naming-r3/) but not its execution, so R4 redraws it. The logo is not chosen yet; nothing is installed.
+**Name chosen: Flan** (2026-10-17). The owner kept the name for its simplicity, as their favourite dessert and as a cultural nod. They liked the tecla-flan idea from [R3](../naming-r3/) but not its execution, so R4 redraws it. **Logo chosen: `iso` (Tres cuartos) with Fraunces 300 SOFT 100, horizontal.** It is built into the [logo kit](../../../docs/branding/flan/README.md) and installed as the back-silkscreen signature on both revI boards.
 
 A low-profile keycap in profile already has a flan's silhouette: soft shoulders, drafted sides and a shallow dish. All six marks share one cap (`tools/branding/flankey.py`), built from tangent arcs. The caramel is a glaze with teardrop drips joined by real fillets (morphological closing).
 

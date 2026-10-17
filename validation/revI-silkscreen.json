@@ -1,36 +1,19 @@
 {
-  "schema": "flan36-silkscreen-install-1",
-  "pattern": "campo",
-  "layer": "B.SilkS",
-  "proposal": "design/proposals/silkscreen-r2",
-  "physical_acceptance": false,
-  "halves": {
-    "left": {
-      "art_sha256": "1ec64b94c5743b875e2756c1d60cb036dfead91d49fff906028acd13edcfa96c",
-      "pcb_before_sha256": "38c58eb3590e2dbb3abae645d75c264904683427476dbf514bda69849b4431a8",
-      "pcb_after_sha256": "e786bbfd23a775ab7d55612e89468c531de019e0a3d03ab484194ac0ebe34462",
-      "pattern_area_mm2": 566.4
-    },
-    "right": {
-      "art_sha256": "76fcf2cd540f93defe6450c99819c17ecf9bea42aabe40bab38a5af9f8da1f65",
-      "pcb_before_sha256": "362f58bad47711258a11dfa2d7dcf165b7345b12d5144d3c7fa9b998b0288f43",
-      "pcb_after_sha256": "c4bb78e7dddbecf85650f42c5c15ff6e84459655223b1923b7099f791eb9fb1b",
-      "pattern_area_mm2": 594.1
+  "schema": "flan36-silkscreen-install-2",
+  "status": "removed",
+  "date": "2026-10-17",
+  "removed": {
+    "pattern": "campo",
+    "proposal": "design/proposals/silkscreen-r2",
+    "installed_pcb_sha256": {
+      "left": "e786bbfd23a775ab7d55612e89468c531de019e0a3d03ab484194ac0ebe34462",
+      "right": "c4bb78e7dddbecf85650f42c5c15ff6e84459655223b1923b7099f791eb9fb1b"
     }
   },
-  "public_readback": {
-    "date": "2026-10-17",
-    "commit": "c43fa1d68b2b1e83cea74914a1a22cfe95ca457a",
-    "method": "anonymous raw.githubusercontent.com download of the main and commit URLs linked from docs/electronics.md",
-    "packages": {
-      "left": {
-        "sha256": "44f69c23a8d4d76d4a3330cb383956f00219956281a661502e2cabb54aa8a9bd",
-        "matches_fabrication_receipt": true
-      },
-      "right": {
-        "sha256": "24ae76d01ff758909631847142df5ef343772ffd46ac3b998a8f19bea44ac9fc",
-        "matches_fabrication_receipt": true
-      }
-    }
-  }
+  "reason": "The owner kept other patterns; patterns are now per-edition packages and the canonical boards carry only the signature",
+  "now": {
+    "signature": "validation/revI-signature.json",
+    "editions": "validation/revI-editions.json"
+  },
+  "history": "commit c43fa1d installed Campo; this receipt superseded its install record"
 }

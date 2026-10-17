@@ -1,0 +1,39 @@
+{
+  "schema": "flan-logo-1",
+  "mark": "flankey.iso",
+  "wordmark": {
+    "text": "flan",
+    "font": {
+      "family": "Fraunces",
+      "license": "OFL-1.1",
+      "source": "https://github.com/google/fonts/tree/main/ofl/fraunces",
+      "file": "Fraunces[SOFT,WONK,opsz,wght].ttf",
+      "sha256": "177ff6c0f14e5550a3c624247cd1189611d4eb65d000b14944c63d967958abbb"
+    },
+    "display": {
+      "wght": 300,
+      "opsz": 144,
+      "SOFT": 100,
+      "glyphs": [
+        "fl",
+        "a",
+        "n"
+      ]
+    },
+    "pcb": {
+      "wght": 450,
+      "opsz": 144,
+      "SOFT": 100,
+      "note": "heavier weight so no hairline falls below 0.17 mm at 4.6 mm em"
+    }
+  },
+  "files": {
+    "flan-lockup.svg": "49f7aa8538e1879ba40356a2c202b6f6c95cd24fb87f632c78b1f910ae624413",
+    "flan-lockup-white.svg": "40d769bd0eed075c7ece59fb00ca0cb6896b56b18c1777daf2336b132149fa10",
+    "flan-mark.svg": "a176c65eedf1388f6638f05a7079c428c0ba22a68afcf2c355769dc23d742e50",
+    "flan-mark-white.svg": "59d774f4f92faed1ccafde30aa50763f29a61187555fe2b342cab636fc960f95",
+    "flan-lockup-pcb.svg": "4e581aa7fbe050c34c6089a0c1d6356af064d03dc412440cc5835616b564cb04",
+    "flan-mark-pcb.svg": "67a697d05afe951996dbdea55b8ad840ba921c76bc9a95e71e363def782f15d2"
+  },
+  "kit_sha256": "4194343f750cb65f4d69b26d599e1e9459190cb01926ff4402130c98816c4c02"
+}

@@ -1,6 +1,8 @@
 # Silkscreen R3 — kumiko and wagara
 
-**Proposal, not installed.** The owner kept only Meandro and Vías from [R2](../silkscreen-r2/) and asked for kumiko and traditional Japanese patterns. R3 adds five of them in PCB language and carries the two favourites. Each pattern covers the back (socket side) of both revI boards as one composition across the pair, seen from below with the controllers adjacent. R2's Campo is still installed until one of these replaces it.
+**Six of these are editions** (all except Shippō): each has its own fabrication package, see [editions](../../docs/electronics.md#editions) and `tools/export_editions.py`. The previews below predate the Flan signature; the edition previews in `docs/images/editions/` show the shipped composition.
+
+The owner kept only Meandro and Vías from [R2](../silkscreen-r2/) and asked for kumiko and traditional Japanese patterns. R3 adds five of them in PCB language and carries the two favourites. Each pattern covers the back (socket side) of both revI boards as one composition across the pair, seen from below with the controllers adjacent. 
 
 | # | Pattern | Idea |
 |---|---|---|

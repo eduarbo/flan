@@ -1,13 +1,14 @@
 """Copy a board without its installed "silkscreen-art" group (run with KiCad's Python).
 
-Usage: kicad_strip_art.py BOARD OUT. Removes the group and every item in it; everything
-else is saved exactly as loaded.
+Usage: kicad_strip_art.py BOARD OUT [GROUP...]. Removes the named groups (default
+"silkscreen-art") and every item in them; everything else is saved exactly as loaded.
 """
 import sys
 import pcbnew
 
 b = pcbnew.LoadBoard(sys.argv[1])
-groups = [g for g in b.Groups() if g.GetName() == "silkscreen-art"]
+names = set(sys.argv[3:]) or {"silkscreen-art"}
+groups = [g for g in b.Groups() if g.GetName() in names]
 removed = 0
 for g in groups:
     for item in list(g.GetItems()):
