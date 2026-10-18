@@ -15,15 +15,20 @@ export ZEPHYR_TOOLCHAIN_VARIANT=cross-compile
 export ZEPHYR_BASE="$FLAN36_ZMK_WORKSPACE/zephyr"
 cd "$FLAN36_ZMK_WORKSPACE"
 if [ "$#" -eq 0 ]; then set -- left right right-no-display; fi
+# A build is left, right or right-no-display for Flan36, or <variant>-<part> (flan42-left, ...).
 for variant in "$@"; do
-  python3 "$ROOT/tools/firmware_inputs.py" start "$variant"
   case "$variant" in
+    flan[0-9][0-9]-*) keyboard=${variant%%-*}; part=${variant#*-} ;;
+    *) keyboard=flan36; part=$variant ;;
+  esac
+  python3 "$ROOT/tools/firmware_inputs.py" start "$variant"
+  case "$part" in
     left|right)
       "$WEST" build -p always -s "$APP" -d "$ROOT/build/firmware-$variant" -b nice_nano_v2 -- \
-        "-DSHIELD=flan36_$variant nice_view" "-DZMK_CONFIG=$ROOT/firmware/config" ;;
+        "-DSHIELD=${keyboard}_$part nice_view" "-DZMK_CONFIG=$ROOT/firmware/config" ;;
     right-no-display)
-      "$WEST" build -p always -s "$APP" -d "$ROOT/build/firmware-right-no-display" -b nice_nano_v2 -- \
-        -DSHIELD=flan36_right "-DZMK_CONFIG=$ROOT/firmware/config" \
+      "$WEST" build -p always -s "$APP" -d "$ROOT/build/firmware-$variant" -b nice_nano_v2 -- \
+        "-DSHIELD=${keyboard}_right" "-DZMK_CONFIG=$ROOT/firmware/config" \
         "-DEXTRA_CONF_FILE=$ROOT/firmware/config/no-display.conf" ;;
     *) echo "Unknown firmware variant: $variant" >&2; exit 1 ;;
   esac

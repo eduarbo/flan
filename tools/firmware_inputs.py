@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 
@@ -18,7 +19,7 @@ def sha(path):
 
 def sources():
     paths = list((ROOT / 'firmware/config').rglob('*'))
-    paths += [ROOT / p for p in ('design/layout.json', 'design/pinmap.json', 'design/key-order.json',
+    paths += [ROOT / p for p in ('design/layout.json', 'design/pinmap.json', 'design/key-order.json', 'design/variants.json',
         'firmware/west-frozen.yml', 'firmware/dependencies.json', 'tools/build_firmware.sh',
         'tools/firmware_inputs.py', 'tools/check_firmware.py')]
     return {str(p.relative_to(ROOT)): sha(p) for p in sorted(paths) if p.is_file()}
@@ -75,7 +76,7 @@ def verify_attestation(variant):
 
 if __name__ == '__main__':
     mode, variant = sys.argv[1:]
-    assert variant in ('left','right','right-no-display')
+    assert re.fullmatch(r'(flan\d\d-)?(left|right|right-no-display)', variant), variant
     temp = ROOT / 'build/firmware-attestation'; temp.mkdir(parents=True, exist_ok=True)
     before = temp / (variant + '-inputs.json')
     if mode == 'start':

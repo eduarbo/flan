@@ -1,0 +1,4 @@
+config SHIELD_FLAN42_LEFT
+ def_bool $(shields_list_contains,flan42_left)
+config SHIELD_FLAN42_RIGHT
+ def_bool $(shields_list_contains,flan42_right)

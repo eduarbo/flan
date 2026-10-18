@@ -35,6 +35,24 @@ The matrix has 18 populated positions per half. Electrical column 0 holds one th
 
 Flan36 defines its own `nice_view_spi`; **do not add `nice_view_adapter`**, whose default pins conflict with this matrix. Display CS is active high. UART and competing I²C/SPI controllers are disabled. The standard nice!nano bootloader configures the two NFC-capable pins used by columns 4/5 as GPIO; a clone or different bootloader must establish that independently.
 
+## Family variants
+
+Each [Flan variant](variants.md) has its own ZMK shield, generated from `design/variants.json` by `tools/build_variant_firmware.py`, with Flan36's pins, display and settings. The outer pinky column uses matrix column 0, which is already wired for thumb K30. The number row is matrix row 4 and gets its pin from `design/pinmap.json` once its PCB is routed.
+
+| Variant | Left | Right | Right without display | Added keys on the base layer |
+|---|---|---|---|---|
+| **Flan42** | [UF2](../firmware/uf2/flan42-left.uf2) | [UF2](../firmware/uf2/flan42-right.uf2) | [UF2](../firmware/uf2/flan42-right-no-display.uf2) | Tab, Ctrl, Shift on the left; Backspace, ', Esc on the right |
+
+The [Flan42 keymap](../firmware/config/flan42.keymap) is Flan36's with the outer column added; the added keys are transparent on Numbers and Symbols and unused on Settings. [Receipt](../validation/flan42-firmware.json). Flash a variant's files only onto that variant's PCBs.
+
+Rebuild a variant with the same environment as below:
+
+```sh
+python3 tools/build_variant_firmware.py
+sh tools/build_firmware.sh flan42-left flan42-right flan42-right-no-display
+python3 tools/check_firmware.py --zephyr "$FLAN36_ZMK_WORKSPACE/zephyr" --keyboard flan42 --publish
+```
+
 ## Build locally
 
 The verified environment uses west 1.5, CMake, Ninja, Python build dependencies and the existing macOS GCC ARM 15.2.0 toolchain. The builder requires the compiler SHA-256 `7528680ad6078c1d2dd67a414fca656e5d78e56e7bc31f422a849bb15a7db04a`; another platform/compiler needs separate qualification. [west-frozen.yml](../firmware/west-frozen.yml) fixes all dependency revisions. Binary identity across different paths or machines is not promised.
