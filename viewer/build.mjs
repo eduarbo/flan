@@ -46,6 +46,9 @@ const assetPath=`docs/assets/printing-${printHash}.bin`;fs.writeFileSync(path.jo
 const silkBytes=deferred('silkscreen',scene.silkscreen.textures);
 const silkHash=crypto.createHash('sha256').update(silkBytes).digest('hex');
 const silkPath=`docs/assets/silkscreen-${silkHash}.bin`;fs.writeFileSync(path.join(root,silkPath),silkBytes);
+// Only this build's deferred assets are published; earlier ones stay in Git history.
+for(const f of fs.readdirSync(path.join(root,'docs/assets')))
+ if(/^(printing|silkscreen)-[0-9a-f]{64}\.bin$/.test(f)&&!assetPath.endsWith(f)&&!silkPath.endsWith(f))fs.rmSync(path.join(root,'docs/assets',f));
 const packedScene={...scene,geometries:unique,geometryAliases,printing:{url:`./assets/printing-${printHash}.bin`,sha256:printHash},
   silkscreen:{...scene.silkscreen,textures:{url:`./assets/silkscreen-${silkHash}.bin`,sha256:silkHash}}};
 const packed=gzipSync(Buffer.from(JSON.stringify(packedScene)),{level:9}).toString('base64');

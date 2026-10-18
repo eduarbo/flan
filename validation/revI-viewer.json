@@ -1160,7 +1160,7 @@
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "47f36236fe271b816041593f793f41ade865290213e6dc37485ba10e80f31310"
+      "sha256": "e6a536b89fe6ae7fcec97ea41b71a89e0061ab5bbfe5305423fe097e97ef520c"
     },
     {
       "path": "viewer/package-lock.json",
