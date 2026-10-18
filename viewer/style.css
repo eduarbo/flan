@@ -240,10 +240,10 @@ select { appearance: none; padding-right: 28px; background-image: linear-gradien
 .part-list-heading h3 { margin: 0; }
 #individual-count { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
 #edit-selection { width: 100%; margin-top: 22px; }
-.individual-row { display: flex; align-items: center; gap: 6px; padding: 8px 0; min-height: 52px; border-bottom: 1px solid var(--line); }
-.individual-row label { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; line-height: 1.5; overflow-wrap: anywhere; color: var(--ink); }
-.individual-row input { width: 18px; height: 18px; flex: none; accent-color: var(--accent); }
-.individual-row button { flex: none; font-size: 10px; padding: 7px; }
+#part-visibility-list { display: grid; grid-template-columns: minmax(0,1fr); gap: 7px; }
+.individual-row { min-height: 48px; }
+.part-label { display: flex; align-items: center; flex: 1; min-width: 0; padding: 10px 12px; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; color: var(--ink); }
+.individual-row:has(input:not(:checked)) .part-label { color: var(--muted); }
 #magnet-location-note { padding: 12px 14px; border-left: 2px solid #b2c6fa; background: #f6f8fe; color: #57657e; border-radius: 0 6px 6px 0; }
 
 /* Files and reference content use separators rather than nested panels. */

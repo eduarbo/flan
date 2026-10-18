@@ -284,6 +284,12 @@ function editPart(ref){
 }
 $('edit-selection').onclick=()=>editPart(explorer.selected);
 $('layers').replaceChildren();
+// Eye toggle (hide / show) shared by component rows and a part's individual pieces.
+function eyeToggle(input,title){
+  const visibility=document.createElement('label');visibility.className='visibility';visibility.title=title;
+  const eye=document.createElement('span');eye.className='eye';eye.innerHTML='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.7"/><path class="eye-slash" d="m3 3 18 18"/></svg>';eye.setAttribute('aria-hidden','true');
+  visibility.append(input,eye);return visibility;
+}
 for(const [id,label] of Object.entries(labels)){
   const row=document.createElement('div');row.className='part-row';row.dataset.group=id;
   const button=document.createElement('button');button.type='button';button.className='part-item';button.dataset.group=id;button.id='part-'+id;button.setAttribute('aria-expanded','false');button.setAttribute('aria-controls','inspector');button.title=partInfo[id].name;button.setAttribute('aria-label',partInfo[id].name);
@@ -294,10 +300,9 @@ for(const [id,label] of Object.entries(labels)){
   row.onpointerenter=e=>{if(e.pointerType!=='touch')explorer.highlight(ref());};row.onpointerleave=()=>explorer.highlight(null);
   row.onfocusin=()=>explorer.highlight(ref());row.onfocusout=e=>{if(!row.contains(e.relatedTarget))explorer.highlight(null);};
   button.onclick=()=>explorer.select(ref());
-  const visibility=document.createElement('label');visibility.className='visibility';visibility.title='Show / hide '+label;
   const input=document.createElement('input');input.type='checkbox';input.id='layer-'+id;input.checked=true;input.setAttribute('aria-label','Show '+label);
   input.addEventListener('change',()=>{state.layers[id]=input.checked;if(input.checked)for(const o of objects)if(o.userData.group===id)hiddenObjects.delete(o.userData.objectIndex);sync();});
-  const eye=document.createElement('span');eye.className='eye';eye.innerHTML='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.7"/><path class="eye-slash" d="m3 3 18 18"/></svg>';eye.setAttribute('aria-hidden','true');visibility.append(input,eye);
+  const visibility=eyeToggle(input,'Show / hide '+label);
   const solo=document.createElement('button');solo.className='part-solo';solo.textContent='Solo';solo.dataset.soloGroup=id;solo.setAttribute('aria-label','Solo '+label);solo.onclick=()=>toggleSolo(ref());
   row.append(button,visibility,solo);$('layers').append(row);
 }
@@ -527,24 +532,26 @@ function syncConfigurationUI(){
 }
 function isSolo(ref){const installed=objects.filter(o=>o.userData.installed!==false);return installed.some(o=>matchesPart(o,ref))&&installed.every(o=>o.visible===Boolean(matchesPart(o,ref)));}
 function refreshPartVisibility(){
-  for(const b of document.querySelectorAll('[data-solo-group]')){const ref={group:b.dataset.soloGroup};b.disabled=!objects.some(o=>o.userData.installed!==false&&matchesPart(o,ref));b.setAttribute('aria-pressed',String(isSolo(ref)));}
-  for(const b of document.querySelectorAll('[data-solo-object]')){const o=objects[Number(b.dataset.soloObject)];b.disabled=o.userData.installed===false;b.setAttribute('aria-pressed',String(isSolo({group:o.userData.group,objectIndex:o.userData.objectIndex})));}
-  for(const input of document.querySelectorAll('[data-object-visibility]')){const o=objects[Number(input.dataset.objectVisibility)];input.checked=o.visible;input.disabled=o.userData.installed===false;input.parentElement.title=(o.visible?'Hide ':'Show ')+o.name;}
+  // A pressed Solo reads "All": pressing it again brings the whole assembly back.
+  const soloState=(b,solo,name)=>{b.setAttribute('aria-pressed',String(solo));b.textContent=solo?'All':'Solo';b.setAttribute('aria-label',solo?'Show all parts':'Solo '+name);b.title=solo?'Show all parts':'Show only '+name;};
+  for(const b of document.querySelectorAll('[data-solo-group]')){const ref={group:b.dataset.soloGroup};b.disabled=!objects.some(o=>o.userData.installed!==false&&matchesPart(o,ref));soloState(b,isSolo(ref),labels[ref.group]);}
+  for(const b of document.querySelectorAll('[data-solo-object]')){const o=objects[Number(b.dataset.soloObject)];b.disabled=o.userData.installed===false;soloState(b,isSolo({group:o.userData.group,objectIndex:o.userData.objectIndex}),b.dataset.name);}
+  for(const input of document.querySelectorAll('[data-object-visibility]')){const o=objects[Number(input.dataset.objectVisibility)];input.checked=o.visible;input.disabled=o.userData.installed===false;input.parentElement.title=(o.visible?'Hide ':'Show ')+input.dataset.name;}
 }
 function populatePartVisibility(ref){
   const list=$('part-visibility-list');list.replaceChildren();const matching=objects.filter(o=>ref.collection==='magnets'?isMagnet(o):o.userData.group===ref.group&&(!ref.side||o.userData.side===ref.side));
   $('individual-count').textContent=String(matching.length);
   for(const o of matching){
-    const row=document.createElement('div');row.className='individual-row';
-    const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.dataset.objectVisibility=String(o.userData.objectIndex);input.checked=o.visible;input.disabled=o.userData.installed===false;
-    const text=document.createElement('span');text.textContent=o.userData.side.charAt(0).toUpperCase()+o.userData.side.slice(1)+' · '+(o.userData.key||o.name.replace(/^(left|right)[\s·-]*/i,''));
-    input.setAttribute('aria-label','Show '+text.textContent);label.append(input,text);
+    const row=document.createElement('div');row.className='part-row individual-row';
+    const input=document.createElement('input');input.type='checkbox';input.dataset.objectVisibility=String(o.userData.objectIndex);input.checked=o.visible;input.disabled=o.userData.installed===false;
+    const text=document.createElement('span');text.className='part-label';text.textContent=o.userData.side.charAt(0).toUpperCase()+o.userData.side.slice(1)+' · '+(o.userData.key||o.name.replace(/^(left|right)[\s·-]*/i,''));
+    input.dataset.name=text.textContent;input.setAttribute('aria-label','Show '+text.textContent);const label=eyeToggle(input,'Show / hide '+text.textContent);
     const current={group:o.userData.group,side:o.userData.side,key:o.userData.key,objectIndex:o.userData.objectIndex};
     input.onchange=()=>{if(input.checked){hiddenObjects.delete(o.userData.objectIndex);state.layers[o.userData.group]=true;if(state.half!==o.userData.side)state.half='both';}else hiddenObjects.add(o.userData.objectIndex);sync();};
     row.onpointerenter=e=>{if(e.pointerType!=='touch')explorer.highlight(current);};row.onpointerleave=()=>explorer.highlight(null);
     row.onfocusin=()=>explorer.highlight(current);row.onfocusout=e=>{if(!row.contains(e.relatedTarget))explorer.highlight(null);};
-    const solo=document.createElement('button');solo.textContent='Solo';solo.title='Isolate '+text.textContent;solo.dataset.soloObject=String(o.userData.objectIndex);solo.setAttribute('aria-label','Solo '+text.textContent);solo.disabled=o.userData.installed===false;solo.onclick=()=>toggleSolo(current);
-    row.append(label,solo);list.append(row);
+    const solo=document.createElement('button');solo.type='button';solo.className='part-solo';solo.textContent='Solo';solo.dataset.soloObject=String(o.userData.objectIndex);solo.dataset.name=text.textContent;solo.disabled=o.userData.installed===false;solo.onclick=()=>toggleSolo(current);
+    row.append(text,label,solo);list.append(row);
   }
   $('frame-install-options').hidden=ref.group!=='lid'&&ref.collection!=='magnets';
   refreshPartVisibility();

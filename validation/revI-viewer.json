@@ -1032,59 +1032,59 @@
     },
     {
       "path": "hardware/revI/fabrication/flan36-left-revI-prototype.zip",
-      "sha256": "07fa8e75e3163d7b243642b233baf6e777e2202cd6af0e40557d80d9d73de82d"
+      "sha256": "3059989d66670d037612d859b66e01940c63b6ebc62f7301f475a38439078422"
     },
     {
       "path": "hardware/revI/fabrication/flan36-right-revI-prototype.zip",
-      "sha256": "2770850cded5d073ed876b29995b600c7625b271353f442d9c9ef1060839ea8b"
+      "sha256": "ce1fce500f28335346de740b97dbc54346ce13cb9257498b26f62e742d5ee5ec"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-left-revI-asanoha.zip",
-      "sha256": "3d3ba2a887e0f6bf6b6e8cda2deb6e5485b6eb95131fdd411d96c04639fbdd56"
+      "sha256": "7eb051e067fdd508f8e9932c7b200a4b8b7179a98b52e1809a7c1699963e800e"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-right-revI-asanoha.zip",
-      "sha256": "7eadf3586f07330574c8edff7b2ea36156085f66c98c6812d4e5a82ffe98c702"
+      "sha256": "3068d481f02a82341eefcaae18adb064d9ae2d7c3c0440168b3222d0ea5bf1b6"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-left-revI-kikko.zip",
-      "sha256": "11ba96dc8c962eb5b5edca95d5cbd7b87c79df954d160da28566ecaa611602fb"
+      "sha256": "6ed5a93d8a5f8dd279cc1829d167c85ee81ef2b3d39a3ddc49c088371cc09575"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-right-revI-kikko.zip",
-      "sha256": "b822e672b1984322c7b51b3f374ed1e48a5c3bd30fc262450a1a5608a5eaf18b"
+      "sha256": "a3a8c059dc709bb74c6a57884de88c15ea914c49efe1d6494af4cae0df2a918a"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-left-revI-sayagata.zip",
-      "sha256": "3cf83e63447e66b40dd07121e8d66652783aa8955bee7d4711bee5aab13a6b89"
+      "sha256": "12322492b4bc1231b759cf5e4223cf3dbb96401de6c88d05b9e4742317e902db"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-right-revI-sayagata.zip",
-      "sha256": "e985503580fc3a161c085ebe40266610687b086d37f082a9f5b91af31615141f"
+      "sha256": "57d668b51a0e4b5b6a0b86b8986735152f4faadf5b7b5a2180fa8a513c783eb5"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-left-revI-seigaiha.zip",
-      "sha256": "ce88c61c4cee465e05e0a09df3f4c90c78d953967ad1ff03faf323760a6c6fc2"
+      "sha256": "6dacefafdf183b18ad33bc8f7a77ed7829ae3ef5e919988d96c821272da92d25"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-right-revI-seigaiha.zip",
-      "sha256": "648d2a6d8f68e00f368afd7d866e9489a20fe242b12613eaf03587bd7e4b802d"
+      "sha256": "3fc02b882a3df8ab827cc2bde77584c48f4492e7b47bf02e7a1b719e99c7b4ac"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-left-revI-meandro.zip",
-      "sha256": "bf9856f65c8f83e3c603c7c1f1bf09cd780152713a2a2182f6b5839482ecf712"
+      "sha256": "258a42e80b996b16f3e3e5172197e1a4c3c8e53868c2440c770a085ce1bcdf8d"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-right-revI-meandro.zip",
-      "sha256": "344d90be2d6769cd22037ba25ae924312e7f2d7d03550c586ba1174e7ec5e6c9"
+      "sha256": "c21bc604964e07016075558ef7e809ba7418162910afd9f8f43cd29420395e18"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-left-revI-vias.zip",
-      "sha256": "4dd6762a68250da15d1603a327df3996a119cb8e565339f28e7b3c9fbc821dbc"
+      "sha256": "dcb313586d20a4b8fce5e347e146f0eb4dc68b24ecf287a8b22e2fe065a89e05"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-right-revI-vias.zip",
-      "sha256": "6a40276ca9c8c13dc1b288c8b6787bd9907033af5aa84d94d48ed76707461025"
+      "sha256": "85e55acc36b64fdb50f64d72b62a396199082425dcbdde8afee7bfe2071ac7fd"
     },
     {
       "path": "design/pcb-options.json",
@@ -1092,7 +1092,7 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "3f17d9628f10bddb6c7c248f7c19db90f7c55aa0deb3df23632376e0f6f645bd"
+      "sha256": "8a6ef8f1be834c93b640963be380043a74ebf3984dbdc4f38a5c05eb6c9d5927"
     },
     {
       "path": "viewer/config.js",
@@ -1152,7 +1152,7 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "9b4e08726050787d414739d4fae6ac9b541a175ca200bd0d4b9a5be71de8a81f"
+      "sha256": "95ca1b1bbb9cccbdd2a90f7834d0294e632bdf55932860a6cd1d82da216c1e0b"
     },
     {
       "path": "viewer/template.html",
@@ -1167,7 +1167,7 @@
       "sha256": "a62090e2bb0ab32205ff582bd3612ff167dc03d9db4c2b6879bb98f5bf25d550"
     }
   ],
-  "viewer_sha256": "2c0f6cb7abe4ffba99cbdf3b5ed86453ac16890adde4d6caacdbef49cb9afbb1",
+  "viewer_sha256": "bc2e9b1cb9ac9ea4925edd6f180cd0dec9f6cd0630f29aa25b81c03355eefa58",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -1179,16 +1179,16 @@
     "cover_ahead_of_adjacent_cap_mm": 0
   },
   "offline": "docs/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.",
-  "offline_sha256": "6b2a016948d3860e9d1464cb23ec5d2b221e44c9a4a96527f68d6ca198d49de3",
+  "offline_sha256": "33d596244847b721a32aa14573fa6a810ddd574cddf1daa591077ebf4cece77d",
   "printing": {
     "path": "docs/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
     "bytes": 7033010
   },
   "silkscreen": {
-    "path": "docs/assets/silkscreen-afeacd2a87f4d28b90649fe7c6926cb60663286c1efedb88e2043297276fdd1d.bin",
-    "sha256": "afeacd2a87f4d28b90649fe7c6926cb60663286c1efedb88e2043297276fdd1d",
-    "bytes": 1319199,
+    "path": "docs/assets/silkscreen-1001e1aa3b955008dcb71166729c79bcd1faf6eee8e5bda9e28a5e205a612470.bin",
+    "sha256": "1001e1aa3b955008dcb71166729c79bcd1faf6eee8e5bda9e28a5e205a612470",
+    "bytes": 1311627,
     "editions": [
       "base",
       "asanoha",
@@ -1200,8 +1200,8 @@
     ]
   },
   "geometry_aliases": 18,
-  "online_bytes": 53265801,
-  "offline_bytes": 64402081,
+  "online_bytes": 53264586,
+  "offline_bytes": 64390770,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",
