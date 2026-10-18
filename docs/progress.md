@@ -11,6 +11,11 @@
 | Firmware and fabrication files | Digital candidate | Three compiled UF2 variants and source-bound Gerber/drill packages; complete purchasing list; physical acceptance pending |
 | Printing and assembly | Pending | Fit coupon, sample caps and actual component measurements |
 | Working keyboard | Pending | All keys, BLE, charging, sleep/wake and measured consumption |
+| Flan42, Flan46, Flan54 | Layouts and outlines | [Family](variants.md): generated and checked; PCB, case, firmware and viewer pending |
+
+## The Flan family: layouts and outlines
+
+On 2026-10-18 the family got its first stage: [layouts, matrices and preliminary case outlines](variants.md) for Flan42 (outer pinky column from the Piantor sources), Flan46 (number row) and Flan54 (both). Flan36 does not move: the shared outline rule (`tools/outline.py`) reproduces its revI control vertices exactly, and its matrix transform matches the shipped firmware. `build_variants.py` also replaces the original Filo36 layout diagram.
 
 ## Repository renamed to eduarbo/flan
 

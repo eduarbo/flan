@@ -12,6 +12,8 @@
 
 **[Silkscreen editions](docs/electronics.md#editions)** — Asanoha, Kikkō, Sayagata, Seigaiha, Meandro and Vías: six all-over back patterns around the Flan signature, one Gerber package each. Preview them with JLCPCB's seven solder-mask colours in the viewer's **Design → PCB** tab, which links the matching ZIPs.
 
+**[The Flan family](docs/variants.md)** — Flan42 adds the outer pinky column, Flan46 a number row and Flan54 both. They keep every Flan36 key, the thumbs and the bay; layouts, matrices and case outlines are generated and checked, and PCBs and cases come next.
+
 **[Themes and print kits](docs/themes-printing.md)** — Twenty-eight coordinated themes, personal keycap palettes, linked rim/frame colors and selected STL/3MF parts.
 
 **[Lower, level stack](docs/level-stack.md)** — The frame and removable switch-covering shell reach 14.50 mm; the glass sits 0.20 mm below them. The display uses its supplied 5 mm socket + 2 mm header; physical assembly remains to be tested.

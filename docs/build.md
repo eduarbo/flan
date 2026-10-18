@@ -25,10 +25,10 @@ Use the **5 mm socket and 2 mm header supplied with each nice!view**. The displa
 
 ```sh
 python3 tools/check_layout.py
-python3 tools/render_layout.py
+python3 tools/build_variants.py      # needs Shapely
 ```
 
-The checker compares all 36 positions/rotations with the original boards. The renderer regenerates the layout diagram. `sources/piantor/` contains the original **wired** reference boards, not Flan36’s wireless PCB designs.
+The checker compares all 36 positions/rotations with the original boards. `build_variants.py` regenerates the [family layouts](variants.md) and their drawings in `docs/images/variants/`. `sources/piantor/` contains the original **wired** reference boards, not Flan36’s wireless PCB designs.
 
 ## Magnetic frame and service
 
