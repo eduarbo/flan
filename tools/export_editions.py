@@ -3,7 +3,8 @@
 
 Each edition is the canonical board (routed, with the Flan signature) plus one all-over
 pattern on B.SilkS, composed as one design across both halves and kept clear of the
-signature. For every edition and half: print checks, KiCad DRC with schematic parity, a
+signature: each pattern stops along the signature's own contour and calms down around it
+(Canvas.quiet), so the plate sits in the pattern instead of a cut-out box. For every edition and half: print checks, KiCad DRC with schematic parity, a
 saved-board readback, Gerber/drill export with the same options as export_fabrication.py,
 and a byte comparison proving that every file except B_Silkscreen matches the base package
 (export dates aside). Packages go to hardware/revI/fabrication/editions/; the receipt to
@@ -15,10 +16,11 @@ import argparse, hashlib, json, re, shutil, subprocess, sys, time, zipfile
 from collections import Counter
 
 from shapely.geometry import MultiPolygon, box, mapping
+from shapely.ops import unary_union
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
-from silkscreen.canvas import Canvas                       # noqa: E402
+from silkscreen.canvas import Canvas, QUIET_REACH          # noqa: E402
 from silkscreen.geo import polys                           # noqa: E402
 from silkscreen.prims import dehole                        # noqa: E402
 from silkscreen import patterns                            # noqa: E402
@@ -34,6 +36,7 @@ BUILD = ROOT / "build/editions"
 OUT = HW / "fabrication/editions"
 PREVIEWS = ROOT / "docs/images/editions"
 HELPERS = ROOT / "tools/silkscreen"
+SIG_CLOSE, SIG_HALO = 0.9, 0.8      # mm: the signature's ink closed into one silhouette, then haloed
 DATE = re.compile(rb"CreationDate|^G04 Created|^; DRILL file|SVG Image created", re.M)
 
 def undated(path):
@@ -67,13 +70,17 @@ def main():
     for half in ("left", "right"):
         kpy([HELPERS / "kicad_extract.py", HW / f"flan36-{half}.kicad_pcb", BUILD / f"geo-{half}.json"], a.kicad_python)
     cv = Canvas(BUILD)
-    carto = {h: MultiPolygon([box(*z) for z in signature[h]["zones"]]).buffer(1.3, join_style="round", quad_segs=8)
-             for h in cv.boards}
+    carto = {}
+    for h, b in cv.boards.items():
+        ink = b.side["B"]["silk"].intersection(unary_union([box(*z) for z in signature[h]["zones"]]).buffer(0.6))
+        carto[h] = ink.buffer(SIG_CLOSE + SIG_HALO, quad_segs=8).buffer(-SIG_CLOSE, quad_segs=8)
+    cv.quiet(carto)
     receipt_path = ROOT / "validation/revI-editions.json"
     receipt = json.loads(receipt_path.read_text()) if receipt_path.exists() and a.only else {}
     receipt.update({"schema": "flan36-editions-1", "physical_acceptance": False,
                     "base": {h: {"pcb_sha256": routing[h]["pcb_sha256"], "package_sha256": fab[h]["sha256"]} for h in fab},
-                    "rules": {"min_art_stroke_mm": MIN_STROKE, "min_gap_mm": MIN_GAP, "signature_clearance_mm": 1.3}})
+                    "rules": {"min_art_stroke_mm": MIN_STROKE, "min_gap_mm": MIN_GAP,
+                              "signature_clearance": {"contour_close_mm": SIG_CLOSE, "halo_mm": SIG_HALO, "quiet_reach_mm": QUIET_REACH}}})
     receipt.setdefault("editions", {})
     for ed in names:
         t0 = time.time()

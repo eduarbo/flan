@@ -3,7 +3,7 @@
 
 Removes any installed "silkscreen-art" (a back pattern) and an earlier "flan-signature",
 checks that what remains is the routed board byte for byte, places the lockup, rule, edition
-lines and maker's URL (tools/silkscreen/signature.flan_plate), checks them against pads,
+lines and the maker's credit (tools/silkscreen/signature.flan_plate), checks them against pads,
 holes, edges and legends, and records validation/revI-signature.json. Patterns become
 per-edition packages (tools/export_editions.py); the canonical boards carry only the
 signature. Then rerun check_routed_pcb.py and export_fabrication.py.

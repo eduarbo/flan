@@ -151,9 +151,9 @@ def bus(cv, pitch=0.70, w=0.30):
 def meandro(cv, row=3.30, period=3.00, amax=1.25, w=0.30):
     """Rows of length-tuning serpentines; their amplitude swells and dies in slow waves."""
     u0, v0, u1, v1 = cv.bounds
-    def amp(u, v):
+    def amp(u, v):                            # straight runs beside the signature, like traces around a part
         a = math.sin((u - u0) / 46.0 + (v - v0) / 21.0) * math.cos((u - u0) / 97.0 - (v - v0) / 37.0)
-        return amax * smooth((abs(a) - 0.12) / 0.6)
+        return amax * smooth((abs(a) - 0.12) / 0.6) * cv.calm(u, v)
     rows = []
     v = v0 + 1.2
     while v < v1 + row:
@@ -248,10 +248,12 @@ def vias(cv, pitch=2.15, w=0.30):
         u = u0 + (pitch / 2 if r_i % 2 else 0)
         while u < u1 + pitch:
             t = ((u - u0) * 0.80 + (v - v0) * 0.60) / 78.0
-            f = 0.5 + 0.5 * math.sin(2 * math.pi * t - 1.0)
+            f = (0.5 + 0.5 * math.sin(2 * math.pi * t - 1.0)) * cv.calm(u, v)
             rad = 0.20 + 0.65 * smooth(f)
             c = Point(u, v)
-            if rad >= 0.62:
+            if cv.hushed(c.buffer(rad + 0.05, quad_segs=4)):     # whole dots only around the signature
+                pass
+            elif rad >= 0.62:
                 shapes.append(c.buffer(rad, quad_segs=8).difference(c.buffer(rad - w, quad_segs=8)))
             else:
                 shapes.append(c.buffer(rad, quad_segs=6))

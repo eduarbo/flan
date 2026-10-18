@@ -32,15 +32,18 @@ def plate(name):
 
 # ---------------------------------------------------------------------------- Flan signature (2026-10-17)
 # Free back-side rectangles of the routed revI boards (space.rects on the board without art):
-# the lockup and its edition lines go in the largest one, the maker's URL in a second one.
+# the lockup and its edition lines go in the largest one, the maker's credit in the nearest
+# one at least 12.5 × 3.4 mm.
 FLAN_PLATE = {"right": (82.6, 54.3, 105.0, 60.5), "left": (53.7, 54.1, 77.1, 60.5)}
-FLAN_URL = {"right": (60.6, 59.1, 76.8, 62.9), "left": (87.1, 59.1, 97.3, 64.3)}
+FLAN_CREDIT = {"right": (60.8, 59.1, 77.0, 62.9), "left": (86.7, 59.9, 99.3, 63.9)}
 FLAN_EM = 4.6          # wordmark em (mm): the mark is 5.5 mm tall, no hairline under 0.17 mm at wght 450
 FLAN_TEXT = {"w": 1.0, "h": 1.0, "t": 0.15}
-URL = "eduarbo.com"
+# "by", the eduarbo cube, "eduarbo": ink widths in KiCad's stroke font at 1.0 mm (kicad_text.py)
+CREDIT = {"by": 1.443, "by_left": 0.258, "name": "eduarbo", "name_w": 5.777, "name_left": 0.21,
+          "mark_h": 2.6, "mark_cut": 0.25, "gap": 0.75, "centre": -0.045}
 
 def flan_plate(name, font_path):
-    """The Flan lockup, a rule and REV I / 2026 / RIGHT|LEFT, plus the maker's URL elsewhere.
+    """The Flan lockup, a rule and REV I / 2026 / RIGHT|LEFT, plus "by <cube> eduarbo" nearby.
 
     Built in reading coordinates (as seen from below) and mirrored onto B.SilkS. Returns
     (shapes, KiCad text specs, cartouche zones)."""
@@ -69,8 +72,28 @@ def flan_plate(name, font_path):
     tx = rx(rule_r + 0.1 + rule_gap)
     texts = [{"id": f"{name}-{i}", "text": t, "x": tx, "y": cy - block_h / 2 + 0.62 + pitch * i, **FLAN_TEXT,
               "layer": "B", "mirror": True, "hj": "left"} for i, t in enumerate(lines)]
-    ux0, uy0, ux1, uy1 = FLAN_URL[name]
-    ucx, ucy = (ux0 + ux1) / 2, (uy0 + uy1) / 2
-    texts.append({"id": f"{name}-url", "text": URL, "x": ucx, "y": ucy, **FLAN_TEXT, "layer": "B", "mirror": True})
-    zones = [box(rx(left + total), cy - lh / 2, rx(left), cy + lh / 2), box(ucx - 4.65, ucy - 0.62, ucx + 4.65, ucy + 0.53)]
+    credit, ctexts, czone = credit_line(name)
+    shapes.append(credit)
+    texts += ctexts
+    zones = [box(rx(left + total), cy - lh / 2, rx(left), cy + lh / 2), czone]
     return unary_union(shapes), texts, zones
+
+def credit_line(name):
+    """by <eduarbo cube> eduarbo, centred in FLAN_CREDIT and mirrored onto B.SilkS."""
+    from shapely.geometry import box
+    from branding.eduarbo import mark
+    c = CREDIT
+    cube = mark(c["mark_h"], cut=c["mark_cut"])
+    mw = cube.bounds[2]
+    total = c["by"] + c["gap"] + mw + c["gap"] + c["name_w"]
+    x0, y0, x1, y1 = FLAN_CREDIT[name]
+    cy = (y0 + y1) / 2 + c["centre"]
+    left = (x1 - x0 - total) / 2
+    rx = lambda r: x1 - r                          # reading x -> board x, as in flan_plate
+    m_r = left + c["by"] + c["gap"]
+    cube = affinity.translate(affinity.scale(cube, -1, 1, origin=(0, 0)), rx(m_r), cy - c["mark_h"] / 2)
+    texts = [{"id": f"{name}-by", "text": "by", "x": rx(left - c["by_left"]), "y": cy - c["centre"], **FLAN_TEXT,
+              "layer": "B", "mirror": True, "hj": "left"},
+             {"id": f"{name}-maker", "text": c["name"], "x": rx(m_r + mw + c["gap"] - c["name_left"]), "y": cy - c["centre"],
+              **FLAN_TEXT, "layer": "B", "mirror": True, "hj": "left"}]
+    return cube, texts, box(rx(left + total), cy - c["mark_h"] / 2, rx(left), cy + c["mark_h"] / 2)

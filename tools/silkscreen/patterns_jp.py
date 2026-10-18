@@ -71,7 +71,7 @@ def asanoha(cv, a=7.2, slat=1.05, w=0.22):
         for a_, b_ in ((t[0], t[1]), (t[1], t[2]), (t[2], t[0])):
             edges[tuple(sorted((key(a_), key(b_))))] = (a_, b_)
         nodes.update(key(p) for p in t)
-        if d > 0.46:
+        if d * cv.calm(*c) > 0.46:                   # beside the signature: frame only, set into the jigumi
             spokes += [(p, c) for p in t]
     return kumiko([list(e) for e in edges.values()] + [list(s_) for s_ in spokes], slat, w, joints=list(nodes))
 
@@ -98,6 +98,7 @@ def sayagata(cv, s=2.3, w=0.30, node=0.62, angle=45.0):
                 segs.append([c, arm, hook])
     segs = rotate_about([[(x + cu, y + cvv) for x, y in sg] for sg in segs], angle, (cu, cvv))
     centres = rotate_about([[(x + cu, y + cvv) for x, y in centres]], angle, (cu, cvv))[0]
+    centres = [c for c in centres if cv.calm(*c) > 0.5]          # plain fret beside the signature
     return cut_in(lines(segs, w), centres, node, 0.24)
 
 # ---------------------------------------------------------------------------- 03 kikkō
@@ -120,6 +121,7 @@ def kikko(cv, R=4.7, slat=1.0, w=0.22):
                 a_, b_ = pts[k], pts[(k + 1) % 6]
                 edges[tuple(sorted((key(a_), key(b_))))] = (a_, b_)
             joints.update(key(p_) for p_ in pts)
+            d *= cv.calm(*c)                         # beside the signature: open shells, set into the jigumi
             if d > 0.72:
                 spokes += [(c, p_) for p_ in pts]
                 joints.add(key(c))
@@ -142,12 +144,14 @@ def seigaiha(cv, R=5.8, w=0.28, gap=0.30):
     out = []
     for k, centres in rows.items():
         for c in centres:
-            rings = [Point(c).buffer(r, quad_segs=24).exterior.buffer(w / 2, quad_segs=4) for r in (R, R * 0.76, R * 0.52)]
+            calm = cv.calm(*c)                    # beside the signature a fan keeps only its outer arcs
+            radii = (R, R * 0.76, R * 0.52) if calm > 0.25 else (R, R * 0.76)
+            rings = [Point(c).buffer(r, quad_segs=24).exterior.buffer(w / 2, quad_segs=4) for r in radii]
             rr = R * 0.30
             n = max(6, int(2 * math.pi * rr / 1.15))
             stitch = [Point(c[0] + rr * math.cos(2 * math.pi * m / n), c[1] + rr * math.sin(2 * math.pi * m / n)).buffer(0.30, quad_segs=6)
-                      for m in range(n)]
-            fan = unary_union(rings + stitch + [Point(c).buffer(0.55, quad_segs=10)])
+                      for m in range(n)] + [Point(c).buffer(0.55, quad_segs=10)] if calm > 0.55 else []
+            fan = unary_union(rings + stitch)
             cover = [Point(c2).buffer(shield, quad_segs=24) for k2 in range(k + 1, k + 5) for c2 in rows.get(k2, ())
                      if math.hypot(c2[0] - c[0], c2[1] - c[1]) < R + shield]
             if cover:

@@ -10,6 +10,7 @@ from shapely.ops import unary_union
 from .geo import Board
 
 GAP = 14.0          # space between the two tiles on the sheet
+QUIET_REACH = 6.0   # mm over which a pattern calms down toward the signature
 
 class Canvas:
     def __init__(self, geo_dir):
@@ -36,6 +37,28 @@ class Canvas:
         cut = max((Polygon(r) for r in b.outline.interiors), key=lambda p: p.area)
         c = cut.centroid
         return self.point(half, c.x, c.y)
+
+    def quiet(self, zones):
+        """Let patterns calm down around {half: board geometry}: calm() is 0 on a zone and
+        rises smoothly to 1 at QUIET_REACH. Without zones every pattern draws as before."""
+        from shapely.prepared import prep
+        self._quiet = unary_union([self.to_canvas(z, h) for h, z in zones.items()]).simplify(0.05)
+        self._quiet_near = prep(self._quiet.buffer(QUIET_REACH, quad_segs=4))
+
+    def calm(self, u, v):
+        q = getattr(self, "_quiet", None)
+        if q is None:
+            return 1.0
+        p = Point(u, v)
+        if not self._quiet_near.contains(p):
+            return 1.0
+        t = min(1.0, q.distance(p) / QUIET_REACH)
+        return t * t * (3 - 2 * t)
+
+    def hushed(self, geom):
+        """True where a discrete element (a dot, a via) would touch a quiet zone."""
+        q = getattr(self, "_quiet", None)
+        return q is not None and q.intersects(geom)
 
     def region(self):
         return unary_union([self.to_canvas(self.boards[h].outline, h) for h in self.boards])
