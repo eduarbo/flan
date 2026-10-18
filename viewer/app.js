@@ -195,7 +195,8 @@ function stopPanelDrag(e){
 }
 resizeHandle.addEventListener('pointerup',stopPanelDrag);resizeHandle.addEventListener('pointercancel',stopPanelDrag);resizeHandle.addEventListener('lostpointercapture',stopPanelDrag);
 resizeHandle.addEventListener('keydown',e=>{const {portrait,total,min,max}=panelBounds(),grow=portrait?'ArrowUp':'ArrowLeft',shrink=portrait?'ArrowDown':'ArrowRight';if(![grow,shrink,'Home','End'].includes(e.key))return;e.preventDefault();const now=(panelSizes.get(sizeKey())??defaultPanelRatio())*total,snaps=[min,Math.min(max,total*.48),max];let size;if(e.key==='Home')size=min;else if(e.key==='End')size=max;else if(portrait)size=e.key===grow?(snaps.find(v=>v>now+2)??max):([...snaps].reverse().find(v=>v<now-2)??min);else size=now+(e.key===grow?32:-32);panelSizes.set(sizeKey(),Math.max(min,Math.min(max,size))/total);layoutPanel();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&panelOpen&&!document.querySelector('dialog[open]')){e.preventDefault();e.stopImmediatePropagation();if(detailRef)explorer.clear();else setPanelOpen(false,{focus:true});}},true);
+// Bubble phase: a field that reverts an edit on Escape prevents the default, and only the next Escape closes the editor.
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!e.defaultPrevented&&panelOpen&&!document.querySelector('dialog[open]')){e.preventDefault();if(detailRef)explorer.clear();else setPanelOpen(false,{focus:true});}});
 function workspaceHeight(){document.documentElement.style.setProperty('--app-height',(window.visualViewport?.height||innerHeight)+'px');layoutPanel();}
 window.addEventListener('resize',workspaceHeight);window.visualViewport?.addEventListener('resize',workspaceHeight);document.addEventListener('focusin',workspaceHeight);document.addEventListener('focusout',()=>requestAnimationFrame(layoutPanel));workspaceHeight();
 

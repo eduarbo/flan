@@ -55,9 +55,7 @@ node viewer/rebrand-check.cjs
 
 The browser checks drive the current controls: bottom navigation, Design tabs, Parts rows with eye and **Solo**, and part pages with **Visible / Solo / All**. They load `docs/offline.html`; `reliability-check.cjs` also serves `docs/index.html` locally to exercise the online print loader. The removed half filter, leader lines, annotations and per-key shape editor are covered by their current equivalents: per-piece eyes, hover highlights, part pages and design-file import.
 
-On 2026-10-18, with playwright-core 1.61.1 and Chromium 149, these passed with no runtime errors against `docs/offline.html` SHA-256 `02b3fb5a…`: `check.cjs`, `responsive-check.cjs`, `customize-check.cjs`, `frame-orientation-check.cjs` (Game Boy and Hanafuda), `battery-leads-check.cjs`, `cap-rows-check.cjs`, `reliability-check.cjs`, `frame-collection-check.cjs`, `display-seam-check.cjs`, `loading-check.cjs` and `keycolors-check.cjs`.
-
-`hex-check.cjs` fails at one step: Escape in a HEX field closes the editor instead of restoring the field's last valid value. That is a viewer bug, not an outdated check; its other steps pass.
+On 2026-10-18, with playwright-core 1.61.1 and Chromium 149, these passed with no runtime errors against `docs/offline.html` SHA-256 `218f32fd…`: `check.cjs`, `responsive-check.cjs`, `customize-check.cjs`, `frame-orientation-check.cjs` (Game Boy and Hanafuda), `battery-leads-check.cjs`, `cap-rows-check.cjs`, `reliability-check.cjs`, `frame-collection-check.cjs`, `display-seam-check.cjs`, `loading-check.cjs`, `keycolors-check.cjs` and `hex-check.cjs`.
 
 Run any check with a local Playwright and Chromium:
 

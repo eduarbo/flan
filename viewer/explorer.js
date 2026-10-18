@@ -35,7 +35,7 @@ export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,req
   const match=(o,ref)=>o.userData.installed!==false&&matchesPart(o,ref);
   const key=ref=>ref?JSON.stringify(ref):'';
   const refOf=o=>({group:o.userData.group,side:o.userData.side,key:o.userData.key,objectIndex:o.userData.objectIndex});
-  let selected=null,hovered=null,moving=false,down=null,pointers=new Set(),pickTimer=0,revision=0,boxRevision=-1,highlightStamp='',activeKey='';
+  let selected=null,hovered=null,moving=false,down=null,pointers=new Set(),pickTimer=0,revision=0,boxRevision=-1,highlightStamp='',visibilityStamp='',activeKey='';
   function refreshBounds(){
     if(boxRevision===revision)return;
     scene.updateMatrixWorld(true);
@@ -80,6 +80,11 @@ export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,req
       }
       locator.visible=positions.length>0;
       locatorGeometry.attributes.position.array.set(positions);locatorGeometry.attributes.position.needsUpdate=true;locatorGeometry.setDrawRange(0,positions.length/3);
+    }
+    // Hovering a row and selecting it share a highlight stamp, so the note tracks selection and visibility on its own.
+    const shown=key(selected)+':'+revision;
+    if(shown!==visibilityStamp){
+      visibilityStamp=shown;
       if(selected)$('selection-visibility').textContent=objects.some(o=>o.visible&&match(o,selected))?'':selected.group==='lid'&&!objects.some(o=>match(o,selected))?'Display frames are not installed. Use the installation controls below.':'This selection is hidden. Turn it back on with Visible below.';
     }
     if(activeKey!==key(active)){activeKey=key(active);for(const row of document.querySelectorAll('.part-row'))row.classList.toggle('is-highlighted',!active?.collection&&active?.group===row.dataset.group);}

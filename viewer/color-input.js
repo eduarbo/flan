@@ -22,7 +22,7 @@ export function enhanceColorInput(swatch){
  hex.addEventListener('focus',()=>hex.select());
  hex.addEventListener('input',()=>{clear();copy.disabled=swatch.disabled||!normalizeHex(hex.value);if(/^#?[0-9a-f]{6}$/i.test(hex.value.trim()))commit();});
  hex.addEventListener('change',commit);
- hex.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();commit();}else if(event.key==='Escape'){clear();hex.value=mixed?'':swatch.value;copy.disabled=mixed;hex.select();}});
+ hex.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();commit();}else if(event.key==='Escape'){const restored=mixed?'':swatch.value;if(hex.value===restored&&!hex.hasAttribute('aria-invalid'))return;event.preventDefault();clear();hex.value=restored;copy.disabled=mixed;hex.select();}});
  copy.onclick=async()=>{
   const color=normalizeHex(hex.value);if(!color)return;
   try{await navigator.clipboard.writeText(color);notice.textContent='Copied.';}
