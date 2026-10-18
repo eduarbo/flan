@@ -1,0 +1,22 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Flan Keyboard · R4 theme transition</title>
+<!-- Storyboard of a theme change, built from t-0..t-2.png (home.html?mix=…). Rendered by render.cjs. -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..600,100&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f3ef;--ink:#24242a;--muted:#66666e;--line:#dddbd3}
+*{box-sizing:border-box}html,body{margin:0}
+body{width:1440px;height:480px;background:var(--bg);color:var(--ink);font:400 15px/1.5 Inter,system-ui,sans-serif;padding:40px 48px;-webkit-font-smoothing:antialiased}
+h1{margin:0;font:300 34px/1.1 Fraunces,Georgia,serif;font-variation-settings:"SOFT" 100,"opsz" 144;letter-spacing:-.01em}
+p{margin:6px 0 0;color:var(--muted);max-width:90ch}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:28px}
+figure{margin:0}figure img{display:block;width:100%;border-radius:12px;box-shadow:0 1px 0 var(--line),0 10px 30px rgba(0,0,0,.08)}
+figcaption{display:flex;justify-content:space-between;margin-top:10px;font:500 11.5px "JetBrains Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+figcaption b{color:var(--ink);font-weight:500}
+</style></head><body>
+<h1>A theme change, frame by frame</h1>
+<p>Picking a swatch eases every page color and the model together, about 600 ms with a gentle ease-out. The keyboard keeps its pose, its standby motion and the layer separation.</p>
+<div class="row">
+  <figure><img src="../../../../build/r4/t-0.png" alt=""><figcaption><b>0 ms · SNES</b><span>click Game Boy</span></figcaption></figure>
+  <figure><img src="../../../../build/r4/t-1.png" alt=""><figcaption><b>300 ms</b><span>colors and model cross-fade</span></figcaption></figure>
+  <figure><img src="../../../../build/r4/t-2.png" alt=""><figcaption><b>600 ms · Game Boy</b><span>settled</span></figcaption></figure>
+</div>
+</body></html>

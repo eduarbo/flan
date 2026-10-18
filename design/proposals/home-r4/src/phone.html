@@ -1,0 +1,81 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Flan Keyboard · R4 phone mockup</title>
+<!-- Static R4 phone mockup (SNES), rendered to PNG by render.cjs. -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..600,100&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="data.js"></script>
+<style>
+:root{--bg0:#f3f1f7;--bg1:#dcd7e8;--bg2:#bdb5d3;--glow:#aca0c2;--ink:#24222f;--muted:#5f5a74;--accent:#746198;--on:#ffffff}
+*{box-sizing:border-box}html,body{margin:0}
+body{width:390px;background:var(--bg1);color:var(--ink);font:400 15px/1.5 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.serif{font-family:Fraunces,Georgia,serif;font-variation-settings:"SOFT" 100,"opsz" 144}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}.muted{color:var(--muted)}
+.hero{position:relative;padding:18px 16px 0;background:linear-gradient(transparent 82%,var(--bg1)),radial-gradient(420px 420px at 50% 52%,var(--bg0) 0,var(--bg1) 60%,var(--bg2) 100%)}
+header{display:flex;justify-content:space-between;align-items:center}
+.lockup{display:inline-flex;align-items:center;gap:7px}.lockup img{height:24px}.lockup span{font-family:Fraunces,Georgia,serif;font-variation-settings:"SOFT" 100,"opsz" 144;font-weight:300;font-size:21px;line-height:1}
+.right{display:flex;align-items:center;gap:12px;font:500 11px "JetBrains Mono",monospace;color:var(--muted)}.right b{font-weight:500;color:var(--ink)}.right svg{width:22px;height:22px;color:var(--ink)}
+h1{margin:6px 0 0;font-weight:300;font-size:50px;line-height:1;letter-spacing:-.03em}
+.copy{margin-top:26px}.sub{margin:10px 0 0;color:var(--muted);font-size:15px;max-width:30ch}
+.stage{position:relative;height:318px;margin:4px -16px 0}
+.glow{position:absolute;left:40px;top:90px;width:300px;height:180px;border-radius:50%;background:var(--glow);filter:blur(60px);opacity:.42}
+.stage img{position:absolute;left:4px;top:8px;width:330px;height:290px;object-fit:contain;filter:drop-shadow(0 22px 20px color-mix(in srgb,var(--ink) 24%,transparent))}
+.layers{position:absolute;right:14px;top:34px;bottom:42px;width:30px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.layers svg{width:22px;height:22px;color:var(--muted)}
+.vtrack{position:relative;flex:1;width:4px;border-radius:2px;background:color-mix(in srgb,var(--ink) 16%,transparent)}
+.vfill{position:absolute;left:0;right:0;bottom:0;height:75%;border-radius:2px;background:var(--accent)}
+.vknob{position:absolute;left:50%;bottom:75%;width:24px;height:24px;margin:0 0 -12px -12px;border-radius:50%;background:var(--on);box-shadow:0 2px 8px color-mix(in srgb,var(--ink) 30%,transparent),0 0 0 4px var(--accent)}
+.chip{position:absolute;left:16px;bottom:8px;display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 12px;border-radius:999px;font-size:12px;background:color-mix(in srgb,var(--on) 46%,transparent)}.chip svg{width:15px;height:15px}
+/* controls: tabs and one row of options, no outlines */
+.ctl{padding:6px 16px 0}
+.tabs{display:flex;justify-content:space-between;font-size:13.5px;font-weight:500;color:var(--muted)}
+.tabs b{display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:500;padding:6px 2px}.tabs b.on{color:var(--ink);font-weight:600}
+.tabs b:after{content:"";width:16px;height:3px;border-radius:2px;background:transparent}.tabs b.on:after{background:var(--accent)}
+.tabs small{font:400 11px Inter;color:var(--muted)}
+.strip{display:flex;gap:14px;overflow:hidden;margin:14px -16px 0;padding:0 16px 4px}
+.sw{display:flex;flex-direction:column;align-items:center;gap:6px;flex:none;width:52px;font-size:11px;text-align:center;line-height:1.2}
+.sw i{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 68% 74%,var(--c) 0 5px,transparent 5.6px),linear-gradient(var(--a) 0 56%,var(--b) 56%);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent)}
+.sw.on i{box-shadow:0 0 0 2px var(--bg1),0 0 0 4px var(--ink)}.sw.on{font-weight:600}
+.cta{display:flex;justify-content:center;align-items:center;gap:8px;height:50px;margin:18px 0 0;border-radius:999px;background:var(--ink);color:var(--bg0);font-weight:500;font-size:15px}
+.note{text-align:center;font-size:12px;color:var(--muted);margin-top:8px}
+.specs{padding:44px 16px 10px}.specs h2{margin:6px 0 0;font-weight:300;font-size:32px;line-height:1.1;letter-spacing:-.02em}
+.grid{display:grid;grid-template-columns:1fr 1fr;margin-top:22px;border-top:1px solid color-mix(in srgb,var(--ink) 13%,transparent)}
+.spec{padding:16px 12px 16px 0;border-bottom:1px solid color-mix(in srgb,var(--ink) 13%,transparent)}.spec:nth-child(even){padding-left:14px;border-left:1px solid color-mix(in srgb,var(--ink) 13%,transparent)}
+.spec b{display:block;font-family:Fraunces,Georgia,serif;font-variation-settings:"SOFT" 100,"opsz" 144;font-weight:400;font-size:25px;line-height:1.1;margin-top:6px}
+.spec p{margin:5px 0 0;font-size:12.5px;line-height:1.45;color:var(--muted)}
+footer{display:flex;flex-direction:column;gap:10px;padding:26px 16px 30px;font-size:12.5px;color:var(--muted)}
+footer .links{display:flex;flex-wrap:wrap;gap:6px 16px;color:var(--ink)}
+.maker{display:inline-flex;align-items:center;gap:5px;font-size:12px}.maker svg{width:13px;height:13px}
+</style></head><body>
+<section class="hero">
+  <header><span class="lockup"><img src="../../../../docs/branding/flan/flan-lockup.svg" alt="Flan"><span>keyboard</span></span>
+    <span class="right"><span><b>EN</b> · ES</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span></header>
+  <div class="copy"><span class="mono muted">Open-source wireless split</span><h1 class="serif">Flan Keyboard</h1><p class="sub">Low-profile and split, in four sizes. Turn it, take it apart, make it yours.</p></div>
+  <div class="stage"><div class="glow"></div><img src="../assets/hero-snes.png" alt="">
+    <div class="layers"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M16 3.5 28 9l-12 5.5L4 9z"/><path d="M4 16.5 16 22l12-5.5" opacity=".7"/><path d="M4 23.5 16 29l12-5.5" opacity=".45"/></svg>
+      <div class="vtrack"><div class="vfill"></div><div class="vknob"></div></div>
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M16 8 28 13.5 16 19 4 13.5z"/><path d="M4 16.5 16 22l12-5.5"/><path d="M4 19.5 16 25l12-5.5"/></svg></div>
+    <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>Drag to turn · pinch to zoom</span></div>
+</section>
+<section class="ctl">
+  <div class="tabs"><b>Size<small>36</small></b><b class="on">Theme<small>SNES</small></b><b>Case<small>Rim</small></b><b>Keys<small>Original</small></b><b>Frame<small>SNES</small></b></div>
+  <div class="strip" id="strip"></div>
+  <div class="cta">Open this build in 3D →</div><div class="note">Swipe for all 28 themes</div>
+</section>
+<section class="specs"><span class="mono muted">Spec sheet</span><h2 class="serif">What’s under the frame</h2>
+  <div class="grid">
+    <div class="spec"><span class="mono muted">Low profile</span><b>14.5 mm</b><p>Choc v1 hot-swap under a flush magnetic frame.</p></div>
+    <div class="spec"><span class="mono muted">Layout</span><b>18 × 17 mm</b><p>Choc spacing, column stagger, splayed thumbs.</p></div>
+    <div class="spec"><span class="mono muted">Wireless</span><b>nice!nano v2</b><p>nRF52840 and ZMK: Bluetooth LE, five profiles, USB-C.</p></div>
+    <div class="spec"><span class="mono muted">Displays</span><b>2 × nice!view</b><p>Low-power memory LCD on each half.</p></div>
+    <div class="spec"><span class="mono muted">Sizes</span><b>36–54 keys</b><p>Outer column, number row or both. Same thumbs.</p></div>
+    <div class="spec"><span class="mono muted">Battery</span><b>100 mAh</b><p>1S LiPo per half; a 110 mAh pack also fits.</p></div>
+    <div class="spec"><span class="mono muted">Looks</span><b>28 · 6 · 4</b><p>Themes, magnetic frames, case styles.</p></div>
+    <div class="spec"><span class="mono muted">Open hardware</span><b>GPL-3.0</b><p>KiCad, FreeCAD, Gerbers, STEP, STL, 3MF.</p></div>
+  </div></section>
+<footer><span class="links"><span>Parts</span><span>Build guide</span><span>Order PCBs</span><span>Firmware</span><span>GitHub</span></span>
+  <span>Digital prototype · physical tests in progress</span>
+  <span class="maker">by <svg viewBox="160 150 880 880" aria-hidden="true"><path d="M960 377.85 960 516.41 600 724.26 600 585.69Z M600 862.82 960 654.97 960 793.54 600 1001.38Z" fill="#1E9C89"/><path d="M240 377.85 360 447.13 360 724.26 600 862.82 600 1001.38 240 793.54Z" fill="#0B554B"/><path d="M240 377.85 600 170 960 377.85 840 447.13 600 308.56 360 447.13Z" fill="#65D7C4"/></svg>eduarbo</span></footer>
+<script>
+// SNES first, then its neighbours in the theme list
+const order=['snes','gameboy','nes','talavera','flan','manga','phone','ipod'];
+document.getElementById('strip').innerHTML=order.map(id=>THEMES.find(t=>t[0]===id)).map(([id,name,a,b,c])=>`<span class="sw${id==='snes'?' on':''}"><i style="--a:${a};--b:${b};--c:${c}"></i>${name}</span>`).join('');
+</script>
+</body></html>

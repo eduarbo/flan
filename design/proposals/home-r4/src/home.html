@@ -1,0 +1,162 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Flan Keyboard · R4 mockup</title>
+<!-- Static R4 mockup, rendered to PNG by render.cjs. Query: ?theme=snes|gameboy &state=home|frames &mix=0..1 (SNES → Game Boy) &hero=1 -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..600,100&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="data.js"></script>
+<style>
+:root{--bg0:#f3f1f7;--bg1:#dcd7e8;--bg2:#bdb5d3;--glow:#aca0c2;--ink:#24222f;--muted:#5f5a74;--accent:#746198;--on:#ffffff}
+*{box-sizing:border-box}html,body{margin:0}
+body{width:1440px;background:var(--bg1);color:var(--ink);font:400 16px/1.5 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.serif{font-family:Fraunces,Georgia,serif;font-variation-settings:"SOFT" 100,"opsz" 144}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase}
+.muted{color:var(--muted)}
+button{font:inherit;color:inherit;background:none;border:0;padding:0}
+/* hero */
+.hero{position:relative;height:900px;overflow:hidden;background:linear-gradient(transparent 78%,var(--bg1)),radial-gradient(980px 700px at 36% 60%,var(--bg0) 0,var(--bg1) 58%,var(--bg2) 100%)}
+.glow{position:absolute;left:150px;top:380px;width:700px;height:380px;border-radius:50%;background:var(--glow);filter:blur(110px);opacity:.42}
+header{position:absolute;inset:0 0 auto;display:flex;justify-content:space-between;align-items:center;padding:30px 56px 0 60px}
+.lockup{display:inline-flex;align-items:center;gap:10px}.lockup img{height:32px}
+.lockup span{font-family:Fraunces,Georgia,serif;font-variation-settings:"SOFT" 100,"opsz" 144;font-weight:300;font-size:28px;line-height:1;transform:translateY(1px)}
+nav{display:flex;align-items:center;gap:28px;font-size:14px}nav a{color:var(--muted);text-decoration:none}
+.lang{display:inline-flex;gap:2px;font:500 11px "JetBrains Mono",monospace}.lang b{padding:5px 8px;border-radius:999px;font-weight:500}.lang b.on{background:color-mix(in srgb,var(--ink) 10%,transparent);color:var(--ink)}.lang b:not(.on){color:var(--muted)}
+.copy{position:absolute;left:62px;top:112px}
+h1{margin:6px 0 0;font-weight:300;font-size:90px;line-height:1;letter-spacing:-.03em}
+.sub{margin:16px 0 0;font-size:19px;max-width:36ch;color:var(--muted)}
+.models{position:absolute;left:140px;top:318px;width:680px;height:530px}
+.models img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 38px 34px color-mix(in srgb,var(--ink) 26%,transparent))}
+.stagebar{position:absolute;left:62px;bottom:40px;display:flex;gap:8px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:999px;font-size:13px;background:color-mix(in srgb,var(--on) 46%,transparent);backdrop-filter:blur(8px);color:var(--ink)}
+.chip svg{width:17px;height:17px}.chip.icon{width:34px;padding:0;justify-content:center}
+.preview-tag{position:absolute;left:392px;top:290px;background:var(--ink);color:var(--bg0)}
+/* vertical layers slider */
+.layers{position:absolute;left:944px;top:318px;width:64px;height:440px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.layers .ico{width:30px;height:30px;color:var(--muted)}
+.vtrack{position:relative;flex:1;width:4px;border-radius:2px;background:color-mix(in srgb,var(--ink) 16%,transparent)}
+.vfill{position:absolute;left:0;right:0;bottom:0;height:75%;border-radius:2px;background:var(--accent)}
+.vknob{position:absolute;left:50%;bottom:75%;width:22px;height:22px;margin:0 0 -11px -11px;border-radius:50%;background:var(--on);box-shadow:0 2px 8px color-mix(in srgb,var(--ink) 30%,transparent),0 0 0 4px var(--accent)}
+.vval{position:absolute;left:24px;bottom:75%;margin-bottom:-11px;height:22px;display:flex;align-items:center;white-space:nowrap;font:500 11px "JetBrains Mono",monospace;color:var(--muted)}
+.layers .cap{font:500 10.5px "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+/* rail: no outline, no panel */
+.rail{position:absolute;left:1060px;top:112px;width:332px;display:flex;flex-direction:column;gap:21px}
+.grp{display:flex;flex-direction:column;gap:9px}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.row .val{font-size:13px;font-weight:500}.row .val i{font-style:normal;color:var(--muted);font-weight:400}
+.opts{display:flex;gap:6px}
+.opt{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;border-radius:14px;padding:8px 4px 6px;flex:1;min-width:0}
+.opt.on{background:color-mix(in srgb,var(--accent) 15%,transparent)}
+.opt span{font-size:11.5px;font-weight:500;white-space:nowrap}.opt.on span{font-weight:600}
+.opt:not(.on) img{opacity:.92}
+.size img{height:44px;width:auto;max-width:100%;object-fit:contain}.size b{font:500 14px "JetBrains Mono",monospace;line-height:1}
+.case img{width:70px;height:46px;object-fit:cover;object-position:0 40%;border-radius:10px;background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.keys img{width:92px;height:44px;object-fit:contain;object-position:50% 100%}
+.sw{display:grid;grid-template-columns:repeat(7,26px);gap:11px 20px}
+.sw i{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 68% 74%,var(--c) 0 3.6px,transparent 4.2px),linear-gradient(var(--a) 0 56%,var(--b) 56%);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent)}
+.sw i.on{box-shadow:0 0 0 2px var(--bg0),0 0 0 4px var(--ink)}
+.frames .opt{padding:7px 2px}.frames img{height:84px;width:auto;border-radius:5px;box-shadow:0 1px 3px color-mix(in srgb,var(--ink) 20%,transparent)}
+.link{font-size:12.5px;font-weight:500;color:var(--accent);display:inline-flex;align-items:center;gap:4px}
+.cta{display:flex;justify-content:center;align-items:center;gap:8px;height:48px;border-radius:999px;background:var(--ink);color:var(--bg0);font-weight:500;font-size:15px;margin-top:4px}
+.caption{text-align:center;margin-top:-12px;font-size:12px;color:var(--muted)}
+/* frame browser */
+.fb{gap:16px}
+.back{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}.back svg{width:18px;height:18px}
+.seg{display:flex;padding:3px;border-radius:999px;background:color-mix(in srgb,var(--ink) 7%,transparent);font-size:12.5px}
+.seg b{flex:1;text-align:center;padding:6px 0;border-radius:999px;font-weight:500;color:var(--muted)}.seg b.on{background:var(--bg0);color:var(--ink);box-shadow:0 1px 3px color-mix(in srgb,var(--ink) 18%,transparent)}
+.focus{display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:center}
+.focus img{height:236px;width:auto;border-radius:8px;box-shadow:0 14px 22px color-mix(in srgb,var(--ink) 22%,transparent)}
+.focus h3{margin:0;font-size:26px;font-weight:400;line-height:1.1}.focus p{margin:6px 0 10px;font-size:13px;line-height:1.45;color:var(--muted)}
+.pal{display:grid;gap:5px;font-size:12px}.pal span{display:flex;align-items:center;gap:7px}.pal i{width:13px;height:13px;border-radius:4px;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent)}
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.fgrid .opt{padding:10px 4px 8px;justify-content:flex-start}.fgrid img{height:92px;width:auto;border-radius:5px;box-shadow:0 1px 3px color-mix(in srgb,var(--ink) 20%,transparent)}
+.fgrid .opt.hover{background:color-mix(in srgb,var(--accent) 15%,transparent)}
+.cur{font-size:11px;color:var(--muted);margin-top:-3px}
+.actions{display:flex;gap:8px}.actions .cta{flex:1;margin:0}.ghost{display:flex;align-items:center;justify-content:center;height:48px;padding:0 20px;border-radius:999px;background:color-mix(in srgb,var(--ink) 8%,transparent);font-weight:500;font-size:15px}
+/* specs */
+.specs{position:relative;padding:64px 62px 64px;background:var(--bg1)}
+.specs h2{margin:8px 0 0;font-weight:300;font-size:46px;line-height:1.05;letter-spacing:-.02em}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);margin-top:40px;border-top:1px solid color-mix(in srgb,var(--ink) 13%,transparent)}
+.spec{padding:24px 26px 26px 0;border-bottom:1px solid color-mix(in srgb,var(--ink) 13%,transparent)}
+.spec+.spec{padding-left:26px;border-left:1px solid color-mix(in srgb,var(--ink) 13%,transparent)}.spec:nth-child(5){border-left:0;padding-left:0}
+.spec b{display:block;font-family:Fraunces,Georgia,serif;font-variation-settings:"SOFT" 100,"opsz" 144;font-weight:400;font-size:38px;line-height:1.05;letter-spacing:-.01em;margin-top:10px}
+.spec p{margin:8px 0 0;font-size:14px;line-height:1.5;color:var(--muted);max-width:30ch}
+footer{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:26px 62px 34px;background:var(--bg1);font-size:13px;color:var(--muted)}
+footer .links{display:flex;gap:22px}
+.maker{display:inline-flex;align-items:center;gap:6px;font-size:12.5px}.maker svg{width:15px;height:15px}
+</style></head><body>
+<section class="hero">
+  <div class="glow"></div>
+  <header><span class="lockup"><img src="../../../../docs/branding/flan/flan-lockup.svg" alt="Flan"><span>keyboard</span></span>
+    <nav><a>Explore in 3D</a><a>Build guide</a><a>GitHub</a><span class="lang"><b class="on">EN</b><b>ES</b></span></nav></header>
+  <div class="copy"><span class="mono muted">Open-source wireless split</span><h1 class="serif">Flan Keyboard</h1>
+    <p class="sub">Low-profile and split, in four sizes. Turn it, take it apart, make it yours.</p></div>
+  <div class="models" id="models"></div>
+  <div class="layers" aria-label="Layers"><span class="cap">Apart</span>
+    <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M16 3.5 28 9l-12 5.5L4 9z"/><path d="M4 16.5 16 22l12-5.5" opacity=".7"/><path d="M4 23.5 16 29l12-5.5" opacity=".45"/></svg>
+    <div class="vtrack"><div class="vfill"></div><div class="vknob"></div></div>
+    <svg class="ico" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M16 8 28 13.5 16 19 4 13.5z"/><path d="M4 16.5 16 22l12-5.5"/><path d="M4 19.5 16 25l12-5.5"/></svg>
+    <span class="cap">Together</span></div>
+  <div class="stagebar">
+    <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>Drag to turn · scroll to zoom</span>
+    <span class="chip icon" title="Pause standby motion"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="6" width="3.2" height="12" rx="1"/><rect x="13.8" y="6" width="3.2" height="12" rx="1"/></svg></span>
+    <span class="chip icon" title="Reset view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 20 7.5v9L12 21 4 16.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg></span>
+  </div>
+  <div class="rail" id="rail"></div>
+</section>
+<section class="specs" id="specs">
+  <span class="mono muted">Spec sheet</span><h2 class="serif">What’s under the frame</h2>
+  <div class="grid">
+    <div class="spec"><span class="mono muted">Low profile</span><b>14.5 mm</b><p>Choc v1 hot-swap sockets under a flush magnetic frame.</p></div>
+    <div class="spec"><span class="mono muted">Layout</span><b>18 × 17 mm</b><p>Choc spacing, column stagger and three splayed thumb keys per half.</p></div>
+    <div class="spec"><span class="mono muted">Wireless</span><b>nice!nano v2</b><p>nRF52840 running ZMK: Bluetooth LE, five host profiles, USB-C.</p></div>
+    <div class="spec"><span class="mono muted">Displays</span><b>2 × nice!view</b><p>Low-power memory LCD on each half, framed by the display cover.</p></div>
+    <div class="spec"><span class="mono muted">Sizes</span><b>36–54 keys</b><p>Four sizes: add the outer column, the number row or both. Same thumbs.</p></div>
+    <div class="spec"><span class="mono muted">Battery</span><b>100 mAh</b><p>1S LiPo per half, under the controller. 110 mAh pack also fits.</p></div>
+    <div class="spec"><span class="mono muted">Looks</span><b>28 · 6 · 4</b><p>Themes, magnetic display frames and case styles. Three KLP Lamé key shapes.</p></div>
+    <div class="spec"><span class="mono muted">Open hardware</span><b>GPL-3.0</b><p>KiCad, FreeCAD, Gerbers, STEP, STL and 3MF. Print it, order it, change it.</p></div>
+  </div>
+</section>
+<footer><span class="links"><span>Parts</span><span>Build guide</span><span>Order PCBs</span><span>Firmware</span><span>GitHub</span></span>
+  <span>Digital prototype · physical tests in progress</span>
+  <span class="maker">by <svg viewBox="160 150 880 880" aria-hidden="true"><path d="M960 377.85 960 516.41 600 724.26 600 585.69Z M600 862.82 960 654.97 960 793.54 600 1001.38Z" fill="#1E9C89"/><path d="M240 377.85 360 447.13 360 724.26 600 862.82 600 1001.38 240 793.54Z" fill="#0B554B"/><path d="M240 377.85 600 170 960 377.85 840 447.13 600 308.56 360 447.13Z" fill="#65D7C4"/></svg>eduarbo</span></footer>
+<script>
+const q=new URLSearchParams(location.search),A='../assets/';
+const LOOK={
+  snes:{bg0:'#f3f1f7',bg1:'#dcd7e8',bg2:'#bdb5d3',glow:'#aca0c2',ink:'#24222f',muted:'#5f5a74',accent:'#746198',on:'#ffffff'},
+  gameboy:{bg0:'#f3f0e2',bg1:'#e0dac1',bg2:'#c4bd9b',glow:'#a6a392',ink:'#2a2c31',muted:'#5f5d50',accent:'#973c60',on:'#ffffff'}};
+const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),mixc=(a,b,t)=>'#'+hex(a).map((v,i)=>Math.round(v+(hex(b)[i]-v)*t).toString(16).padStart(2,'0')).join('');
+// mix interpolates every page token, as the live page's transition would
+const mix=q.has('mix')?+q.get('mix'):null,theme=mix===null?(q.get('theme')||'snes'):(mix<.5?'snes':'gameboy'),state=q.get('state')||'home';
+for(const [k,v] of Object.entries(LOOK.snes))document.documentElement.style.setProperty('--'+k,mix===null?LOOK[theme][k]:mixc(v,LOOK.gameboy[k],mix));
+if(q.get('hero'))document.querySelectorAll('#specs,footer').forEach(e=>e.remove());
+// model: the live 3D view in the standby pose; mixes cross-fade
+const models=document.getElementById('models'),img=(src,o=1)=>{const i=new Image();i.src=src;i.style.opacity=o;models.append(i);};
+if(mix!==null){img(A+'hero-snes.png',1-mix);img(A+'hero-gameboy.png',mix);}else img(A+(state==='frames'?'hero-snes-talavera.png':`hero-${theme}.png`));
+if(state==='frames'){const t=document.createElement('span');t.className='chip preview-tag';t.textContent='Previewing Talavera · not applied yet';document.querySelector('.hero').append(t);}
+const names={snes:'SNES',gameboy:'Game Boy'};
+const opt=(cls,on,inner)=>`<button class="opt ${cls}${on?' on':''}">${inner}</button>`;
+const group=(label,val,body,extra='')=>`<div class="grp"><div class="row"><span class="mono muted">${label}</span>${extra||`<span class="val">${val}</span>`}</div>${body}</div>`;
+const rail=document.getElementById('rail');
+if(state!=='frames'){
+  const sizes=[['flan36',36],['flan42',42],['flan46',46],['flan54',54]].map(([v,n],i)=>opt('size',!i,`<img src="${A}size-${theme}-${v}.png" alt=""><b>${n}</b>`)).join('');
+  const sw=THEMES.map(([id,name,a,b,c])=>`<i class="${id===theme?'on':''}" title="${name}" style="--a:${a};--b:${b};--c:${c}"></i>`).join('');
+  const cases=[['rim','Color rim'],['solid','Solid'],['terrace','Terrace'],['level','Level']].map(([v,n],i)=>opt('case',!i,`<img src="${A}case-${theme}-${v}.png" alt=""><span>${n}</span>`)).join('');
+  const keys=[['original','Original'],['normal','Sculpted'],['saddle','Saddle']].map(([v,n],i)=>opt('keys',!i,`<img src="${A}keys-${theme}-${v}.png" alt=""><span>${n}</span>`)).join('');
+  const frames=Object.keys(FRAMES).map(id=>opt('frame',id===theme,`<img src="${A}frame-${theme}-${id}.png" alt="" title="${FRAMES[id].label}">`)).join('');
+  rail.innerHTML=group('Size','Flan36 <i>· 3 × 5 + 3</i>',`<div class="opts">${sizes}</div>`)
+    +group('Theme',`${names[theme]} <i>· 28</i>`,`<div class="sw">${sw}</div>`)
+    +group('Case','Color rim',`<div class="opts">${cases}</div>`)
+    +group('Keycaps','Original <i>· KLP Lamé</i>',`<div class="opts">${keys}</div>`)
+    +group('Frame','',`<div class="opts frames">${frames}</div>`,`<span class="link">${names[theme]} · Browse 6 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></span>`)
+    +`<div class="cta">Open this build in 3D <span aria-hidden="true">→</span></div>`;
+}else{
+  const shape={talavera:'Four teardrop petals in quadrants around a concave star.',gameboy:'Pocket-console bezel, cross pad and two buttons.',snes:'Console face with a cross pad and four round buttons.',phone:'Faceplate with a full keypad and call key.',ipod:'A complete click wheel and a continuous screen border.',hanafuda:'Lacquer-card landscape: sun, mountain, snowcap and foothills.'};
+  const roles=[['Body','#d1d0c9'],['Detail','#464751'],['Accent','#746198'],['Secondary','#aca0c2']],pal=roles.map(([k,c])=>`<span><i style="background:${c}"></i>${k}</span>`).join('');
+  const grid=Object.keys(FRAMES).map(id=>`<button class="opt${id==='talavera'?' hover':''}"><img src="${A}frame-${theme}-${id}.png" alt=""><span>${FRAMES[id].label}</span>${id==='snes'?'<span class="cur">Current</span>':''}</button>`).join('');
+  rail.className+=' fb';
+  rail.innerHTML=`<div class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 6-6 6 6 6"/></svg>Frames <span class="muted" style="font-weight:400;font-size:13px">· 6 magnetic designs</span></div>
+    <div class="seg"><b class="on">Both halves</b><b>Left</b><b>Right</b></div>
+    <div class="focus"><img src="${A}frame-${theme}-talavera.png" alt=""><div><h3 class="serif">Talavera</h3><p>${shape.talavera}</p><span class="mono muted" style="font-size:10.5px">Colors from SNES</span><div class="pal" style="margin-top:7px">${pal}</div><span class="link" style="margin-top:12px">Use Talavera’s own palette</span></div></div>
+    <div class="fgrid">${grid}</div>
+    <div class="actions"><div class="cta">Apply Talavera</div><div class="ghost">Cancel</div></div>
+    <div class="caption" style="margin-top:-6px">Hover a frame to preview it on the model</div>`;
+}
+</script>
+</body></html>
