@@ -1,0 +1,456 @@
+{
+  "schema": "flan-variant-pcb-1",
+  "variant": "flan46",
+  "source": "hardware/revI (routed, signed Flan36)",
+  "kicad_version": "10.0.6",
+  "routed": true,
+  "physical_acceptance": false,
+  "fasteners": {
+    "kept": [
+      "H1",
+      "H2",
+      "H3",
+      "H4",
+      "H5"
+    ],
+    "added": [
+      "H7"
+    ],
+    "rule": "edge points left of the bay within max(Flan36's worst key-side distance, the distance at the Flan36 edge point they extend) of a fastener; smallest set of revI holes moved a column outward, a row up or both",
+    "flan36_worst_key_side_mm": 41.65,
+    "worst_excess_without_added_mm": 8.25
+  },
+  "halves": {
+    "left": {
+      "signature_items": 19,
+      "outline_segments": 412,
+      "GND3_tracks": 5,
+      "model_paths_shared": 59,
+      "outline_segments_added": 412,
+      "row4_pin": "D15",
+      "released_pin": "GND3",
+      "added_footprints": {
+        "K41": {
+          "from": "K01",
+          "at": [
+            30.0,
+            12.0
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "D41": {
+          "from": "D01",
+          "at": [
+            30.0,
+            15.1
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K42": {
+          "from": "K02",
+          "at": [
+            48.0,
+            0.0
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "D42": {
+          "from": "D02",
+          "at": [
+            48.0,
+            3.1
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K43": {
+          "from": "K03",
+          "at": [
+            66.0,
+            -5.0
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "D43": {
+          "from": "D03",
+          "at": [
+            66.0,
+            -1.9
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K44": {
+          "from": "K04",
+          "at": [
+            84.0,
+            0.0
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "D44": {
+          "from": "D04",
+          "at": [
+            84.0,
+            3.1
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K45": {
+          "from": "K05",
+          "at": [
+            102.0,
+            2.0
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "D45": {
+          "from": "D05",
+          "at": [
+            102.0,
+            5.1
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "H7": {
+          "from": "H2",
+          "at": [
+            57.0,
+            3.5
+          ],
+          "angle": 0.0
+        }
+      },
+      "source_pcb_sha256": "45f04ff8676ad319f62897029d1438bd8f839e68ee3b0c43bf69c2d3b13920bd",
+      "source_schematic_sha256": "9f992431dca90841329fb1d6099e1d8ca5f35487671626ae05d74da12859e08b",
+      "pcb_sha256": "1950eb0fb99293dfbfaf2ecefe07a400de1961ecc5d63ae9aa0d71a56b1d4a54",
+      "schematic_sha256": "ff7633c4672409a60178ea76602015f7fc64abfb43d4b11a0b586489a183aca6",
+      "components": 51,
+      "tracks_and_vias_kept": 558,
+      "routing": {
+        "items_copied": {
+          "/K41_A": 9,
+          "/K42_A": 9,
+          "/K43_A": 7,
+          "/K44_A": 9,
+          "/K45_A": 8
+        },
+        "links_routed": 15,
+        "straightened": {
+          "/COL1 F.Cu": [
+            25,
+            2,
+            7.4
+          ],
+          "/COL1 B.Cu": [
+            6,
+            2,
+            11.09
+          ],
+          "/COL2 F.Cu": [
+            2,
+            1,
+            4.12
+          ],
+          "/COL2 B.Cu": [
+            30,
+            6,
+            15.4
+          ],
+          "/COL3 F.Cu": [
+            1,
+            1,
+            2.6
+          ],
+          "/COL3 B.Cu": [
+            30,
+            3,
+            16.19
+          ],
+          "/COL4 B.Cu": [
+            30,
+            5,
+            18.8
+          ],
+          "/COL5 B.Cu": [
+            22,
+            3,
+            19.15
+          ],
+          "/ROW4 F.Cu": [
+            325,
+            18,
+            87.34
+          ],
+          "/ROW4 B.Cu": [
+            151,
+            33,
+            100.79
+          ]
+        },
+        "vias_added": 18,
+        "drc": {
+          "violations": 0,
+          "unconnected_items": 0,
+          "schematic_parity": 0
+        },
+        "routed_pcb_sha256": "84dbb68700fb789e53b799b25c6e6d04ed25b9250ae3f8999f3db138482e6f78"
+      }
+    },
+    "right": {
+      "signature_items": 19,
+      "outline_segments": 412,
+      "model_paths_shared": 59,
+      "outline_segments_added": 412,
+      "row4_pin": "D6",
+      "added_footprints": {
+        "K45": {
+          "from": "K05",
+          "at": [
+            58.0,
+            2.0
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "D45": {
+          "from": "D05",
+          "at": [
+            58.0,
+            5.1
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K44": {
+          "from": "K04",
+          "at": [
+            76.0,
+            0.0
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "D44": {
+          "from": "D04",
+          "at": [
+            76.0,
+            3.1
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K43": {
+          "from": "K03",
+          "at": [
+            94.0,
+            -5.0
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "D43": {
+          "from": "D03",
+          "at": [
+            94.0,
+            -1.9
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K42": {
+          "from": "K02",
+          "at": [
+            112.0,
+            0.0
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "D42": {
+          "from": "D02",
+          "at": [
+            112.0,
+            3.1
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K41": {
+          "from": "K01",
+          "at": [
+            130.0,
+            12.0
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "D41": {
+          "from": "D01",
+          "at": [
+            130.0,
+            15.1
+          ],
+          "angle": 0.0,
+          "offset_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "H7": {
+          "from": "H2",
+          "at": [
+            103.0,
+            3.5
+          ],
+          "angle": 0.0
+        }
+      },
+      "source_pcb_sha256": "3dbbf5ecd73c8b12bb2e5297fe49b10de2cb7d6ff89be892f6882488f6319211",
+      "source_schematic_sha256": "17522642e1a1fd42eedd57e41d69bcaca3db6c4704ad92ece880b47c5cff8853",
+      "pcb_sha256": "cfa8433286628ab28a416619deb779db089fbdf62d474ce30896a6deb0f16930",
+      "schematic_sha256": "b90f82ba20836cb83f1304c0a7ad503e8b2c7b83866f06d9d1efdff0e5096099",
+      "components": 51,
+      "tracks_and_vias_kept": 564,
+      "routing": {
+        "items_copied": {
+          "/K41_A": 7,
+          "/K42_A": 11,
+          "/K43_A": 8,
+          "/K44_A": 10,
+          "/K45_A": 7
+        },
+        "links_routed": 15,
+        "straightened": {
+          "/COL1 F.Cu": [
+            1,
+            1,
+            2.6
+          ],
+          "/COL1 B.Cu": [
+            30,
+            6,
+            17.38
+          ],
+          "/COL2 F.Cu": [
+            22,
+            3,
+            6.52
+          ],
+          "/COL2 B.Cu": [
+            6,
+            2,
+            13.06
+          ],
+          "/COL3 B.Cu": [
+            30,
+            6,
+            19.35
+          ],
+          "/COL4 F.Cu": [
+            22,
+            1,
+            5.8
+          ],
+          "/COL4 B.Cu": [
+            6,
+            2,
+            13.06
+          ],
+          "/COL5 F.Cu": [
+            1,
+            1,
+            2.6
+          ],
+          "/COL5 B.Cu": [
+            30,
+            5,
+            16.26
+          ],
+          "/ROW4 F.Cu": [
+            202,
+            15,
+            93.6
+          ],
+          "/ROW4 B.Cu": [
+            127,
+            25,
+            84.31
+          ]
+        },
+        "vias_added": 17,
+        "drc": {
+          "violations": 0,
+          "unconnected_items": 0,
+          "schematic_parity": 0
+        },
+        "routed_pcb_sha256": "38d4d13c8a2a9621dd796179b5d38ea03fb1eeeac5004d002a6422ea8b684232"
+      }
+    }
+  }
+}

@@ -80,14 +80,16 @@ def variant_geometry(board, old, side, profile, revi_outline, keys):
     for ref, value in base.items():
         assert new.pop(ref) == value, ("Component/pad/pose/model mutation", side, ref)
     templates = {h["id"]: (h["from"], [int(round(v * 1e6)) for v in h["xy"]]) for h in profile["added_mounts"]}
+    from build_variant_pcb import template   # outer column copies column 1, number row the top row
     for ref in [r for r in new if r[0] in "KD"]:
-        tmpl = ref[0] + ref[1] + "1"
-        templates[ref] = (tmpl, None)
+        tr, tc = template(ref)
+        templates[ref] = (f"{ref[0]}{tr}{tc}", None)
     assert sorted(templates) == sorted(new), (side, sorted(new))
     for ref, (tmpl, xy) in templates.items():
         a, b = new[ref], base[tmpl]
         if xy is None:   # keys and diodes move with their key: the variant key offset
-            key = base["K" + ref[1] + "1"]["xy"]; centre = keys["K" + ref[1] + "0"]
+            tr, tc = template(ref)
+            key = base[f"K{tr}{tc}"]["xy"]; centre = keys["K" + ref[1:]]
             xy = [b["xy"][0] + int(round(centre["x"] * 1e6)) - key[0], b["xy"][1] + int(round(centre["y"] * 1e6)) - key[1]]
         dx, dy = xy[0] - b["xy"][0], xy[1] - b["xy"][1]
         assert a["xy"] == xy, (side, ref)
@@ -105,6 +107,7 @@ def verify(directory, output, cli, variant="flan36"):
     family = variant != "flan36"
     result = {"schema": "flan36-routed-pcb-1", "baseline": BASELINE,
               "kicad_version": p.GetBuildVersion(), "physical_acceptance": False, "halves": {}}
+    pinmap_variants = json.loads((ROOT / "design/pinmap.json").read_text()).get("variants", {})
     pinmap = json.loads((ROOT / "design/pinmap.json").read_text())["halves"]
     layout = json.loads((ROOT / "design/layout.json").read_text())["halves"]
     if family:
@@ -151,6 +154,11 @@ def verify(directory, output, cli, variant="flan36"):
         pins = {"D0": "DISP_SCK", "D1": "DISP_MOSI", "D14": "DISP_CS", "RAW": "BAT_SW", "VCC": "VCC", "RST": "RESET"}
         pins.update({f"D{x}": f"ROW{i}" for i, x in enumerate(pinmap[side]["rows"])})
         pins.update({f"D{x}": f"COL{i}" for i, x in enumerate(pinmap[side]["cols"])})
+        if family and variant in pinmap_variants:   # the number row's ROW4 pin, and GND3 released on the left
+            from build_variant_pcb import RELEASE
+            pins[f'D{pinmap_variants[variant][side]["row4"]}'] = "ROW4"
+            if side in RELEASE:
+                assert expected["U1", RELEASE[side]].startswith("unconnected-"), (side, RELEASE[side])
         for pad, net in pins.items(): assert expected["U1", pad] == "/"+net
         for i, net in enumerate(("DISP_MOSI", "DISP_SCK", "VCC", "GND", "DISP_CS"), 1):
             assert expected["J2", str(i)] == "/"+net

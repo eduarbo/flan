@@ -44,5 +44,24 @@
         16
       ]
     }
+  },
+  "variants": {
+    "flan46": {
+      "left": {
+        "row4": 15
+      },
+      "right": {
+        "row4": 6
+      }
+    },
+    "flan54": {
+      "left": {
+        "row4": 15
+      },
+      "right": {
+        "row4": 6
+      }
+    },
+    "row4_choice": "The number row is matrix row 4 on one free GPIO per half; revI's pins are unchanged. Every free pin was routed on Flan46 (build_variant_pcb.py --row4, route_variant_keys.py): the lowest pin gives the shortest ROW4. Left: D15 188.09 mm, D18 190.60, D19 193.23, D20 195.73, D21 198.22 (15 vias each). Right: D6 178.58 mm, D5 180.41, D4 183.69, D3 185.52, D2 188.69 (13 vias each). On the left the number-row boards leave U1 GND3 unconnected on the PCB so ROW4 fits the RAW-side channel (tools/build_variant_pcb.py)."
   }
 }

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Reject wrong duplicate pads and broken routes in disposable PCB copies.
 
---variant flan42 runs the same mutations on hardware/flan42 (an added key's pad) plus a
-0.1 mm move of K00, which the variant geometry check must reject.
+--variant flan42 (or flan46, flan54) runs the same mutations on hardware/<variant> (on the
+variant's first added key) plus a 0.1 mm move of that key, which the variant geometry check
+must reject.
 Run with KiCad Python. SPDX-License-Identifier: GPL-3.0-or-later
 """
 import argparse
@@ -18,7 +19,9 @@ CLI='/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli'
 
 
 def test(variant='flan36'):
-    family=variant!='flan36'; key='K00' if family else 'K01'
+    family=variant!='flan36'
+    key=json.loads((ROOT/'design/variants.json').read_text())['variants'][variant]['added_per_half'][0] if family else 'K01'
+    wrong='/COL3' if key[2]=='2' else '/COL2'   # a column the key is not on
     root=ROOT/('build/routing-negative-'+variant if family else 'build/routing-negative'); root.mkdir(parents=True,exist_ok=True)
     receipt=ROOT/(f'validation/{variant}-routing.json' if family else 'validation/revI-routing.json'); before=receipt.read_bytes(); cases=[]
     for kind in ('one-duplicate-pad','disconnected-row')+(('moved-added-key',) if family else ()):
@@ -33,7 +36,7 @@ def test(variant='flan36'):
         elif kind=='one-duplicate-pad':
             fp=next(f for f in board.GetFootprints() if f.GetReference()==key)
             pads=[q for q in fp.Pads() if q.GetNumber()=='1']; assert len(pads)>1
-            net=next(n for n in board.GetNetsByNetcode().values() if n.GetNetname()=='/COL2')
+            net=next(n for n in board.GetNetsByNetcode().values() if n.GetNetname()==wrong)
             pads[0].SetNet(net)
         else:
             tracks=[t for t in board.GetTracks() if t.GetNetname()=='/ROW0']; assert tracks
