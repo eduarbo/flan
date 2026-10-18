@@ -1,6 +1,6 @@
 {
   "schema": "flan36-readme-images-1",
-  "viewer_sha256": "0fd8a433bdd88a4208b28afec395c22884dc9398ca3f65766b9317aace1f9696",
+  "viewer_sha256": "3e60a5941f61457eb83be26b1035f1a035de91cccefd6c2744baea41e099445d",
   "capture_sha256": "a38901d6e78150ae02f0cd257042e88fae491a3ceab204c852dffd46ce940926",
   "note": "Rendered from docs/offline.html with SwiftShader; supersedes the case and assembled image hashes in earlier delivery receipts.",
   "images": {

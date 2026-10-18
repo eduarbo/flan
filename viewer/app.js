@@ -411,6 +411,8 @@ function applyConfiguration(next,{record=true,persist=true}={}){
   catch(error){commit(old);configuration=previous;sync();throw error;}
   if(record)history.record(next,gesture);syncHistory();
   if(persist){message('Saving changes…');store.save(configuration);}
+  // A design that names a variant not loaded yet (a loaded file, undo, a link) shows it once it arrives.
+  if(shownVariant(next)!==next.variant&&builtVariant(next.variant))loadVariant(next.variant).then(()=>{if(configuration.variant===next.variant){applyConfiguration(copy(configuration),{record:false,persist:false});fit();}}).catch(e=>message(e.message,true));
 }
 function syncHistory(){$('undo').disabled=!history.canUndo;$('redo').disabled=!history.canRedo;}
 function travelHistory(direction){keycapColors?.cancelPending();gesture=null;const next=direction==='undo'?history.peekUndo():history.peekRedo();if(!next)return;try{applyConfiguration(next,{record:false});history[direction]();syncHistory();}catch(e){message(e.message,true);}}
@@ -692,9 +694,7 @@ function refreshRecovery(){
 window.addEventListener('storage',e=>{if(e.key===savedKey)message('Another tab changed the saved design. Your current view stays here; use Files to load or keep a separate copy.',true);});
 appearance=createAppearance({$,get:()=>configuration,apply:applyConfiguration,targets:kind=>kind==='case'?caseTargets():frameTargets(),preview,frameFinish,material,resize,catalog,geometryFor});
 keycapColors=createKeycapColors({$,catalog,get:()=>configuration,apply:applyConfiguration,message,storageNotice:(text,error)=>storageNotice(text,error,'palettes')});
-const startVariant=configuration.variant;
 applyConfiguration(configuration,{record:false,persist:false});
-if(startVariant!==baseVariant&&builtVariant(startVariant))loadVariant(startVariant).then(()=>{applyConfiguration(copy(configuration),{record:false,persist:false});fit();}).catch(e=>message(e.message,true));
 if(storageMessage)storageNotice(storageMessage,true,'configuration');else if(restored)message('Restored your saved configuration.');else message('Changes save on this device.');
 if(keycapColors.initialWarning)storageNotice(keycapColors.initialWarning,true,'palettes');
 
