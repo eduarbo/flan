@@ -38,13 +38,13 @@ for(const old of retired){
 const py=require('child_process').spawnSync('python3',['-c',"import sys,json;sys.path.insert(0,'tools');from keycap_config import check,normalize;xs=json.load(sys.stdin);assert all(not check(x)[0] for x in xs);print(json.dumps([normalize(x) for x in xs]))"],{cwd:root,input:JSON.stringify(fixtures.map(f=>f.expected)),encoding:'utf8',maxBuffer:5e6});
 assert.equal(py.status,0,py.stderr);assert.deepEqual(JSON.parse(py.stdout),fixtures.map(f=>f.expected));
 for(const preset of Object.values(scene.presets))for(const frame of Object.values(preset.frames))assert(styles.includes(frame.style));
-const report={styles,viewer_sha256:sha(fs.readFileSync(path.join(root,'docs/offline.html'))),native_3mf:materials,checks:{},runtime_errors:[]};
+const report={styles,viewer_sha256:sha(fs.readFileSync(path.join(root,'docs/explore/offline.html'))),native_3mf:materials,checks:{},runtime_errors:[]};
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
 (async()=>{
  const browser=await chromium.launch({headless:true,executablePath:process.env.FLAN36_BROWSER});
  try{
   const ctx=await browser.newContext({viewport:{width:1440,height:960}}),p=await ctx.newPage();p.on('pageerror',e=>report.runtime_errors.push(e.message));
-  const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/offline.html');
+  const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/explore/offline.html');
   const open=async(page)=>{if(page!==p)page.on('pageerror',e=>report.runtime_errors.push(e.message));await page.goto(url+(url.includes('?')?'&':'?')+'diagnostics');await page.waitForFunction(()=>window.flan36,null,{timeout:120000});};
   const snap=()=>p.evaluate(()=>window.flan36.snapshot()),idle=()=>p.evaluate(()=>window.flan36.idle());
   const panel=async(page,mode)=>{if(await page.locator('body').getAttribute('data-panel-open')!=='true'||await page.locator('body').getAttribute('data-mode')!==mode||await page.locator('body').getAttribute('data-detail')==='true')await page.click('#nav-'+mode);};

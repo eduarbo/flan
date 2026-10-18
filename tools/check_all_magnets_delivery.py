@@ -33,8 +33,8 @@ assert len([p for p in scene['parts'] if ' · Captive frame magnet ' in p['name'
 assert len([p for p in scene['parts'] if ' · Captive base magnet ' in p['name']]) == 6
 for entry in scene['sources']: assert sha(entry['path']) == entry['sha256'], entry['path']
 viewer = read('validation/revI-viewer.json')
-assert sha('docs/index.html') == viewer['viewer_sha256']
-assert sha('docs/offline.html') == viewer['offline_sha256']
+assert sha('docs/explore/index.html') == viewer['viewer_sha256']
+assert sha('docs/explore/offline.html') == viewer['offline_sha256']
 assert sha(viewer['printing']['path']) == viewer['printing']['sha256']
 render = read('validation/revI-render.json')
 for entry in render['sources'] + render['meshes']: assert sha(entry['path']) == entry['sha256'], entry['path']

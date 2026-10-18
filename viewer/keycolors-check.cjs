@@ -7,7 +7,7 @@ const fs=require('fs'),path=require('path'),assert=require('assert/strict'),cryp
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
 const root=process.env.FLAN36_ROOT||path.resolve(__dirname,'..');
 const out=process.env.FLAN36_KEYCOLORS_OUT||path.join(root,'build/keycolors');
-const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/offline.html');
+const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/explore/offline.html');
 const clone=x=>JSON.parse(JSON.stringify(x));
 const colorMap=c=>Object.fromEntries(Object.entries(c.keycaps).map(([side,keys])=>[side,Object.fromEntries(Object.entries(keys).map(([ref,k])=>[ref,k.color]))]));
 const geometry=c=>({keycaps:Object.fromEntries(Object.entries(c.keycaps).map(([side,keys])=>[side,Object.fromEntries(Object.entries(keys).map(([ref,k])=>[ref,{variant:k.variant,rotation_deg:k.rotation_deg}]))])),frames:Object.fromEntries(Object.entries(c.frames).map(([s,f])=>[s,f.style])),cases:Object.fromEntries(Object.entries(c.cases).map(([s,v])=>[s,{style:v.style,cover:v.cover}])),batteries:c.batteries});

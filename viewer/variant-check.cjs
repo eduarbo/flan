@@ -7,7 +7,7 @@ const root=path.resolve(__dirname,'..'),shots=path.join(root,'build/variant-chec
   const browser=await chromium.launch({executablePath:process.env.FLAN36_BROWSER,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
   const ctx=await browser.newContext({viewport:{width:1400,height:900}});const page=await ctx.newPage();
   const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
-  const url='file://'+path.join(root,'docs/offline.html');await page.goto(url);await page.waitForSelector('#loading',{state:'hidden',timeout:400000});
+  const url='file://'+path.join(root,'docs/explore/offline.html');await page.goto(url);await page.waitForSelector('#loading',{state:'hidden',timeout:400000});
   const state=()=>page.evaluate(()=>({size:document.getElementById('size-current').textContent,status:document.getElementById('status').textContent,
     pressed:[...document.querySelectorAll('#size-grid [aria-pressed=true]')].map(b=>b.dataset.variant),
     links:[...document.querySelectorAll('#pcb-downloads a')].map(a=>a.href.split('/main/')[1]),note:document.getElementById('size-note').textContent}));

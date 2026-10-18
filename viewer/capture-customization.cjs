@@ -8,7 +8,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/keycolors');
  const browser=await chromium.launch({headless:true,...(process.env.FLAN36_BROWSER?{executablePath:process.env.FLAN36_BROWSER}:{})});
  try{
   const page=await browser.newPage({viewport:{width:1440,height:960}});
-  await page.goto(process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/index.html'));
+  await page.goto(process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/explore/index.html'));
   await page.waitForSelector('[data-cap-key]',{state:'attached'});
   await page.click('#part-lid');await page.click('[data-style=cartridge]');await page.click('#theme-colors');
   await page.click('#part-keycaps');await page.click('[data-cap-palette=flan]');await page.mouse.move(10,20);

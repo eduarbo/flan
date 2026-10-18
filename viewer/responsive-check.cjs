@@ -5,7 +5,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {pathToFileURL}=require('node:url'),pw=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(__dirname,'..'),engine=process.env.FLAN36_ENGINE||'chromium';
 const out=path.join(root,'build/canvas-review');fs.mkdirSync(out,{recursive:true});
-const target=process.env.FLAN36_VIEWER_URL||pathToFileURL(path.join(root,'docs/offline.html')).href;
+const target=process.env.FLAN36_VIEWER_URL||pathToFileURL(path.join(root,'docs/explore/offline.html')).href;
 const result={engine,target:target.startsWith('file:')?'offline':target,checks:[],errors:[],physical_phone_tested:false};
 const settle=async p=>{await p.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>requestAnimationFrame(r)))));await p.waitForTimeout(100);};
 const snapshot=p=>p.evaluate(()=>window.flan36.snapshot());

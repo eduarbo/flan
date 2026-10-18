@@ -6,7 +6,7 @@ const {pathToFileURL}=require('node:url');
 const root=path.resolve(__dirname,'..'),out=path.join(root,'build/general-review');
 fs.mkdirSync(out,{recursive:true});
 const hash=x=>crypto.createHash('sha256').update(x).digest('hex');
-const html=fs.readFileSync(path.join(root,'docs/index.html'));
+const html=fs.readFileSync(path.join(root,'docs/explore/index.html'));
 const catalog=JSON.parse(fs.readFileSync(path.join(root,'keycaps/catalog.json')));
 require(path.join(root,'viewer/node_modules/esbuild')).buildSync({stdin:{contents:"export {check,normalize} from './config.js';",resolveDir:path.join(root,'viewer')},bundle:true,platform:'node',format:'cjs',outfile:path.join(out,'config.cjs')});
 const {check,normalize}=require(path.join(out,'config.cjs'));
@@ -17,7 +17,7 @@ const legacy=clone(base);delete legacy.cases;
 report.observations.legacy_without_cases={errors:check(legacy,catalog).errors,result:normalize(legacy,catalog).cases};
 const bad=clone(base);bad.frames.right.style='constructor';bad.cases.left.base_color='#ff0000';bad.cases.left.match_frame=false;
 report.observations.prototype_style={errors:check(bad,catalog).errors};
-const target=pathToFileURL(path.join(root,'docs/index.html')).href;
+const target=pathToFileURL(path.join(root,'docs/explore/index.html')).href;
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
 (async()=>{
  const browser=await chromium.launch({headless:true,...(process.env.FLAN36_BROWSER?{executablePath:process.env.FLAN36_BROWSER}:{})});

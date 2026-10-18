@@ -57,9 +57,9 @@ for side in ['left','right']:
         assert item['actual_kicad_export_reimported'] and item['native_placement_difference_mm3']<.001
 viewer=read('validation/revI-viewer.json')
 for item in viewer['sources']:bound(item['path'],item['sha256'])
-bound('docs/index.html',viewer['viewer_sha256']);bound('docs/offline.html',viewer['offline_sha256']);bound(viewer['printing']['path'],viewer['printing']['sha256'])
+bound('docs/explore/index.html',viewer['viewer_sha256']);bound('docs/explore/offline.html',viewer['offline_sha256']);bound(viewer['printing']['path'],viewer['printing']['sha256'])
 browser=read('build/frame-collection/acceptance/result.json');assert browser['passed'] and not browser['runtime_errors']
-bound('docs/offline.html',browser['viewer_sha256'])
+bound('docs/explore/offline.html',browser['viewer_sha256'])
 printing=read('validation/revI-approved-frames-3mf.json');assert printing['passed'] and len(printing['registered_assemblies'])==22
 bound('tools/check_approved_3mf.py',printing['checker_sha256'])
 for item in printing['registered_assemblies']:bound('build/frame-collection/acceptance/'+item['id']+'.3mf',item['sha256'])

@@ -12,7 +12,7 @@ import vtk
 from vtk.util.numpy_support import vtk_to_numpy
 
 ROOT=Path(__file__).resolve().parents[1]
-html=(ROOT/'docs/index.html').read_bytes()
+html=(ROOT/'docs/explore/index.html').read_bytes()
 receipt=json.loads((ROOT/'validation/revE-viewer.json').read_text())
 assert hashlib.sha256(html).hexdigest()==receipt['viewer_sha256']
 for source in receipt['sources']:

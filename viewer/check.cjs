@@ -9,7 +9,7 @@ const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(__dirname,'..');
 fs.mkdirSync(path.join(root,'build/case-variants'),{recursive:true});
 const hash=buffer=>crypto.createHash('sha256').update(buffer).digest('hex');
-const html=fs.readFileSync(path.join(root,'docs/offline.html'),'utf8');
+const html=fs.readFileSync(path.join(root,'docs/explore/offline.html'),'utf8');
 const scene=JSON.parse(require('node:zlib').gunzipSync(Buffer.from(html.match(/<script id="scene-data" type="application\/octet-stream">([\s\S]*?)<\/script>/)[1],'base64')));
 for(const [alias,id] of Object.entries(scene.geometryAliases||{}))scene.geometries[alias]=scene.geometries[id];
 const frameStyles=['talavera','gameboy','snes','phone','ipod','hanafuda'];
@@ -18,7 +18,7 @@ const palettes=JSON.parse(fs.readFileSync(path.join(root,'design/frame-finishes.
 const expectedCount=scene.parts.filter(p=>!p.variants).length;   // a family variant's added keys and fasteners start hidden on Flan36
 const coverCount=side=>scene.parts.filter(p=>!p.variants&&p.side===side&&p.group==='lid').length;
 for(const side of ['left','right'])assert.equal(scene.parts.filter(p=>p.part_id===`${side}-display-socket`&&p.group==='connectors').length,1,'Retained J2 socket must be explicit');
-const target=process.env.FLAN36_VIEWER_URL||pathToFileURL(path.join(root,'docs/offline.html')).href;
+const target=process.env.FLAN36_VIEWER_URL||pathToFileURL(path.join(root,'docs/explore/offline.html')).href;
 const offline=target.startsWith('file:');
 // WebGL-only captures: floating stage controls and the drawer keep their layout and hover/focus, but not their pixels.
 const bare='.stage > :not(canvas),#workspace{opacity:0!important}';

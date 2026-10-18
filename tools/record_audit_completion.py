@@ -103,7 +103,7 @@ def validate_presentation(native, selected):
 
 def run():
     native = sha('mechanical/revI/Flan36.FCStd')
-    online, offline = sha('docs/index.html'), sha('docs/offline.html')
+    online, offline = sha('docs/explore/index.html'), sha('docs/explore/offline.html')
     evidence = {}
     for kind in ['parameters', 'delivery']:
         path = f'validation/revI-audit-{kind}.json'

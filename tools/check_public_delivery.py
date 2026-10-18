@@ -26,11 +26,11 @@ with zipfile.ZipFile(path) as archive:
         assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==digest,name
 print('Anonymous archive verified:',len(expected),'files',flush=True)
 pageurl='https://eduarbo.github.io/flan/'
-html=urllib.request.urlopen(pageurl+'?rev='+commit,timeout=60).read()
-assert hashlib.sha1(b'blob '+str(len(html)).encode()+b'\0'+html).hexdigest()==expected['docs/index.html'],'Pages is not yet the published source revision'
+html=urllib.request.urlopen(pageurl+'explore/?rev='+commit,timeout=60).read()
+assert hashlib.sha1(b'blob '+str(len(html)).encode()+b'\0'+html).hexdigest()==expected['docs/explore/index.html'],'Pages is not yet the published source revision'
 extra={}
 viewer_receipt=json.loads(subprocess.check_output(['git','show',commit+':validation/revI-viewer.json'],cwd=ROOT))
-for name in ['docs/offline.html',viewer_receipt['printing']['path']]:
+for name in ['docs/explore/offline.html',viewer_receipt['printing']['path']]:
     raw=urllib.request.urlopen(pageurl+name.removeprefix('docs/')+'?rev='+commit,timeout=60).read()
     assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==expected[name],name
     extra[name]=hashlib.sha256(raw).hexdigest()

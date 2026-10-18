@@ -3,9 +3,10 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 
-import {retiredFrames,retiredReplacementNames,copy,check,normalize} from './config.js';
+import {retiredFrames,retiredReplacementNames,copy,check,normalize,variantIds} from './config.js';
 import {printKit} from './printing.js';
-import {createAppearance,setColor,savedKey} from './appearance.js';
+import {createAppearance,setColor,savedKey,applyTheme} from './appearance.js';
+import themeLibrary from '../design/themes.json';
 import {restoreConfiguration,createStore,recoveryPrefix} from './storage.js';
 import {createHistory} from './history.js';
 import {decodeBytes,unpack,unpackVariant,printLoader} from './assets.js';
@@ -697,6 +698,35 @@ keycapColors=createKeycapColors({$,catalog,get:()=>configuration,apply:applyConf
 applyConfiguration(configuration,{record:false,persist:false});
 if(storageMessage)storageNotice(storageMessage,true,'configuration');else if(restored)message('Restored your saved configuration.');else message('Changes save on this device.');
 if(keycapColors.initialWarning)storageNotice(keycapColors.initialWarning,true,'palettes');
+// A look from the home page opens as a new design: ?size=&theme=&case=&keys=&frame=left[,right]&palette=frame|theme[,…].
+// Undo returns to the saved design; the parameters then leave the address so a reload keeps later edits.
+const LOOK_KEYS=['size','theme','case','keys','frame','palette'],lookQuery=new URLSearchParams(location.search);
+function lookConfiguration(q){
+  let c=normalize(catalog.default_configuration,catalog);const sides=['left','right'];
+  const size=q.get('size')||c.variant;if(!variantIds.includes(size))throw Error(`Unknown size “${size}”.`);c.variant=size;
+  const preset={original:'default',normal:'normal-sculpted',saddle:'saddle-sculpted'}[q.get('keys')||'original'];if(!preset)throw Error(`Unknown keycaps “${q.get('keys')}”.`);
+  const style=q.get('case')||'rim';if(!catalog.case_styles[style])throw Error(`Unknown case “${style}”.`);
+  const theme=themeLibrary.themes.find(t=>t.id===(q.get('theme')||'snes'));if(!theme)throw Error(`Unknown theme “${q.get('theme')}”.`);
+  const frames=(q.get('frame')||(catalog.frame_styles[theme.recommended_frame]?theme.recommended_frame:c.frames.left.style)).split(',');
+  for(const [i,side] of sides.entries()){
+    const frame=frames[i]||frames[0];if(!catalog.frame_styles[frame])throw Error(`Unknown frame “${frame}”.`);
+    for(const ref of Object.keys(c.keycaps[side]))c.keycaps[side][ref]={...data.presets[preset].keycaps[side][ref],color:c.keycaps[side][ref].color};
+    c.cases[side].style=style;c.frames[side].style=frame;
+  }
+  c=applyTheme(c,theme,sides);
+  const palette=(q.get('palette')||'').split(',');
+  for(const [i,side] of sides.entries())if((palette[i]||palette[0])==='frame'){
+    const p=framePalette(c.frames[side].style);c.cases[side].match_frame=false;c.frames[side].color=p.body.toLowerCase();
+    c.frames[side].accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,p[k].toLowerCase()]));
+  }
+  return c;
+}
+if(LOOK_KEYS.some(k=>lookQuery.has(k))){
+  try{applyConfiguration(lookConfiguration(lookQuery));message(restored?'Opened the look from the home page. Undo returns to your saved design.':'Opened the look from the home page.');}
+  catch(e){message('Could not open that link: '+e.message,true);}
+  for(const k of LOOK_KEYS)lookQuery.delete(k);
+  window.history.replaceState(null,'',location.pathname+(lookQuery.size?'?'+lookQuery:'')+location.hash);
+}
 
 
 resize();reset();showWorkspace();

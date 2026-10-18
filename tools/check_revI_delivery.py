@@ -36,9 +36,9 @@ for p in [ROOT/'README.md',ROOT/'ATTRIBUTION.md',ROOT/'CONTRIBUTING.md',*(ROOT/'
     for target in re.findall(r'\]\(([^)]+)\)',p.read_text()):
         if target.startswith(('https:','http:','#','mailto:')):continue
         assert (p.parent/target.split('#')[0]).exists(),(str(p),target)
-case_images=json.loads((ROOT/'validation/revI-cases-render.json').read_text());assert case_images['viewer_sha256']==sha('docs/index.html') and case_images['checker_sha256']==sha('viewer/check.cjs')
+case_images=json.loads((ROOT/'validation/revI-cases-render.json').read_text());assert case_images['viewer_sha256']==sha('docs/explore/index.html') and case_images['checker_sha256']==sha('viewer/check.cjs')
 for name,digest in case_images['images'].items():assert sha('docs/images/revI-case-'+name+'.png')==digest
-ui=json.loads((ROOT/'build/viewer-ui-check.json').read_text());assert ui['viewer_sha256']==sha('docs/index.html') and not ui['runtime_errors'] and ui['glb_selected_vertices_exact']
+ui=json.loads((ROOT/'build/viewer-ui-check.json').read_text());assert ui['viewer_sha256']==sha('docs/explore/index.html') and not ui['runtime_errors'] and ui['glb_selected_vertices_exact']
 finishes=json.loads((ROOT/'validation/revI-freecad-finishes.json').read_text())
 assert finishes['passed'] and finishes['source_sha256']==sha('mechanical/revI/Flan36.FCStd')
 native=json.loads((ROOT/'validation/revI-freecad.json').read_text());assert native['source_sha256']==sha('mechanical/revI/Flan36.FCStd')
@@ -90,7 +90,7 @@ for item in pcb_models['models'].values():assert item['sha256']==sha(item['path'
 for side in ['left','right']:
     assert pcb_models['models'][side+'-slider']['distinct_colors']==3 and pcb_models['models'][side+'-reset']['distinct_colors']==4
 for side,digest in pcb_models['pcb_unchanged'].items():assert digest==sha(f'hardware/revI/flan36-{side}.kicad_pcb')
-themes=json.loads((ROOT/'validation/revI-theme-customization.json').read_text());assert themes['viewer_sha256']==sha('docs/index.html') and themes['custom_case_and_four_frame_colors_in_glb'] and not themes['runtime_errors']
+themes=json.loads((ROOT/'validation/revI-theme-customization.json').read_text());assert themes['viewer_sha256']==sha('docs/explore/index.html') and themes['custom_case_and_four_frame_colors_in_glb'] and not themes['runtime_errors']
 kit=json.loads((ROOT/'validation/revI-print-kit.json').read_text());assert kit['passed'] and kit['no_manufacturing_acceptance']
 for pack in kit['kits']:assert all(p['closed'] and p['stl_bytes_identical'] and p['oriented_surface_preserved'] for p in pack['parts'])
 assert sha('docs/parts.md')==json.loads((ROOT/'validation/revI-parts-links.json').read_text())['document_sha256']

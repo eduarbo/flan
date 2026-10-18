@@ -4,9 +4,9 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(__dirname,'..'),THREE=require(path.join(root,'viewer/node_modules/three'));
 const out=process.env.FLAN36_CAP_ROWS_OUT||path.join(root,'build/cap-row-fix/browser');
-const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/offline.html');
+const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/explore/offline.html');
 const hash=b=>crypto.createHash('sha256').update(b).digest('hex'),clone=x=>JSON.parse(JSON.stringify(x));
-const html=fs.readFileSync(path.join(root,'docs/offline.html'));
+const html=fs.readFileSync(path.join(root,'docs/explore/offline.html'));
 const packed=html.toString().match(/<script id="scene-data" type="application\/octet-stream">([\s\S]*?)<\/script>/)[1];
 const scene=JSON.parse(require('node:zlib').gunzipSync(Buffer.from(packed,'base64')));
 for(const [alias,id] of Object.entries(scene.geometryAliases||{}))scene.geometries[alias]=scene.geometries[id];

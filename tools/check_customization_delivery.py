@@ -58,10 +58,10 @@ for half in mechanical['halves'].values():
  for case in half['case_variants'].values():assert case['closed_meshes'] and case['connected_solids'] and not case['component_collisions_mm3']
 colors=read('build/keycolors/acceptance.json');cad=read('build/keycolors/freecad.json')
 assert colors['keycaps']==colors['distinct_glb_colors']==36 and not colors['runtime_errors']
-assert colors['viewer_sha256']==sha('docs/index.html')
+assert colors['viewer_sha256']==sha('docs/explore/index.html')
 assert cad['passed'] and cad['source_unchanged'] and cad['source_sha256']==source and cad['native_save_reopen_roundtrip']
 ui=read('build/viewer-ui-check.json');themes=read('build/themes-print/ui.json');kits=read('build/themes-print/print-validation.json')
-for receipt in (ui,themes):assert receipt['viewer_sha256']==sha('docs/index.html') and not receipt['runtime_errors']
+for receipt in (ui,themes):assert receipt['viewer_sha256']==sha('docs/explore/index.html') and not receipt['runtime_errors']
 assert ui['ten_preview_cards'] and ui['glb_selected_vertices_exact'] and ui['small_320px_viewport']
 assert themes['global_keycap_colors'] and len(themes['new_frame_print_kits'])==4
 assert kits['passed'] and len(kits['kits'])==6
@@ -78,7 +78,7 @@ with zipfile.ZipFile(ROOT/'mechanical/studies/slim-mounts.zip') as z:
 for p in [ROOT/'README.md',*(ROOT/'docs').glob('*.md')]:
  for target in re.findall(r'\]\(([^)]+)\)',p.read_text()):
   if not target.startswith(('https:','http:','#','mailto:')):assert (p.parent/target.split('#')[0]).exists(),(p,target)
-inputs=['docs/index.html','keycaps/catalog.json','design/keycap-themes.json','design/themes.json',
+inputs=['docs/explore/index.html','keycaps/catalog.json','design/keycap-themes.json','design/themes.json',
  'viewer/keycap-colors.js','viewer/keycolors-check.cjs','viewer/customize-check.cjs','tools/check_print_kit.py',
  'tools/freecad/check_keycolors.py','tools/freecad/configuration.py','tools/package_slim_study.py',
  'validation/revI-frame-extensions.json','validation/revI-document-label.json','validation/revI-native-export.json',

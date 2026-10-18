@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<title>Flan Keyboard · low-profile wireless split</title>
+<meta name="description" content="Flan Keyboard: an open-source, low-profile wireless split keyboard in four sizes. Choc v1 hot-swap, nice!nano v2 with ZMK, magnetic display frames and 28 themes.">
+<meta name="theme-color" content="#e2dcee">
+<link rel="icon" href="branding/flan/flan-mark.svg" type="image/svg+xml">
+<meta property="og:title" content="Flan Keyboard">
+<meta property="og:description" content="An open-source, low-profile wireless split keyboard in four sizes.">
+<meta property="og:image" content="https://eduarbo.github.io/flan/assets/home-og.png">
+<meta property="og:type" content="website">
+<link rel="preload" href="assets/fonts/Fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>/*__STYLE__*/</style>
+</head>
+<body>
+<div class="hero" id="hero">
+  <div class="glow" aria-hidden="true"></div>
+  <header class="top">
+    <a class="lockup" href="./" aria-label="Flan Keyboard home"><!--__MARK__--><span class="word">flan</span><span class="kbd">keyboard</span></a>
+    <nav aria-label="Site">
+      <a class="hide-sm" href="explore/" data-t="nav.explore">Explore in 3D</a>
+      <a class="hide-sm" href="https://github.com/eduarbo/flan/blob/main/docs/build.md" data-t="nav.build">Build guide</a>
+      <a class="hide-sm" href="https://github.com/eduarbo/flan">GitHub</a>
+      <span class="lang" role="group" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="es" aria-pressed="false">ES</button></span>
+    </nav>
+  </header>
+  <div class="copy">
+    <span class="eyebrow" data-t="hero.eyebrow">Open-source wireless split</span>
+    <h1>Flan Keyboard</h1>
+    <p class="sub" data-t="hero.sub">Low-profile and split, in four sizes. Turn it, take it apart, make it yours.</p>
+  </div>
+  <section class="stage" id="stage" aria-label="3D keyboard" data-t-label="stage.label">
+    <img class="poster" id="poster" src="assets/home-poster.webp" alt="Flan36 in the SNES theme, layers apart" width="1600" height="959" data-t-alt="stage.poster">
+    <canvas id="canvas" aria-label="Drag to turn the keyboard" data-t-label="stage.canvas"></canvas>
+    <p class="note" id="note" role="status" hidden></p>
+    <div class="stagebar">
+      <span class="chip hint"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg><span data-t="stage.hint">Drag to turn · pinch to zoom</span></span>
+      <button type="button" class="chip icon" id="standby" aria-pressed="true" title="Pause the standby motion" data-t-title="stage.pause"><svg class="pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="6" width="3.2" height="12" rx="1"/><rect x="13.8" y="6" width="3.2" height="12" rx="1"/></svg><svg class="play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg></button>
+      <button type="button" class="chip icon" id="reset" title="Reset the view" data-t-title="stage.reset"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 20 7.5v9L12 21 4 16.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg></button>
+    </div>
+  </section>
+  <div class="layers" id="layers">
+    <span class="cap" data-t="layers.apart">Apart</span>
+    <svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.5 28 9l-12 5.5L4 9z"/><path d="M4 16.5 16 22l12-5.5" opacity=".7"/><path d="M4 23.5 16 29l12-5.5" opacity=".45"/></svg>
+    <div class="vtrack" id="explode" role="slider" tabindex="0" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Separate the layers" data-t-label="layers.label"><div class="vfill"></div><div class="vknob"></div></div>
+    <svg class="ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 8 28 13.5 16 19 4 13.5z"/><path d="M4 16.5 16 22l12-5.5"/><path d="M4 19.5 16 25l12-5.5"/></svg>
+    <span class="cap" data-t="layers.together">Together</span>
+  </div>
+  <aside class="rail" id="rail" aria-label="Make it yours" data-t-label="rail.label">
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="grp" data-group="size"><div class="row"><span class="lab" data-t="g.size">Size</span><span class="val" id="v-size"></span></div><div class="opts" id="o-size"></div></div>
+    <div class="grp" data-group="theme"><div class="row"><span class="lab" data-t="g.theme">Theme</span><span class="val" id="v-theme"></span></div><div class="sw" id="o-theme"></div></div>
+    <div class="grp" data-group="case"><div class="row"><span class="lab" data-t="g.case">Case</span><span class="val" id="v-case"></span></div><div class="opts" id="o-case"></div></div>
+    <div class="grp" data-group="keys"><div class="row"><span class="lab" data-t="g.keys">Keycaps</span><span class="val" id="v-keys"></span></div><div class="opts" id="o-keys"></div></div>
+    <div class="grp" data-group="frame"><div class="row"><span class="lab" data-t="g.frame">Frame</span><button type="button" class="link" id="browse"><span id="v-frame"></span> · <span data-t="frame.browse">Browse 6</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg></button></div><div class="opts frames" id="o-frame"></div></div>
+    <a class="cta" id="open" href="explore/"><span data-t="cta.open">Open this build in 3D</span> <span aria-hidden="true">→</span></a>
+  </aside>
+  <aside class="browser" id="browser" aria-label="Frames" hidden>
+    <button type="button" class="back" id="back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg><span data-t="g.frames">Frames</span> <small data-t="frame.count">· 6 magnetic designs</small></button>
+    <div class="seg" role="group" aria-label="Halves" id="sides"><button type="button" data-side="both" aria-pressed="true" data-t="side.both">Both halves</button><button type="button" data-side="left" aria-pressed="false" data-t="side.left">Left</button><button type="button" data-side="right" aria-pressed="false" data-t="side.right">Right</button></div>
+    <div class="focus"><img id="f-img" alt=""><div><h3 id="f-name"></h3><p id="f-desc"></p><span class="lab" id="f-from"></span><div class="pal" id="f-pal"></div><button type="button" class="link" id="f-own" aria-pressed="false"></button></div></div>
+    <div class="fgrid" id="f-grid"></div>
+    <div class="actions"><button type="button" class="cta" id="f-apply"></button><button type="button" class="ghost" id="f-cancel" data-t="frame.cancel">Cancel</button></div>
+    <p class="caption" data-t="frame.hover">Hover a frame to preview it on the model</p>
+  </aside>
+</div>
+<main>
+  <section class="specs" aria-labelledby="specs-title">
+    <span class="lab" data-t="specs.eyebrow">Spec sheet</span><h2 id="specs-title" data-t="specs.title">What’s under the frame</h2>
+    <div class="grid" id="specs"></div>
+  </section>
+</main>
+<footer>
+  <span class="links"><a href="https://github.com/eduarbo/flan/blob/main/docs/parts.md" data-t="f.parts">Parts</a><a href="https://github.com/eduarbo/flan/blob/main/docs/build.md" data-t="nav.build">Build guide</a><a href="https://github.com/eduarbo/flan/blob/main/docs/electronics.md#order-the-two-pcbs" data-t="f.pcbs">Order PCBs</a><a href="https://github.com/eduarbo/flan/blob/main/docs/firmware.md">Firmware</a><a href="https://github.com/eduarbo/flan">GitHub</a></span>
+  <span class="status" data-t="f.status">Digital prototype · physical tests in progress</span>
+  <a class="maker" href="https://eduarbo.com"><span data-t="f.by">by</span> <svg viewBox="160 150 880 880" aria-hidden="true"><path d="M960 377.85 960 516.41 600 724.26 600 585.69Z M600 862.82 960 654.97 960 793.54 600 1001.38Z" fill="#1E9C89"/><path d="M240 377.85 360 447.13 360 724.26 600 862.82 600 1001.38 240 793.54Z" fill="#0B554B"/><path d="M240 377.85 600 170 960 377.85 840 447.13 600 308.56 360 447.13Z" fill="#65D7C4"/></svg>eduarbo</a>
+</footer>
+<script id="home-data" type="application/json">/*__DATA__*/</script>
+<script>/*__APP__*/</script>
+</body>
+</html>

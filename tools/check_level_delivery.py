@@ -69,7 +69,7 @@ def run():
         for c in h['components'].values():
             require(c['native_placement_difference_mm3']<.001,'PCB model placement differs')
             bound_hash(c['step_path'],c['step_sha256'])
-    viewer=sha('docs/index.html')
+    viewer=sha('docs/explore/index.html')
     built=viewer_report('validation/revI-viewer.json',viewer)
     for s in built['sources']:bound_hash(s['path'],s['sha256'])
     checks={}

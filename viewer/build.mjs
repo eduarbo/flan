@@ -33,7 +33,7 @@ for(const [id,geometry] of Object.entries(scene.geometries)){
 }
 // Reuse a published asset with the same content: gzip bytes differ between zlib versions.
 function deferred(prefix,value){
- const raw=Buffer.from(JSON.stringify(value)),dir=path.join(root,'docs/assets');fs.mkdirSync(dir,{recursive:true});
+ const raw=Buffer.from(JSON.stringify(value)),dir=path.join(root,'docs/explore/assets');fs.mkdirSync(dir,{recursive:true});
  for(const f of fs.readdirSync(dir).filter(f=>f.startsWith(prefix+'-')).sort()){
   const bytes=fs.readFileSync(path.join(dir,f));
   if(bytes.readUInt32LE(bytes.length-4)===raw.length%2**32&&gunzipSync(bytes).equals(raw))return bytes;
@@ -42,10 +42,10 @@ function deferred(prefix,value){
 }
 const printBytes=deferred('printing',scene.printing);
 const printHash=crypto.createHash('sha256').update(printBytes).digest('hex');
-const assetPath=`docs/assets/printing-${printHash}.bin`;fs.writeFileSync(path.join(root,assetPath),printBytes);
+const assetPath=`docs/explore/assets/printing-${printHash}.bin`;fs.writeFileSync(path.join(root,assetPath),printBytes);
 const silkBytes=deferred('silkscreen',scene.silkscreen.textures);
 const silkHash=crypto.createHash('sha256').update(silkBytes).digest('hex');
-const silkPath=`docs/assets/silkscreen-${silkHash}.bin`;fs.writeFileSync(path.join(root,silkPath),silkBytes);
+const silkPath=`docs/explore/assets/silkscreen-${silkHash}.bin`;fs.writeFileSync(path.join(root,silkPath),silkBytes);
 // Each built Flan variant's case and PCB meshes and printable case STLs, loaded when chosen.
 const variantAssets={};
 function variantContainer(v){
@@ -59,7 +59,7 @@ function variantContainer(v){
 }
 // Reuse a published container with the same content, as deferred() does for the print kit.
 function deferredBinary(prefix,raw){
- const dir=path.join(root,'docs/assets');
+ const dir=path.join(root,'docs/explore/assets');
  for(const f of fs.readdirSync(dir).filter(f=>f.startsWith(prefix+'-')).sort()){
   const bytes=fs.readFileSync(path.join(dir,f));
   if(bytes.readUInt32LE(bytes.length-4)===raw.length%2**32&&gunzipSync(bytes).equals(raw))return bytes;
@@ -68,37 +68,46 @@ function deferredBinary(prefix,raw){
 }
 for(const [id,v] of Object.entries(scene.variants||{}))if(v.printing){
  const bytes=deferredBinary('variant-'+id,variantContainer(v));
- const hash=crypto.createHash('sha256').update(bytes).digest('hex'),file=`docs/assets/variant-${id}-${hash}.bin`;
+ const hash=crypto.createHash('sha256').update(bytes).digest('hex'),file=`docs/explore/assets/variant-${id}-${hash}.bin`;
  fs.writeFileSync(path.join(root,file),bytes);variantAssets[id]={bytes,hash,file};
 }
 const variants=Object.fromEntries(Object.entries(scene.variants||{}).map(([id,{printing,meshes,silkscreen,...rest}])=>
  [id,variantAssets[id]?{...rest,asset:{url:`./assets/variant-${id}-${variantAssets[id].hash}.bin`,sha256:variantAssets[id].hash}}:rest]));
 // Only this build's deferred assets are published; earlier ones stay in Git history.
 const current=new Set([assetPath,silkPath,...Object.values(variantAssets).map(a=>a.file)].map(p=>path.basename(p)));
-for(const f of fs.readdirSync(path.join(root,'docs/assets')))
- if(/^(printing|silkscreen|variant-[a-z0-9]+)-[0-9a-f]{64}\.bin$/.test(f)&&!current.has(f))fs.rmSync(path.join(root,'docs/assets',f));
+for(const f of fs.readdirSync(path.join(root,'docs/explore/assets')))
+ if(/^(printing|silkscreen|variant-[a-z0-9]+)-[0-9a-f]{64}\.bin$/.test(f)&&!current.has(f))fs.rmSync(path.join(root,'docs/explore/assets',f));
 const packedScene={...scene,geometries:unique,geometryAliases,printing:{url:`./assets/printing-${printHash}.bin`,sha256:printHash},
   silkscreen:{...scene.silkscreen,textures:{url:`./assets/silkscreen-${silkHash}.bin`,sha256:silkHash}},variants};
 const packed=gzipSync(Buffer.from(JSON.stringify(packedScene)),{level:9}).toString('base64');
+// the Flan mark, inline: the viewer's CSP loads no external images
+const mark=fs.readFileSync(path.join(root,'docs/branding/flan/flan-mark.svg'),'utf8').replace(/<\?xml[^>]*>|<title>[^<]*<\/title>/g,'')
+  .replace(/<svg[^>]*viewBox="([^"]+)"[^>]*>/,'<svg class="mark" viewBox="$1" aria-hidden="true" fill="currentColor">').replace(/ fill="#000"/g,'').trim();
 function page(offline){return template.replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(here,'style.css'),'utf8'))
+ .replace('<!--__MARK__-->',()=>mark)
  .replace('<!--__LICENSES__-->',()=>credits+licenses)
  .replace('/*__DATA__*/',()=>packed)
  .replace('/*__PRINT__*/',()=>offline?printBytes.toString('base64'):'')
  .replace('/*__SILK__*/',()=>offline?silkBytes.toString('base64'):'')
  .replace('/*__VARIANTS__*/',()=>JSON.stringify(offline?Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,a.bytes.toString('base64')])):{}))
+ .replace('href="../" id="nav-home"',()=>offline?'href="https://eduarbo.github.io/flan/" id="nav-home"':'href="../" id="nav-home"')
  .replace('/*__APP__*/',()=>bundle.outputFiles[0].text.replaceAll('</script','<\\/script'))
  .replaceAll('\r\n','\n');}
 const html=page(false),offlineHtml=page(true);
 new Script([...html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g)].at(-1)[1]);
-fs.writeFileSync(path.join(root,'docs/index.html'),html);
-fs.writeFileSync(path.join(root,'docs/offline.html'),offlineHtml);
+fs.writeFileSync(path.join(root,'docs/explore/index.html'),html);
+fs.writeFileSync(path.join(root,'docs/explore/offline.html'),offlineHtml);
 fs.writeFileSync(path.join(root,'docs/.nojekyll'),'');
 const sources=[...scene.sources,...['viewer/app.js','viewer/config.js','viewer/storage.js','viewer/history.js','viewer/assets.js','viewer/keycap-colors.js','viewer/color-input.js','design/keycap-themes.json','viewer/appearance.js','viewer/printing.js','design/themes.json','viewer/explorer.js','viewer/previews.js','viewer/finishes.js','design/frame-finishes.json','viewer/style.css','viewer/template.html','viewer/build.mjs','viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}))];
 const receipt={revision:scene.revision,units:'mm',objects:scene.parts.length,unique_meshes:Object.keys(scene.geometries).length,
   keycaps:scene.parts.filter(p=>p.group==='keycaps').length,geometry_changed:false,
-  sources,viewer_sha256:hash('docs/index.html'),measurements:scene.measurements,
-  offline:'docs/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.',
-  offline_sha256:hash('docs/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},variants:Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),silkscreen:{path:silkPath,sha256:silkHash,bytes:silkBytes.length,editions:scene.silkscreen.editions.map(e=>e.id)},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
+  sources,viewer_sha256:hash('docs/explore/index.html'),measurements:scene.measurements,
+  offline:'docs/explore/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/explore/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.',
+  offline_sha256:hash('docs/explore/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},variants:Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),silkscreen:{path:silkPath,sha256:silkHash,bytes:silkBytes.length,editions:scene.silkscreen.editions.map(e=>e.id)},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
   limitations:scene.limits};
 fs.writeFileSync(path.join(root,`validation/rev${scene.revision}-viewer.json`),JSON.stringify(receipt,null,2)+'\n');
 console.log(`Online viewer: ${(Buffer.byteLength(html)/1048576).toFixed(2)} MiB; ${scene.parts.length} objects.`);
+// the home page at the site root, with its own small packs from the same scene
+const {buildHome}=await import('./home-build.mjs');
+const home=await buildHome({scene});
+console.log(`Home: ${(home.page.bytes/1024).toFixed(0)} KiB page; packs ${Object.entries(home.bytes).map(([k,b])=>`${k} ${(b/1024).toFixed(0)} KiB`).join(', ')}.`);

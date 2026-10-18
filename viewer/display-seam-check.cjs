@@ -10,7 +10,7 @@ fs.mkdirSync(out,{recursive:true});
  try{
   const page=await browser.newPage({viewport:{width:1440,height:960}}),errors=[];
   page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('file://'+path.join(root,'docs/offline.html')+'?diagnostics');
+  await page.goto('file://'+path.join(root,'docs/explore/offline.html')+'?diagnostics');
   await page.waitForFunction(()=>window.flan36,null,{timeout:120000});
   await page.click('#nav-customize');await page.click('#editor-tabs [data-panel=frames]');await page.click('#frame-target [data-side=left]');
   await page.click('[data-style=talavera]');await page.click('#theme-colors');
@@ -39,7 +39,7 @@ fs.mkdirSync(out,{recursive:true});
   assert.deepEqual(state.visible.map(i=>scene[i]).filter(p=>!(p.side==='left'&&['lid','display','supports'].includes(p.group))),[],'Only the left frame, display and supports are shown');
   for(const group of ['lid','display','supports'])assert.ok(state.visible.some(i=>scene[i].group===group),group+' visible');
   assert.deepEqual(errors,[]);
-  fs.writeFileSync(path.join(out,'result.json'),JSON.stringify({viewer_sha256:sha(path.join(root,'docs/offline.html')),checker_sha256:sha(__filename),real_frame_glass_and_supports_visible:true,proposal_link_verified:true,images,errors,pixel_fit_automatically_qualified:false},null,2)+'\n');
+  fs.writeFileSync(path.join(out,'result.json'),JSON.stringify({viewer_sha256:sha(path.join(root,'docs/explore/offline.html')),checker_sha256:sha(__filename),real_frame_glass_and_supports_visible:true,proposal_link_verified:true,images,errors,pixel_fit_automatically_qualified:false},null,2)+'\n');
   console.log('PASS: actual viewer front/oblique captures and proposal navigation; visual inspection required');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

@@ -10,7 +10,7 @@ const hide='.stage > :not(canvas){visibility:hidden!important}';
 async function viewer(browser,{width,height}){
   const page=await browser.newPage({viewport:{width,height},deviceScaleFactor:1.5});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(pathToFileURL(path.join(root,'docs/offline.html')).href);
+  await page.goto(pathToFileURL(path.join(root,'docs/explore/offline.html')).href);
   await page.waitForSelector('#loading',{state:'hidden',timeout:180000});
   page.errors=errors;return page;
 }
@@ -47,8 +47,8 @@ function caseDesign(style){
   const errors=page.errors;await browser.close();
   if(errors.length)throw Error('Viewer errors: '+errors.join('; '));
   const sha=f=>require('crypto').createHash('sha256').update(fs.readFileSync(f)).digest('hex');
-  const receipt={schema:'flan36-readme-images-1',viewer_sha256:sha(path.join(root,'docs/offline.html')),capture_sha256:sha(__filename),
-    note:'Rendered from docs/offline.html with SwiftShader; supersedes the case and assembled image hashes in earlier delivery receipts.',
+  const receipt={schema:'flan36-readme-images-1',viewer_sha256:sha(path.join(root,'docs/explore/offline.html')),capture_sha256:sha(__filename),
+    note:'Rendered from docs/explore/offline.html with SwiftShader; supersedes the case and assembled image hashes in earlier delivery receipts.',
     images:Object.fromEntries(written.map(f=>[path.relative(root,f),sha(f)]))};
   fs.writeFileSync(path.join(root,'validation/revI-readme-images.json'),JSON.stringify(receipt,null,2)+'\n');
   console.log(JSON.stringify({cases,written:Object.keys(receipt.images)},null,1));

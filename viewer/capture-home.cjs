@@ -9,7 +9,7 @@ const settle=p=>p.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestA
 (async()=>{
   const b=await chromium.launch({executablePath:process.env.FLAN36_BROWSER,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
   const p=await b.newPage({viewport:{width:1600,height:1000},deviceScaleFactor:1.5});const errs=[];p.on('pageerror',e=>errs.push(e.message));
-  await p.goto('file://'+path.join(root,'docs/offline.html'));await p.waitForSelector('#loading',{state:'hidden',timeout:400000});
+  await p.goto('file://'+path.join(root,'docs/explore/offline.html'));await p.waitForSelector('#loading',{state:'hidden',timeout:400000});
   for(const id of ['flan36','flan42','flan46','flan54']){
     await p.click('.app-nav [data-mode="customize"]');await p.click('[data-panel="cases"]');await p.click(`#size-grid [data-variant="${id}"]`);
     await p.waitForFunction(id=>document.querySelector(`#size-grid [data-variant="${id}"]`).getAttribute('aria-pressed')==='true',id,{timeout:120000});

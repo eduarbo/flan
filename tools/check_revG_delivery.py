@@ -28,7 +28,7 @@ for p in [ROOT/'README.md',ROOT/'ATTRIBUTION.md',ROOT/'CONTRIBUTING.md',*(ROOT/'
     for target in re.findall(r'\]\(([^)]+)\)',p.read_text()):
         if target.startswith(('https:','http:','#','mailto:')):continue
         assert (p.parent/target.split('#')[0]).exists(),(str(p),target)
-ui=json.loads((ROOT/'build/viewer-ui-check.json').read_text());assert ui['viewer_sha256']==sha('docs/index.html') and not ui['runtime_errors'] and ui['glb_selected_vertices_exact']
+ui=json.loads((ROOT/'build/viewer-ui-check.json').read_text());assert ui['viewer_sha256']==sha('docs/explore/index.html') and not ui['runtime_errors'] and ui['glb_selected_vertices_exact']
 native=json.loads((ROOT/'validation/revG-freecad.json').read_text());assert native['source_sha256']==sha('mechanical/revG/Filo36.FCStd')
 # Native App::Link delegates FrameStyle, so the 6 bodies plus 2 active links are sampled.
 assert native['opaque_side_wall_samples']==96 and native['configuration_roundtrip']

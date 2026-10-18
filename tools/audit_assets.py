@@ -31,7 +31,7 @@ def link(url):
         return {'url': url, 'error': str(error)}
 
 
-html = (ROOT / 'docs/index.html').read_text()
+html = (ROOT / 'docs/explore/index.html').read_text()
 packed = re.search(r'<script id="scene-data" type="application/octet-stream">(.*?)</script>', html, re.S)[1]
 scene = json.loads(gzip.decompress(base64.b64decode(packed)))
 (OUT / 'runtime-catalog.json').write_text(json.dumps(scene['catalog']))
@@ -58,8 +58,8 @@ for file, key in [('components/sources.json', 'assets'), ('keycaps/variants-sour
     pinned.update({v['path']: v['sha256'] for v in json.loads((ROOT / file).read_text())[key]})
 render_stale = [v['path'] for v in render['meshes'] if sha(ROOT / v['path']) != v['sha256']]
 report = {'viewer_source_count': len(receipt['sources']), 'stale_viewer_sources': stale,
-          'online_matches_receipt': sha(ROOT / 'docs/index.html') == receipt['viewer_sha256'],
-          'offline_matches_receipt': sha(ROOT / 'docs/offline.html') == receipt['offline_sha256'],
+          'online_matches_receipt': sha(ROOT / 'docs/explore/index.html') == receipt['viewer_sha256'],
+          'offline_matches_receipt': sha(ROOT / 'docs/explore/offline.html') == receipt['offline_sha256'],
           'local_documents_checked': len(documents), 'local_missing_targets': local_missing,
           'bom_links': links, 'active_frames': scene['catalog']['frame_styles'],
           'native_catalog_frames': json.loads((ROOT / 'keycaps/catalog.json').read_text())['frame_styles'],

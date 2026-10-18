@@ -1,6 +1,6 @@
 # Using the viewer
 
-[Open Flan36](https://eduarbo.github.io/flan/) · [Download the complete offline viewer](https://eduarbo.github.io/flan/offline.html)
+[Open Flan36](https://eduarbo.github.io/flan/explore/) · [Download the complete offline viewer](https://eduarbo.github.io/flan/explore/offline.html)
 
 Drag to orbit, scroll or pinch to zoom, and right-drag or use two fingers to pan. The floating camera buttons choose **3D, Top, Front, Right, Left, Back or Bottom**. Bottom looks up at the boards with the rear edge at the top, so the back silkscreen reads correctly. The adjacent fit icon recenters visible parts without changing the viewing angle; the vertical **Separate layers** slider opens the assembly. **Reset** in the bottom navigation resets the camera only, preserving visibility, separation and your design.
 
@@ -22,6 +22,18 @@ Visibility is a preview choice, separate from what your design includes. To omit
 **Undo / Redo** keeps 40 design steps during the current session. Ctrl/Cmd Z and Ctrl/Cmd Shift Z work outside text fields. One continuous color gesture is one step. View changes are separate from design history.
 
 In **Files**, give your design a name and save its JSON. Load that file to return to the same shapes, per-key colors, frames and batteries. JSON also transfers selections to FreeCAD.
+
+## The home page
+
+[eduarbo.github.io/flan](https://eduarbo.github.io/flan/) opens on a live, simplified configurator; the full explorer is at [`/explore/`](https://eduarbo.github.io/flan/explore/). On load the layers ease apart, then the keyboard turns and floats slowly until you drag it. The vertical slider separates or reassembles the layers, ⏸ stops the standby motion and the cube resets the view. Pinch or ⌘/Ctrl-scroll zooms, so ordinary scrolling still moves the page.
+
+- **Size, Theme, Case, Keycaps and Frame** change the model at once. Theme colours the case, frames and keycaps exactly as the explorer's theme presets do, and the page eases to colours derived from it in about 600 ms; dark-bodied themes give a dark page. Every option's thumbnail is rendered live in the current colours.
+- **Browse 6** lists the six magnetic frames. Hovering one previews it on the model; nothing changes until **Apply**, for both halves or one. A frame keeps the theme's colours unless you choose its own palette.
+- **Open this build in 3D** opens the explorer on the same design. English by default; **ES** switches to Spanish. The last look and language stay on the device.
+
+The explorer accepts the same look as a link: `explore/?size=flan54&theme=gameboy&case=terrace&keys=saddle&frame=talavera,gameboy&palette=frame,theme`. Every parameter is optional (Flan36, SNES, Color rim, Original and the theme's frame, or the default frame). `frame` and `palette` take one value for both halves or `left,right`. The look opens as a new design: **Undo** returns to the saved one, and the parameters leave the address so a reload keeps later edits. The flan lockup at the left of the bottom bar returns to the home page.
+
+`node viewer/build.mjs` writes the explorer and then the home. `viewer/home-build.mjs` (also runnable alone) welds, simplifies and meshopt-encodes the scene's own meshes: one common pack of keycaps, switches, frames and electronics, and one pack per size with its four cases and PCB. Its receipt, [`validation/revI-home.json`](../validation/revI-home.json), records each family's error bound, source and result triangle counts and pack sizes. Fasteners, magnets and the underside diodes are left out. `viewer/home-poster.cjs` renders the poster shown until WebGL is ready and the social image from the built page; `viewer/home-check.cjs` serves `docs/` and checks the page end to end, including the explorer opening on the chosen look.
 
 ## Saved data and recovery
 
@@ -53,9 +65,9 @@ node viewer/config-contract-check.cjs
 node viewer/rebrand-check.cjs
 ```
 
-The browser checks drive the current controls: bottom navigation, Design tabs, Parts rows with eye and **Solo**, and part pages with **Visible / Solo / All**. They load `docs/offline.html`; `reliability-check.cjs` also serves `docs/index.html` locally to exercise the online print loader. The removed half filter, leader lines, annotations and per-key shape editor are covered by their current equivalents: per-piece eyes, hover highlights, part pages and design-file import.
+The browser checks drive the current controls: bottom navigation, Design tabs, Parts rows with eye and **Solo**, and part pages with **Visible / Solo / All**. They load `docs/explore/offline.html`; `reliability-check.cjs` also serves `docs/explore/index.html` locally to exercise the online print loader. The removed half filter, leader lines, annotations and per-key shape editor are covered by their current equivalents: per-piece eyes, hover highlights, part pages and design-file import.
 
-On 2026-10-18, with playwright-core 1.56.1 and Chrome for Testing 156, these passed with no runtime errors against `docs/offline.html` SHA-256 `0fd8a433…`: `variant-check.cjs` (every built size and back, with persistence), `check.cjs`, `responsive-check.cjs`, `customize-check.cjs`, `frame-orientation-check.cjs` (Game Boy and Hanafuda), `battery-leads-check.cjs`, `cap-rows-check.cjs`, `reliability-check.cjs`, `frame-collection-check.cjs`, `display-seam-check.cjs`, `loading-check.cjs`, `keycolors-check.cjs` and `hex-check.cjs`.
+On 2026-10-18, with playwright-core 1.56.1 and Chrome for Testing 156, these passed with no runtime errors against the then `docs/offline.html` SHA-256 `0fd8a433…`: `variant-check.cjs` (every built size and back, with persistence), `check.cjs`, `responsive-check.cjs`, `customize-check.cjs`, `frame-orientation-check.cjs` (Game Boy and Hanafuda), `battery-leads-check.cjs`, `cap-rows-check.cjs`, `reliability-check.cjs`, `frame-collection-check.cjs`, `display-seam-check.cjs`, `loading-check.cjs`, `keycolors-check.cjs` and `hex-check.cjs`.
 
 Run any check with a local Playwright and Chromium:
 
@@ -63,7 +75,7 @@ Run any check with a local Playwright and Chromium:
 FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright-core FLAN36_BROWSER=/path/to/chromium node viewer/check.cjs
 ```
 
-`capture-readme.cjs` regenerates the README images (`revI-assembled`, the Solid, Color rim and Terrace `revI-case-*` captures and `revI-pcb-underside`) from `docs/offline.html` and records their hashes in [the image receipt](../validation/revI-readme-images.json):
+`capture-readme.cjs` regenerates the README images (`revI-assembled`, the Solid, Color rim and Terrace `revI-case-*` captures and `revI-pcb-underside`) from `docs/explore/offline.html` and records their hashes in [the image receipt](../validation/revI-readme-images.json):
 
 ```sh
 FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/capture-readme.cjs

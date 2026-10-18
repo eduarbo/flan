@@ -17,7 +17,7 @@ checks={
  'hex':read('build/hex-check/result.json'),
  'key_colors':read('build/keycolors/acceptance.json'),
 }
-online=sha('docs/index.html');offline=sha('docs/offline.html')
+online=sha('docs/explore/index.html');offline=sha('docs/explore/offline.html')
 assert checks['browser']['passed'] and checks['browser']['online_sha256']==online and checks['browser']['offline_sha256']==offline
 assert checks['loading']['summary']['online']['sha256']==online and checks['loading']['summary']['offline']['sha256']==offline
 for name in ['full_ui','cap_rows','hex','key_colors']:

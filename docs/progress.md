@@ -13,6 +13,10 @@
 | Working keyboard | Pending | All keys, BLE, charging, sleep/wake and measured consumption |
 | Flan42, Flan46, Flan54 | Digital builds | [Family](variants.md): routed PCBs with editions, four case styles, ZMK firmware and viewer; keycap qualification and physical tests pending |
 
+## Home page and explorer address
+
+On 2026-10-18 the site root became the **Flan Keyboard** home: a live, simplified configurator of size, theme, case, keycaps and the six frames, with the layers easing apart and a slow standby motion. Its page colours follow the chosen theme. The full explorer moved to [`/explore/`](https://eduarbo.github.io/flan/explore/) and opens on the home's look from its address; the flan lockup returns home. See [the home page](viewer.md#the-home-page). The old `offline.html` address redirects.
+
 ## The Flan family: PCBs, cases, firmware and viewer
 
 On 2026-10-18 every variant was built digitally. Flan42, Flan46 and Flan54 have routed PCBs (DRC, ERC and parity 0) with the six silkscreen editions, and the four case styles from the revI document with their added keys and fasteners. They also have ZMK firmware: number row on D15/D6, and Flan36's UF2 files rebuilt byte-identical. The viewer offers a **Keyboard size** choice that loads each variant on demand. The number-row left boards leave the nice!nano's GND3 unconnected so ROW4 fits; a check proves GND stays one net. [Details](variants.md).

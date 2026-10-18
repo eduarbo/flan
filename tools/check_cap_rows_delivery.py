@@ -19,7 +19,7 @@ def run():
     assert native['checker_sha256']==sha('tools/freecad/check_cap_rows.py')
     assert native['geometry_oracle_sha256']==sha('tools/keycap_row_geometry.py')
     assert browser['checker_sha256']==sha('viewer/cap-rows-check.cjs')
-    assert browser['viewer_sha256']==ui['viewer_sha256']==built['viewer_sha256']==sha('docs/index.html')
+    assert browser['viewer_sha256']==ui['viewer_sha256']==built['viewer_sha256']==sha('docs/explore/index.html')
     for item in built['sources']:assert sha(item['path'])==item['sha256'],item['path']
     assert not subprocess.check_output(['git','diff',BASE,'--','mechanical','hardware','keycaps','design/layout.json'],cwd=ROOT)
     changes={}

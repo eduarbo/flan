@@ -1,6 +1,6 @@
 # Choose your keycaps and frames
 
-Open the **[3D configurator](https://eduarbo.github.io/flan/)**. No account or paid software is required.
+Open the **[3D configurator](https://eduarbo.github.io/flan/explore/)**. No account or paid software is required.
 
 ## Keycap colors
 
@@ -125,16 +125,16 @@ node viewer/build.mjs
 FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/hex-check.cjs
 ```
 
-The historical command regenerates ignored `build/hex-check/` screenshots and `result.json`. It must exit successfully with no runtime errors; the result's viewer SHA-256 must match `docs/offline.html`. `node viewer/keycolors-check.cjs` with the same environment checks color targets, palettes, persistence and GLB colors in ignored `build/keycolors/`. Rebuild the ignored scene first with `python tools/build_viewer_revI.py` if its source hashes are stale.
+The historical command regenerates ignored `build/hex-check/` screenshots and `result.json`. It must exit successfully with no runtime errors; the result's viewer SHA-256 must match `docs/explore/offline.html`. `node viewer/keycolors-check.cjs` with the same environment checks color targets, palettes, persistence and GLB colors in ignored `build/keycolors/`. Rebuild the ignored scene first with `python tools/build_viewer_revI.py` if its source hashes are stale.
 
 The sculpted-direction workflow uses `python3 tools/freecad/run_macos.py tools/freecad/check_cap_rows.py` and `node viewer/cap-rows-check.cjs` (same browser environment). They measure actual cap edges in reopened CAD and exported GLB, reject the former reversed arrangement, and verify explicit repair, custom choices and reload. The native copies, screenshots and reports in `build/cap-row-fix/` are ignored and reproducible. Source STL geometry and seating are unchanged.
 
 For historical gallery reproduction, run its matching broader UI check in a disposable mirror so screenshots do not overwrite the published gallery. Do not copy new images into the gallery until the matching check succeeds:
 
 ```sh
-mkdir -p build/cap-row-fix/full-ui/{viewer,docs/images,design,validation}
+mkdir -p build/cap-row-fix/full-ui/{viewer,docs/images,docs/explore,design,validation}
 cp viewer/check.cjs build/cap-row-fix/full-ui/viewer/
-cp docs/offline.html build/cap-row-fix/full-ui/docs/
+cp docs/explore/offline.html build/cap-row-fix/full-ui/docs/explore/
 cp design/frame-finishes.json build/cap-row-fix/full-ui/design/
 node build/cap-row-fix/full-ui/viewer/check.cjs
 cp build/cap-row-fix/browser/normal-sculpted-side.png docs/images/revI-sculpted-normal.png

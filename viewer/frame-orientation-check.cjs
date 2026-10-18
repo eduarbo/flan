@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 const fs=require('fs'),path=require('path'),assert=require('assert/strict'),crypto=require('crypto');
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
-const root=path.resolve(__dirname,'..'),url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/offline.html');
+const root=path.resolve(__dirname,'..'),url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/explore/offline.html');
 const style=process.env.FLAN36_FRAME_STYLE||'gameboy';assert(['gameboy','hanafuda'].includes(style));
 const out=path.join(root,'build/frame-orientation',url.startsWith('http')?'public':'viewer',style);fs.mkdirSync(out,{recursive:true});
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
@@ -46,7 +46,7 @@ function glb(bytes){
   assert.deepEqual(manifest.configuration,after.configuration);let materialCount=0;
   for(const part of manifest.parts){assert.equal(sha(files['STL/'+part.id+'.stl']),sha(fs.readFileSync(path.join(root,part.source))));for(const m of part.material_parts||[]){if(!part.id.includes('-frame-'))continue;assert.equal(sha(files[`Materials/${part.id}/${m.role}.stl`]),sha(fs.readFileSync(path.join(root,m.source))));materialCount++;}}
   assert.equal(materialCount,8);assert.deepEqual(errors,[]);
-  const report={url,style,passed:true,exported_glb_roles:roles,registered_frame_materials:materialCount,camera_preserved:true,errors,viewer_sha256:sha(fs.readFileSync(path.join(root,url.startsWith('http')?'docs/index.html':'docs/offline.html')))};
+  const report={url,style,passed:true,exported_glb_roles:roles,registered_frame_materials:materialCount,camera_preserved:true,errors,viewer_sha256:sha(fs.readFileSync(path.join(root,url.startsWith('http')?'docs/explore/index.html':'docs/explore/offline.html')))};
   fs.writeFileSync(path.join(out,'result.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

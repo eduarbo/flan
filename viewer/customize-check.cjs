@@ -2,7 +2,7 @@
 const fs=require('fs'),path=require('path'),assert=require('assert/strict'),crypto=require('crypto'),zlib=require('zlib');
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(__dirname,'..'),out=path.join(root,'build/themes-print');fs.mkdirSync(out,{recursive:true});
-const html=fs.readFileSync(path.join(root,'docs/offline.html'));const scene=JSON.parse(zlib.gunzipSync(Buffer.from(html.toString().match(/<script id="scene-data" type="application\/octet-stream">([\s\S]*?)<\/script>/)[1],'base64')));
+const html=fs.readFileSync(path.join(root,'docs/explore/offline.html'));const scene=JSON.parse(zlib.gunzipSync(Buffer.from(html.toString().match(/<script id="scene-data" type="application\/octet-stream">([\s\S]*?)<\/script>/)[1],'base64')));
 for(const [alias,id] of Object.entries(scene.geometryAliases||{}))scene.geometries[alias]=scene.geometries[id];
 const styles=['talavera','gameboy','snes','phone','ipod','hanafuda'];
 const themes=JSON.parse(fs.readFileSync(path.join(root,'design/themes.json'))).themes;
@@ -10,7 +10,7 @@ assert.deepEqual(Object.keys(scene.catalog.frame_styles),styles);assert.ok(theme
 assert.equal(new Set(themes.map(t=>t.id)).size,themes.length);
 (async()=>{const browser=await chromium.launch({headless:true,...(process.env.FLAN36_BROWSER?{executablePath:process.env.FLAN36_BROWSER}:{})});try{
  const context=await browser.newContext({viewport:{width:1440,height:960},acceptDownloads:true}),p=await context.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
- const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/offline.html');await p.goto(url);await p.waitForFunction(()=>document.querySelector('#status').textContent.includes('visible components'),null,{timeout:60000});
+ const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/explore/offline.html');await p.goto(url);await p.waitForFunction(()=>document.querySelector('#status').textContent.includes('visible components'),null,{timeout:60000});
  // Opening the already-open destination closes the editor; open each panel only when needed.
  async function panel(mode,page=p){if(await page.locator('body').getAttribute('data-panel-open')!=='true'||await page.locator('body').getAttribute('data-mode')!==mode||await page.locator('body').getAttribute('data-detail')==='true')await page.click('#nav-'+mode);}
  async function category(name,page=p){await panel('customize',page);await page.click(`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);}

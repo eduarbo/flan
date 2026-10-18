@@ -60,7 +60,7 @@ if __name__ == '__main__':
                   runner_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                   results=results, physical_acceptance=False,
                   inputs=[{'path':p,'sha256':hashlib.sha256((ROOT/p).read_bytes()).hexdigest()}
-                          for p in sorted({'docs/index.html','docs/offline.html','design/revI.json','mechanical/revI/Flan36.FCStd',
+                          for p in sorted({'docs/explore/index.html','docs/explore/offline.html','design/revI.json','mechanical/revI/Flan36.FCStd',
                                           *[r['command'][1] for r in results if len(r['command'])>1 and (ROOT/r['command'][1]).is_file()]} )])
     (OUT / 'checks.json').write_text(json.dumps(report, indent=2) + '\n')
     # An audit is not a green build merely because its JSON was written. The

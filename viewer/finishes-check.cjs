@@ -84,5 +84,5 @@ if(scene.frameArtwork?.mode==='same-reading-direction'){
  assert.equal(topRole(g,44.2,55.7),2,'Right A button stays on the right');
  assert.notEqual(topRole(g,42.6,57.45),1,'Reject the former mirrored D-pad');
 }
-const report={viewer_sha256:sha(path.join(root,'docs/index.html')),scene_sha256:sha(path.join(root,'build/viewer-scene.json')),checker_sha256:sha(__filename),original_vertices_normals_and_triangles:true,flush_feature_probes:true,approved_thickness_domains_and_negative_controls:true,exact_native_material_volumes:true,no_raised_relief:true,max_material_groups:4,geometry_cached:true,checked};
+const report={viewer_sha256:sha(path.join(root,'docs/explore/index.html')),scene_sha256:sha(path.join(root,'build/viewer-scene.json')),checker_sha256:sha(__filename),original_vertices_normals_and_triangles:true,flush_feature_probes:true,approved_thickness_domains_and_negative_controls:true,exact_native_material_volumes:true,no_raised_relief:true,max_material_groups:4,geometry_cached:true,checked};
 fs.writeFileSync(path.join(out,'geometry.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));

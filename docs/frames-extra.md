@@ -1,6 +1,6 @@
 # Frame collection
 
-Choose **Frame** in the [3D explorer](https://eduarbo.github.io/flan/) and click a preview. Each thumbnail uses the actual native material geometry. **Talavera** is the default; switching designs preserves the camera, colors and other selections.
+Choose **Frame** in the [3D explorer](https://eduarbo.github.io/flan/explore/) and click a preview. Each thumbnail uses the actual native material geometry. **Talavera** is the default; switching designs preserves the camera, colors and other selections.
 
 ![Approved native frame designs rendered from native meshes](images/revI-approved-r4.png)
 

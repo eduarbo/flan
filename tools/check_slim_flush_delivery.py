@@ -348,7 +348,7 @@ def run():
         require(socket['nominal_housing_height_mm'] == 5 and abs(socket['measured_native_housing_height_mm']-5) < 1e-5, 'J2 installed socket height differs from documented 5 mm')
         require(len(socket['native_housing_dimensions_mm']) == 3 and max(abs(a-b) for a,b in zip(socket['native_housing_dimensions_mm'], [13.2,3,5])) < 1e-5, 'J2 conservative body envelope changed')
 
-    viewer = sha('docs/index.html')
+    viewer = sha('docs/explore/index.html')
     scene = read('build/viewer-scene.json')
     native_ids = [p['part_id'] for p in scene['parts'] if 'part_id' in p]
     require(len(native_ids) == len(set(native_ids)) and set(native_ids) == set(model['parts']), 'Viewer must show each native assembly part exactly once')

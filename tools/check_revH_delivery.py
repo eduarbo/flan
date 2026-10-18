@@ -28,7 +28,7 @@ for p in [ROOT/'README.md',ROOT/'ATTRIBUTION.md',ROOT/'CONTRIBUTING.md',*(ROOT/'
     for target in re.findall(r'\]\(([^)]+)\)',p.read_text()):
         if target.startswith(('https:','http:','#','mailto:')):continue
         assert (p.parent/target.split('#')[0]).exists(),(str(p),target)
-ui=json.loads((ROOT/'build/viewer-ui-check.json').read_text());assert ui['viewer_sha256']==sha('docs/index.html') and not ui['runtime_errors'] and ui['glb_selected_vertices_exact']
+ui=json.loads((ROOT/'build/viewer-ui-check.json').read_text());assert ui['viewer_sha256']==sha('docs/explore/index.html') and not ui['runtime_errors'] and ui['glb_selected_vertices_exact']
 native=json.loads((ROOT/'validation/revH-freecad.json').read_text());assert native['source_sha256']==sha('mechanical/revH/Filo36.FCStd')
 outline=json.loads((ROOT/'validation/revH-outline.json').read_text())
 for path,digest in outline['inputs'].items():assert sha(path)==digest,path

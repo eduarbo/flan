@@ -77,8 +77,8 @@ scene = read('build/viewer-scene.json'); entries(scene['sources'])
 assert sum('Captive frame magnet' in p['name'] for p in scene['parts']) == 6
 assert sum('Captive base magnet' in p['name'] for p in scene['parts']) == 6
 viewer = read('validation/revI-viewer.json'); entries(viewer['sources'])
-assert viewer['viewer_sha256'] == sha('docs/index.html')
-assert viewer['offline_sha256'] == sha('docs/offline.html')
+assert viewer['viewer_sha256'] == sha('docs/explore/index.html')
+assert viewer['offline_sha256'] == sha('docs/explore/offline.html')
 assert viewer['printing']['sha256'] == sha(viewer['printing']['path'])
 render = read('validation/revI-render.json'); entries(render['sources'] + render['meshes'])
 for view,item in render['views'].items():
@@ -92,7 +92,7 @@ for kit in printing['kits']:
     assert kit['sha256'] == sha('build/stock-print/'+kit['style']+'.zip')
 interaction = read('validation/revI-interaction.json')
 assert interaction['passed']; entries(interaction['sources'])
-assert interaction['final_build_smoke']['viewer_sha256'] == sha('docs/index.html')
+assert interaction['final_build_smoke']['viewer_sha256'] == sha('docs/explore/index.html')
 assert interaction['final_build_smoke']['scene_sha256'] == sha('build/viewer-scene.json')
 assert interaction['final_build_smoke']['native_sha256'] == model['fcstd_sha256']
 paths=['mechanical/revI/Flan36.FCStd','design/revI.json','design/revI-ports.json','design/revI-magnets.json',
