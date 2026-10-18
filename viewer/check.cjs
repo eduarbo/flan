@@ -16,44 +16,82 @@ const frameStyles=['talavera','gameboy','snes','phone','ipod','hanafuda'];
 assert.deepEqual(Object.keys(scene.catalog.frame_styles),frameStyles);
 const palettes=JSON.parse(fs.readFileSync(path.join(root,'design/frame-finishes.json')));
 const expectedCount=scene.parts.length;
-const sideCount=side=>scene.parts.filter(p=>p.side===side).length;
 const coverCount=side=>scene.parts.filter(p=>p.side===side&&p.group==='lid').length;
 for(const side of ['left','right'])assert.equal(scene.parts.filter(p=>p.part_id===`${side}-display-socket`&&p.group==='connectors').length,1,'Retained J2 socket must be explicit');
 const target=process.env.FLAN36_VIEWER_URL||pathToFileURL(path.join(root,'docs/offline.html')).href;
 const offline=target.startsWith('file:');
+// WebGL-only captures: floating stage controls and the drawer keep their layout and hover/focus, but not their pixels.
+const bare='.stage > :not(canvas),#workspace{opacity:0!important}';
+
+// Touch pages tap; desktop pages click.
+const press=(page,selector)=>page.touch?page.locator(selector).tap():page.click(selector);
+const settle=page=>page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(r,60)))));
+// Selecting the already-open destination closes the editor; open each panel only when needed.
+async function panel(page,mode){if(await page.locator('body').getAttribute('data-panel-open')!=='true'||await page.locator('body').getAttribute('data-mode')!==mode||await page.locator('body').getAttribute('data-detail')==='true')await press(page,'#nav-'+mode);await settle(page);}
+async function category(page,name){await panel(page,'customize');await press(page,`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);}
+async function close(page){if(await page.locator('#workspace').isVisible())await press(page,'#panel-close');await settle(page);}
+async function recovery(page){await panel(page,'files');if(await page.locator('#recovery').getAttribute('open')===null)await press(page,'#recovery summary');}
+// Installed display frames live in Parts → Frame; eyes, Solo and Show all never change them.
+async function installFrames(page,sides){await panel(page,'inspect');await press(page,'#part-lid');for(const [side,on] of Object.entries(sides))await page.locator('#install-frame-'+side).setChecked(on);await press(page,'#panel-back');}
+// Show all restores visibility and assembly; Reset restores the camera. Together they are the full reset.
+async function restoreAll(page){await panel(page,'inspect');await press(page,'#show-all');await close(page);await press(page,'#reset');await settle(page);}
+const canvasHash=async page=>{await settle(page);return hash(await page.locator('#canvas').screenshot({style:bare}));};
 
 async function checkDirectory(page){
-  await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
-  assert.equal(await page.locator('.callout,#callouts').count(),0,'No floating tags');
-  const entries=await page.locator('.part-item,.section-links button,#collapse-detail').evaluateAll(nodes=>nodes.map(e=>{
-    const r=e.getBoundingClientRect(),name=e.querySelector('.part-name'),text=name?.getBoundingClientRect();
-    const at=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
-    return{id:e.id,visible:r.width>0&&r.height>0&&r.x>=0&&r.y>=0&&r.right<=innerWidth+1&&r.bottom<=innerHeight+1&&!!at&&(e===at||e.contains(at)),textFits:!text||text.width>0&&name.scrollWidth<=name.clientWidth+1};
-  }));
-  assert.equal(entries.length,16);assert.ok(entries.every(e=>e.visible&&e.textFits),'All 12 components plus 3 section controls must be unclipped: '+JSON.stringify(entries.filter(e=>!e.visible||!e.textFits)));
-  const controls=await page.locator('.view-controls button,.view-controls select,#explode').evaluateAll(nodes=>nodes.map(e=>{
+  await panel(page,'inspect');
+  assert.equal(await page.locator('.callout,#callouts,#part-link').count(),0,'No floating tags');
+  // Every component row scrolls fully into view, unclipped and on top.
+  const rows=page.locator('.part-item');assert.equal(await rows.count(),12);
+  const entries=[];
+  for(const row of await rows.all()){
+    await row.scrollIntoViewIfNeeded();
+    entries.push(await row.evaluate(e=>{
+      const r=e.getBoundingClientRect(),name=e.querySelector('.part-name'),text=name?.getBoundingClientRect();
+      const at=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
+      return{id:e.id,visible:r.width>0&&r.height>0&&r.x>=0&&r.y>=0&&r.right<=innerWidth+1&&r.bottom<=innerHeight+1&&!!at&&(e===at||e.contains(at)),textFits:!text||text.width>0&&name.scrollWidth<=name.clientWidth+1};
+    }));
+  }
+  assert.ok(entries.every(e=>e.visible&&e.textFits),'All 12 component rows must be unclipped: '+JSON.stringify(entries.filter(e=>!e.visible||!e.textFits)));
+  // Seven camera views, Fit and Separate layers float over the model and stay reachable.
+  const controls=await page.locator('.camera-widget [data-view],#fit,#explode').evaluateAll(nodes=>nodes.map(e=>{
     const r=e.getBoundingClientRect(),at=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
-    return {id:e.id,visible:r.width>0&&r.height>=25&&r.x>=0&&r.right<=innerWidth+1&&r.y>=0&&r.bottom<=innerHeight&&!!at&&(at===e||e.contains(at))};
+    return {id:e.id||e.dataset.view,visible:r.width>0&&r.height>=25&&r.x>=0&&r.right<=innerWidth+1&&r.y>=0&&r.bottom<=innerHeight&&!!at&&(at===e||e.contains(at))};
   }));
   assert.equal(controls.length,9);assert.ok(controls.every(c=>c.visible),'Persistent view controls: '+JSON.stringify(controls));
-  const separation=await page.evaluate(()=>{const c=document.querySelector('#canvas').getBoundingClientRect(),t=document.querySelector('.view-controls').getBoundingClientRect();return {gap:t.top-c.bottom,height:c.height};});
-  assert.ok(separation.gap>=-1&&separation.height>=120,'View toolbar must not cover the model: '+JSON.stringify(separation));
+  const height=await page.evaluate(()=>document.querySelector('#canvas').getBoundingClientRect().height);
+  assert.ok(height>=120,'The drawer must leave a model region: '+height);
 }
 async function checkFramedPixels(page){
-  const png=(await page.locator('#canvas').screenshot({style:'.stage-label,#leader-lines{opacity:0!important}'})).toString('base64');
+  const png=(await page.locator('#canvas').screenshot({style:bare})).toString('base64');
   const bounds=await page.evaluate(async png=>{
     const image=new Image();image.src='data:image/png;base64,'+png;await image.decode();
     const c=document.createElement('canvas');c.width=image.width;c.height=image.height;const ctx=c.getContext('2d');ctx.drawImage(image,0,0);
     const {data}=ctx.getImageData(0,0,c.width,c.height),bg=[...data.slice(0,3)];let x0=c.width,y0=c.height,x1=0,y1=0;
     for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++){const i=(y*c.width+x)*4;if(bg.reduce((s,v,j)=>s+Math.abs(v-data[i+j]),0)>35){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);}}
-    return{x0,y0,x1,y1,w:c.width,h:c.height};
+    // Fit reserves the strips under the floating camera views and stage tools (CSS pixels, scaled to the capture).
+    const r=document.querySelector('#canvas').getBoundingClientRect(),scale=c.width/r.width,cam=document.querySelector('.camera-widget'),tools=document.querySelector('.stage-tools');
+    const free={top:(cam.getClientRects().length?cam.getBoundingClientRect().bottom-r.top+12:8)*scale,right:(r.width-(tools.getClientRects().length?tools.offsetWidth+24:8))*scale};
+    return{x0,y0,x1,y1,w:c.width,h:c.height,free,scale};
   },png);
   assert.ok(bounds.x1>bounds.x0&&bounds.y1>bounds.y0&&bounds.x0>5&&bounds.y0>5&&bounds.x1<bounds.w-6&&bounds.y1<bounds.h-6,'Fit view must contain the actually rendered assembly: '+JSON.stringify(bounds));
+  assert.ok(bounds.y0>=bounds.free.top-3*bounds.scale&&bounds.x1<=bounds.free.right+3*bounds.scale,'View controls must not cover the fitted model: '+JSON.stringify(bounds));
 }
-async function checkLink(page,group){
-  await page.waitForFunction(group=>{const p=document.querySelector('#part-link'),r=document.querySelector('main').getBoundingClientRect(),a=document.querySelector(`.part-anchor[data-group=${group}]`).getBoundingClientRect();return !p.hasAttribute('hidden')&&p.dataset.group===group&&Math.abs(Number(p.dataset.endX)+r.x-a.x-a.width/2)<1&&Math.abs(Number(p.dataset.endY)+r.y-a.y-a.height/2)<1},group);
-  const info=await page.evaluate(group=>{const p=document.querySelector('#part-link'),r=document.querySelector('main').getBoundingClientRect(),a=document.querySelector(`.part-anchor[data-group=${group}]`).getBoundingClientRect();return{dx:Math.abs(Number(p.dataset.endX)+r.x-a.x-a.width/2),dy:Math.abs(Number(p.dataset.endY)+r.y-a.y-a.height/2)}},group);
-  assert.ok(info.dx<1&&info.dy<1,'Line must end at its exact sidebar anchor: '+JSON.stringify(info));
+// Direct canvas picking: hover the Frame row, and its x-ray marks the frame pixels to tap.
+async function framePixel(page){
+  await panel(page,'inspect');await page.click('[data-view=top]');await page.mouse.move(2,2);
+  const plain=(await page.locator('#canvas').screenshot({style:bare})).toString('base64');
+  await page.locator('.part-row[data-group=lid] .part-item').hover();await settle(page);
+  const lit=(await page.locator('#canvas').screenshot({style:bare})).toString('base64');
+  await page.mouse.move(2,2);await settle(page);
+  const pixel=await page.evaluate(async([a,b])=>{
+    const read=async png=>{const i=new Image();i.src='data:image/png;base64,'+png;await i.decode();const c=document.createElement('canvas');c.width=i.width;c.height=i.height;const x=c.getContext('2d');x.drawImage(i,0,0);return x.getImageData(0,0,c.width,c.height);};
+    const p=await read(a),q=await read(b),w=p.width,h=p.height,lit=(x,y)=>{const i=(y*w+x)*4;return Math.abs(p.data[i]-q.data[i])+Math.abs(p.data[i+1]-q.data[i+1])+Math.abs(p.data[i+2]-q.data[i+2])>60;};
+    // A pixel deep inside the lit left frame body, not on its edge or the display window.
+    for(let y=4;y<h-4;y++)for(let x=4;x<w/2;x++){let all=true;for(let dy=-4;dy<=4&&all;dy++)for(let dx=-4;dx<=4&&all;dx++)all=lit(x+dx,y+dy);if(all)return {x,y};}
+    return null;
+  },[plain,lit]);
+  assert.ok(pixel,'Hovering the Frame row must light the frame through the x-ray');
+  const box=await page.locator('#canvas').boundingBox();return {x:box.x+pixel.x,y:box.y+pixel.y};
 }
 
 (async()=>{
@@ -73,22 +111,24 @@ async function checkLink(page,group){
   }
   await page.waitForFunction(n=>document.querySelector('#status').textContent.includes(`${n} visible components`),expectedCount,{timeout:60000});
   for(const [key,value] of Object.entries(scene.measurements))if(['bay_width_mm','cover_top_mm','plate_top_mm'].includes(key))assert.equal(await page.locator(`[data-measurement=${key}]`).textContent(),String(value));
-  await checkDirectory(page);
   await checkFramedPixels(page);
+  await checkDirectory(page);
   // Case choices change native meshes; absent covers differ from eye visibility.
   assert.equal(await page.locator('#case-grid button').count(),4);
   assert.equal(new Set(await page.locator('#case-grid img').evaluateAll(nodes=>nodes.map(n=>n.src))).size,4);
   for(const style of ['level','solid','rim','terrace']){
-    await page.locator(`[data-case=${style}]`).focus();await page.keyboard.press('Enter');
+    await category(page,'cases');await page.locator(`[data-case=${style}]`).focus();await page.keyboard.press('Enter');
     assert.equal(await page.locator(`[data-case=${style}]`).getAttribute('aria-pressed'),'true');
-    await page.mouse.move(10,20);await page.keyboard.press('Escape');
-    await page.locator('#canvas').screenshot({path:path.join(root,`build/case-variants/${style}.png`),style:'.stage-label,#leader-lines{opacity:0!important}'});
+    await page.mouse.move(10,20);await page.keyboard.press('Escape');await settle(page);assert.equal(await page.locator('#workspace').isVisible(),false,'Escape closes the editor');
+    await page.locator('#canvas').screenshot({path:path.join(root,`build/case-variants/${style}.png`),style:bare});
   }
-  await page.click('#case-target [data-side=left]');await page.click('[data-case=rim]');await page.locator('#case-cover').uncheck();
+  await category(page,'cases');await page.click('#case-target [data-side=left]');await page.click('[data-case=rim]');await installFrames(page,{left:false});
   await page.click('#reset');assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount-coverCount('left')} visible`),'Open cover omits its three frame magnets and cover, preserves display');
-  await page.click('#case-target [data-side=both]');assert.equal(await page.locator('#case-current').textContent(),'Mixed cases');
-  assert.equal(await page.locator('#case-cover').evaluate(n=>n.indeterminate),true);
-  await page.click('#nav-files');
+  await category(page,'cases');await page.click('#case-target [data-side=both]');assert.equal(await page.locator('#case-current').textContent(),'Mixed cases');
+  // Mixed installation stays explicit per half.
+  await panel(page,'inspect');await page.click('#part-lid');
+  assert.deepEqual([await page.locator('#install-frame-left').isChecked(),await page.locator('#install-frame-right').isChecked()],[false,true]);await page.click('#panel-back');
+  await panel(page,'files');
   let savedPromise=page.waitForEvent('download');await page.click('#save-config');let saved=await savedPromise;
   const casesPath=path.join(root,'build/case-variants/selected.json');await saved.saveAs(casesPath);
   const caseConfig=JSON.parse(fs.readFileSync(casesPath));assert.deepEqual(Object.fromEntries(Object.entries(caseConfig.cases).map(([side,c])=>[side,{style:c.style,cover:c.cover}])),{left:{style:'rim',cover:false},right:{style:'terrace',cover:true}});
@@ -112,12 +152,11 @@ async function checkLink(page,group){
   await page.locator('#load-config').setInputFiles({name:'legacy.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(legacy))});
   assert.equal(await page.locator('#config-status').getAttribute('data-error'),'false');
   await page.click('#reset');assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount} visible`));
-  await page.click('#part-base');await page.click('[data-case=rim]');await page.locator('#case-cover').uncheck();await page.keyboard.press('Escape');await page.mouse.move(10,20);
-  await page.selectOption('#half','left');await page.selectOption('#view','top');
-  await page.locator('#canvas').screenshot({path:path.join(root,'build/case-variants/rim-open-top.png'),style:'.stage-label,#leader-lines{opacity:0!important}'});
-  await page.click('#nav-files');await page.click('#default-config');await page.keyboard.press('Escape');await page.click('#reset');
-  await page.click('#annotations');await page.click('#annotations');
-  assert.match(await page.locator('#view-feedback').textContent(),/Hover or select/);
+  await category(page,'cases');await page.click('[data-case=rim]');await installFrames(page,{left:false,right:false});await close(page);await page.mouse.move(10,20);
+  await page.click('[data-view=top]');await settle(page);
+  await page.locator('#canvas').screenshot({path:path.join(root,'build/case-variants/rim-open-top.png'),style:bare});
+  await recovery(page);await page.click('#default-config');await page.keyboard.press('Escape');await page.click('#reset');
+  await panel(page,'inspect');
   const row=await page.locator('.part-row[data-group=plate]').boundingBox();
   await page.mouse.move(row.x+3,row.y+row.height/2);
   assert.equal(await page.locator('.part-row[data-group=plate]').evaluate(e=>e.matches(':hover')),true);
@@ -126,10 +165,11 @@ async function checkLink(page,group){
   assert.equal(await page.locator('#layer-plate').isChecked(),true,'Hover never changes visibility');
   await page.mouse.move(10,20);await page.keyboard.press('Escape');
   await page.mouse.move(400,350);await page.mouse.wheel(0,-700);await page.waitForTimeout(150);
-  await page.click('#fit');assert.match(await page.locator('#view-feedback').textContent(),/centered and fitted/);await checkFramedPixels(page);
-  for(const group of new Set(scene.parts.map(p=>p.group)))await page.locator('#layer-'+group).uncheck();
-  await page.click('#fit');assert.match(await page.locator('#view-feedback').textContent(),/Nothing visible/);await page.click('#reset');
-  await page.click('#part-base');await page.locator('#individual-parts summary').click();
+  await page.click('#fit');assert.match(await page.locator('#view-feedback').textContent(),/centered and fitted/);await settle(page);await checkFramedPixels(page);
+  await panel(page,'inspect');for(const group of new Set(scene.parts.map(p=>p.group)))await page.locator('#layer-'+group).uncheck();
+  await page.click('#fit');assert.match(await page.locator('#view-feedback').textContent(),/Nothing visible/);await page.click('#show-all');
+  assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount} visible`));
+  await page.click('#part-base');
   assert.equal(await page.locator('[data-object-visibility]').count(),2);
   await page.locator('[data-object-visibility]').first().uncheck();
   assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount-1} visible`));
@@ -138,56 +178,53 @@ async function checkLink(page,group){
   await page.locator('[data-solo-object]').first().click();
   assert.match(await page.locator('#status').textContent(),/1 visible/);
   await page.click('#show-all');assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount} visible`));
-  await page.click('#part-mcu');await page.click('#isolate-selection');
+  await page.click('#panel-back');await page.click('#part-mcu');await page.click('#selection-solo');
   assert.match(await page.locator('#status').textContent(),/2 visible/);
-  await page.click('#toggle-selection');assert.match(await page.locator('#status').textContent(),/0 visible/);
-  await page.click('#toggle-selection');assert.match(await page.locator('#status').textContent(),/2 visible/);
-  await page.click('#show-all');await page.selectOption('#view','top');await page.keyboard.press('Escape');await page.mouse.move(10,20);
-  const beforeXray=hash(await page.locator('#canvas').screenshot({style:'.stage-label,#leader-lines{opacity:0!important}'}));
-  await page.locator('#part-mcu').hover();await checkLink(page,'mcu');
-  const duringXray=hash(await page.locator('#canvas').screenshot({style:'.stage-label,#leader-lines{opacity:0!important}'}));
+  await page.locator('#selection-visible').uncheck();assert.match(await page.locator('#status').textContent(),/0 visible/);
+  await page.locator('#selection-visible').check();assert.match(await page.locator('#status').textContent(),/2 visible/);
+  await page.click('#show-all');await page.click('[data-view=top]');await page.click('#panel-back');await page.mouse.move(10,20);
+  const beforeXray=await canvasHash(page);
+  await page.locator('#part-mcu').hover();
+  const duringXray=await canvasHash(page);
   assert.notEqual(duringXray,beforeXray,'Hover must reveal the controller through the assembled display/frame');
   assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount} visible`),'X-ray hover never changes visibility');
-  await page.mouse.move(10,20);await page.keyboard.press('Escape');
-  assert.equal(hash(await page.locator('#canvas').screenshot({style:'.stage-label,#leader-lines{opacity:0!important}'})),beforeXray,'Leaving hover restores the original assembly');
-  await page.click('#reset');
+  await page.mouse.move(10,20);
+  assert.equal(await canvasHash(page),beforeXray,'Leaving hover restores the original assembly');
+  await restoreAll(page);
   await page.screenshot({path:path.join(root,'build/viewer-desktop.png')});
-  // Compare WebGL output without the overlaid DOM controls or label borders.
+  // Compare WebGL output without the overlaid DOM controls.
   // Opacity keeps hover/focus active; the separate full-page captures include UI.
-  const baseline=hash(await page.locator('#canvas').screenshot({style:'.stage > :not(canvas),#leader-lines{opacity:0!important}'}));
+  const baseline=await canvasHash(page);
   const count=async()=>Number((await page.locator('#status').textContent()).match(/(\d+) visible components/)[1]);
   assert.equal(await count(),expectedCount);
-  await page.click('#part-battery');
+  await category(page,'battery');
   await page.click('#battery-options [data-battery="301230"]');
   assert.equal(await page.locator('#battery-options [data-battery="301230"]').getAttribute('aria-pressed'),'true');
   await page.click('#battery-options [data-battery="adafruit-1570"]');
   await page.keyboard.press('Escape');
+  await panel(page,'inspect');
   for(const group of new Set(scene.parts.map(p=>p.group))){
     await page.locator('#layer-'+group).uncheck();
     assert.equal(await count(),expectedCount-scene.parts.filter(p=>p.group===group).length,group);
     await page.locator('#layer-'+group).check();
   }
-  await page.selectOption('#half','right');assert.equal(await count(),sideCount('right'));
-  await page.selectOption('#half','left');assert.equal(await count(),sideCount('left'));
   await page.click('#stack');assert.equal(await page.locator('#explode').inputValue(),'55');
   await page.screenshot({path:path.join(root,'build/viewer-stack.png')});
-  await page.selectOption('#view','bottom');await page.screenshot({path:path.join(root,'build/viewer-bottom.png')});
-  await page.click('#reset');assert.equal(await count(),expectedCount);
-  assert.equal(await page.locator('#half').inputValue(),'both');assert.equal(await page.locator('#explode').inputValue(),'0');
-  assert.equal(hash(await page.locator('#canvas').screenshot({style:'.stage > :not(canvas),#leader-lines{opacity:0!important}'})),baseline,'Full reset must restore the original rendered assembly');
+  await page.click('[data-view=bottom]');await settle(page);await page.screenshot({path:path.join(root,'build/viewer-bottom.png')});
+  await restoreAll(page);assert.equal(await count(),expectedCount);
+  assert.equal(await page.locator('#explode').inputValue(),'0');
+  assert.equal(await canvasHash(page),baseline,'Full reset must restore the original rendered assembly');
   const box=await page.locator('#canvas').boundingBox();
   await page.mouse.move(box.x+box.width*.5,box.y+box.height*.5);await page.mouse.down();
   await page.mouse.move(box.x+box.width*.65,box.y+box.height*.65,{steps:8});await page.mouse.up();
-  assert.notEqual(hash(await page.locator('#canvas').screenshot({style:'.stage > :not(canvas),#leader-lines{opacity:0!important}'})),baseline,'Orbit drag must change view');
+  assert.notEqual(await canvasHash(page),baseline,'Orbit drag must change view');
   assert.equal(await page.locator('#selection').isVisible(),false,'Orbit drag must not select a component');
   await page.click('#reset');
-  // Select an actual alternate mesh and orientation, then export that choice.
-  await page.click('#part-keycaps');if(!await page.locator('#key-details').evaluate(d=>d.open))await page.locator('#key-details summary').click();
-  await page.selectOption('#key-target','left:K30');
-  await page.selectOption('#key-variant','choc_stem_mx_size_normal_90deg'); // gitleaks:allow -- public upstream STL variant ID, not a credential
-  assert.equal(await page.locator('#key-rotation').inputValue(),'90');
-  await page.click('#apply-keys');
-  await page.click('#part-lid');await page.click('#frame-target [data-side=left]');
+  // Per-key shapes come from a design file; export it with an actual alternate mesh and orientation.
+  const keyed=JSON.parse(JSON.stringify(scene.catalog.default_configuration));Object.assign(keyed.keycaps.left.K30,{variant:'choc_stem_mx_size_normal_90deg',rotation_deg:90}); // gitleaks:allow -- public upstream STL variant ID, not a credential
+  await panel(page,'files');await page.locator('#load-config').setInputFiles({name:'keyed.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(keyed))});
+  assert.equal(await page.locator('#config-status').getAttribute('data-error'),'false');
+  await category(page,'frames');await page.click('#frame-target [data-side=left]');
   assert.deepEqual(await page.locator('#frame-grid button').evaluateAll(nodes=>nodes.map(n=>n.dataset.style)),frameStyles);
   assert.equal(new Set(await page.locator('#frame-grid img').evaluateAll(imgs=>imgs.map(i=>i.src))).size,frameStyles.length,'All approved previews use distinct actual geometries');
   const themePixels=[];
@@ -195,7 +232,7 @@ async function checkLink(page,group){
     await page.click(`[data-style=${theme}]`);
     assert.equal(await page.locator(`[data-style=${theme}]`).getAttribute('aria-pressed'),'true');
     assert.equal(await page.locator('#config-status').getAttribute('data-error'),'false');
-    themePixels.push(hash(await page.locator('#canvas').screenshot({style:'.stage > :not(canvas),#leader-lines{opacity:0!important}'})));
+    themePixels.push(await canvasHash(page));
   }
   assert.equal(new Set(themePixels).size,frameStyles.length,'Every approved cover must change actual rendered geometry');
   await page.locator('#frame-color').fill('#ad7656');
@@ -213,8 +250,7 @@ async function checkLink(page,group){
   await page.locator('#frame-color').fill('#ad7656');
   await page.click('#frame-target [data-side=right]');await page.click('[data-color="#ded8c6"]');
   await page.click('#frame-target [data-side=left]');
-  await page.click('#nav-files');
-  await page.click('#part-battery');await page.click('[data-battery="301230"]');await page.click('#nav-files');
+  await category(page,'battery');await page.click('[data-battery="301230"]');await panel(page,'files');
   const configDownload=page.waitForEvent('download');await page.click('#save-config');
   const downloadedConfig=await configDownload;const configPath=path.join(root,'build/revI/viewer-config.json');await downloadedConfig.saveAs(configPath);
   const config=JSON.parse(fs.readFileSync(configPath));
@@ -224,28 +260,30 @@ async function checkLink(page,group){
   assert.deepEqual({style:config.frames.right.style,color:config.frames.right.color},{style:'phone',color:'#ded8c6'});
   assert.equal(Object.keys(config.frames.right.accents).length,3);
   assert.deepEqual(config.batteries,{left:'301230',right:'301230'});
-  await page.click('#default-config');await page.locator('#load-config').setInputFiles(configPath);
+  await recovery(page);await page.click('#default-config');await page.locator('#load-config').setInputFiles(configPath);
   await page.waitForFunction(()=>document.querySelector('[data-style=hanafuda]').getAttribute('aria-pressed')==='true');
   assert.equal(await page.locator('[data-style=hanafuda]').getAttribute('aria-pressed'),'true');
   assert.equal(await page.locator('#frame-color').inputValue(),'#ad7656');
-  assert.notEqual(hash(await page.locator('#canvas').screenshot({style:'.stage > :not(canvas),#leader-lines{opacity:0!important}'})),baseline,'Custom configuration changes the actual assembly');
+  await close(page);await page.click('#reset');
+  assert.notEqual(await canvasHash(page),baseline,'Custom configuration changes the actual assembly');
   // An incompatible mixed configuration must not replace the current one.
   const invalid=JSON.parse(JSON.stringify(config));invalid.keycaps.left.K01={variant:'choc_stem_mx_size_normal',rotation_deg:0};
   await page.locator('#load-config').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(invalid))});
   await page.waitForFunction(()=>document.querySelector('#config-status').dataset.error==='true');
-  // Labels open contextual controls and highlights never enter the export.
+  // Rows open part pages and Customize this part; highlights never enter the export.
+  await panel(page,'inspect');
   const frameLabel=page.locator('#part-lid');
   assert.equal(await frameLabel.isVisible(),true);
-  await page.keyboard.press('Escape');
-  const withoutHighlight=hash(await page.locator('#canvas').screenshot({style:'.stage > :not(canvas),#leader-lines{opacity:0!important}'}));
+  await page.mouse.move(10,20);
+  const withoutHighlight=await canvasHash(page);
   await frameLabel.hover();
-  assert.notEqual(hash(await page.locator('#canvas').screenshot({style:'.stage > :not(canvas),#leader-lines{opacity:0!important}'})),withoutHighlight,'Sidebar hover highlights geometry');
+  assert.notEqual(await canvasHash(page),withoutHighlight,'Sidebar hover highlights geometry');
   await frameLabel.click();
   assert.equal(await page.locator('#selection-title').textContent(),'Display frame');
   assert.equal(await page.locator('#part-lid').getAttribute('aria-expanded'),'true');
+  await page.click('#edit-selection');assert.equal(await page.locator('#panel-frames').isVisible(),true);
   assert.equal(await page.locator('#frame-target [data-side=both]').getAttribute('aria-pressed'),'true');
-  assert.equal(await frameLabel.getAttribute('aria-expanded'),'true');
-  await checkLink(page,'lid');await page.click('#nav-files');
+  await panel(page,'files');
   const downloadPromise=page.waitForEvent('download');await page.click('#glb');const download=await downloadPromise;
   const glbPath=path.join(root,'build/viewer-export.glb');await download.saveAs(glbPath);const glb=fs.readFileSync(glbPath);
   assert.equal(glb.toString('ascii',0,4),'glTF');assert.equal(glb.readUInt32LE(4),2);assert.equal(glb.readUInt32LE(8),glb.length);
@@ -289,62 +327,55 @@ async function checkLink(page,group){
   const capPath=scene.catalog.variants.find(v=>v.id===config.keycaps.left.K30.variant).path;
   assert.deepEqual(positionBytes(customCap),Buffer.from(scene.geometries[capPath].positions,'base64'),'GLB must contain selected cap vertices');
   assert.deepEqual(positionBytes(customFrame),Buffer.from(scene.geometries['mechanical/revI/left-frame-hanafuda.stl'].positions,'base64'),'GLB must contain selected frame vertices');
-  await page.click('#default-config');await page.keyboard.press('Escape');await page.click('#reset');
-  assert.equal(hash(await page.locator('#canvas').screenshot({style:'.stage > :not(canvas),#leader-lines{opacity:0!important}'})),baseline,'Default config plus reset restores exact rendered assembly');
-  await page.click('#part-keycaps');
-  await page.selectOption('#key-target','all');
-  assert.equal(await page.locator('#key-variant option[value="choc_stem_mx_size_normal"]').evaluate(o=>o.disabled),true);
+  await recovery(page);await page.click('#default-config');await page.keyboard.press('Escape');await page.click('#reset');
+  assert.equal(await canvasHash(page),baseline,'Default config plus reset restores exact rendered assembly');
+  await category(page,'keycaps');
   await page.click('[data-preset=saddle-sculpted]');assert.equal(await page.locator('#config-status').getAttribute('data-error'),'false');
-  await page.click('#nav-files');await page.click('#default-config');
-  // The entire directory remains visible while inspector bodies change/scroll.
-  await page.click('#stack');
-  await page.locator('#part-mcu').hover();await checkLink(page,'mcu');
-  await page.selectOption('#view','front');
-  await page.locator('#part-mcu').hover();await checkLink(page,'mcu');
-  await page.click('#part-lid');await page.click('[data-style=gameboy]');
+  await recovery(page);await page.click('#default-config');
+  // Design edits preserve the inspection: separation and a hidden cover survive frame changes.
+  await panel(page,'inspect');await page.click('#stack');
+  await page.locator('#part-mcu').hover();
+  await page.click('[data-view=front]');
+  await category(page,'frames');await page.click('[data-style=gameboy]');
   assert.equal(await page.locator('#layer-lid').isChecked(),false,'Changing a frame preserves a hidden cover');
   assert.equal(await page.locator('#explode').inputValue(),'55');
   await page.click('#frame-target [data-side=both]');await page.click('[data-style=phone]');
-  assert.equal(await page.locator('#half').inputValue(),'left','Editing both halves preserves the inspected half');
-  await page.click('#reset');await page.locator('#part-lid').focus();await page.keyboard.press('Enter');
+  assert.equal(await page.locator('#layer-lid').isChecked(),false,'Editing both halves preserves the inspection');assert.equal(await page.locator('#explode').inputValue(),'55');
+  await restoreAll(page);await panel(page,'inspect');await page.locator('#part-lid').focus();await page.keyboard.press('Enter');
   assert.equal(await page.locator('#selection-title').textContent(),'Display frame');
-  await checkDirectory(page);await checkLink(page,'lid');
+  await page.click('#panel-back');await checkDirectory(page);
   await page.screenshot({path:path.join(root,'build/viewer-sidebar/desktop-linked.png')});
-  await page.evaluate(()=>document.querySelector('#inspector').scrollTop=10000);await checkDirectory(page);await checkLink(page,'lid');
-  await page.click('#collapse-detail');await checkDirectory(page);await checkLink(page,'lid');
-  assert.equal(await page.locator('#inspector').isVisible(),false);
-  await page.click('#collapse-detail');await checkDirectory(page);await checkLink(page,'lid');
-  await page.click('#annotations');assert.equal(await page.locator('#part-link').isVisible(),false);
-  await page.click('#annotations');await checkLink(page,'lid');
-  const pick=await page.locator('#part-link-dot').evaluate(el=>{const r=el.closest('main').getBoundingClientRect();return{x:r.x+Number(el.getAttribute('cx')),y:r.y+Number(el.getAttribute('cy'))};});
+  await page.evaluate(()=>document.querySelector('#inspector').scrollTop=10000);await checkDirectory(page);
+  // Tap the left frame in the model itself.
+  const pick=await framePixel(page);
   await page.mouse.click(pick.x,pick.y);assert.equal(await page.locator('#selection-title').textContent(),'Display frame');
-  assert.equal(await page.locator('#frame-target [data-side=left]').getAttribute('aria-pressed'),'true');
+  assert.match(await page.locator('#selection-meta').textContent(),/^left half/);
+  await page.click('#edit-selection');assert.equal(await page.locator('#frame-target [data-side=left]').getAttribute('aria-pressed'),'true');
   await page.keyboard.press('Escape');
   const mobile=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});
   if(offline)await mobile.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});
-  const phone=await mobile.newPage();phone.on('pageerror',e=>errors.push(e.message));await phone.goto(target);
+  const phone=await mobile.newPage();phone.touch=true;phone.on('pageerror',e=>errors.push(e.message));await phone.goto(target);
   await phone.waitForFunction(n=>document.querySelector('#status').textContent.includes(`${n} visible components`),expectedCount);
   await checkFramedPixels(phone);
   assert.equal(await phone.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'No horizontal overflow');
-  await phone.locator('[data-case=rim]').tap();await checkDirectory(phone);
-  await phone.locator('#part-lid').tap();await phone.locator('[data-style=gameboy]').tap();
+  await category(phone,'cases');await phone.locator('[data-case=rim]').tap();await checkDirectory(phone);
+  await category(phone,'frames');await phone.locator('[data-style=gameboy]').tap();
   assert.equal(await phone.locator('[data-style=gameboy]').getAttribute('aria-pressed'),'true');
   assert.ok((await phone.locator('#canvas').boundingBox()).y>=0,'Model stays visible while browsing cards');
-  await phone.locator('#part-lid').tap();await checkLink(phone,'lid');await checkDirectory(phone);
+  await panel(phone,'inspect');await phone.locator('#part-lid').tap();
   assert.equal(await phone.locator('#selection-title').textContent(),'Display frame');
-  assert.equal(await phone.locator('#frame-target [data-side=both]').getAttribute('aria-pressed'),'true');
-  await phone.locator('#clear-selection').tap();
+  await phone.locator('#edit-selection').tap();assert.equal(await phone.locator('#frame-target [data-side=both]').getAttribute('aria-pressed'),'true');
+  await checkDirectory(phone);
 
   await phone.locator('#inside').tap();assert.ok((await phone.locator('#status').textContent()).includes('components'));
   await phone.locator('#layer-display').uncheck();
   await phone.locator('#part-display').tap();
-  await phone.waitForTimeout(120);assert.equal(await phone.locator('#part-link').isVisible(),false,'Hidden layers have no line');
+  assert.equal(await phone.locator('#selection-visible').isChecked(),false);assert.equal(await phone.locator('#selection-view .view-label').textContent(),'Hidden','A hidden selection says so on its page');
   await phone.locator('#reset').tap();assert.equal(await phone.locator('#explode').inputValue(),'0');
-  await phone.locator('#part-lid').tap();
-  await checkDirectory(phone);await checkLink(phone,'lid');
+  await phone.locator('#panel-back').tap();await phone.locator('#part-lid').tap();
+  assert.equal(await phone.locator('#selection-title').textContent(),'Display frame');await phone.locator('#panel-back').tap();await checkDirectory(phone);
   await phone.evaluate(()=>{document.querySelector('#inspector').scrollTop=0;scrollTo(0,0);});await phone.evaluate(()=>new Promise(requestAnimationFrame));
   await phone.screenshot({path:path.join(root,'build/viewer-mobile.png'),fullPage:true,animations:'disabled'});
-  await phone.locator('#clear-selection').tap();
   // Actual touch events: a one-finger orbit and two-finger gesture must not select.
   const cdp=await mobile.newCDPSession(phone),rect=await phone.locator('#canvas').boundingBox();
   const cx=rect.x+rect.width*.5,cy=rect.y+rect.height*.48;
@@ -358,16 +389,15 @@ async function checkLink(page,group){
   assert.equal(await phone.locator('#selection').isVisible(),false,'Pinch/pan does not select');
   await phone.setViewportSize({width:320,height:568});await phone.locator('#reset').tap();
   assert.equal(await phone.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'No overflow at 320px');
-  await phone.locator('[data-style=phone]').tap();await checkDirectory(phone);
-  await phone.locator('#part-lid').tap();await checkLink(phone,'lid');
-  await phone.locator('#collapse-detail').tap();await checkDirectory(phone);
-  await phone.locator('#collapse-detail').tap();await checkDirectory(phone);
+  await category(phone,'frames');await phone.locator('[data-style=phone]').tap();await checkDirectory(phone);
+  await phone.locator('#part-lid').tap();assert.equal(await phone.locator('#selection-title').textContent(),'Display frame');
+  await phone.locator('#panel-back').tap();await checkDirectory(phone);
   const stage=await phone.locator('.stage').boundingBox();assert.ok(stage.y>=0&&stage.y+stage.height<568,'3D view stays visible at the smallest tested viewport');
   await phone.screenshot({path:path.join(root,'build/viewer-ux/mobile-small.png'),animations:'disabled'});
   await phone.setViewportSize({width:844,height:390});await checkDirectory(phone);
   // Capture the actual designs and readable palette cards, including mobile.
   fs.mkdirSync(path.join(root,'build/viewer-multicolor'),{recursive:true});
-  await page.click('#reset');await page.click('#part-lid');await page.click('#frame-target [data-side=both]');
+  await page.click('#reset');await category(page,'frames');await page.click('#frame-target [data-side=both]');
   for(const style of frameStyles){
     await page.click(`[data-style=${style}]`);await page.click('#theme-colors');await page.mouse.move(10,100);
     assert.equal(await page.locator('#frame-color').inputValue(),palettes.styles[style].colors.body.toLowerCase());
@@ -376,23 +406,24 @@ async function checkLink(page,group){
   await page.locator('#frame-color').fill('#ad7656');await page.click('#theme-colors');
   assert.equal(await page.locator('#frame-color').inputValue(),palettes.styles.hanafuda.colors.body.toLowerCase());
   await page.locator('#frame-grid').screenshot({path:path.join(root,'build/viewer-multicolor/previews.png')});
-  await phone.setViewportSize({width:390,height:844});await phone.locator('#reset').tap();await phone.locator('#part-lid').tap();await phone.locator('[data-style=hanafuda]').tap();
-  await phone.evaluate(()=>document.querySelector('#inspector').scrollTop=0);await checkDirectory(phone);
-  await phone.screenshot({path:path.join(root,'build/viewer-multicolor/mobile.png')});
-  await page.click('#nav-files');await page.click('#default-config');await page.click('#reset');await page.click('#part-base');await page.click('#case-target [data-side=both]');await page.click('[data-case=rim]');await page.keyboard.press('Escape');await page.mouse.move(10,20);await page.evaluate(()=>document.querySelector('#inspector').scrollTop=0);await checkDirectory(page);
+  await phone.setViewportSize({width:390,height:844});await phone.locator('#reset').tap();await category(phone,'frames');await phone.locator('[data-style=hanafuda]').tap();
+  await phone.evaluate(()=>document.querySelector('#inspector').scrollTop=0);
+  await phone.screenshot({path:path.join(root,'build/viewer-multicolor/mobile.png')});await checkDirectory(phone);
+  await recovery(page);await page.click('#default-config');await page.click('#reset');await category(page,'cases');await page.click('#case-target [data-side=both]');await page.click('[data-case=rim]');await page.mouse.move(10,20);await page.evaluate(()=>document.querySelector('#inspector').scrollTop=0);
   assert.equal(await page.locator('#case-grid').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length),2);
-  await page.screenshot({path:path.join(root,'build/viewer-cases-desktop.png')});
-  await phone.locator('#part-base').tap();await phone.locator('[data-case=rim]').tap();await phone.locator('#clear-selection').tap();await phone.evaluate(()=>document.querySelector('#inspector').scrollTop=0);await checkDirectory(phone);
-  await phone.screenshot({path:path.join(root,'build/viewer-cases-mobile.png')});
+  await page.screenshot({path:path.join(root,'build/viewer-cases-desktop.png')});await checkDirectory(page);
+  await category(phone,'cases');await phone.locator('[data-case=rim]').tap();await phone.evaluate(()=>document.querySelector('#inspector').scrollTop=0);
+  await phone.screenshot({path:path.join(root,'build/viewer-cases-mobile.png')});await checkDirectory(phone);
   assert.deepEqual(errors,[]);if(offline)assert.deepEqual(requests,[],'Offline viewer must not request network resources');
   const receipt={viewer_sha256:hash(Buffer.from(html)),checker_sha256:hash(fs.readFileSync(__filename)),about_measurements_match_model:true,target:offline?'local file with all HTTP(S) requests blocked':'public URL',
     browser:await browser.version(),desktop:true,narrow_viewport_emulation:true,physical_phone_tested:false,public_embedded_scene_matches_current:!offline,
-    all_12_layer_filters:true,individual_visibility:true,individual_and_group_solo:true,show_all_recovery:true,occluded_hover_xray_pixel_verified:true,persistent_view_controls:true,fit_actual_pixels_after_zoom:true,fit_empty_feedback:true,full_row_hover:true,half_filters:true,orbit_drag:true,bottom_view:true,full_reset_pixel_identical:true,
-    persistent_component_directory:true,sidebar_line_endpoints:true,directory_visible_during_scroll_and_collapse:true,keyboard_component_selection:true,direct_canvas_picking:true,labels_follow_camera:true,frame_change_preserves_hidden_cover:true,annotation_toggle:true,orbit_does_not_select:true,touch_orbit_and_pinch_do_not_select:true,small_320px_viewport:true,
-    approved_preview_cards:frameStyles.length,multicolor_glb_roles:true,one_click_frames:true,keyboard_frame_activation:true,mixed_style_and_color_state:true,theme_applies_palette_and_body_overrides_roundtrip:true,sidebar_hover_highlight:true,sidebar_opens_frame_explorer:true,touch_frame_cards_and_sidebar:true,hidden_layer_links_removed:true,highlight_excluded_from_glb:true,
-    dual_battery_selection_and_exact_glb:true,captive_frame_magnets_preserved:true,keycap_variant_selection:true,frame_style_and_color:true,distinct_themed_geometries:frameStyles.length,json_roundtrip:true,invalid_combination_rejected:true,glb_matches_custom_configuration:true,glb_selected_vertices_exact:true,glb_objects:expectedCount,glb_keycaps:36,glb_units:'metres',case_variants:Object.keys(scene.catalog.case_styles).length,case_previews_distinct:true,case_glb_meshes_exact:true,open_cover_configuration:true,legacy_case_default:true,runtime_errors:errors,offline_network_requests:requests.length};
-  const caseImages={};for(const [name,source] of [['level','level'],['solid','solid'],['rim','rim'],['terrace','terrace'],['rim-open','rim-open-top']]){const buffer=fs.readFileSync(path.join(root,`build/case-variants/${source}.png`));fs.writeFileSync(path.join(root,`docs/images/revI-case-${name}.png`),buffer);caseImages[name]=hash(buffer);}
-  fs.writeFileSync(path.join(root,'validation/revI-cases-render.json'),JSON.stringify({viewer_sha256:hash(Buffer.from(html)),checker_sha256:hash(fs.readFileSync(__filename)),images:caseImages,source:'Unretouched screenshots of the actual selected native STL meshes in the viewer'},null,2)+'\n');
+    all_12_layer_filters:true,individual_visibility:true,individual_and_group_solo:true,selection_visible_toggle:true,show_all_recovery:true,occluded_hover_xray_pixel_verified:true,floating_view_controls_clear_of_fitted_model:true,fit_actual_pixels_after_zoom:true,fit_empty_feedback:true,full_row_hover:true,orbit_drag:true,bottom_view:true,full_reset_pixel_identical:true,
+    component_rows_reachable:true,keyboard_component_selection:true,direct_canvas_picking:true,frame_change_preserves_hidden_cover:true,orbit_does_not_select:true,touch_orbit_and_pinch_do_not_select:true,small_320px_viewport:true,
+    approved_preview_cards:frameStyles.length,multicolor_glb_roles:true,one_click_frames:true,keyboard_frame_activation:true,mixed_style_and_color_state:true,theme_applies_palette_and_body_overrides_roundtrip:true,sidebar_hover_highlight:true,part_page_customizes_frame:true,touch_frame_cards_and_sidebar:true,hidden_selection_marked:true,highlight_excluded_from_glb:true,
+    dual_battery_selection_and_exact_glb:true,captive_frame_magnets_preserved:true,keycap_variant_from_design_file:true,frame_style_and_color:true,distinct_themed_geometries:frameStyles.length,json_roundtrip:true,invalid_combination_rejected:true,glb_matches_custom_configuration:true,glb_selected_vertices_exact:true,glb_objects:expectedCount,glb_keycaps:36,glb_units:'metres',case_variants:Object.keys(scene.catalog.case_styles).length,case_previews_distinct:true,case_glb_meshes_exact:true,open_cover_configuration:true,legacy_case_default:true,runtime_errors:errors,offline_network_requests:requests.length};
+  // Case captures stay under build/; capture-readme.cjs owns the README images.
+  const caseImages={};for(const [name,source] of [['level','level'],['solid','solid'],['rim','rim'],['terrace','terrace'],['rim-open','rim-open-top']])caseImages[name]=hash(fs.readFileSync(path.join(root,`build/case-variants/${source}.png`)));
+  fs.writeFileSync(path.join(root,'build/case-variants/render.json'),JSON.stringify({viewer_sha256:hash(Buffer.from(html)),checker_sha256:hash(fs.readFileSync(__filename)),images:caseImages,source:'Unretouched screenshots of the actual selected native STL meshes in the viewer'},null,2)+'\n');
   fs.writeFileSync(path.join(root,'build/viewer-ui-check.json'),JSON.stringify(receipt,null,2)+'\n');
   console.log(JSON.stringify(receipt,null,2));await mobile.close();await context.close();
  }finally{await browser.close();}

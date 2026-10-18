@@ -53,11 +53,16 @@ node viewer/config-contract-check.cjs
 node viewer/rebrand-check.cjs
 ```
 
-`responsive-check.cjs` and `keycolors-check.cjs` have been adapted to the new controls. They remain reproducibility tools; this redesign's delivery does not claim a CLI browser run. To run them independently in an environment that permits that browser runner:
+The browser checks drive the current controls: bottom navigation, Design tabs, Parts rows with eye and **Solo**, and part pages with **Visible / Solo / All**. They load `docs/offline.html`; `reliability-check.cjs` also serves `docs/index.html` locally to exercise the online print loader. The removed half filter, leader lines, annotations and per-key shape editor are covered by their current equivalents: per-piece eyes, hover highlights, part pages and design-file import.
+
+On 2026-10-18, with playwright-core 1.61.1 and Chromium 149, these passed with no runtime errors against `docs/offline.html` SHA-256 `02b3fb5a…`: `check.cjs`, `responsive-check.cjs`, `customize-check.cjs`, `frame-orientation-check.cjs` (Game Boy and Hanafuda), `battery-leads-check.cjs`, `cap-rows-check.cjs`, `reliability-check.cjs`, `frame-collection-check.cjs`, `display-seam-check.cjs`, `loading-check.cjs` and `keycolors-check.cjs`.
+
+`hex-check.cjs` fails at one step: Escape in a HEX field closes the editor instead of restoring the field's last valid value. That is a viewer bug, not an outdated check; its other steps pass.
+
+Run any check with a local Playwright and Chromium:
 
 ```sh
-FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/responsive-check.cjs
-FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/keycolors-check.cjs
+FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright-core FLAN36_BROWSER=/path/to/chromium node viewer/check.cjs
 ```
 
 `capture-readme.cjs` regenerates the README images (`revI-assembled`, the Solid, Color rim and Terrace `revI-case-*` captures and `revI-pcb-underside`) from `docs/offline.html` and records their hashes in [the image receipt](../validation/revI-readme-images.json):
@@ -68,7 +73,7 @@ FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium no
 
 The silkscreen textures come from the fabrication ZIPs themselves: `tools/build_silkscreen_textures.py` (with `tools/requirements-silkscreen.txt`) rasterizes each package's `B_Silkscreen`, then `tools/build_viewer_revI.py` and `viewer/build.mjs` embed them.
 
-Outputs under `build/canvas-review/`, `build/reliability-fix/` and `build/keycolors/` are ignored test artifacts. A passing run must identify the current built viewer and contain no runtime errors. Browser emulation does not constitute a physical iPhone test. The [reliability plan](reviews/reliability-plan.md) and its original receipts retain their historical scope and hashes; `python3 tools/restore_reliability_review.py` restores their ignored advisory artifacts.
+Browser checks write only ignored artifacts under `build/`; `check.cjs` keeps its case captures in `build/case-variants/`, since `capture-readme.cjs` owns the README images. A passing run must identify the current built viewer and contain no runtime errors. Browser emulation does not constitute a physical iPhone test. The [reliability plan](reviews/reliability-plan.md) and its original receipts retain their historical scope and hashes; `python3 tools/restore_reliability_review.py` restores their ignored advisory artifacts.
 
 After publication, compare the anonymous source archive and served viewer assets with the exact published commit:
 

@@ -16,15 +16,17 @@ const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/offline.
   await page.goto(url);await page.waitForFunction(n=>document.querySelector('#status').textContent.includes(`${n} visible components`),expectedCount,{timeout:60000});
   const cases=[{name:'adafruit',profiles:{left:'adafruit-1570',right:'adafruit-1570'}},{name:'301230',profiles:{left:'301230',right:'301230'}},{name:'mixed',profiles:{left:'301230',right:'adafruit-1570'}}];
   const checked=[];
+  // Opening the already-open destination closes the editor; open each panel only when needed.
+  async function panel(mode){if(await page.locator('body').getAttribute('data-panel-open')!=='true'||await page.locator('body').getAttribute('data-mode')!==mode||await page.locator('body').getAttribute('data-detail')==='true')await page.click('#nav-'+mode);}
   for(const c of cases){
    if(c.name==='mixed'){
     const cfg=structuredClone(scene.catalog.default_configuration);cfg.batteries=c.profiles;
-    await page.click('#nav-files');await page.locator('#load-config').setInputFiles({name:'mixed.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(cfg))});
+    await panel('files');await page.locator('#load-config').setInputFiles({name:'mixed.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(cfg))});
     assert.equal(await page.locator('#config-status').getAttribute('data-error'),'false');
    }else{
-    await page.click('#part-battery');await page.click(`[data-battery="${c.profiles.left}"]`);
+    await panel('customize');await page.click('#editor-tabs [data-panel=battery]');await page.click('#battery-target [data-side=both]');await page.click(`[data-battery="${c.profiles.left}"]`);
    }
-   await page.click('#nav-files');const pending=page.waitForEvent('download');await page.click('#glb');const download=await pending;
+   await panel('files');const pending=page.waitForEvent('download');await page.click('#glb');const download=await pending;
    const filename=path.join(out,c.name+'.glb');await download.saveAs(filename);const bytes=fs.readFileSync(filename),jsonLength=bytes.readUInt32LE(12),gltf=JSON.parse(bytes.toString('utf8',20,20+jsonLength));
    const geometryBytes=node=>{const primitive=gltf.meshes[node.mesh].primitives[0],a=gltf.accessors[primitive.attributes.POSITION],v=gltf.bufferViews[a.bufferView];const at=20+jsonLength+8+(v.byteOffset||0)+(a.byteOffset||0);return bytes.subarray(at,at+a.count*12);};
    for(const side of ['left','right']){

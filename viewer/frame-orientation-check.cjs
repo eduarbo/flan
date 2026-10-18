@@ -28,12 +28,12 @@ function glb(bytes){
  try{
   const p=await browser.newPage({viewport:{width:1500,height:1050}});p.on('pageerror',e=>errors.push(e.message));
   await p.goto(url+(url.includes('?')?'&':'?')+'diagnostics');await p.waitForFunction(()=>window.flan36,null,{timeout:120000});
-  await p.click('#part-lid');await p.click('#frame-target [data-side=both]');const before=await p.evaluate(()=>window.flan36.snapshot());
+  await p.click('#nav-customize');await p.click('#editor-tabs [data-panel=frames]');await p.click('#frame-target [data-side=both]');const before=await p.evaluate(()=>window.flan36.snapshot());
   await p.click(`[data-style=${style}]`);await p.click('#theme-colors');await p.evaluate(()=>window.flan36.idle());
   const after=await p.evaluate(()=>window.flan36.snapshot());assert.deepEqual(after.camera,before.camera);assert.deepEqual(after.view,before.view);
   for(const side of ['left','right'])assert.equal(after.configuration.frames[side].style,style);
-  await p.selectOption('#view','top');await p.click('#fit');await p.click('#collapse-detail');
-  // Collapsing the inspector resizes and clears the WebGL drawing buffer. Let
+  await p.click('[data-view=top]');await p.click('#fit');await p.click('#panel-close');
+  // Closing the editor resizes and clears the WebGL drawing buffer. Let
   // ResizeObserver and the requested render finish before reading its pixels.
   await p.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))));
   assert.equal(await p.locator('#error').isVisible(),false);

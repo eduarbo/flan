@@ -11,19 +11,26 @@ assert.equal(new Set(themes.map(t=>t.id)).size,themes.length);
 (async()=>{const browser=await chromium.launch({headless:true,...(process.env.FLAN36_BROWSER?{executablePath:process.env.FLAN36_BROWSER}:{})});try{
  const context=await browser.newContext({viewport:{width:1440,height:960},acceptDownloads:true}),p=await context.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
  const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/offline.html');await p.goto(url);await p.waitForFunction(()=>document.querySelector('#status').textContent.includes('visible components'),null,{timeout:60000});
- async function save(name){await p.click('#nav-files');const wait=p.waitForEvent('download');await p.click('#save-config');const d=await wait,file=path.join(out,name+'.json');await d.saveAs(file);return JSON.parse(fs.readFileSync(file));}
+ // Opening the already-open destination closes the editor; open each panel only when needed.
+ async function panel(mode,page=p){if(await page.locator('body').getAttribute('data-panel-open')!=='true'||await page.locator('body').getAttribute('data-mode')!==mode||await page.locator('body').getAttribute('data-detail')==='true')await page.click('#nav-'+mode);}
+ async function category(name,page=p){await panel('customize',page);await page.click(`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);}
+ // Installed display frames live in Parts → Frame; Show / Solo there never change them.
+ async function installFrames(sides){await panel('inspect');await p.click('#part-lid');for(const [side,on] of Object.entries(sides))await p.locator('#install-frame-'+side).setChecked(on);await p.click('#panel-back');}
+ // Reset is camera-only, so Solo stays pressed until Show all or a second press.
+ async function solo(group){await panel('inspect');await p.click('#part-'+group);if(await p.locator('#selection-solo').getAttribute('aria-pressed')!=='true')await p.click('#selection-solo');assert.equal(await p.locator('#selection-solo').getAttribute('aria-pressed'),'true');}
+ async function save(name){await panel('files');const wait=p.waitForEvent('download');await p.click('#save-config');const d=await wait,file=path.join(out,name+'.json');await d.saveAs(file);return JSON.parse(fs.readFileSync(file));}
  async function color(id,value){await p.locator(id).evaluate((e,v)=>{e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));},value);}
- const initial=await save('initial');await p.click('#part-base');await p.click('[data-case=rim]');await p.click('#part-lid');await p.click('[data-style=gameboy]');await p.click('#part-base');await p.locator('#case-cover').uncheck();
- await p.click('#nav-themes');assert.deepEqual(await p.locator('[data-theme]').evaluateAll(a=>a.map(x=>x.dataset.theme)),themes.map(t=>t.id));assert.equal(new Set(await p.locator('#themes-grid img').evaluateAll(a=>a.map(x=>x.src))).size,themes.length);
+ const initial=await save('initial');await category('cases');await p.click('[data-case=rim]');await category('frames');await p.click('[data-style=gameboy]');await installFrames({left:false,right:false});
+ await category('themes');assert.deepEqual(await p.locator('[data-theme]').evaluateAll(a=>a.map(x=>x.dataset.theme)),themes.map(t=>t.id));assert.equal(new Set(await p.locator('#themes-grid img').evaluateAll(a=>a.map(x=>x.src))).size,themes.length);
  await p.locator('[data-theme=cyber-mint]').focus();await p.keyboard.press('Enter');let c=await save('theme');assert.equal(c.cases.left.style,'rim');assert.equal(c.frames.left.style,'gameboy');assert.equal(c.cases.left.cover,false);assert.equal(c.cases.left.base_color,c.frames.left.color);assert.equal(c.cases.left.match_frame,true);for(const side of ['left','right'])for(const ref of Object.keys(c.keycaps[side])){assert.equal(c.keycaps[side][ref].variant,initial.keycaps[side][ref].variant);assert.equal(c.keycaps[side][ref].rotation_deg,initial.keycaps[side][ref].rotation_deg);}assert.notDeepEqual(c.keycaps,initial.keycaps);
- await p.click('#part-base');await p.click('#case-target [data-side=left]');await color('#case-base_color','#bb2244');await color('#case-plate_color','#272737');c=await save('custom-case');assert.equal(c.frames.left.color,'#bb2244');assert.notEqual(c.frames.left.color,c.frames.right.color);
- await p.click('#part-lid');await p.click('#frame-target [data-side=left]');await color('#frame-color','#cc5533');await color('#frame-detail','#313131');await color('#frame-accent','#eeee88');await color('#frame-secondary','#6688ee');c=await save('custom-frame');assert.equal(c.cases.left.base_color,'#cc5533');assert.deepEqual(c.frames.left.accents,{detail:'#313131',accent:'#eeee88',secondary:'#6688ee'});
- await p.click('#part-lid');await p.click('#frame-target [data-side=left]');await p.click('[data-style=phone]');let mixed=await save('mixed');assert.equal(mixed.frames.left.color,'#cc5533');assert.equal(mixed.frames.right.style,'gameboy');assert.equal(mixed.cases.right.cover,false);assert.deepEqual(mixed.frames.left.accents,c.frames.left.accents);
+ await category('cases');await p.click('#case-target [data-side=left]');await color('#case-base_color','#bb2244');await color('#case-plate_color','#272737');c=await save('custom-case');assert.equal(c.frames.left.color,'#bb2244');assert.notEqual(c.frames.left.color,c.frames.right.color);
+ await category('frames');await p.click('#frame-target [data-side=left]');await color('#frame-color','#cc5533');await color('#frame-detail','#313131');await color('#frame-accent','#eeee88');await color('#frame-secondary','#6688ee');c=await save('custom-frame');assert.equal(c.cases.left.base_color,'#cc5533');assert.deepEqual(c.frames.left.accents,{detail:'#313131',accent:'#eeee88',secondary:'#6688ee'});
+ await category('frames');await p.click('#frame-target [data-side=left]');await p.click('[data-style=phone]');let mixed=await save('mixed');assert.equal(mixed.frames.left.color,'#cc5533');assert.equal(mixed.frames.right.style,'gameboy');assert.equal(mixed.cases.right.cover,false);assert.deepEqual(mixed.frames.left.accents,c.frames.left.accents);
  await p.reload();await p.waitForFunction(()=>document.querySelector('#config-status').textContent.includes('Restored'),null,{timeout:60000});assert.deepEqual(await save('reloaded'),mixed);
  // Eye/Solo/explosion never determine printable selection.
- await p.click('#part-mcu');await p.click('#isolate-selection');await p.locator('#explode').evaluate(e=>{e.value='70';e.dispatchEvent(new Event('input',{bubbles:true}));});await p.click('#nav-files');await p.selectOption('#print-scope','complete');
+ await solo('mcu');await p.locator('#explode').evaluate(e=>{e.value='70';e.dispatchEvent(new Event('input',{bubbles:true}));});await panel('files');await p.click('#print-scope [data-value=complete]');
  let wait=p.waitForEvent('download');await p.click('#print-kit');let d=await wait;await d.saveAs(path.join(out,'complete.zip'));
- await p.selectOption('#print-half','left');await p.selectOption('#print-scope','shells');wait=p.waitForEvent('download');await p.click('#print-kit');d=await wait;await d.saveAs(path.join(out,'left-shells.zip'));
+ await p.click('#print-half [data-value=left]');await p.click('#print-scope [data-value=shells]');wait=p.waitForEvent('download');await p.click('#print-kit');d=await wait;await d.saveAs(path.join(out,'left-shells.zip'));
  // Custom case and all four frame colors also survive GLB export.
  wait=p.waitForEvent('download');await p.click('#glb');d=await wait;const glbPath=path.join(out,'mixed.glb');await d.saveAs(glbPath);const bytes=fs.readFileSync(glbPath),gltf=JSON.parse(bytes.toString('utf8',20,20+bytes.readUInt32LE(12)));
  const assembly=gltf.nodes.find(n=>n.extras?.configuration);assert.deepEqual(assembly.extras.configuration,mixed);
@@ -31,21 +38,29 @@ assert.equal(new Set(themes.map(t=>t.id)).size,themes.length);
  for(const node of gltf.nodes.filter(n=>n.extras&&(['base','plate'].includes(n.extras.group)||n.extras.frame_style))){const side=node.extras.side,group=node.extras.group,colors=group==='lid'?[mixed.frames[side].color,...['detail','accent','secondary'].map(k=>mixed.frames[side].accents[k])]:[mixed.cases[side][group+'_color']],primitives=gltf.meshes[node.mesh].primitives;assert.equal(primitives.length,colors.length);for(const [i,hex] of colors.entries()){const actual=gltf.materials[primitives[i].material].pbrMetallicRoughness.baseColorFactor;[1,3,5].map(j=>linear(hex.slice(j,j+2))).forEach((v,j)=>assert.ok(Math.abs(v-actual[j])<1e-5));}}
  const bad=JSON.parse(JSON.stringify(mixed));bad.cases.left.base_color='#nothex';await p.locator('#load-config').setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(bad))});assert.equal(await p.locator('#config-status').getAttribute('data-error'),'true');assert.deepEqual(await save('after-bad'),mixed);
  // Each new design must reach the actual downloadable print kit.
- await p.click('#part-base');await p.click('#case-target [data-side=left]');await p.locator('#case-cover').check();
+ await installFrames({left:true});
  for(const style of styles){
-  await p.click('#part-lid');await p.click('#frame-target [data-side=left]');await p.click(`[data-style=${style}]`);
-  await p.click('#nav-files');await p.selectOption('#print-half','left');await p.selectOption('#print-scope','shells');
+  await category('frames');await p.click('#frame-target [data-side=left]');await p.click(`[data-style=${style}]`);
+  await panel('files');await p.click('#print-half [data-value=left]');await p.click('#print-scope [data-value=shells]');
   const pending=p.waitForEvent('download');await p.click('#print-kit');const kit=await pending;await kit.saveAs(path.join(out,style+'-shells.zip'));assert.equal(await kit.failure(),null);
  }
- await p.click('#default-config');await p.click('#reset');await p.click('#part-base');await p.click('[data-case=rim]');await p.click('#part-lid');await p.click('[data-style=hanafuda]');await p.click('#nav-themes');await p.click('[data-theme=cyber-mint]');await p.screenshot({path:path.join(out,'themes-desktop.png')});
- await p.click('#part-mcu');await p.click('#isolate-selection');await p.selectOption('#half','left');await p.selectOption('#view','top');await p.mouse.move(10,20);await p.keyboard.press('Escape');await p.locator('#canvas').screenshot({path:path.join(out,'nano-v2.png'),style:'.stage-label,#leader-lines{opacity:0!important}'});
- for(const width of [390,320]){await p.setViewportSize({width,height:844});await p.click('#reset');await p.click('#nav-themes');const overflow=await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth);assert.equal(overflow,false);const visible=await p.locator('.part-item,.section-links button,#collapse-detail').evaluateAll(a=>a.map(e=>{const r=e.getBoundingClientRect();return r.x>=0&&r.y>=0&&r.right<=innerWidth+1&&r.bottom<=innerHeight+1;}));assert.equal(visible.length,16);assert(visible.every(Boolean));await p.screenshot({path:path.join(out,`themes-${width}.png`)});}
- await p.emulateMedia({reducedMotion:'reduce'});await p.locator('[data-theme=pocket]').focus();await p.keyboard.press('Enter');assert.equal(await p.locator('[data-theme=pocket]').getAttribute('aria-pressed'),'true');
+ if(await p.locator('#recovery').getAttribute('open')===null)await p.click('#recovery summary');await p.click('#default-config');await p.click('#reset');await category('cases');await p.click('[data-case=rim]');await category('frames');await p.click('[data-style=hanafuda]');await category('themes');await p.click('[data-theme=cyber-mint]');await p.screenshot({path:path.join(out,'themes-desktop.png')});
+ // The left controller alone: Solo, then each right-half piece's eye.
+ await solo('mcu');for(const eye of await p.locator('#part-visibility-list [data-object-visibility][data-name^="Right"]').all())await eye.uncheck();
+ await p.click('[data-view=top]');await p.mouse.move(10,20);await p.keyboard.press('Escape');await p.click('#panel-close');await p.click('#fit');await p.locator('#canvas').screenshot({path:path.join(out,'nano-v2.png'),style:'.stage > :not(canvas){visibility:hidden!important}'});
+ for(const width of [390,320]){
+  await p.setViewportSize({width,height:844});await p.click('#reset');await category('themes');const overflow=await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth);assert.equal(overflow,false);await p.screenshot({path:path.join(out,`themes-${width}.png`)});
+  // Every component row in Parts scrolls fully into the narrow viewport.
+  await panel('inspect');const rows=p.locator('.part-item');assert.equal(await rows.count(),12);
+  for(const row of await rows.all()){await row.scrollIntoViewIfNeeded();assert(await row.evaluate(e=>{const r=e.getBoundingClientRect(),at=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return r.x>=0&&r.y>=0&&r.right<=innerWidth+1&&r.bottom<=innerHeight+1&&e.contains(at);}),'Component row reachable at '+width);}
+  assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+ }
+ await p.emulateMedia({reducedMotion:'reduce'});await category('themes');await p.locator('[data-theme=pocket]').focus();await p.keyboard.press('Enter');assert.equal(await p.locator('[data-theme=pocket]').getAttribute('aria-pressed'),'true');
  assert.deepEqual(errors,[]);await context.close();
  const recovery=await browser.newContext({acceptDownloads:true});await recovery.addInitScript(()=>{Storage.prototype.setItem=function(){throw Error('denied')};});const q=await recovery.newPage();q.on('pageerror',e=>errors.push(e.message));const recoveryUrl=new URL(url);recoveryUrl.searchParams.set('diagnostics','');await q.goto(recoveryUrl.href);await q.waitForFunction(()=>window.flan36,null,{timeout:60000});
  // Startup is read-only. Exercise a real edit before expecting a denied write.
  const beforeDenied=await q.evaluate(()=>window.flan36.snapshot().configuration);
- await q.click('#nav-themes');await q.click('[data-theme=matcha]');await q.evaluate(()=>window.flan36.idle());
+ await category('themes',q);await q.click('[data-theme=matcha]');await q.evaluate(()=>window.flan36.idle());
  assert.equal(await q.locator('[data-theme=matcha]').getAttribute('aria-pressed'),'true');
  assert.match(await q.locator('#config-status').textContent(),/storage unavailable/);
  const afterDenied=await q.evaluate(()=>window.flan36.snapshot().configuration);assert.notDeepEqual(afterDenied,beforeDenied);

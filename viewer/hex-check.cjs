@@ -10,7 +10,10 @@ const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/offline.
  const context=await browser.newContext({viewport:{width:1440,height:960},permissions:['clipboard-read','clipboard-write']});
  const page=await context.newPage(),errors=[],checks=[];page.on('pageerror',e=>errors.push(e.message));
  try{
-  await page.goto(url+(url.includes('?')?'&':'?')+'diagnostics');await page.waitForSelector('#case-base_color-hex',{timeout:60000});
+  const panel=async mode=>{if(await page.locator('body').getAttribute('data-panel-open')!=='true'||await page.locator('body').getAttribute('data-mode')!==mode||await page.locator('body').getAttribute('data-detail')==='true')await page.click('#nav-'+mode);};
+  const category=async name=>{await panel('customize');await page.click(`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);};
+  const ready=async()=>{await page.waitForFunction(()=>window.flan36,null,{timeout:60000});await category('cases');await page.waitForSelector('#case-base_color-hex',{timeout:60000});};
+  await page.goto(url+(url.includes('?')?'&':'?')+'diagnostics');await ready();
   await page.evaluate(()=>document.querySelector('#default-config').click());
   const saved=async()=>{await page.evaluate(()=>new Promise(requestAnimationFrame));await page.evaluate(()=>window.flan36.idle());return page.evaluate(()=>{for(const v of Object.values(localStorage)){try{const c=JSON.parse(v);if(c.schema==='flan36-config-1')return c;}catch{}}});};
   const initial=await saved(),geometry=c=>Object.fromEntries(Object.entries(c.keycaps).map(([s,ks])=>[s,Object.fromEntries(Object.entries(ks).map(([k,v])=>[k,[v.variant,v.rotation_deg]]))]));
@@ -23,16 +26,16 @@ const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/offline.
   await page.getByRole('button',{name:'Copy Base / color rim HEX',exact:true}).click();assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),'#765432');
   await page.locator('#case-plate_color-hex').focus();await page.keyboard.press(process.platform==='darwin'?'Meta+V':'Control+V');assert.equal((await saved()).cases.left.plate_color,'#765432');checks.push('native picker sync, Copy, real clipboard paste to another part');
   await page.locator('#case-target [data-side="left"]').click();await hex.fill('bb1122');await page.locator('#case-target [data-side="both"]').click();assert.equal(await hex.inputValue(),'');assert.equal(await hex.getAttribute('placeholder'),'Mixed');assert.equal(await page.getByRole('button',{name:'Copy Base / color rim HEX',exact:true}).isEnabled(),false);checks.push('mixed halves stay explicit and cannot copy a misleading value');
-  await page.locator('#part-lid').click();await page.locator('[data-style="gameboy"]').click();
+  await category('frames');await page.locator('[data-style="gameboy"]').click();
   for(const [id,value] of [['frame-color','#abcdef'],['frame-detail','#445566'],['frame-accent','#c0ffee'],['frame-secondary','#123abc']]){await page.locator('#'+id+'-hex').fill(value);assert.equal(await page.locator('#'+id).inputValue(),value);}
   assert.equal((await saved()).cases.left.base_color,'#abcdef');checks.push('frame body and all three accent HEX fields, linked rim');
-  await page.locator('#part-keycaps').click();await page.locator('#cap-mode').selectOption('all');await page.locator('#cap-color-hex').fill('abc123');assert(Object.values((await saved()).keycaps).flatMap(Object.values).every(k=>k.color==='#abc123'));
-  await page.locator('#cap-mode').selectOption('row');await page.locator('#cap-row').selectOption('1');await page.locator('#cap-color-hex').fill('112233');
+  await category('keycaps');await page.locator('#cap-mode [data-value="all"]').click();await page.locator('#cap-color-hex').fill('abc123');assert(Object.values((await saved()).keycaps).flatMap(Object.values).every(k=>k.color==='#abc123'));
+  await page.locator('#cap-mode [data-value="row"]').click();await page.locator('#cap-row [data-value="1"]').click();await page.locator('#cap-color-hex').fill('112233');
   const row=await saved();for(const ks of Object.values(row.keycaps))for(const [ref,k] of Object.entries(ks))assert.equal(k.color,ref[1]==='1'?'#112233':'#abc123');
-  await page.locator('#cap-mode').selectOption('key');await page.locator('[data-cap-side="left"][data-cap-key="K11"]').click();await page.locator('#cap-color-hex').fill('fedcba');const single=await saved();assert.equal(single.keycaps.left.K11.color,'#fedcba');assert.equal(single.keycaps.right.K11.color,'#112233');assert.deepEqual(geometry(single),geometry(initial));checks.push('HEX follows all/row/individual targets and preserves cap geometry');
-  await page.reload();await page.waitForSelector('#case-base_color-hex',{timeout:60000});assert.deepEqual(await saved(),single);checks.push('reload preserves configuration');
-  await page.locator('#part-lid').click();await page.locator('#frame-color-hex').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,'desktop.png')});
-  await page.setViewportSize({width:390,height:844});await page.locator('#part-keycaps').click();await page.locator('#cap-color-hex').scrollIntoViewIfNeeded();
+  await page.locator('#cap-mode [data-value="key"]').click();await page.locator('[data-cap-side="left"][data-cap-key="K11"]').click();await page.locator('#cap-color-hex').fill('fedcba');const single=await saved();assert.equal(single.keycaps.left.K11.color,'#fedcba');assert.equal(single.keycaps.right.K11.color,'#112233');assert.deepEqual(geometry(single),geometry(initial));checks.push('HEX follows all/row/individual targets and preserves cap geometry');
+  await page.reload();await ready();assert.deepEqual(await saved(),single);checks.push('reload preserves configuration');
+  await category('frames');await page.locator('#frame-color-hex').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,'desktop.png')});
+  await page.setViewportSize({width:390,height:844});await category('keycaps');await page.locator('#cap-color-hex').scrollIntoViewIfNeeded();
   const bounds=await page.locator('#cap-color-hex').boundingBox();assert(bounds.x>=0&&bounds.x+bounds.width<=390);await page.locator('#cap-color-hex').fill('badbad');assert.equal(await page.locator('#cap-color').inputValue(),'#badbad');await page.screenshot({path:path.join(out,'mobile.png')});checks.push('390px mobile HEX input and editing');
   assert.deepEqual(errors,[]);const bytes=url.startsWith('file:')?fs.readFileSync(new URL(url)):Buffer.from(await(await fetch(url)).arrayBuffer());
   const report={checker_sha256:crypto.createHash('sha256').update(fs.readFileSync(__filename)).digest('hex'),viewer_sha256:crypto.createHash('sha256').update(bytes).digest('hex'),checks,runtime_errors:errors};fs.writeFileSync(path.join(out,'result.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report,null,2));

@@ -22,8 +22,11 @@ const errors=[];let browser;
  async function activate(selector){const e=p.locator(selector);for(const d of await e.locator('xpath=ancestor::details').all())if(await d.getAttribute('open')===null){await d.locator(':scope > summary').focus();await p.keyboard.press('Enter');}await e.focus();await p.keyboard.press('Enter');}
  async function ready(){await p.waitForFunction(()=>document.querySelectorAll('[data-preset]').length===3&&localStorage.getItem('flan36.configuration.v1'),null,{timeout:60000});}
  const saved=async()=>{await p.evaluate(()=>window.flan36.idle());return p.evaluate(()=>JSON.parse(localStorage.getItem('flan36.configuration.v1')));};
- async function download(selector,name){await activate('#nav-files');const event=p.waitForEvent('download');await activate(selector);const d=await event,file=path.join(out,name);await d.saveAs(file);assert.equal(await d.failure(),null);return fs.readFileSync(file);}
- async function imported(c){await activate('#nav-files');await p.locator('#load-config').setInputFiles({name:'caps.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(c))});await p.waitForFunction(()=>document.querySelector('#load-config').value==='');assert.equal(await p.locator('#config-status').getAttribute('data-error'),'false');}
+ // Opening the already-open destination closes the editor; open each panel only when needed.
+ async function panel(mode){if(await p.locator('body').getAttribute('data-panel-open')!=='true'||await p.locator('body').getAttribute('data-mode')!==mode||await p.locator('body').getAttribute('data-detail')==='true')await activate('#nav-'+mode);}
+ async function caps(){await panel('customize');await activate('#editor-tabs [data-panel="keycaps"]');assert.equal(await p.locator('#panel-keycaps').isVisible(),true);}
+ async function download(selector,name){await panel('files');const event=p.waitForEvent('download');await activate(selector);const d=await event,file=path.join(out,name);await d.saveAs(file);assert.equal(await d.failure(),null);return fs.readFileSync(file);}
+ async function imported(c){await panel('files');await p.locator('#load-config').setInputFiles({name:'caps.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(c))});await p.waitForFunction(()=>document.querySelector('#load-config').value==='');assert.equal(await p.locator('#config-status').getAttribute('data-error'),'false');}
  await p.goto(url+(url.includes('?')?'&':'?')+'diagnostics');await p.waitForFunction(()=>document.querySelector('#status').textContent.includes('visible components'));await p.evaluate(()=>document.querySelector('#default-config').click());await ready();
  assert.equal(await p.evaluate(async()=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(document.querySelector('#scene-data').textContent)))).map(x=>x.toString(16).padStart(2,'0')).join('')),hash(Buffer.from(packed)));
  const initial=await saved(),legacy=clone(initial);
@@ -38,10 +41,10 @@ const errors=[];let browser;
  legacy.batteries.left='301230';legacy.cases.right.style='rim';legacy.frames.right.style='tv';
  await imported(legacy);const normalized=await saved();
  await p.reload();await ready();assert.deepEqual(await saved(),normalized,'No inferred migration of literal manual choices');
- await activate('#part-keycaps');assert.equal(await p.locator('#fix-cap-rows').textContent(),'Fix top/bottom slopes (19)');
- await p.selectOption('#half','left');await p.selectOption('#view','left');await p.mouse.move(10,10);await p.keyboard.press('Escape');
+ await caps();assert.equal(await p.locator('#fix-cap-rows').textContent(),'Fix top/bottom slopes (19)');
+ await activate('[data-view=left]');await p.mouse.move(10,10);await p.keyboard.press('Escape');
  await p.locator('#canvas').screenshot({path:path.join(out,'before.png'),style:'.stage-label,#leader-lines{opacity:0!important}'});
- await p.setViewportSize({width:390,height:844});
+ await p.setViewportSize({width:390,height:844});await caps();
  await p.locator('#fix-cap-rows').scrollIntoViewIfNeeded();
  const repairBounds=await p.locator('#fix-cap-rows').boundingBox();
  assert(repairBounds.x>=0&&repairBounds.x+repairBounds.width<=390,'Repair control fits mobile width');
@@ -55,7 +58,7 @@ const errors=[];let browser;
  const exported=JSON.parse(await download('#save-config','repaired.json'));assert.deepEqual(exported,fixed);await imported(exported);assert.deepEqual(await saved(),fixed);
  const presets={};
  for(const id of ['normal-sculpted','saddle-sculpted']){
-   await activate('#part-keycaps');await activate(`[data-preset="${id}"]`);const config=await saved();
+   await caps();await activate(`[data-preset="${id}"]`);const config=await saved();
    assert.deepEqual(geometry(config),geometry(scene.presets[id]));assert.deepEqual(colors(config),colors(fixed));assert.deepEqual(rest(config),rest(fixed));
    const glb=await download('#glb',id+'.glb'),length=glb.readUInt32LE(12),gltf=JSON.parse(glb.toString('utf8',20,20+length));
    assert.deepEqual(gltf.nodes.find(n=>n.name==='Flan36 revI · nominal').extras.configuration,config);
@@ -76,10 +79,10 @@ const errors=[];let browser;
      measurements.push({side,key:ref,outer_above_inner_mm:outer-inner});
    }
    assert.equal(measurements.length,20);presets[id]=measurements;
-   await activate('#part-keycaps');await p.locator('#key-presets').screenshot({path:path.join(out,'presets.png')});
-   await p.selectOption('#view','left');await p.selectOption('#half','left');await p.mouse.move(10,10);await p.keyboard.press('Escape');
+   await caps();await p.locator('#key-presets').screenshot({path:path.join(out,'presets.png')});
+   await activate('[data-view=left]');await p.mouse.move(10,10);await p.keyboard.press('Escape');
    await p.locator('#canvas').screenshot({path:path.join(out,id+'-side.png'),style:'.stage-label,#leader-lines{opacity:0!important}'});
-   await p.selectOption('#half','both');await p.selectOption('#view','iso');
+   await activate('[data-view=iso]');
    await p.reload();await ready();assert.deepEqual(await saved(),config,'Preset orientation survives reload');
  }
  assert.deepEqual(errors,[]);
