@@ -1,6 +1,6 @@
 # The Flan family
 
-**Flan36 is built. Flan42 has routed PCBs that pass DRC, ERC and schematic parity, with Gerber packages; its case, firmware and viewer support come next. Flan46 and Flan54 have generated layouts, matrices and preliminary case outlines.**
+**Flan36 is built. Flan42, Flan46 and Flan54 have routed PCBs that pass DRC, ERC and schematic parity, with Gerber packages; their cases, firmware and viewer support come next.**
 
 ![The Flan family: Flan36, Flan42, Flan46 and Flan54, both halves from the front](images/variants/family.svg)
 
@@ -57,12 +57,32 @@ $KICAD_PY tools/test_routing_gate.py --variant flan42
 python3 tools/export_fabrication.py --variant flan42
 ```
 
+## Flan46 and Flan54 PCBs
+
+![Flan46 left and right PCBs from the front: back copper blue, front copper red](images/variants/flan46-pcb.png)
+
+![Flan54 left and right PCBs from the front](images/variants/flan54-pcb.png)
+
+[`hardware/flan46/`](../hardware/flan46/) and [`hardware/flan54/`](../hardware/flan54/) are built with the same tools and checks as Flan42. The boards are 113.45 × 108.27 mm (Flan46) and 131.45 × 108.27 mm (Flan54) per half.
+
+- **Number row:** K41–K45 copy the top-row key of their column one 17 mm pitch up, with diodes D41–D45; Flan54 adds K40 (a copy of K01) and Flan42's outer column. They are matrix row 4, net ROW4.
+- **ROW4 pin:** D15 on the left and D6 on the right, recorded in [`design/pinmap.json`](../design/pinmap.json) under `variants`; revI's pins are unchanged. Every free pin was routed on Flan46. The lowest pin gave the shortest ROW4 on each half: 188.09 mm against up to 198.22 mm on the left, and 178.58 mm against up to 188.69 mm on the right.
+- **GND3 on the left:** the left's free pins sit in the nice!nano's RAW-side channel. At the revI rules (0.2 mm tracks and clearance, 0.5 mm to the edge), that channel already carries three tracks per layer past D10, and a seventh signal misses by 0.02 mm. The left number-row boards therefore leave U1 GND3 unconnected on the PCB, a no-connect in the schematic, and use its track's place for ROW4. The module ties its GND pads together; J1 and the rest of GND stay connected through GND1 and GND2.
+- **Fasteners:** every edge point left of the bay must stay as close to a fastener as Flan36's worst key-side point (41.65 mm), or as the Flan36 edge point it extends. Flan46 adds H7, H2 one row up, at (57, 3.5) mm on the left and (103, 3.5) mm on the right. Flan54 adds H6, H7 and H8, which is H1 one column out and one row up, at (20.7, 20.5) mm and (139.3, 20.5) mm.
+- **Routing:** each new key copies its template key's Krc_A routing. The grid router links the number-row columns, the ROW4 chain and the ROW4 link to the MCU, and the straightening pass cleans them up. The signature stays in revI's free rectangles.
+
+**Checks.** DRC, ERC and parity report 0 violations and 0 unconnected items per half. The checker reads 303 physical pads and 23 matrix keys per half on Flan46, and 349 pads and 27 keys on Flan54. It also verifies the ROW4 pin and the released GND3. Negative controls reject a wrong pad net, a disconnected row and a moved key. The Gerber and drill readback matches 676 outline segments and every hole. Packages are in `hardware/flan46/fabrication/` and `hardware/flan54/fabrication/`. The receipts are `validation/flan46-*.json` and `validation/flan54-*.json`.
+
+**Physical fit is untested.** The firmware also needs ROW4 on D15/D6 before a number-row board can be used.
+
+The rebuild commands are the same as Flan42's with `--variant flan46` or `--variant flan54`. Use `build_variant_pcb.py --row4 LEFT RIGHT --output DIR` to try other pins.
+
 ## Next stages
 
 Each stage applies to Flan42, Flan46 and Flan54. Flan42 is the natural first build: it adds keys to an existing matrix column and needs no new pin.
 
-1. **PCB:** Flan42 is done (above). Flan46 and Flan54 need the row-4 net and a chosen pin, then routing, checks and Gerber packages. The builder and router handle the outer column only. The six silkscreen editions still need to be generated for each variant board.
-2. **Case:** FreeCAD bodies from the variant outline with the same stack, bay, frames, magnets and batteries; new fastener positions for the larger plates (Flan42's H6 is already on its PCB); fit coupons.
+1. **PCB:** done for all three variants (above). The six silkscreen editions still need to be generated for each variant board.
+2. **Case:** FreeCAD bodies from the variant outline with the same stack, bay, frames, magnets and batteries; new fastener positions for the larger plates (H6–H8 are already on the variant PCBs); fit coupons.
 3. **Firmware:** a ZMK shield per variant from its matrix transform, the row-4 pin and keymaps with the number row or outer column.
 4. **Keycaps:** KLP Lamé qualification for the new positions.
 5. **Viewer:** a variant choice in Design, each variant's scene loaded on demand like the print kit.
