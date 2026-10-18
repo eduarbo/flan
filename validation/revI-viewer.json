@@ -1492,7 +1492,7 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "29cc88dcf69785f18b7566478132e0fef1f27f6e9b21f677bf288251925b2730"
+      "sha256": "283d573b271b7ebd4d0645c0fe55b069c1bc24c8fd3c8a1c5f12540a47c77acd"
     },
     {
       "path": "viewer/config.js",
@@ -1556,18 +1556,18 @@
     },
     {
       "path": "viewer/template.html",
-      "sha256": "1ff14d463917b327b7b7d329b45045f4c61e6686411523ed48ef490a01f78786"
+      "sha256": "7a8c8ba5fec09b5a96cbab27026ae4d9b4e04fe7d395f649cb44b39a2728f76d"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "0dadcdd30e0d17a0c2b50e12b7a1ac5749fcc74c81b2dd7a47bf00944e0b2bc2"
+      "sha256": "7286f90f6d97c97a6ccc8f90b25c44105f05195d7b1bc012bbc1a00637ccfa08"
     },
     {
       "path": "viewer/package-lock.json",
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "f44726dc0200831c332ebcd1376ea24e2c0b1765719b2b3a67d9fb42de8a6a7f",
+  "viewer_sha256": "1e1a0290300ae2ba84c98218a465b4cfd649d5caf8d035eed3df7089c468e1ed",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -1579,7 +1579,7 @@
     "cover_ahead_of_adjacent_cap_mm": 0
   },
   "offline": "docs/explore/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/explore/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.",
-  "offline_sha256": "7b9bc2d39bb1dfc500d20db408305dc6a1d0d501d0467d4367bf549b19178cab",
+  "offline_sha256": "40f90072b1b1455f208c8c95c90dcb0a10fcb9772a245a5caf2208ba08110b91",
   "printing": {
     "path": "docs/explore/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
@@ -1617,8 +1617,8 @@
     ]
   },
   "geometry_aliases": 18,
-  "online_bytes": 53356259,
-  "offline_bytes": 85196694,
+  "online_bytes": 53356455,
+  "offline_bytes": 85196890,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

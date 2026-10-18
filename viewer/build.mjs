@@ -19,7 +19,7 @@ fs.writeFileSync(path.join(root,'LICENSES/Three-MIT.txt'),license);
 const escape=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 const licenses=[['LICENSE','Flan36 · GPL-3.0'],['LICENSES/CC-BY-SA-4.0.txt','Keycap meshes · CC-BY-SA-4.0'],['LICENSES/Three-MIT.txt','Three.js · MIT'],['LICENSES/fflate-MIT.txt','fflate · MIT'],['components/sources/KiSwitch-MIT.txt','KiSwitch · MIT']].map(([p,label])=>`<details class="option-group"><summary>${label}</summary><pre>${escape(fs.readFileSync(path.join(root,p),'utf8'))}</pre></details>`).join('');
 const credits=`<dl class="credit-list">
-<div><dt>Original keyboard &amp; CAD</dt><dd>Designed by Eduardo Ruiz. Piantor by beekeeb was an inspiration for the number of keys. Flan36 is not affiliated with beekeeb.</dd></div>
+<div><dt>Original keyboard &amp; CAD</dt><dd>Designed by Eduardo Ruiz. Inspired by Piantor by beekeeb, whose 36 key positions and angles it keeps (GPL-3.0); the PCBs, case outline, cases, frames and firmware are original. Flan36 is not affiliated with beekeeb.</dd></div>
 <div><dt>KLP Lamé keycaps</dt><dd>braindefender · CC-BY-SA-4.0. Original meshes, placed and colored. <a href="https://github.com/braindefender/KLP-Lame-Keycaps/tree/4a67a824232d3054c61599ea047c56a340faaba2">Pinned source ↗</a></dd></div>
 <div><dt>Component models</dt><dd>KiSwitch Choc v1 · MIT. KiCad library models · CC-BY-SA-4.0 with library exception. <a href="https://github.com/eduarbo/flan/blob/main/components/README.md">Per-file sources &amp; changes ↗</a></dd></div>
 <div><dt>Viewer libraries</dt><dd>Three.js 0.180.0 and fflate · MIT.</dd></div>

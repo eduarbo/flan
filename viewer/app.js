@@ -363,7 +363,7 @@ $('glb').onclick=async()=>{
     const assembly=new THREE.Group();assembly.name=`Flan36 rev${data.revision} · nominal`;assembly.scale.setScalar(.001);
     for(const object of objects){if(object.userData.installed===false)continue;const clone=object.clone();for(const child of [...clone.children])if(child.userData.silkscreen)clone.remove(child);clone.visible=true;clone.position.fromArray(object.userData.base);assembly.add(clone);}
     assembly.userData={configuration:copy(configuration),units:'metres',source:'https://github.com/eduarbo/flan',limitations:data.limits,
-      attribution:'Flan36 / Eduardo Ruiz, original keyboard and CAD design; Piantor by beekeeb inspired the key count; KLP Lame keycaps by braindefender (CC-BY-SA-4.0), unchanged meshes, placed and coloured. Choc models by keyswitch-kicad-library contributors (MIT); reset and power switch geometry by KiCad (CC-BY-SA-4.0 with library exception).',
+      attribution:'Flan36 / Eduardo Ruiz, original PCBs, case and CAD design; inspired by Piantor by beekeeb, keeping its key positions and angles (GPL-3.0); KLP Lame keycaps by braindefender (CC-BY-SA-4.0), unchanged meshes, placed and coloured. Choc models by keyswitch-kicad-library contributors (MIT); reset and power switch geometry by KiCad (CC-BY-SA-4.0 with library exception).',
       licenses:['https://www.gnu.org/licenses/gpl-3.0.html','https://creativecommons.org/licenses/by-sa/4.0/'],
       component_sources:'https://github.com/eduarbo/flan/blob/main/components/sources.json',
       component_licenses:'https://github.com/eduarbo/flan/blob/main/components/README.md',
