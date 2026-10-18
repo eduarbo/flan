@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flan · Home proposal B · Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..600,100&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #162123; --panel: #1c292b; --ink: #ecf1ec; --muted: #9aaba7; --line: #2d3d3f; --mint: #84cbb1; --custard: #f1e6ca; }
+* { box-sizing: border-box; }
+html[lang=en] [lang=es], html[lang=es] [lang=en] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.6 Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased;
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 48px 48px; background-position: -1px -1px; }
+a { color: inherit; }
+.mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.wrap { max-width: 1200px; margin: 0 auto; padding-inline: max(20px, env(safe-area-inset-left)); }
+header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; }
+.logo img { display: block; height: 32px; width: auto; }
+nav { display: flex; align-items: center; gap: 22px; }
+nav a { text-decoration: none; } nav a:hover { color: var(--ink); }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--bg); }
+.lang button { border: 0; background: none; font: 500 11px "JetBrains Mono", monospace; padding: 6px 10px; color: var(--muted); cursor: pointer; }
+.lang button[aria-pressed=true] { background: var(--mint); color: var(--bg); }
+.hero { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px; align-items: center; padding-block: 64px 40px; }
+h1 { font-family: Fraunces, Georgia, serif; font-variation-settings: "SOFT" 100, "opsz" 144; font-weight: 300; font-size: clamp(40px, 5.6vw, 72px); line-height: 1.03; letter-spacing: -0.02em; margin: 14px 0 0; text-wrap: balance; }
+.lede { color: var(--muted); font-size: 17px; max-width: 42ch; margin: 20px 0 0; }
+.cta { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
+.button { display: inline-flex; align-items: center; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 500; font-size: 15px; }
+.button.primary { background: var(--mint); color: var(--bg); } .button.ghost { border: 1px solid var(--line); background: var(--bg); }
+figure { margin: 0; position: relative; }
+figure img { width: 100%; height: auto; filter: drop-shadow(0 26px 30px rgba(0, 0, 0, .45)); }
+figcaption { display: flex; justify-content: space-between; border-top: 1px dashed var(--line); margin-top: 18px; padding-top: 10px; }
+.specs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 12px; background: var(--panel); margin-top: 40px; overflow: hidden; }
+.spec { padding: 22px; border-left: 1px solid var(--line); min-width: 0; }
+.spec:first-child { border-left: 0; }
+.spec b { display: block; font-family: "JetBrains Mono", monospace; font-weight: 500; font-size: 22px; color: var(--custard); margin-top: 8px; }
+.spec span:last-child { display: block; color: var(--muted); font-size: 14px; margin-top: 6px; }
+.sizes { padding-block: 88px 30px; }
+h2 { font-family: Fraunces, Georgia, serif; font-variation-settings: "SOFT" 100, "opsz" 144; font-weight: 300; font-size: clamp(30px, 4vw, 44px); margin: 10px 0 30px; }
+.list { border-top: 1px solid var(--line); }
+.row { display: grid; grid-template-columns: 150px minmax(0, 1fr) 260px 120px; gap: 24px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+.row:hover { background: rgba(132, 203, 177, .05); }
+.row strong { font-family: Fraunces, Georgia, serif; font-variation-settings: "SOFT" 100, "opsz" 144; font-weight: 400; font-size: 28px; }
+.row .pic img { width: 100%; max-height: 92px; object-fit: contain; }
+.row .data { display: grid; gap: 4px; } .row .go { text-align: right; color: var(--mint); font-weight: 500; }
+footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px; padding-block: 64px 40px; color: var(--muted); font-size: 14px; }
+.maker { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--ink); }
+.maker svg { width: 18px; height: 18px; }
+.links { display: flex; gap: 18px; flex-wrap: wrap; } .links a { text-decoration: none; }
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; } .specs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .spec:nth-child(3) { border-left: 0; } .spec:nth-child(n+3) { border-top: 1px solid var(--line); }
+  .row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .row .pic { grid-column: 1 / -1; grid-row: 1; } .row .go { text-align: left; }
+  nav .hide-sm { display: none; }
+}
+@media (max-width: 480px) { .specs { grid-template-columns: 1fr; } .spec { border-left: 0; } .spec:nth-child(n+2) { border-top: 1px solid var(--line); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="logo" href="./b.html" aria-label="Flan home"><img src="../../branding/flan/flan-lockup-white.svg" alt="Flan"></a>
+    <nav class="mono">
+      <a class="hide-sm" href="../../index.html"><span lang="en">Explore</span><span lang="es">Explorar</span></a>
+      <a class="hide-sm" href="https://github.com/eduarbo/flan/blob/main/docs/build.md"><span lang="en">Build</span><span lang="es">Armar</span></a>
+      <a class="hide-sm" href="https://github.com/eduarbo/flan">GitHub</a>
+      <span class="lang" role="group" aria-label="Language"><button data-set-lang="en">EN</button><button data-set-lang="es">ES</button></span>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <span class="mono"><span lang="en">Open hardware · Rev I</span><span lang="es">Hardware abierto · Rev I</span></span>
+      <h1><span lang="en">Low, wireless, split. Drawn to the millimetre.</span><span lang="es">Bajo, inalámbrico, dividido. Dibujado al milímetro.</span></h1>
+      <p class="lede"><span lang="en">Flan is a split keyboard with routed PCBs, printable cases and ZMK firmware. Every part is open, measured and ready to build.</span><span lang="es">Flan es un teclado dividido con PCB ruteados, cajas imprimibles y firmware ZMK. Cada pieza es abierta, está medida y lista para armar.</span></p>
+      <div class="cta">
+        <a class="button primary" href="#sizes"><span lang="en">Choose a size</span><span lang="es">Elige un tamaño</span></a>
+        <a class="button ghost" href="https://github.com/eduarbo/flan">GitHub</a>
+      </div>
+    </div>
+    <figure>
+      <img src="../../images/home/flan36-3d.webp" alt="Flan36 in the Level case">
+      <figcaption class="mono"><span>Flan36 · Level · Talavera</span><span>116.75 × 94.57 mm</span></figcaption>
+    </figure>
+  </section>
+
+  <section class="specs" aria-label="Specifications">
+    <div class="spec"><span class="mono"><span lang="en">Frame plane</span><span lang="es">Plano del marco</span></span><b>14.50 mm</b><span><span lang="en">Choc v1 hot-swap, flush glass.</span><span lang="es">Choc v1 hot-swap, cristal al ras.</span></span></div>
+    <div class="spec"><span class="mono"><span lang="en">Controller</span><span lang="es">Controlador</span></span><b>nice!nano v2</b><span><span lang="en">Bluetooth, ZMK, nice!view display.</span><span lang="es">Bluetooth, ZMK, pantalla nice!view.</span></span></div>
+    <div class="spec"><span class="mono"><span lang="en">Sizes</span><span lang="es">Tamaños</span></span><b>36 · 42 · 46 · 54</b><span><span lang="en">Same thumbs, bay and battery.</span><span lang="es">Mismos pulgares, bahía y batería.</span></span></div>
+    <div class="spec"><span class="mono"><span lang="en">Sources</span><span lang="es">Fuentes</span></span><b>KiCad · FreeCAD</b><span><span lang="en">Gerbers, STEP, STL and 3MF. GPL-3.0.</span><span lang="es">Gerbers, STEP, STL y 3MF. GPL-3.0.</span></span></div>
+  </section>
+
+  <section class="sizes" id="sizes">
+    <span class="mono"><span lang="en">The family</span><span lang="es">La familia</span></span>
+    <h2><span lang="en">Pick a size to explore in 3D</span><span lang="es">Elige un tamaño para explorarlo en 3D</span></h2>
+    <div class="list">
+      <a class="row" href="../../index.html#flan36"><strong>Flan36</strong><span class="pic"><img src="../../images/home/flan36-top.webp" alt=""></span><span class="data mono"><span>3 × 5 + 3 · 36 <span lang="en">keys</span><span lang="es">teclas</span></span><span>116.75 × 94.57 mm</span></span><span class="go"><span lang="en">Open →</span><span lang="es">Abrir →</span></span></a>
+      <a class="row" href="../../index.html#flan42"><strong>Flan42</strong><span class="pic"><img src="../../images/home/flan42-top.webp" alt=""></span><span class="data mono"><span>3 × 6 + 3 · 42 <span lang="en">keys</span><span lang="es">teclas</span></span><span>134.75 × 94.57 mm</span></span><span class="go"><span lang="en">Open →</span><span lang="es">Abrir →</span></span></a>
+      <a class="row" href="../../index.html#flan46"><strong>Flan46</strong><span class="pic"><img src="../../images/home/flan46-top.webp" alt=""></span><span class="data mono"><span>4 × 5 + 3 · 46 <span lang="en">keys</span><span lang="es">teclas</span></span><span>116.75 × 111.57 mm</span></span><span class="go"><span lang="en">Open →</span><span lang="es">Abrir →</span></span></a>
+      <a class="row" href="../../index.html#flan54"><strong>Flan54</strong><span class="pic"><img src="../../images/home/flan54-top.webp" alt=""></span><span class="data mono"><span>4 × 6 + 3 · 54 <span lang="en">keys</span><span lang="es">teclas</span></span><span>134.75 × 111.57 mm</span></span><span class="go"><span lang="en">Open →</span><span lang="es">Abrir →</span></span></a>
+    </div>
+  </section>
+
+  <footer>
+    <a class="maker" href="https://eduarbo.com"><span lang="en">by</span><span lang="es">por</span>
+      <svg viewBox="160 150 880 880" aria-hidden="true"><path d="M960 377.85 960 516.41 600 724.26 600 585.69Z M600 862.82 960 654.97 960 793.54 600 1001.38Z" fill="#1E9C89"/><path d="M240 377.85 360 447.13 360 724.26 600 862.82 600 1001.38 240 793.54Z" fill="#0B554B"/><path d="M240 377.85 600 170 960 377.85 840 447.13 600 308.56 360 447.13Z" fill="#65D7C4"/></svg>eduarbo</a>
+    <span class="links mono"><a href="https://github.com/eduarbo/flan/blob/main/docs/parts.md"><span lang="en">Parts</span><span lang="es">Piezas</span></a><a href="https://github.com/eduarbo/flan/blob/main/docs/electronics.md#order-the-two-pcbs"><span lang="en">Order PCBs</span><span lang="es">Pedir PCB</span></a><a href="https://github.com/eduarbo/flan/blob/main/docs/firmware.md">Firmware</a></span>
+    <span class="mono" style="width:100%"><span lang="en">Digital prototype · physical tests in progress</span><span lang="es">Prototipo digital · pruebas físicas en curso</span></span>
+  </footer>
+</div>
+<script src="./lang.js"></script>
+</body>
+</html>
