@@ -354,7 +354,7 @@
             },
             {
               "path": "design/pinmap.json",
-              "sha256": "a47cfd14cb09cec9604225e92d8fc41838ef4dd9001cc353a3e990e350eeabe5"
+              "sha256": "ad5b204b45dc200fbce491cc003c719b3a53c1bddfc58c9413a0f6bfc80e43ee"
             },
             {
               "path": "design/variants.json",
@@ -746,7 +746,7 @@
             },
             {
               "path": "design/pinmap.json",
-              "sha256": "a47cfd14cb09cec9604225e92d8fc41838ef4dd9001cc353a3e990e350eeabe5"
+              "sha256": "ad5b204b45dc200fbce491cc003c719b3a53c1bddfc58c9413a0f6bfc80e43ee"
             },
             {
               "path": "design/variants.json",
@@ -1138,7 +1138,7 @@
             },
             {
               "path": "design/pinmap.json",
-              "sha256": "a47cfd14cb09cec9604225e92d8fc41838ef4dd9001cc353a3e990e350eeabe5"
+              "sha256": "ad5b204b45dc200fbce491cc003c719b3a53c1bddfc58c9413a0f6bfc80e43ee"
             },
             {
               "path": "design/variants.json",
