@@ -14,10 +14,9 @@
   "added": [
    "H6"
   ],
-  "rule": "worst key-side edge distance to a fastener must not exceed Flan36's",
-  "flan36_worst_mm": 41.65,
-  "without_added_mm": 52.54,
-  "with_added_mm": 41.65
+  "rule": "edge points left of the bay within max(Flan36's worst key-side distance, the distance at the Flan36 edge point they extend) of a fastener; smallest set of revI holes moved a column outward, a row up or both",
+  "flan36_worst_key_side_mm": 41.65,
+  "worst_excess_without_added_mm": 10.89
  },
  "left": {
   "control_vertices": [

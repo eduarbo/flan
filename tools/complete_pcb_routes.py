@@ -20,8 +20,12 @@ outline=Polygon(profiles['pcb_outline'])
 aperture=[[116.55,13.2],[129.05,13.2],[129.05,47.6],[119.85,47.6],[119.85,49.4],[117.65,49.4],[117.65,47.6],[116.55,47.6]]
 if side=='right':aperture=[[160-x,y] for x,y in aperture]
 for contour in [aperture,*profiles['pcb_cutouts']]:outline=outline.difference(Polygon(contour))
-step=.1;nx,ny=1620,960
-X,Y=np.meshgrid(np.arange(nx)*step,np.arange(ny)*step)
+step=.1;nx,ny=1620,960;x0=y0=0.0
+if len(sys.argv)>4:   # a variant board may reach past revI's grid (e.g. a number row above y = 0)
+ bx0,by0,bx1,by1=outline.bounds
+ x0,y0=min(0.0,float(math.floor(bx0)-1)),min(0.0,float(math.floor(by0)-1))
+ nx,ny=max(nx,int(math.ceil((bx1+1-x0)/step))),max(ny,int(math.ceil((by1+1-y0)/step)))
+X,Y=np.meshgrid(x0+np.arange(nx)*step,y0+np.arange(ny)*step)
 inside=contains_xy(outline.buffer(-.65),X,Y)
 mm=p.ToMM;v=lambda x,y:p.VECTOR2I(p.FromMM(x),p.FromMM(y))
 allpads=[q for f in b.GetFootprints() for q in f.Pads()]
@@ -45,7 +49,7 @@ for t in b.GetTracks():
  obstacles.append((t.GetNetname(),layers,shape))
 def mark(arr,shape,layers):
  if shape.is_empty:return
- xa,ya,xb,yb=shape.bounds;ix0=max(0,int(xa/step)-1);ix1=min(nx,int(xb/step)+2);iy0=max(0,int(ya/step)-1);iy1=min(ny,int(yb/step)+2)
+ xa,ya,xb,yb=shape.bounds;ix0=max(0,int((xa-x0)/step)-1);ix1=min(nx,int((xb-x0)/step)+2);iy0=max(0,int((ya-y0)/step)-1);iy1=min(ny,int((yb-y0)/step)+2)
  if ix1<=ix0 or iy1<=iy0:return
  mask=contains_xy(shape,X[iy0:iy1,ix0:ix1],Y[iy0:iy1,ix0:ix1])
  for l in layers:arr[l,iy0:iy1,ix0:ix1]|=mask
@@ -73,7 +77,7 @@ for number,error in enumerate(ordered):
   if pad.GetAttribute()==p.PAD_ATTRIB_PTH:
    px,py=mm(pad.GetPosition().x),mm(pad.GetPosition().y);dr=max(mm(pad.GetDrillSize().x),mm(pad.GetDrillSize().y))/2
    mark(via_block[np.newaxis,:,:],Point(px,py).buffer(dr+.45),[0])
- starts=[(l,round(a[3]/step),round(a[2]/step)) for l in a[4]];goals={(l,round(c[3]/step),round(c[2]/step)) for l in c[4]}
+ starts=[(l,round((a[3]-y0)/step),round((a[2]-x0)/step)) for l in a[4]];goals={(l,round((c[3]-y0)/step),round((c[2]-x0)/step)) for l in c[4]}
  for n in starts+list(goals):assert not blocked[n],(name,n,'blocked endpoint')
  def h(n):return min(abs(n[1]-g[1])+abs(n[2]-g[2])+10*(n[0]!=g[0]) for g in goals)
  pq=[];dist={};prev={}
@@ -103,7 +107,7 @@ for number,error in enumerate(ordered):
   if math.hypot(x1-x2,y1-y2)<1e-5:return
   t=p.PCB_TRACK(b);t.SetStart(v(x1,y1));t.SetEnd(v(x2,y2));t.SetLayer([p.F_Cu,p.B_Cu][l]);t.SetWidth(p.FromMM(trackwidth));t.SetNetCode(a[0].GetNetCode());b.Add(t)
   obstacles.append((name,[l],LineString([(x1,y1),(x2,y2)]).buffer(.41)))
- addline(a[2],a[3],path[0][2]*step,path[0][1]*step,path[0][0])
+ addline(a[2],a[3],x0+path[0][2]*step,y0+path[0][1]*step,path[0][0])
  # Keep only turns and layer transitions.
  pts=[path[0]]
  for i in range(1,len(path)-1):
@@ -111,13 +115,13 @@ for number,error in enumerate(ordered):
   if before!=after:pts.append(path[i])
  pts.append(path[-1])
  for aa,cc in zip(pts,pts[1:]):
-  x1,y1=aa[2]*step,aa[1]*step;x2,y2=cc[2]*step,cc[1]*step
+  x1,y1=x0+aa[2]*step,y0+aa[1]*step;x2,y2=x0+cc[2]*step,y0+cc[1]*step
   if aa[0]!=cc[0]:
    assert x1==x2 and y1==y2
    vi=p.PCB_VIA(b);vi.SetPosition(v(x1,y1));vi.SetWidth(p.FromMM(.6));vi.SetDrill(p.FromMM(.3));vi.SetViaType(p.VIATYPE_THROUGH);vi.SetLayerPair(p.F_Cu,p.B_Cu);vi.SetNetCode(a[0].GetNetCode());b.Add(vi)
    obstacles.append((name,[0,1],Point(x1,y1).buffer(.61)))
   else:addline(x1,y1,x2,y2,aa[0])
- addline(path[-1][2]*step,path[-1][1]*step,c[2],c[3],path[-1][0])
+ addline(x0+path[-1][2]*step,y0+path[-1][1]*step,c[2],c[3],path[-1][0])
  p.SaveBoard(str(board_path),b)
  print(number+1,name,len(pts),'segments',flush=True)
 b.BuildConnectivity();p.SaveBoard(str(board_path),b)

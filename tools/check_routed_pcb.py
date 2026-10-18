@@ -74,6 +74,9 @@ def variant_geometry(board, old, side, profile, revi_outline, keys):
     """revI footprints unchanged; added keys, diodes and holes exact translated copies at the
     variant's key centres (design/variants.json) and added mounts (design/<id>-profiles.json)."""
     new, base = geometry(board), geometry(old)
+    # the variant shares revI's 3D models through ${KIPRJMOD}/../revI/ (build_variant_pcb.py)
+    for value in base.values():
+        value["models"] = [m.replace("${KIPRJMOD}/models/", "${KIPRJMOD}/../revI/models/") for m in value["models"]]
     for ref, value in base.items():
         assert new.pop(ref) == value, ("Component/pad/pose/model mutation", side, ref)
     templates = {h["id"]: (h["from"], [int(round(v * 1e6)) for v in h["xy"]]) for h in profile["added_mounts"]}

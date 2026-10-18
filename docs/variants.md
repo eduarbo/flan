@@ -30,7 +30,7 @@ python3 tools/build_variants.py      # needs Shapely (tools/requirements-silkscr
 
 ![Flan42 left and right PCBs from the front: back copper blue, front copper red](images/variants/flan42-pcb.png)
 
-[`hardware/flan42/`](../hardware/flan42/) holds two KiCad 10 projects derived from the routed, signed revI boards. Every Flan36 footprint, track, via and hole, the bay, the battery opening and both cutouts are unchanged; the checker compares them with revI.
+[`hardware/flan42/`](../hardware/flan42/) holds two KiCad 10 projects derived from the routed, signed revI boards. Every Flan36 footprint, track, via and hole, the bay, the battery opening and both cutouts are unchanged; the checker compares them with revI. Libraries and 3D models are revI's, referenced through `${KIPRJMOD}/../revI/`.
 
 - **Added per half:** K00, K10 and K20 (Choc v1 hot-swap, copies of K01/K11/K21) at the variant centres, and D00, D10 and D20 (SOD-123, 1N4148W). They are wired col2row on ROW0–ROW2 and COL0, with no new GPIO.
 - **Fastener H6:** an M2 hole one column outward from H1, at (20.7, 37.5) mm on the left and (139.3, 37.5) mm on the right. Without it, the outer edge would reach 52.54 mm from the nearest fastener; Flan36's worst key-side point is 41.65 mm, and H6 restores exactly that.

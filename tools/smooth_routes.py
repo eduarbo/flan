@@ -69,14 +69,17 @@ def copper_of(t, copper, holes):
         (x0, y0), (x1, y1) = ends(t)
         copper[t.GetLayer()].append((t.GetNetname(), LineString([(mm(x0), mm(y0)), (mm(x1), mm(y1))]).buffer(mm(t.GetWidth()) / 2, 16)))
 
-def chains(segments):
-    """Split one net/layer's segments into simple polylines between non-pass-through nodes."""
+def chains(segments, anchors):
+    """Split one net/layer's segments into simple polylines. A chain ends at a node that is
+    not a pass-through, or at an anchor (a pad centre, via or pre-existing track end), so
+    straightening never skips a connection."""
     adj = {}
     for s in segments:
         a, c = ends(s)
         adj.setdefault(a, []).append((c, s)); adj.setdefault(c, []).append((a, s))
     used, out = set(), []
-    starts = [n for n, e in adj.items() if len(e) != 2] or [next(iter(adj))]
+    stop = lambda n: len(adj[n]) != 2 or n in anchors
+    starts = [n for n in adj if stop(n)] or [next(iter(adj))]
     for n0 in starts:
         for nxt, s in adj[n0]:
             if id(s) in used:
@@ -84,7 +87,7 @@ def chains(segments):
             line, cur = [n0], n0
             while True:
                 used.add(id(s)); line.append(nxt); cur = nxt
-                if len(adj[cur]) != 2:
+                if stop(cur):
                     break
                 follow = [(n, q) for n, q in adj[cur] if id(q) not in used]
                 if not follow:
@@ -107,6 +110,9 @@ def main():
     outline = p.SHAPE_POLY_SET(); b1.GetBoardPolygonOutlines(outline, False)
     copper, holes = obstacles(b1)
     region = polys(outline)
+    anchors = {(q.GetPosition().x, q.GetPosition().y) for fp in b1.GetFootprints() for q in fp.Pads()}
+    anchors |= {(v.GetPosition().x, v.GetPosition().y) for v in b1.GetTracks() if isinstance(v, p.PCB_VIA)}
+    anchors |= {q for t in b0.GetTracks() for q in ends(t)}
     report = {}
     for net in sorted({s.GetNetname() for s in segs}):
         for layer in LAYERS:
@@ -128,13 +134,14 @@ def main():
                     return False
                 return not any(hole_tree.geometries[i].distance(line) < reach_h for i in hole_tree.query(line.buffer(reach_h)))
             pulled = []
-            for pts in chains(mine):
+            for pts in chains(mine, anchors):
                 keep, i = [pts[0]], 0
                 while i < len(pts) - 1:
                     j = next((j for j in range(len(pts) - 1, i + 1, -1) if clear(pts[i], pts[j])), i + 1)
                     keep.append(pts[j]); i = j
                 pulled.append(keep)
-            report[f"{net} {b1.GetLayerName(layer)}"] = [len(mine), sum(len(k) - 1 for k in pulled)]
+            length = sum(mm(int(round(((u[0] - v[0]) ** 2 + (u[1] - v[1]) ** 2) ** .5))) for k in pulled for u, v in zip(k, k[1:]))
+            report[f"{net} {b1.GetLayerName(layer)}"] = [len(mine), sum(len(k) - 1 for k in pulled), round(length, 2)]
             # the straightened tracks are obstacles for the nets that follow
             for keep in pulled:
                 for u, v in zip(keep, keep[1:]):

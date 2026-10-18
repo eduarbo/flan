@@ -8,7 +8,7 @@ holes, edges and legends, and records validation/revI-signature.json. Patterns b
 per-edition packages (tools/export_editions.py); the canonical boards carry only the
 signature. Then rerun check_routed_pcb.py and export_fabrication.py.
 
---variant flan42 signs hardware/flan42 the same way (validation/flan42-signature.json),
+--variant flan42 (or flan46, flan54) signs hardware/<variant> the same way (validation/<variant>-signature.json),
 after checking that the lockup and credit still lie in the board's free back area.
 SPDX-License-Identifier: GPL-3.0-or-later
 """
@@ -34,19 +34,22 @@ HELPERS = ROOT / "tools/silkscreen"
 ROUTED = {"left": "38c58eb3590e2dbb3abae645d75c264904683427476dbf514bda69849b4431a8",
           "right": "362f58bad47711258a11dfa2d7dcf165b7345b12d5144d3c7fa9b998b0288f43"}
 MIN_STROKE = 0.17
-# Flan family boards (build_variant_pcb.py + route_variant_keys.py), routed, before any art
-VARIANTS = {"flan42": {"left": "0daac0ed6ac5f9c88983d8ecd1b6281b027e47e985c55ab290e6c1d3427cf5a0",
-                       "right": "5e83953bc24d6cf054df2ae6a2c703cb322888304d6fc4380567336c5d4015bd"}}
+
+def variant_routed(variant):
+    """A family board's routed hashes before any art, from its build receipt
+    (build_variant_pcb.py, then route_variant_keys.py)."""
+    halves = json.loads((ROOT / f"validation/{variant}-pcb.json").read_text())["halves"]
+    return {h: halves[h]["routing"]["routed_pcb_sha256"] for h in ("left", "right")}
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--kicad-python", default=KICAD_PY)
-    ap.add_argument("--variant", default="flan36", choices=["flan36", *VARIANTS])
+    ap.add_argument("--variant", default="flan36", help="flan36 signs hardware/revI; flan42, flan46 or flan54 hardware/<variant>")
     a = ap.parse_args()
     family = a.variant != "flan36"
     hw = ROOT / "hardware" / a.variant if family else HW
     build = ROOT / "build" / f"signature-{a.variant}" if family else BUILD
-    routed = VARIANTS[a.variant] if family else ROUTED
+    routed = variant_routed(a.variant) if family else ROUTED
     font = font_file(ROOT)
     assert font.is_file() and sha(font) == FONT["sha256"], f"pinned font missing: fetch {FONT['file']} from {FONT['source']} into build/fonts/"
     build.mkdir(parents=True, exist_ok=True)

@@ -13,9 +13,9 @@
   "physical_acceptance": false,
   "halves": {
     "left": {
-      "pcb_before_sha256": "0daac0ed6ac5f9c88983d8ecd1b6281b027e47e985c55ab290e6c1d3427cf5a0",
-      "routed_base_sha256": "0daac0ed6ac5f9c88983d8ecd1b6281b027e47e985c55ab290e6c1d3427cf5a0",
-      "pcb_after_sha256": "e9ad05499e5365934aa65236da0992a74094a94010d7ade0a21b39d8abb72755",
+      "pcb_before_sha256": "ab1f38a4a469059a4dc28a4b046e128224b341ac605ec45491fe7252cc90ba6e",
+      "routed_base_sha256": "ab1f38a4a469059a4dc28a4b046e128224b341ac605ec45491fe7252cc90ba6e",
+      "pcb_after_sha256": "83801a361fcb0461d64da872a3edf9a87506c35244082bb49698e3957fea1548",
       "art_sha256": "e6fa75465c540834e73d00e52603d0da67ca67cd1a2ae19fd2da96ef2f130755",
       "checks": {
         "keepout_overlap_mm2": 0.0,
@@ -56,9 +56,9 @@
       ]
     },
     "right": {
-      "pcb_before_sha256": "5e83953bc24d6cf054df2ae6a2c703cb322888304d6fc4380567336c5d4015bd",
-      "routed_base_sha256": "5e83953bc24d6cf054df2ae6a2c703cb322888304d6fc4380567336c5d4015bd",
-      "pcb_after_sha256": "1b4ba507f00403a59a15fccc4fa358fb21d82bcb5f0454ecb9c1fe493803d011",
+      "pcb_before_sha256": "903a64ab03d40b4cdec5cdbac158b1c02ad29ef9f363dabf8ae957066dca1ce8",
+      "routed_base_sha256": "903a64ab03d40b4cdec5cdbac158b1c02ad29ef9f363dabf8ae957066dca1ce8",
+      "pcb_after_sha256": "5f7ac1227dce68f954a099735d1e985290aa126ac574fe9008422a8d77bacff4",
       "art_sha256": "dbb8a66d5f535479c0c4807bcf977c9385c0872193bb516c9bd2ac2feb23bb9b",
       "checks": {
         "keepout_overlap_mm2": 0.0,
