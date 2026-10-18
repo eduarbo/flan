@@ -1,0 +1,103 @@
+{
+  "schema": "flan-variant-signature-1",
+  "variant": "flan42",
+  "layer": "B.SilkS",
+  "group": "flan-signature",
+  "font": {
+    "family": "Fraunces",
+    "license": "OFL-1.1",
+    "source": "https://github.com/google/fonts/tree/main/ofl/fraunces",
+    "file": "Fraunces[SOFT,WONK,opsz,wght].ttf",
+    "sha256": "177ff6c0f14e5550a3c624247cd1189611d4eb65d000b14944c63d967958abbb"
+  },
+  "physical_acceptance": false,
+  "halves": {
+    "left": {
+      "pcb_before_sha256": "0daac0ed6ac5f9c88983d8ecd1b6281b027e47e985c55ab290e6c1d3427cf5a0",
+      "routed_base_sha256": "0daac0ed6ac5f9c88983d8ecd1b6281b027e47e985c55ab290e6c1d3427cf5a0",
+      "pcb_after_sha256": "e9ad05499e5365934aa65236da0992a74094a94010d7ade0a21b39d8abb72755",
+      "art_sha256": "e6fa75465c540834e73d00e52603d0da67ca67cd1a2ae19fd2da96ef2f130755",
+      "checks": {
+        "keepout_overlap_mm2": 0.0,
+        "existing_silk_overlap_mm2": 0.0,
+        "outside_edge_clearance_mm2": 0.0,
+        "min_distance_to_keepout_mm": 1.32,
+        "art_area_mm2": 34.2,
+        "largest_thin_piece_mm2": 0.005,
+        "min_counter_mm": 0.648
+      },
+      "zones": [
+        [
+          54.820473145145684,
+          54.56084293590367,
+          75.97952685485431,
+          60.03915706409632
+        ],
+        [
+          87.48202479793667,
+          60.555,
+          98.51797520206333,
+          63.154999999999994
+        ]
+      ],
+      "free_back_rectangles": [
+        [
+          53.700000000000045,
+          54.100000000000044,
+          77.10000000000005,
+          60.50000000000004
+        ],
+        [
+          89.50000000000007,
+          57.90000000000005,
+          95.50000000000007,
+          69.70000000000005
+        ]
+      ]
+    },
+    "right": {
+      "pcb_before_sha256": "5e83953bc24d6cf054df2ae6a2c703cb322888304d6fc4380567336c5d4015bd",
+      "routed_base_sha256": "5e83953bc24d6cf054df2ae6a2c703cb322888304d6fc4380567336c5d4015bd",
+      "pcb_after_sha256": "1b4ba507f00403a59a15fccc4fa358fb21d82bcb5f0454ecb9c1fe493803d011",
+      "art_sha256": "dbb8a66d5f535479c0c4807bcf977c9385c0872193bb516c9bd2ac2feb23bb9b",
+      "checks": {
+        "keepout_overlap_mm2": 0.0,
+        "existing_silk_overlap_mm2": 0.0,
+        "outside_edge_clearance_mm2": 0.0,
+        "min_distance_to_keepout_mm": 0.67,
+        "art_area_mm2": 34.73,
+        "largest_thin_piece_mm2": 0.005,
+        "min_counter_mm": 0.648
+      },
+      "zones": [
+        [
+          83.22047314514569,
+          54.66084293590367,
+          104.37952685485432,
+          60.139157064096324
+        ],
+        [
+          63.38202479793667,
+          59.655,
+          74.41797520206333,
+          62.254999999999995
+        ]
+      ],
+      "free_back_rectangles": [
+        [
+          82.6499999999998,
+          54.30000000000005,
+          105.04999999999981,
+          60.50000000000005
+        ],
+        [
+          69.04999999999986,
+          58.70000000000005,
+          75.04999999999986,
+          69.90000000000005
+        ]
+      ]
+    }
+  },
+  "placement": "revI plate and credit rectangles; both art zones checked inside this board's free back area"
+}

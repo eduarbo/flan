@@ -14,7 +14,8 @@ root=Path(__file__).resolve().parents[1]
 board_path=Path(sys.argv[1]); report_path=Path(sys.argv[2]);side=sys.argv[3]
 b=p.LoadBoard(str(board_path))
 j=json.loads(report_path.read_text())
-profiles=json.loads((root/'design/revI-profiles.json').read_text())[side]
+# optional 4th argument: a variant's profiles (tools/build_variant_profiles.py); default revI
+profiles=json.loads((Path(sys.argv[4]) if len(sys.argv)>4 else root/'design/revI-profiles.json').read_text())[side]
 outline=Polygon(profiles['pcb_outline'])
 aperture=[[116.55,13.2],[129.05,13.2],[129.05,47.6],[119.85,47.6],[119.85,49.4],[117.65,49.4],[117.65,47.6],[116.55,47.6]]
 if side=='right':aperture=[[160-x,y] for x,y in aperture]

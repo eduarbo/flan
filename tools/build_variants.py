@@ -35,7 +35,7 @@ CUT = 14.0
 BAY = box(111, BAY_TOP, FLANK_X, BAY_BOTTOM)   # display frame / electronics bay
 VARIANTS = {
     "flan36": {"title": "Flan36", "outer_column": False, "number_row": False, "status": "built: routed PCB, case, firmware, viewer"},
-    "flan42": {"title": "Flan42", "outer_column": True, "number_row": False, "status": "layout and outline"},
+    "flan42": {"title": "Flan42", "outer_column": True, "number_row": False, "status": "routed PCB (hardware/flan42); case, firmware, viewer next"},
     "flan46": {"title": "Flan46", "outer_column": False, "number_row": True, "status": "layout and outline"},
     "flan54": {"title": "Flan54", "outer_column": True, "number_row": True, "status": "layout and outline"},
 }

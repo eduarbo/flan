@@ -1,0 +1,43 @@
+{
+  "schema": "flan-variant-routed-pcb-1",
+  "variant": "flan42",
+  "source": "cc484e0d7d207389f2ac30a37eb9c9d8b868ed9c",
+  "kicad_version": "10.0.6",
+  "physical_acceptance": false,
+  "halves": {
+    "left": {
+      "drc_violations": 0,
+      "unconnected_items": 0,
+      "schematic_parity": 0,
+      "erc_violations": 0,
+      "components": 53,
+      "physical_pads_checked": 281,
+      "matrix_keys": 21,
+      "tracks_and_vias": 642,
+      "minimum_track_mm": 0.2,
+      "pcb_sha256": "e9ad05499e5365934aa65236da0992a74094a94010d7ade0a21b39d8abb72755",
+      "schematic_sha256": "dd5e7c42d07b7b2f9e6a00c6b6bea5b867f243cd51350a83025f841b9b4f5796",
+      "rules_sha256": "2d11dbe6a54ecabf3bafd06006d63f4d7101346798a0b6ea280c1c1e865df295",
+      "added_footprints_checked": 7,
+      "revI_footprints_pads_models_unchanged": true,
+      "outline": "design/flan42-profiles.json"
+    },
+    "right": {
+      "drc_violations": 0,
+      "unconnected_items": 0,
+      "schematic_parity": 0,
+      "erc_violations": 0,
+      "components": 53,
+      "physical_pads_checked": 281,
+      "matrix_keys": 21,
+      "tracks_and_vias": 635,
+      "minimum_track_mm": 0.2,
+      "pcb_sha256": "1b4ba507f00403a59a15fccc4fa358fb21d82bcb5f0454ecb9c1fe493803d011",
+      "schematic_sha256": "a5600d616a765afb5547aa93712640aad908292db905a23c4813536e519b8c6f",
+      "rules_sha256": "7b7a0a098132377c8c4fd76150d0323bb1479eea73da2b727c39a922979a757a",
+      "added_footprints_checked": 7,
+      "revI_footprints_pads_models_unchanged": true,
+      "outline": "design/flan42-profiles.json"
+    }
+  }
+}

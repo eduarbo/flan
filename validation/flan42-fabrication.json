@@ -1,0 +1,104 @@
+{
+  "schema": "flan-variant-fabrication-1",
+  "variant": "flan42",
+  "physical_acceptance": false,
+  "kicad_version": "10.0.6",
+  "halves": {
+    "left": {
+      "package": "hardware/flan42/fabrication/flan42-left-prototype.zip",
+      "sha256": "ef75cc9062ccc2c0bcf2121adc121d97b20bfc2377e99d4dfc9c27886895225a",
+      "manifest": {
+        "side": "left",
+        "source": {
+          "drc_violations": 0,
+          "unconnected_items": 0,
+          "schematic_parity": 0,
+          "erc_violations": 0,
+          "components": 53,
+          "physical_pads_checked": 281,
+          "matrix_keys": 21,
+          "tracks_and_vias": 642,
+          "minimum_track_mm": 0.2,
+          "pcb_sha256": "e9ad05499e5365934aa65236da0992a74094a94010d7ade0a21b39d8abb72755",
+          "schematic_sha256": "dd5e7c42d07b7b2f9e6a00c6b6bea5b867f243cd51350a83025f841b9b4f5796",
+          "rules_sha256": "2d11dbe6a54ecabf3bafd06006d63f4d7101346798a0b6ea280c1c1e865df295",
+          "added_footprints_checked": 7,
+          "revI_footprints_pads_models_unchanged": true,
+          "outline": "design/flan42-profiles.json"
+        },
+        "files": {
+          "flan42-left-B_Cu.gbl": "c6e6c6cd3cf2dcdfca07d8e54b254518f01523d967d7926c8fd0a772cd9e518b",
+          "flan42-left-B_Mask.gbs": "ba4224fe4b5c0690a48df7130bb1319dfdd3b0837f169c67bd132f6e06ba0d45",
+          "flan42-left-B_Silkscreen.gbo": "a602bc203f6f26b0473aa6074582420b73611c0a4994c0694720e40d27855ffb",
+          "flan42-left-Edge_Cuts.gm1": "67bb0502d484b0da6114399ad432e40a8f3b662b261f11edacf844a8f7b4d20b",
+          "flan42-left-F_Cu.gtl": "e79e923cc718bd9b9f13b05e661621310d9a912bae6617ca50a706334d552418",
+          "flan42-left-F_Mask.gts": "8934799063666e7f739ddf320db7a88ee0c80c7cb6a05627db22d8fbbdb21554",
+          "flan42-left-F_Silkscreen.gto": "79d2652e616d5c574e143da5b357903dae63a227c6c9895699985cfbd22f98f6",
+          "flan42-left-NPTH-drl_map.svg": "1744df65e8aa2416ed0d0f87a7ccf1668cf2330cff9c9160280f452d0f439c2e",
+          "flan42-left-NPTH.drl": "26232f51a50e46ae2c5ca6f9c0100ede76cdb082831ae7f5f1f3b3bf553a8da0",
+          "flan42-left-PTH-drl_map.svg": "b96326cfb95b295658fcabd28386a2e9ebd9ac72548e410b17a22c29c0b9e8ea",
+          "flan42-left-PTH.drl": "5e78b3c43418d0a3ec3be3a53c3ce221cace0c74523980281be5ed27d6aa88ee",
+          "flan42-left-job.gbrjob": "d4d8725d2574576b872831008a7531bfc47a064125ccf0df482c07636e99c451"
+        },
+        "physical_acceptance": false,
+        "specification": {
+          "copper_layers": 2,
+          "board_mm": 1.6,
+          "copper_oz": 1,
+          "minimum_track_mm": 0.2,
+          "netclass_clearance_mm": 0.2,
+          "copper_edge_mm": 0.5
+        },
+        "status": "Prototype candidate; confirm connectors, battery and assembly fit before ordering."
+      }
+    },
+    "right": {
+      "package": "hardware/flan42/fabrication/flan42-right-prototype.zip",
+      "sha256": "cf5ce08d25366b03b404ecd8655637be86cbff5c3c0d7243e3ca4df376cb3f03",
+      "manifest": {
+        "side": "right",
+        "source": {
+          "drc_violations": 0,
+          "unconnected_items": 0,
+          "schematic_parity": 0,
+          "erc_violations": 0,
+          "components": 53,
+          "physical_pads_checked": 281,
+          "matrix_keys": 21,
+          "tracks_and_vias": 635,
+          "minimum_track_mm": 0.2,
+          "pcb_sha256": "1b4ba507f00403a59a15fccc4fa358fb21d82bcb5f0454ecb9c1fe493803d011",
+          "schematic_sha256": "a5600d616a765afb5547aa93712640aad908292db905a23c4813536e519b8c6f",
+          "rules_sha256": "7b7a0a098132377c8c4fd76150d0323bb1479eea73da2b727c39a922979a757a",
+          "added_footprints_checked": 7,
+          "revI_footprints_pads_models_unchanged": true,
+          "outline": "design/flan42-profiles.json"
+        },
+        "files": {
+          "flan42-right-B_Cu.gbl": "b58f81da98186b61241ffe731a7a2072ace2869eb10c5561e188ae5b1896e507",
+          "flan42-right-B_Mask.gbs": "8a9ebbfc727b006050ed9aed7b3ba26534794e577b675824fe6d40aeae126822",
+          "flan42-right-B_Silkscreen.gbo": "5381e54bacfa672f3b8a07cdabd1a1ab32ad5ea42278d48f5effba0fa7e28474",
+          "flan42-right-Edge_Cuts.gm1": "630af63096e9a184bf21b888b465f97d462b0cb6ccd4ba2bc7906bb22f284b6e",
+          "flan42-right-F_Cu.gtl": "3dda4dd58371fc21843ee77b725f7f3e2e075e926a496e2ec08fecfc9b11ca74",
+          "flan42-right-F_Mask.gts": "b3da47c00b6e10736acb13dcd955805f7f1f9639e56d42e44390c6eae3148fb2",
+          "flan42-right-F_Silkscreen.gto": "fc5208b42a1904747489f0ba4cabd5e83c3452e40a4aa56e9f189d1ab79ee7cd",
+          "flan42-right-NPTH-drl_map.svg": "d946cf79d2bee2f4587232448a2084a5a151fe644918a3945ac8daf0b59c6398",
+          "flan42-right-NPTH.drl": "ef0bc72a36f54c0987ca4c8bd0cbc5a593e5eacae36ec226c16dd8cd5452525d",
+          "flan42-right-PTH-drl_map.svg": "978fce01b073277154b3d17b2d312fe403837678fbedb6d074026e7c8b3c2f63",
+          "flan42-right-PTH.drl": "816358d50308ea07332079bee2fb6d4e656ded38301f0e98bc399742e2886efd",
+          "flan42-right-job.gbrjob": "f73ccb8f5c1b7ec50d7bec567bb16a1d6da12294847d429937e3ed97dd571eef"
+        },
+        "physical_acceptance": false,
+        "specification": {
+          "copper_layers": 2,
+          "board_mm": 1.6,
+          "copper_oz": 1,
+          "minimum_track_mm": 0.2,
+          "netclass_clearance_mm": 0.2,
+          "copper_edge_mm": 0.5
+        },
+        "status": "Prototype candidate; confirm connectors, battery and assembly fit before ordering."
+      }
+    }
+  }
+}

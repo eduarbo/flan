@@ -1,0 +1,7 @@
+(fp_lib_table
+  (lib (name "PiantorSlim")(type "KiCad")(uri "${KIPRJMOD}/libraries/PiantorSlim.pretty")(options "")(descr "Bundled footprints; see ATTRIBUTION.md"))
+  (lib (name "keyswitches")(type "KiCad")(uri "${KIPRJMOD}/libraries/keyswitches.pretty")(options "")(descr "Bundled footprints; see ATTRIBUTION.md"))
+  (lib (name "Button_Switch_SMD")(type "KiCad")(uri "${KIPRJMOD}/libraries/Button_Switch_SMD.pretty")(options "")(descr "Bundled footprints; see ATTRIBUTION.md"))
+  (lib (name "Diode_SMD")(type "KiCad")(uri "${KIPRJMOD}/libraries/Diode_SMD.pretty")(options "")(descr "Bundled footprints; see ATTRIBUTION.md"))
+  (lib (name "MountingHole")(type "KiCad")(uri "${KIPRJMOD}/libraries/MountingHole.pretty")(options "")(descr "Bundled footprints; see ATTRIBUTION.md"))
+)

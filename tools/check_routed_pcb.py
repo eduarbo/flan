@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 """Read every physical pad and independently check the routed revI boards.
+
+With --variant (e.g. flan42) it checks a Flan family board built by build_variant_pcb.py
+instead: every revI footprint, pad and model unchanged against the revI source commit, each
+added footprint an exact translated copy of its template, and the Edge.Cuts set equal to
+revI's minus its outer outline plus the variant's (design/<id>-profiles.json).
 Run with KiCad Python. SPDX-License-Identifier: GPL-3.0-or-later
 """
 import argparse
@@ -15,6 +20,8 @@ from check_layout import read_sexpr
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE = "fe8c7fdc1b13b8eac6383c3315af8e749b1b8d4c"
+# the routed, signed revI boards the family variants are derived from
+VARIANT_SOURCE = "cc484e0d7d207389f2ac30a37eb9c9d8b868ed9c"
 
 
 def geometry(board):
@@ -48,22 +55,78 @@ def edges(path):
                   and any(isinstance(c, list) and c[:2] == ["layer", "Edge.Cuts"] for c in n))
 
 
-def verify(directory, output, cli):
+def segments(board):
+    """Edge.Cuts as a set of segments (nm endpoints); anything but straight segments fails."""
+    out = set()
+    for d in board.GetDrawings():
+        if d.GetLayer() == p.Edge_Cuts:
+            assert d.GetShape() == p.SHAPE_T_SEGMENT, d.GetShapeStr()
+            out.add(frozenset([(d.GetStart().x, d.GetStart().y), (d.GetEnd().x, d.GetEnd().y)]))
+    return out
+
+
+def loop(points):
+    nm = lambda v: int(round(v * 1e6))
+    return {frozenset([(nm(a[0]), nm(a[1])), (nm(c[0]), nm(c[1]))]) for a, c in zip(points, points[1:] + points[:1])}
+
+
+def variant_geometry(board, old, side, profile, revi_outline, keys):
+    """revI footprints unchanged; added keys, diodes and holes exact translated copies at the
+    variant's key centres (design/variants.json) and added mounts (design/<id>-profiles.json)."""
+    new, base = geometry(board), geometry(old)
+    for ref, value in base.items():
+        assert new.pop(ref) == value, ("Component/pad/pose/model mutation", side, ref)
+    templates = {h["id"]: (h["from"], [int(round(v * 1e6)) for v in h["xy"]]) for h in profile["added_mounts"]}
+    for ref in [r for r in new if r[0] in "KD"]:
+        tmpl = ref[0] + ref[1] + "1"
+        templates[ref] = (tmpl, None)
+    assert sorted(templates) == sorted(new), (side, sorted(new))
+    for ref, (tmpl, xy) in templates.items():
+        a, b = new[ref], base[tmpl]
+        if xy is None:   # keys and diodes move with their key: the variant key offset
+            key = base["K" + ref[1] + "1"]["xy"]; centre = keys["K" + ref[1] + "0"]
+            xy = [b["xy"][0] + int(round(centre["x"] * 1e6)) - key[0], b["xy"][1] + int(round(centre["y"] * 1e6)) - key[1]]
+        dx, dy = xy[0] - b["xy"][0], xy[1] - b["xy"][1]
+        assert a["xy"] == xy, (side, ref)
+        for k in ("angle", "layer", "locked", "models"):
+            assert a[k] == b[k], (side, ref, k)
+        moved = sorted((n, x + dx, y + dy, *rest) for _, n, x, y, *rest in b["pads"])
+        assert sorted(tuple(q[1:]) for q in a["pads"]) == moved, (side, ref, "pads")
+    expected = (segments(old) - loop(revi_outline)) | loop(profile["pcb_outline"])
+    assert segments(board) == expected, (side, "Outline or aperture changed")
+    return len(templates)
+
+
+def verify(directory, output, cli, variant="flan36"):
     output.mkdir(parents=True, exist_ok=True)
+    family = variant != "flan36"
     result = {"schema": "flan36-routed-pcb-1", "baseline": BASELINE,
               "kicad_version": p.GetBuildVersion(), "physical_acceptance": False, "halves": {}}
     pinmap = json.loads((ROOT / "design/pinmap.json").read_text())["halves"]
     layout = json.loads((ROOT / "design/layout.json").read_text())["halves"]
+    if family:
+        result = {"schema": "flan-variant-routed-pcb-1", "variant": variant, "source": VARIANT_SOURCE,
+                  "kicad_version": p.GetBuildVersion(), "physical_acceptance": False, "halves": {}}
+        layout = json.loads((ROOT / "design/variants.json").read_text())["variants"][variant]["keys"]
+        profiles = json.loads((ROOT / f"design/{variant}-profiles.json").read_text())
+        revi = json.loads((ROOT / "design/revI-profiles.json").read_text())
+    added_counts = {}
     for side in ("left", "right"):
-        name = f"flan36-{side}"
+        name = f"{variant}-{side}"
         board_path = directory / (name + ".kicad_pcb")
         sch_path = board_path.with_suffix(".kicad_sch")
         original = output / (name + "-baseline.kicad_pcb")
-        original.write_bytes(subprocess.check_output(["git", "show", f"{BASELINE}:hardware/revI/{name}.kicad_pcb"], cwd=ROOT))
+        source = f"{VARIANT_SOURCE}:hardware/revI/flan36-{side}.kicad_pcb" if family else f"{BASELINE}:hardware/revI/{name}.kicad_pcb"
+        original.write_bytes(subprocess.check_output(["git", "show", source], cwd=ROOT))
         board = p.LoadBoard(str(board_path)); old = p.LoadBoard(str(original))
-        assert geometry(board) == geometry(old), "Component/pad/pose/model mutation"
-        assert edges(board_path) == edges(original), "Outline or aperture changed"
+        if family:
+            added = variant_geometry(board, old, side, profiles[side], revi[side]["pcb_outline"],
+                                     {k["ref"]: k for k in layout[side]})
+        else:
+            assert geometry(board) == geometry(old), "Component/pad/pose/model mutation"
+            assert edges(board_path) == edges(original), "Outline or aperture changed"
         assert board.GetTracks(), "Unrouted study is not accepted"
+        if family: added_counts[side] = added
         assert board.GetCopperLayerCount() == 2
         netfile = output / (name + "-netlist.xml")
         subprocess.run([cli, "sch", "export", "netlist", "--format", "kicadxml", "-o", str(netfile), str(sch_path)], check=True)
@@ -106,18 +169,28 @@ def verify(directory, output, cli):
         widths = [p.ToMM(t.GetWidth()) for t in board.GetTracks() if not isinstance(t,p.PCB_VIA)]
         assert min(widths) >= .2 - 1e-7
         result["halves"][side] = {**counts, "components": len(fps), "physical_pads_checked": physical_pads,
-            "matrix_keys": 18, "tracks_and_vias": len(board.GetTracks()), "minimum_track_mm": min(widths),
+            "matrix_keys": len(layout[side]), "tracks_and_vias": len(board.GetTracks()), "minimum_track_mm": min(widths),
             "poses_pads_models_and_outline_preserved": True,
             "pcb_sha256": hashlib.sha256(board_path.read_bytes()).hexdigest(),
             "schematic_sha256": hashlib.sha256(sch_path.read_bytes()).hexdigest(),
             "rules_sha256": hashlib.sha256(board_path.with_suffix(".kicad_pro").read_bytes()).hexdigest()}
-    (ROOT / "validation/revI-routing.json").write_text(json.dumps(result, indent=2)+"\n")
+    if family:
+        for side in ("left", "right"):
+            result["halves"][side] = {**result["halves"][side], "added_footprints_checked": added_counts[side],
+                                      "revI_footprints_pads_models_unchanged": True, "outline": f"design/{variant}-profiles.json"}
+            del result["halves"][side]["poses_pads_models_and_outline_preserved"]
+    receipt = "validation/revI-routing.json" if not family else f"validation/{variant}-routing.json"
+    (ROOT / receipt).write_text(json.dumps(result, indent=2)+"\n")
     print("PASS: both boards connected; all physical pads, semantic matrix and unchanged geometry verified")
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--directory", type=Path, default=ROOT/"hardware/revI")
-    ap.add_argument("--output", type=Path, default=ROOT/"build/routing-validation")
+    ap.add_argument("--variant", default="flan36", help="flan36 checks hardware/revI; flan42 hardware/flan42")
+    ap.add_argument("--directory", type=Path)
+    ap.add_argument("--output", type=Path)
     ap.add_argument("--cli", default="/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli")
-    a=ap.parse_args(); verify(a.directory.resolve(), a.output.resolve(), a.cli)
+    a=ap.parse_args(); family = a.variant != "flan36"
+    directory = a.directory or ROOT/("hardware/" + a.variant if family else "hardware/revI")
+    output = a.output or ROOT/("build/routing-validation-" + a.variant if family else "build/routing-validation")
+    verify(directory.resolve(), output.resolve(), a.cli, a.variant)

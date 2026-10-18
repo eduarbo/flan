@@ -571,7 +571,7 @@
   },
   "flan42": {
    "title": "Flan42",
-   "status": "layout and outline",
+   "status": "routed PCB (hardware/flan42); case, firmware, viewer next",
    "keys_per_half": 21,
    "keys_total": 42,
    "grid_per_half": "3 × 6 + 3",
