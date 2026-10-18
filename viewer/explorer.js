@@ -80,7 +80,7 @@ export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,req
       }
       locator.visible=positions.length>0;
       locatorGeometry.attributes.position.array.set(positions);locatorGeometry.attributes.position.needsUpdate=true;locatorGeometry.setDrawRange(0,positions.length/3);
-      if(selected)$('selection-visibility').textContent=objects.some(o=>o.visible&&match(o,selected))?'':selected.group==='lid'&&!objects.some(o=>match(o,selected))?'Display frames are not installed. Use the installation controls below.':'This selection is hidden. Use the visibility control beside its name.';
+      if(selected)$('selection-visibility').textContent=objects.some(o=>o.visible&&match(o,selected))?'':selected.group==='lid'&&!objects.some(o=>match(o,selected))?'Display frames are not installed. Use the installation controls below.':'This selection is hidden. Turn it back on with Visible below.';
     }
     if(activeKey!==key(active)){activeKey=key(active);for(const row of document.querySelectorAll('.part-row'))row.classList.toggle('is-highlighted',!active?.collection&&active?.group===row.dataset.group);}
   }

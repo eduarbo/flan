@@ -532,11 +532,19 @@ function syncConfigurationUI(){
 }
 function isSolo(ref){const installed=objects.filter(o=>o.userData.installed!==false);return installed.some(o=>matchesPart(o,ref))&&installed.every(o=>o.visible===Boolean(matchesPart(o,ref)));}
 function refreshPartVisibility(){
-  // A pressed Solo reads "All": pressing it again brings the whole assembly back.
-  const soloState=(b,solo,name)=>{b.setAttribute('aria-pressed',String(solo));b.textContent=solo?'All':'Solo';b.setAttribute('aria-label',solo?'Show all parts':'Solo '+name);b.title=solo?'Show all parts':'Show only '+name;};
+  // A pressed Solo isolates; pressing it again brings the whole assembly back.
+  const soloState=(b,solo,name)=>{b.setAttribute('aria-pressed',String(solo));b.setAttribute('aria-label','Solo '+name);b.title=solo?'Showing only '+name+'. Press again to show all':'Show only '+name;};
   for(const b of document.querySelectorAll('[data-solo-group]')){const ref={group:b.dataset.soloGroup};b.disabled=!objects.some(o=>o.userData.installed!==false&&matchesPart(o,ref));soloState(b,isSolo(ref),labels[ref.group]);}
   for(const b of document.querySelectorAll('[data-solo-object]')){const o=objects[Number(b.dataset.soloObject)];b.disabled=o.userData.installed===false;soloState(b,isSolo({group:o.userData.group,objectIndex:o.userData.objectIndex}),b.dataset.name);}
   for(const input of document.querySelectorAll('[data-object-visibility]')){const o=objects[Number(input.dataset.objectVisibility)];input.checked=o.visible;input.disabled=o.userData.installed===false;input.parentElement.title=(o.visible?'Hide ':'Show ')+input.dataset.name;}
+  // The selected part as a whole: shown or hidden, Solo, All.
+  if(detailRef){
+    const installed=objects.filter(o=>o.userData.installed!==false),mine=installed.filter(o=>matchesPart(o,detailRef)),shown=mine.some(o=>o.visible);
+    selectionVisible.checked=shown;selectionVisible.disabled=!mine.length;selectionVisibleLabel.textContent=shown?'Visible':'Hidden';
+    selectionVisible.parentElement.title=(shown?'Hide ':'Show ')+'this part';
+    $('selection-solo').disabled=!mine.length;$('selection-solo').setAttribute('aria-pressed',String(mine.length>0&&isSolo(detailRef)));
+    $('selection-all').setAttribute('aria-pressed',String(state.half==='both'&&installed.every(o=>o.visible)));
+  }
 }
 function populatePartVisibility(ref){
   const list=$('part-visibility-list');list.replaceChildren();const matching=objects.filter(o=>ref.collection==='magnets'?isMagnet(o):o.userData.group===ref.group&&(!ref.side||o.userData.side===ref.side));
@@ -556,6 +564,24 @@ function populatePartVisibility(ref){
   $('frame-install-options').hidden=ref.group!=='lid'&&ref.collection!=='magnets';
   refreshPartVisibility();
 }
+// Hide or show every piece of a selection without touching the rest of the assembly.
+function setPartVisible(ref,show){
+  for(const o of objects){
+    if(!matchesPart(o,ref))continue;
+    const g=o.userData.group;
+    if(show){
+      if(!state.layers[g]){for(const other of objects)if(other.userData.group===g&&!matchesPart(other,ref))hiddenObjects.add(other.userData.objectIndex);state.layers[g]=true;}
+      hiddenObjects.delete(o.userData.objectIndex);if(state.half!=='both'&&state.half!==o.userData.side)state.half='both';
+    }else hiddenObjects.add(o.userData.objectIndex);
+  }
+  sync();
+}
+const selectionVisible=document.createElement('input'),selectionVisibleLabel=document.createElement('span');
+selectionVisible.type='checkbox';selectionVisible.id='selection-visible';selectionVisible.setAttribute('aria-label','Show this part');selectionVisibleLabel.className='view-label';
+{const eye=eyeToggle(selectionVisible,'Hide this part');eye.append(selectionVisibleLabel);$('selection-view').prepend(eye);}
+selectionVisible.onchange=()=>{if(detailRef)setPartVisible(detailRef,selectionVisible.checked);};
+$('selection-solo').onclick=()=>{if(detailRef)toggleSolo(detailRef);};
+$('selection-all').onclick=showAll;
 function showAll(){hiddenObjects.clear();state.half='both';state.explode=0;for(const key of Object.keys(labels))state.layers[key]=true;sync();fit();$('view-feedback').textContent='All installed parts visible; layers assembled.';}
 function toggleSolo(ref){
   if(isSolo(ref)){showAll();return;}
