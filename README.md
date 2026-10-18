@@ -8,9 +8,9 @@
 
 ![Flan36 revI with interchangeable display frames and original KLP Lamé keycaps](docs/images/revI-assembled.png)
 
-*RevI: key-aligned local curves, four interchangeable cases, optional exposed display stack, magnetic frames and a floor-mounted cell in either battery size. Physical fit untested.*
+*RevI with the Level case: key-aligned local curves, four interchangeable cases, optional exposed display stack, magnetic frames and a floor-mounted cell in either battery size. Physical fit untested.*
 
-**[Silkscreen editions](docs/electronics.md#editions)** — Asanoha, Kikkō, Sayagata, Seigaiha, Meandro and Vías: six all-over back patterns around the Flan signature, one Gerber package each.
+**[Silkscreen editions](docs/electronics.md#editions)** — Asanoha, Kikkō, Sayagata, Seigaiha, Meandro and Vías: six all-over back patterns around the Flan signature, one Gerber package each. Preview them with JLCPCB's seven solder-mask colours in the viewer's **Design → PCB** tab, which links the matching ZIPs.
 
 **[Themes and print kits](docs/themes-printing.md)** — Twenty-eight coordinated themes, personal keycap palettes, linked rim/frame colors and selected STL/3MF parts.
 
@@ -30,7 +30,11 @@ Flan36 is a low-profile wireless split keyboard in development by [Eduardo Ruiz]
 
 **Status: routed prototype; physical qualification pending.** Both PCBs pass DRC, schematic parity and ERC with no unconnected items. Three [ZMK firmware builds](docs/firmware.md) cover two displays or a left-only display. [Prototype fabrication files and verification](docs/electronics.md) are included. Exact connectors, printed retention, BLE, charging and measured power still need hardware tests.
 
-![Measured rim and mirrored case halves](docs/images/revI-rim.png)
+| Solid | Color rim | Terrace |
+|---|---|---|
+| ![Solid case in deep teal](docs/images/revI-case-solid.png) | ![Color rim case, red base and black plate](docs/images/revI-case-rim.png) | ![Terrace case, sage base and dark plate](docs/images/revI-case-terrace.png) |
+
+![Asanoha edition on a black solder mask, both boards seen from below in the viewer](docs/images/revI-pcb-underside.png)
 
 **[Keycaps and frames](docs/customize.md) · [Design](docs/design.md) · [Build](docs/build.md) · [CAD files](docs/cad.md) · [Progress](docs/progress.md)**
 

@@ -2,11 +2,11 @@
 
 [Open Flan36](https://eduarbo.github.io/flan/) · [Download the complete offline viewer](https://eduarbo.github.io/flan/offline.html)
 
-Drag to orbit, scroll or pinch to zoom, and right-drag or use two fingers to pan. The floating camera buttons choose **3D, Top, Front, Right, Left, Back or Bottom**. The adjacent fit icon recenters visible parts without changing the viewing angle; the vertical **Separate layers** slider opens the assembly. **Reset** in the bottom navigation resets the camera only, preserving visibility, separation and your design.
+Drag to orbit, scroll or pinch to zoom, and right-drag or use two fingers to pan. The floating camera buttons choose **3D, Top, Front, Right, Left, Back or Bottom**. Bottom looks up at the boards with the rear edge at the top, so the back silkscreen reads correctly. The adjacent fit icon recenters visible parts without changing the viewing angle; the vertical **Separate layers** slider opens the assembly. **Reset** in the bottom navigation resets the camera only, preserving visibility, separation and your design.
 
 The viewer opens with the editor closed so the model fills the workspace above the compact bottom navigation. Camera controls float within the model area; they collapse out of the way when the drawer leaves only a small model strip.
 
-- **Design** opens the **Case / Frame / Keys / Colors / Battery** tabs. Case and Frame colors and finishes sit directly below their previews; Keys has curated shape presets followed by its color controls. Use Left/Right arrows or Home/End while a category tab is focused to switch tabs.
+- **Design** opens the **Case / Frame / Keys / Colors / Battery / PCB** tabs. Case and Frame colors and finishes sit directly below their previews; Keys has curated shape presets followed by its color controls. **PCB** picks the back-silkscreen [edition](electronics.md#editions) and one of JLCPCB's solder-mask colours, turns the model to the underside without base or fasteners, and links that edition's Gerber/drill ZIPs. Both choices are saved in the design JSON; the colour is not in the Gerbers, so pick the same one in the quote. Use Left/Right arrows or Home/End while a category tab is focused to switch tabs.
 - **Parts** shows component rows with an eye for Hide/Show and a **Solo** toggle. **Show all** in the sidebar header restores every installed component and closes separated layers. **Inside** and **Stack** are component previews in this panel.
 - **Magnets** in Parts opens a location preview and its detail page. Three paired stations form a triangle around each electronics bay, beneath the removable frame. Six Ø2 × 3 mm base magnets meet six Ø2 × 4 mm frame magnets. They are enclosed in plastic; the preview highlights their locations through the surrounding geometry and separates the pairs.
 - **Files** contains JSON, print kit, GLB, offline download and recovery. **About** contains original design and CAD by Eduardo Ruiz, dimensions, resources and credits. Full license texts expand individually; their close button remains visible.
@@ -59,6 +59,14 @@ node viewer/rebrand-check.cjs
 FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/responsive-check.cjs
 FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/keycolors-check.cjs
 ```
+
+`capture-readme.cjs` regenerates the README images (`revI-assembled`, the Solid, Color rim and Terrace `revI-case-*` captures and `revI-pcb-underside`) from `docs/offline.html` and records their hashes in [the image receipt](../validation/revI-readme-images.json):
+
+```sh
+FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/capture-readme.cjs
+```
+
+The silkscreen textures come from the fabrication ZIPs themselves: `tools/build_silkscreen_textures.py` (with `tools/requirements-silkscreen.txt`) rasterizes each package's `B_Silkscreen`, then `tools/build_viewer_revI.py` and `viewer/build.mjs` embed them.
 
 Outputs under `build/canvas-review/`, `build/reliability-fix/` and `build/keycolors/` are ignored test artifacts. A passing run must identify the current built viewer and contain no runtime errors. Browser emulation does not constitute a physical iPhone test. The [reliability plan](reviews/reliability-plan.md) and its original receipts retain their historical scope and hashes; `python3 tools/restore_reliability_review.py` restores their ignored advisory artifacts.
 

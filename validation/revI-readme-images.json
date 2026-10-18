@@ -1,0 +1,13 @@
+{
+  "schema": "flan36-readme-images-1",
+  "viewer_sha256": "6b2a016948d3860e9d1464cb23ec5d2b221e44c9a4a96527f68d6ca198d49de3",
+  "capture_sha256": "a38901d6e78150ae02f0cd257042e88fae491a3ceab204c852dffd46ce940926",
+  "note": "Rendered from docs/offline.html with SwiftShader; supersedes the case and assembled image hashes in earlier delivery receipts.",
+  "images": {
+    "docs/images/revI-assembled.png": "5e41b9645e90d1d69b82d6094bb8116fe30995237c3919e91f62cc53ae447a7c",
+    "docs/images/revI-case-solid.png": "169d508d376c8629745b286272e779c128d8c9225183ab9f2868b32d5efdb075",
+    "docs/images/revI-case-rim.png": "0055aaf7cc1d6987cdad330a9a81194c8f97efec72770dd2671561c4849d7de0",
+    "docs/images/revI-case-terrace.png": "1f3f197cb626e5ecefe8f000d75db7794806533acfa7fc2bfb1b096873ab9d22",
+    "docs/images/revI-pcb-underside.png": "3d7256630cd5c282f052c09669ef118b52127652f905654f9728e0fe4af38bcc"
+  }
+}
