@@ -4,11 +4,11 @@
   "base": {
     "left": {
       "pcb_sha256": "a29ad360b9f938f4597ce3edb15aa79c50e82b59d08e0a6188e5cd2c3de95c48",
-      "package_sha256": "56f43e1d717a0bfd0284a2e313a598b361e502329be25b70fdf09b779d093ca5"
+      "package_sha256": "f4684b8d59bf2f227822d07aecfe28b111eced362d2aea544fd3d3b9f5035b4f"
     },
     "right": {
       "pcb_sha256": "fda00958db011294c5f31986490dc14c235e18fa253e59efbaf1cd2c42c59fab",
-      "package_sha256": "39fbb42b6b7c0b3efffb1bb26fc10fa9ccfb9e50ce0a81de1c188566c8b1293a"
+      "package_sha256": "e41ddb23b723e5aa7f7b5111d5f682f23fc5b21ebd7853f0b43a8fcb968a30f1"
     }
   },
   "rules": {
@@ -42,7 +42,7 @@
             "flan46-right-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-right-asanoha.zip",
-          "package_sha256": "4500df4920129901a6cdf1c585ea98c95e14072ea2a587e4a50ce9a4220f033d"
+          "package_sha256": "d954c064b2e8f8380e7dd51d7c3676d6fa40bf071a8bcae45f9406495a366d86"
         },
         "left": {
           "keepout_overlap_mm2": 0.0,
@@ -62,7 +62,7 @@
             "flan46-left-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-left-asanoha.zip",
-          "package_sha256": "177f498f670b08bfff15b88a5f58662353addf933e6a490c9f6c9cfa9e18494a"
+          "package_sha256": "865ebbf831466ede93355cf43cb7219d1f5d296e9016853177b794c701e85e74"
         }
       },
       "preview": "docs/images/editions/flan46/asanoha.png"
@@ -88,7 +88,7 @@
             "flan46-right-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-right-kikko.zip",
-          "package_sha256": "befc2ed7c464f9e89ae25a717ed5cd6e258f61b05b725756de1d119c9b431857"
+          "package_sha256": "0cdf0002ba24f95b991e439923a52f4d54d234cb66192be5f568387b2e273f48"
         },
         "left": {
           "keepout_overlap_mm2": 0.0,
@@ -108,7 +108,7 @@
             "flan46-left-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-left-kikko.zip",
-          "package_sha256": "6b6887ac6c5fddf69a9c87895e117e1ed80c955383eee6fc77296c57c7213dd0"
+          "package_sha256": "8caf92e17a37652a388480b51f31b0b0ed7bd469452d6b5c0adcf9b92f9ab2e7"
         }
       },
       "preview": "docs/images/editions/flan46/kikko.png"
@@ -134,7 +134,7 @@
             "flan46-right-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-right-sayagata.zip",
-          "package_sha256": "d1a9bd3c4067f998aa499948466ddc8d4a3d3e98d3379a26c10a396c838d24d2"
+          "package_sha256": "ed0d8c8d061ac2ae292681e5f73a5e0518a00592da8c5252fd34af52cb23eeb8"
         },
         "left": {
           "keepout_overlap_mm2": 0.0,
@@ -154,7 +154,7 @@
             "flan46-left-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-left-sayagata.zip",
-          "package_sha256": "d864d49f10d522b5277fc0a4c8a139dc4a9257f86a7ba4d5ac6dfbb99444e377"
+          "package_sha256": "78e7b737394c9375bfd1ec11e10f7aa059b59deff2f1bed7ca7a616e14f01ead"
         }
       },
       "preview": "docs/images/editions/flan46/sayagata.png"
@@ -180,7 +180,7 @@
             "flan46-right-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-right-seigaiha.zip",
-          "package_sha256": "e959e42964f1a006f1dec420d6e7e9851accac18c87c6fd3b8670ecb55e516f1"
+          "package_sha256": "f4d6a8607b2989b50f8a2dbf41870b2273cd95b1bf3e2c1a0b37f8b89a40fd19"
         },
         "left": {
           "keepout_overlap_mm2": 0.0,
@@ -200,7 +200,7 @@
             "flan46-left-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-left-seigaiha.zip",
-          "package_sha256": "6c45abdcf24cb985b46c0b8c1199e3db17182da0d9b0fad72da4b85f7de2df52"
+          "package_sha256": "58f2f3eef650176f843f24d4b2ab0fc9a24adc993c464b2deb0fe7b937b69bf0"
         }
       },
       "preview": "docs/images/editions/flan46/seigaiha.png"
@@ -226,7 +226,7 @@
             "flan46-right-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-right-meandro.zip",
-          "package_sha256": "417b4f148b39c6c9a77b225f1f78bff94d9f028226593d1409a465f0606b15dd"
+          "package_sha256": "3fa84d4129282d7be5a20196c9f72acc485ac474e013bb6bcfb6e1faf443f5aa"
         },
         "left": {
           "keepout_overlap_mm2": 0.0,
@@ -246,7 +246,7 @@
             "flan46-left-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-left-meandro.zip",
-          "package_sha256": "45db3689fff63d58d37faec91332cb1040cb5c5e50ff13fc39e7379b30e7a4a5"
+          "package_sha256": "374f02249cd0e459a2ead97b7758535af9b0ca51378c72736a374af9eaec91d4"
         }
       },
       "preview": "docs/images/editions/flan46/meandro.png"
@@ -272,7 +272,7 @@
             "flan46-right-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-right-vias.zip",
-          "package_sha256": "ce5716030835a5a27f04e53aff3c37c07ffeaadeb5435553210972bc6f7be1af"
+          "package_sha256": "052627314aad7905cc01854ace8800415b9e69dd4dc24f2814b30ee12188cf42"
         },
         "left": {
           "keepout_overlap_mm2": 0.0,
@@ -292,7 +292,7 @@
             "flan46-left-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-left-vias.zip",
-          "package_sha256": "b923cf1ccb0e4ed6fb0e21de2c1927ceae1ce80daadd5a7c90a25921fa2310fa"
+          "package_sha256": "e8a87c28ed73ab75d3a031cec590145d905a81bac40da9e295f961971dd543aa"
         }
       },
       "preview": "docs/images/editions/flan46/vias.png"

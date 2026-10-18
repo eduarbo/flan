@@ -20,7 +20,11 @@
       "rules_sha256": "c200306d2eadd1ac9cdffc781f003bebf6dc3e9385bc73253a478a59e060a15c",
       "added_footprints_checked": 11,
       "revI_footprints_pads_models_unchanged": true,
-      "outline": "design/flan46-profiles.json"
+      "outline": "design/flan46-profiles.json",
+      "gnd": {
+        "gnd_pads_in_one_copper_island": 6,
+        "u1_gnd3": "no-connect"
+      }
     },
     "right": {
       "drc_violations": 0,
@@ -37,7 +41,11 @@
       "rules_sha256": "e177a095a8ed201d6cf0fd0f4afec103ce660369be67e03914c65dd17d1155c9",
       "added_footprints_checked": 11,
       "revI_footprints_pads_models_unchanged": true,
-      "outline": "design/flan46-profiles.json"
+      "outline": "design/flan46-profiles.json",
+      "gnd": {
+        "gnd_pads_in_one_copper_island": 7,
+        "u1_gnd3": "connected"
+      }
     }
   }
 }

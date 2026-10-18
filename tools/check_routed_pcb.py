@@ -102,6 +102,54 @@ def variant_geometry(board, old, side, profile, revi_outline, keys):
     return len(templates)
 
 
+def copper_islands(board, net):
+    """Independent of DRC: the net's pads, tracks and vias, joined wherever their copper meets
+    on a shared layer. Returns the islands as sets of "REF.PAD" names (empty for pad-less
+    copper; a name appears once per pad). Needs Shapely, so only the family checks call it."""
+    from shapely.geometry import LineString, Point, Polygon
+    from shapely.ops import unary_union
+    from shapely.strtree import STRtree
+    mm = p.ToMM
+    def polys(ps):
+        return unary_union([Polygon([(mm(ps.Outline(i).CPoint(j).x), mm(ps.Outline(i).CPoint(j).y))
+                                     for j in range(ps.Outline(i).PointCount())]) for i in range(ps.OutlineCount())])
+    shapes, names = {p.F_Cu: [], p.B_Cu: []}, []
+    for fp in board.GetFootprints():
+        for q in fp.Pads():
+            if q.GetNetname() != net:
+                continue
+            names.append(f"{fp.GetReference()}.{q.GetNumber()}")
+            for l in shapes:
+                if q.IsOnLayer(l):
+                    ps = p.SHAPE_POLY_SET(); q.TransformShapeToPolygon(ps, l, 0, p.FromMM(.002), p.ERROR_OUTSIDE)
+                    shapes[l].append((polys(ps), len(names) - 1))
+    for t in board.GetTracks():
+        if t.GetNetname() != net:
+            continue
+        names.append(None)
+        if isinstance(t, p.PCB_VIA):
+            for l in shapes:
+                shapes[l].append((Point(mm(t.GetPosition().x), mm(t.GetPosition().y)).buffer(mm(t.GetWidth(l)) / 2), len(names) - 1))
+        else:
+            line = LineString([(mm(t.GetStart().x), mm(t.GetStart().y)), (mm(t.GetEnd().x), mm(t.GetEnd().y))])
+            shapes[t.GetLayer()].append((line.buffer(mm(t.GetWidth()) / 2), len(names) - 1))
+    parent = list(range(len(names)))
+    def root(i):
+        while parent[i] != i:
+            parent[i] = parent[parent[i]]; i = parent[i]
+        return i
+    for items in shapes.values():
+        tree = STRtree([g for g, _ in items])
+        for g, i in items:
+            for k in tree.query(g):
+                if g.distance(items[k][0]) < 1e-4:
+                    parent[root(i)] = root(items[k][1])
+    islands = {}
+    for i, n in enumerate(names):
+        islands.setdefault(root(i), []).extend([n] if n else [])
+    return list(islands.values())
+
+
 def verify(directory, output, cli, variant="flan36"):
     output.mkdir(parents=True, exist_ok=True)
     family = variant != "flan36"
@@ -116,7 +164,7 @@ def verify(directory, output, cli, variant="flan36"):
         layout = json.loads((ROOT / "design/variants.json").read_text())["variants"][variant]["keys"]
         profiles = json.loads((ROOT / f"design/{variant}-profiles.json").read_text())
         revi = json.loads((ROOT / "design/revI-profiles.json").read_text())
-    added_counts = {}
+    added_counts, gnd_checks = {}, {}
     for side in ("left", "right"):
         name = f"{variant}-{side}"
         board_path = directory / (name + ".kicad_pcb")
@@ -159,6 +207,11 @@ def verify(directory, output, cli, variant="flan36"):
             pins[f'D{pinmap_variants[variant][side]["row4"]}'] = "ROW4"
             if side in RELEASE:
                 assert expected["U1", RELEASE[side]].startswith("unconnected-"), (side, RELEASE[side])
+            # without U1 GND3 on the left, J1's GND and every GND pad must still be one copper net
+            islands = copper_islands(board, "/GND")
+            assert len(islands) == 1 and "J1.2" in islands[0], (side, "GND split", [sorted(i) for i in islands])
+            gnd_checks[side] = {"gnd_pads_in_one_copper_island": len(islands[0]),
+                                "u1_gnd3": "no-connect" if side in RELEASE else "connected"}
         for pad, net in pins.items(): assert expected["U1", pad] == "/"+net
         for i, net in enumerate(("DISP_MOSI", "DISP_SCK", "VCC", "GND", "DISP_CS"), 1):
             assert expected["J2", str(i)] == "/"+net
@@ -188,7 +241,8 @@ def verify(directory, output, cli, variant="flan36"):
     if family:
         for side in ("left", "right"):
             result["halves"][side] = {**result["halves"][side], "added_footprints_checked": added_counts[side],
-                                      "revI_footprints_pads_models_unchanged": True, "outline": f"design/{variant}-profiles.json"}
+                                      "revI_footprints_pads_models_unchanged": True, "outline": f"design/{variant}-profiles.json",
+                                      **({"gnd": gnd_checks[side]} if side in gnd_checks else {})}
             del result["halves"][side]["poses_pads_models_and_outline_preserved"]
     receipt = "validation/revI-routing.json" if not family else f"validation/{variant}-routing.json"
     (ROOT / receipt).write_text(json.dumps(result, indent=2)+"\n")

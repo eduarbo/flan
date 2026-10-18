@@ -6,7 +6,7 @@
   "halves": {
     "left": {
       "package": "hardware/flan54/fabrication/flan54-left-prototype.zip",
-      "sha256": "07f6b4ecab47178881b6bc7e4b784e041710a65d4df30b628145b4e9ee95287a",
+      "sha256": "a2c13c24c15ab140205ab8ef497bcb85e3d705b1fecb4cd11914dc6c26d7a320",
       "manifest": {
         "side": "left",
         "source": {
@@ -24,21 +24,25 @@
           "rules_sha256": "5f62bdcc7118726160651ed4af94c668ab2654e5c37d2934475eb6344152d81d",
           "added_footprints_checked": 21,
           "revI_footprints_pads_models_unchanged": true,
-          "outline": "design/flan54-profiles.json"
+          "outline": "design/flan54-profiles.json",
+          "gnd": {
+            "gnd_pads_in_one_copper_island": 6,
+            "u1_gnd3": "no-connect"
+          }
         },
         "files": {
-          "flan54-left-B_Cu.gbl": "b6b17b034d1bf882b25062b83b3a82aa455930e7561222e8b84d1e9668a471da",
-          "flan54-left-B_Mask.gbs": "253dca34cbfa2cf6c8f2cb023fbcfafe5a32121812b61100d9c13e4d201f90a4",
-          "flan54-left-B_Silkscreen.gbo": "ef8559ef10ddf944885630209ff25c25ab866ffc5a6298839e47d9e68728d672",
-          "flan54-left-Edge_Cuts.gm1": "9737e17fbbd5db01bc8ce6c78fd7578243595c9a2aaaebaee6661422149ab1de",
-          "flan54-left-F_Cu.gtl": "acf8eed6f000852e5f02a8c68183292773fdcf992466a7bab0cf45d95d9d4c8c",
-          "flan54-left-F_Mask.gts": "4cf1138af3fc1e7b6b36e18bd55781df16011851ebd15d350f99842ae4c6cc12",
-          "flan54-left-F_Silkscreen.gto": "55a2fcf5280d7fa797504c10e2ecf4cb7e4eb48e9950b8e77f83f6d3b507938d",
-          "flan54-left-NPTH-drl_map.svg": "af2bfd2bb904ef4363778f97563a86e6c1bdf4a1d8f1df854f0e1386592fbc94",
-          "flan54-left-NPTH.drl": "d9ecb2bcf9150ee0e2b545591627ed6ef951f5ec9b86345285f88a6b43623316",
-          "flan54-left-PTH-drl_map.svg": "e430b20ded567273189ad67c8825e1994049eb4505567bd3353de7071b20628c",
-          "flan54-left-PTH.drl": "9b4eacbd3eceb7030f608692475efc2623d31bf77f913a3692085456559f0523",
-          "flan54-left-job.gbrjob": "577e5cbe004b98be7e578573304b4c47651844ebdc22db46b42cd82043b21036"
+          "flan54-left-B_Cu.gbl": "4588bd8cd5d9bf9c98eb400a19e82347b955e7adc6899f6fddca90a6d1e47bb5",
+          "flan54-left-B_Mask.gbs": "a46d2b622f2b85ce7bdb1743efef8252f4766f3c2968bf70adc328a690d4dfc1",
+          "flan54-left-B_Silkscreen.gbo": "85f69db213a8c6d3d82fa56e483851f1bdc57cd7cc049b9e662c847ffe0f07ec",
+          "flan54-left-Edge_Cuts.gm1": "2646a768f7f4a0ffb2b13e32c0bb37e426cda721e7e7b2e194691d8fdb94f2cb",
+          "flan54-left-F_Cu.gtl": "9b2fb60152dad9912e8dfb56535852218210fff6d67b49f47bb34a9374f986dc",
+          "flan54-left-F_Mask.gts": "ba1688529aec09b466c302c0314812137c45682252baa46fd7521597c4dd2b77",
+          "flan54-left-F_Silkscreen.gto": "eb9915c0d791c189c690ea1ca31b89def87dc92dc939690eeb328717233c1009",
+          "flan54-left-NPTH-drl_map.svg": "1b066b58830b802ded2c5c97f5c74f37409d21d37af1f9828ba65faf37fdc4f2",
+          "flan54-left-NPTH.drl": "e8d26c8eed0937b6b81ad6e8f32ac902f6a655b6be5035a72bd9ef01e721ca8a",
+          "flan54-left-PTH-drl_map.svg": "57efe84b3dfd4b3e6ebfd2f8722792468daab73a19514c11bbd4124f253b371c",
+          "flan54-left-PTH.drl": "9288ee2a7a4257f71e522fc99e6f984cf1b910044d8191eb0d1f6c0220e0032d",
+          "flan54-left-job.gbrjob": "0b162b9cdbcb97cf15c7cae9db0f03c53265ff65602bffbe97a99b5c71b5dfd5"
         },
         "physical_acceptance": false,
         "specification": {
@@ -54,7 +58,7 @@
     },
     "right": {
       "package": "hardware/flan54/fabrication/flan54-right-prototype.zip",
-      "sha256": "d624d4cc4fd04051742f659c077c8c50197195aa265515b1266d84cbdb274805",
+      "sha256": "336898ceac3a6bfda21605ea346a9e2ac90fdad8f8c5942e4eab2b5266fd7930",
       "manifest": {
         "side": "right",
         "source": {
@@ -72,21 +76,25 @@
           "rules_sha256": "eff34485da847b3d23694d91bdbbfc45c324c4a14bba13589f905c72a72fc423",
           "added_footprints_checked": 21,
           "revI_footprints_pads_models_unchanged": true,
-          "outline": "design/flan54-profiles.json"
+          "outline": "design/flan54-profiles.json",
+          "gnd": {
+            "gnd_pads_in_one_copper_island": 7,
+            "u1_gnd3": "connected"
+          }
         },
         "files": {
-          "flan54-right-B_Cu.gbl": "3f5b28be4e88f6c76ad7960f31ff27a45fff0270856ba91cd9723299f74c35c6",
-          "flan54-right-B_Mask.gbs": "73023aa579297bd82ec8cd2b1573389ce2382a1c0f5cd727752b9ff8a10ceecc",
-          "flan54-right-B_Silkscreen.gbo": "294b3952dae7efff404b9663cebf7b4f078776733aeaae8b6b81a95587650229",
-          "flan54-right-Edge_Cuts.gm1": "b729ed81ba972d264ceaa33a1949f6f3970e8af73dc5ceacc5a2158e5d6432d9",
-          "flan54-right-F_Cu.gtl": "acd330cc07b0acbb2aeac1387a150e737a65c85956e7118695c0da77d7ebab56",
-          "flan54-right-F_Mask.gts": "b006ba7b04af10fa525e768ad39829d064a4c94aac28fc62676a71572db7e7a6",
-          "flan54-right-F_Silkscreen.gto": "3919685a172e09d63aac207994e026339342e2de6730550ce977f94ecd35e319",
-          "flan54-right-NPTH-drl_map.svg": "86e7144da2f4eff2e0fe268aa5785609fab34117769b1371a8134dc2cee94547",
-          "flan54-right-NPTH.drl": "0fc9cc9c2dcce37782ba0ef443bfbe9e36c133f4613506937aa6db6cd9196e43",
-          "flan54-right-PTH-drl_map.svg": "9e8a048da04b63228069a4da11cbe738ad86798ca4bff2079c7e463a87cbfa4b",
-          "flan54-right-PTH.drl": "36c3447e45411fe31d027d0a207002f5107f2601b638e68e48393ff2cc8d6065",
-          "flan54-right-job.gbrjob": "9180243e7e557b9eda80f9291f5c9458d3b9b173cf3d6a27f7d9d79e085feaac"
+          "flan54-right-B_Cu.gbl": "1cec69671a8e61a6cbae7782b28f6a7b7e79f6b63d1fd25a40f7cd285b6b68ae",
+          "flan54-right-B_Mask.gbs": "a2cf46536c2084d6076364d06be9f262aa4f03bdcb10a4c197cc57dbe4f780dc",
+          "flan54-right-B_Silkscreen.gbo": "0b3970399af9de6f258b64e2ba44ded23aa831840c295e86286797f203f8ab24",
+          "flan54-right-Edge_Cuts.gm1": "f59e43f2092733480ca8736630670c8a960b63f8deb60065ec90ada0a26fc6cf",
+          "flan54-right-F_Cu.gtl": "8385894217e19e59a5f2ea1ea29b1a277c4c97bdd2e40db18234f778c4f69b79",
+          "flan54-right-F_Mask.gts": "3eb20a1e528dccde933fdf2132d5ffe3dd471272297cfa5a8a74d0fb92c0881f",
+          "flan54-right-F_Silkscreen.gto": "d666584870531ce82a3c4663862296b15ece7a9e2b938af1912741a2601b661f",
+          "flan54-right-NPTH-drl_map.svg": "c1eb763534d332c6f7fdbb4c5c264bc9a73841223a7994f55cf8abefbbf2d541",
+          "flan54-right-NPTH.drl": "ee5a5905e908cda655e26f0ad2c0bf4db892349fdbecce61709540ee859a7eef",
+          "flan54-right-PTH-drl_map.svg": "b2396f1a5fee15d824733eba4ceb1a7bd8f0fb5a9665b64b1404d71bd208848c",
+          "flan54-right-PTH.drl": "c2507fb12efbca8527753a51d5ac51727581db8af1c632bab3bac393913e09d4",
+          "flan54-right-job.gbrjob": "206f8d0a1e482e95a08d69e1c279ed49d27c37f09d9d1658a0947e073ed6cfeb"
         },
         "physical_acceptance": false,
         "specification": {
