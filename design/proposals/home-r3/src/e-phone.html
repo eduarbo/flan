@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..600,100&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="base.css"><script src="sizes.js"></script><script src="controls.js"></script><style>
+html,body{width:390px;height:844px}body{background:radial-gradient(500px 400px at 50% 36%,#fff 0,#f1efe9 70%);color:#22202c}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px 18px}.lockup img{height:24px}.lockup span{font-size:21px}
+h1{margin:6px 18px 0;font-weight:300;font-size:46px;line-height:1;letter-spacing:-.02em}.sub{margin:8px 18px 0;color:#6d6b78;font-size:15px}
+.model{display:block;width:100%;margin:6px 0 0;filter:drop-shadow(0 26px 26px rgba(34,32,44,.16))}
+.hint{margin:0 18px;background:#fff;color:#55536a;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+#c{margin:14px 12px 0;padding:14px;background:#fff;border-radius:20px;box-shadow:0 12px 30px rgba(34,32,44,.1);display:flex;flex-direction:column;gap:12px}
+#c .opts{flex-wrap:wrap}#c .tile{width:56px}#c .ico{width:58px}
+</style></head><body>
+<header><span class="lockup"><img src="../../../../docs/branding/flan/flan-lockup.svg"><span>keyboard</span></span><span class="mono">EN · ES</span></header>
+<h1 class="serif">Flan Keyboard</h1><p class="sub">A low-profile wireless split, in layers.</p>
+<img class="model" src="../assets/anim-3.png"><span class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12c0-3 4-5 9-5s9 2 9 5-4 5-9 5"/><path d="M9 14l3 3-3 3"/></svg> Drag to rotate</span>
+<div id="c"></div><script>controls(document.getElementById('c'),{assets:'../assets',layout:'col'})</script>
+</body></html>

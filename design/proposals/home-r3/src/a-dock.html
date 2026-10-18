@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..600,100&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="base.css"><script src="sizes.js"></script><script src="controls.js"></script><style>
+html,body{width:1440px;height:960px}body{background:radial-gradient(900px 560px at 64% 46%,#ffffff 0,#f1efe9 60%,#e8e5dc 100%);color:#22202c}
+header{display:flex;justify-content:space-between;align-items:center;padding:28px 52px}nav{color:#6d6b78}nav .pill{background:#22202c;color:#fff}
+h1{position:absolute;left:52px;top:132px;margin:0;font-weight:300;font-size:88px;line-height:.95;letter-spacing:-.025em}
+.sub{position:absolute;left:56px;top:330px;max-width:330px;color:#6d6b78;font-size:17px}
+.model{position:absolute;left:470px;top:96px;width:900px;filter:drop-shadow(0 40px 40px rgba(34,32,44,.18))}
+.hint{position:absolute;left:520px;top:690px;background:#fff;color:#55536a;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+#c{position:absolute;left:52px;right:52px;bottom:32px;display:flex;justify-content:space-between;gap:20px;padding:16px 24px;background:#fff;border-radius:22px;box-shadow:0 18px 40px rgba(34,32,44,.12);color:#22202c}
+</style></head><body>
+<header><span class="lockup"><img src="../../../../docs/branding/flan/flan-lockup.svg"><span>keyboard</span></span><nav><span>Build</span><span>GitHub</span><span>EN · ES</span><span class="pill">Full viewer →</span></nav></header>
+<h1 class="serif">Flan<br>Keyboard</h1><p class="sub">A low-profile wireless split, here in layers. Drag to turn it; slide back to put it together.</p>
+<img class="model" src="../assets/anim-3.png"><span class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12c0-3 4-5 9-5s9 2 9 5-4 5-9 5"/><path d="M9 14l3 3-3 3"/></svg> Drag to rotate · scroll to zoom</span>
+<div id="c"></div><script>controls(document.getElementById('c'),{assets:'../assets'})</script>
+</body></html>

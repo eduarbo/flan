@@ -1,0 +1,16 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..600,100&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="base.css"><script src="sizes.js"></script><script src="controls.js"></script><style>
+html,body{width:1440px;height:960px}body{background:radial-gradient(1000px 700px at 50% 55%,#e9e5f4 0,#c9c2e0 55%,#ab a1cb 100%);background:radial-gradient(1000px 700px at 50% 55%,#e9e5f4 0,#c9c2e0 55%,#aba1cb 100%);color:#26223a}
+header{display:flex;justify-content:space-between;align-items:center;padding:28px 52px}nav{color:#4d4669}
+h1{position:absolute;left:0;right:0;top:100px;text-align:center;margin:0;font-weight:300;font-size:96px;line-height:1;letter-spacing:-.025em}
+.sub{position:absolute;left:0;right:0;top:206px;text-align:center;color:#4d4669;font-size:18px}
+.model{position:absolute;left:330px;top:232px;width:780px;filter:drop-shadow(0 46px 46px rgba(40,30,80,.3))}
+#c{position:absolute;left:50%;transform:translateX(-50%);bottom:30px;display:flex;gap:22px;padding:14px 22px;border-radius:24px;background:rgba(255,255,255,.62);backdrop-filter:blur(14px);box-shadow:0 16px 40px rgba(40,30,80,.18);color:#26223a}
+#c .lab{display:none}#c .ico span,#c .tile span{font-size:10px}#c .ico{width:56px}#c .tile{width:54px}
+.hint{position:absolute;right:52px;top:470px;background:rgba(255,255,255,.6);color:#4d4669}
+.cta{position:absolute;left:52px;top:470px}.cta .pill{background:#26223a;color:#fff}
+</style></head><body>
+<header><span class="lockup"><img src="../../../../docs/branding/flan/flan-lockup.svg"><span>keyboard</span></span><nav><span>Build</span><span>GitHub</span><span>EN · ES</span></nav></header>
+<h1 class="serif">Flan Keyboard</h1><p class="sub">Low, wireless, split. Make it yours.</p>
+<img class="model" src="../assets/anim-3.png"><span class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12c0-3 4-5 9-5s9 2 9 5-4 5-9 5"/><path d="M9 14l3 3-3 3"/></svg> Drag to rotate</span><span class="cta"><span class="pill">Full viewer →</span></span>
+<div id="c"></div><script>controls(document.getElementById('c'),{assets:'../assets'})</script>
+</body></html>
