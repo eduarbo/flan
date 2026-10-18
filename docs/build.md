@@ -21,7 +21,7 @@ Use the **5 mm socket and 2 mm header supplied with each nice!view**. The displa
 
 ## Inspect the layout now
 
-`design/layout.json` contains each half’s 18 key centers and angles in millimeters. The Flan36 CAD is Eduardo Ruiz's original design. Historical Piantor reference boards and their provenance are retained under `sources/` and [ATTRIBUTION.md](../ATTRIBUTION.md).
+`design/layout.json` contains each half’s 18 key centers and angles in millimeters. They are Piantor's key positions and angles, translated per half without change; the pinned Piantor boards under `sources/` and [ATTRIBUTION.md](../ATTRIBUTION.md) record that provenance. The PCBs, case outline and the rest of the CAD are Eduardo Ruiz's original design.
 
 ```sh
 python3 tools/check_layout.py

@@ -1,6 +1,6 @@
 # Credits and licenses
 
-Flan36 and its CAD are an original design by Eduardo Ruiz. Piantor by beekeeb was an inspiration for the number of keys. Imported reference files and third-party component meshes are credited individually below; their provenance does not make the complete Flan36 CAD a derivative of Piantor. There is no implied affiliation or certification by beekeeb or component manufacturers.
+Flan36 is inspired by Piantor by beekeeb and keeps Piantor's 36 key centres and angles, translated per half without change. Flan42 and Flan54 add Piantor's outer pinky column (K00/K10/K20). That key layout is the part of Flan derived from Piantor, under GPL-3.0. The wireless PCBs and their routing, the case outline rule, the cases, frames, firmware and branding are original work by Eduardo Ruiz. Imported reference files and third-party component meshes are credited individually below. There is no implied affiliation or certification by beekeeb or component manufacturers.
 
 | Material | Author / source | License and changes |
 |---|---|---|
@@ -9,7 +9,7 @@ Flan36 and its CAD are an original design by Eduardo Ruiz. Piantor by beekeeb wa
 | `Keebio-Parts:TRRS-PJ-320A` footprint | [Keebio](https://github.com/keebio/Keebio-Parts.pretty), commit `063565dcba9a8ee807d49772de0ed75ecaedcc26` | MIT; copyright/permission in [LICENSES/Keebio-MIT.txt](LICENSES/Keebio-MIT.txt) |
 | `RPi_Pico:RPi_Pico_SMD_TH` footprint | [TPCWare / Nicola Carandini](https://github.com/ncarandini/KiCad-RP-Pico), commit `dc6f9b9f213dc36eebce626aa9ee72a333fa0db3` | [TPCWare license](LICENSES/TPCWare-KiCad.txt): CC-BY-SA-4.0 with design exception |
 | Standard KiCad footprints, including `Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder` | [KiCad libraries](https://www.kicad.org/libraries/license/) | [CC-BY-SA-4.0 with design exception](LICENSES/KiCad-Libraries.md) |
-| `design/layout.json`, layout diagram | Archived coordinate-reference provenance: Piantor source commit and source-coordinate fields | GPL-3.0; existing reference metadata retained unchanged. This is file-level historical provenance, not attribution of the complete CAD |
+| `design/layout.json`, layout diagram; outer-column centres in `design/variants.json` | Key centres and angles of [Piantor](https://github.com/beekeeb/piantor) by beekeeb / Leo, commit `cd847afb4f9a86e8c1c8e36f243140644013afb2`; `source_x`/`source_y` keep the original coordinates | GPL-3.0; translated per half, angles unchanged; Flan36 omits the outer column, Flan42/54 restore it upright |
 | `keycaps/*.stl`, `keycaps/variants/*.stl`, KLP meshes in FCStd/viewer/GLB | [KLP Lamé by braindefender](https://github.com/braindefender/KLP-Lame-Keycaps), commit `4a67a824232d3054c61599ea047c56a340faaba2` | CC-BY-SA-4.0; unchanged meshes, placed and colored. RevG catalogs all 38 Choc-stem files, Choc/MX body sizes. [Original three sources](keycaps/sources.json), [complete pinned sources](keycaps/variants-source.json) |
 | `docs/images/revE-*.png` through `revI-*.png`, including case screenshots, and `docs/images/viewer-*.png` | Original Flan36 CAD renders incorporating credited KLP Lamé meshes | CC-BY-SA-4.0; calculated from attributed meshes, no image retouching |
 | Original CAD, project tools and original documentation | Eduardo Ruiz / Flan36 contributors | GPL-3.0-or-later, except identified materials above |
@@ -34,6 +34,14 @@ The Flan wordmark in `docs/branding/flan/` and on the revI back silkscreen is th
 
 The `docs/branding/outline/flan36-*.svg` artwork is a deterministic vector conversion of the selected Outline board’s monochrome reference. Letterforms are traced paths, not a bundled or substituted font. Source, reference hash and contour checks are recorded in `tools/build_outline_logo.py`, `validation/branding-outline-trace.json` and `design/branding-outline-vectors.json`. The preview and SVG kit follow GPL-3.0-or-later to the extent applicable.
 
+## Trademarks
+
+The GPL covers the logo artwork as files, not the right to use Flan's names and marks. As an additional term under GPL-3.0 section 7(e), the project's license grants no trademark rights to the names Flan, Flan36, Flan42, Flan46 and Flan54, the Flan wordmark or the tecla-flan mark. See [TRADEMARKS.md](TRADEMARKS.md).
+
 ## CAD authorship correction · 2026-10-09
 
 Earlier viewer credits, GLB metadata and project descriptions incorrectly described the whole CAD as derived from Piantor. Eduardo Ruiz clarified that the CAD is his original design and Piantor inspired the key count. Current descriptions and exports reflect that correction. Historical coordinate-reference metadata, archived upstream copies and third-party license notices are preserved; no geometry or license terms changed.
+
+## Key layout provenance · 2026-10-18
+
+The 2026-10-09 wording said Piantor only inspired the key count. That understated it: all 36 centres and angles in `design/layout.json` match Piantor's switch footprints in `sources/piantor/` after a constant per-half translation, and Flan42/54 reuse Piantor's outer column. Descriptions now say that the key layout comes from Piantor. The PCBs and routing, the revI case outline rule (`tools/outline.py`), cases, frames and firmware remain Eduardo's original work; only the early RevE case study (`tools/build_case.py`) traced Piantor's board exterior. No geometry or license terms changed.
