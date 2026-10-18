@@ -40,10 +40,15 @@ def text_polys(specs, kicad_py, tag, build):
     return unary_union([polys(v) for v in json.loads(dst.read_text()).values()])
 
 def components_merge(geom, gap):
-    """True when two separate strokes sit closer than gap (their halos fuse)."""
+    """True when two separate strokes sit closer than gap (their halos fuse).
+
+    Pairwise: a count of the fused halos could also change when a buffer artefact splits
+    one tiny stroke's halo, which is no fusion at all."""
+    from shapely.strtree import STRtree
     parts = list(getattr(geom, "geoms", [geom]))
-    grown = unary_union([p.buffer(gap / 2, quad_segs=4) for p in parts])
-    return len(parts) != len(getattr(grown, "geoms", [grown]))
+    grown = [p.buffer(gap / 2, quad_segs=4) for p in parts]
+    tree = STRtree(grown)
+    return any(j > i and g.intersects(grown[j]) for i, g in enumerate(grown) for j in tree.query(g))
 
 def main():
     run("r2", patterns.PATTERNS, ORDER, OUT, BUILD, strip_installed=False, doc=__doc__)

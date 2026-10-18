@@ -36,7 +36,7 @@ python3 tools/build_variants.py      # needs Shapely (tools/requirements-silkscr
 - **Fastener H6:** an M2 hole one column outward from H1, at (20.7, 37.5) mm on the left and (139.3, 37.5) mm on the right. Without it, the outer edge would reach 52.54 mm from the nearest fastener; Flan36's worst key-side point is 41.65 mm, and H6 restores exactly that.
 - **Outline:** the Flan42 case outline under revI's board rule: a 1.65 mm inset, the LCD-flank notch and revI's cutouts. The board is 131.45 × 91.27 mm per half.
 - **Routing:** each added key copies its row neighbour's own routing, translated 18 mm. The grid router [`complete_pcb_routes.py`](../tools/complete_pcb_routes.py) routes the row links and the COL0 link; [`smooth_routes.py`](../tools/smooth_routes.py) then straightens them.
-- **Silkscreen:** the Flan signature and credit sit in the same free back rectangles as revI. The tool rechecks them on these boards. The back still reads REV I because Flan42 keeps revI's electronics; the front legend reads FLAN42. The six back-pattern editions are not generated for Flan42 yet.
+- **Silkscreen:** the Flan signature and credit sit in the same free back rectangles as revI. The tool rechecks them on these boards. The back still reads REV I because Flan42 keeps revI's electronics; the front legend reads FLAN42.
 
 **Checks.** KiCad 10.0.6 runs DRC at all severities with all track errors, schematic parity and ERC. Each half has 0 violations and 0 unconnected items. The checker reads all 281 physical pads and 21 matrix keys per half. It confirms that each added footprint is an exact translated copy of its template, and that the outline equals revI's minus its outer edge plus Flan42's. Negative controls reject a wrong pad net, a disconnected row and a key moved 0.1 mm. A readback of the Gerber and drill files matches the PCB's 676 outline segments and every plated and non-plated hole.
 
@@ -75,13 +75,15 @@ python3 tools/export_fabrication.py --variant flan42
 
 **Physical fit is untested.** The firmware also needs ROW4 on D15/D6 before a number-row board can be used.
 
+**Silkscreen editions.** All three variants have the six back patterns that revI offers: Asanoha, Kikkō, Sayagata, Seigaiha, Meandro and Vías. Each pattern follows its own board's outline and keys around the signature. For every edition and half, the export runs revI's print checks, DRC with parity and a readback. It also compares the Gerbers byte for byte with the base package and requires that only `B_Silkscreen` differs. The packages are in `hardware/<variant>/fabrication/editions/`, the previews in [`docs/images/editions/<variant>/`](images/editions/flan54/seigaiha.png), and the receipts are `validation/<variant>-editions.json`. Rebuild them with `$SILK_PY tools/export_editions.py --variant flan42` (or flan46, flan54) after the fabrication export.
+
 The rebuild commands are the same as Flan42's with `--variant flan46` or `--variant flan54`. Use `build_variant_pcb.py --row4 LEFT RIGHT --output DIR` to try other pins.
 
 ## Next stages
 
 Each stage applies to Flan42, Flan46 and Flan54. Flan42 is the natural first build: it adds keys to an existing matrix column and needs no new pin.
 
-1. **PCB:** done for all three variants (above). The six silkscreen editions still need to be generated for each variant board.
+1. **PCB:** done for all three variants, including the six silkscreen editions (above).
 2. **Case:** FreeCAD bodies from the variant outline with the same stack, bay, frames, magnets and batteries; new fastener positions for the larger plates (H6–H8 are already on the variant PCBs); fit coupons.
 3. **Firmware:** a ZMK shield per variant from its matrix transform, the row-4 pin and keymaps with the number row or outer column.
 4. **Keycaps:** KLP Lamé qualification for the new positions.
