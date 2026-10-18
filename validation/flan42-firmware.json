@@ -282,7 +282,7 @@
             },
             {
               "path": "design/pinmap.json",
-              "sha256": "0e1e32f41a33682463b168814515619ecf7e4f3d9a678db80e927fddbf997b0f"
+              "sha256": "a47cfd14cb09cec9604225e92d8fc41838ef4dd9001cc353a3e990e350eeabe5"
             },
             {
               "path": "design/variants.json",
@@ -333,6 +333,46 @@
               "sha256": "c603d923316a2116fd3175840d4ffbae20bdbf33d4dc5fbfe209c57c2ab233de"
             },
             {
+              "path": "firmware/config/boards/shields/flan46/Kconfig.defconfig",
+              "sha256": "6caef37c2036c7fbd79c86e4afc88cfe0c681be0d3c3751548c95d80180f8cd1"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan46/Kconfig.shield",
+              "sha256": "4782d5cf939c18a78689cca5ab4bad2d61ec65ae17d024d2125d9dfeef127733"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan46/flan46.dtsi",
+              "sha256": "d4aebbe1a40ea184d6ccecc0ea28ca66c4f9215da7e314cc7d819e2bda9893ca"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan46/flan46_left.overlay",
+              "sha256": "7bdab3869fded5e53992e6841d13dee25e09722e773bcc7e6b30b27445438f85"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan46/flan46_right.overlay",
+              "sha256": "afc1867171d1415ef757c4ee72ec6716c8f4eb79cffd2211d5efd8fbf7559186"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/Kconfig.defconfig",
+              "sha256": "c40aef35783ab08777e17abbc98d16ad93490280be40d84db39ae1e9dc76ef85"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/Kconfig.shield",
+              "sha256": "1be0d62724e9e21b9e66c70e50921f433b23860eabf7d2743a86d7fb2f38771c"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/flan54.dtsi",
+              "sha256": "cdc9d9996a56979c63e5f5588c71d7b9f989aa5e825ae34b03cc7e34feacbc6e"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/flan54_left.overlay",
+              "sha256": "b3183153e89d46d85e234678276acdac94a1f06d8a1f7e7802f4114f907672d9"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/flan54_right.overlay",
+              "sha256": "292dd3a9b7b2ef2512b09a63dff70596d5da717d5a22c18240defdc6d6be2fda"
+            },
+            {
               "path": "firmware/config/flan36.conf",
               "sha256": "a6d8843a884b5325fd3c4c402ad83972eb7218534578b8d26dfd9c23a714ad38"
             },
@@ -347,6 +387,22 @@
             {
               "path": "firmware/config/flan42.keymap",
               "sha256": "b60b52f21e941e68a51da20a0344b8f522e052432596ccdda91e7653230beb9c"
+            },
+            {
+              "path": "firmware/config/flan46.conf",
+              "sha256": "a6d8843a884b5325fd3c4c402ad83972eb7218534578b8d26dfd9c23a714ad38"
+            },
+            {
+              "path": "firmware/config/flan46.keymap",
+              "sha256": "bff2ea281b70138291063fbadd61a937d55ed4e89cbac9deed2366806fd0eaf1"
+            },
+            {
+              "path": "firmware/config/flan54.conf",
+              "sha256": "a6d8843a884b5325fd3c4c402ad83972eb7218534578b8d26dfd9c23a714ad38"
+            },
+            {
+              "path": "firmware/config/flan54.keymap",
+              "sha256": "762dccd6dc3d1b8297606a77bda3308d1839900e55fe1d9e993ef0890bb48810"
             },
             {
               "path": "firmware/config/no-display.conf",
@@ -618,7 +674,7 @@
             },
             {
               "path": "design/pinmap.json",
-              "sha256": "0e1e32f41a33682463b168814515619ecf7e4f3d9a678db80e927fddbf997b0f"
+              "sha256": "a47cfd14cb09cec9604225e92d8fc41838ef4dd9001cc353a3e990e350eeabe5"
             },
             {
               "path": "design/variants.json",
@@ -669,6 +725,46 @@
               "sha256": "c603d923316a2116fd3175840d4ffbae20bdbf33d4dc5fbfe209c57c2ab233de"
             },
             {
+              "path": "firmware/config/boards/shields/flan46/Kconfig.defconfig",
+              "sha256": "6caef37c2036c7fbd79c86e4afc88cfe0c681be0d3c3751548c95d80180f8cd1"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan46/Kconfig.shield",
+              "sha256": "4782d5cf939c18a78689cca5ab4bad2d61ec65ae17d024d2125d9dfeef127733"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan46/flan46.dtsi",
+              "sha256": "d4aebbe1a40ea184d6ccecc0ea28ca66c4f9215da7e314cc7d819e2bda9893ca"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan46/flan46_left.overlay",
+              "sha256": "7bdab3869fded5e53992e6841d13dee25e09722e773bcc7e6b30b27445438f85"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan46/flan46_right.overlay",
+              "sha256": "afc1867171d1415ef757c4ee72ec6716c8f4eb79cffd2211d5efd8fbf7559186"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/Kconfig.defconfig",
+              "sha256": "c40aef35783ab08777e17abbc98d16ad93490280be40d84db39ae1e9dc76ef85"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/Kconfig.shield",
+              "sha256": "1be0d62724e9e21b9e66c70e50921f433b23860eabf7d2743a86d7fb2f38771c"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/flan54.dtsi",
+              "sha256": "cdc9d9996a56979c63e5f5588c71d7b9f989aa5e825ae34b03cc7e34feacbc6e"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/flan54_left.overlay",
+              "sha256": "b3183153e89d46d85e234678276acdac94a1f06d8a1f7e7802f4114f907672d9"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/flan54_right.overlay",
+              "sha256": "292dd3a9b7b2ef2512b09a63dff70596d5da717d5a22c18240defdc6d6be2fda"
+            },
+            {
               "path": "firmware/config/flan36.conf",
               "sha256": "a6d8843a884b5325fd3c4c402ad83972eb7218534578b8d26dfd9c23a714ad38"
             },
@@ -683,6 +779,22 @@
             {
               "path": "firmware/config/flan42.keymap",
               "sha256": "b60b52f21e941e68a51da20a0344b8f522e052432596ccdda91e7653230beb9c"
+            },
+            {
+              "path": "firmware/config/flan46.conf",
+              "sha256": "a6d8843a884b5325fd3c4c402ad83972eb7218534578b8d26dfd9c23a714ad38"
+            },
+            {
+              "path": "firmware/config/flan46.keymap",
+              "sha256": "bff2ea281b70138291063fbadd61a937d55ed4e89cbac9deed2366806fd0eaf1"
+            },
+            {
+              "path": "firmware/config/flan54.conf",
+              "sha256": "a6d8843a884b5325fd3c4c402ad83972eb7218534578b8d26dfd9c23a714ad38"
+            },
+            {
+              "path": "firmware/config/flan54.keymap",
+              "sha256": "762dccd6dc3d1b8297606a77bda3308d1839900e55fe1d9e993ef0890bb48810"
             },
             {
               "path": "firmware/config/no-display.conf",
@@ -954,7 +1066,7 @@
             },
             {
               "path": "design/pinmap.json",
-              "sha256": "0e1e32f41a33682463b168814515619ecf7e4f3d9a678db80e927fddbf997b0f"
+              "sha256": "a47cfd14cb09cec9604225e92d8fc41838ef4dd9001cc353a3e990e350eeabe5"
             },
             {
               "path": "design/variants.json",
@@ -1005,6 +1117,46 @@
               "sha256": "c603d923316a2116fd3175840d4ffbae20bdbf33d4dc5fbfe209c57c2ab233de"
             },
             {
+              "path": "firmware/config/boards/shields/flan46/Kconfig.defconfig",
+              "sha256": "6caef37c2036c7fbd79c86e4afc88cfe0c681be0d3c3751548c95d80180f8cd1"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan46/Kconfig.shield",
+              "sha256": "4782d5cf939c18a78689cca5ab4bad2d61ec65ae17d024d2125d9dfeef127733"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan46/flan46.dtsi",
+              "sha256": "d4aebbe1a40ea184d6ccecc0ea28ca66c4f9215da7e314cc7d819e2bda9893ca"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan46/flan46_left.overlay",
+              "sha256": "7bdab3869fded5e53992e6841d13dee25e09722e773bcc7e6b30b27445438f85"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan46/flan46_right.overlay",
+              "sha256": "afc1867171d1415ef757c4ee72ec6716c8f4eb79cffd2211d5efd8fbf7559186"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/Kconfig.defconfig",
+              "sha256": "c40aef35783ab08777e17abbc98d16ad93490280be40d84db39ae1e9dc76ef85"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/Kconfig.shield",
+              "sha256": "1be0d62724e9e21b9e66c70e50921f433b23860eabf7d2743a86d7fb2f38771c"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/flan54.dtsi",
+              "sha256": "cdc9d9996a56979c63e5f5588c71d7b9f989aa5e825ae34b03cc7e34feacbc6e"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/flan54_left.overlay",
+              "sha256": "b3183153e89d46d85e234678276acdac94a1f06d8a1f7e7802f4114f907672d9"
+            },
+            {
+              "path": "firmware/config/boards/shields/flan54/flan54_right.overlay",
+              "sha256": "292dd3a9b7b2ef2512b09a63dff70596d5da717d5a22c18240defdc6d6be2fda"
+            },
+            {
               "path": "firmware/config/flan36.conf",
               "sha256": "a6d8843a884b5325fd3c4c402ad83972eb7218534578b8d26dfd9c23a714ad38"
             },
@@ -1019,6 +1171,22 @@
             {
               "path": "firmware/config/flan42.keymap",
               "sha256": "b60b52f21e941e68a51da20a0344b8f522e052432596ccdda91e7653230beb9c"
+            },
+            {
+              "path": "firmware/config/flan46.conf",
+              "sha256": "a6d8843a884b5325fd3c4c402ad83972eb7218534578b8d26dfd9c23a714ad38"
+            },
+            {
+              "path": "firmware/config/flan46.keymap",
+              "sha256": "bff2ea281b70138291063fbadd61a937d55ed4e89cbac9deed2366806fd0eaf1"
+            },
+            {
+              "path": "firmware/config/flan54.conf",
+              "sha256": "a6d8843a884b5325fd3c4c402ad83972eb7218534578b8d26dfd9c23a714ad38"
+            },
+            {
+              "path": "firmware/config/flan54.keymap",
+              "sha256": "762dccd6dc3d1b8297606a77bda3308d1839900e55fe1d9e993ef0890bb48810"
             },
             {
               "path": "firmware/config/no-display.conf",
@@ -1314,6 +1482,46 @@
       "sha256": "c603d923316a2116fd3175840d4ffbae20bdbf33d4dc5fbfe209c57c2ab233de"
     },
     {
+      "path": "firmware/config/boards/shields/flan46/Kconfig.defconfig",
+      "sha256": "6caef37c2036c7fbd79c86e4afc88cfe0c681be0d3c3751548c95d80180f8cd1"
+    },
+    {
+      "path": "firmware/config/boards/shields/flan46/Kconfig.shield",
+      "sha256": "4782d5cf939c18a78689cca5ab4bad2d61ec65ae17d024d2125d9dfeef127733"
+    },
+    {
+      "path": "firmware/config/boards/shields/flan46/flan46.dtsi",
+      "sha256": "d4aebbe1a40ea184d6ccecc0ea28ca66c4f9215da7e314cc7d819e2bda9893ca"
+    },
+    {
+      "path": "firmware/config/boards/shields/flan46/flan46_left.overlay",
+      "sha256": "7bdab3869fded5e53992e6841d13dee25e09722e773bcc7e6b30b27445438f85"
+    },
+    {
+      "path": "firmware/config/boards/shields/flan46/flan46_right.overlay",
+      "sha256": "afc1867171d1415ef757c4ee72ec6716c8f4eb79cffd2211d5efd8fbf7559186"
+    },
+    {
+      "path": "firmware/config/boards/shields/flan54/Kconfig.defconfig",
+      "sha256": "c40aef35783ab08777e17abbc98d16ad93490280be40d84db39ae1e9dc76ef85"
+    },
+    {
+      "path": "firmware/config/boards/shields/flan54/Kconfig.shield",
+      "sha256": "1be0d62724e9e21b9e66c70e50921f433b23860eabf7d2743a86d7fb2f38771c"
+    },
+    {
+      "path": "firmware/config/boards/shields/flan54/flan54.dtsi",
+      "sha256": "cdc9d9996a56979c63e5f5588c71d7b9f989aa5e825ae34b03cc7e34feacbc6e"
+    },
+    {
+      "path": "firmware/config/boards/shields/flan54/flan54_left.overlay",
+      "sha256": "b3183153e89d46d85e234678276acdac94a1f06d8a1f7e7802f4114f907672d9"
+    },
+    {
+      "path": "firmware/config/boards/shields/flan54/flan54_right.overlay",
+      "sha256": "292dd3a9b7b2ef2512b09a63dff70596d5da717d5a22c18240defdc6d6be2fda"
+    },
+    {
       "path": "firmware/config/flan36.conf",
       "sha256": "a6d8843a884b5325fd3c4c402ad83972eb7218534578b8d26dfd9c23a714ad38"
     },
@@ -1328,6 +1536,22 @@
     {
       "path": "firmware/config/flan42.keymap",
       "sha256": "b60b52f21e941e68a51da20a0344b8f522e052432596ccdda91e7653230beb9c"
+    },
+    {
+      "path": "firmware/config/flan46.conf",
+      "sha256": "a6d8843a884b5325fd3c4c402ad83972eb7218534578b8d26dfd9c23a714ad38"
+    },
+    {
+      "path": "firmware/config/flan46.keymap",
+      "sha256": "bff2ea281b70138291063fbadd61a937d55ed4e89cbac9deed2366806fd0eaf1"
+    },
+    {
+      "path": "firmware/config/flan54.conf",
+      "sha256": "a6d8843a884b5325fd3c4c402ad83972eb7218534578b8d26dfd9c23a714ad38"
+    },
+    {
+      "path": "firmware/config/flan54.keymap",
+      "sha256": "762dccd6dc3d1b8297606a77bda3308d1839900e55fe1d9e993ef0890bb48810"
     },
     {
       "path": "firmware/config/no-display.conf",

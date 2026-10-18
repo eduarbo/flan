@@ -37,19 +37,21 @@ Flan36 defines its own `nice_view_spi`; **do not add `nice_view_adapter`**, whos
 
 ## Family variants
 
-Each [Flan variant](variants.md) has its own ZMK shield, generated from `design/variants.json` by `tools/build_variant_firmware.py`, with Flan36's pins, display and settings. The outer pinky column uses matrix column 0, which is already wired for thumb K30. The number row is matrix row 4 and gets its pin from `design/pinmap.json` once its PCB is routed.
+Each [Flan variant](variants.md) has its own ZMK shield, generated from `design/variants.json` by `tools/build_variant_firmware.py`, with Flan36's pins, display and settings. The outer pinky column uses matrix column 0, which is already wired for thumb K30. The number row is matrix row 4 on the pin recorded for each variant in `design/pinmap.json`.
 
 | Variant | Left | Right | Right without display | Added keys on the base layer |
 |---|---|---|---|---|
 | **Flan42** | [UF2](../firmware/uf2/flan42-left.uf2) | [UF2](../firmware/uf2/flan42-right.uf2) | [UF2](../firmware/uf2/flan42-right-no-display.uf2) | Tab, Ctrl, Shift on the left; Backspace, ', Esc on the right |
+| **Flan46** | [UF2](../firmware/uf2/flan46-left.uf2) | [UF2](../firmware/uf2/flan46-right.uf2) | [UF2](../firmware/uf2/flan46-right-no-display.uf2) | 1–0 on the number row |
+| **Flan54** | [UF2](../firmware/uf2/flan54-left.uf2) | [UF2](../firmware/uf2/flan54-right.uf2) | [UF2](../firmware/uf2/flan54-right-no-display.uf2) | Flan42's outer column plus ` 1–0 - on the number row |
 
-The [Flan42 keymap](../firmware/config/flan42.keymap) is Flan36's with the outer column added; the added keys are transparent on Numbers and Symbols and unused on Settings. [Receipt](../validation/flan42-firmware.json). Flash a variant's files only onto that variant's PCBs.
+Each keymap is Flan36's with the added keys filled in: [Flan42](../firmware/config/flan42.keymap), [Flan46](../firmware/config/flan46.keymap), [Flan54](../firmware/config/flan54.keymap). On Numbers the number row carries F1–F10, with F11 and F12 on Flan54's outer keys; the outer column is transparent on Numbers and Symbols, and every added key is unused on Settings. The number row is matrix row 4 on D15 (left) and D6 (right), the pins its PCBs route. Receipts: [Flan42](../validation/flan42-firmware.json), [Flan46](../validation/flan46-firmware.json), [Flan54](../validation/flan54-firmware.json). Flash a variant's files only onto that variant's PCBs.
 
 Rebuild a variant with the same environment as below:
 
 ```sh
 python3 tools/build_variant_firmware.py
-sh tools/build_firmware.sh flan42-left flan42-right flan42-right-no-display
+sh tools/build_firmware.sh flan42-left flan42-right flan42-right-no-display      # likewise flan46-*, flan54-*
 python3 tools/check_firmware.py --zephyr "$FLAN36_ZMK_WORKSPACE/zephyr" --keyboard flan42 --publish
 ```
 

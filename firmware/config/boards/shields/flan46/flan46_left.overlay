@@ -1,0 +1,2 @@
+#include "flan46.dtsi"
+#include "../flan36/flan36-display.dtsi"
