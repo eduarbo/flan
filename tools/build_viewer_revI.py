@@ -234,6 +234,22 @@ scene['limits']=['Commercial representations combine documented nominal dimensio
                  'Nominal lead-storage paths; actual terminations, insulation and finished-pack tolerances unverified', 'PCB aperture 12.5 mm; both nominal cells fit. Magnetic force, print-in capture/temperature and physical fit need coupons',
                  'Generic Choc v1 source model; purchased switch fit, keycap seating and travel unmeasured. Hot-swap sockets are registered to nominal PCB datums; purchased-part fit remains unqualified. Feet illustrative; nominal screws do not prove thread strength',
                  'Exploded positions are a viewing aid, not a validated extraction path']
+# Back-silkscreen editions: textures rasterized from the committed Gerber packages
+# (tools/build_silkscreen_textures.py); the viewer lays them under each PCB.
+editions=json.loads((ROOT/'design/pcb-options.json').read_text())
+textures=json.loads((ROOT/'build/silkscreen-textures/manifest.json').read_text())
+pcb=np.frombuffer(base64.b64decode(scene['geometries']['mechanical/revI/left-pcb.stl']['positions']),dtype=np.float32).reshape(-1,3)
+scene['silkscreen']={'default':editions['default_edition'],'default_mask':editions['default_mask'],'masks':editions['masks'],'masks_source':editions['masks_source'],'bottom_mm':round(float(pcb[:,1].min()),4),'bounds':textures['bounds'],
+    'editions':[{k:e[k] for k in ('id','title','description','packages')} for e in editions['editions']],'textures':{}}
+for e in editions['editions']:
+    for half,package in e['packages'].items():
+        t=textures['textures'][e['id']][half]
+        assert t['source']['package']==package and t['source']['sha256']==digest(package),(e['id'],half,'stale silkscreen texture')
+        assert digest(t['path'])==t['sha256'],(e['id'],half,'texture changed after its manifest')
+        scene['silkscreen']['textures'].setdefault(e['id'],{})[half]=base64.b64encode((ROOT/t['path']).read_bytes()).decode()
+        scene['sources'].append({'path':package,'sha256':t['source']['sha256']})
+scene['silkscreen']['thumbnails']={e['id']:'data:image/webp;base64,'+base64.b64encode((ROOT/textures['thumbnails'][e['id']]['path']).read_bytes()).decode() for e in editions['editions']}
+scene['sources'].append({'path':'design/pcb-options.json','sha256':digest('design/pcb-options.json')})
 (ROOT/'build').mkdir(exist_ok=True)
 (ROOT/'build/viewer-scene.json').write_text(json.dumps(scene,separators=(',',':'))+'\n')
 print(f'Packed {len(scene["parts"])} objects, {len(scene["geometries"])} unchanged meshes; 36 keycaps.')

@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import crypto from 'node:crypto';
-import {gzipSync} from 'node:zlib';
+import {gzipSync,gunzipSync} from 'node:zlib';
 import {Script} from 'node:vm';
 import {build} from 'esbuild';
 
@@ -31,16 +31,29 @@ for(const [id,geometry] of Object.entries(scene.geometries)){
  const digest=crypto.createHash('sha256').update(JSON.stringify(geometry)).digest('hex');
  if(seen.has(digest))geometryAliases[id]=seen.get(digest);else{unique[id]=geometry;seen.set(digest,id);}
 }
-const printBytes=gzipSync(Buffer.from(JSON.stringify(scene.printing)),{level:9});
+// Reuse a published asset with the same content: gzip bytes differ between zlib versions.
+function deferred(prefix,value){
+ const raw=Buffer.from(JSON.stringify(value)),dir=path.join(root,'docs/assets');fs.mkdirSync(dir,{recursive:true});
+ for(const f of fs.readdirSync(dir).filter(f=>f.startsWith(prefix+'-')).sort()){
+  const bytes=fs.readFileSync(path.join(dir,f));
+  if(bytes.readUInt32LE(bytes.length-4)===raw.length%2**32&&gunzipSync(bytes).equals(raw))return bytes;
+ }
+ return gzipSync(raw,{level:9});
+}
+const printBytes=deferred('printing',scene.printing);
 const printHash=crypto.createHash('sha256').update(printBytes).digest('hex');
-const assetPath=`docs/assets/printing-${printHash}.bin`;
-fs.mkdirSync(path.join(root,'docs/assets'),{recursive:true});fs.writeFileSync(path.join(root,assetPath),printBytes);
-const packedScene={...scene,geometries:unique,geometryAliases,printing:{url:`./assets/printing-${printHash}.bin`,sha256:printHash}};
+const assetPath=`docs/assets/printing-${printHash}.bin`;fs.writeFileSync(path.join(root,assetPath),printBytes);
+const silkBytes=deferred('silkscreen',scene.silkscreen.textures);
+const silkHash=crypto.createHash('sha256').update(silkBytes).digest('hex');
+const silkPath=`docs/assets/silkscreen-${silkHash}.bin`;fs.writeFileSync(path.join(root,silkPath),silkBytes);
+const packedScene={...scene,geometries:unique,geometryAliases,printing:{url:`./assets/printing-${printHash}.bin`,sha256:printHash},
+  silkscreen:{...scene.silkscreen,textures:{url:`./assets/silkscreen-${silkHash}.bin`,sha256:silkHash}}};
 const packed=gzipSync(Buffer.from(JSON.stringify(packedScene)),{level:9}).toString('base64');
 function page(offline){return template.replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(here,'style.css'),'utf8'))
  .replace('<!--__LICENSES__-->',()=>credits+licenses)
  .replace('/*__DATA__*/',()=>packed)
  .replace('/*__PRINT__*/',()=>offline?printBytes.toString('base64'):'')
+ .replace('/*__SILK__*/',()=>offline?silkBytes.toString('base64'):'')
  .replace('/*__APP__*/',()=>bundle.outputFiles[0].text.replaceAll('</script','<\\/script'))
  .replaceAll('\r\n','\n');}
 const html=page(false),offlineHtml=page(true);
@@ -52,8 +65,8 @@ const sources=[...scene.sources,...['viewer/app.js','viewer/config.js','viewer/s
 const receipt={revision:scene.revision,units:'mm',objects:scene.parts.length,unique_meshes:Object.keys(scene.geometries).length,
   keycaps:scene.parts.filter(p=>p.group==='keycaps').length,geometry_changed:false,
   sources,viewer_sha256:hash('docs/index.html'),measurements:scene.measurements,
-  offline:'docs/offline.html embeds geometry, scripts, styles, deferred print files and licenses. docs/index.html fetches only the hashed print payload on export.',
-  offline_sha256:hash('docs/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
+  offline:'docs/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.',
+  offline_sha256:hash('docs/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},silkscreen:{path:silkPath,sha256:silkHash,bytes:silkBytes.length,editions:scene.silkscreen.editions.map(e=>e.id)},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
   limitations:scene.limits};
 fs.writeFileSync(path.join(root,`validation/rev${scene.revision}-viewer.json`),JSON.stringify(receipt,null,2)+'\n');
 console.log(`Online viewer: ${(Buffer.byteLength(html)/1048576).toFixed(2)} MiB; ${scene.parts.length} objects.`);

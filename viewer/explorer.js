@@ -8,7 +8,7 @@ export const partInfo={
   base:{name:'Printed base',short:'Base',info:'Key-aligned local curves and a shared contour. Use Customize this part to choose a case. Native parts are editable in FreeCAD.'},
   plate:{name:'Switch plate',short:'Plate',info:'Holds the 36 switch positions and angles of Flan36. Nominal plate height: 7.6 mm.'},
   switches:{name:'Choc switches',short:'Switch',info:'Licensed KiSwitch Choc v1 housings, pins and stems. Generic model; seating, travel and printed keycap stems need physical fit tests.'},
-  pcb:{name:'PCB',short:'PCB',info:'Custom wireless PCB. See the build guide for fabrication files and electrical validation.'},
+  pcb:{name:'PCB',short:'PCB',info:'Custom wireless PCB with the Flan signature on the back. Choose a back-silkscreen edition in Design → PCB; each edition has its own Gerber package.'},
   battery:{name:'LiPo battery',short:'Battery',info:'Adafruit 1570 and 301230 nominal profiles share the insulated case floor and captured cage. Use Customize this part to choose a profile. Verify actual pack, leads and insulation.'},
   mcu:{name:'nice!nano v2 controller',short:'MCU',info:'Nominal v2 reconstruction with separate PCB, ENIG pads, mid-mount USB-C, ICs and passives. Community outline dimensions; package detail inferred from official photos.'},
   supports:{name:'Insulating supports',short:'Mounts',info:'Cradle, display sled and controller supports. Retention is a nominal CAD proposal.'},

@@ -7,6 +7,9 @@ from frame_finishes import palette
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 CATALOG=ROOT/'keycaps/catalog.json'
+PCB_OPTIONS=json.loads((ROOT/'design/pcb-options.json').read_text())
+PCB_EDITION_IDS=[e['id'] for e in PCB_OPTIONS['editions']]
+PCB_MASK_IDS=[m['id'] for m in PCB_OPTIONS['masks']]
 
 def polygon(hull,key,turn):
     a=math.radians(-key['angle']-turn);c,s=math.cos(a),math.sin(a)
@@ -33,6 +36,7 @@ def default_config(catalog=None):
 
 def normalize(config,catalog=None):
     c=catalog or load();result=copy.deepcopy(config);result['schema']='flan36-config-1'
+    result.setdefault('pcb_edition',PCB_OPTIONS['default_edition']);result.setdefault('pcb_mask',PCB_OPTIONS['default_mask'])
     for side,keys in c['layout'].items():
         for key in keys:result['keycaps'][side][key['ref']].setdefault('color','#45967b' if key['row']==3 else '#e9dfc6')
     if 'cases' not in result:result['cases']={side:{'style':'solid','cover':True} for side in ['left','right']}
@@ -53,6 +57,8 @@ def check(config,catalog=None):
     if set(config.get('keycaps',{}))!={'left','right'} or set(config.get('frames',{}))!={'left','right'}:return ['Both halves are required.'],None
     if not isinstance(config.get('batteries'),dict):return ['Select a battery for each half.'],None
     if set(config.get('batteries',{}))!={'left','right'}:return ['Select a battery for each half.'],None
+    if 'pcb_edition' in config and (not isinstance(config['pcb_edition'],str) or config['pcb_edition'] not in PCB_EDITION_IDS):return ['Unknown PCB edition.'],None
+    if 'pcb_mask' in config and (not isinstance(config['pcb_mask'],str) or config['pcb_mask'] not in PCB_MASK_IDS):return ['Unknown PCB solder mask colour.'],None
     if 'cases' in config:
         cases=config['cases']
         if not isinstance(cases,dict) or set(cases)!={'left','right'}:return ['Select a case for each half.'],None

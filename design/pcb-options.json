@@ -1,0 +1,120 @@
+{
+  "schema": "flan36-pcb-options-1",
+  "default_edition": "base",
+  "editions": [
+    {
+      "id": "base",
+      "title": "Signature",
+      "description": "Flan signature only, no pattern",
+      "packages": {
+        "left": "hardware/revI/fabrication/flan36-left-revI-prototype.zip",
+        "right": "hardware/revI/fabrication/flan36-right-revI-prototype.zip"
+      }
+    },
+    {
+      "id": "asanoha",
+      "title": "Asanoha",
+      "description": "Kumiko hemp-leaf with via joints",
+      "packages": {
+        "left": "hardware/revI/fabrication/editions/flan36-left-revI-asanoha.zip",
+        "right": "hardware/revI/fabrication/editions/flan36-right-revI-asanoha.zip"
+      }
+    },
+    {
+      "id": "kikko",
+      "title": "Kikkō",
+      "description": "Hexagonal kumiko, open shells to six-spoke stars",
+      "packages": {
+        "left": "hardware/revI/fabrication/editions/flan36-left-revI-kikko.zip",
+        "right": "hardware/revI/fabrication/editions/flan36-right-revI-kikko.zip"
+      }
+    },
+    {
+      "id": "sayagata",
+      "title": "Sayagata",
+      "description": "The Japanese key fret as one meander",
+      "packages": {
+        "left": "hardware/revI/fabrication/editions/flan36-left-revI-sayagata.zip",
+        "right": "hardware/revI/fabrication/editions/flan36-right-revI-sayagata.zip"
+      }
+    },
+    {
+      "id": "seigaiha",
+      "title": "Seigaiha",
+      "description": "Wave fans with via stitching",
+      "packages": {
+        "left": "hardware/revI/fabrication/editions/flan36-left-revI-seigaiha.zip",
+        "right": "hardware/revI/fabrication/editions/flan36-right-revI-seigaiha.zip"
+      }
+    },
+    {
+      "id": "meandro",
+      "title": "Meandro",
+      "description": "Length-tuning serpentines in slow waves",
+      "packages": {
+        "left": "hardware/revI/fabrication/editions/flan36-left-revI-meandro.zip",
+        "right": "hardware/revI/fabrication/editions/flan36-right-revI-meandro.zip"
+      }
+    },
+    {
+      "id": "vias",
+      "title": "Vías",
+      "description": "Via stitching as a halftone",
+      "packages": {
+        "left": "hardware/revI/fabrication/editions/flan36-left-revI-vias.zip",
+        "right": "hardware/revI/fabrication/editions/flan36-right-revI-vias.zip"
+      }
+    }
+  ],
+  "default_mask": "green",
+  "masks_source": {
+    "fab": "JLCPCB",
+    "url": "https://jlcpcb.com/capabilities/pcb-capabilities",
+    "checked": "2026-10-17",
+    "note": "Seven solder mask colours for 2-layer FR4. Silkscreen is white, black on white boards. Black and white need 0.13 mm mask bridges (0.10 mm otherwise); Flan's smallest bridge between pad openings is 0.47 mm. Green has the fastest turnaround."
+  },
+  "masks": [
+    {
+      "id": "green",
+      "label": "Green",
+      "mask": "#1f5c3c",
+      "silk": "#f1efe8"
+    },
+    {
+      "id": "purple",
+      "label": "Purple",
+      "mask": "#45295f",
+      "silk": "#f1efe8"
+    },
+    {
+      "id": "red",
+      "label": "Red",
+      "mask": "#9c2229",
+      "silk": "#f1efe8"
+    },
+    {
+      "id": "yellow",
+      "label": "Yellow",
+      "mask": "#d9a92b",
+      "silk": "#f7f5ee"
+    },
+    {
+      "id": "blue",
+      "label": "Blue",
+      "mask": "#1d4a87",
+      "silk": "#f1efe8"
+    },
+    {
+      "id": "white",
+      "label": "White",
+      "mask": "#f0efea",
+      "silk": "#1d1d1d"
+    },
+    {
+      "id": "black",
+      "label": "Black",
+      "mask": "#18191b",
+      "silk": "#f1efe8"
+    }
+  ]
+}

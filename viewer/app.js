@@ -27,7 +27,7 @@ let restored=false,storageMessage='';try{const saved=restoreConfiguration({getIt
 const variants=new Map(catalog.variants.map(v=>[v.id,v]));
 const labels={base:'Bases',plate:'Plates',lid:'Frames / covers',keycaps:'Keycaps',switches:'Switches',pcb:'PCB',battery:'Batteries',mcu:'Controllers',display:'Displays',connectors:'Connectors',supports:'Supports',fasteners:'Fasteners / feet'};
 const state={half:'both',layers:Object.fromEntries(Object.keys(labels).map(k=>[k,true])),explode:0,view:'iso'};
-const directions={iso:[.35,1.6,1.75],top:[0,1,.0001],front:[0,0,1],back:[0,0,-1],right:[1,0,0],left:[-1,0,0],bottom:[0,-1,.0001]};
+const directions={iso:[.35,1.6,1.75],top:[0,1,.0001],front:[0,0,1],back:[0,0,-1],right:[1,0,0],left:[-1,0,0],bottom:[0,-1,-.0001]};   // bottom: rear edge up, so the back silkscreen reads correctly
 const scene=new THREE.Scene();scene.background=new THREE.Color('#eef0f3');
 const camera=new THREE.OrthographicCamera(-180,180,100,-100,.1,3000);
 const canvas=$('canvas');
@@ -41,7 +41,9 @@ controls.enableDamping=false;controls.minZoom=.2;controls.maxZoom=14;
 controls.minPolarAngle=0;controls.maxPolarAngle=Math.PI;
 controls.touches.ONE=THREE.TOUCH.ROTATE;controls.touches.TWO=THREE.TOUCH.DOLLY_PAN;
 scene.add(new THREE.HemisphereLight('#ffffff','#9cafa0',2));
-for(const [pos,power] of [[[20,250,160],2.4],[[-220,100,-180],1.1],[[360,30,20],.7]]){
+// The last light is a neutral fill from below: it only reaches downward faces, so the PCB's
+// mask colour reads true in the Bottom view without changing the usual views.
+for(const [pos,power] of [[[20,250,160],2.4],[[-220,100,-180],1.1],[[360,30,20],.7],[[30,-300,60],1.9]]){
   const light=new THREE.DirectionalLight('#ffffff',power);light.position.fromArray(pos);scene.add(light);
 }
 
@@ -91,7 +93,7 @@ for(const part of data.parts){
   objects.push(mesh);scene.add(mesh);
 }
 // Runtime scene uses x=CAD x, y=CAD z, z=CAD y; right-hand meshes are not mirrored again.
-let explorer,appearance,keycapColors,renderFrame=0;
+let explorer,appearance,keycapColors,renderFrame=0,silkHook=null;   // silkHook: set once the silkscreen layer exists
 function render(){if(renderFrame)return;renderFrame=requestAnimationFrame(()=>{renderFrame=0;explorer?.update();renderer.render(scene,camera);$('loading').hidden=true;});}
 let orbiting=false;
 controls.addEventListener('start',()=>{orbiting=true;explorer?.motion(true);});controls.addEventListener('end',()=>{orbiting=false;explorer?.motion(false);});
@@ -100,6 +102,7 @@ controls.addEventListener('change',()=>{
     state.view='iso';for(const button of document.querySelectorAll('[data-view]'))button.setAttribute('aria-pressed',String(button.dataset.view==='iso'));
   }
   if(!orbiting)explorer?.cameraChanged();
+  if(camera.position.y<controls.target.y)silkHook?.();
   render();
 });
 let halfHeight=100,lastAspect=0,lastFrame=null;
@@ -240,17 +243,18 @@ function reset(){
   for(const key of Object.keys(labels))state.layers[key]=true;
   sync();fit(directions.iso);
 }
-const editablePanel={base:'cases',plate:'cases',lid:'frames',keycaps:'keycaps',battery:'battery'};
+const editablePanel={base:'cases',plate:'cases',lid:'frames',keycaps:'keycaps',battery:'battery',pcb:'pcb'};
 function showWorkspace(){
   document.body.dataset.mode=activeMode;document.body.dataset.detail=String(Boolean(detailRef));
   currentScrollKey=detailRef?'detail:'+JSON.stringify(detailRef):activeMode==='customize'?activeMode+':'+activePanel:activeMode;
-  for(const name of ['cases','frames','themes','keycaps','battery','inspect','files','about'])$('panel-'+name).hidden=Boolean(detailRef)||!(activeMode==='customize'?name===activePanel:name===activeMode);
+  for(const name of ['cases','frames','themes','keycaps','battery','pcb','inspect','files','about'])$('panel-'+name).hidden=Boolean(detailRef)||!(activeMode==='customize'?name===activePanel:name===activeMode);
   $('selection').hidden=!detailRef;$('editor-tabs').hidden=activeMode!=='customize'||Boolean(detailRef);
   for(const b of document.querySelectorAll('[data-panel]')){b.setAttribute('aria-selected',String(b.dataset.panel===activePanel));b.tabIndex=b.dataset.panel===activePanel?0:-1;}
   $('workspace-title').textContent=detailRef?(detailRef.collection==='magnets'?'Magnets':partInfo[detailRef.group].short):{customize:'Design',inspect:'Components',files:'Files',about:'About'}[activeMode];
   $('panel-back').hidden=!detailRef;$('show-all').hidden=!detailRef&&activeMode!=='inspect';
   updatePanelButtons();layoutPanel();$('inspector').scrollTop=panelScroll.get(currentScrollKey)||0;
   explorer?.layoutChanged();appearance?.sync();keycapColors?.sync();
+  if(activeMode==='customize'&&activePanel==='pcb'&&!detailRef)silkHook?.();
 }
 function leaveDetail(){
   const previous=detailReturn;detailRef=null;detailReturn=null;
@@ -319,7 +323,7 @@ $('glb').onclick=async()=>{
   const button=$('glb');button.disabled=true;button.textContent='Preparing GLB…';
   try{
     const assembly=new THREE.Group();assembly.name=`Flan36 rev${data.revision} · nominal`;assembly.scale.setScalar(.001);
-    for(const object of objects){if(object.userData.installed===false)continue;const clone=object.clone();clone.visible=true;clone.position.fromArray(object.userData.base);assembly.add(clone);}
+    for(const object of objects){if(object.userData.installed===false)continue;const clone=object.clone();for(const child of [...clone.children])if(child.userData.silkscreen)clone.remove(child);clone.visible=true;clone.position.fromArray(object.userData.base);assembly.add(clone);}
     assembly.userData={configuration:copy(configuration),units:'metres',source:'https://github.com/eduarbo/flan',limitations:data.limits,
       attribution:'Flan36 / Eduardo Ruiz, original keyboard and CAD design; Piantor by beekeeb inspired the key count; KLP Lame keycaps by braindefender (CC-BY-SA-4.0), unchanged meshes, placed and coloured. Choc models by keyswitch-kicad-library contributors (MIT); reset and power switch geometry by KiCad (CC-BY-SA-4.0 with library exception).',
       licenses:['https://www.gnu.org/licenses/gpl-3.0.html','https://creativecommons.org/licenses/by-sa/4.0/'],
@@ -358,6 +362,7 @@ function applyConfiguration(next,{record=true,persist=true}={}){
     }
     if(group==='lid'&&userData.frame_style!==undefined){const f=next.frames[side],finish=frameFinish(f.style,side,f.color,f.accents);geometry=finish.geometry;mat=finish.material;userData.frame_style=f.style;userData.frame_palette=finish.palette;}
     if(group==='battery'){const id=next.batteries[side];geometry=geometryFor(`mechanical/revI/${side}-battery-${id}.stl`);userData.battery_profile=id;}
+    if(userData.part_id===`${side}-pcb`){mat=material(data.silkscreen.masks.find(m=>m.id===next.pcb_mask).mask);userData.pcb_mask=next.pcb_mask;}
     if(Number.isInteger(userData.battery_lead_index)){const id=next.batteries[side],wire=data.batteryLeadProfiles[`${side}-${id}`].find(p=>p.index===userData.battery_lead_index);geometry=geometryFor(wire.geometry);mat=material(wire.color);userData.battery_profile=id;}
     return {o,geometry,mat,rotation,userData};
   });
@@ -426,7 +431,78 @@ function reversedTiltedRows(){return Object.entries(catalog.layout).flatMap(([si
 rowRepair.onclick=()=>{const cfg=copy(configuration);for(const [side,ref] of reversedTiltedRows())cfg.keycaps[side][ref].rotation_deg=(cfg.keycaps[side][ref].rotation_deg+180)%360;try{applyConfiguration(cfg);message('Top and bottom slopes corrected. Your other choices are unchanged.');}catch(e){message(e.message,true);}};
 for(const [id,spec] of Object.entries(catalog.battery_profiles)){const b=document.createElement('button');b.type='button';b.dataset.battery=id;b.textContent=spec.label;b.title=`${spec.width} × ${spec.length} × ${spec.height} mm`;b.onclick=()=>{const c=copy(configuration);for(const side of batterySide==='both'?['left','right']:[batterySide])c.batteries[side]=id;applyConfiguration(c);};$('battery-options').append(b);}
 for(const b of $('battery-target').children)b.onclick=()=>{batterySide=b.dataset.side;syncConfigurationUI();};
+// Back-silkscreen editions: one choice for both halves. Textures come from the committed Gerber
+// packages; the online viewer downloads them the first time the underside is shown.
+const silk=data.silkscreen,loadSilk=printLoader(silk.textures,$('silk-data')),silkOverlays=[],silkTextures=new Map();
+let silkImages=null,silkPending=null;
+for(const o of objects){
+  if(o.userData.part_id!==`${o.userData.side}-pcb`)continue;
+  const [x0,y0,x1,y1]=silk.bounds[o.userData.side],plane=new THREE.PlaneGeometry(x1-x0,y1-y0);plane.rotateX(Math.PI/2);
+  const overlay=new THREE.Mesh(plane,new THREE.MeshBasicMaterial({color:'#e9e8e0',transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2}));   // unlit: ink reads the same under the top-down lights
+  overlay.position.set((x0+x1)/2,silk.bottom_mm-.02,(y0+y1)/2);overlay.visible=false;overlay.raycast=()=>{};overlay.userData={silkscreen:o.userData.side};
+  o.add(overlay);silkOverlays.push(overlay);
+}
+function silkTexture(edition,side){
+  const key=edition+'/'+side;
+  if(!silkTextures.has(key)){const t=new THREE.Texture(silkImages[edition][side]);t.flipY=false;t.anisotropy=renderer.capabilities.getMaxAnisotropy();t.needsUpdate=true;silkTextures.set(key,t);}
+  return silkTextures.get(key);
+}
+const maskSpec=()=>silk.masks.find(m=>m.id===configuration.pcb_mask);
+function showSilk(){
+  if(!silkImages)return;
+  for(const overlay of silkOverlays){overlay.material.alphaMap=silkTexture(configuration.pcb_edition,overlay.userData.silkscreen);overlay.material.color.set(maskSpec().silk);overlay.material.needsUpdate=true;overlay.visible=true;}
+  render();
+}
+// Thumbnails are two-channel masks (red = board, green = ink), painted with the chosen colours.
+const thumbImages=new Map();let paintedMask=null;
+function thumbImage(id){if(!thumbImages.has(id)){const img=new Image();img.src=silk.thumbnails[id];thumbImages.set(id,img.decode().then(()=>img));}return thumbImages.get(id);}
+const rgb=hex=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
+async function paintThumbs(){
+  const spec=maskSpec();if(paintedMask===spec.id)return;paintedMask=spec.id;
+  const [mr,mg,mb]=rgb(spec.mask),[sr,sg,sb]=rgb(spec.silk);
+  for(const button of $('pcb-grid').children){
+    const src=await thumbImage(button.dataset.edition);if(paintedMask!==spec.id)return;
+    const c=document.createElement('canvas');c.width=src.naturalWidth;c.height=src.naturalHeight;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(src,0,0);
+    const d=x.getImageData(0,0,c.width,c.height),p=d.data;
+    for(let i=0;i<p.length;i+=4){const board=p[i]/255,ink=p[i+1]/255;p[i]=mr+(sr-mr)*ink;p[i+1]=mg+(sg-mg)*ink;p[i+2]=mb+(sb-mb)*ink;p[i+3]=255*board;}
+    x.putImageData(d,0,0);button.querySelector('img').src=c.toDataURL();
+  }
+}
+function ensureSilk(){
+  silkPending??=loadSilk().then(async textures=>{
+    const images={};
+    for(const [edition,halves] of Object.entries(textures)){images[edition]={};for(const [side,png] of Object.entries(halves))images[edition][side]=await createImageBitmap(new Blob([decodeBytes(png)],{type:'image/png'}));}
+    silkImages=images;$('pcb-status').textContent='';showSilk();
+  }).catch(error=>{silkPending=null;$('pcb-status').textContent=error.message.replace('Print files','Silkscreen textures');});
+  return silkPending;
+}
+function showUnderside(){
+  reset();for(const k of ['base','fasteners'])state.layers[k]=false;state.view='bottom';sync();fit(directions.bottom);ensureSilk();
+}
+const raw=path=>'https://raw.githubusercontent.com/eduarbo/flan/main/'+path;
+for(const edition of silk.editions){
+  // the image is painted by paintThumbs() with the chosen mask colour
+  const button=card(edition.id,edition.title,'data:image/gif;base64,R0lGODlhAQABAAAAACw=');button.dataset.edition=edition.id;button.title=edition.description;
+  const img=button.querySelector('img');img.width=380;img.height=150;img.alt=edition.description;
+  button.onclick=()=>{const c=copy(configuration);c.pcb_edition=edition.id;try{applyConfiguration(c);}catch(e){message(e.message,true);return;}showUnderside();};
+  $('pcb-grid').append(button);
+}
+$('pcb-underside').onclick=showUnderside;silkHook=ensureSilk;
+for(const spec of silk.masks){
+  const button=document.createElement('button');button.type='button';button.dataset.mask=spec.id;button.title=spec.label;button.setAttribute('aria-label',spec.label+' solder mask');button.setAttribute('aria-pressed','false');button.style.setProperty('--swatch',spec.mask);
+  button.onclick=()=>{const c=copy(configuration);c.pcb_mask=spec.id;try{applyConfiguration(c);}catch(e){message(e.message,true);return;}showUnderside();};
+  $('pcb-masks').append(button);
+}
+$('pcb-mask-note').textContent=`${silk.masks_source.fab} colours, checked ${silk.masks_source.checked}. Pick the same colour in the quote; silkscreen is white, black on white boards. Green has the fastest turnaround.`;
 function syncConfigurationUI(){
+  const edition=silk.editions.find(e=>e.id===configuration.pcb_edition);
+  $('pcb-current').textContent=edition.title;
+  for(const b of $('pcb-grid').children)b.setAttribute('aria-pressed',String(b.dataset.edition===edition.id));
+  const spec=maskSpec();$('pcb-mask-current').textContent=spec.label;
+  for(const b of $('pcb-masks').children)b.setAttribute('aria-pressed',String(b.dataset.mask===spec.id));
+  paintThumbs();
+  $('pcb-downloads').replaceChildren(...['left','right'].map(side=>{const a=document.createElement('a');a.href=raw(edition.packages[side]);const note=document.createElement('span');note.textContent=`Gerber + drill ZIP · ${edition.title} · order with ${maskSpec().label.toLowerCase()} mask`;a.append(`${side==='left'?'Left':'Right'} half PCB ↓`,note);return a;}));
+  showSilk();
   for(const b of $('battery-target').children)b.setAttribute('aria-pressed',String(b.dataset.side===batterySide));
   const batteries=(batterySide==='both'?['left','right']:[batterySide]).map(side=>configuration.batteries[side]);
   $('battery-current').textContent=new Set(batteries).size===1?catalog.battery_profiles[batteries[0]].label:'Mixed profiles';
