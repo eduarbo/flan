@@ -12,7 +12,7 @@
 
 **[Silkscreen editions](docs/electronics.md#editions)** — Asanoha, Kikkō, Sayagata, Seigaiha, Meandro and Vías: six all-over back patterns around the Flan signature, one Gerber package each. Preview them with JLCPCB's seven solder-mask colours in the viewer's **Design → PCB** tab, which links the matching ZIPs.
 
-**[The Flan family](docs/variants.md)** — Flan42 adds the outer pinky column, Flan46 a number row and Flan54 both. They keep every Flan36 key, the thumbs and the bay; layouts, matrices and case outlines are generated and checked. Flan42's PCBs are routed and pass DRC, ERC and parity; cases come next.
+**[The Flan family](docs/variants.md)** — Flan42 adds the outer pinky column, Flan46 a number row and Flan54 both. They keep every Flan36 key, the thumbs and the bay. Each has routed PCBs with silkscreen editions, the four case styles and ZMK firmware; pick one in the viewer under **Design → Case → Keyboard size**.
 
 **[Themes and print kits](docs/themes-printing.md)** — Twenty-eight coordinated themes, personal keycap palettes, linked rim/frame colors and selected STL/3MF parts.
 

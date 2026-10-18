@@ -11,7 +11,11 @@
 | Firmware and fabrication files | Digital candidate | Three compiled UF2 variants and source-bound Gerber/drill packages; complete purchasing list; physical acceptance pending |
 | Printing and assembly | Pending | Fit coupon, sample caps and actual component measurements |
 | Working keyboard | Pending | All keys, BLE, charging, sleep/wake and measured consumption |
-| Flan42, Flan46, Flan54 | Layouts and outlines | [Family](variants.md): generated and checked; PCB, case, firmware and viewer pending |
+| Flan42, Flan46, Flan54 | Digital builds | [Family](variants.md): routed PCBs with editions, four case styles, ZMK firmware and viewer; keycap qualification and physical tests pending |
+
+## The Flan family: PCBs, cases, firmware and viewer
+
+On 2026-10-18 every variant was built digitally. Flan42, Flan46 and Flan54 have routed PCBs (DRC, ERC and parity 0) with the six silkscreen editions, and the four case styles from the revI document with their added keys and fasteners. They also have ZMK firmware: number row on D15/D6, and Flan36's UF2 files rebuilt byte-identical. The viewer offers a **Keyboard size** choice that loads each variant on demand. The number-row left boards leave the nice!nano's GND3 unconnected so ROW4 fits; a check proves GND stays one net. [Details](variants.md).
 
 ## The Flan family: layouts and outlines
 

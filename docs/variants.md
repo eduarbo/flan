@@ -1,6 +1,6 @@
 # The Flan family
 
-**Flan36 is built. Flan42, Flan46 and Flan54 have routed PCBs that pass DRC, ERC and schematic parity, with Gerber packages; their cases, firmware and viewer support come next.**
+**All four sizes are built digitally: routed PCBs with Gerber packages and silkscreen editions, case parts in all four styles, ZMK firmware and a size choice in the viewer. None is physically tested; KLP Lamé qualification of the added key positions is still open.**
 
 ![The Flan family: Flan36, Flan42, Flan46 and Flan54, both halves from the front](images/variants/family.svg)
 
@@ -42,7 +42,7 @@ python3 tools/build_variants.py      # needs Shapely (tools/requirements-silkscr
 
 **Packages:** [`flan42-left-prototype.zip`](../hardware/flan42/fabrication/flan42-left-prototype.zip) and [`flan42-right-prototype.zip`](../hardware/flan42/fabrication/flan42-right-prototype.zip), exported with revI's options. Receipts: [build](../validation/flan42-pcb.json), [routing](../validation/flan42-routing.json), [negative controls](../validation/flan42-routing-negative.json), [signature](../validation/flan42-signature.json) and [fabrication](../validation/flan42-fabrication.json).
 
-**Physical fit is untested.** No Flan42 case, firmware shield or keycap qualification exists yet. Check the board against the case before ordering. Flan42 also inherits Flan36's open hardware tests.
+**Physical fit is untested.** Flan42's [case](#cases) and [firmware](#firmware) are below; keycap qualification for the added positions is pending. Check the board against the case before ordering. Flan42 also inherits Flan36's open hardware tests.
 
 Rebuild from revI with KiCad 10.0.6. `$SILK_PY` is a Python with [`tools/requirements-silkscreen.txt`](../tools/requirements-silkscreen.txt). `$KICAD_PY` is KiCad's Python with Shapely, NumPy and SciPy. The board builder refuses to overwrite existing boards.
 
@@ -73,20 +73,45 @@ python3 tools/export_fabrication.py --variant flan42
 
 **Checks.** DRC, ERC and parity report 0 violations and 0 unconnected items per half. The checker reads 303 physical pads and 23 matrix keys per half on Flan46, and 349 pads and 27 keys on Flan54. It also verifies the ROW4 pin, the no-connect GND3 and the single GND copper net. Negative controls reject a wrong pad net, a disconnected row, a moved key and a cut GND link. The Gerber and drill readback matches 676 outline segments and every hole. Packages are in `hardware/flan46/fabrication/` and `hardware/flan54/fabrication/`. The receipts are `validation/flan46-*.json` and `validation/flan54-*.json`.
 
-**Physical fit is untested.** The firmware also needs ROW4 on D15/D6 before a number-row board can be used.
+**Physical fit is untested.** The [firmware](#firmware) scans ROW4 on D15 (left) and D6 (right).
 
 **Silkscreen editions.** All three variants have the six back patterns that revI offers: Asanoha, Kikkō, Sayagata, Seigaiha, Meandro and Vías. Each pattern follows its own board's outline and keys around the signature. For every edition and half, the export runs revI's print checks, DRC with parity and a readback. It also compares the Gerbers byte for byte with the base package and requires that only `B_Silkscreen` differs. The packages are in `hardware/<variant>/fabrication/editions/`, the previews in [`docs/images/editions/<variant>/`](images/editions/flan54/seigaiha.png), and the receipts are `validation/<variant>-editions.json`. Rebuild them with `$SILK_PY tools/export_editions.py --variant flan42` (or flan46, flan54) after the fabrication export.
 
 The rebuild commands are the same as Flan42's with `--variant flan46` or `--variant flan54`. Use `build_variant_pcb.py --row4 LEFT RIGHT --output DIR` to try other pins.
 
-## Next stages
+## Cases
 
-Each stage applies to Flan42, Flan46 and Flan54. Flan42 is the natural first build: it adds keys to an existing matrix column and needs no new pin.
+Every variant has the four case styles (Solid, Color rim, Terrace and Level), base and plate per half, as STEP and STL in `mechanical/<variant>/` with the same names as revI's (`left-case-level-plate.stl` and so on). [`tools/freecad/build_variant_case.py`](../tools/freecad/build_variant_case.py) builds them from the revI document, so the stack, bay, frames, magnets, batteries, ports and every Flan36 feature stay identical:
 
-1. **PCB:** done for all three variants, including the six silkscreen editions (above).
-2. **Case:** FreeCAD bodies from the variant outline with the same stack, bay, frames, magnets and batteries; new fastener positions for the larger plates (H6–H8 are already on the variant PCBs); fit coupons.
-3. **Firmware:** a ZMK shield per variant from its matrix transform, the row-4 pin and keymaps with the number row or outer column.
-4. **Keycaps:** KLP Lamé qualification for the new positions.
-5. **Viewer:** a variant choice in Design, each variant's scene loaded on demand like the print kit.
+- **Outline:** each outline sketch (outer pad, cavity, plate, rim, terrace and PCB) gets the variant's profile, after a check that it held exactly the revI profile it stands for. The derived offsets follow `build_revI_profiles.py`; the script first proves that this runtime reproduces revI's.
+- **Keys:** each added key's switch cut, switch, hot-swap and keycap are copies of its template key, and its cut is spliced into the plate chain. The Level shell's cap openings are regenerated for every key with level_stack's rule.
+- **Fasteners:** each added fastener (H6–H8 above) copies its source fastener's pillar, pilot, washer seat, board drill, plate hole, washer, screw and Level driver access.
+
+| Variant | Base per half | Added fasteners | Level cap poses |
+|---|---|---|---|
+| Flan42 | 134.75 × 94.58 mm | H6 | 1176 |
+| Flan46 | 116.75 × 111.58 mm | H7 | 1288 |
+| Flan54 | 134.75 × 111.58 mm | H6, H7, H8 | 1512 |
+
+**Checks.** For each half and style, base and plate are one valid solid with a closed mesh and span the variant outline. They don't overlap, every key has a switch opening through the plate, and the Level shell clears every admitted keycap envelope. Every added fastener has its pillar and pilot. Receipts: `validation/<variant>-case.json`. The edited FreeCAD document (about 100 MB) is written to `build/variants/<variant>/` and not committed. Rebuild it and the parts with:
+
+```sh
+python3 tools/freecad/run_macos.py tools/freecad/build_variant_case.py --variant flan42 -NSAppSleepDisabled YES
+```
+
+A full recompute takes about 20 minutes per variant. `--reuse` reruns the checks and exports on the saved document.
+
+## Firmware
+
+ZMK firmware for every variant is in [`docs/firmware.md`](firmware.md#family-variants): Flan42's outer column is matrix column 0, and the number row is matrix row 4 on D15/D6. All four keyboards pass the same devicetree, GPIO, role, display, sleep and UF2 checks.
+
+## In the viewer
+
+**Design → Case → Keyboard size** switches between the four sizes. A variant's case, PCB and silkscreen textures load on demand. Its added keys and fasteners appear only on the variants that have them; the added keys follow the key beside them. The print kit and the PCB tab's Gerber links follow the chosen size. [Viewer guide](viewer.md).
+
+## Still open
+
+- **Keycaps:** KLP Lamé qualification for the added positions. The added keys follow their neighbour's cap for now.
+- **Physical tests:** fit coupons and hardware acceptance, as for Flan36.
 
 None of this is physically qualified; the variants inherit Flan36's open hardware tests.
