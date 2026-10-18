@@ -9,6 +9,20 @@
       "packages": {
         "left": "hardware/revI/fabrication/flan36-left-revI-prototype.zip",
         "right": "hardware/revI/fabrication/flan36-right-revI-prototype.zip"
+      },
+      "variants": {
+        "flan42": {
+          "left": "hardware/flan42/fabrication/flan42-left-prototype.zip",
+          "right": "hardware/flan42/fabrication/flan42-right-prototype.zip"
+        },
+        "flan46": {
+          "left": "hardware/flan46/fabrication/flan46-left-prototype.zip",
+          "right": "hardware/flan46/fabrication/flan46-right-prototype.zip"
+        },
+        "flan54": {
+          "left": "hardware/flan54/fabrication/flan54-left-prototype.zip",
+          "right": "hardware/flan54/fabrication/flan54-right-prototype.zip"
+        }
       }
     },
     {
@@ -18,6 +32,20 @@
       "packages": {
         "left": "hardware/revI/fabrication/editions/flan36-left-revI-asanoha.zip",
         "right": "hardware/revI/fabrication/editions/flan36-right-revI-asanoha.zip"
+      },
+      "variants": {
+        "flan42": {
+          "left": "hardware/flan42/fabrication/editions/flan42-left-asanoha.zip",
+          "right": "hardware/flan42/fabrication/editions/flan42-right-asanoha.zip"
+        },
+        "flan46": {
+          "left": "hardware/flan46/fabrication/editions/flan46-left-asanoha.zip",
+          "right": "hardware/flan46/fabrication/editions/flan46-right-asanoha.zip"
+        },
+        "flan54": {
+          "left": "hardware/flan54/fabrication/editions/flan54-left-asanoha.zip",
+          "right": "hardware/flan54/fabrication/editions/flan54-right-asanoha.zip"
+        }
       }
     },
     {
@@ -27,6 +55,20 @@
       "packages": {
         "left": "hardware/revI/fabrication/editions/flan36-left-revI-kikko.zip",
         "right": "hardware/revI/fabrication/editions/flan36-right-revI-kikko.zip"
+      },
+      "variants": {
+        "flan42": {
+          "left": "hardware/flan42/fabrication/editions/flan42-left-kikko.zip",
+          "right": "hardware/flan42/fabrication/editions/flan42-right-kikko.zip"
+        },
+        "flan46": {
+          "left": "hardware/flan46/fabrication/editions/flan46-left-kikko.zip",
+          "right": "hardware/flan46/fabrication/editions/flan46-right-kikko.zip"
+        },
+        "flan54": {
+          "left": "hardware/flan54/fabrication/editions/flan54-left-kikko.zip",
+          "right": "hardware/flan54/fabrication/editions/flan54-right-kikko.zip"
+        }
       }
     },
     {
@@ -36,6 +78,20 @@
       "packages": {
         "left": "hardware/revI/fabrication/editions/flan36-left-revI-sayagata.zip",
         "right": "hardware/revI/fabrication/editions/flan36-right-revI-sayagata.zip"
+      },
+      "variants": {
+        "flan42": {
+          "left": "hardware/flan42/fabrication/editions/flan42-left-sayagata.zip",
+          "right": "hardware/flan42/fabrication/editions/flan42-right-sayagata.zip"
+        },
+        "flan46": {
+          "left": "hardware/flan46/fabrication/editions/flan46-left-sayagata.zip",
+          "right": "hardware/flan46/fabrication/editions/flan46-right-sayagata.zip"
+        },
+        "flan54": {
+          "left": "hardware/flan54/fabrication/editions/flan54-left-sayagata.zip",
+          "right": "hardware/flan54/fabrication/editions/flan54-right-sayagata.zip"
+        }
       }
     },
     {
@@ -45,6 +101,20 @@
       "packages": {
         "left": "hardware/revI/fabrication/editions/flan36-left-revI-seigaiha.zip",
         "right": "hardware/revI/fabrication/editions/flan36-right-revI-seigaiha.zip"
+      },
+      "variants": {
+        "flan42": {
+          "left": "hardware/flan42/fabrication/editions/flan42-left-seigaiha.zip",
+          "right": "hardware/flan42/fabrication/editions/flan42-right-seigaiha.zip"
+        },
+        "flan46": {
+          "left": "hardware/flan46/fabrication/editions/flan46-left-seigaiha.zip",
+          "right": "hardware/flan46/fabrication/editions/flan46-right-seigaiha.zip"
+        },
+        "flan54": {
+          "left": "hardware/flan54/fabrication/editions/flan54-left-seigaiha.zip",
+          "right": "hardware/flan54/fabrication/editions/flan54-right-seigaiha.zip"
+        }
       }
     },
     {
@@ -54,6 +124,20 @@
       "packages": {
         "left": "hardware/revI/fabrication/editions/flan36-left-revI-meandro.zip",
         "right": "hardware/revI/fabrication/editions/flan36-right-revI-meandro.zip"
+      },
+      "variants": {
+        "flan42": {
+          "left": "hardware/flan42/fabrication/editions/flan42-left-meandro.zip",
+          "right": "hardware/flan42/fabrication/editions/flan42-right-meandro.zip"
+        },
+        "flan46": {
+          "left": "hardware/flan46/fabrication/editions/flan46-left-meandro.zip",
+          "right": "hardware/flan46/fabrication/editions/flan46-right-meandro.zip"
+        },
+        "flan54": {
+          "left": "hardware/flan54/fabrication/editions/flan54-left-meandro.zip",
+          "right": "hardware/flan54/fabrication/editions/flan54-right-meandro.zip"
+        }
       }
     },
     {
@@ -63,6 +147,20 @@
       "packages": {
         "left": "hardware/revI/fabrication/editions/flan36-left-revI-vias.zip",
         "right": "hardware/revI/fabrication/editions/flan36-right-revI-vias.zip"
+      },
+      "variants": {
+        "flan42": {
+          "left": "hardware/flan42/fabrication/editions/flan42-left-vias.zip",
+          "right": "hardware/flan42/fabrication/editions/flan42-right-vias.zip"
+        },
+        "flan46": {
+          "left": "hardware/flan46/fabrication/editions/flan46-left-vias.zip",
+          "right": "hardware/flan46/fabrication/editions/flan46-right-vias.zip"
+        },
+        "flan54": {
+          "left": "hardware/flan54/fabrication/editions/flan54-left-vias.zip",
+          "right": "hardware/flan54/fabrication/editions/flan54-right-vias.zip"
+        }
       }
     }
   ],
