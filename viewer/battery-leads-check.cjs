@@ -6,7 +6,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/slim-flush/bat
 const html=fs.readFileSync(path.join(root,'docs/offline.html'),'utf8');
 const scene=JSON.parse(zlib.gunzipSync(Buffer.from(html.match(/<script id="scene-data" type="application\/octet-stream">([\s\S]*?)<\/script>/)[1],'base64')));
 for(const [alias,id] of Object.entries(scene.geometryAliases||{}))scene.geometries[alias]=scene.geometries[id];
-const expectedCount=scene.parts.length;
+const expectedCount=scene.parts.filter(p=>!p.variants).length;   // a family variant's added keys and fasteners start hidden on Flan36
 const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/offline.html');
 (async()=>{
  const browser=await chromium.launch({headless:true,...(process.env.FLAN36_BROWSER?{executablePath:process.env.FLAN36_BROWSER}:{})});

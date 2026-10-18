@@ -1,9 +1,9 @@
 {
   "revision": "I",
   "units": "mm",
-  "objects": 220,
+  "objects": 304,
   "unique_meshes": 260,
-  "keycaps": 36,
+  "keycaps": 54,
   "geometry_changed": false,
   "sources": [
     {
@@ -991,6 +991,406 @@
       "sha256": "046c67773c539c11883b248de156e4659890c90d6220c20f5f457ca717e540b6"
     },
     {
+      "path": "design/variants.json",
+      "sha256": "23a9787ae73d074ce01cd13b188660472c96f1975be3a01b6f0fde337fd6c1e4"
+    },
+    {
+      "path": "validation/flan42-case.json",
+      "sha256": "8842922f9829ac5ccb4fea3b7eb32c41cd653e75d5cdef60b9d9ed23ad8eff72"
+    },
+    {
+      "path": "mechanical/flan42/left-case-solid-base.stl",
+      "sha256": "2bd69b590b9ae223de64195a3deb0532dd6044c546faa14eae566f813e9ffa73"
+    },
+    {
+      "path": "mechanical/flan42/left-case-solid-plate.stl",
+      "sha256": "3d0bb9ba18a3020004200ddbe8c4b647ed3830b83ebddd53b9d9e75a85e56420"
+    },
+    {
+      "path": "mechanical/flan42/left-case-rim-base.stl",
+      "sha256": "9c2fad6a774ba178bd71aeaa7d0877a9b3285ba8ea3556e054e022f7a4e7825c"
+    },
+    {
+      "path": "mechanical/flan42/left-case-rim-plate.stl",
+      "sha256": "50432f12892bfe89a1df4faa7986385964316dc0bc0d7132f2374bdc4c759770"
+    },
+    {
+      "path": "mechanical/flan42/left-case-terrace-base.stl",
+      "sha256": "6adaf685bec53371336c4f6ea8675b08b89a735fc78cd6fa8cddfad5fd694e84"
+    },
+    {
+      "path": "mechanical/flan42/left-case-terrace-plate.stl",
+      "sha256": "3d0bb9ba18a3020004200ddbe8c4b647ed3830b83ebddd53b9d9e75a85e56420"
+    },
+    {
+      "path": "mechanical/flan42/left-case-level-base.stl",
+      "sha256": "2bd69b590b9ae223de64195a3deb0532dd6044c546faa14eae566f813e9ffa73"
+    },
+    {
+      "path": "mechanical/flan42/left-case-level-plate.stl",
+      "sha256": "e3ab8d598efc210a24e48bbac8b56faf26816502d11c2929a452d6bb2069f183"
+    },
+    {
+      "path": "mechanical/flan42/left-pcb.stl",
+      "sha256": "d3fa92a1e327f048a367321bae21b184fa09d0267055c6620b8e8e5ee28e93d5"
+    },
+    {
+      "path": "mechanical/flan42/right-case-solid-base.stl",
+      "sha256": "bd1ed3064a603b00a37b40ef524f74e193869573189825ee1d99ef07003a4d6b"
+    },
+    {
+      "path": "mechanical/flan42/right-case-solid-plate.stl",
+      "sha256": "e2cdcd6ee4a434eaba3bd91a4aeddf3cf767c09051136fa6823ca8aabfc73a37"
+    },
+    {
+      "path": "mechanical/flan42/right-case-rim-base.stl",
+      "sha256": "66b0f9855ca6408d3d01a51a80869cfb28dbfd37725ca298e423fd806cc82fbf"
+    },
+    {
+      "path": "mechanical/flan42/right-case-rim-plate.stl",
+      "sha256": "2e37f75fa6c2a791670a0e90b82cd73cf58819b2b4a22904d21dac5605af0a9e"
+    },
+    {
+      "path": "mechanical/flan42/right-case-terrace-base.stl",
+      "sha256": "4bbde26b7451ca50b8933fff8e40ecc6f062fd24015a8670fc096d3f8a1059cc"
+    },
+    {
+      "path": "mechanical/flan42/right-case-terrace-plate.stl",
+      "sha256": "e2cdcd6ee4a434eaba3bd91a4aeddf3cf767c09051136fa6823ca8aabfc73a37"
+    },
+    {
+      "path": "mechanical/flan42/right-case-level-base.stl",
+      "sha256": "bd1ed3064a603b00a37b40ef524f74e193869573189825ee1d99ef07003a4d6b"
+    },
+    {
+      "path": "mechanical/flan42/right-case-level-plate.stl",
+      "sha256": "e5202ce5d8cc80a5da5f908cd492bc18f49003ac61403aa0e08f01567424a5d7"
+    },
+    {
+      "path": "mechanical/flan42/right-pcb.stl",
+      "sha256": "154bee5d126e2573c56439c84688dc632493f56ce99efd48af9eec80b6fb4bf9"
+    },
+    {
+      "path": "hardware/flan42/fabrication/flan42-left-prototype.zip",
+      "sha256": "64ca818b92e661447fc039c7c2e3a3b3d3c53e4c70467f44fa48a40a0ca47e36"
+    },
+    {
+      "path": "hardware/flan42/fabrication/flan42-right-prototype.zip",
+      "sha256": "0466bc1b49e3dc9eed9fb1fb360c10905232758825d0b58c97a350bc1fcc2a0d"
+    },
+    {
+      "path": "hardware/flan42/fabrication/editions/flan42-left-asanoha.zip",
+      "sha256": "f2c7d0369b5d1a60b38c4d85bd777e1bdc6f29cf8a1981c48c0ad61954618b83"
+    },
+    {
+      "path": "hardware/flan42/fabrication/editions/flan42-right-asanoha.zip",
+      "sha256": "b54527ce2817de20085a9116f4f31de6ce489d5df1fd6bb9af637591604d22b6"
+    },
+    {
+      "path": "hardware/flan42/fabrication/editions/flan42-left-kikko.zip",
+      "sha256": "73fc0b122534cb3c66226037f885de9d4a22f56df0b740a41776f3ccc9d19cbf"
+    },
+    {
+      "path": "hardware/flan42/fabrication/editions/flan42-right-kikko.zip",
+      "sha256": "12fae3731051237d78aed63e88f216ec85b05db3389ddc2d5cb68f70ac8f9ee0"
+    },
+    {
+      "path": "hardware/flan42/fabrication/editions/flan42-left-sayagata.zip",
+      "sha256": "c850254d15d2550b88effec530c1c18771a60bbebce83fce2185cc419d9f7193"
+    },
+    {
+      "path": "hardware/flan42/fabrication/editions/flan42-right-sayagata.zip",
+      "sha256": "3f8a4f3c89fdd4a58c3465d6f062c88470b0183fa5c287d808d22f880cf9ef53"
+    },
+    {
+      "path": "hardware/flan42/fabrication/editions/flan42-left-seigaiha.zip",
+      "sha256": "8232449f70912becef48d706022139153c3f55850b50f0a5729656c3c6d47423"
+    },
+    {
+      "path": "hardware/flan42/fabrication/editions/flan42-right-seigaiha.zip",
+      "sha256": "8a223ab78cb90cf64a8cfff238a701e39e31abbae07d58aa7d6e8a9e12a613cd"
+    },
+    {
+      "path": "hardware/flan42/fabrication/editions/flan42-left-meandro.zip",
+      "sha256": "f78ccd996832e0f3a5c5155e7e49f33bb7bb58e6294e6beccda2def0011cd2c8"
+    },
+    {
+      "path": "hardware/flan42/fabrication/editions/flan42-right-meandro.zip",
+      "sha256": "a4474f8d745ebd8705da3defa1afbba3f2b2479745bbb95f487ac37f567e31f7"
+    },
+    {
+      "path": "hardware/flan42/fabrication/editions/flan42-left-vias.zip",
+      "sha256": "ee5ec27ff02b0ebe89cdd07862a2db2284e158ec2512a5020f398fc9fe355032"
+    },
+    {
+      "path": "hardware/flan42/fabrication/editions/flan42-right-vias.zip",
+      "sha256": "77a0aa5daa7456a41c85b6622316dcb34bab39a459b747e24d3d311c9bbdda68"
+    },
+    {
+      "path": "validation/flan46-case.json",
+      "sha256": "c9431fb8e18939e7f87701c201f3167bc977dd6ebc47dfef918422e67ee7feb9"
+    },
+    {
+      "path": "mechanical/flan46/left-case-solid-base.stl",
+      "sha256": "f5d3e0356b7fd32967d8bf38a89e41f130b42704e0edbb4bc894f27fbc29c219"
+    },
+    {
+      "path": "mechanical/flan46/left-case-solid-plate.stl",
+      "sha256": "4a3dec11f08609821e4924e98d05758941a08ee36ff64fae4bd92b92e2c7facf"
+    },
+    {
+      "path": "mechanical/flan46/left-case-rim-base.stl",
+      "sha256": "7fb91eda75968a482d5eb29c6fb6566c2ea4468eb455aff0a069c631d8b7802a"
+    },
+    {
+      "path": "mechanical/flan46/left-case-rim-plate.stl",
+      "sha256": "3803e97fc631077ac85b50c200c75ad81255b552f0d30e7dfceb5fafbff63495"
+    },
+    {
+      "path": "mechanical/flan46/left-case-terrace-base.stl",
+      "sha256": "a8404870e6cbb0902f845ae8660753470bf8220728dd90724d53476015b1c62b"
+    },
+    {
+      "path": "mechanical/flan46/left-case-terrace-plate.stl",
+      "sha256": "4a3dec11f08609821e4924e98d05758941a08ee36ff64fae4bd92b92e2c7facf"
+    },
+    {
+      "path": "mechanical/flan46/left-case-level-base.stl",
+      "sha256": "f5d3e0356b7fd32967d8bf38a89e41f130b42704e0edbb4bc894f27fbc29c219"
+    },
+    {
+      "path": "mechanical/flan46/left-case-level-plate.stl",
+      "sha256": "be3674260c1bc5bf451695e22c68f16c76e364f18586bace81e7b0c53c164f7a"
+    },
+    {
+      "path": "mechanical/flan46/left-pcb.stl",
+      "sha256": "cb5dcf7734117bf3cb40b57d9adc9551b4ea9c3d46a1d4f9b8d0b297d6d74cd7"
+    },
+    {
+      "path": "mechanical/flan46/right-case-solid-base.stl",
+      "sha256": "21406da7789a03bba92303f79ea06b7f606b9e15519d6e241f16b6e11496e61d"
+    },
+    {
+      "path": "mechanical/flan46/right-case-solid-plate.stl",
+      "sha256": "0a656cc31119434ae4640b4a32f383751441a52ac263fa8317826f401e057bd0"
+    },
+    {
+      "path": "mechanical/flan46/right-case-rim-base.stl",
+      "sha256": "bfdba2f7dbdda61c1efc47bc8487c8730e8028f2a10b45b616930dfaab87bf20"
+    },
+    {
+      "path": "mechanical/flan46/right-case-rim-plate.stl",
+      "sha256": "de7b1718f0212a55423abc592b5f7628e464f85ede4c93c45975ca4ee8287a30"
+    },
+    {
+      "path": "mechanical/flan46/right-case-terrace-base.stl",
+      "sha256": "1263ef1fb033d15061170e8789b44677f0cfd2a39ed6d803344908d219f74cf2"
+    },
+    {
+      "path": "mechanical/flan46/right-case-terrace-plate.stl",
+      "sha256": "0a656cc31119434ae4640b4a32f383751441a52ac263fa8317826f401e057bd0"
+    },
+    {
+      "path": "mechanical/flan46/right-case-level-base.stl",
+      "sha256": "21406da7789a03bba92303f79ea06b7f606b9e15519d6e241f16b6e11496e61d"
+    },
+    {
+      "path": "mechanical/flan46/right-case-level-plate.stl",
+      "sha256": "fd1bf5422383af1f519c5bacb4a2f290d878f270370bc05e9fc378b57a7a7c72"
+    },
+    {
+      "path": "mechanical/flan46/right-pcb.stl",
+      "sha256": "9100ac97842a6e79baf7ba3426055b00c8d061f6e3ebe2f3c457c7736b587e43"
+    },
+    {
+      "path": "hardware/flan46/fabrication/flan46-left-prototype.zip",
+      "sha256": "f4684b8d59bf2f227822d07aecfe28b111eced362d2aea544fd3d3b9f5035b4f"
+    },
+    {
+      "path": "hardware/flan46/fabrication/flan46-right-prototype.zip",
+      "sha256": "e41ddb23b723e5aa7f7b5111d5f682f23fc5b21ebd7853f0b43a8fcb968a30f1"
+    },
+    {
+      "path": "hardware/flan46/fabrication/editions/flan46-left-asanoha.zip",
+      "sha256": "865ebbf831466ede93355cf43cb7219d1f5d296e9016853177b794c701e85e74"
+    },
+    {
+      "path": "hardware/flan46/fabrication/editions/flan46-right-asanoha.zip",
+      "sha256": "d954c064b2e8f8380e7dd51d7c3676d6fa40bf071a8bcae45f9406495a366d86"
+    },
+    {
+      "path": "hardware/flan46/fabrication/editions/flan46-left-kikko.zip",
+      "sha256": "8caf92e17a37652a388480b51f31b0b0ed7bd469452d6b5c0adcf9b92f9ab2e7"
+    },
+    {
+      "path": "hardware/flan46/fabrication/editions/flan46-right-kikko.zip",
+      "sha256": "0cdf0002ba24f95b991e439923a52f4d54d234cb66192be5f568387b2e273f48"
+    },
+    {
+      "path": "hardware/flan46/fabrication/editions/flan46-left-sayagata.zip",
+      "sha256": "78e7b737394c9375bfd1ec11e10f7aa059b59deff2f1bed7ca7a616e14f01ead"
+    },
+    {
+      "path": "hardware/flan46/fabrication/editions/flan46-right-sayagata.zip",
+      "sha256": "ed0d8c8d061ac2ae292681e5f73a5e0518a00592da8c5252fd34af52cb23eeb8"
+    },
+    {
+      "path": "hardware/flan46/fabrication/editions/flan46-left-seigaiha.zip",
+      "sha256": "58f2f3eef650176f843f24d4b2ab0fc9a24adc993c464b2deb0fe7b937b69bf0"
+    },
+    {
+      "path": "hardware/flan46/fabrication/editions/flan46-right-seigaiha.zip",
+      "sha256": "f4d6a8607b2989b50f8a2dbf41870b2273cd95b1bf3e2c1a0b37f8b89a40fd19"
+    },
+    {
+      "path": "hardware/flan46/fabrication/editions/flan46-left-meandro.zip",
+      "sha256": "374f02249cd0e459a2ead97b7758535af9b0ca51378c72736a374af9eaec91d4"
+    },
+    {
+      "path": "hardware/flan46/fabrication/editions/flan46-right-meandro.zip",
+      "sha256": "3fa84d4129282d7be5a20196c9f72acc485ac474e013bb6bcfb6e1faf443f5aa"
+    },
+    {
+      "path": "hardware/flan46/fabrication/editions/flan46-left-vias.zip",
+      "sha256": "e8a87c28ed73ab75d3a031cec590145d905a81bac40da9e295f961971dd543aa"
+    },
+    {
+      "path": "hardware/flan46/fabrication/editions/flan46-right-vias.zip",
+      "sha256": "052627314aad7905cc01854ace8800415b9e69dd4dc24f2814b30ee12188cf42"
+    },
+    {
+      "path": "validation/flan54-case.json",
+      "sha256": "b97f52608a489b9231da89458c3ab97cc4463b17f4510ddc93364c822e9e94fd"
+    },
+    {
+      "path": "mechanical/flan54/left-case-solid-base.stl",
+      "sha256": "c6d387eb516ba7fd67609fa5ee9b58908d1159e8c5f271589e76bcf69e4f012d"
+    },
+    {
+      "path": "mechanical/flan54/left-case-solid-plate.stl",
+      "sha256": "7b20b33e142b499cff6ec37394e1a10f986fa9c51af7e3221cc0e6de2cbb0af9"
+    },
+    {
+      "path": "mechanical/flan54/left-case-rim-base.stl",
+      "sha256": "c9aaf57120ee3c707800f0764d2ae80c7bfcaebd28496657c7de141d0bffea64"
+    },
+    {
+      "path": "mechanical/flan54/left-case-rim-plate.stl",
+      "sha256": "2e8ca57344730a1ca33407059818936daa99dff7b937b28b6c69b89bcf2a98d4"
+    },
+    {
+      "path": "mechanical/flan54/left-case-terrace-base.stl",
+      "sha256": "4db253cdf8902ca045863d39a8ef360d69a3e75e2e1bcc9efb2b2dfa3c47c4ad"
+    },
+    {
+      "path": "mechanical/flan54/left-case-terrace-plate.stl",
+      "sha256": "7b20b33e142b499cff6ec37394e1a10f986fa9c51af7e3221cc0e6de2cbb0af9"
+    },
+    {
+      "path": "mechanical/flan54/left-case-level-base.stl",
+      "sha256": "c6d387eb516ba7fd67609fa5ee9b58908d1159e8c5f271589e76bcf69e4f012d"
+    },
+    {
+      "path": "mechanical/flan54/left-case-level-plate.stl",
+      "sha256": "bf145dd2b2f8abdbaaebe476c36189dae4cca6dd141e676d0cded6220356c02e"
+    },
+    {
+      "path": "mechanical/flan54/left-pcb.stl",
+      "sha256": "5c44434b46d49800fb65760b7e2a73681922344ce901817e101eebeba2beedf4"
+    },
+    {
+      "path": "mechanical/flan54/right-case-solid-base.stl",
+      "sha256": "b976692b071ba6e4f511fff57f42f1af3d65a5d5f20ae6ea3ba107dd50d72b2b"
+    },
+    {
+      "path": "mechanical/flan54/right-case-solid-plate.stl",
+      "sha256": "ee072eaa2788f5d68dd60314c0150451402a37dc26ff6ac1e918adc6cda3a493"
+    },
+    {
+      "path": "mechanical/flan54/right-case-rim-base.stl",
+      "sha256": "adbf8be22c3b8486c11982139a25b67e05bc8cb1085d6efd0185924e9568dfec"
+    },
+    {
+      "path": "mechanical/flan54/right-case-rim-plate.stl",
+      "sha256": "d41674abc16a2fbaa20f940cecbae0696bde721c038dcdff3cb2f2697cf18b13"
+    },
+    {
+      "path": "mechanical/flan54/right-case-terrace-base.stl",
+      "sha256": "8fd5815b465ef069d3ff1b1f7001b29bbab789de2f3bc5e5bff851746a0f94c2"
+    },
+    {
+      "path": "mechanical/flan54/right-case-terrace-plate.stl",
+      "sha256": "ee072eaa2788f5d68dd60314c0150451402a37dc26ff6ac1e918adc6cda3a493"
+    },
+    {
+      "path": "mechanical/flan54/right-case-level-base.stl",
+      "sha256": "b976692b071ba6e4f511fff57f42f1af3d65a5d5f20ae6ea3ba107dd50d72b2b"
+    },
+    {
+      "path": "mechanical/flan54/right-case-level-plate.stl",
+      "sha256": "ed7d0563a7aebad1d7021bb09a6c5f4318c51bbc164950d4436eb34b9b4897c3"
+    },
+    {
+      "path": "mechanical/flan54/right-pcb.stl",
+      "sha256": "c422f722bd057524fd504d547405cedf29b5d18f6b1e25634f1f9ed22c06425f"
+    },
+    {
+      "path": "hardware/flan54/fabrication/flan54-left-prototype.zip",
+      "sha256": "a2c13c24c15ab140205ab8ef497bcb85e3d705b1fecb4cd11914dc6c26d7a320"
+    },
+    {
+      "path": "hardware/flan54/fabrication/flan54-right-prototype.zip",
+      "sha256": "336898ceac3a6bfda21605ea346a9e2ac90fdad8f8c5942e4eab2b5266fd7930"
+    },
+    {
+      "path": "hardware/flan54/fabrication/editions/flan54-left-asanoha.zip",
+      "sha256": "9c5c461eae40d6c9cd531a500b6f228f6807ac46263a43e6b5fc44fe88227a12"
+    },
+    {
+      "path": "hardware/flan54/fabrication/editions/flan54-right-asanoha.zip",
+      "sha256": "67c7ebd58e56d628f387ea086d0f908e89143f6544122bc6725081756d016087"
+    },
+    {
+      "path": "hardware/flan54/fabrication/editions/flan54-left-kikko.zip",
+      "sha256": "42a34c116f78d697d97c1b62e2558e2ddafc328d79f16b7eb02f03ddab1754c2"
+    },
+    {
+      "path": "hardware/flan54/fabrication/editions/flan54-right-kikko.zip",
+      "sha256": "b08f254f273fc2e30e26881556101f4b4c30a5af1b82cf85d6b9f1137493f546"
+    },
+    {
+      "path": "hardware/flan54/fabrication/editions/flan54-left-sayagata.zip",
+      "sha256": "103fb6b7176d40c5b33161165c18af010b6382bc0dc0dab9af37e79ff052f2d5"
+    },
+    {
+      "path": "hardware/flan54/fabrication/editions/flan54-right-sayagata.zip",
+      "sha256": "c5de4179df795d6dbbff45d7d64a0e7eea897697898540ae25db9cb2b4457763"
+    },
+    {
+      "path": "hardware/flan54/fabrication/editions/flan54-left-seigaiha.zip",
+      "sha256": "d2fb13d67ecdb456cfa9d4aab693f58e0d6458d0206c506345c1aa6f4ffe4d50"
+    },
+    {
+      "path": "hardware/flan54/fabrication/editions/flan54-right-seigaiha.zip",
+      "sha256": "29393ac6aa720b3c77066aef8022072b55ca1f781b0dca9eeee662f2903f161c"
+    },
+    {
+      "path": "hardware/flan54/fabrication/editions/flan54-left-meandro.zip",
+      "sha256": "022aec1140a418a832e834f9a5e6e1cb656ba126fe27e32c28ae6c05dc9c640a"
+    },
+    {
+      "path": "hardware/flan54/fabrication/editions/flan54-right-meandro.zip",
+      "sha256": "d2804d3fccc244413943dfe49e851a1eaa74680736ac6297244c2ddc9a370a48"
+    },
+    {
+      "path": "hardware/flan54/fabrication/editions/flan54-left-vias.zip",
+      "sha256": "9b10733390e6a79db5e1557d454b90278a5a7db3d586cf0e7b7242e0c66a61a1"
+    },
+    {
+      "path": "hardware/flan54/fabrication/editions/flan54-right-vias.zip",
+      "sha256": "02bafcc2b80ebcd1a04c153c1fae472ff60e80b9d3814a834504f47faae6ec54"
+    },
+    {
       "path": "design/revI.json",
       "sha256": "939da95663f38b8668cf4f07eedbb38e40d04fc12d104720f165440c01a4a78b"
     },
@@ -1004,7 +1404,7 @@
     },
     {
       "path": "tools/build_viewer_revI.py",
-      "sha256": "7d8857e5746f85b7017515a767a0f8d2bdb0f218feb8719e33c1e47546da1552"
+      "sha256": "009a53192084f0549fe47bcf1e7e1997c2cec4ec8a691f2d10929ab66397dfde"
     },
     {
       "path": "tools/viewer_frame_selection.py",
@@ -1088,15 +1488,15 @@
     },
     {
       "path": "design/pcb-options.json",
-      "sha256": "922d75877bcfbdaa59089d06cc1923f1b84cc917186750b34c854eb2c7672fc6"
+      "sha256": "11ece185de58d70836dd030e228d08f1036648b0c384491c943467d55b00d616"
     },
     {
       "path": "viewer/app.js",
-      "sha256": "288b2c0edba09e3e0d76876e00f93a5d6dd91a5e0b0e4147c6854f6915983518"
+      "sha256": "d555a42546d7f248d78f568ea9281b7f2a9ad955c49c8088c8aae43f30c2e4ec"
     },
     {
       "path": "viewer/config.js",
-      "sha256": "a9232e825a3b0c13749ab74b32977ba6225ce235f55ccce4283ef2b022d3d52b"
+      "sha256": "5f6c7c101a9ac9ee29f127f91112bc091412009674734fcfa31e133f75d23a7e"
     },
     {
       "path": "viewer/storage.js",
@@ -1108,7 +1508,7 @@
     },
     {
       "path": "viewer/assets.js",
-      "sha256": "161172f2366683f7c7432b3ca9a715d298d2a6421dbd40c7e128713a9a28f4fb"
+      "sha256": "ef0d5d7bdd19139a272fa1b9991be0b955a3ed06dea06d6b4df3768763fd5a10"
     },
     {
       "path": "viewer/keycap-colors.js",
@@ -1128,7 +1528,7 @@
     },
     {
       "path": "viewer/printing.js",
-      "sha256": "0cbfb93a39e03be3a79a4a1aaa599d9c6a96c64e0d49debb6306e0cb9364d038"
+      "sha256": "21b475333a862dac76c6776fdf7e3b82937d1d0b514e0b63c7228f24285fc1a2"
     },
     {
       "path": "design/themes.json",
@@ -1152,22 +1552,22 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "327e9b15d5b1de063872cc470cc0c45c43dc3d419aad1cfa829e7aa3ba52cb99"
+      "sha256": "f900b2b202fc8cc0a2d9bcc140488f269e45aa9f66c848beca8078afe82a6ebc"
     },
     {
       "path": "viewer/template.html",
-      "sha256": "9eb6ebcf5edbec8a45125097c1a5504be14398913a2c5151e4d0b236b144c37f"
+      "sha256": "c05419407127d3ae24a0933d43e21aa3687f585fb5b9b7746e04b809194d421a"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "e6a536b89fe6ae7fcec97ea41b71a89e0061ab5bbfe5305423fe097e97ef520c"
+      "sha256": "ffa2cb0051dc6477e6f2b718b0ade9cc00404d43b712443811b43d39c514f9fc"
     },
     {
       "path": "viewer/package-lock.json",
       "sha256": "a62090e2bb0ab32205ff582bd3612ff167dc03d9db4c2b6879bb98f5bf25d550"
     }
   ],
-  "viewer_sha256": "ec686a624f7039129312e6902ed29a223cc399918bd1e80a998f1aa0d50945ad",
+  "viewer_sha256": "d809e68880c053add7a59323eeb73d9f71bc9c6e37e700055763cb49385cb7ea",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -1179,11 +1579,28 @@
     "cover_ahead_of_adjacent_cap_mm": 0
   },
   "offline": "docs/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.",
-  "offline_sha256": "218f32fdcb2b2cc6bbae0e839a156e6b1e573a8cc56bb6e3fc33c8a928728098",
+  "offline_sha256": "0fd8a433bdd88a4208b28afec395c22884dc9398ca3f65766b9317aace1f9696",
   "printing": {
     "path": "docs/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
     "bytes": 7033010
+  },
+  "variants": {
+    "flan42": {
+      "path": "docs/assets/variant-flan42-585fb0811df0ec2ea91f235882c94a24a66a9b3469327dea047c81c76869852c.bin",
+      "sha256": "585fb0811df0ec2ea91f235882c94a24a66a9b3469327dea047c81c76869852c",
+      "bytes": 4996284
+    },
+    "flan46": {
+      "path": "docs/assets/variant-flan46-638db2b1e08676a663759d3b91da07b3580ef22af6b15a11587abcfa7ffdd867.bin",
+      "sha256": "638db2b1e08676a663759d3b91da07b3580ef22af6b15a11587abcfa7ffdd867",
+      "bytes": 5045773
+    },
+    "flan54": {
+      "path": "docs/assets/variant-flan54-6cf7ba751343d8169e7a782d74d88adce2b6dbde486a244d742a0cb7d0be49c1.bin",
+      "sha256": "6cf7ba751343d8169e7a782d74d88adce2b6dbde486a244d742a0cb7d0be49c1",
+      "bytes": 5493581
+    }
   },
   "silkscreen": {
     "path": "docs/assets/silkscreen-1001e1aa3b955008dcb71166729c79bcd1faf6eee8e5bda9e28a5e205a612470.bin",
@@ -1200,8 +1617,8 @@
     ]
   },
   "geometry_aliases": 18,
-  "online_bytes": 53267021,
-  "offline_bytes": 64393205,
+  "online_bytes": 53332373,
+  "offline_bytes": 85172780,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

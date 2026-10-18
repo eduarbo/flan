@@ -15,8 +15,8 @@ for(const [alias,id] of Object.entries(scene.geometryAliases||{}))scene.geometri
 const frameStyles=['talavera','gameboy','snes','phone','ipod','hanafuda'];
 assert.deepEqual(Object.keys(scene.catalog.frame_styles),frameStyles);
 const palettes=JSON.parse(fs.readFileSync(path.join(root,'design/frame-finishes.json')));
-const expectedCount=scene.parts.length;
-const coverCount=side=>scene.parts.filter(p=>p.side===side&&p.group==='lid').length;
+const expectedCount=scene.parts.filter(p=>!p.variants).length;   // a family variant's added keys and fasteners start hidden on Flan36
+const coverCount=side=>scene.parts.filter(p=>!p.variants&&p.side===side&&p.group==='lid').length;
 for(const side of ['left','right'])assert.equal(scene.parts.filter(p=>p.part_id===`${side}-display-socket`&&p.group==='connectors').length,1,'Retained J2 socket must be explicit');
 const target=process.env.FLAN36_VIEWER_URL||pathToFileURL(path.join(root,'docs/offline.html')).href;
 const offline=target.startsWith('file:');
@@ -205,7 +205,7 @@ async function framePixel(page){
   await panel(page,'inspect');
   for(const group of new Set(scene.parts.map(p=>p.group))){
     await page.locator('#layer-'+group).uncheck();
-    assert.equal(await count(),expectedCount-scene.parts.filter(p=>p.group===group).length,group);
+    assert.equal(await count(),expectedCount-scene.parts.filter(p=>!p.variants&&p.group===group).length,group);
     await page.locator('#layer-'+group).check();
   }
   await page.click('#stack');assert.equal(await page.locator('#explode').inputValue(),'55');

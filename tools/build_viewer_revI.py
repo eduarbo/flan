@@ -59,21 +59,25 @@ def pack(array, dtype):
     return base64.b64encode(np.asarray(array,dtype=dtype).tobytes()).decode('ascii')
 
 
-def mesh(path):
-    if path in scene['geometries']:return path
+CAD_MESHES=('mechanical/revI/','mechanical/flan')   # FreeCAD exports: y up becomes z, mirrored
+
+
+def mesh(path,store=None):
+    store=scene['geometries'] if store is None else store
+    if path in store:return path
     reader=vtk.vtkSTLReader();reader.SetFileName(str(ROOT/path));reader.Update()
     normals=vtk.vtkPolyDataNormals();normals.SetInputData(reader.GetOutput())
     normals.SetFeatureAngle(45);normals.ConsistencyOn();normals.AutoOrientNormalsOn();normals.Update()
     data=normals.GetOutput()
     points=vtk_to_numpy(data.GetPoints().GetData()).copy()[:,[0,2,1]]
     ns=vtk_to_numpy(data.GetPointData().GetNormals()).copy()[:,[0,2,1]]
-    if path.startswith('mechanical/revI/'):
+    if path.startswith(CAD_MESHES):
         points[:,2]*=-1; ns[:,2]*=-1
     cells=vtk_to_numpy(data.GetPolys().GetData()).reshape(-1,4)
     assert np.all(cells[:,0]==3)
     # CAD (x,y,z) -> viewer (x,z,y) reflects handedness; reverse every triangle.
-    indices=cells[:,[1,2,3] if path.startswith('mechanical/revI/') else [1,3,2]].reshape(-1)
-    scene['geometries'][path]={'positions':pack(points,'<f4'),'normals':pack(ns,'<f4'),
+    indices=cells[:,[1,2,3] if path.startswith(CAD_MESHES) else [1,3,2]].reshape(-1)
+    store[path]={'positions':pack(points,'<f4'),'normals':pack(ns,'<f4'),
                              'indices':pack(indices,'<u4'),'triangles':len(cells),
                              'bounds_mm':[points.min(axis=0).tolist(),points.max(axis=0).tolist()]}
     scene['sources'].append({'path':path,'sha256':digest(path)})
@@ -194,6 +198,83 @@ for side,keys in layout['halves'].items():
 
 for v in catalog['variants']:
     if v['qualified_reference_positions']:mesh(v['path'])
+
+# Flan family. Each built variant brings its own case and PCB meshes and printable case STLs,
+# loaded on demand (viewer/build.mjs defers them like the print kit). Its added keys and
+# fasteners are parts shown only on the variants that have them: copies of the template
+# key's keycap, switch and hot-swap, and of H1's screw and washer, at the variant's centres.
+family=json.loads((ROOT/'design/variants.json').read_text())
+scene['variants']={}
+scene['sources'].append({'path':'design/variants.json','sha256':digest('design/variants.json')})
+added_parts={}
+for vid,v in family['variants'].items():
+    entry={'id':vid,'title':v['title'],'grid':v['grid_per_half'],'keys_total':v['keys_total'],
+           'case_size_mm':v['case_size_mm'],'added':v['added_per_half'],'built':vid=='flan36',
+           'drawing':'data:image/svg+xml;base64,'+base64.b64encode((ROOT/f'docs/images/variants/{vid}.svg').read_bytes()).decode()}
+    receipt=ROOT/f'validation/{vid}-case.json'
+    if vid!='flan36' and receipt.exists():
+        case=json.loads(receipt.read_text())
+        entry.update(built=True,printing={},meshes={},fasteners={})
+        scene['sources'].append({'path':f'validation/{vid}-case.json','sha256':digest(f'validation/{vid}-case.json')})
+        for side in ['left','right']:
+            for style in catalog['case_styles']:
+                for group in ['base','plate']:
+                    path=f'mechanical/{vid}/{side}-case-{style}-{group}.stl'
+                    assert digest(path)==case['halves'][side]['cases'][style][group]['stl_sha256'],(path,'stale variant case')
+                    scene['sources'].append({'path':path,'sha256':digest(path)})
+                    name=f'{side}-case-{style}-{group}'
+                    entry['printing'][name]={'id':name,'path':path,'sha256':digest(path),'stl':base64.b64encode((ROOT/path).read_bytes()).decode()}
+            # one exact copy of each STL: the viewer builds its render mesh from it
+            path=f'mechanical/{vid}/{side}-pcb.stl'
+            entry['meshes'][path]=base64.b64encode((ROOT/path).read_bytes()).decode();scene['sources'].append({'path':path,'sha256':digest(path)})
+            entry['fasteners'][side]=case['halves'][side].get('fasteners',{})
+        # its silkscreen editions, when build_silkscreen_textures.py has rasterized its packages
+        vt=json.loads((ROOT/'build/silkscreen-textures/manifest.json').read_text()).get('variants',{}).get(vid)
+        if vt:
+            entry['silkscreen']={'bounds':vt['bounds'],'textures':{},'thumbnails':{}}
+            for edition,halves in vt['textures'].items():
+                for half,t in halves.items():
+                    assert digest(t['source']['package'])==t['source']['sha256'] and digest(t['path'])==t['sha256'],(vid,edition,half,'stale silkscreen texture')
+                    entry['silkscreen']['textures'].setdefault(edition,{})[half]=base64.b64encode((ROOT/t['path']).read_bytes()).decode()
+                    scene['sources'].append({'path':t['source']['package'],'sha256':t['source']['sha256']})
+            for edition,t in vt['thumbnails'].items():
+                entry['silkscreen']['thumbnails'][edition]='data:image/webp;base64,'+base64.b64encode((ROOT/t['path']).read_bytes()).decode()
+        zips={s:f'hardware/{vid}/fabrication/{vid}-{s}-prototype.zip' for s in ('left','right')}
+        if all((ROOT/z).exists() for z in zips.values()):entry['gerbers']=zips
+        keys={side:{k['ref']:k for k in v['keys'][side]} for side in ['left','right']}
+        for side in ['left','right']:
+            offset=0 if side=='left' else 161
+            for ref in v['added_per_half']:
+                k=keys[side][ref];tref='K01' if ref=='K40' else (f"K{k['row']}1" if k['col']==0 else f"K0{k['col']}")
+                t=keys[side][tref];added_parts.setdefault((side,ref),{'k':k,'t':t,'variants':[]})['variants'].append(vid)
+            for n,f in entry['fasteners'][side].items():
+                added_parts.setdefault((side,n),{'fastener':f,'variants':[]})['variants'].append(vid)
+    scene['variants'][vid]=entry
+sockets={side:{s['reference']:s for s in model['hotswap_model']['instances'][side]} for side in ['left','right']}
+h1={side:next(m for m in json.loads((ROOT/'design/revI-mounts.json').read_text())['left'] if m['id']=='H1')['xy'] for side in ['left','right']}
+for (side,ref),a in sorted(added_parts.items()):
+    offset=0 if side=='left' else 161
+    first=len(scene['parts'])
+    if 'fastener' in a:
+        x,y=a['fastener']['xy_mm'];hx,hy=h1[side]
+        if side=='right':hx=160-hx
+        add(f'Structural screw {ref[1:]}',side,'fasteners','#56615b',[offset+x-hx,0,y-hy],9,mesh(f'mechanical/revI/{side}-screw-1.stl'))
+        add(f'Washer {ref[1:]}',side,'fasteners','#89918a',[offset+x-hx,0,y-hy],9,mesh(f'mechanical/revI/{side}-washer-1.stl'))
+    else:
+        k,t=a['k'],a['t'];choice=cfg['keycaps'][side][t['ref']];cap=variants[choice['variant']]
+        add('KLP '+ref,side,'keycaps','#e9dfc6',[offset+k['x'],cap['seating_z_mm'],k['y']],22,mesh(cap['path']),angle=k['angle']+choice['rotation_deg'])
+        scene['parts'][-1]['key_ref']=ref
+        for name,label in [('choc-body','Choc housing'),('choc-stem','Choc stem')]:
+            geometry,colors=switch_meshes[name]
+            add(label+' '+ref,side,'switches',colors[0],[offset+k['x'],5.4,k['y']],14,geometry=geometry,angle=k['angle'])
+            scene['parts'][-1]['materials']=colors
+        sock=sockets[side][t['ref']];position=list(sock['position_mm'])
+        position[0]+=offset+k['x']-t['x'];position[2]+=k['y']-t['y']
+        add('Hot-swap '+ref,side,'pcb',socket_colors[0],position,3,socket_geometry,angle=sock['angle_deg'])
+        scene['parts'][-1]['materials']=socket_colors
+    for part in scene['parts'][first:]:
+        part['variants']=a['variants'];part.pop('part_id',None)
+        if 'k' in a:part['template_ref']=a['t']['ref']
 # Exact native bytes; never derive printable parts from the presentation scene.
 printing={'assets':{},'supports':['cradle','battery-retainer','mcu-riser','display-sled','washer-1','washer-2','washer-3'],
  'joining':{'case':'3 M2x6 + 2 M2x4 per half; tap the 1.7 mm pilots to M2',
@@ -240,7 +321,7 @@ editions=json.loads((ROOT/'design/pcb-options.json').read_text())
 textures=json.loads((ROOT/'build/silkscreen-textures/manifest.json').read_text())
 pcb=np.frombuffer(base64.b64decode(scene['geometries']['mechanical/revI/left-pcb.stl']['positions']),dtype=np.float32).reshape(-1,3)
 scene['silkscreen']={'default':editions['default_edition'],'default_mask':editions['default_mask'],'masks':editions['masks'],'masks_source':editions['masks_source'],'bottom_mm':round(float(pcb[:,1].min()),4),'bounds':textures['bounds'],
-    'editions':[{k:e[k] for k in ('id','title','description','packages')} for e in editions['editions']],'textures':{}}
+    'editions':[{k:e[k] for k in ('id','title','description','packages','variants') if k in e} for e in editions['editions']],'textures':{}}
 for e in editions['editions']:
     for half,package in e['packages'].items():
         t=textures['textures'][e['id']][half]

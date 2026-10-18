@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {framePalette} from './finishes.js';
 import pcbOptions from '../design/pcb-options.json';
+import family from '../design/variants.json';
 export const pcbEditionIds=pcbOptions.editions.map(e=>e.id),pcbMaskIds=pcbOptions.masks.map(m=>m.id);
+export const variantIds=Object.keys(family.variants),defaultVariant=family.base;
 export const copy=x=>JSON.parse(JSON.stringify(x));
 export function polygon(hull,key,turn){const a=(-key.angle-turn)*Math.PI/180,c=Math.cos(a),s=Math.sin(a);return hull.map(([x,y])=>[key.x+x*c-y*s,key.y+x*s+y*c]);}
 export function gap(a,b){
@@ -16,7 +18,7 @@ export function gap(a,b){
  return result;
 }
 export const retiredFrames=(config,c)=>['left','right'].filter(side=>Object.hasOwn(c.retired_frame_styles||{},config?.frames?.[side]?.style));
-export function normalize(config,c){const result=copy(config);result.schema="flan36-config-1";result.pcb_edition??=pcbOptions.default_edition;result.pcb_mask??=pcbOptions.default_mask;for(const [side,keys] of Object.entries(c.layout))for(const key of keys)result.keycaps[side][key.ref].color??=key.row===3?'#45967b':'#e9dfc6';if(!('cases' in result))result.cases=Object.fromEntries(['left','right'].map(side=>[side,{style:'solid',cover:true}]));for(const side of ['left','right']){const cs=result.cases[side],style=c.case_styles[cs.style];cs.base_color??=style.base_color;cs.plate_color??=style.plate_color;cs.match_frame??=false;const f=result.frames[side],retired=Object.hasOwn(c.retired_frame_styles||{},f.style),paletteStyle=retired?(c.retired_frame_palette_styles?.[f.style]||c.retired_frame_styles[f.style]):f.style;const p=framePalette(paletteStyle,f.color,f.accents);if(retired)f.style=c.retired_frame_styles[f.style];f.accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,p[k]]));}return result;}
+export function normalize(config,c){const result=copy(config);result.schema="flan36-config-1";result.variant??=defaultVariant;result.pcb_edition??=pcbOptions.default_edition;result.pcb_mask??=pcbOptions.default_mask;for(const [side,keys] of Object.entries(c.layout))for(const key of keys)result.keycaps[side][key.ref].color??=key.row===3?'#45967b':'#e9dfc6';if(!('cases' in result))result.cases=Object.fromEntries(['left','right'].map(side=>[side,{style:'solid',cover:true}]));for(const side of ['left','right']){const cs=result.cases[side],style=c.case_styles[cs.style];cs.base_color??=style.base_color;cs.plate_color??=style.plate_color;cs.match_frame??=false;const f=result.frames[side],retired=Object.hasOwn(c.retired_frame_styles||{},f.style),paletteStyle=retired?(c.retired_frame_palette_styles?.[f.style]||c.retired_frame_styles[f.style]):f.style;const p=framePalette(paletteStyle,f.color,f.accents);if(retired)f.style=c.retired_frame_styles[f.style];f.accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,p[k]]));}return result;}
 export function retiredReplacementNames(config,c){return [...new Set(retiredFrames(config,c).map(side=>c.frame_styles[c.retired_frame_styles[config.frames[side].style]]))].join(', ');}
 export function check(config,c){
  const record=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
@@ -25,6 +27,7 @@ export function check(config,c){
  if(!['flan36-config-1','filo36-config-1'].includes(config?.schema)||config?.revision!=='I')return {errors:['Unsupported configuration format or revision.']};
  if(Object.keys(record(config.keycaps)?config.keycaps:{}).sort().join()!=='left,right'||Object.keys(record(config.frames)?config.frames:{}).sort().join()!=='left,right')return {errors:['Both halves are required.']};
  if(Object.keys(record(config.batteries)?config.batteries:{}).sort().join()!=='left,right')return {errors:['Select a battery for each half.']};
+ if('variant' in config&&!variantIds.includes(config.variant))return {errors:['Unknown Flan variant.']};
  if('pcb_edition' in config&&!pcbEditionIds.includes(config.pcb_edition))return {errors:['Unknown PCB edition.']};
  if('pcb_mask' in config&&!pcbMaskIds.includes(config.pcb_mask))return {errors:['Unknown PCB solder mask colour.']};
  if('cases' in config){if(Object.keys(record(config.cases)?config.cases:{}).sort().join()!=='left,right')return {errors:['Select a case for each half.']};for(const choice of Object.values(config.cases))if(!record(choice)||typeof choice.style!=='string'||!Object.hasOwn(c.case_styles,choice.style)||typeof choice?.cover!=='boolean')return {errors:['Invalid case or display cover option.']};}

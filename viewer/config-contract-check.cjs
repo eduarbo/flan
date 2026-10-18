@@ -6,6 +6,7 @@ require('esbuild').buildSync({stdin:{contents:"export * from './config.js';expor
 const api=require(path.join(out,'contract.cjs')),catalog=JSON.parse(fs.readFileSync(path.join(root,'keycaps/catalog.json'))),base=api.normalize(catalog.default_configuration,catalog),clone=structuredClone;
 const fixtures=[null,[],true,5,'hello',{},base];const legacy=clone(base);delete legacy.cases;fixtures.push(legacy);
 for(const style of Object.keys(catalog.retired_frame_styles)){const old=clone(base);old.frames.left.style=style;old.frames.right.style=style;fixtures.push(old);}
+for(const id of Object.keys(JSON.parse(fs.readFileSync(path.join(root,'design/variants.json'))).variants)){const v=clone(base);v.variant=id;fixtures.push(v);}
 const locations=`keycaps
 frames
 batteries
@@ -20,7 +21,8 @@ keycaps.left.K01.rotation_deg
 cases.left
 frames.right.accents
 pcb_edition
-pcb_mask`.split('\n');
+pcb_mask
+variant`.split('\n');
 for(const location of locations)for(const value of [null,[],{},true,0,'constructor','__proto__','toString']){const c=clone(base),parts=location.split('.'),last=parts.pop();let target=c;for(const k of parts)target=target[k];target[last]=value;fixtures.push(c);}
 const js=fixtures.map(c=>{const errors=api.check(c,catalog).errors;return {valid:!errors.length,normalized:errors.length?null:api.normalize(c,catalog)};});
 const py=spawnSync('python3',['-c',"import sys,json;sys.path.insert(0,'tools');from keycap_config import check,normalize;xs=json.load(sys.stdin);print(json.dumps([{'valid':not check(x)[0],'normalized':normalize(x) if not check(x)[0] else None} for x in xs]))"],{cwd:root,input:JSON.stringify(fixtures),encoding:'utf8',maxBuffer:5e6});assert.equal(py.status,0,py.stderr);assert.deepEqual(js,JSON.parse(py.stdout));assert.equal(js[7].normalized.cases.left.style,'solid');assert.equal(js[7].normalized.cases.right.cover,true);

@@ -2,7 +2,7 @@
 import {zipSync,strToU8} from 'three/addons/libs/fflate.module.js';
 import {framePalette,finishes} from './finishes.js';
 const utf8=x=>strToU8(typeof x==='string'?x:JSON.stringify(x,null,2)+'\n');
-const decode=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const decode=s=>s instanceof Uint8Array?s:Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 const xml=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
 export function selectedParts(config,registry,half='both',scope='shells'){
  const parts=[];for(const side of ['left','right']){if(half!=='both'&&side!==half)continue;const cs=config.cases[side],f=config.frames[side];for(const group of ['base','plate'])parts.push({...registry.assets[`${side}-case-${cs.style}-${group}`],side,colors:{body:cs[group+'_color']}});if(cs.cover)parts.push({...registry.assets[`${side}-frame-${f.style}`],side,style:f.style,colors:framePalette(f.style,f.color,f.accents)});if(scope==='complete')for(const id of registry.supports)parts.push({...registry.assets[`${side}-${id}`],side,colors:{body:'#78908a'}});}return parts;

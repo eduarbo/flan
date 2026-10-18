@@ -8,7 +8,8 @@ import {printKit} from './printing.js';
 import {createAppearance,setColor,savedKey} from './appearance.js';
 import {restoreConfiguration,createStore,recoveryPrefix} from './storage.js';
 import {createHistory} from './history.js';
-import {decodeBytes,unpack,printLoader} from './assets.js';
+import {decodeBytes,unpack,unpackVariant,printLoader} from './assets.js';
+import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
 import {enhanceColorInput} from './color-input.js';
 import {createKeycapColors} from './keycap-colors.js';
 import {createExplorer,partInfo,matchesPart,isMagnet} from './explorer.js';
@@ -19,6 +20,34 @@ async function start(){
 const $=id=>document.getElementById(id);
 const data=await unpack(decodeBytes($('scene-data').textContent));
 const loadPrinting=printLoader(data.printing,$('print-data'));
+// Flan family: Flan36's case and PCB are in the scene; a built variant brings its own on demand.
+const family=data.variants||{},baseVariant='flan36',variantLoads=new Map();
+const variantData=(()=>{try{return JSON.parse($('variant-data').textContent||'{}');}catch{return {};}})();
+const variantDir=id=>id===baseVariant?'revI':id,builtVariant=id=>id===baseVariant||Boolean(family[id]?.built&&family[id]?.asset);
+const shownVariant=config=>config.variant===baseVariant||family[config.variant]?.loaded?config.variant:baseVariant;
+// A variant's render meshes come from its exact STL files: CAD (x, y, z) -> viewer (x, z, -y), creased at 45°
+// like the scene builder's normals.
+function stlGeometry(bytes){
+  const view=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength),n=view.getUint32(80,true);
+  if(bytes.length!==84+50*n)throw Error('Expected a binary STL.');
+  const positions=new Float32Array(n*9);
+  for(let t=0;t<n;t++)for(let v=0;v<3;v++){const o=84+50*t+12+12*v,i=t*9+v*3;positions[i]=view.getFloat32(o,true);positions[i+1]=view.getFloat32(o+8,true);positions[i+2]=-view.getFloat32(o+4,true);}
+  const flat=new THREE.BufferGeometry();flat.setAttribute('position',new THREE.BufferAttribute(positions,3));
+  const geometry=toCreasedNormals(flat,Math.PI/4);geometry.computeBoundingBox();return geometry;
+}
+async function loadVariant(id){
+  if(id===baseVariant||family[id]?.loaded)return;
+  if(!builtVariant(id))throw Error(`${family[id]?.title||id} is not built yet.`);
+  if(!variantLoads.has(id))variantLoads.set(id,printLoader(family[id].asset,{textContent:variantData[id]||''},unpackVariant));
+  let payload;try{payload=await variantLoads.get(id)();}catch{variantLoads.delete(id);throw Error(`${family[id].title} could not be loaded. Try again when connected.`);}
+  for(const asset of Object.values(payload.printing))geometries.set(asset.path,stlGeometry(asset.stl));
+  for(const [path,stl] of Object.entries(payload.meshes))geometries.set(path,stlGeometry(stl));
+  family[id].printing=payload.printing;
+  if(payload.silkscreen){const s=payload.silkscreen,images={};
+    for(const [edition,halves] of Object.entries(s.textures)){images[edition]={};for(const [side,png] of Object.entries(halves))images[edition][side]=await createImageBitmap(new Blob([decodeBytes(png)],{type:'image/png'}));}
+    family[id].silk={bounds:s.bounds,images,thumbnails:s.thumbnails};}
+  family[id].loaded=true;
+}
 if($('print-data').textContent.trim())document.querySelector('[download="Flan36-revI.html"]').href=location.href;
 for(const node of document.querySelectorAll('[data-measurement]'))node.textContent=String(data.measurements[node.dataset.measurement]);
 const catalog=data.catalog;let configuration=normalize(catalog.default_configuration,catalog);
@@ -86,7 +115,9 @@ for(const part of data.parts){
   }
   const mesh=new THREE.Mesh(geometry,mat);mesh.name=part.name;
   mesh.position.fromArray(part.position);mesh.rotation.y=THREE.MathUtils.degToRad(part.angle_deg);
-  mesh.userData={objectIndex:objects.length,group:part.group,side:part.side,base:[...part.position],explode:part.explode_mm,key:part.key_ref};
+  // A variant's added key follows its template key (same cap, rotation and colour); it is shown only on that variant.
+  mesh.userData={objectIndex:objects.length,group:part.group,side:part.side,base:[...part.position],explode:part.explode_mm,key:part.template_ref||part.key_ref,ref:part.key_ref};
+  if(part.variants){mesh.userData.variants=part.variants;mesh.userData.installed=false;}
   if(part.part_id)mesh.userData.part_id=part.part_id;
   if(Number.isInteger(part.battery_lead_index))mesh.userData.battery_lead_index=part.battery_lead_index;
   if(part.name.includes('Electronics cover'))mesh.userData.frame_style=configuration.frames[part.side].style;
@@ -324,7 +355,7 @@ $('credits').onclick=()=>{$('licenses').showModal();$('licenses').querySelector(
 $('close-credits').onclick=()=>$('licenses').close();$('licenses').addEventListener('close',()=>$('credits').focus({preventScroll:true}));
 canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();$('error').hidden=false;$('error').textContent='Graphics context lost. Reload the page to restore the viewer.';});
 for(const id of ['print-half','print-scope'])for(const button of $(id).children)button.onclick=()=>{for(const option of $(id).children)option.setAttribute('aria-pressed',String(option===button));};
-$('print-kit').onclick=async()=>{const b=$('print-kit');b.disabled=true;try{const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;b.textContent='Loading print files…';const registry=await loadPrinting();const {bytes,manifest}=await printKit(selected,registry,{half,scope,progress:(i,n)=>b.textContent=`Preparing ${i} / ${n}…`});const url=URL.createObjectURL(new Blob([bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=`Flan36-${manifest.half}-${manifest.scope}.zip`;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);$('print-status').textContent=`${manifest.parts.length} printed parts exported. See the included joining instructions.`;}catch(e){$('print-status').textContent='Export failed: '+e.message;}finally{b.disabled=false;b.textContent='Download print kit';}};
+$('print-kit').onclick=async()=>{const b=$('print-kit');b.disabled=true;try{const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;b.textContent='Loading print files…';const base=await loadPrinting(),variant=shownVariant(selected),registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing}};const {bytes,manifest}=await printKit(selected,registry,{half,scope,progress:(i,n)=>b.textContent=`Preparing ${i} / ${n}…`});const url=URL.createObjectURL(new Blob([bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=`${variant===baseVariant?'Flan36':family[variant].title}-${manifest.half}-${manifest.scope}.zip`;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);$('print-status').textContent=`${manifest.parts.length} printed parts exported. See the included joining instructions.`;}catch(e){$('print-status').textContent='Export failed: '+e.message;}finally{b.disabled=false;b.textContent='Download print kit';}};
 $('glb').onclick=async()=>{
   const button=$('glb');button.disabled=true;button.textContent='Preparing GLB…';
   try{
@@ -359,7 +390,9 @@ function applyConfiguration(next,{record=true,persist=true}={}){
   const prepared=objects.map(o=>{
     const userData=copy(o.userData),{side,key,group}=userData;
     let geometry=o.geometry,mat=o.material,rotation=o.rotation.y;
-    if(group==='base'||group==='plate'){const style=next.cases[side].style;geometry=geometryFor(`mechanical/revI/${side}-case-${style}-${group}.stl`);mat=material(next.cases[side][group+'_color']);userData.case_style=style;}
+    const dir=variantDir(shownVariant(next));
+    if(userData.variants)userData.installed=userData.variants.includes(shownVariant(next));
+    if(group==='base'||group==='plate'){const style=next.cases[side].style;geometry=geometryFor(`mechanical/${dir}/${side}-case-${style}-${group}.stl`);mat=material(next.cases[side][group+'_color']);userData.case_style=style;}
     if(group==='lid')userData.installed=next.cases[side].cover;
     if(group==='keycaps'){
       const choice=next.keycaps[side][key],v=variants.get(choice.variant),k=catalog.layout[side].find(k=>k.ref===key);
@@ -368,7 +401,7 @@ function applyConfiguration(next,{record=true,persist=true}={}){
     }
     if(group==='lid'&&userData.frame_style!==undefined){const f=next.frames[side],finish=frameFinish(f.style,side,f.color,f.accents);geometry=finish.geometry;mat=finish.material;userData.frame_style=f.style;userData.frame_palette=finish.palette;}
     if(group==='battery'){const id=next.batteries[side];geometry=geometryFor(`mechanical/revI/${side}-battery-${id}.stl`);userData.battery_profile=id;}
-    if(userData.part_id===`${side}-pcb`){mat=material(data.silkscreen.masks.find(m=>m.id===next.pcb_mask).mask);userData.pcb_mask=next.pcb_mask;}
+    if(userData.part_id===`${side}-pcb`){geometry=geometryFor(`mechanical/${dir}/${side}-pcb.stl`);mat=material(data.silkscreen.masks.find(m=>m.id===next.pcb_mask).mask);userData.pcb_mask=next.pcb_mask;}
     if(Number.isInteger(userData.battery_lead_index)){const id=next.batteries[side],wire=data.batteryLeadProfiles[`${side}-${id}`].find(p=>p.index===userData.battery_lead_index);geometry=geometryFor(wire.geometry);mat=material(wire.color);userData.battery_profile=id;}
     return {o,geometry,mat,rotation,userData};
   });
@@ -388,6 +421,21 @@ const preview=createPreviewRenderer(renderer,geometryFor);
 function card(id,label,src){
   const button=document.createElement('button');button.type='button';button.className='preview-card';button.dataset.choice=id;button.setAttribute('aria-pressed','false');
   const img=document.createElement('img');img.src=src;img.alt='';img.width=220;img.height=220;const text=document.createElement('span');text.textContent=label;button.append(img,text);button.setAttribute('aria-label',label);return button;
+}
+// Keyboard size: Flan36 and every built variant; layout-only variants are listed but not offered.
+for(const [id,v] of Object.entries(family)){
+  const button=document.createElement('button');button.type='button';button.className='size-card';button.dataset.variant=id;button.setAttribute('aria-pressed','false');
+  if(v.drawing){const img=document.createElement('img');img.src=v.drawing;img.alt='';img.width=240;img.height=90;button.append(img);}
+  const title=document.createElement('strong');title.textContent=v.title;const meta=document.createElement('span');meta.textContent=`${v.grid} per half · ${v.keys_total} keys`+(builtVariant(id)?'':' · coming');
+  button.append(title,meta);button.disabled=!builtVariant(id);button.title=builtVariant(id)?`${v.title}: ${v.grid} per half`:`${v.title}: layout only; PCB and case are not built yet`;
+  button.onclick=async()=>{
+    if(shownVariant(configuration)===id)return;
+    $('size-note').textContent=`Loading ${v.title}…`;
+    try{await loadVariant(id);const c=copy(configuration);c.variant=id;applyConfiguration(c);fit();
+      $('size-note').textContent=id===baseVariant?'':`${v.title} adds ${v.added.join(', ')} on each half; added keys follow the key beside them. Physical fit untested.`;}
+    catch(e){$('size-note').textContent=e.message;}
+  };
+  $('size-grid').append(button);
 }
 function frameTargets(){return frameSide==='both'?['left','right']:[frameSide];}
 function setFrameSide(side){frameSide=side;syncConfigurationUI();}
@@ -448,26 +496,39 @@ for(const o of objects){
   overlay.position.set((x0+x1)/2,silk.bottom_mm-.02,(y0+y1)/2);overlay.visible=false;overlay.raycast=()=>{};overlay.userData={silkscreen:o.userData.side};
   o.add(overlay);silkOverlays.push(overlay);
 }
+// The board a texture belongs to: Flan36's from the scene, a variant's from its own payload.
+const silkSource=()=>{const v=shownVariant(configuration);return v===baseVariant?{id:v,bounds:silk.bounds,images:silkImages,thumbnails:silk.thumbnails}:{id:v,...(family[v].silk||{})};};
+const overlayPlanes=new Map();
+function fitOverlay(overlay,id,bounds){
+  const key=id+'/'+overlay.userData.silkscreen,[x0,y0,x1,y1]=bounds[overlay.userData.silkscreen];
+  if(!overlayPlanes.has(key)){const plane=new THREE.PlaneGeometry(x1-x0,y1-y0);plane.rotateX(Math.PI/2);overlayPlanes.set(key,plane);}
+  overlay.geometry=overlayPlanes.get(key);overlay.position.x=(x0+x1)/2;overlay.position.z=(y0+y1)/2;
+}
 function silkTexture(edition,side){
-  const key=edition+'/'+side;
-  if(!silkTextures.has(key)){const t=new THREE.Texture(silkImages[edition][side]);t.flipY=false;t.anisotropy=renderer.capabilities.getMaxAnisotropy();t.needsUpdate=true;silkTextures.set(key,t);}
+  const src=silkSource(),key=src.id+'/'+edition+'/'+side;
+  if(!silkTextures.has(key)){const t=new THREE.Texture(src.images[edition][side]);t.flipY=false;t.anisotropy=renderer.capabilities.getMaxAnisotropy();t.needsUpdate=true;silkTextures.set(key,t);}
   return silkTextures.get(key);
 }
 const maskSpec=()=>silk.masks.find(m=>m.id===configuration.pcb_mask);
 function showSilk(){
   if(!silkImages)return;
-  for(const overlay of silkOverlays){overlay.material.alphaMap=silkTexture(configuration.pcb_edition,overlay.userData.silkscreen);overlay.material.color.set(maskSpec().silk);overlay.material.needsUpdate=true;overlay.visible=true;}
+  const src=silkSource();
+  for(const overlay of silkOverlays){
+    if(!src.images){overlay.visible=false;continue;}          // a variant without edition textures shows its plain mask
+    fitOverlay(overlay,src.id,src.bounds);
+    overlay.material.alphaMap=silkTexture(configuration.pcb_edition,overlay.userData.silkscreen);overlay.material.color.set(maskSpec().silk);overlay.material.needsUpdate=true;overlay.visible=true;
+  }
   render();
 }
 // Thumbnails are two-channel masks (red = board, green = ink), painted with the chosen colours.
 const thumbImages=new Map();let paintedMask=null;
-function thumbImage(id){if(!thumbImages.has(id)){const img=new Image();img.src=silk.thumbnails[id];thumbImages.set(id,img.decode().then(()=>img));}return thumbImages.get(id);}
+function thumbImage(id){const src=silkSource(),key=src.id+'/'+id;if(!thumbImages.has(key)){const img=new Image();img.src=(src.thumbnails||silk.thumbnails)[id];thumbImages.set(key,img.decode().then(()=>img));}return thumbImages.get(key);}
 const rgb=hex=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
 async function paintThumbs(){
-  const spec=maskSpec();if(paintedMask===spec.id)return;paintedMask=spec.id;
+  const spec=maskSpec(),painted=silkSource().id+'/'+spec.id;if(paintedMask===painted)return;paintedMask=painted;
   const [mr,mg,mb]=rgb(spec.mask),[sr,sg,sb]=rgb(spec.silk);
   for(const button of $('pcb-grid').children){
-    const src=await thumbImage(button.dataset.edition);if(paintedMask!==spec.id)return;
+    const src=await thumbImage(button.dataset.edition);if(paintedMask!==painted)return;
     const c=document.createElement('canvas');c.width=src.naturalWidth;c.height=src.naturalHeight;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(src,0,0);
     const d=x.getImageData(0,0,c.width,c.height),p=d.data;
     for(let i=0;i<p.length;i+=4){const board=p[i]/255,ink=p[i+1]/255;p[i]=mr+(sr-mr)*ink;p[i+1]=mg+(sg-mg)*ink;p[i+2]=mb+(sb-mb)*ink;p[i+3]=255*board;}
@@ -501,13 +562,19 @@ for(const spec of silk.masks){
 }
 $('pcb-mask-note').textContent=`${silk.masks_source.fab} colours, checked ${silk.masks_source.checked}. Pick the same colour in the quote; silkscreen is white, black on white boards. Green has the fastest turnaround.`;
 function syncConfigurationUI(){
+  const size=shownVariant(configuration);$('size-current').textContent=family[size]?.title||'Flan36';
+  for(const b of $('size-grid').children)b.setAttribute('aria-pressed',String(b.dataset.variant===size));
   const edition=silk.editions.find(e=>e.id===configuration.pcb_edition);
   $('pcb-current').textContent=edition.title;
-  for(const b of $('pcb-grid').children)b.setAttribute('aria-pressed',String(b.dataset.edition===edition.id));
+  const variant=shownVariant(configuration),flan36=variant===baseVariant,editions=flan36||Boolean(family[variant].silk);
+  for(const b of $('pcb-grid').children){b.setAttribute('aria-pressed',String(editions&&b.dataset.edition===edition.id));b.disabled=!editions;}
+  $('pcb-variant-note').hidden=editions;$('pcb-variant-note').textContent=editions?'':`${family[variant].title} has no silkscreen editions yet; it ships with the signature only.`;
+  if(!flan36)$('pcb-current').textContent=family[variant].title+' · '+(editions?edition.title:'signature');
   const spec=maskSpec();$('pcb-mask-current').textContent=spec.label;
   for(const b of $('pcb-masks').children)b.setAttribute('aria-pressed',String(b.dataset.mask===spec.id));
   paintThumbs();
-  $('pcb-downloads').replaceChildren(...['left','right'].map(side=>{const a=document.createElement('a');a.href=raw(edition.packages[side]);const note=document.createElement('span');note.textContent=`Gerber + drill ZIP · ${edition.title} · order with ${maskSpec().label.toLowerCase()} mask`;a.append(`${side==='left'?'Left':'Right'} half PCB ↓`,note);return a;}));
+  const packages=flan36?edition.packages:(editions&&edition.variants?.[variant])||family[variant].gerbers;
+  $('pcb-downloads').replaceChildren(...['left','right'].map(side=>{const a=document.createElement('a');a.href=raw(packages[side]);const note=document.createElement('span');note.textContent=`Gerber + drill ZIP · ${edition.title} · order with ${maskSpec().label.toLowerCase()} mask`;a.append(`${side==='left'?'Left':'Right'} half PCB ↓`,note);return a;}));
   showSilk();
   for(const b of $('battery-target').children)b.setAttribute('aria-pressed',String(b.dataset.side===batterySide));
   const batteries=(batterySide==='both'?['left','right']:[batterySide]).map(side=>configuration.batteries[side]);
@@ -553,7 +620,7 @@ function populatePartVisibility(ref){
   for(const o of matching){
     const row=document.createElement('div');row.className='part-row individual-row';
     const input=document.createElement('input');input.type='checkbox';input.dataset.objectVisibility=String(o.userData.objectIndex);input.checked=o.visible;input.disabled=o.userData.installed===false;
-    const text=document.createElement('span');text.className='part-label';text.textContent=o.userData.side.charAt(0).toUpperCase()+o.userData.side.slice(1)+' · '+(o.userData.key||o.name.replace(/^(left|right)[\s·-]*/i,''));
+    const text=document.createElement('span');text.className='part-label';text.textContent=o.userData.side.charAt(0).toUpperCase()+o.userData.side.slice(1)+' · '+(o.userData.ref||o.userData.key||o.name.replace(/^(left|right)[\s·-]*/i,''));
     input.dataset.name=text.textContent;input.setAttribute('aria-label','Show '+text.textContent);const label=eyeToggle(input,'Show / hide '+text.textContent);
     const current={group:o.userData.group,side:o.userData.side,key:o.userData.key,objectIndex:o.userData.objectIndex};
     input.onchange=()=>{if(input.checked){hiddenObjects.delete(o.userData.objectIndex);state.layers[o.userData.group]=true;if(state.half!==o.userData.side)state.half='both';}else hiddenObjects.add(o.userData.objectIndex);sync();};
@@ -625,7 +692,9 @@ function refreshRecovery(){
 window.addEventListener('storage',e=>{if(e.key===savedKey)message('Another tab changed the saved design. Your current view stays here; use Files to load or keep a separate copy.',true);});
 appearance=createAppearance({$,get:()=>configuration,apply:applyConfiguration,targets:kind=>kind==='case'?caseTargets():frameTargets(),preview,frameFinish,material,resize,catalog,geometryFor});
 keycapColors=createKeycapColors({$,catalog,get:()=>configuration,apply:applyConfiguration,message,storageNotice:(text,error)=>storageNotice(text,error,'palettes')});
+const startVariant=configuration.variant;
 applyConfiguration(configuration,{record:false,persist:false});
+if(startVariant!==baseVariant&&builtVariant(startVariant))loadVariant(startVariant).then(()=>{applyConfiguration(copy(configuration),{record:false,persist:false});fit();}).catch(e=>message(e.message,true));
 if(storageMessage)storageNotice(storageMessage,true,'configuration');else if(restored)message('Restored your saved configuration.');else message('Changes save on this device.');
 if(keycapColors.initialWarning)storageNotice(keycapColors.initialWarning,true,'palettes');
 

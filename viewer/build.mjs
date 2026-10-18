@@ -46,17 +46,46 @@ const assetPath=`docs/assets/printing-${printHash}.bin`;fs.writeFileSync(path.jo
 const silkBytes=deferred('silkscreen',scene.silkscreen.textures);
 const silkHash=crypto.createHash('sha256').update(silkBytes).digest('hex');
 const silkPath=`docs/assets/silkscreen-${silkHash}.bin`;fs.writeFileSync(path.join(root,silkPath),silkBytes);
+// Each built Flan variant's case and PCB meshes and printable case STLs, loaded when chosen.
+const variantAssets={};
+function variantContainer(v){
+ const blobs=[],index=new Map(),parts=[];let offset=0;
+ const add=b64=>{const bytes=Buffer.from(b64,'base64'),key=crypto.createHash('sha256').update(bytes).digest('hex');
+  if(!index.has(key)){index.set(key,blobs.length);blobs.push([offset,bytes.length]);parts.push(bytes);offset+=bytes.length;}return index.get(key);};
+ const printing=Object.fromEntries(Object.entries(v.printing).map(([name,{stl,...a}])=>[name,{...a,blob:add(stl)}]));
+ const meshes=Object.fromEntries(Object.entries(v.meshes).map(([path,stl])=>[path,add(stl)]));
+ const header=Buffer.from(JSON.stringify({schema:'flan-variant-1',printing,meshes,silkscreen:v.silkscreen,blobs})),length=Buffer.alloc(4);length.writeUInt32LE(header.length);
+ return Buffer.concat([length,header,...parts]);
+}
+// Reuse a published container with the same content, as deferred() does for the print kit.
+function deferredBinary(prefix,raw){
+ const dir=path.join(root,'docs/assets');
+ for(const f of fs.readdirSync(dir).filter(f=>f.startsWith(prefix+'-')).sort()){
+  const bytes=fs.readFileSync(path.join(dir,f));
+  if(bytes.readUInt32LE(bytes.length-4)===raw.length%2**32&&gunzipSync(bytes).equals(raw))return bytes;
+ }
+ return gzipSync(raw,{level:9});
+}
+for(const [id,v] of Object.entries(scene.variants||{}))if(v.printing){
+ const bytes=deferredBinary('variant-'+id,variantContainer(v));
+ const hash=crypto.createHash('sha256').update(bytes).digest('hex'),file=`docs/assets/variant-${id}-${hash}.bin`;
+ fs.writeFileSync(path.join(root,file),bytes);variantAssets[id]={bytes,hash,file};
+}
+const variants=Object.fromEntries(Object.entries(scene.variants||{}).map(([id,{printing,meshes,silkscreen,...rest}])=>
+ [id,variantAssets[id]?{...rest,asset:{url:`./assets/variant-${id}-${variantAssets[id].hash}.bin`,sha256:variantAssets[id].hash}}:rest]));
 // Only this build's deferred assets are published; earlier ones stay in Git history.
+const current=new Set([assetPath,silkPath,...Object.values(variantAssets).map(a=>a.file)].map(p=>path.basename(p)));
 for(const f of fs.readdirSync(path.join(root,'docs/assets')))
- if(/^(printing|silkscreen)-[0-9a-f]{64}\.bin$/.test(f)&&!assetPath.endsWith(f)&&!silkPath.endsWith(f))fs.rmSync(path.join(root,'docs/assets',f));
+ if(/^(printing|silkscreen|variant-[a-z0-9]+)-[0-9a-f]{64}\.bin$/.test(f)&&!current.has(f))fs.rmSync(path.join(root,'docs/assets',f));
 const packedScene={...scene,geometries:unique,geometryAliases,printing:{url:`./assets/printing-${printHash}.bin`,sha256:printHash},
-  silkscreen:{...scene.silkscreen,textures:{url:`./assets/silkscreen-${silkHash}.bin`,sha256:silkHash}}};
+  silkscreen:{...scene.silkscreen,textures:{url:`./assets/silkscreen-${silkHash}.bin`,sha256:silkHash}},variants};
 const packed=gzipSync(Buffer.from(JSON.stringify(packedScene)),{level:9}).toString('base64');
 function page(offline){return template.replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(here,'style.css'),'utf8'))
  .replace('<!--__LICENSES__-->',()=>credits+licenses)
  .replace('/*__DATA__*/',()=>packed)
  .replace('/*__PRINT__*/',()=>offline?printBytes.toString('base64'):'')
  .replace('/*__SILK__*/',()=>offline?silkBytes.toString('base64'):'')
+ .replace('/*__VARIANTS__*/',()=>JSON.stringify(offline?Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,a.bytes.toString('base64')])):{}))
  .replace('/*__APP__*/',()=>bundle.outputFiles[0].text.replaceAll('</script','<\\/script'))
  .replaceAll('\r\n','\n');}
 const html=page(false),offlineHtml=page(true);
@@ -69,7 +98,7 @@ const receipt={revision:scene.revision,units:'mm',objects:scene.parts.length,uni
   keycaps:scene.parts.filter(p=>p.group==='keycaps').length,geometry_changed:false,
   sources,viewer_sha256:hash('docs/index.html'),measurements:scene.measurements,
   offline:'docs/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.',
-  offline_sha256:hash('docs/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},silkscreen:{path:silkPath,sha256:silkHash,bytes:silkBytes.length,editions:scene.silkscreen.editions.map(e=>e.id)},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
+  offline_sha256:hash('docs/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},variants:Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),silkscreen:{path:silkPath,sha256:silkHash,bytes:silkBytes.length,editions:scene.silkscreen.editions.map(e=>e.id)},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
   limitations:scene.limits};
 fs.writeFileSync(path.join(root,`validation/rev${scene.revision}-viewer.json`),JSON.stringify(receipt,null,2)+'\n');
 console.log(`Online viewer: ${(Buffer.byteLength(html)/1048576).toFixed(2)} MiB; ${scene.parts.length} objects.`);
