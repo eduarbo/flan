@@ -1,0 +1,392 @@
+{
+  "schema": "flan-variant-case-1",
+  "variant": "flan54",
+  "title": "Flan54",
+  "physical_acceptance": false,
+  "source": {
+    "path": "mechanical/revI/Flan36.FCStd",
+    "sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399"
+  },
+  "halves": {
+    "left": {
+      "keys": {
+        "K40": {
+          "template": "K01",
+          "move_mm": [
+            -18.0,
+            -17.0
+          ]
+        },
+        "K41": {
+          "template": "K01",
+          "move_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K42": {
+          "template": "K02",
+          "move_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K43": {
+          "template": "K03",
+          "move_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K44": {
+          "template": "K04",
+          "move_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K45": {
+          "template": "K05",
+          "move_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K00": {
+          "template": "K01",
+          "move_mm": [
+            -18.0,
+            0.0
+          ]
+        },
+        "K10": {
+          "template": "K11",
+          "move_mm": [
+            -18.0,
+            0.0
+          ]
+        },
+        "K20": {
+          "template": "K21",
+          "move_mm": [
+            -18.0,
+            0.0
+          ]
+        }
+      },
+      "fasteners": {
+        "H6": {
+          "xy_mm": [
+            20.7,
+            37.5
+          ],
+          "copy_of": "H1"
+        },
+        "H7": {
+          "xy_mm": [
+            57.0,
+            3.5
+          ],
+          "copy_of": "H2"
+        },
+        "H8": {
+          "xy_mm": [
+            20.7,
+            20.5
+          ],
+          "copy_of": "H1"
+        }
+      },
+      "level_cap_openings": {
+        "pieces": 3,
+        "poses": 1512,
+        "admitted_variants": 28
+      },
+      "cases": {
+        "solid": {
+          "base": {
+            "volume_mm3": 19168.94,
+            "size_mm": [
+              134.75,
+              111.58,
+              6.6
+            ],
+            "stl_sha256": "c6d387eb516ba7fd67609fa5ee9b58908d1159e8c5f271589e76bcf69e4f012d"
+          },
+          "plate": {
+            "volume_mm3": 6022.74,
+            "size_mm": [
+              134.75,
+              111.58,
+              1.3
+            ],
+            "stl_sha256": "7b20b33e142b499cff6ec37394e1a10f986fa9c51af7e3221cc0e6de2cbb0af9"
+          },
+          "base_plate_overlap_mm3": 0.0
+        },
+        "rim": {
+          "base": {
+            "volume_mm3": 19645.79,
+            "size_mm": [
+              134.75,
+              111.58,
+              7.6
+            ],
+            "stl_sha256": "c9aaf57120ee3c707800f0764d2ae80c7bfcaebd28496657c7de141d0bffea64"
+          },
+          "plate": {
+            "volume_mm3": 5440.91,
+            "size_mm": [
+              132.55,
+              109.37,
+              1.3
+            ],
+            "stl_sha256": "2e8ca57344730a1ca33407059818936daa99dff7b937b28b6c69b89bcf2a98d4"
+          },
+          "base_plate_overlap_mm3": 0.0
+        },
+        "terrace": {
+          "base": {
+            "volume_mm3": 19023.35,
+            "size_mm": [
+              134.75,
+              111.58,
+              6.6
+            ],
+            "stl_sha256": "4db253cdf8902ca045863d39a8ef360d69a3e75e2e1bcc9efb2b2dfa3c47c4ad"
+          },
+          "plate": {
+            "volume_mm3": 6022.74,
+            "size_mm": [
+              134.75,
+              111.57,
+              1.3
+            ],
+            "stl_sha256": "7b20b33e142b499cff6ec37394e1a10f986fa9c51af7e3221cc0e6de2cbb0af9"
+          },
+          "base_plate_overlap_mm3": 0.0
+        },
+        "level": {
+          "base": {
+            "volume_mm3": 19168.94,
+            "size_mm": [
+              134.75,
+              111.57,
+              6.6
+            ],
+            "stl_sha256": "c6d387eb516ba7fd67609fa5ee9b58908d1159e8c5f271589e76bcf69e4f012d"
+          },
+          "plate": {
+            "volume_mm3": 16973.34,
+            "size_mm": [
+              134.75,
+              111.58,
+              8.2
+            ],
+            "stl_sha256": "bf145dd2b2f8abdbaaebe476c36189dae4cca6dd141e676d0cded6220356c02e"
+          },
+          "cap_envelope_overlap_mm3": 0.0,
+          "base_plate_overlap_mm3": 0.0
+        }
+      },
+      "pcb": {
+        "size_mm": [
+          131.45,
+          108.27
+        ],
+        "stl_sha256": "5c44434b46d49800fb65760b7e2a73681922344ce901817e101eebeba2beedf4"
+      }
+    },
+    "right": {
+      "keys": {
+        "K40": {
+          "template": "K01",
+          "move_mm": [
+            18.0,
+            -17.0
+          ]
+        },
+        "K41": {
+          "template": "K01",
+          "move_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K42": {
+          "template": "K02",
+          "move_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K43": {
+          "template": "K03",
+          "move_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K44": {
+          "template": "K04",
+          "move_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K45": {
+          "template": "K05",
+          "move_mm": [
+            0.0,
+            -17.0
+          ]
+        },
+        "K00": {
+          "template": "K01",
+          "move_mm": [
+            18.0,
+            0.0
+          ]
+        },
+        "K10": {
+          "template": "K11",
+          "move_mm": [
+            18.0,
+            0.0
+          ]
+        },
+        "K20": {
+          "template": "K21",
+          "move_mm": [
+            18.0,
+            0.0
+          ]
+        }
+      },
+      "fasteners": {
+        "H6": {
+          "xy_mm": [
+            139.3,
+            37.5
+          ],
+          "copy_of": "H1"
+        },
+        "H7": {
+          "xy_mm": [
+            103.0,
+            3.5
+          ],
+          "copy_of": "H2"
+        },
+        "H8": {
+          "xy_mm": [
+            139.3,
+            20.5
+          ],
+          "copy_of": "H1"
+        }
+      },
+      "level_cap_openings": {
+        "pieces": 3,
+        "poses": 1512,
+        "admitted_variants": 28
+      },
+      "cases": {
+        "solid": {
+          "base": {
+            "volume_mm3": 19168.59,
+            "size_mm": [
+              134.75,
+              111.58,
+              6.6
+            ],
+            "stl_sha256": "b976692b071ba6e4f511fff57f42f1af3d65a5d5f20ae6ea3ba107dd50d72b2b"
+          },
+          "plate": {
+            "volume_mm3": 6022.74,
+            "size_mm": [
+              134.75,
+              111.58,
+              1.3
+            ],
+            "stl_sha256": "ee072eaa2788f5d68dd60314c0150451402a37dc26ff6ac1e918adc6cda3a493"
+          },
+          "base_plate_overlap_mm3": 0.0
+        },
+        "rim": {
+          "base": {
+            "volume_mm3": 19645.43,
+            "size_mm": [
+              134.75,
+              111.58,
+              7.6
+            ],
+            "stl_sha256": "adbf8be22c3b8486c11982139a25b67e05bc8cb1085d6efd0185924e9568dfec"
+          },
+          "plate": {
+            "volume_mm3": 5440.91,
+            "size_mm": [
+              132.55,
+              109.37,
+              1.3
+            ],
+            "stl_sha256": "d41674abc16a2fbaa20f940cecbae0696bde721c038dcdff3cb2f2697cf18b13"
+          },
+          "base_plate_overlap_mm3": 0.0
+        },
+        "terrace": {
+          "base": {
+            "volume_mm3": 19022.99,
+            "size_mm": [
+              134.75,
+              111.58,
+              6.6
+            ],
+            "stl_sha256": "8fd5815b465ef069d3ff1b1f7001b29bbab789de2f3bc5e5bff851746a0f94c2"
+          },
+          "plate": {
+            "volume_mm3": 6022.74,
+            "size_mm": [
+              134.75,
+              111.57,
+              1.3
+            ],
+            "stl_sha256": "ee072eaa2788f5d68dd60314c0150451402a37dc26ff6ac1e918adc6cda3a493"
+          },
+          "base_plate_overlap_mm3": 0.0
+        },
+        "level": {
+          "base": {
+            "volume_mm3": 19168.59,
+            "size_mm": [
+              134.75,
+              111.57,
+              6.6
+            ],
+            "stl_sha256": "b976692b071ba6e4f511fff57f42f1af3d65a5d5f20ae6ea3ba107dd50d72b2b"
+          },
+          "plate": {
+            "volume_mm3": 16973.41,
+            "size_mm": [
+              134.75,
+              111.58,
+              8.2
+            ],
+            "stl_sha256": "ed7d0563a7aebad1d7021bb09a6c5f4318c51bbc164950d4436eb34b9b4897c3"
+          },
+          "cap_envelope_overlap_mm3": 0.0,
+          "base_plate_overlap_mm3": 0.0
+        }
+      },
+      "pcb": {
+        "size_mm": [
+          131.45,
+          108.27
+        ],
+        "stl_sha256": "c422f722bd057524fd504d547405cedf29b5d18f6b1e25634f1f9ed22c06425f"
+      }
+    }
+  },
+  "fcstd": "build/variants/flan54/Flan54.FCStd",
+  "seconds": 1602
+}
