@@ -17,6 +17,25 @@ import {createExplorer,partInfo,matchesPart,isMagnet} from './explorer.js';
 import {createPreviewRenderer} from './previews.js';
 import {createFrameFinishes,framePalette,finishes} from './finishes.js';
 import {pageTokens} from './home/tokens.js';
+import {t,tOr,translate,setLanguage,onLanguage,setText,partName} from './i18n.js';
+
+// The page speaks the visitor's language from the first frame; what the scripts write follows onLanguage.
+translate();
+for(const b of document.querySelectorAll('[data-lang]'))b.onclick=()=>setLanguage(b.dataset.lang);
+// The lockup reads "flan keyboard" where it clears its neighbours in the top bar, else "flan kbd", else "flan".
+{
+  const lockup=document.getElementById('nav-home'),bar=lockup.parentElement;
+  const fit=()=>{
+    const others=[...bar.children].filter(e=>e!==lockup&&e.getClientRects().length);
+    for(const state of ['long','short','none']){
+      lockup.dataset.fit=state;const r=lockup.getBoundingClientRect();
+      if(bar.scrollWidth<=bar.parentElement.clientWidth+1&&others.every(e=>{const o=e.getBoundingClientRect();return o.bottom<=r.top||o.top>=r.bottom||o.left>=r.right+4;}))return;
+    }
+  };
+  const watch=new ResizeObserver(fit);for(const e of [bar,...bar.children])if(e!==lockup)watch.observe(e);
+  // the serif lockup widens when its font arrives
+  document.fonts?.addEventListener('loadingdone',fit);document.fonts?.ready.then(fit);fit();
+}
 
 async function start(){
 const $=id=>document.getElementById(id);
@@ -39,9 +58,9 @@ function stlGeometry(bytes){
 }
 async function loadVariant(id){
   if(id===baseVariant||family[id]?.loaded)return;
-  if(!builtVariant(id))throw Error(`${family[id]?.title||id} is not built yet.`);
+  if(!builtVariant(id))throw Error(t('msg.notBuilt',{name:family[id]?.title||id}));
   if(!variantLoads.has(id))variantLoads.set(id,printLoader(family[id].asset,{textContent:variantData[id]||''},unpackVariant));
-  let payload;try{payload=await variantLoads.get(id)();}catch{variantLoads.delete(id);throw Error(`${family[id].title} could not be loaded. Try again when connected.`);}
+  let payload;try{payload=await variantLoads.get(id)();}catch{variantLoads.delete(id);throw Error(t('msg.variant',{name:family[id].title}));}
   for(const asset of Object.values(payload.printing))geometries.set(asset.path,stlGeometry(asset.stl));
   for(const [path,stl] of Object.entries(payload.meshes))geometries.set(path,stlGeometry(stl));
   family[id].printing=payload.printing;
@@ -54,10 +73,10 @@ if($('print-data').textContent.trim())document.querySelector('[download="Flan36-
 for(const node of document.querySelectorAll('[data-measurement]'))node.textContent=String(data.measurements[node.dataset.measurement]);
 const catalog=data.catalog;let configuration=normalize(catalog.default_configuration,catalog);
 const store=createStore({key:savedKey,preserveBeforeWrite:value=>retiredFrames(value,catalog).length>0,validate:value=>{const result=check(value,catalog);if(result.errors.length)throw Error(result.errors[0]);return normalize(value,catalog);},notify:(text,error)=>storageNotice(text,error,'configuration')});
-let restored=false,storageMessage='';try{const saved=restoreConfiguration({getItem:key=>key===savedKey?store.initialRaw:localStorage.getItem(key)},catalog);if(saved.configuration){configuration=saved.configuration;restored=true;}storageMessage=saved.message;}catch(e){storageMessage='Device storage unavailable; use JSON to restore.';}
+let restored=false,storageMessage='';try{const saved=restoreConfiguration({getItem:key=>key===savedKey?store.initialRaw:localStorage.getItem(key)},catalog);if(saved.configuration){configuration=saved.configuration;restored=true;}storageMessage=saved.message;}catch(e){storageMessage=t('msg.storage');}
 const variants=new Map(catalog.variants.map(v=>[v.id,v]));
-const labels={base:'Bases',plate:'Plates',lid:'Frames / covers',keycaps:'Keycaps',switches:'Switches',pcb:'PCB',battery:'Batteries',mcu:'Controllers',display:'Displays',connectors:'Connectors',supports:'Supports',fasteners:'Fasteners / feet'};
-const state={half:'both',layers:Object.fromEntries(Object.keys(labels).map(k=>[k,true])),explode:0,view:'iso'};
+const groups=['base','plate','lid','keycaps','switches','pcb','battery','mcu','display','connectors','supports','fasteners'],groupName=key=>t('group.'+key);
+const state={half:'both',layers:Object.fromEntries(groups.map(k=>[k,true])),explode:0,view:'iso'};
 const directions={iso:[.35,1.6,1.75],top:[0,1,.0001],front:[0,0,1],back:[0,0,-1],right:[1,0,0],left:[-1,0,0],bottom:[0,-1,-.0001]};   // bottom: rear edge up, so the back silkscreen reads correctly
 // The scene is transparent: the model floats on the page, whose colours follow the keyboard's theme.
 const scene=new THREE.Scene();
@@ -65,7 +84,7 @@ const camera=new THREE.OrthographicCamera(-180,180,100,-100,.1,3000);
 const canvas=$('canvas');
 let renderer;
 try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});renderer.setClearColor(0x000000,0);}
-catch(error){$('error').hidden=false;$('error').textContent='WebGL 2 could not start. Use a current Safari, Chrome or Firefox browser, or download the STEP files from the guide.';throw error;}
+catch(error){$('error').hidden=false;$('error').textContent=t('msg.webgl');throw error;}
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
 renderer.outputColorSpace=THREE.SRGBColorSpace;
 const controls=new OrbitControls(camera,canvas);
@@ -95,7 +114,7 @@ function geometryFor(id){
   if(!id)return undefined;
   id=data.geometryAliases?.[id]||id;
   if(geometries.has(id))return geometries.get(id);
-  const g=data.geometries[id];if(!g)throw Error('Geometry unavailable: '+id);
+  const g=data.geometries[id];if(!g)throw Error(t('msg.geometry',{id}));
   const geometry=new THREE.BufferGeometry();
   geometry.setAttribute('position',new THREE.BufferAttribute(decode(g.positions,Float32Array),3));
   geometry.setAttribute('normal',new THREE.BufferAttribute(decode(g.normals,Float32Array),3));
@@ -209,7 +228,7 @@ function layoutPanel(){
   document.body.dataset.drawerSnap=peek?'peek':size>=max-5?'full':Math.abs(size-total*.48)<6?'half':'custom';
   $('inspector').inert=peek;$('editor-tabs').inert=peek;
   const handle=$('panel-resize');handle.setAttribute('aria-orientation',portrait?'horizontal':'vertical');handle.setAttribute('aria-valuemin',Math.round(min/total*100));handle.setAttribute('aria-valuemax',Math.round(max/total*100));handle.setAttribute('aria-valuenow',Math.round(size/total*100));
-  handle.setAttribute('aria-valuetext',peek?'Model focus':size>=max-5?'Panel focus':'Shared screen');
+  handle.setAttribute('aria-valuetext',t(peek?'resize.model':size>=max-5?'resize.panel':'resize.shared'));
 }
 function rememberPanelScroll(){if(panelOpen)panelScroll.set(currentScrollKey,$('inspector').scrollTop);}
 function updatePanelButtons(){
@@ -273,15 +292,15 @@ function sync(){
     const box=new THREE.Box3();for(const o of shown)box.union(new THREE.Box3().setFromObject(o));const size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
     mesh.position.set(center.x,box.min.y-.4,center.z+4);mesh.scale.set(size.x*1.45+16,1,size.z*1.7+20);
   }
-  for(const key of Object.keys(labels)){
+  for(const key of groups){
     const nodes=objects.filter(o=>o.userData.group===key&&o.userData.installed!==false),shown=nodes.filter(o=>state.layers[key]&&!hiddenObjects.has(o.userData.objectIndex)).length,input=$('layer-'+key);
-    $('count-'+key).textContent=nodes.length||'';input.disabled=nodes.length===0;input.checked=shown>0;input.indeterminate=shown>0&&shown<nodes.length;input.parentElement.title=nodes.length?(shown?'Hide ':'Show ')+labels[key]:'No covers installed. Pick a frame to reinstall them.';
+    $('count-'+key).textContent=nodes.length||'';input.disabled=nodes.length===0;input.checked=shown>0;input.indeterminate=shown>0&&shown<nodes.length;input.parentElement.title=nodes.length?t(shown?'vis.hide':'vis.show',{name:groupName(key)}):t('vis.nocovers');
   }
   refreshPartVisibility();
   const count=objects.filter(o=>o.visible).length;
-  $('status').textContent=`Rev${data.revision} · ${count} visible components${state.explode?' · Exploded view':''}`;
+  $('status').textContent=t('parts.status',{rev:data.revision,n:count})+(state.explode?t('parts.exploded'):'');
   for(const button of document.querySelectorAll('[data-view]'))button.setAttribute('aria-pressed',String(button.dataset.view===state.view));
-  $('view-current').textContent=document.querySelector(`[data-view="${state.view}"]`).textContent;
+  $('view-current').textContent=t(`view.${state.view}.chip`);
   const isComplete=state.half==='both'&&state.explode===0&&Object.values(state.layers).every(Boolean)&&hiddenObjects.size===0;
   $('show-all').setAttribute('aria-pressed',String(isComplete));
   const presetMatches=keys=>hiddenObjects.size===0&&Object.entries(state.layers).every(([key,shown])=>shown===keys.includes(key));
@@ -292,7 +311,7 @@ function sync(){
 }
 function reset(){
   hiddenObjects.clear();state.half='both';state.explode=0;state.view='iso';
-  for(const key of Object.keys(labels))state.layers[key]=true;
+  for(const key of groups)state.layers[key]=true;
   sync();fit(directions.iso);
 }
 const editablePanel={base:'cases',plate:'cases',lid:'frames',keycaps:'keycaps',battery:'battery',pcb:'pcb'};
@@ -305,7 +324,7 @@ function setTune(name,open){
   const button=$('panel-'+name)?.querySelector('.tune');if(!button)return;
   if(open)tunes.add(name);else tunes.delete(name);
   button.setAttribute('aria-expanded',String(open));$(button.getAttribute('aria-controls')).hidden=!open;
-  const act=button.querySelector('.act');if(act)act.textContent=open?(stacked()?'Done':'Hide'):act.dataset.label;
+  const act=button.querySelector('.act');if(act)act.textContent=t(open?(stacked()?'act.done':'act.hide'):'act.'+name);
 }
 for(const button of document.querySelectorAll('.tune'))button.onclick=()=>{const name=button.closest('.sec').id.slice(6);setTune(name,!tunes.has(name));};
 function revealPanel(name){if(stacked()&&!$('panel-'+name).hidden)$('panel-'+name).scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
@@ -321,7 +340,7 @@ function showWorkspace(){
   if(!stack&&['battery','pcb'].includes(activePanel))setTune(activePanel,true);
   if(!stack&&design)requestAnimationFrame(()=>{const chosen=$('panel-'+activePanel).querySelector(':is(.preview-grid,.size-grid,.theme-grid) [aria-pressed=true]'),strip=chosen?.parentElement;if(strip&&strip.scrollWidth>strip.clientWidth)strip.scrollLeft=Math.max(0,chosen.offsetLeft-strip.offsetLeft-(strip.clientWidth-chosen.offsetWidth)/2);});
   for(const name of tunes)setTune(name,true);
-  $('workspace-title').textContent=detailRef?'Selected part':{customize:'Design',inspect:'Parts',files:'Files',about:'About'}[activeMode];
+  $('workspace-title').textContent=t(detailRef?'mode.detail':'mode.'+activeMode);
   $('panel-back').hidden=!detailRef;$('show-all').hidden=!detailRef&&activeMode!=='inspect';
   updatePanelButtons();layoutPanel();$('inspector').scrollTop=panelScroll.get(currentScrollKey)||0;
   explorer?.layoutChanged();appearance?.sync();keycapColors?.sync();
@@ -364,23 +383,32 @@ function eyeToggle(input,title){
   const eye=document.createElement('span');eye.className='eye';eye.innerHTML='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.7"/><path class="eye-slash" d="m3 3 18 18"/></svg>';eye.setAttribute('aria-hidden','true');
   visibility.append(input,eye);return visibility;
 }
-for(const [id,label] of Object.entries(labels)){
+for(const id of groups){
   const row=document.createElement('div');row.className='part-row';row.dataset.group=id;
-  const button=document.createElement('button');button.type='button';button.className='part-item';button.dataset.group=id;button.id='part-'+id;button.setAttribute('aria-expanded','false');button.setAttribute('aria-controls','inspector');button.title=partInfo[id].name;button.setAttribute('aria-label',partInfo[id].name);
+  const button=document.createElement('button');button.type='button';button.className='part-item';button.dataset.group=id;button.id='part-'+id;button.setAttribute('aria-expanded','false');button.setAttribute('aria-controls','inspector');
   const item=objects.find(o=>o.userData.group===id),color='#'+(Array.isArray(item.material)?item.material[0]:item.material).color.getHexString();
   const dot=document.createElement('span');dot.className='part-anchor';dot.dataset.group=id;dot.style.setProperty('--part-color',color);
-  const name=document.createElement('span');name.className='part-name';name.textContent=label;
+  const name=document.createElement('span');name.className='part-name';
   const count=document.createElement('span');count.className='part-count';count.id='count-'+id;button.append(dot,name,count);
   const ref=()=>({group:id,side:state.half==='both'?null:state.half});
   row.onpointerenter=e=>{if(e.pointerType!=='touch')explorer.highlight(ref());};row.onpointerleave=()=>explorer.highlight(null);
   row.onfocusin=()=>explorer.highlight(ref());row.onfocusout=e=>{if(!row.contains(e.relatedTarget))explorer.highlight(null);};
   button.onclick=()=>explorer.select(ref());
-  const input=document.createElement('input');input.type='checkbox';input.id='layer-'+id;input.checked=true;input.setAttribute('aria-label','Show '+label);
+  const input=document.createElement('input');input.type='checkbox';input.id='layer-'+id;input.checked=true;
   input.addEventListener('change',()=>{state.layers[id]=input.checked;if(input.checked)for(const o of objects)if(o.userData.group===id)hiddenObjects.delete(o.userData.objectIndex);sync();});
-  const visibility=eyeToggle(input,'Show / hide '+label);
-  const solo=document.createElement('button');solo.className='part-solo';solo.textContent='Solo';solo.dataset.soloGroup=id;solo.setAttribute('aria-label','Solo '+label);solo.onclick=()=>toggleSolo(ref());
+  const visibility=eyeToggle(input,'');
+  const solo=document.createElement('button');solo.className='part-solo';solo.dataset.soloGroup=id;solo.onclick=()=>toggleSolo(ref());
   row.append(button,visibility,solo);$('layers').append(row);
 }
+function labelDirectory(){
+  for(const row of $('layers').children){
+    const id=row.dataset.group,label=groupName(id),button=row.querySelector('.part-item');
+    button.title=partInfo(id).name;button.setAttribute('aria-label',partInfo(id).name);row.querySelector('.part-name').textContent=label;
+    row.querySelector('input').setAttribute('aria-label',t('vis.show',{name:label}));row.querySelector('.visibility').title=t('vis.toggle',{name:label});
+    const solo=row.querySelector('.part-solo');solo.textContent=t('solo');solo.setAttribute('aria-label',t('solo.label',{name:label}));
+  }
+}
+labelDirectory();onLanguage(labelDirectory);
 function chooseView(view){state.view=view;sync();fit(directions[view]);viewMenu(false);}
 // On a narrow scene the views fold into one menu.
 function viewMenu(open){$('camera-views').toggleAttribute('data-open',open);$('view-menu').setAttribute('aria-expanded',String(open));}
@@ -389,23 +417,23 @@ document.addEventListener('pointerdown',e=>{if($('camera-views').hasAttribute('d
 $('camera-views').addEventListener('keydown',e=>{if(e.key==='Escape'&&$('camera-views').hasAttribute('data-open')){e.preventDefault();e.stopPropagation();viewMenu(false);$('view-menu').focus();}});
 for(const button of document.querySelectorAll('[data-view]'))button.onclick=()=>chooseView(button.dataset.view);
 $('explode').addEventListener('input',e=>{state.explode=Number(e.target.value)/100;sync();});
-$('reset').onclick=()=>{state.view='iso';sync();fit(directions.iso);$('view-feedback').textContent='Camera reset.';};
-$('fit').onclick=()=>{fit();$('view-feedback').textContent=objects.some(o=>o.visible)?'Visible parts centered and fitted.':'Nothing visible. Use Show all in Components.';};
+$('reset').onclick=()=>{state.view='iso';sync();fit(directions.iso);$('view-feedback').textContent=t('feedback.reset');};
+$('fit').onclick=()=>{fit();$('view-feedback').textContent=t(objects.some(o=>o.visible)?'feedback.fit':'feedback.empty');};
 $('inside').onclick=()=>{reset();for(const k of ['base','plate','lid','keycaps','switches','fasteners'])state.layers[k]=false;sync();fit();};
-$('stack').onclick=()=>{reset();state.explode=.55;for(const k of Object.keys(labels))state.layers[k]=['battery','mcu','display','supports','connectors'].includes(k);sync();fit();};
+$('stack').onclick=()=>{reset();state.explode=.55;for(const k of groups)state.layers[k]=['battery','mcu','display','supports','connectors'].includes(k);sync();fit();};
 $('locate-magnets').onclick=()=>{
   hiddenObjects.clear();state.half='both';state.explode=.65;state.view='iso';
-  for(const k of Object.keys(labels))state.layers[k]=['base','lid','fasteners'].includes(k);
+  for(const k of groups)state.layers[k]=['base','lid','fasteners'].includes(k);
   for(const o of objects)if(o.userData.group==='fasteners'&&!isMagnet(o))hiddenObjects.add(o.userData.objectIndex);
   sync();fit(directions.iso);explorer.select({group:'fasteners',collection:'magnets'});
 };
 $('credits').onclick=()=>{$('licenses').showModal();$('licenses').querySelector('.dialog-body').scrollTop=0;};
 $('close-credits').onclick=()=>$('licenses').close();$('licenses').addEventListener('close',()=>$('credits').focus({preventScroll:true}));
-canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();$('error').hidden=false;$('error').textContent='Graphics context lost. Reload the page to restore the viewer.';});
+canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();$('error').hidden=false;$('error').textContent=t('msg.contextLost');});
 for(const id of ['print-half','print-scope'])for(const button of $(id).children)button.onclick=()=>{for(const option of $(id).children)option.setAttribute('aria-pressed',String(option===button));};
-$('print-kit').onclick=async()=>{const b=$('print-kit');b.disabled=true;try{const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;b.textContent='Loading print files…';const base=await loadPrinting(),variant=shownVariant(selected),registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing}};const {bytes,manifest}=await printKit(selected,registry,{half,scope,progress:(i,n)=>b.textContent=`Preparing ${i} / ${n}…`});const url=URL.createObjectURL(new Blob([bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=`${variant===baseVariant?'Flan36':family[variant].title}-${manifest.half}-${manifest.scope}.zip`;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);$('print-status').textContent=`${manifest.parts.length} printed parts exported. See the included joining instructions.`;}catch(e){$('print-status').textContent='Export failed: '+e.message;}finally{b.disabled=false;b.textContent='Download print kit';}};
+$('print-kit').onclick=async()=>{const b=$('print-kit');b.disabled=true;try{const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;b.textContent=t('kit.loading');const base=await loadPrinting(),variant=shownVariant(selected),registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing}};const {bytes,manifest}=await printKit(selected,registry,{half,scope,progress:(i,n)=>b.textContent=t('kit.preparing',{i,n})});const url=URL.createObjectURL(new Blob([bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=`${variant===baseVariant?'Flan36':family[variant].title}-${manifest.half}-${manifest.scope}.zip`;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);say('print-status','kit.done',{n:manifest.parts.length});}catch(e){say('print-status','kit.failed',{error:e.message});}finally{b.disabled=false;b.textContent=t('kit.download');}};
 $('glb').onclick=async()=>{
-  const button=$('glb');button.disabled=true;button.textContent='Preparing GLB…';
+  const button=$('glb');button.disabled=true;setText(button,t('glb.preparing'));
   try{
     const assembly=new THREE.Group();assembly.name=`Flan36 rev${data.revision} · nominal`;assembly.scale.setScalar(.001);
     for(const object of objects){if(object.userData.installed===false)continue;const clone=object.clone();for(const child of [...clone.children])if(child.userData.silkscreen)clone.remove(child);clone.visible=true;clone.position.fromArray(object.userData.base);assembly.add(clone);}
@@ -418,16 +446,20 @@ $('glb').onclick=async()=>{
     const buffer=await new GLTFExporter().parseAsync(assembly,{binary:true,onlyVisible:true});
     const url=URL.createObjectURL(new Blob([buffer],{type:'model/gltf-binary'}));const link=document.createElement('a');
     link.href=url;link.download=`Flan36-rev${data.revision}-assembled.glb`;link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
-    button.textContent='GLB downloaded';
-  }catch(error){button.textContent='Export failed; use STEP files';console.error(error);}
+    setText(button,t('glb.done'));
+  }catch(error){setText(button,t('glb.failed'));console.error(error);}
   finally{button.disabled=false;}
 };
 const saveWarnings=new Map();
-function storageNotice(text,error,scope){if(error)saveWarnings.set(scope,text);else saveWarnings.delete(scope);$('save-warning').hidden=saveWarnings.size===0;$('save-warning').title=[...saveWarnings.values()].join(' ');if(scope==='configuration')saveState(error?'':'Saved ✓',error?'error':'saved');message(text,error);}
+function storageNotice(text,error,scope){if(error)saveWarnings.set(scope,text);else saveWarnings.delete(scope);$('save-warning').hidden=saveWarnings.size===0;$('save-warning').title=[...saveWarnings.values()].join(' ');if(scope==='configuration')saveState(error?'':'save.done',error?'error':'saved');message(text,error);}
 // The top bar's quiet save state; a failure shows the Not saved button instead.
-function saveState(text,state){$('save-state').textContent=text;$('save-state').dataset.state=state;}
+let saveLabel='';
+function saveState(key,state){saveLabel=key;$('save-state').textContent=key?t(key):'';$('save-state').dataset.state=state;}
 $('save-warning').onclick=()=>{openPanel('files',$('save-warning'));refreshRecovery();$('recovery').open=true;};
 const message=(text,error=false)=>{$('config-status').textContent=text;$('config-status').dataset.error=String(error);};
+// Status lines that stay in view are redrawn in a new language; a null key shows plain text.
+const said=new Map();
+function say(id,key,vars){if(key)said.set(id,[key,vars]);else said.delete(id);$(id).textContent=key?t(key,vars):vars||'';}
 const history=createHistory(configuration);
 let gesture=null;
 document.addEventListener('pointerdown',e=>{if(e.target.type!=='color'){gesture=null;history.endGesture();}},true);
@@ -460,7 +492,7 @@ function applyConfiguration(next,{record=true,persist=true}={}){
   try{commit(prepared);configuration=copy(next);sync();syncConfigurationUI();}
   catch(error){commit(old);configuration=previous;sync();throw error;}
   if(record)history.record(next,gesture);syncHistory();
-  if(persist){message('Saving changes…');if(!saveWarnings.has('configuration'))saveState('Saving…','saving');store.save(configuration);}
+  if(persist){message(t('msg.saving'));if(!saveWarnings.has('configuration'))saveState('save.saving','saving');store.save(configuration);}
   // A design that names a variant not loaded yet (a loaded file, undo, a link) shows it once it arrives.
   if(shownVariant(next)!==next.variant&&builtVariant(next.variant))loadVariant(next.variant).then(()=>{if(configuration.variant===next.variant){applyConfiguration(copy(configuration),{record:false,persist:false});fit();}}).catch(e=>message(e.message,true));
 }
@@ -478,17 +510,24 @@ function card(id,label,src){
 for(const [id,v] of Object.entries(family)){
   const button=document.createElement('button');button.type='button';button.className='size-card';button.dataset.variant=id;button.setAttribute('aria-pressed','false');
   if(v.thumb||v.drawing){const img=document.createElement('img');img.src=v.thumb||v.drawing;img.alt='';img.width=192;img.height=132;button.append(img);}
-  const title=document.createElement('strong');title.textContent=v.title.replace(/^Flan/,'');const meta=document.createElement('span');meta.textContent=`${v.grid} per half · ${v.keys_total} keys`+(builtVariant(id)?'':' · coming');
-  button.append(title,meta);button.setAttribute('aria-label',`${v.title}: ${meta.textContent}`);button.disabled=!builtVariant(id);button.title=builtVariant(id)?`${v.title}: ${v.grid} per half`:`${v.title}: layout only; PCB and case are not built yet`;
+  const title=document.createElement('strong');title.textContent=v.title.replace(/^Flan/,'');const meta=document.createElement('span');
+  button.append(title,meta);button.disabled=!builtVariant(id);
   button.onclick=async()=>{
     if(shownVariant(configuration)===id)return;
-    $('size-note').textContent=`Loading ${v.title}…`;
+    say('size-note','size.loading',{name:v.title});
     try{await loadVariant(id);const c=copy(configuration);c.variant=id;applyConfiguration(c);fit();
-      $('size-note').textContent=id===baseVariant?'':`${v.title} adds ${v.added.join(', ')} on each half; added keys follow the key beside them. Physical fit untested.`;}
-    catch(e){$('size-note').textContent=e.message;}
+      if(id===baseVariant)say('size-note',null,'');else say('size-note','size.note',{name:v.title,added:v.added.join(', ')});}
+    catch(e){say('size-note',null,e.message);}
   };
   $('size-grid').append(button);
 }
+function labelSizes(){
+  for(const button of $('size-grid').children){
+    const id=button.dataset.variant,v=family[id],meta=button.querySelector('span');meta.textContent=t('size.meta',{grid:v.grid,n:v.keys_total})+(builtVariant(id)?'':t('size.coming'));
+    button.setAttribute('aria-label',`${v.title}: ${meta.textContent}`);button.title=builtVariant(id)?t('size.title',{name:v.title,grid:v.grid}):t('size.unbuilt',{name:v.title});
+  }
+}
+labelSizes();onLanguage(labelSizes);
 function frameTargets(){return frameSide==='both'?['left','right']:[frameSide];}
 function setFrameSide(side){frameSide=side;syncConfigurationUI();}
 function applyFrame(change){
@@ -501,22 +540,31 @@ function caseTargets(){return caseSide==='both'?['left','right']:[caseSide];}
 for(const [id,spec] of Object.entries(catalog.case_styles)){
   const entries=['base','plate'].map(group=>({path:`mechanical/revI/left-case-${id}-${group}.stl`,material:material(spec[group+'_color'])}));
   // Every thumbnail uses that style's exported parts, with the same camera.
-  const button=card(id,spec.label,preview.image(entries,[.15,.8,1],{width:360,height:250}));button.dataset.case=id;button.title=spec.description;
-  const img=button.querySelector('img');img.width=360;img.height=250;img.alt=spec.description;
+  const button=card(id,spec.label,preview.image(entries,[.15,.8,1],{width:360,height:250}));button.dataset.case=id;
+  const img=button.querySelector('img');img.width=360;img.height=250;
   button.onclick=()=>{const cfg=copy(configuration);for(const side of caseTargets()){const cs=cfg.cases[side],old=catalog.case_styles[cs.style];if(!cs.match_frame&&cs.base_color===old.base_color&&cs.plate_color===old.plate_color){cs.base_color=spec.base_color;cs.plate_color=spec.plate_color;}cs.style=id;if(cs.match_frame&&id==='level')cs.plate_color=cfg.frames[side].color;}applyConfiguration(cfg);};
   $('case-grid').append(button);
 }
+// Case, frame and keycap names stay as the home page shows them; what describes them is translated.
+function labelCases(){for(const button of $('case-grid').children)button.title=button.querySelector('img').alt=tOr('case.'+button.dataset.case,catalog.case_styles[button.dataset.case].description);}
+labelCases();onLanguage(labelCases);
 for(const button of $('case-target').children)button.onclick=()=>{caseSide=button.dataset.side;syncConfigurationUI();};
 for(const id of Object.keys(catalog.frame_styles)){
-  const finish=frameFinish(id,'left'),button=card(id,catalog.frame_styles[id],preview.image([finish],[0,1,.16],{width:220,height:360,up:[0,0,-1]}));button.dataset.style=id;button.title='Approved design';
-  const img=button.querySelector('img');img.width=220;img.height=360;img.alt=catalog.frame_styles[id]+' frame in its original palette';
+  const finish=frameFinish(id,'left'),button=card(id,catalog.frame_styles[id],preview.image([finish],[0,1,.16],{width:220,height:360,up:[0,0,-1]}));button.dataset.style=id;
+  const img=button.querySelector('img');img.width=220;img.height=360;
   button.onclick=()=>applyFrame({style:id});$('frame-grid').append(button);
 }
 for(const button of $('frame-target').children)button.onclick=()=>setFrameSide(button.dataset.side);
-for(const [color,label] of [['#304d4e','Deep teal'],['#ded8c6','Linen'],['#ad7656','Clay'],['#363b3b','Graphite']]){
-  const button=document.createElement('button');button.type='button';button.dataset.color=color;button.title=label;button.setAttribute('aria-label',label);button.setAttribute('aria-pressed','false');button.style.setProperty('--swatch',color);button.onclick=()=>applyFrame({color});$('swatches').append(button);
+const swatchNames={'#304d4e':'teal','#ded8c6':'linen','#ad7656':'clay','#363b3b':'graphite'};
+for(const color of Object.keys(swatchNames)){
+  const button=document.createElement('button');button.type='button';button.dataset.color=color;button.setAttribute('aria-pressed','false');button.style.setProperty('--swatch',color);button.onclick=()=>applyFrame({color});$('swatches').append(button);
 }
-const frameHex=enhanceColorInput($('frame-color'));
+function labelFrames(){
+  for(const button of $('frame-grid').children){const name=catalog.frame_styles[button.dataset.style];button.title=t('frame.approved');button.querySelector('img').alt=t('frame.alt',{name});}
+  for(const button of $('swatches').children){const label=t('swatch.'+swatchNames[button.dataset.color]);button.title=label;button.setAttribute('aria-label',label);}
+}
+labelFrames();onLanguage(labelFrames);
+const frameHex=enhanceColorInput($('frame-color'),()=>t('frame.color'));
 $('frame-color').oninput=e=>applyConfiguration(setColor(configuration,frameTargets(),'frame','body',e.target.value));
 $('theme-colors').onclick=()=>{const cfg=copy(configuration);for(const side of frameTargets()){const p=framePalette(cfg.frames[side].style);cfg.frames[side].color=p.body;cfg.frames[side].accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,p[k]]));if(cfg.cases[side].match_frame){cfg.cases[side].base_color=p.body;if(cfg.cases[side].style==='level')cfg.cases[side].plate_color=p.body;}}applyConfiguration(cfg);};
 for(const [id,label] of [['default','Original'],['normal-sculpted','Sculpted'],['saddle-sculpted','Saddle']]){
@@ -534,12 +582,12 @@ function reversedTiltedRows(){return Object.entries(catalog.layout).flatMap(([si
   const choice=configuration.keycaps[side][k.ref];
   return /^choc_stem_(choc|mx)_size_(normal|saddle)_tilted$/.test(choice.variant)&&((k.row===0&&choice.rotation_deg===0)||(k.row===2&&choice.rotation_deg===180));
 }).map(k=>[side,k.ref]));}
-rowRepair.onclick=()=>{const cfg=copy(configuration);for(const [side,ref] of reversedTiltedRows())cfg.keycaps[side][ref].rotation_deg=(cfg.keycaps[side][ref].rotation_deg+180)%360;try{applyConfiguration(cfg);message('Top and bottom slopes corrected. Your other choices are unchanged.');}catch(e){message(e.message,true);}};
+rowRepair.onclick=()=>{const cfg=copy(configuration);for(const [side,ref] of reversedTiltedRows())cfg.keycaps[side][ref].rotation_deg=(cfg.keycaps[side][ref].rotation_deg+180)%360;try{applyConfiguration(cfg);message(t('keys.fixed'));}catch(e){message(e.message,true);}};
 for(const [id,spec] of Object.entries(catalog.battery_profiles)){const b=document.createElement('button');b.type='button';b.dataset.battery=id;b.textContent=spec.label;b.title=`${spec.width} × ${spec.length} × ${spec.height} mm`;b.onclick=()=>{const c=copy(configuration);for(const side of batterySide==='both'?['left','right']:[batterySide])c.batteries[side]=id;applyConfiguration(c);};$('battery-options').append(b);}
 for(const b of $('battery-target').children)b.onclick=()=>{batterySide=b.dataset.side;syncConfigurationUI();};
 // Back-silkscreen editions: one choice for both halves. Textures come from the committed Gerber
 // packages; the online viewer downloads them the first time the underside is shown.
-const silk=data.silkscreen,loadSilk=printLoader(silk.textures,$('silk-data')),silkOverlays=[],silkTextures=new Map();
+const silk=data.silkscreen,loadSilk=printLoader(silk.textures,$('silk-data'),undefined,'silk'),silkOverlays=[],silkTextures=new Map();
 let silkImages=null,silkPending=null;
 for(const o of objects){
   if(o.userData.part_id!==`${o.userData.side}-pcb`)continue;
@@ -592,7 +640,7 @@ function ensureSilk(){
     const images={};
     for(const [edition,halves] of Object.entries(textures)){images[edition]={};for(const [side,png] of Object.entries(halves))images[edition][side]=await createImageBitmap(new Blob([decodeBytes(png)],{type:'image/png'}));}
     silkImages=images;$('pcb-status').textContent='';showSilk();
-  }).catch(error=>{silkPending=null;$('pcb-status').textContent=error.message.replace('Print files','Silkscreen textures');});
+  }).catch(error=>{silkPending=null;$('pcb-status').textContent=error.message;});
   return silkPending;
 }
 function showUnderside(){
@@ -601,39 +649,47 @@ function showUnderside(){
 const raw=path=>'https://raw.githubusercontent.com/eduarbo/flan/main/'+path;
 for(const edition of silk.editions){
   // the image is painted by paintThumbs() with the chosen mask colour
-  const button=card(edition.id,edition.title,'data:image/gif;base64,R0lGODlhAQABAAAAACw=');button.dataset.edition=edition.id;button.title=edition.description;
-  const img=button.querySelector('img');img.width=380;img.height=150;img.alt=edition.description;
+  const button=card(edition.id,edition.title,'data:image/gif;base64,R0lGODlhAQABAAAAACw=');button.dataset.edition=edition.id;
+  const img=button.querySelector('img');img.width=380;img.height=150;
   button.onclick=()=>{const c=copy(configuration);c.pcb_edition=edition.id;try{applyConfiguration(c);}catch(e){message(e.message,true);return;}showUnderside();};
   $('pcb-grid').append(button);
 }
 $('pcb-underside').onclick=showUnderside;silkHook=ensureSilk;
 for(const spec of silk.masks){
-  const button=document.createElement('button');button.type='button';button.dataset.mask=spec.id;button.title=spec.label;button.setAttribute('aria-label',spec.label+' solder mask');button.setAttribute('aria-pressed','false');button.style.setProperty('--swatch',spec.mask);
+  const button=document.createElement('button');button.type='button';button.dataset.mask=spec.id;button.setAttribute('aria-pressed','false');button.style.setProperty('--swatch',spec.mask);
   button.onclick=()=>{const c=copy(configuration);c.pcb_mask=spec.id;try{applyConfiguration(c);}catch(e){message(e.message,true);return;}showUnderside();};
   $('pcb-masks').append(button);
 }
-$('pcb-mask-note').textContent=`${silk.masks_source.fab} colours, checked ${silk.masks_source.checked}. Pick the same colour in the quote; silkscreen is white, black on white boards. Green has the fastest turnaround.`;
+// Edition and mask names: the patterns keep theirs; the signature edition and the colours are translated.
+const editionName=edition=>tOr('edition.'+edition.id,edition.title),maskName=spec=>tOr('mask.'+spec.id,spec.label);
+function labelPcb(){
+  for(const button of $('pcb-grid').children){const edition=silk.editions.find(e=>e.id===button.dataset.edition),name=editionName(edition);
+    button.querySelector('span').textContent=name;button.setAttribute('aria-label',name);button.title=button.querySelector('img').alt=tOr(`edition.${edition.id}.desc`,edition.description);}
+  for(const button of $('pcb-masks').children){const name=maskName(silk.masks.find(m=>m.id===button.dataset.mask));button.title=name;button.setAttribute('aria-label',t('pcb.maskLabel',{Mask:name,mask:name.toLowerCase()}));}
+  $('pcb-mask-note').textContent=t('pcb.maskNote',{fab:silk.masks_source.fab,date:silk.masks_source.checked});
+}
+labelPcb();onLanguage(labelPcb);
 function syncConfigurationUI(){
   const size=shownVariant(configuration);$('size-current').textContent=family[size]?.title||'Flan36';
   for(const b of $('size-grid').children)b.setAttribute('aria-pressed',String(b.dataset.variant===size));
   const edition=silk.editions.find(e=>e.id===configuration.pcb_edition);
-  $('pcb-current').textContent=edition.title;
+  $('pcb-current').textContent=editionName(edition);
   const variant=shownVariant(configuration),flan36=variant===baseVariant,editions=flan36||Boolean(family[variant].silk);
   for(const b of $('pcb-grid').children){b.setAttribute('aria-pressed',String(editions&&b.dataset.edition===edition.id));b.disabled=!editions;}
-  $('pcb-variant-note').hidden=editions;$('pcb-variant-note').textContent=editions?'':`${family[variant].title} has no silkscreen editions yet; it ships with the signature only.`;
-  if(!flan36)$('pcb-current').textContent=family[variant].title+' · '+(editions?edition.title:'signature');
-  const spec=maskSpec();$('pcb-mask-current').textContent=spec.label;
+  $('pcb-variant-note').hidden=editions;$('pcb-variant-note').textContent=editions?'':t('pcb.variant',{name:family[variant].title});
+  if(!flan36)$('pcb-current').textContent=family[variant].title+' · '+(editions?editionName(edition):t('pcb.signature'));
+  const spec=maskSpec();$('pcb-mask-current').textContent=maskName(spec);
   for(const b of $('pcb-masks').children)b.setAttribute('aria-pressed',String(b.dataset.mask===spec.id));
   paintThumbs();
   const packages=flan36?edition.packages:(editions&&edition.variants?.[variant])||family[variant].gerbers;
-  $('pcb-downloads').replaceChildren(...['left','right'].map(side=>{const a=document.createElement('a');a.href=raw(packages[side]);const note=document.createElement('span');note.textContent=`Gerber + drill ZIP · ${edition.title} · order with ${maskSpec().label.toLowerCase()} mask`;a.append(`${side==='left'?'Left':'Right'} half PCB ↓`,note);return a;}));
+  $('pcb-downloads').replaceChildren(...['left','right'].map(side=>{const a=document.createElement('a');a.href=raw(packages[side]);const note=document.createElement('span');note.textContent=t('pcb.package',{edition:editionName(edition),mask:maskName(maskSpec()).toLowerCase()});a.append(t('pcb.'+side),note);return a;}));
   showSilk();
   for(const b of $('battery-target').children)b.setAttribute('aria-pressed',String(b.dataset.side===batterySide));
   const batteries=(batterySide==='both'?['left','right']:[batterySide]).map(side=>configuration.batteries[side]);
-  $('battery-current').textContent=new Set(batteries).size===1?catalog.battery_profiles[batteries[0]].label:'Mixed profiles';
-  const reversed=reversedTiltedRows();rowRepair.hidden=!reversed.length;rowRepair.textContent=`Fix top/bottom slopes (${reversed.length})`;
+  $('battery-current').textContent=new Set(batteries).size===1?catalog.battery_profiles[batteries[0]].label:t('battery.mixed');
+  const reversed=reversedTiltedRows();rowRepair.hidden=!reversed.length;rowRepair.textContent=t('keys.fix',{n:reversed.length});
   const cases=caseTargets().map(side=>configuration.cases[side]),caseStyles=new Set(cases.map(c=>c.style));
-  $('case-current').textContent=caseStyles.size===1?catalog.case_styles[cases[0].style].label:'Mixed cases';
+  $('case-current').textContent=caseStyles.size===1?catalog.case_styles[cases[0].style].label:t('case.mixed');
   for(const b of $('case-grid').children)b.setAttribute('aria-pressed',String(caseStyles.size===1&&caseStyles.has(b.dataset.case)));
   for(const b of $('case-target').children)b.setAttribute('aria-pressed',String(b.dataset.side===caseSide));
   for(const side of ['left','right'])$('install-frame-'+side).checked=configuration.cases[side].cover;
@@ -641,18 +697,18 @@ function syncConfigurationUI(){
   const frames=frameTargets().map(side=>configuration.frames[side]),styles=new Set(frames.map(f=>f.style)),colors=new Set(frames.map(f=>f.color.toLowerCase()));
   for(const button of $('frame-target').children)button.setAttribute('aria-pressed',String(button.dataset.side===frameSide));
   for(const button of $('frame-grid').children)button.setAttribute('aria-pressed',String(styles.size===1&&styles.has(button.dataset.style)));
-  $('frame-current').textContent=styles.size===1?catalog.frame_styles[frames[0].style]:'Mixed styles';
-  $('color-current').textContent=colors.size===1?[...colors][0]:'Mixed colors';
+  $('frame-current').textContent=styles.size===1?catalog.frame_styles[frames[0].style]:t('frame.mixed');
+  $('color-current').textContent=colors.size===1?[...colors][0]:t('frame.mixedColors');
   for(const button of $('swatches').children)button.setAttribute('aria-pressed',String(colors.size===1&&colors.has(button.dataset.color)));
   // The color input has no mixed state: its visible companion explicitly names it.
-  $('frame-color').value=frames[0].color;$('frame-color').setAttribute('aria-label',colors.size===1?'Custom frame color':'Custom frame color; mixed colors, changing this applies to both halves');
+  $('frame-color').value=frames[0].color;$('frame-color').setAttribute('aria-label',t(colors.size===1?'frame.custom':'frame.customMixed'));
   frameHex.sync(frames.map(f=>f.color));
   appearance?.sync();keycapColors?.sync();
   for(const button of $('key-presets').children){const preset=data.presets[button.dataset.preset];const same=Object.entries(configuration.keycaps).every(([side,keys])=>Object.entries(keys).every(([ref,c])=>c.variant===preset.keycaps[side][ref].variant&&c.rotation_deg===preset.keycaps[side][ref].rotation_deg));button.setAttribute('aria-pressed',String(same));}
-  $('keys-current').textContent=$('key-presets').querySelector('[aria-pressed=true]')?.getAttribute('aria-label')||'Custom shapes';
+  $('keys-current').textContent=$('key-presets').querySelector('[aria-pressed=true]')?.getAttribute('aria-label')||t('keys.custom');
   $('size-layout').textContent=family[size]?.grid?' · '+family[size].grid:'';
   // the phone's tabs name each section's current choice
-  for(const [tab,source,short] of [['size','size-current',t=>t.replace(/^Flan/,'')],['themes','theme-current'],['cases','case-current'],['keycaps','keys-current'],['frames','frame-current'],['battery','battery-current'],['pcb','pcb-current']])
+  for(const [tab,source,short] of [['size','size-current',t=>t.replace(/^Flan/,'')],['themes','theme-current'],['cases','case-current'],['keycaps','keys-current'],['frames','frame-current'],['battery','battery-current',s=>s===t('battery.mixed')?t('mixed'):s.split(' · ').pop()],['pcb','pcb-current']])
     $('tab-'+tab).textContent=(short||(t=>t))($(source).textContent);
   paintPage();refreshShare();
 }
@@ -670,15 +726,15 @@ function paintPage(){
 function isSolo(ref){const installed=objects.filter(o=>o.userData.installed!==false);return installed.some(o=>matchesPart(o,ref))&&installed.every(o=>o.visible===Boolean(matchesPart(o,ref)));}
 function refreshPartVisibility(){
   // A pressed Solo isolates; pressing it again brings the whole assembly back.
-  const soloState=(b,solo,name)=>{b.setAttribute('aria-pressed',String(solo));b.setAttribute('aria-label','Solo '+name);b.title=solo?'Showing only '+name+'. Press again to show all':'Show only '+name;};
-  for(const b of document.querySelectorAll('[data-solo-group]')){const ref={group:b.dataset.soloGroup};b.disabled=!objects.some(o=>o.userData.installed!==false&&matchesPart(o,ref));soloState(b,isSolo(ref),labels[ref.group]);}
+  const soloState=(b,solo,name)=>{b.setAttribute('aria-pressed',String(solo));b.setAttribute('aria-label',t('solo.label',{name}));b.title=t(solo?'solo.on':'solo.off',{name});};
+  for(const b of document.querySelectorAll('[data-solo-group]')){const ref={group:b.dataset.soloGroup};b.disabled=!objects.some(o=>o.userData.installed!==false&&matchesPart(o,ref));soloState(b,isSolo(ref),groupName(ref.group));}
   for(const b of document.querySelectorAll('[data-solo-object]')){const o=objects[Number(b.dataset.soloObject)];b.disabled=o.userData.installed===false;soloState(b,isSolo({group:o.userData.group,objectIndex:o.userData.objectIndex}),b.dataset.name);}
-  for(const input of document.querySelectorAll('[data-object-visibility]')){const o=objects[Number(input.dataset.objectVisibility)];input.checked=o.visible;input.disabled=o.userData.installed===false;input.parentElement.title=(o.visible?'Hide ':'Show ')+input.dataset.name;}
+  for(const input of document.querySelectorAll('[data-object-visibility]')){const o=objects[Number(input.dataset.objectVisibility)];input.checked=o.visible;input.disabled=o.userData.installed===false;input.parentElement.title=t(o.visible?'vis.hide':'vis.show',{name:input.dataset.name});}
   // The selected part as a whole: shown or hidden, Solo, All.
   if(detailRef){
     const installed=objects.filter(o=>o.userData.installed!==false),mine=installed.filter(o=>matchesPart(o,detailRef)),shown=mine.some(o=>o.visible);
-    selectionVisible.checked=shown;selectionVisible.disabled=!mine.length;selectionVisibleLabel.textContent=shown?'Visible':'Hidden';
-    selectionVisible.parentElement.title=(shown?'Hide ':'Show ')+'this part';
+    selectionVisible.checked=shown;selectionVisible.disabled=!mine.length;selectionVisibleLabel.textContent=t(shown?'sel.visible':'sel.hidden');
+    selectionVisible.parentElement.title=t(shown?'sel.hide':'sel.show');
     $('selection-solo').disabled=!mine.length;$('selection-solo').setAttribute('aria-pressed',String(mine.length>0&&isSolo(detailRef)));
     $('selection-all').setAttribute('aria-pressed',String(state.half==='both'&&installed.every(o=>o.visible)));
   }
@@ -689,13 +745,13 @@ function populatePartVisibility(ref){
   for(const o of matching){
     const row=document.createElement('div');row.className='part-row individual-row';
     const input=document.createElement('input');input.type='checkbox';input.dataset.objectVisibility=String(o.userData.objectIndex);input.checked=o.visible;input.disabled=o.userData.installed===false;
-    const text=document.createElement('span');text.className='part-label';text.textContent=o.userData.side.charAt(0).toUpperCase()+o.userData.side.slice(1)+' · '+(o.userData.ref||o.userData.key||o.name.replace(/^(left|right)[\s·-]*/i,''));
-    input.dataset.name=text.textContent;input.setAttribute('aria-label','Show '+text.textContent);const label=eyeToggle(input,'Show / hide '+text.textContent);
+    const text=document.createElement('span');text.className='part-label';text.textContent=t('side.'+o.userData.side)+' · '+(o.userData.ref||o.userData.key||partName(o.name.replace(/^(left|right)[\s·-]*/i,'')));
+    input.dataset.name=text.textContent;input.setAttribute('aria-label',t('vis.show',{name:text.textContent}));const label=eyeToggle(input,t('vis.toggle',{name:text.textContent}));
     const current={group:o.userData.group,side:o.userData.side,key:o.userData.key,objectIndex:o.userData.objectIndex};
     input.onchange=()=>{if(input.checked){hiddenObjects.delete(o.userData.objectIndex);state.layers[o.userData.group]=true;if(state.half!==o.userData.side)state.half='both';}else hiddenObjects.add(o.userData.objectIndex);sync();};
     row.onpointerenter=e=>{if(e.pointerType!=='touch')explorer.highlight(current);};row.onpointerleave=()=>explorer.highlight(null);
     row.onfocusin=()=>explorer.highlight(current);row.onfocusout=e=>{if(!row.contains(e.relatedTarget))explorer.highlight(null);};
-    const solo=document.createElement('button');solo.type='button';solo.className='part-solo';solo.textContent='Solo';solo.dataset.soloObject=String(o.userData.objectIndex);solo.dataset.name=text.textContent;solo.disabled=o.userData.installed===false;solo.onclick=()=>toggleSolo(current);
+    const solo=document.createElement('button');solo.type='button';solo.className='part-solo';solo.textContent=t('solo');solo.dataset.soloObject=String(o.userData.objectIndex);solo.dataset.name=text.textContent;solo.disabled=o.userData.installed===false;solo.onclick=()=>toggleSolo(current);
     row.append(text,label,solo);list.append(row);
   }
   $('frame-install-options').hidden=ref.group!=='lid'&&ref.collection!=='magnets';
@@ -714,28 +770,31 @@ function setPartVisible(ref,show){
   sync();
 }
 const selectionVisible=document.createElement('input'),selectionVisibleLabel=document.createElement('span');
-selectionVisible.type='checkbox';selectionVisible.id='selection-visible';selectionVisible.setAttribute('aria-label','Show this part');selectionVisibleLabel.className='view-label';
-{const eye=eyeToggle(selectionVisible,'Hide this part');eye.append(selectionVisibleLabel);$('selection-view').prepend(eye);}
+selectionVisible.type='checkbox';selectionVisible.id='selection-visible';selectionVisible.setAttribute('aria-label',t('sel.show'));selectionVisibleLabel.className='view-label';
+{const eye=eyeToggle(selectionVisible,t('sel.hide'));eye.append(selectionVisibleLabel);$('selection-view').prepend(eye);}
 selectionVisible.onchange=()=>{if(detailRef)setPartVisible(detailRef,selectionVisible.checked);};
 $('selection-solo').onclick=()=>{if(detailRef)toggleSolo(detailRef);};
 $('selection-all').onclick=showAll;
-function showAll(){hiddenObjects.clear();state.half='both';state.explode=0;for(const key of Object.keys(labels))state.layers[key]=true;sync();fit();$('view-feedback').textContent='All installed parts visible; layers assembled.';}
+function showAll(){hiddenObjects.clear();state.half='both';state.explode=0;for(const key of groups)state.layers[key]=true;sync();fit();$('view-feedback').textContent=t('feedback.all');}
 function toggleSolo(ref){
   if(isSolo(ref)){showAll();return;}
-  hiddenObjects.clear();state.half='both';for(const key of Object.keys(labels))state.layers[key]=true;
+  hiddenObjects.clear();state.half='both';for(const key of groups)state.layers[key]=true;
   for(const o of objects)if(!matchesPart(o,ref))hiddenObjects.add(o.userData.objectIndex);
-  sync();fit();$('view-feedback').textContent='Showing only this selection. Show all restores the assembly.';
+  sync();fit();$('view-feedback').textContent=t('feedback.solo');
 }
 $('show-all').onclick=showAll;
 for(const side of ['left','right'])$('install-frame-'+side).onchange=e=>{const cfg=copy(configuration);cfg.cases[side].cover=e.target.checked;applyConfiguration(cfg);};
+function describeSelection(ref){
+  const magnets=ref.collection==='magnets';
+  $('selection-meta').textContent=magnets?t('sel.magnets.meta'):(ref.side?t('sel.half',{side:t('half.'+ref.side)}):t('sel.both'))+(ref.key?' / '+ref.key:'');
+  $('selection-title').textContent=magnets?t('sel.magnets.title'):partInfo(ref.group).name;
+  $('selection-info').textContent=magnets?t('sel.magnets.info'):partInfo(ref.group).info;
+}
 explorer=createExplorer({scene,camera,canvas,objects,requestRender:render,
   onSelect(ref){
     if(!detailRef){rememberPanelScroll();detailReturn={mode:activeMode,panel:activePanel,scroll:$('inspector').scrollTop,open:panelOpen,ratio:panelSizes.get(sizeKey())??defaultPanelRatio(),opener:document.activeElement};}
     detailRef=ref;
-    $('selection-meta').textContent=ref.collection==='magnets'?'3 pairs per half · 12 magnets total':(ref.side?ref.side+' half':'Both halves')+(ref.key?' / '+ref.key:'');
-    populatePartVisibility(ref);
-    $('selection-title').textContent=ref.collection==='magnets'?'Captive frame magnets':partInfo[ref.group].name;
-    $('selection-info').textContent=ref.collection==='magnets'?'Three paired stations form a triangle around each electronics bay, below the removable display frame. Each pair has a Ø2 × 3 mm base magnet and a Ø2 × 4 mm frame magnet. They are enclosed in plastic, so they are hidden in the assembled model. The blue highlights locate them through the case; separation reveals the pairs. Opposite poles must face each other.':partInfo[ref.group].info;
+    describeSelection(ref);populatePartVisibility(ref);
     $('edit-selection').hidden=!editablePanel[ref.group]||Boolean(ref.collection);
     for(const button of document.querySelectorAll('.part-item'))button.setAttribute('aria-expanded',String(button.dataset.group===ref.group));
     if(portraitLayout.matches&&(panelSizes.get(sizeKey())??defaultPanelRatio())*panelBounds().total<=77)panelSizes.set(sizeKey(),.48);
@@ -745,20 +804,21 @@ explorer=createExplorer({scene,camera,canvas,objects,requestRender:render,
 $('load-trigger').onclick=()=>$('load-config').click();
 function downloadJSON(){const url=URL.createObjectURL(new Blob([JSON.stringify(configuration,null,2)+'\n'],{type:'application/json'})),link=document.createElement('a');link.href=url;link.download=($('design-name').value.trim().replace(/[^a-z0-9_-]+/gi,'-').slice(0,60)||'Flan36-config')+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
 $('save-config').onclick=downloadJSON;
-$('load-config').onchange=async e=>{try{const f=e.target.files[0];if(f){if(f.size>100000)throw Error('File too large. Choose a configuration JSON.');const value=JSON.parse(await f.text()),migrated=retiredFrames(value,catalog).length,replacement=retiredReplacementNames(value,catalog);applyConfiguration(value);if(migrated){await store.idle();message(`Retired frames replaced with ${replacement}. Other choices are preserved; your imported file is unchanged.`);}}}catch(error){message(error.message,true);}finally{e.target.value='';}};
+$('load-config').onchange=async e=>{try{const f=e.target.files[0];if(f){if(f.size>100000)throw Error(t('msg.fileTooLarge'));const value=JSON.parse(await f.text()),migrated=retiredFrames(value,catalog).length,replacement=retiredReplacementNames(value,catalog);applyConfiguration(value);if(migrated){await store.idle();message(t('msg.retired',{names:replacement}));}}}catch(error){message(error.message,true);}finally{e.target.value='';}};
 $('default-config').onclick=()=>applyConfiguration(catalog.default_configuration);
-$('load-saved').onclick=async()=>{try{keycapColors?.cancelPending();applyConfiguration(await store.load(),{persist:false});message('Loaded the saved version. Undo keeps your previous design available.');}catch(e){message(e.message,true);}};
+$('load-saved').onclick=async()=>{try{keycapColors?.cancelPending();applyConfiguration(await store.load(),{persist:false});message(t('msg.loadedSaved'));}catch(e){message(e.message,true);}};
 $('replace-saved').onclick=async()=>{try{await store.replace(configuration);refreshRecovery();}catch(e){message(e.message,true);}};
 function refreshRecovery(){
  const list=$('recovery-list');list.replaceChildren();
  try{const keys=[savedKey,'filo36.configuration.v1','flan36.keycap-palettes.v1',...Object.keys(localStorage).filter(k=>k.startsWith(recoveryPrefix))];
-  for(const key of keys){const raw=localStorage.getItem(key);if(raw===null)continue;let content=raw,label=key.includes('palette')?'Saved palettes':'Saved configuration';
-   if(key.startsWith(recoveryPrefix)){try{const v=JSON.parse(raw);content=v.raw;label=v.label+(v.key.includes('palette')?' · palettes':' · design');}catch{label='Unreadable recovery record';}}
-   const b=document.createElement('button');b.textContent='Download '+label;b.onclick=()=>{const url=URL.createObjectURL(new Blob([content],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='Flan36-recovery.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);};list.append(b);
+  for(const key of keys){const raw=localStorage.getItem(key);if(raw===null)continue;let content=raw,label=t(key.includes('palette')?'recovery.palettes':'recovery.configuration');
+   // a record keeps its English label as data; the list names it in the page's language
+   if(key.startsWith(recoveryPrefix)){try{const v=JSON.parse(raw);content=v.raw;label=t(v.key.includes('palette')?'recovery.asPalettes':'recovery.asDesign',{label:tOr('draft.'+v.label,v.label)});}catch{label=t('recovery.unreadable');}}
+   const b=document.createElement('button');b.textContent=t('recovery.download',{label});b.onclick=()=>{const url=URL.createObjectURL(new Blob([content],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='Flan36-recovery.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);};list.append(b);
   }
- }catch{list.textContent='Device storage is unavailable. Export the current design instead.';}
+ }catch{list.textContent=t('recovery.unavailable');}
 }
-window.addEventListener('storage',e=>{if(e.key===savedKey)message('Another tab changed the saved design. Your current view stays here; use Files to load or keep a separate copy.',true);});
+window.addEventListener('storage',e=>{if(e.key===savedKey)message(t('msg.otherTab'),true);});
 // Share: the short look when it says everything about this keyboard, otherwise the whole design, deflated.
 const base64url=bytes=>btoa(String.fromCharCode(...bytes)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 const fromBase64url=text=>Uint8Array.from(atob(text.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
@@ -783,26 +843,26 @@ let shareTimer=0,shareTicket=0;
 function refreshShare(){clearTimeout(shareTimer);if($('panel-files').hidden||!panelOpen)return;shareTimer=setTimeout(()=>{const ticket=++shareTicket;shareLink().then(link=>{if(ticket===shareTicket)$('share-link').value=link;}).catch(()=>{});},250);}
 async function copyLink(button){
   const link=await shareLink();$('share-link').value=link;
-  try{await navigator.clipboard.writeText(link);$('share-status').textContent='Link copied. It opens this exact keyboard.';return true;}
-  catch{if(activeMode!=='files'||!panelOpen)openPanel('files',button);$('share-link').focus();$('share-link').select();$('share-status').textContent='Copy the selected link with your keyboard or text menu.';return false;}
+  try{await navigator.clipboard.writeText(link);say('share-status','files.copied');return true;}
+  catch{if(activeMode!=='files'||!panelOpen)openPanel('files',button);$('share-link').focus();$('share-link').select();say('share-status','files.copyManual');return false;}
 }
 appearance=createAppearance({$,get:()=>configuration,apply:applyConfiguration,targets:kind=>kind==='case'?caseTargets():frameTargets(),preview,frameFinish,material,resize,catalog,geometryFor});
 keycapColors=createKeycapColors({$,catalog,get:()=>configuration,apply:applyConfiguration,message,storageNotice:(text,error)=>storageNotice(text,error,'palettes')});
 applyConfiguration(configuration,{record:false,persist:false});
-if(storageMessage)storageNotice(storageMessage,true,'configuration');else if(restored){message('Restored your saved configuration.');saveState('Saved ✓','saved');}else{message('Changes save on this device.');saveState('','');}
+if(storageMessage)storageNotice(storageMessage,true,'configuration');else if(restored){message(t('msg.restored'));saveState('save.done','saved');}else{message(t('msg.local'));saveState('','');}
 if(keycapColors.initialWarning)storageNotice(keycapColors.initialWarning,true,'palettes');
 // A look from the home page opens as a new design: ?size=&theme=&case=&keys=&frame=left[,right]&palette=frame|theme[,…].
 // Undo returns to the saved design; the parameters then leave the address so a reload keeps later edits.
 const LOOK_KEYS=['size','theme','case','keys','frame','palette'],lookQuery=new URLSearchParams(location.search);
 function lookConfiguration(q){
   let c=normalize(catalog.default_configuration,catalog);const sides=['left','right'];
-  const size=q.get('size')||c.variant;if(!variantIds.includes(size))throw Error(`Unknown size “${size}”.`);c.variant=size;
-  const preset={original:'default',normal:'normal-sculpted',saddle:'saddle-sculpted'}[q.get('keys')||'original'];if(!preset)throw Error(`Unknown keycaps “${q.get('keys')}”.`);
-  const style=q.get('case')||'rim';if(!catalog.case_styles[style])throw Error(`Unknown case “${style}”.`);
-  const theme=themeLibrary.themes.find(t=>t.id===(q.get('theme')||'snes'));if(!theme)throw Error(`Unknown theme “${q.get('theme')}”.`);
+  const size=q.get('size')||c.variant;if(!variantIds.includes(size))throw Error(t('msg.size',{v:size}));c.variant=size;
+  const preset={original:'default',normal:'normal-sculpted',saddle:'saddle-sculpted'}[q.get('keys')||'original'];if(!preset)throw Error(t('msg.keys',{v:q.get('keys')}));
+  const style=q.get('case')||'rim';if(!catalog.case_styles[style])throw Error(t('msg.case',{v:style}));
+  const theme=themeLibrary.themes.find(t=>t.id===(q.get('theme')||'snes'));if(!theme)throw Error(t('msg.theme',{v:q.get('theme')}));
   const frames=(q.get('frame')||(catalog.frame_styles[theme.recommended_frame]?theme.recommended_frame:c.frames.left.style)).split(',');
   for(const [i,side] of sides.entries()){
-    const frame=frames[i]||frames[0];if(!catalog.frame_styles[frame])throw Error(`Unknown frame “${frame}”.`);
+    const frame=frames[i]||frames[0];if(!catalog.frame_styles[frame])throw Error(t('msg.frame',{v:frame}));
     for(const ref of Object.keys(c.keycaps[side]))c.keycaps[side][ref]={...data.presets[preset].keycaps[side][ref],color:c.keycaps[side][ref].color};
     c.cases[side].style=style;c.frames[side].style=frame;
   }
@@ -814,22 +874,33 @@ function lookConfiguration(q){
   }
   return c;
 }
-$('share').onclick=async()=>{if(await copyLink($('share'))){const b=$('share'),label=b.querySelector('span');b.dataset.copied='true';label.textContent='Copied ✓';$('view-feedback').textContent='Link copied.';setTimeout(()=>{b.dataset.copied='false';label.textContent='Share';},2200);}};
+$('share').onclick=async()=>{if(await copyLink($('share'))){const b=$('share'),label=b.querySelector('span');b.dataset.copied='true';label.textContent=t('share.copied');$('view-feedback').textContent=t('feedback.copied');setTimeout(()=>{b.dataset.copied='false';label.textContent=t('share');},2200);}};
 $('share-copy').onclick=()=>copyLink($('share-copy'));
 $('share-link').addEventListener('focus',e=>e.target.select());
 if(LOOK_KEYS.some(k=>lookQuery.has(k))||lookQuery.has('design')){
   try{
     if(lookQuery.has('design')){
-      const text=lookQuery.get('design');if(text.length>40000)throw Error('the link is too long.');
-      const bytes=await streamBytes(fromBase64url(text),new DecompressionStream('deflate-raw'));if(bytes.length>400000)throw Error('the design is too large.');
-      applyConfiguration(JSON.parse(new TextDecoder().decode(bytes)));message(restored?'Opened a shared design. Undo returns to your saved design.':'Opened a shared design.');
-    }else{applyConfiguration(lookConfiguration(lookQuery));message(restored?'Opened the look from the home page. Undo returns to your saved design.':'Opened the look from the home page.');}
+      const text=lookQuery.get('design');if(text.length>40000)throw Error(t('msg.linkLong'));
+      const bytes=await streamBytes(fromBase64url(text),new DecompressionStream('deflate-raw'));if(bytes.length>400000)throw Error(t('msg.designLarge'));
+      applyConfiguration(JSON.parse(new TextDecoder().decode(bytes)));message(t(restored?'msg.sharedSaved':'msg.shared'));
+    }else{applyConfiguration(lookConfiguration(lookQuery));message(t(restored?'msg.lookSaved':'msg.look'));}
   }
-  catch(e){message('Could not open that link: '+e.message,true);}
+  catch(e){message(t('msg.badLink',{error:e.message}),true);}
   for(const k of [...LOOK_KEYS,'design'])lookQuery.delete(k);
   window.history.replaceState(null,'',location.pathname+(lookQuery.size?'?'+lookQuery:'')+location.hash);
 }
 
+
+// A new language redraws what the scripts wrote; translate() has already done the page's own text.
+onLanguage(()=>{
+  for(const name of ['themes','cases','keycaps','frames'])setTune(name,tunes.has(name));
+  $('workspace-title').textContent=t(detailRef?'mode.detail':'mode.'+activeMode);saveState(saveLabel,$('save-state').dataset.state);
+  selectionVisible.setAttribute('aria-label',t('sel.show'));selectionVisible.parentElement.title=t('sel.hide');
+  layoutPanel();sync();syncConfigurationUI();
+  if(detailRef){describeSelection(detailRef);populatePartVisibility(detailRef);}
+  if(activeMode==='files'&&panelOpen)refreshRecovery();
+  for(const [id,[key,vars]] of said)$(id).textContent=t(key,vars);
+});
 
 // The design opens beside the model, as the home page's rail does.
 showWorkspace();setPanelOpen(true);resize();reset();
@@ -839,4 +910,4 @@ if(new URLSearchParams(location.search).has('diagnostics'))window.flan36=Object.
 
 
 }
-start().catch(error=>{document.getElementById('loading').hidden=true;document.getElementById('error').hidden=false;document.getElementById('error').textContent='Could not open the viewer: '+error.message;console.error(error);});
+start().catch(error=>{document.getElementById('loading').hidden=true;document.getElementById('error').hidden=false;document.getElementById('error').textContent=t('msg.start',{error:error.message});console.error(error);});

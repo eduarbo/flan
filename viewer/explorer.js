@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import * as THREE from 'three';
+import {t,language} from './i18n.js';
 
-export const partInfo={
+// Each group's name, short name and note, in the page's language.
+const parts={en:{
   lid:{name:'Display frame',short:'Frame',info:'Removable frame with three captive Ø2 × 4 mm magnets per half. Opposite poles face the base magnets; check attraction before embedding. PCB and battery remain mechanically secured.'},
   keycaps:{name:'KLP Lamé keycaps',short:'Caps',info:'Original Choc-stem meshes. Choose a shape preset; color all keys, rows, columns or individual keys.'},
   display:{name:'nice!view display',short:'Display',info:'14 × 36 × 2.9 mm nominal nice!view. Illustrative screen content; flush frame details. Uses the supplied 7.00 mm connector pair. Glass sits 0.20 mm below the frame; physical fit remains untested.'},
@@ -14,7 +16,21 @@ export const partInfo={
   supports:{name:'Insulating supports',short:'Mounts',info:'Cradle, display sled and controller supports. Retention is a nominal CAD proposal.'},
   connectors:{name:'Connectors & controls',short:'Ports',info:'Supplied nice!view connectors, specified Mill-Max controller sockets, battery connector, reset and power switch. Exact purchasing references are in the build guide; verify delivered dimensions and solder clearances during assembly.'},
   fasteners:{name:'Fasteners & feet',short:'Feet',info:'Per half: five internal M2 screws, three captive Ø2 × 3 mm base magnets and three Ø2 × 4 mm frame magnets. All magnets are axial. Printed threads, magnetic holding force and capture need physical tests.'}
-};
+},es:{
+  lid:{name:'Marco de pantalla',short:'Marco',info:'Marco removible con tres imanes cautivos de Ø2 × 4 mm por mitad. Los polos opuestos miran hacia los imanes de la base; revisa que se atraigan antes de fijarlos. La PCB y la batería siguen sujetas mecánicamente.'},
+  keycaps:{name:'Keycaps KLP Lamé',short:'Keycaps',info:'Mallas originales con vástago Choc. Elige una forma; pinta todas las teclas, filas, columnas o teclas sueltas.'},
+  display:{name:'Pantalla nice!view',short:'Pantalla',info:'nice!view nominal de 14 × 36 × 2.9 mm. Contenido de pantalla ilustrativo; detalles del marco al ras. Usa el par de conectores de 7.00 mm incluido. El vidrio queda 0.20 mm bajo el marco; el ajuste físico aún no se prueba.'},
+  base:{name:'Base impresa',short:'Base',info:'Curvas locales alineadas a las teclas y un contorno común. Usa Personalizar esta pieza para elegir una caja. Las piezas nativas se editan en FreeCAD.'},
+  plate:{name:'Placa de switches',short:'Placa',info:'Sostiene las 36 posiciones y ángulos de switch de Flan36. Altura nominal de la placa: 7.6 mm.'},
+  switches:{name:'Switches Choc',short:'Switch',info:'Carcasas, pines y vástagos Choc v1 de KiSwitch, con licencia. Modelo genérico; el asiento, el recorrido y los vástagos impresos de las keycaps necesitan pruebas físicas de ajuste.'},
+  pcb:{name:'PCB',short:'PCB',info:'PCB inalámbrica a la medida, con la firma de Flan atrás. Elige una edición de serigrafía trasera en Diseño → PCB; cada edición tiene su propio paquete Gerber.'},
+  battery:{name:'Batería LiPo',short:'Batería',info:'Los perfiles nominales Adafruit 1570 y 301230 comparten el piso aislado de la caja y la jaula de sujeción. Usa Personalizar esta pieza para elegir un perfil. Verifica la batería real, los cables y el aislamiento.'},
+  mcu:{name:'Controlador nice!nano v2',short:'MCU',info:'Reconstrucción nominal de la v2 con PCB aparte, pads ENIG, USB-C de montaje medio, circuitos integrados y pasivos. Medidas del contorno de la comunidad; detalle de los encapsulados deducido de fotos oficiales.'},
+  supports:{name:'Soportes aislantes',short:'Soportes',info:'Cuna, trineo de la pantalla y soportes del controlador. La sujeción es una propuesta nominal de CAD.'},
+  connectors:{name:'Conectores y controles',short:'Puertos',info:'Conectores incluidos del nice!view, zócalos Mill-Max especificados para el controlador, conector de batería, botón de reset e interruptor de encendido. Las referencias exactas de compra están en la guía de armado; verifica las medidas recibidas y los espacios para soldar durante el armado.'},
+  fasteners:{name:'Sujetadores y patas',short:'Patas',info:'Por mitad: cinco tornillos M2 internos, tres imanes cautivos de base de Ø2 × 3 mm y tres imanes de marco de Ø2 × 4 mm. Todos los imanes son axiales. Las roscas impresas, la fuerza magnética y la captura necesitan pruebas físicas.'}
+}};
+export const partInfo=id=>parts[language()][id]??parts.en[id];
 
 export const isMagnet=o=>/^(left|right)-(magnet|frame-target)-[0-2]$/.test(o.userData.part_id||'');
 export const matchesPart=(o,ref)=>Boolean(ref)&&(ref.collection==='magnets'?isMagnet(o):o.userData.group===ref.group)&&(!ref.side||o.userData.side===ref.side)&&(!ref.key||o.userData.key===ref.key)&&(ref.objectIndex===undefined||o.userData.objectIndex===ref.objectIndex);
@@ -85,7 +101,7 @@ export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,req
     const shown=key(selected)+':'+revision;
     if(shown!==visibilityStamp){
       visibilityStamp=shown;
-      if(selected)$('selection-visibility').textContent=objects.some(o=>o.visible&&match(o,selected))?'':selected.group==='lid'&&!objects.some(o=>match(o,selected))?'Display frames are not installed. Use the installation controls below.':'This selection is hidden. Turn it back on with Visible below.';
+      if(selected)$('selection-visibility').textContent=objects.some(o=>o.visible&&match(o,selected))?'':t(selected.group==='lid'&&!objects.some(o=>match(o,selected))?'vis.frames':'vis.hidden');
     }
     if(activeKey!==key(active)){activeKey=key(active);for(const row of document.querySelectorAll('.part-row'))row.classList.toggle('is-highlighted',!active?.collection&&active?.group===row.dataset.group);}
   }

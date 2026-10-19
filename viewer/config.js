@@ -2,6 +2,7 @@
 import {framePalette} from './finishes.js';
 import pcbOptions from '../design/pcb-options.json';
 import family from '../design/variants.json';
+import {t} from './i18n.js';
 export const pcbEditionIds=pcbOptions.editions.map(e=>e.id),pcbMaskIds=pcbOptions.masks.map(m=>m.id);
 export const variantIds=Object.keys(family.variants),defaultVariant=family.base;
 export const copy=x=>JSON.parse(JSON.stringify(x));
@@ -22,32 +23,32 @@ export function normalize(config,c){const result=copy(config);result.schema="fla
 export function retiredReplacementNames(config,c){return [...new Set(retiredFrames(config,c).map(side=>c.frame_styles[c.retired_frame_styles[config.frames[side].style]]))].join(', ');}
 export function check(config,c){
  const record=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
- if(!record(config))return {errors:['Choose a configuration object.']};
+ if(!record(config))return {errors:[t('cfg.object')]};
  const errors=[],variants=new Map(c.variants.map(v=>[v.id,v]));let minimum=Infinity;
- if(!['flan36-config-1','filo36-config-1'].includes(config?.schema)||config?.revision!=='I')return {errors:['Unsupported configuration format or revision.']};
- if(Object.keys(record(config.keycaps)?config.keycaps:{}).sort().join()!=='left,right'||Object.keys(record(config.frames)?config.frames:{}).sort().join()!=='left,right')return {errors:['Both halves are required.']};
- if(Object.keys(record(config.batteries)?config.batteries:{}).sort().join()!=='left,right')return {errors:['Select a battery for each half.']};
- if('variant' in config&&!variantIds.includes(config.variant))return {errors:['Unknown Flan variant.']};
- if('pcb_edition' in config&&!pcbEditionIds.includes(config.pcb_edition))return {errors:['Unknown PCB edition.']};
- if('pcb_mask' in config&&!pcbMaskIds.includes(config.pcb_mask))return {errors:['Unknown PCB solder mask colour.']};
- if('cases' in config){if(Object.keys(record(config.cases)?config.cases:{}).sort().join()!=='left,right')return {errors:['Select a case for each half.']};for(const choice of Object.values(config.cases))if(!record(choice)||typeof choice.style!=='string'||!Object.hasOwn(c.case_styles,choice.style)||typeof choice?.cover!=='boolean')return {errors:['Invalid case or display cover option.']};}
+ if(!['flan36-config-1','filo36-config-1'].includes(config?.schema)||config?.revision!=='I')return {errors:[t('cfg.format')]};
+ if(Object.keys(record(config.keycaps)?config.keycaps:{}).sort().join()!=='left,right'||Object.keys(record(config.frames)?config.frames:{}).sort().join()!=='left,right')return {errors:[t('cfg.halves')]};
+ if(Object.keys(record(config.batteries)?config.batteries:{}).sort().join()!=='left,right')return {errors:[t('cfg.batteries')]};
+ if('variant' in config&&!variantIds.includes(config.variant))return {errors:[t('cfg.variant')]};
+ if('pcb_edition' in config&&!pcbEditionIds.includes(config.pcb_edition))return {errors:[t('cfg.edition')]};
+ if('pcb_mask' in config&&!pcbMaskIds.includes(config.pcb_mask))return {errors:[t('cfg.mask')]};
+ if('cases' in config){if(Object.keys(record(config.cases)?config.cases:{}).sort().join()!=='left,right')return {errors:[t('cfg.cases')]};for(const choice of Object.values(config.cases))if(!record(choice)||typeof choice.style!=='string'||!Object.hasOwn(c.case_styles,choice.style)||typeof choice?.cover!=='boolean')return {errors:[t('cfg.case')]};}
  const color=v=>typeof v==='string'&&/^#[0-9a-f]{6}$/i.test(v);
- for(const side of ['left','right']){const cs=config.cases?.[side]||{},f=config.frames[side];if(!record(f))return {errors:['Invalid frame.']};if(['base_color','plate_color'].some(k=>k in cs&&!color(cs[k])))return {errors:['Invalid case color.']};if('match_frame' in cs&&typeof cs.match_frame!=='boolean')return {errors:['Invalid color link.']};if('accents' in f&&(!f.accents||typeof f.accents!=='object'||Array.isArray(f.accents)||Object.entries(f.accents).some(([k,v])=>!['detail','accent','secondary'].includes(k)||!color(v))))return {errors:['Invalid frame accent color.']};if(cs.match_frame&&cs.style==='level'&&cs.plate_color?.toLowerCase()!==String(f.color||'').toLowerCase())return {errors:['Linked Level shell and frame colors must match.']};if(cs.match_frame&&cs.base_color?.toLowerCase()!==String(f.color||'').toLowerCase())return {errors:['Linked rim and frame colors must match.']};}
+ for(const side of ['left','right']){const cs=config.cases?.[side]||{},f=config.frames[side];if(!record(f))return {errors:[t('cfg.frame')]};if(['base_color','plate_color'].some(k=>k in cs&&!color(cs[k])))return {errors:[t('cfg.caseColor')]};if('match_frame' in cs&&typeof cs.match_frame!=='boolean')return {errors:[t('cfg.link')]};if('accents' in f&&(!f.accents||typeof f.accents!=='object'||Array.isArray(f.accents)||Object.entries(f.accents).some(([k,v])=>!['detail','accent','secondary'].includes(k)||!color(v))))return {errors:[t('cfg.accent')]};if(cs.match_frame&&cs.style==='level'&&cs.plate_color?.toLowerCase()!==String(f.color||'').toLowerCase())return {errors:[t('cfg.level')]};if(cs.match_frame&&cs.base_color?.toLowerCase()!==String(f.color||'').toLowerCase())return {errors:[t('cfg.rim')]};}
  for(const [side,keys] of Object.entries(c.layout)){
-   if(typeof config.batteries[side]!=='string'||!Object.hasOwn(c.battery_profiles,config.batteries[side]))errors.push('Unknown battery profile.');
-   if(Object.keys(record(config.keycaps[side])?config.keycaps[side]:{}).sort().join()!==keys.map(k=>k.ref).sort().join())return {errors:['Missing keys or unknown positions.']};
-   const f=config.frames[side];if(typeof f.style!=='string'||(!Object.hasOwn(c.frame_styles,f.style)&&!Object.hasOwn(c.retired_frame_styles||{},f.style))||!color(f.color))errors.push('Invalid frame or color.');
+   if(typeof config.batteries[side]!=='string'||!Object.hasOwn(c.battery_profiles,config.batteries[side]))errors.push(t('cfg.battery'));
+   if(Object.keys(record(config.keycaps[side])?config.keycaps[side]:{}).sort().join()!==keys.map(k=>k.ref).sort().join())return {errors:[t('cfg.keys')]};
+   const f=config.frames[side];if(typeof f.style!=='string'||(!Object.hasOwn(c.frame_styles,f.style)&&!Object.hasOwn(c.retired_frame_styles||{},f.style))||!color(f.color))errors.push(t('cfg.frameColor'));
    const shapes=[];
    for(const k of keys){
-     const x=config.keycaps[side][k.ref];if(!record(x))return {errors:['Invalid keycap choice.']};const v=variants.get(x.variant);
-     if(x&&'color' in x&&(typeof x.color!=='string'||!/^#[0-9a-f]{6}$/i.test(x.color)))return {errors:['Invalid keycap color.']};
-     if(!v||!v.rotations_deg.includes(x?.rotation_deg)||!v.qualified_reference_positions.length){errors.push(`${side} ${k.ref}: unqualified variant or orientation.`);continue;}
+     const x=config.keycaps[side][k.ref];if(!record(x))return {errors:[t('cfg.keycap')]};const v=variants.get(x.variant);
+     if(x&&'color' in x&&(typeof x.color!=='string'||!/^#[0-9a-f]{6}$/i.test(x.color)))return {errors:[t('cfg.keycapColor')]};
+     if(!v||!v.rotations_deg.includes(x?.rotation_deg)||!v.qualified_reference_positions.length){errors.push(t('cfg.variantKey',{side:t('half.'+side),ref:k.ref}));continue;}
      const p=polygon(v.hull_xy_mm,k,x.rotation_deg);shapes.push([k.ref,p]);const d=gap(p,c.frame_envelopes[side]);minimum=Math.min(minimum,d);
-     if(d<c.minimum_clearance_mm-1e-7)errors.push(`${side} ${k.ref}: violates the frame clearance.`);
+     if(d<c.minimum_clearance_mm-1e-7)errors.push(t('cfg.clearance',{side:t('half.'+side),ref:k.ref}));
    }
    for(let i=0;i<shapes.length;i++)for(let j=i+1;j<shapes.length;j++){
      const d=gap(shapes[i][1],shapes[j][1]);minimum=Math.min(minimum,d);
-     if(d<c.minimum_clearance_mm-1e-7)errors.push(`${side} ${shapes[i][0]}/${shapes[j][0]}: insufficient keycap clearance.`);
+     if(d<c.minimum_clearance_mm-1e-7)errors.push(t('cfg.keyClearance',{side:t('half.'+side),a:shapes[i][0],b:shapes[j][0]}));
    }
  }
  return {errors,minimum};

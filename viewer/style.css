@@ -45,8 +45,8 @@ svg { flex: none; }
 .link { color: var(--accent); font-size: 13px; font-weight: 500; min-height: 36px; padding: 0 4px; }
 .link:hover { text-decoration: underline; text-underline-offset: 4px; }
 
-/* top bar: the lockup back home, the three modes, then history, save state, Share and About */
-.bar { position: relative; z-index: 5; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 12px;
+/* top bar: the lockup back home, the three modes, then history, save state, Share, About and EN · ES */
+.bar { position: relative; z-index: 5; display: grid; grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr); align-items: center; gap: 12px;
   padding: max(12px, env(safe-area-inset-top)) max(22px, env(safe-area-inset-right)) 4px max(30px, env(safe-area-inset-left)); }
 .nav-home { justify-self: start; display: inline-flex; align-items: center; gap: 9px; min-height: 44px; color: var(--ink); text-decoration: none; border-radius: 12px; }
 .nav-home .mark { width: 36px; height: 30px; }
@@ -54,6 +54,9 @@ svg { flex: none; }
 .nav-home .word, .nav-home .kbd { font-family: var(--serif); font-variation-settings: "SOFT" 100, "opsz" 144; line-height: 1; white-space: nowrap; }
 .nav-home .word { font-size: 29px; font-weight: 400; letter-spacing: -.01em; transform: translateY(-1px); }
 .nav-home .kbd { font-size: 26px; font-weight: 300; transform: translateY(1px); }
+/* the lockup's second word: "keyboard" where it fits, "kbd" where it does not, none at all last (app.js measures) */
+.nav-home .kbd-short, .nav-home[data-fit=short] .kbd-long, .nav-home[data-fit=none] .kbd { display: none; }
+.nav-home[data-fit=short] .kbd-short { display: inline; }
 .app-nav { display: flex; gap: 4px; justify-self: center; }
 .app-nav button { position: relative; min-width: 64px; min-height: 44px; padding: 0 14px; font-size: 15.5px; font-weight: 500; color: var(--muted); }
 .app-nav button::after { content: ""; position: absolute; left: 50%; bottom: 3px; width: 18px; height: 3px; margin-left: -9px; border-radius: 2px; background: transparent; transition: background .2s; }
@@ -69,6 +72,21 @@ svg { flex: none; }
 .share:hover { background: var(--field); }
 .share[data-copied=true] { color: var(--accent); }
 #nav-about[aria-current=page] { color: var(--ink); background: var(--soft); }
+/* the language, as on the home page */
+.lang { display: inline-flex; gap: 2px; margin-left: 4px; font: 500 11px var(--mono); }
+.lang button { min-width: 34px; min-height: 34px; padding: 0 8px; color: var(--muted); }
+.lang button:hover { color: var(--ink); }
+.lang button[aria-pressed=true] { background: color-mix(in srgb, var(--ink) 10%, transparent); color: var(--ink); }
+/* a narrower window keeps the modes clear: Share folds to its icon, then the save state and the lockup's second word go */
+@media (max-width: 980px) {
+  .share { width: 44px; padding: 0; margin: 0; justify-content: center; background: none; color: var(--muted); }
+  .share span { display: none; }
+  .share:hover { background: var(--soft); color: var(--ink); }
+}
+@media (max-width: 900px) {
+  .save-state { display: none; }
+  .app-nav button { padding: 0 10px; }
+}
 
 /* the scene and the panel share real layout space; neither covers the other */
 main { grid-row: 2; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); min-width: 0; min-height: 0; position: relative; }
@@ -251,8 +269,9 @@ input[type=color]::-moz-color-swatch { border: 0; border-radius: 50%; }
 #swatches [aria-pressed=true], #pcb-masks [aria-pressed=true] { box-shadow: 0 0 0 2px var(--bg0), 0 0 0 4px var(--ink); }
 .cover-option { display: flex; align-items: center; gap: 10px; min-height: 40px; color: var(--ink); font-size: 13px; }
 .cover-option input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
-.case-guide { display: inline-flex; align-items: center; min-height: 36px; font-size: 12.5px; font-weight: 500; text-decoration: none; }
-.case-guide:hover { text-decoration: underline; }
+.case-guide, .support { display: inline-flex; align-items: center; min-height: 36px; font-size: 12.5px; font-weight: 500; text-decoration: none; }
+.case-guide:hover, .support:hover { text-decoration: underline; }
+.support { align-self: flex-start; margin-top: -8px; font-size: 13.5px; }
 .palette-reset, .text-action { align-self: flex-start; min-height: 36px; padding: 0; color: var(--accent); font-size: 13px; font-weight: 500; border-radius: 6px; }
 .palette-reset:hover, .text-action:hover { text-decoration: underline; text-underline-offset: 4px; }
 .text-action { display: flex; justify-content: space-between; width: 100%; }
@@ -387,7 +406,12 @@ dialog pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 11px/1.6 var(
   .bar { grid-template-columns: minmax(0, 1fr) auto; row-gap: 0; padding: max(6px, env(safe-area-inset-top)) max(6px, env(safe-area-inset-right)) 0 max(16px, env(safe-area-inset-left)); }
   .app-nav { grid-row: 2; grid-column: 1 / -1; gap: 10px; }
   .app-nav button { font-size: 15px; padding: 0 10px; }
-  .nav-home .mark { width: 30px; height: 25px; } .nav-home .word { font-size: 25px; } .nav-home .kbd { display: none; }
+  /* a tighter bar leaves the lockup room for "flan kbd" */
+  .bar { column-gap: 8px; }
+  .nav-home { gap: 7px; } .nav-home .mark { width: 28px; height: 24px; } .nav-home .word, .nav-home .kbd { font-size: 23px; }
+  .bar .icon-button, .bar .share { width: 40px; }
+  .lang { margin-left: 2px; }
+  .lang button { min-width: 30px; padding: 0 5px; }
   .save-state { display: none; }
   .share { width: 44px; padding: 0; margin: 0; justify-content: center; background: none; color: var(--muted); }
   .share span { display: none; }
@@ -415,6 +439,7 @@ dialog pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 11px/1.6 var(
   .sec > .tune-body { order: 3; }
   .sec > .sec-head h2 { display: none; }
   .sec > .sec-head::before { content: "Fine-tune"; font: 400 11.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  :root[lang=es] .sec > .sec-head::before { content: "Ajustes"; }
   .sec > .sec-head .tune .cur { display: none; }
   .tune[aria-expanded=true] .act::after { content: "\00a0⌃"; }
   #panel-size > .sec-head, .build > .tune.row, .build-lab { display: none; }
@@ -439,9 +464,17 @@ dialog pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 11px/1.6 var(
   .dialog-body { padding: 16px; }
   body[data-drawer-snap=peek] .editor-tabs, body[data-drawer-snap=peek] .inspector, body[data-drawer-snap=peek] #config-status { display: none; }
 }
+/* the smallest phones: "flan kbd" still fits beside the tools */
+@media (max-width: 374px) {
+  .bar { padding-left: max(12px, env(safe-area-inset-left)); padding-right: max(4px, env(safe-area-inset-right)); }
+  .nav-home { gap: 5px; } .nav-home .mark { width: 24px; height: 20px; } .nav-home .word, .nav-home .kbd { font-size: 20px; }
+  .bar .icon-button, .bar .share { width: 34px; }
+  .lang { margin-left: 0; } .lang button { min-width: 26px; padding: 0 4px; }
+  /* segments share by content and long group names wrap, so nothing is cut */
+  .segments button { flex: 1 1 auto; padding: 0 4px; }
+  .part-name { white-space: normal; }
+}
 @media (max-width: 360px) {
-  .bar { padding-left: max(12px, env(safe-area-inset-left)); }
-  .nav-home .word { display: none; }
   .color-editor { grid-template-columns: 30px 84px auto; }
 }
 @container editor (max-width: 300px) {
