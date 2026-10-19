@@ -69,7 +69,7 @@ export function createModel({canvas,packs,onChange=()=>{}}){
   canvas.style.touchAction='pan-y';
   const turntable=new THREE.Group(),model=new THREE.Group();turntable.add(model);scene.add(turntable);
   const sizes={},state={onscreen:true,look:null,theme:null,explode:0,target:EXPLODED,standby:!reduced.matches,interacting:false,idle:0,amp:0,phase:0,ready:false};
-  let common,objects=[],center=new THREE.Vector3(),tweens=[];
+  let common,objects=[],tweens=[];
 
   const load=id=>sizes[id]??=fetchPack(packs[id]);
   async function init(look,theme){
@@ -84,19 +84,11 @@ export function createModel({canvas,packs,onChange=()=>{}}){
     }
     await apply(look,theme,{animate:false});
     // the keyboard's own centre, fitted with its layers apart so the frame never jumps
-    const box=bounds(EXPLODED);box.getCenter(center);model.position.sub(center);fitBox=box.translate(center.clone().negate());resetView();
+    measure();resetView();
     state.ready=true;state.explode=reduced.matches?EXPLODED:0;state.target=EXPLODED;place();
     // the other sizes in the background, so a size change is instant
     for(const id of Object.keys(packs))if(id!=='common')load(id).catch(()=>{});
     loop();
-  }
-  function bounds(explode){
-    const box=new THREE.Box3();
-    for(const o of objects)if(o.visible&&o.geometry){
-      const y=o.position.y;o.position.y=o.userData.base[1]+o.userData.e*explode;o.updateMatrixWorld(true);
-      box.expandByObject(o);o.position.y=y;
-    }
-    model.updateMatrixWorld(true);return box;
   }
   // Size, case style, keycap shape and frames swap geometry at once; colours ease when animate is set.
   async function apply(look,theme,{animate=true}={}){
@@ -122,7 +114,9 @@ export function createModel({canvas,packs,onChange=()=>{}}){
       const mats=Array.isArray(o.material)?o.material:[o.material];
       mats.forEach((m,i)=>{const to=new THREE.Color(colors[i]??colors[0]);if(animate&&state.ready)tweens.push({m,from:m.color.clone(),to});else m.color.copy(to);});
     }
-    tweenStart=performance.now();place();render();
+    tweenStart=performance.now();place();
+    if(state.ready&&state.size!==look.size){measure();frame();}state.size=look.size;
+    render();
   }
   let tweenStart=0;
   function place(){for(const o of objects)o.position.y=o.userData.base[1]+o.userData.e*state.explode;}
@@ -130,21 +124,33 @@ export function createModel({canvas,packs,onChange=()=>{}}){
     const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;
     renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();frame();render();
   }
-  // keep the whole keyboard in view at any aspect: the box's extent across the view sets the distance
-  let zoom=1,fitBox=null;
+  // keep the whole keyboard in view at any aspect: every part's box corner, with the layers apart, must
+  // project inside the view; the model is centred on what is seen, not on its box
+  let zoom=1,fitPoints=[];
   const VIEW=new THREE.Vector3(1.05,1.38,1.5).normalize();
+  function measure(){
+    const keep=[state.explode,turntable.rotation.y,turntable.position.y];
+    state.explode=EXPLODED;place();turntable.rotation.y=0;turntable.position.y=0;model.position.set(0,0,0);scene.updateMatrixWorld(true);
+    const points=[],box=new THREE.Box3();
+    for(const o of objects)if(o.visible&&o.geometry){box.setFromObject(o);for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z])points.push(new THREE.Vector3(x,y,z));}
+    const centre=new THREE.Box3().setFromPoints(points).getCenter(new THREE.Vector3());
+    for(const p of points)p.sub(centre);model.position.copy(centre).negate();
+    [state.explode,turntable.rotation.y,turntable.position.y]=keep;place();fitPoints=points;
+  }
   function frame(){
-    if(!fitBox)return;
+    if(!fitPoints.length)return;
     const dir=camera.position.clone().sub(controls.target).normalize(),up=new THREE.Vector3(0,1,0);
     const right=new THREE.Vector3().crossVectors(up,dir).normalize(),top=new THREE.Vector3().crossVectors(dir,right);
-    let w=0,h=0,d=0;
-    for(const x of [fitBox.min.x,fitBox.max.x])for(const y of [fitBox.min.y,fitBox.max.y])for(const z of [fitBox.min.z,fitBox.max.z]){
-      const v=new THREE.Vector3(x,y,z);w=Math.max(w,Math.abs(v.dot(right)));h=Math.max(h,Math.abs(v.dot(top)));d=Math.max(d,v.dot(dir));}
-    const tan=Math.tan(THREE.MathUtils.degToRad(camera.fov)/2),distance=(Math.max(h/tan,w/(tan*camera.aspect))*1.06+d)/zoom;
+    let r0=Infinity,r1=-Infinity,t0=Infinity,t1=-Infinity;
+    for(const p of fitPoints){const r=p.dot(right),t=p.dot(top);r0=Math.min(r0,r);r1=Math.max(r1,r);t0=Math.min(t0,t);t1=Math.max(t1,t);}
+    controls.target.copy(right).multiplyScalar((r0+r1)/2).addScaledVector(top,(t0+t1)/2);
+    const tan=Math.tan(THREE.MathUtils.degToRad(camera.fov)/2);let distance=0;
+    for(const p of fitPoints){const v=p.clone().sub(controls.target),depth=v.dot(dir);distance=Math.max(distance,Math.abs(v.dot(top))/tan+depth,Math.abs(v.dot(right))/(tan*camera.aspect)+depth);}
+    distance=distance*1.04/zoom;
     camera.position.copy(dir).multiplyScalar(distance).add(controls.target);camera.near=distance/20;camera.far=distance*20;camera.updateProjectionMatrix();
   }
   function resetView(){
-    zoom=1.14;controls.target.set(0,0,0);camera.position.copy(VIEW);camera.up.set(0,1,0);frame();controls.update();state.idle=0;render();
+    zoom=1;controls.target.set(0,0,0);camera.position.copy(VIEW);camera.up.set(0,1,0);frame();controls.update();state.idle=0;render();
   }
   const clock=new THREE.Clock();let frameId=0,needs=true;
   const render=()=>{needs=true;if(!frameId)frameId=requestAnimationFrame(tick);};
@@ -175,47 +181,77 @@ export function createModel({canvas,packs,onChange=()=>{}}){
   new IntersectionObserver(([e])=>{state.onscreen=e.isIntersecting;if(state.onscreen)render();}).observe(canvas);
   document.addEventListener('visibilitychange',render);
 
-  // option previews: a second small renderer, transparent PNGs in the current colours
+  // Option and spec previews: a second small renderer, transparent PNGs in the current colours.
+  // Each kind picks parts of the left half, a direction and what it frames; specs may add dimensions.
+  const COLUMN=['K01','K11','K21'],STACK=['battery','mcu','display','supports','connectors'];
+  const KINDS={
+    size:{keep:p=>['case','frame','cap','screen'].includes(p.kind)||p.group==='display',view:[0,1,.0001],up:[0,0,-1]},
+    case:{keep:p=>['case','cap'].includes(p.kind)||p.group==='switches',view:[.35,1.6,1.75],focus:[[8,-2,52],[82,10,96]],tight:.62},
+    keys:{keep:p=>(p.kind==='cap'||p.group==='switches')&&COLUMN.includes(p.r),view:[-1,.06,0]},
+    frame:{keep:p=>['frame','screen'].includes(p.kind)||p.group==='display',view:[0,1,.0001],up:[0,0,-1],focusKind:'frame'},
+    // specs
+    profile:{keep:p=>!['connectors','supports'].includes(p.group),view:[0,.02,1],annotate:'height'},
+    layout:{keep:p=>p.kind==='cap'&&p.k[1]!=='3'&&p.k[1]!=='4'&&p.k[2]!=='0',view:[0,1,.0001],up:[0,0,-1],annotate:'pitch',tight:1.22},
+    controller:{keep:p=>p.group==='mcu',view:[.55,1.25,.9]},
+    display:{keep:p=>p.group==='display'||p.kind==='screen',view:[.25,1.5,.85]},
+    stack:{keep:p=>STACK.includes(p.group)||p.kind==='battery'||p.kind==='screen',view:[1,.42,1.25],explode:1},
+    pcb:{keep:p=>p.group==='pcb',view:[0,1,.0001],up:[0,0,-1]},
+  };
   let previewRenderer;
-  function preview(kind,value,{width=160,height=110}={}){
+  async function preview(kind,value,{width=160,height=110,ink='#20212a'}={}){
     previewRenderer??=new THREE.WebGLRenderer({canvas:document.createElement('canvas'),antialias:true,alpha:true,preserveDrawingBuffer:true});
-    const r=previewRenderer;r.setPixelRatio(Math.min(devicePixelRatio,2));r.setSize(width,height,false);r.outputColorSpace=THREE.SRGBColorSpace;r.setClearColor(0,0);
+    const r=previewRenderer,dpr=Math.min(devicePixelRatio,2),spec=KINDS[kind];r.setPixelRatio(dpr);r.setSize(width,height,false);r.outputColorSpace=THREE.SRGBColorSpace;r.setClearColor(0,0);
     const look={...state.look,frame:{...state.look.frame}},theme=state.theme,s=new THREE.Scene();lights(s);
     if(kind==='size')look.size=value;else if(kind==='case')look.case=value;else if(kind==='keys')look.keys=value;else if(kind==='frame')look.frame.left=value;
-    const pack=sizes[look.size];
-    return Promise.resolve(pack).then(pack=>{
-      const picked=[],made=[],mat=c=>{const m=surface(c);made.push(m);return m;},column=['K01','K11','K21'];
-      for(const o of objects){
-        const p=o.userData;if(p.side!=='left'||(p.v&&!p.v.includes(look.size)))continue;
-        const keep={size:['case','frame','cap','screen'].includes(p.kind)||p.group==='display',
-          case:['case','cap'].includes(p.kind)||p.group==='switches',
-          keys:(p.kind==='cap'||p.group==='switches')&&column.includes(p.r),
-          frame:['frame','screen'].includes(p.kind)||p.group==='display'}[kind];
-        if(!keep)continue;
-        let g=o.geometry,material=o.material,rot=o.rotation.y,y=p.base[1];
-        if(p.kind==='case'){g=pack.mesh(`left-case-${look.case}-${p.group}`);material=mat(p.group==='base'?theme.base:look.case==='level'?theme.frame.body:theme.plate);}
-        if(p.kind==='frame'){g=common.mesh(`left-frame-${look.frame.left}`);material=framePalette({...look,own:{left:kind==='frame'?false:look.own?.left}},theme,'left').map(mat);}
-        if(p.kind==='cap'){const [variant,turn]=common.presets[look.keys].left[p.k],cap=common.caps[variant],key=common.layout.left[p.k];g=common.mesh(cap.mesh);rot=THREE.MathUtils.degToRad(key.angle+turn);y=cap.seat;material=mat(capColor(theme.keycaps,key));}
-        const m=new THREE.Mesh(g,material);m.position.set(p.p[0],y,p.p[2]);m.rotation.y=rot;m.userData.kind=p.kind;s.add(m);picked.push(m);
+    const pack=await sizes[look.size],picked=[],made=[],mat=c=>{const m=surface(c);made.push(m);return m;};
+    for(const o of objects){
+      const p=o.userData;if(p.side!=='left'||(p.v&&!p.v.includes(look.size))||!o.geometry&&p.kind!=='case'||!spec.keep(p))continue;
+      let g=o.geometry,material=o.material,rot=o.rotation.y,y=p.base[1]+(spec.explode?p.e*spec.explode:0);
+      if(p.kind==='case'){g=pack.mesh(`left-case-${look.case}-${p.group}`);material=mat(p.group==='base'?theme.base:look.case==='level'?theme.frame.body:theme.plate);}
+      if(p.kind==='pcb')g=pack.mesh('left-pcb');
+      if(p.kind==='frame'){g=common.mesh(`left-frame-${look.frame.left}`);material=framePalette({...look,own:{left:kind==='frame'?false:look.own?.left}},theme,'left').map(mat);}
+      if(p.kind==='cap'){const [variant,turn]=common.presets[look.keys].left[p.k],cap=common.caps[variant],key=common.layout.left[p.k];g=common.mesh(cap.mesh);rot=THREE.MathUtils.degToRad(key.angle+turn);y=cap.seat;material=mat(capColor(theme.keycaps,key));}
+      const m=new THREE.Mesh(g,material);m.position.set(p.p[0],y,p.p[2]);m.rotation.y=rot;m.userData={kind:p.kind,group:p.group,k:p.k};s.add(m);picked.push(m);
+    }
+    const focus=new THREE.Box3();
+    if(spec.focus)focus.set(new THREE.Vector3(...spec.focus[0]),new THREE.Vector3(...spec.focus[1]));
+    else for(const m of picked)if(!spec.focusKind||m.userData.kind===spec.focusKind)focus.expandByObject(m);
+    // room for the dimension labels
+    const body=focus.clone();if(spec.annotate==='height')focus.max.x+=34;if(spec.annotate==='pitch'){focus.max.x+=22;focus.max.z+=12;}
+    const c=focus.getCenter(new THREE.Vector3()),cam=new THREE.OrthographicCamera();
+    cam.position.copy(c).add(new THREE.Vector3(...spec.view).normalize().multiplyScalar(400));cam.up.set(...(spec.up||[0,1,0]));
+    cam.lookAt(c);cam.updateMatrixWorld();
+    const right=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,0),up=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,1),aspect=width/height;
+    let half=0;for(const x of [focus.min.x,focus.max.x])for(const y of [focus.min.y,focus.max.y])for(const z of [focus.min.z,focus.max.z]){const v=new THREE.Vector3(x,y,z).sub(c);half=Math.max(half,Math.abs(v.dot(right))/aspect,Math.abs(v.dot(up)));}
+    half*=spec.tight||1.04;
+    Object.assign(cam,{left:-half*aspect,right:half*aspect,top:half,bottom:-half,near:1,far:2000});cam.updateProjectionMatrix();
+    r.render(s,cam);
+    let url;
+    if(!spec.annotate)url=r.domElement.toDataURL('image/png');
+    else{
+      // real dimensions, projected from the model: lines and labels in the page's ink
+      const out=document.createElement('canvas');out.width=width*dpr;out.height=height*dpr;
+      const ctx=out.getContext('2d');ctx.drawImage(r.domElement,0,0);
+      const px=v=>{const n=new THREE.Vector3(...v).project(cam);return [(n.x+1)/2*out.width,(1-n.y)/2*out.height];};
+      ctx.strokeStyle=ink;ctx.fillStyle=ink;ctx.lineWidth=dpr;ctx.font=`500 ${11*dpr}px "JetBrains Mono", ui-monospace, monospace`;ctx.textBaseline='middle';
+      const tick=(a,b,label,offset)=>{
+        const [x0,y0]=px(a),[x1,y1]=px(b),dx=x1-x0,dy=y1-y0,l=Math.hypot(dx,dy),nx=-dy/l*4*dpr,ny=dx/l*4*dpr;
+        ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);for(const [x,y] of [[x0,y0],[x1,y1]]){ctx.moveTo(x-nx,y-ny);ctx.lineTo(x+nx,y+ny);}ctx.stroke();
+        ctx.textAlign=offset[0]>0?'left':offset[0]<0?'right':'center';ctx.fillText(label,(x0+x1)/2+offset[0]*dpr,(y0+y1)/2+offset[1]*dpr);
+      };
+      if(spec.annotate==='height'){
+        const base=picked.filter(m=>m.userData.kind==='case'),frame=picked.find(m=>m.userData.kind==='frame');
+        const bottom=Math.min(...base.map(m=>new THREE.Box3().setFromObject(m).min.y)),top=new THREE.Box3().setFromObject(frame).max.y,x=body.max.x+5;
+        tick([x,bottom,body.max.z],[x,top,body.max.z],`${(top-bottom).toFixed(1)} mm`,[8,0]);
+      }else{
+        const key=k=>{const m=picked.find(m=>m.userData.k===k);return m.position;},a=key('K22'),b=key('K23'),e=key('K13'),y=a.y+8;
+        const z=body.max.z+4;tick([a.x,y,z],[b.x,y,z],`${b.x-a.x} mm`,[0,10]);
+        const x=body.max.x+4;tick([x,y,e.z],[x,y,b.z],`${b.z-e.z} mm`,[7,0]);
       }
-      // what each preview frames: the half from above, the pinky foot and thumb notch where the case styles
-      // differ, one column of caps from the side, the frame from above
-      let focus=new THREE.Box3();
-      if(kind==='case')focus.set(new THREE.Vector3(8,-2,52),new THREE.Vector3(82,10,96));
-      else for(const m of picked)if(kind!=='frame'||m.userData.kind==='frame')focus.expandByObject(m);
-      const views={size:[0,1,.0001],case:[.35,1.6,1.75],keys:[-1,.06,0],frame:[0,1,.0001]};
-      const c=focus.getCenter(new THREE.Vector3()),cam=new THREE.OrthographicCamera();
-      cam.position.copy(c).add(new THREE.Vector3(...views[kind]).normalize().multiplyScalar(400));
-      cam.up.set(0,1,0);if(kind==='size'||kind==='frame')cam.up.set(0,0,-1);
-      cam.lookAt(c);cam.updateMatrixWorld();
-      const right=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,0),up=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,1),aspect=width/height;
-      let half=0;for(const x of [focus.min.x,focus.max.x])for(const y of [focus.min.y,focus.max.y])for(const z of [focus.min.z,focus.max.z]){const v=new THREE.Vector3(x,y,z).sub(c);half=Math.max(half,Math.abs(v.dot(right))/aspect,Math.abs(v.dot(up)));}
-      half*=kind==='case'?.62:1.04;
-      Object.assign(cam,{left:-half*aspect,right:half*aspect,top:half,bottom:-half,near:1,far:2000});cam.updateProjectionMatrix();
-      r.render(s,cam);const url=r.domElement.toDataURL('image/png');
-      for(const m of made)m.dispose();
-      return url;
-    });
+      url=out.toDataURL('image/png');
+    }
+    for(const m of made)m.dispose();
+    return url;
   }
   return {
     init,apply,resize,resetView,preview,load,

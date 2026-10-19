@@ -9,7 +9,7 @@ const $=id=>document.getElementById(id);
 const themes=new Map(data.themes.map(t=>[t.id,t])),frameIds=data.frames.map(f=>f.id);
 const CASES=[['rim','Color rim'],['solid','Solid'],['terrace','Terrace'],['level','Level']],KEYS=[['original','Original'],['normal','Sculpted'],['saddle','Saddle']];
 const T={
-  en:{'nav.explore':'Explore in 3D','nav.build':'Build guide','hero.eyebrow':'Open-source wireless split','hero.sub':'Low-profile and split, in four sizes. Turn it, take it apart, make it yours.',
+  en:{'nav.explore':'Explore in 3D','nav.build':'Build guide','hero.eyebrow':'Open-source wireless keyboard','hero.title':'Low. Split. Yours.','hero.sub':'Four sizes, 28 themes and six magnetic frames. Turn it, take it apart, make it yours.',
     'stage.label':'3D keyboard','stage.canvas':'Drag to turn the keyboard','stage.poster':'Flan36 in the SNES theme, layers apart','stage.hint':'Drag to turn · pinch to zoom','stage.pause':'Pause the standby motion','stage.play':'Resume the standby motion','stage.reset':'Reset the view',
     'stage.nogl':'The live 3D view needs WebGL. The explorer shows every part.','stage.failed':'The 3D model could not load. Check the connection and reload.',
     'layers.apart':'Apart','layers.together':'Together','layers.label':'Separate the layers','rail.label':'Make it yours','g.size':'Size','g.theme':'Theme','g.case':'Case','g.keys':'Keycaps','g.frame':'Frame','g.frames':'Frames',
@@ -17,7 +17,7 @@ const T={
     'side.both':'Both halves','side.left':'Left','side.right':'Right','cta.open':'Open this build in 3D','keys':'keys','specs.eyebrow':'Spec sheet','specs.title':'What’s under the frame',
     'f.parts':'Parts','f.pcbs':'Order PCBs','f.status':'Digital prototype · physical tests in progress','f.by':'by',
     'role.body':'Body','role.detail':'Detail','role.accent':'Accent','role.secondary':'Secondary'},
-  es:{'nav.explore':'Explorar en 3D','nav.build':'Guía de armado','hero.eyebrow':'Teclado dividido, inalámbrico y abierto','hero.sub':'Perfil bajo y dividido, en cuatro tamaños. Gíralo, sepáralo y hazlo tuyo.',
+  es:{'nav.explore':'Explorar en 3D','nav.build':'Guía de armado','hero.eyebrow':'Teclado inalámbrico de código abierto','hero.title':'Bajo. Dividido. Tuyo.','hero.sub':'Cuatro tamaños, 28 temas y seis marcos magnéticos. Gíralo, sepáralo y hazlo tuyo.',
     'stage.label':'Teclado en 3D','stage.canvas':'Arrastra para girar el teclado','stage.poster':'Flan36 con el tema SNES, capas separadas','stage.hint':'Arrastra para girar · pellizca para acercar','stage.pause':'Pausar el movimiento en reposo','stage.play':'Reanudar el movimiento en reposo','stage.reset':'Restablecer la vista',
     'stage.nogl':'La vista 3D necesita WebGL. El explorador muestra cada pieza.','stage.failed':'No se pudo cargar el modelo 3D. Revisa la conexión y recarga.',
     'layers.apart':'Separado','layers.together':'Unido','layers.label':'Separar las capas','rail.label':'Hazlo tuyo','g.size':'Tamaño','g.theme':'Tema','g.case':'Caja','g.keys':'Keycaps','g.frame':'Marco','g.frames':'Marcos',
@@ -34,7 +34,8 @@ const SHAPES={
   ipod:['A complete click wheel and a continuous screen border.','Click wheel completa y un marco continuo de pantalla.'],
   hanafuda:['Lacquer-card landscape: sun, mountain, snowcap and foothills.','Paisaje de carta lacada: sol, montaña, nieve y faldas.'],
 };
-// label (en, es), value (one, or en and es), note (en, es)
+// label (en, es), value (one, or en and es), note (en, es); ART names each card's illustration, in order
+const ART=[['profile',300,128],['layout',250,128],['controller',230,128],['display',210,128],['sizes'],['stack',250,128],['frames'],['pcb',250,128]];
 const SPECS=[
   ['Low profile','Perfil bajo','14.5 mm','Choc v1 hot-swap sockets under a flush magnetic frame.','Sockets hot-swap Choc v1 bajo un marco magnético al ras.'],
   ['Layout','Distribución','18 × 17 mm','Choc spacing, column stagger and three splayed thumb keys per half.','Espaciado Choc, columnas escalonadas y tres teclas de pulgar abiertas por mitad.'],
@@ -138,9 +139,16 @@ async function renderPreviews(){
   if(!model)return;const seq=++previewSeq;
   const jobs=[...data.sizes.map(s=>['size',s.id,{width:128,height:88}]),...CASES.map(c=>['case',c[0],{width:140,height:92}]),
     ...KEYS.map(k=>['keys',k[0],{width:184,height:88}]),...frameIds.map(f=>['frame',f,{width:68,height:168}])];
+  // the spec sheet's own renders wait until it is about to be read
+  if(specsNear){
+    const ink=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();
+    await document.fonts?.load('500 11px "JetBrains Mono"').catch(()=>{});
+    for(const [kind,w,h] of ART)if(w)jobs.push([kind,'spec',{width:w,height:h,ink}]);
+  }
   for(const [kind,value,size] of jobs){
-    try{const url=await model.preview(kind,value,size);if(seq!==previewSeq)return;previews.get(`${kind}:${value}`).src=url;}catch{}
+    try{const url=await model.preview(kind,value,size);if(seq!==previewSeq)return;previews.get(value==='spec'?'spec:'+kind:`${kind}:${value}`).src=url;}catch(e){console.warn(kind,value,e);}
     await new Promise(r=>setTimeout(r,0));
+    if(kind==='frame'||kind==='size')for(const [img,key] of mirror)setSrc(img,previews.get(key).getAttribute('src'));
   }
   if(!$('browser').hidden)focusFrame(browsing.focus);
 }
@@ -205,6 +213,19 @@ function slider(){
   return show;
 }
 
+function buildSpecs(){
+  $('specs').replaceChildren(...ART.map(([kind])=>{
+    const art=el('div',{className:'art '+kind});
+    if(kind==='sizes')art.append(...data.sizes.map(z=>{const img=el('img',{alt:''});mirror.push([img,'size:'+z.id]);return img;}));
+    else if(kind==='frames')art.append(...frameIds.map(f=>{const img=el('img',{alt:''});mirror.push([img,'frame:'+f]);return img;}));
+    else{const img=el('img',{alt:''});previews.set('spec:'+kind,img);art.append(img);}
+    return el('div',{className:'spec'},art,el('span',{className:'lab'}),el('b'),el('p'));
+  }));
+}
+// spec art that shows option thumbnails again
+const mirror=[];
+let specsNear=false;
+new IntersectionObserver(([e],o)=>{if(e.isIntersecting){specsNear=true;o.disconnect();if(model)renderPreviews();}},{rootMargin:'600px 0px'}).observe(document.querySelector('.specs'));
 function translate(){
   document.documentElement.lang=lang;
   for(const b of document.querySelectorAll('[data-lang]'))b.setAttribute('aria-pressed',String(b.dataset.lang===lang));
@@ -213,14 +234,14 @@ function translate(){
   for(const n of document.querySelectorAll('[data-t-title]'))n.title=t(n.dataset.tTitle);
   for(const n of document.querySelectorAll('[data-t-alt]'))n.alt=t(n.dataset.tAlt);
   const i=lang==='es'?1:0;
-  $('specs').replaceChildren(...SPECS.map(s=>el('div',{className:'spec'},el('span',{className:'lab',textContent:s[i]}),el('b',{textContent:Array.isArray(s[2])?s[2][i]:s[2]}),el('p',{textContent:s[3+i]}))));
+  for(const [n,card] of [...$('specs').children].entries()){const sp=SPECS[n];card.querySelector('.lab').textContent=sp[i];card.querySelector('b').textContent=Array.isArray(sp[2])?sp[2][i]:sp[2];card.querySelector('p').textContent=sp[3+i];}
   $('standby').title=model&&!model.standby?t('stage.play'):t('stage.pause');
   syncRail();if(!$('browser').hidden)focusFrame(browsing.focus);
 }
 function failed(error){console.error(error);const n=$('note');n.hidden=false;n.textContent=t('stage.failed');}
 
 lang=store.get('flan.lang')==='es'?'es':'en';
-buildRail();paint();translate();reveal();
+buildRail();buildSpecs();paint();translate();reveal();
 for(const b of document.querySelectorAll('[data-lang]'))b.addEventListener('click',()=>{lang=b.dataset.lang;store.set('flan.lang',lang);translate();});
 $('browse').addEventListener('click',openBrowser);$('back').addEventListener('click',()=>closeBrowser(false));$('f-cancel').addEventListener('click',()=>closeBrowser(false));
 $('f-apply').addEventListener('click',()=>closeBrowser(true));

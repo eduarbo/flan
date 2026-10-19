@@ -10,8 +10,12 @@ const root=path.resolve(__dirname,'..'),shots=path.join(root,'build/home-check')
   const errors=[],out={};
   const watch=(p,name)=>{p.on('pageerror',e=>errors.push(name+': '+e.message));p.on('console',m=>{if(m.type()==='error')errors.push(name+': '+m.text());});p.on('requestfailed',r=>errors.push(name+': failed '+r.url()));};
   const page=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFactor:1});watch(page,'desktop');
-  await page.goto(base);await page.waitForSelector('#stage.live',{timeout:120000});
-  await page.waitForFunction(()=>[...document.querySelectorAll('.opt img')].every(i=>i.src),null,{timeout:120000});
+  await page.goto(base,{timeout:120000});await page.waitForSelector('#stage.live',{timeout:120000});
+  await page.waitForFunction(()=>[...document.querySelectorAll('.opt img')].every(i=>i.src),null,{timeout:180000});
+  // the spec sheet renders once it nears the viewport
+  await page.evaluate(()=>document.querySelector('.specs').scrollIntoView());
+  await page.waitForFunction(()=>[...document.querySelectorAll('.art img')].every(i=>i.src),null,{timeout:180000});
+  await page.evaluate(()=>scrollTo(0,0));
   await page.waitForTimeout(2200);await page.screenshot({path:path.join(shots,'desktop-snes.png'),fullPage:true});
   const state=()=>page.evaluate(()=>({href:document.getElementById('open').getAttribute('href'),bg:getComputedStyle(document.documentElement).getPropertyValue('--bg1').trim(),
     pressed:[...document.querySelectorAll('#rail [aria-pressed=true]')].map(b=>b.dataset.value),explode:+document.getElementById('explode').getAttribute('aria-valuenow')}));
@@ -47,21 +51,23 @@ const root=path.resolve(__dirname,'..'),shots=path.join(root,'build/home-check')
   assert(!/theme=/.test(out.explore.url),'the look leaves the address');
   out.homeLink=await viewer.getAttribute('#nav-home','href');assert.equal(out.homeLink,'../');
   await viewer.screenshot({path:path.join(shots,'explore.png')});
+  // software rendering is slow: free the CPU before the next layouts
+  await page.close();await viewer.close();
   // phone
   const phone=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});watch(phone,'phone');
-  await phone.goto(base);await phone.waitForSelector('#stage.live',{timeout:120000});await phone.waitForTimeout(2200);
+  await phone.goto(base,{timeout:120000});await phone.waitForSelector('#stage.live',{timeout:120000});await phone.waitForTimeout(2200);
   out.phone=await phone.evaluate(()=>({tabs:[...document.querySelectorAll('#tabs button')].length,scroll:document.documentElement.scrollWidth,visible:[...document.querySelectorAll('.grp')].filter(g=>getComputedStyle(g).display!=='none').length}));
   assert.equal(out.phone.tabs,5);assert.equal(out.phone.visible,1);assert(out.phone.scroll<=390,'no sideways scroll');
   await phone.screenshot({path:path.join(shots,'phone.png'),fullPage:true});
   // tablet: the rail moves below the model; Spanish; reduced motion skips the intro and the standby
   const tablet=await browser.newPage({viewport:{width:1024,height:900},reducedMotion:'reduce'});watch(tablet,'tablet');
   await tablet.addInitScript(()=>{try{localStorage.setItem('flan.lang','es');}catch{}});
-  await tablet.goto(base);await tablet.waitForSelector('#stage.live',{timeout:120000});await tablet.waitForTimeout(1500);
+  await phone.close();await tablet.goto(base,{timeout:120000});await tablet.waitForSelector('#stage.live',{timeout:120000});await tablet.waitForTimeout(1500);
   out.tablet=await tablet.evaluate(()=>({lang:document.documentElement.lang,cta:document.getElementById('open').textContent.trim(),standby:document.getElementById('standby').getAttribute('aria-pressed'),
     explode:+document.getElementById('explode').getAttribute('aria-valuenow'),scroll:document.documentElement.scrollWidth,railBelow:document.getElementById('rail').getBoundingClientRect().top>document.getElementById('stage').getBoundingClientRect().bottom-1}));
   assert.equal(out.tablet.lang,'es');assert(/Abrir/.test(out.tablet.cta));assert.equal(out.tablet.standby,'false');assert.equal(out.tablet.explode,75);
   assert(out.tablet.railBelow,'rail below the model');assert(out.tablet.scroll<=1024,'no sideways scroll');
-  await tablet.screenshot({path:path.join(shots,'tablet-es.png'),fullPage:true});
+  await tablet.screenshot({path:path.join(shots,'tablet-es.png'),fullPage:true,timeout:180000});
   assert.deepEqual(errors,[]);
   await browser.close();server.close();console.log(JSON.stringify(out,null,1));console.log('home ok');
 })().catch(e=>{console.error(e);process.exit(1);});
