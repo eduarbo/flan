@@ -1,0 +1,48 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Flan · logo a color R1</title>
+<!-- Review sheet for the colour marks, rendered to PNG by render.cjs. -->
+<style>
+@font-face{font-family:Fraunces;src:url(../../../../docs/assets/fonts/Fraunces-latin.woff2) format("woff2");font-weight:300 500}
+@font-face{font-family:Inter;src:url(../../../../docs/assets/fonts/Inter-latin.woff2) format("woff2");font-weight:400 600}
+@font-face{font-family:"JetBrains Mono";src:url(../../../../docs/assets/fonts/JetBrainsMono-latin.woff2) format("woff2");font-weight:400 500}
+*{box-sizing:border-box}html,body{margin:0}body{width:1440px;background:#f6f1e7;color:#2b1d14;font:400 15px/1.45 Inter,system-ui,sans-serif;padding:44px 52px 52px}
+h1{margin:0;font:300 44px/1.05 Fraunces,serif;font-variation-settings:"SOFT" 100,"opsz" 144;letter-spacing:-.02em}
+h2{margin:40px 0 14px;font:500 12px "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:#7a6250}
+p.lede{margin:8px 0 0;color:#6d5a4b;max-width:80ch}
+.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.card{background:#fffaf0;border-radius:18px;padding:18px 16px 16px;display:flex;flex-direction:column;gap:6px}
+.card img{width:100%;height:150px;object-fit:contain}.card b{font-size:15px;margin-top:6px}.card span{font-size:12.5px;color:#6d5a4b}
+.card .k{font:500 11px "JetBrains Mono",monospace;color:#a0846c}
+.tabs{border-radius:12px;overflow:hidden;margin-bottom:12px}
+.bar{display:flex;gap:4px;padding:8px 10px 0}.tab{display:flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:9px 9px 0 0;font:400 12.5px system-ui,-apple-system,sans-serif;white-space:nowrap;min-width:0}
+.tab img{width:16px;height:16px;flex:none}.light{background:#dee1e6}.light .tab{background:#fff;color:#202124}.dark{background:#202124}.dark .tab{background:#35363a;color:#e8eaed}
+.strip{height:10px}.light .strip{background:#fff}.dark .strip{background:#35363a}
+.pix{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.pix div{background:#fffaf0;border-radius:14px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12px;color:#6d5a4b}
+.pix .z{display:flex;flex-direction:row;gap:12px;align-items:flex-end;padding:0;background:none}.pix .z img{image-rendering:pixelated}
+.pix .z span{display:block;padding:6px;border-radius:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.lock{border-radius:16px;padding:26px 30px;display:flex;align-items:center;gap:12px}
+.lock img{height:44px}.lock .w{font:400 40px/1 Fraunces,serif;font-variation-settings:"SOFT" 100,"opsz" 144}.lock .k2{font:300 36px/1 Fraunces,serif;font-variation-settings:"SOFT" 100,"opsz" 144;opacity:.85}
+</style></head><body>
+<h1>Logo a color · R1</h1>
+<p class="lede">La misma tecla-flan en tres cuartos, ahora horneada: natilla iluminada desde la izquierda, caramelo con brillo arriba y más oscuro donde escurre. Abajo, la prueba que importa: el favicon a 16 px reales en pestañas claras y oscuras, junto a la marca actual.</p>
+<h2>Variantes</h2><div class="cards" id="cards"></div>
+<h2>Favicon en la pestaña · tamaño real</h2>
+<div class="tabs light"><div class="bar" id="tl"></div><div class="strip"></div></div>
+<div class="tabs dark"><div class="bar" id="td"></div><div class="strip"></div></div>
+<h2>Píxel a píxel · 16 y 32 px ampliados ×4, en claro y oscuro</h2><div class="pix" id="pix"></div>
+<h2>En el sitio · con «flan keyboard»</h2>
+<div class="pair"><div class="lock" style="background:#e2dcee;color:#20212a"><img src="../caramelo.svg"><span class="w">flan</span><span class="k2">keyboard</span></div>
+<div class="lock" style="background:#1c2734;color:#eef4fc"><img src="../caramelo.svg"><span class="w">flan</span><span class="k2">keyboard</span></div></div>
+<script>
+const V=[["actual","Actual","La marca de hoy, negra con contorno fino."],["caramelo"],["contorno"],["plato"],["dos-tintas"],["azulejo-crema"],["azulejo-caramelo"]];
+fetch('../variants.json').then(r=>r.json()).then(({variants})=>{
+  const meta=Object.fromEntries(variants.map(v=>[v.id,v]));
+  const src=(id,px)=>px?`../${id}-${px}.png`:id==='actual'?'../../../../docs/branding/flan/flan-mark.svg':`../${id}.svg`;
+  const name=id=>id==='actual'?'Actual':meta[id].name;
+  document.getElementById('cards').innerHTML=V.slice(1).map(([id])=>`<div class="card"><img src="${src(id)}"><b>${name(id)}</b><span>${meta[id].note}</span><span class="k">${id}.svg</span></div>`).join('');
+  for(const bar of ['tl','td'])document.getElementById(bar).innerHTML=V.map(([id])=>`<div class="tab"><img src="${src(id)}">${name(id)} · Flan Keyboard</div>`).join('');
+  document.getElementById('pix').innerHTML=V.map(([id])=>`<div><div class="z">${[16,32].map(px=>`<span style="background:#fff"><img src="${src(id,px)}" width="${px*4}" height="${px*4}"></span>`).join('')}</div><div class="z">${[16,32].map(px=>`<span style="background:#202124"><img src="${src(id,px)}" width="${px*4}" height="${px*4}"></span>`).join('')}</div>${name(id)}</div>`).join('');
+  document.body.dataset.ready='1';
+});
+</script></body></html>

@@ -126,6 +126,13 @@ def linea(small=False):
 def iso(small=False):
     """A keycap in three-quarter view: caramel pooled on the top face, dripping down the
     two front faces."""
+    g = iso_regions(small)
+    return unary_union([g["outline"], g["caramel"], g["front"]])
+
+def iso_regions(small=False):
+    """The three-quarter mark's parts, scaled into the 100 box: the silhouette, the top face, the
+    caramel, the front corner edge, and the one-colour mark's outline and front-edge strokes.
+    The colour marks (tools/branding/color_marks.py) fill these regions."""
     w = 5.0 if small else 2.8
     c30, s30 = math.cos(math.radians(30)), math.sin(math.radians(30))
     def proj(x, y, z):
@@ -166,7 +173,8 @@ def iso(small=False):
     g_sil, g_car, g_edge = tf(g_sil), tf(g_car), tf(g_edge)
     outline = g_sil.exterior.buffer(w / 2, quad_segs=Q)
     front = g_edge.difference(g_car).buffer(w / 2, quad_segs=Q, cap_style="round")
-    return unary_union([outline, g_car, front])
+    return {"silhouette": g_sil, "top": tf(top), "caramel": g_car, "edge": g_edge, "outline": outline, "front": front,
+            "stroke": w, "project": lambda x, y, z: tf(Point(proj(x, y, z)))}
 
 VARIANTS = {
     "glaseado": ("Glaseado", "Flan de perfil sobre su plato: contorno fino y caramelo sólido.", glaseado),

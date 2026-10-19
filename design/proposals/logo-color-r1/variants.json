@@ -1,0 +1,48 @@
+{
+  "palette": {
+    "custard_lit": "#F9D774",
+    "custard": "#F0B94A",
+    "custard_deep": "#DE9C34",
+    "caramel_top": "#A9531C",
+    "caramel": "#86390F",
+    "caramel_dark": "#5A240A",
+    "gloss": "#DC9452",
+    "outline": "#48210B",
+    "cream": "#FFF4DA",
+    "plate": "#FFFFFF",
+    "plate_rim": "#E7DDCA",
+    "plate_shade": "#F1E9DA"
+  },
+  "variants": [
+    {
+      "id": "caramelo",
+      "name": "Caramelo",
+      "note": "Natilla con luz y sombra, caramelo con brillo arriba y más oscuro donde escurre. Sin contorno."
+    },
+    {
+      "id": "contorno",
+      "name": "Con contorno",
+      "note": "La misma, con el contorno café de la marca original. Se lee mejor sobre fondos claros."
+    },
+    {
+      "id": "plato",
+      "name": "En su plato",
+      "note": "Servido: un plato blanco en la misma perspectiva, con la sombra del flan."
+    },
+    {
+      "id": "dos-tintas",
+      "name": "Dos tintas",
+      "note": "Solo natilla y caramelo, sin sombras. La más clara a 16 px y para imprimir."
+    },
+    {
+      "id": "azulejo-crema",
+      "name": "Azulejo crema",
+      "note": "La marca sobre un cuadrado redondeado color crema: se ve en pestañas claras y oscuras."
+    },
+    {
+      "id": "azulejo-caramelo",
+      "name": "Azulejo caramelo",
+      "note": "Sobre caramelo oscuro: la natilla resalta y funciona como ícono de app."
+    }
+  ]
+}
