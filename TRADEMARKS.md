@@ -26,4 +26,4 @@ Official Flan kits come from Eduardo Ruiz or from the licensed sellers listed he
 
 **Licensed sellers:** none yet.
 
-To sell kits under the Flan name, contact Eduardo through [github.com/eduarbo](https://github.com/eduarbo). Terms are agreed per seller.
+To sell kits under the Flan name, write to [hello@flankbd.com](mailto:hello@flankbd.com). Terms are agreed per seller.
