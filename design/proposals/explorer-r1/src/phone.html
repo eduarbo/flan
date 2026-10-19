@@ -1,0 +1,65 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Explorer R1 phone mockup</title>
+<!-- Static explorer R1 phone mockup (SNES), rendered by render.cjs. -->
+<style>
+@font-face{font-family:Fraunces;src:url(../../../../docs/assets/fonts/Fraunces-latin.woff2) format("woff2");font-weight:300 500}
+@font-face{font-family:Inter;src:url(../../../../docs/assets/fonts/Inter-latin.woff2) format("woff2");font-weight:400 600}
+@font-face{font-family:"JetBrains Mono";src:url(../../../../docs/assets/fonts/JetBrainsMono-latin.woff2) format("woff2");font-weight:400 500}
+:root{--bg0:#f6f2fd;--bg1:#e2dcee;--bg2:#c6bed5;--glow:#aca0c2;--ink:#20212a;--muted:#5e5769;--accent:#705d94;--on:#ffffff;--sel:color-mix(in srgb,var(--accent) 15%,transparent)}
+*{box-sizing:border-box}html,body{margin:0}
+body{width:390px;height:844px;overflow:hidden;position:relative;color:var(--ink);font:400 14px/1.4 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;background:radial-gradient(420px 460px at 50% 36%,var(--bg0) 0,var(--bg1) 60%,var(--bg2) 100%)}
+.lab{font:400 10.5px/1.2 "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.top{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 0}
+.lockup{display:flex;align-items:center;gap:7px}.lockup img{height:22px}.lockup b{font:400 21px/1 Fraunces,serif;font-variation-settings:"SOFT" 100,"opsz" 144}
+.tools{display:flex;gap:2px}.ib{width:34px;height:34px;display:grid;place-items:center;color:var(--muted)}.ib svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.modes{display:flex;justify-content:center;gap:26px;margin-top:10px;font-size:14px;font-weight:500;color:var(--muted)}
+.modes b{font-weight:500;display:flex;flex-direction:column;align-items:center;gap:3px}.modes b::after{content:"";width:16px;height:3px;border-radius:2px}.modes b.on{color:var(--ink);font-weight:600}.modes b.on::after{background:var(--accent)}
+.model{position:absolute;left:-6px;top:118px;width:360px;height:300px;object-fit:contain}
+.shadow{position:absolute;left:40px;top:330px;width:280px;height:90px;background:radial-gradient(closest-side,color-mix(in srgb,var(--ink) 18%,transparent),transparent 92%)}
+.layers{position:absolute;right:14px;top:140px;height:230px;width:30px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.layers svg{width:22px;height:22px;fill:none;stroke:var(--muted);stroke-width:1.6;stroke-linejoin:round}
+.track{position:relative;flex:1;width:4px;border-radius:2px;background:color-mix(in srgb,var(--ink) 16%,transparent)}
+.fill{position:absolute;left:0;right:0;bottom:0;height:75%;border-radius:2px;background:var(--accent)}
+.knob{position:absolute;left:50%;bottom:75%;width:24px;height:24px;margin:0 0 -12px -12px;border-radius:50%;background:var(--on);box-shadow:0 2px 8px color-mix(in srgb,var(--ink) 30%,transparent),0 0 0 4px var(--accent)}
+.views{position:absolute;left:16px;top:398px;display:flex;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;font-size:12.5px;font-weight:500;background:color-mix(in srgb,var(--on) 60%,transparent)}
+.chip svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sheet{position:absolute;left:0;right:0;bottom:0;height:398px;border-radius:22px 22px 0 0;background:color-mix(in srgb,var(--bg0) 82%,transparent);box-shadow:0 -8px 30px color-mix(in srgb,var(--ink) 10%,transparent);padding:8px 16px 0}
+.grab{width:38px;height:5px;border-radius:3px;background:color-mix(in srgb,var(--ink) 20%,transparent);margin:0 auto 10px}
+.tabs{display:flex;justify-content:space-between;font-size:13.5px;font-weight:500;color:var(--muted)}
+.tabs b{display:flex;flex-direction:column;align-items:center;gap:1px;font-weight:500;padding:4px 1px}.tabs b small{font-size:10.5px;font-weight:400}
+.tabs b::after{content:"";width:16px;height:3px;border-radius:2px;margin-top:2px}.tabs b.on{color:var(--ink);font-weight:600}.tabs b.on::after{background:var(--accent)}
+.strip{display:flex;gap:12px;margin:14px -16px 0;padding:0 16px;overflow:hidden}
+.sw{flex:none;width:54px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;text-align:center;line-height:1.2}
+.sw i{width:42px;height:42px;border-radius:50%;background:radial-gradient(circle at 68% 74%,var(--c) 0 5px,transparent 5.6px),linear-gradient(var(--a) 0 56%,var(--b) 56%);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent)}
+.sw.on i{box-shadow:0 0 0 2px var(--bg0),0 0 0 4px var(--ink)}.sw.on{font-weight:600}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.more{font-size:13px;font-weight:500;color:var(--accent);display:inline-flex;align-items:center;gap:3px}.more svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.pills{display:flex;padding:3px;border-radius:999px;background:color-mix(in srgb,var(--ink) 7%,transparent);font-size:12.5px;margin-top:10px}
+.pills b{flex:1;text-align:center;padding:6px 0;border-radius:999px;font-weight:500;color:var(--muted)}.pills b.on{background:var(--bg0);color:var(--ink);box-shadow:0 1px 3px color-mix(in srgb,var(--ink) 18%,transparent)}
+.colors{display:flex;gap:10px;align-items:center;margin-top:12px}.colors span{font-size:12.5px;width:96px}.colors i{width:26px;height:26px;border-radius:50%;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent)}
+.colors code{margin-left:auto;font:500 12px "JetBrains Mono",monospace;padding:5px 9px;border-radius:8px;background:color-mix(in srgb,var(--on) 70%,transparent)}
+.cta{display:flex;justify-content:center;align-items:center;height:46px;border-radius:999px;background:var(--ink);color:var(--bg0);font-weight:500;font-size:14.5px;margin-top:16px}
+</style></head><body>
+<div class="shadow"></div><img class="model" src="../assets/snes-model-apart.png" alt="">
+<header class="top"><span class="lockup"><img src="../../../../docs/branding/flan/flan-mark-color.svg" alt=""><b>flan</b></span>
+  <span class="tools"><span class="ib"><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></span>
+  <span class="ib"><svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></span>
+  <span class="ib"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></span></span></header>
+<nav class="modes"><b class="on">Design</b><b>Parts</b><b>Files</b></nav>
+<div class="layers"><svg viewBox="0 0 32 32"><path d="M16 3.5 28 9l-12 5.5L4 9z"/><path d="M4 16.5 16 22l12-5.5" opacity=".7"/><path d="M4 23.5 16 29l12-5.5" opacity=".45"/></svg><div class="track"><div class="fill"></div><div class="knob"></div></div><svg viewBox="0 0 32 32"><path d="M16 8 28 13.5 16 19 4 13.5z"/><path d="M4 16.5 16 22l12-5.5"/><path d="M4 19.5 16 25l12-5.5"/></svg></div>
+<div class="views"><span class="chip">3D view <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span><span class="chip" style="width:32px;padding:0;justify-content:center"><svg viewBox="0 0 24 24"><path d="M4 9V4h5m6 0h5v5M4 15v5h5m6 0h5v-5"/></svg></span></div>
+<section class="sheet"><div class="grab"></div>
+  <div class="tabs"><b>Size<small>36</small></b><b class="on">Theme<small>SNES</small></b><b>Case<small>Rim</small></b><b>Keys<small>Original</small></b><b>Frame<small>SNES</small></b><b>Build<small>PCB</small></b></div>
+  <div class="strip" id="strip"></div>
+  <div class="row"><span class="lab">Fine-tune</span><span class="more">Hide <svg viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></svg></span></div>
+  <div class="pills"><b class="on">Both halves</b><b>Left</b><b>Right</b></div>
+  <div class="colors"><span>Base &amp; rim</span><i style="background:#d1d0c9"></i><code>#d1d0c9</code></div>
+  <div class="colors"><span>Plate</span><i style="background:#464751"></i><code>#464751</code></div>
+  <div class="cta">Open in AR · Download</div>
+</section>
+<script>
+const T=[['snes','SNES','#d1d0c9','#464751','#746198'],['gameboy','Game Boy','#dcd6ba','#42454d','#973c60'],['nes','NES','#c6c7be','#32363b','#c94b3e'],['talavera','Talavera','#f1e6ca','#244e91','#c36443'],['flan','Flan','#f2dfaf','#68422f','#b96732'],['phone','2000s Phone','#263c55','#b8bbb5','#87ad67']];
+document.getElementById('strip').innerHTML=T.map(([id,n,a,b,c])=>`<span class="sw${id==='snes'?' on':''}"><i style="--a:${a};--b:${b};--c:${c}"></i>${n}</span>`).join('');
+document.querySelector('.cta').textContent='Share this build';
+document.body.dataset.ready='1';
+</script></body></html>

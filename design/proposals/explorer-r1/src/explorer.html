@@ -1,0 +1,190 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Explorer R1 mockup</title>
+<!-- Static explorer R1 mockup, rendered by render.cjs. ?mode=design|advanced|parts|files &theme=snes|phone -->
+<style>
+@font-face{font-family:Fraunces;src:url(../../../../docs/assets/fonts/Fraunces-latin.woff2) format("woff2");font-weight:300 500}
+@font-face{font-family:Inter;src:url(../../../../docs/assets/fonts/Inter-latin.woff2) format("woff2");font-weight:400 600}
+@font-face{font-family:"JetBrains Mono";src:url(../../../../docs/assets/fonts/JetBrainsMono-latin.woff2) format("woff2");font-weight:400 500}
+:root{--bg0:#f6f2fd;--bg1:#e2dcee;--bg2:#c6bed5;--glow:#aca0c2;--ink:#20212a;--muted:#5e5769;--accent:#705d94;--on:#ffffff;--line:color-mix(in srgb,var(--ink) 12%,transparent);--sel:color-mix(in srgb,var(--accent) 15%,transparent)}
+:root.phone{--bg0:#313e4d;--bg1:#1c2734;--bg2:#0d1722;--glow:#87ad67;--ink:#eef4fc;--muted:#aab9cb;--accent:#92b972;--on:#141b24}
+*{box-sizing:border-box}html,body{margin:0}
+body{width:1440px;height:900px;overflow:hidden;color:var(--ink);font:400 15px/1.45 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+ background:radial-gradient(1000px 720px at 36% 56%,var(--bg0) 0,var(--bg1) 58%,var(--bg2) 100%)}
+.lab{font:400 11px/1.2 "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.serif{font-family:Fraunces,Georgia,serif;font-variation-settings:"SOFT" 100,"opsz" 144}
+/* top bar: no box */
+.top{position:absolute;inset:0 0 auto;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 32px 0 36px}
+.lockup{display:flex;align-items:center;gap:9px}.lockup img{height:28px}.lockup b{font:400 26px/1 Fraunces,serif;font-variation-settings:"SOFT" 100,"opsz" 144}.lockup i{font:300 24px/1 Fraunces,serif;font-style:normal;font-variation-settings:"SOFT" 100,"opsz" 144;opacity:.8}
+.modes{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:28px;font-size:14.5px;font-weight:500;color:var(--muted)}
+.modes b{font-weight:500;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:4px}.modes b::after{content:"";width:18px;height:3px;border-radius:2px}
+.modes b.on{color:var(--ink);font-weight:600}.modes b.on::after{background:var(--accent)}
+.tools{display:flex;align-items:center;gap:6px}
+.ib{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--muted)}.ib svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ib.dim{opacity:.4}
+.saved{font:400 11.5px "JetBrains Mono",monospace;color:var(--muted);margin:0 6px}
+.chip{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:500;background:color-mix(in srgb,var(--on) 55%,transparent);color:var(--ink)}
+.chip svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.lang{font:500 11px "JetBrains Mono",monospace;color:var(--muted);margin-left:8px}.lang b{color:var(--ink);font-weight:500;background:color-mix(in srgb,var(--ink) 10%,transparent);padding:5px 8px;border-radius:999px}
+/* stage */
+.glow{position:absolute;left:0;top:18%;width:68%;height:80%;background:radial-gradient(closest-side,color-mix(in srgb,var(--glow) 40%,transparent),transparent)}
+.model{position:absolute;left:70px;top:120px;width:880px;height:620px;object-fit:contain}
+.shadow{position:absolute;left:180px;top:610px;width:680px;height:150px;background:radial-gradient(closest-side,color-mix(in srgb,var(--ink) 20%,transparent),transparent 92%)}
+.views{position:absolute;left:36px;bottom:30px;display:flex;align-items:center;gap:8px}
+.seg{display:inline-flex;padding:3px;border-radius:999px;background:color-mix(in srgb,var(--on) 55%,transparent);font-size:12.5px}
+.seg b{padding:6px 12px;border-radius:999px;font-weight:500;color:var(--muted)}.seg b.on{background:var(--ink);color:var(--bg0)}
+.layers{position:absolute;left:996px;top:250px;height:420px;width:44px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.layers .cap{font:500 10px "JetBrains Mono",monospace;letter-spacing:.08em;color:var(--muted)}
+.layers svg{width:26px;height:26px;fill:none;stroke:var(--muted);stroke-width:1.5;stroke-linejoin:round}
+.track{position:relative;flex:1;width:4px;border-radius:2px;background:color-mix(in srgb,var(--ink) 16%,transparent)}
+.fill{position:absolute;left:0;right:0;bottom:0;height:var(--v);border-radius:2px;background:var(--accent)}
+.knob{position:absolute;left:50%;bottom:var(--v);width:22px;height:22px;margin:0 0 -11px -11px;border-radius:50%;background:var(--on);box-shadow:0 2px 8px color-mix(in srgb,var(--ink) 30%,transparent),0 0 0 4px var(--accent)}
+.callout{position:absolute;display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600}
+.callout i{display:block;height:1.5px;background:var(--ink);opacity:.5}
+.callout span{background:var(--ink);color:var(--bg0);padding:5px 10px;border-radius:999px}
+/* rail */
+.rail{position:absolute;left:1076px;top:84px;width:336px;bottom:0;padding-bottom:30px;display:flex;flex-direction:column;gap:18px;overflow:hidden;
+ -webkit-mask:linear-gradient(#000 88%,transparent);mask:linear-gradient(#000 88%,transparent)}
+.grp{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.val{font-size:13px;font-weight:500}.val i{font-style:normal;color:var(--muted);font-weight:400}
+.more{font-size:12.5px;font-weight:500;color:var(--accent);display:inline-flex;align-items:center;gap:3px}
+.more svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.opts{display:flex;gap:6px}
+.opt{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;padding:6px 3px 5px;border-radius:13px}
+.opt.on{background:var(--sel)}.opt span{font-size:11.5px;font-weight:500;white-space:nowrap}.opt.on span{font-weight:600}
+.opt b{font:500 13px/1 "JetBrains Mono",monospace}
+.opt img{display:block;max-width:100%;object-fit:contain}
+.size img{height:38px}.case img{width:70px;height:40px;object-fit:cover;border-radius:9px;background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.keys img{height:38px}.frames img{height:64px}
+.sw{display:grid;grid-template-columns:repeat(14,1fr);gap:7px 0;justify-items:center}
+.sw i{width:19px;height:19px;border-radius:50%;background:radial-gradient(circle at 68% 74%,var(--c) 0 2.8px,transparent 3.2px),linear-gradient(var(--a) 0 56%,var(--b) 56%);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent)}
+.sw i.on{box-shadow:0 0 0 2px var(--bg0),0 0 0 3.5px var(--ink)}
+.compact{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.compact .lab{width:84px}.compact .val{flex:1;text-align:left}
+.tier{font:600 11px/1 Inter;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);opacity:.8;margin-top:2px}
+.pcbs{display:flex;gap:5px}.pcbs img{width:44px;height:30px;object-fit:cover;border-radius:6px}.pcbs img.on{outline:2px solid var(--ink);outline-offset:1px}
+.masks{display:flex;gap:7px}.masks i{width:16px;height:16px;border-radius:50%}.masks i.on{box-shadow:0 0 0 2px var(--bg0),0 0 0 3.5px var(--ink)}
+/* advanced, opened in place */
+.adv{display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:16px;background:color-mix(in srgb,var(--on) 45%,transparent)}
+.pills{display:flex;padding:3px;border-radius:999px;background:color-mix(in srgb,var(--ink) 7%,transparent);font-size:12px}
+.pills b{flex:1;text-align:center;padding:5px 0;border-radius:999px;font-weight:500;color:var(--muted)}.pills b.on{background:var(--bg0);color:var(--ink);box-shadow:0 1px 3px color-mix(in srgb,var(--ink) 18%,transparent)}
+.keymap{position:relative;height:172px}
+.keymap i{position:absolute;width:32px;height:30px;margin:-15px 0 0 -16px;border-radius:7px;background:var(--k,#d1d0c9);box-shadow:inset 0 -2px 0 color-mix(in srgb,#000 14%,transparent)}
+.keymap i.sel{outline:2px solid var(--accent);outline-offset:1px}.keymap i.x{visibility:hidden}
+.colors{display:flex;gap:8px;align-items:center}.colors i{width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 14%,transparent)}
+.colors i.on{box-shadow:0 0 0 2px var(--bg0),0 0 0 3.5px var(--ink)}
+.hex{margin-left:auto;font:500 12px "JetBrains Mono",monospace;padding:6px 10px;border-radius:8px;background:color-mix(in srgb,var(--on) 70%,transparent);color:var(--ink)}
+.done{display:flex;justify-content:space-between;align-items:center;font-size:12.5px}
+/* parts and files */
+.card{display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:18px;background:color-mix(in srgb,var(--on) 45%,transparent)}
+.card h3{margin:0;font:400 24px/1.1 Fraunces,serif;font-variation-settings:"SOFT" 100,"opsz" 144}
+.card p{margin:0;font-size:12.5px;color:var(--muted)}
+.card .links{display:flex;gap:14px;font-size:12.5px;font-weight:500;color:var(--accent)}
+.prow{display:flex;align-items:center;gap:10px;padding:8px 2px;border-top:1px solid var(--line);font-size:13.5px}
+.prow b{font-weight:500;flex:1}.prow small{font:400 11px "JetBrains Mono",monospace;color:var(--muted)}
+.prow svg{width:17px;height:17px;fill:none;stroke:var(--muted);stroke-width:1.6}.prow .solo{font-size:11.5px;color:var(--muted);padding:3px 8px;border-radius:999px;border:1px solid var(--line)}
+.prow.off b,.prow.off small{opacity:.45}.prow.hl{background:var(--sel);border-radius:10px;border-color:transparent;padding-inline:8px}
+.quick{display:flex;gap:6px}.quick span{flex:1;text-align:center;padding:7px 0;border-radius:999px;font-size:12.5px;font-weight:500;background:color-mix(in srgb,var(--ink) 7%,transparent)}
+.btn{display:flex;justify-content:center;align-items:center;gap:8px;height:42px;border-radius:999px;background:var(--ink);color:var(--bg0);font-weight:500;font-size:14px}
+.btn.ghost{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink)}
+.field{display:flex;align-items:center;height:40px;padding:0 12px;border-radius:10px;background:color-mix(in srgb,var(--on) 75%,transparent);font-size:13px;color:var(--ink)}
+.field.mono{font:400 11.5px "JetBrains Mono",monospace;color:var(--muted);overflow:hidden;white-space:nowrap}
+.two{display:flex;gap:8px}.two>*{flex:1}
+.dl{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:13.5px}
+.dl small{display:block;font-size:11.5px;color:var(--muted)}.dl span{font-size:12.5px;font-weight:500;color:var(--accent)}
+</style></head><body>
+<div class="glow"></div><div class="shadow"></div>
+<img class="model" id="model" alt="">
+<header class="top">
+  <span class="lockup"><img src="../../../../docs/branding/flan/flan-mark-color.svg" alt=""><b>flan</b><i>keyboard</i></span>
+  <nav class="modes" id="modes"><b>Design</b><b>Parts</b><b>Files</b></nav>
+  <span class="tools">
+    <span class="ib"><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></span>
+    <span class="ib dim"><svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></span>
+    <span class="saved">Saved ✓</span>
+    <span class="chip"><svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>Share</span>
+    <span class="ib"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></span>
+    <span class="lang"><b>EN</b> ES</span>
+  </span>
+</header>
+<div class="views"><span class="seg"><b class="on">3D</b><b>Top</b><b>Front</b><b>Side</b><b>Back</b><b>Bottom</b></span>
+  <span class="chip" style="width:34px;padding:0;justify-content:center" title="Fit"><svg viewBox="0 0 24 24"><path d="M4 9V4h5m6 0h5v5M4 15v5h5m6 0h5v-5"/></svg></span>
+  <span class="chip" style="width:34px;padding:0;justify-content:center" title="Reset"><svg viewBox="0 0 24 24"><path d="M12 3 20 7.5v9L12 21 4 16.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/></svg></span></div>
+<div class="layers"><span class="cap">APART</span><svg viewBox="0 0 32 32"><path d="M16 3.5 28 9l-12 5.5L4 9z"/><path d="M4 16.5 16 22l12-5.5" opacity=".7"/><path d="M4 23.5 16 29l12-5.5" opacity=".45"/></svg>
+  <div class="track" id="track"><div class="fill"></div><div class="knob"></div></div>
+  <svg viewBox="0 0 32 32"><path d="M16 8 28 13.5 16 19 4 13.5z"/><path d="M4 16.5 16 22l12-5.5"/><path d="M4 19.5 16 25l12-5.5"/></svg><span class="cap">TOGETHER</span></div>
+<aside class="rail" id="rail"></aside>
+<script>
+const q=new URLSearchParams(location.search),mode=q.get('mode')||'design',theme=q.get('theme')||'snes',A='../assets/'+theme+'-';
+if(theme==='phone')document.documentElement.classList.add('phone');
+const THEMES=[["#f2dfaf","#68422f","#b96732"],["#d2cec1","#303738","#e27136"],["#eee5cd","#315c4e","#df7339"],["#f0eadb","#27282e","#da453d"],["#f1e6ca","#244e91","#c36443"],["#dcd6ba","#42454d","#973c60"],["#c6c7be","#32363b","#c94b3e"],["#d1d0c9","#464751","#746198"],["#263c55","#b8bbb5","#87ad67"],["#275273","#192d3b","#e4b54b"],["#f0eee5","#656f79","#afb4b1"],["#f1e7d2","#252b2e","#d84932"],["#d93957","#24292b","#f3deab"],["#d8d3bd","#33343e","#9b3056"],["#9baa83","#344b40","#ead5a2"],["#dca4b4","#453c51","#fff0d9"],["#d9e7e9","#325365","#f0c977"],["#ea9563","#423a3d","#e8d9a8"],["#447e90","#172e3e","#e7b976"],["#343946","#181d26","#bbc8c9"],["#24444b","#19272f","#42e3ba"],["#514269","#252235","#60d5d7"],["#976044","#2f3234","#c69543"],["#e4d5b4","#76675b","#d28d72"],["#c9ab86","#635649","#c37753"],["#aaa0ce","#423e62","#efbaad"],["#e2e3da","#292d31","#939e96"],["#d3ae49","#30343b","#e7d9b3"]];
+const LAYOUT=[['K01',30,29,0],['K02',48,17,0],['K03',66,12,0],['K04',84,17,0],['K05',102,19,0],['K11',30,46,0],['K12',48,34,0],['K13',66,29,0],['K14',84,34,0],['K15',102,36,0],['K21',30,63,0],['K22',48,51,0],['K23',66,46,0],['K24',84,51,0],['K25',102,53,0],['K30',79,72,5],['K31',101,73,-10],['K32',122,80,-25]];
+const KC=theme==='phone'?{base:'#263c55',thumbs:['#b8bbb5','#87ad67','#455469']}:{base:'#d1d0c9',thumbs:['#464751','#746198','#aca0c2']};
+const on=theme==='phone'?8:7,name=theme==='phone'?'2000s Phone':'SNES';
+document.getElementById('model').src=A+'model-apart.png';
+document.getElementById('track').style.setProperty('--v','75%');
+[...document.getElementById('modes').children].forEach((b,i)=>b.classList.toggle('on',i===({design:0,advanced:0,parts:1,files:2}[mode])));
+const chev='<svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>',down='<svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>';
+const g=(lab,val,body,more='')=>`<div class="grp"><div class="row"><span class="lab">${lab}</span>${more?`<span class="more">${more}</span>`:`<span class="val">${val}</span>`}</div>${body}</div>`;
+const tiles=(cls,items,sel)=>`<div class="opts">${items.map(([src,label],i)=>`<span class="opt ${cls}${i===sel?' on':''}"><img src="${src}">${label}</span>`).join('')}</div>`;
+const size=tiles('size',['flan36','flan42','flan46','flan54'].map((v,i)=>[A+'size-'+v+'.png',`<b>${[36,42,46,54][i]}</b>`]),0);
+const sw=`<div class="sw">${THEMES.map(([a,b,c],i)=>`<i class="${i===on?'on':''}" style="--a:${a};--b:${b};--c:${c}"></i>`).join('')}</div>`;
+const cases=tiles('case',[['rim','Color rim'],['solid','Solid'],['terrace','Terrace'],['level','Level']].map(([v,n])=>[A+'case-'+v+'.png',`<span>${n}</span>`]),0);
+const keys=tiles('keys',[['original','Original'],['normal','Sculpted'],['saddle','Saddle']].map(([v,n])=>[A+'keys-'+v+'.png',`<span>${n}</span>`]),0);
+const frames=tiles('frames',['talavera','gameboy','snes','phone','ipod','hanafuda'].map(v=>[A+'frame-'+v+'.png','']),theme==='phone'?3:2);
+const valRow=(lab,val,more)=>`<div class="row"><span class="lab">${lab}</span><span class="val">${val}</span></div>`;
+const head=(lab,val,more)=>`<div class="row"><span class="lab">${lab} <span class="val" style="margin-left:6px;text-transform:none;letter-spacing:0;font-family:Inter">${val}</span></span><span class="more">${more}${chev}</span></div>`;
+const rail=document.getElementById('rail');
+const pcbRow=`<div class="compact"><span class="lab">PCB</span><span class="val" style="display:flex;align-items:center;gap:10px"><img src="../assets/pcb-base.png" style="width:46px;height:30px;object-fit:cover;border-radius:6px">Signature <i>· green mask</i></span><span class="more">${chev}</span></div>`;
+const batteryRow=`<div class="compact"><span class="lab">Battery</span><span class="val">100 mAh <i>· Adafruit 1570</i></span><span class="more">${chev}</span></div>`;
+if(mode==='design'||mode==='advanced'){
+  const keysBlock=mode==='advanced'?`<div class="grp">${head('Keycaps','Original · KLP Lamé','Done')}
+    ${keys}
+    <div class="adv">
+      <div class="pills"><b class="on">Both</b><b>Left</b><b>Right</b></div>
+      <div class="row"><span class="lab">Paint</span></div>
+      <div class="pills"><b>All</b><b>Row</b><b>Column</b><b class="on">Key</b></div>
+      <div class="keymap">${LAYOUT.map(([ref,x,y,a])=>{const row=ref[1],col=+ref[2];const k=row==='3'?KC.thumbs[col]:KC.base;
+        const kk=ref==='K21'?(theme==='phone'?'#87ad67':'#746198'):k;return `<i class="${ref==='K21'?'sel':''}" style="left:${(x-21)*2.05}px;top:${(y-3)*2.05}px;transform:rotate(${-a}deg);--k:${kk}"></i>`;}).join('')}</div>
+      <div class="row"><span class="lab">K21 colour</span></div>
+      <div class="colors">${(theme==='phone'?['#263c55','#b8bbb5','#87ad67','#455469','#f1efe8']:['#d1d0c9','#464751','#746198','#aca0c2','#f1efe8']).map((c,i)=>`<i class="${i===2?'on':''}" style="background:${c}"></i>`).join('')}<span class="hex">${theme==='phone'?'#87ad67':'#746198'}</span></div>
+      <div class="done"><span class="more">My palettes ${down}</span><span class="more">Shape per key ${chev}</span></div>
+    </div></div>`:g('Keycaps','',keys,`Original · Paint keys ${chev}`);
+  rail.innerHTML=`<span class="tier">Look</span>`
+   +g('Size','Flan36 <i>· 3 × 5 + 3</i>',size)
+   +g('Theme','',sw,`${name} · Fine-tune ${chev}`)
+   +g('Case','',cases,`Color rim · Per half ${chev}`)
+   +keysBlock
+   +(mode==='advanced'?'':g('Frame','',frames,`${name} · Fine-tune ${chev}`))
+   +`<span class="tier" style="margin-top:6px">Build</span>`+batteryRow+pcbRow;
+}
+if(mode==='parts'){
+  document.body.insertAdjacentHTML('beforeend',`<div class="callout" style="left:478px;top:306px"><i style="width:120px"></i><span>nice!nano v2 · left</span></div>`);
+  const rows=[['Bases','2',1],['Plates','2',1],['Frames','2',1],['Keycaps','36',1],['Switches','36',1],['PCB & sockets','2 · 36',1],['Batteries','2',1],['Controllers','2',2],['Displays','2',1],['Connectors','8',0],['Supports','8',1],['Fasteners','42',0]];
+  rail.innerHTML=`<div class="card"><div class="row"><span class="lab">Selected part</span><span class="more">✕</span></div>
+      <div style="display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:center"><img src="${A}art-art-controller.png" style="width:96px">
+      <div><h3>nice!nano v2</h3><p>nRF52840 · Bluetooth LE · USB-C. Under the display, above the battery.</p></div></div>
+      <div class="pills"><b class="on">Visible</b><b>Solo</b><b>All</b></div>
+      <div class="links"><span>Datasheet ↗</span><span>Buy ↗</span><span style="margin-left:auto">Customize →</span></div></div>
+    <div class="row"><span class="lab">Parts · 220 visible</span><span class="more">Show all</span></div>
+    <div class="quick"><span>Inside</span><span>Stack</span><span>Magnets</span></div>
+    <div>${rows.map(([n,c,s])=>`<div class="prow${s===0?' off':''}${s===2?' hl':''}"><b>${n}</b><small>${c}</small><svg viewBox="0 0 24 24">${s===0?'<path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 5.1A10 10 0 0 1 21 12a12 12 0 0 1-2.6 3.4M6.2 6.2A12 12 0 0 0 3 12a10 10 0 0 0 9 6 9 9 0 0 0 4.2-1"/>':'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'}</svg><span class="solo">Solo</span></div>`).join('')}</div>`;
+}
+if(mode==='files'){
+  rail.innerHTML=`<div class="card"><span class="lab">Your design</span><div class="field">Flan36 · ${name} · Color rim</div>
+      <div class="two"><span class="btn">Save JSON</span><span class="btn ghost">Open JSON</span></div></div>
+    <div class="card"><div class="row"><span class="lab">Share</span><span class="more">Copy</span></div>
+      <div class="field mono">flankbd.com/explore/?size=flan36&amp;theme=${theme}&amp;case=rim&amp;keys=original&amp;frame=${theme}</div>
+      <p>Anyone with the link sees this keyboard.</p></div>
+    <div class="card"><span class="lab">Print your parts</span>
+      <div class="pills"><b class="on">Both</b><b>Left</b><b>Right</b></div>
+      <div class="pills"><b class="on">Shells + frame</b><b>Complete kit</b></div>
+      <span class="btn">Download print kit</span><p>ZIP with STL, colour 3MF and a parts list.</p></div>
+    <div><div class="dl"><div>3D model<small>Assembled GLB, for Blender or AR</small></div><span>Download</span></div>
+      <div class="dl"><div>Offline explorer<small>One HTML file, 81 MB</small></div><span>Download</span></div>
+      <div class="dl"><div>CAD and PCB<small>FreeCAD, STEP, KiCad and Gerbers on GitHub</small></div><span>Open ↗</span></div>
+      <div class="dl"><div>Saved versions<small>Recover an earlier design</small></div><span>${chev}</span></div></div>`;
+}
+// the rail scrolls: with a section opened, bring it into view as the real panel would
+if(mode==='advanced'){const k=[...rail.querySelectorAll('.grp')].find(g=>g.querySelector('.adv'));rail.scrollTop=k.offsetTop-rail.offsetTop-90;}
+document.body.dataset.ready='1';
+</script></body></html>
