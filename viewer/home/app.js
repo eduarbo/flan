@@ -143,7 +143,7 @@ async function renderPreviews(){
   if(specsNear){
     const ink=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();
     await document.fonts?.load('500 11px "JetBrains Mono"').catch(()=>{});
-    for(const [kind,w,h] of ART)if(w)jobs.push([kind,'spec',{width:w,height:h,ink}]);
+    for(const [kind,w,h] of ART)if(w)jobs.push([kind,'spec',{...artSize(kind,w,h),ink}]);
   }
   for(const [kind,value,size] of jobs){
     // one at a time, only while the model is still
@@ -231,6 +231,12 @@ function buildSpecs(){
 const mirror=[];
 let specsNear=false;
 new IntersectionObserver(([e],o)=>{if(e.isIntersecting){specsNear=true;o.disconnect();if(model)renderPreviews();}},{rootMargin:'600px 0px'}).observe(document.querySelector('.specs'));
+// Each spec render matches the box it is shown in, so its lines and labels stay crisp at 1:1 (a phone's box is
+// about 152 × 84); a box that changes size, on rotation or across a breakpoint, gets new renders.
+function artSize(kind,w,h){const box=previews.get('spec:'+kind).parentElement;return {width:Math.max(96,Math.min(w,Math.floor(box.clientWidth))),height:Math.floor(box.clientHeight)||h};}
+let artSizes='';
+new ResizeObserver(()=>{if(!previews.has('spec:layout'))return;const now=JSON.stringify(ART.filter(a=>a[1]).map(([k,w,h])=>artSize(k,w,h)));if(now===artSizes)return;const first=!artSizes;artSizes=now;
+  if(!first&&specsNear&&model){clearTimeout(previewTimer);previewTimer=setTimeout(renderPreviews,250);}}).observe($('specs'));
 function translate(){
   document.documentElement.lang=lang;
   for(const b of document.querySelectorAll('[data-lang]'))b.setAttribute('aria-pressed',String(b.dataset.lang===lang));

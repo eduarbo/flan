@@ -239,8 +239,8 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
     frame:{keep:p=>['frame','screen'].includes(p.kind)||p.group==='display',view:[0,1,.0001],up:[0,0,-1],focusKind:'frame'},
     // specs
     profile:{keep:p=>!['connectors','supports'].includes(p.group),view:[0,.02,1],annotate:'height'},
-    // every key of the chosen size, thumbs included, on its key plate, from above
-    layout:{keep:p=>p.kind==='cap'||(p.kind==='case'&&p.group==='plate'),view:[0,1,.0001],up:[0,0,-1],annotate:'pitch'},
+    // the whole left half of the chosen size from above, thumbs included, like the size cards
+    layout:{keep:p=>['case','frame','cap','screen'].includes(p.kind)||p.group==='display',view:[0,1,.0001],up:[0,0,-1],annotate:'pitch'},
     controller:{keep:p=>p.group==='mcu',view:[.55,1.25,.9]},
     display:{keep:p=>p.group==='display'||p.kind==='screen',view:[.25,1.5,.85]},
     stack:{keep:p=>STACK.includes(p.group)||p.kind==='battery'||p.kind==='screen',view:[1,.42,1.25],explode:1},
@@ -248,7 +248,8 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
   };
   let target=null;
   async function preview(kind,value,{width=160,height=110,ink='#20212a'}={}){
-    const dpr=Math.min(devicePixelRatio,2),spec=KINDS[kind],W=Math.round(width*dpr),H=Math.round(height*dpr);
+    // dimensioned art follows a 3× phone screen too, so its labels stay sharp
+    const spec=KINDS[kind],dpr=Math.min(devicePixelRatio,spec.annotate?3:2),W=Math.round(width*dpr),H=Math.round(height*dpr);
     const look={...state.look,frame:{...state.look.frame}},theme=state.theme,s=new THREE.Scene();lights(s);
     if(kind==='size')look.size=value;else if(kind==='case')look.case=value;else if(kind==='keys')look.keys=value;else if(kind==='frame')look.frame.left=value;
     const pack=await sizes[look.size],picked=[],made=[],mat=c=>{const m=surface(c);made.push(m);return m;};
@@ -264,19 +265,43 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
     const focus=new THREE.Box3();
     if(spec.focus)focus.set(new THREE.Vector3(...spec.focus[0]),new THREE.Vector3(...spec.focus[1]));
     else for(const m of picked)if(!spec.focusKind||m.userData.kind===spec.focusKind)focus.expandByObject(m);
-    // room for the dimension labels
-    const body=focus.clone(),aspect=width/height;if(spec.annotate==='height')focus.max.x+=34;
-    let c=focus.getCenter(new THREE.Vector3()),half=0;
-    // the plan view keeps fixed room in CSS pixels: the 17 mm label on the left, the 18 mm label on top
-    const pad={l:52,r:4,t:26,b:4},mm=spec.annotate==='pitch'?Math.min((width-pad.l-pad.r)/(body.max.x-body.min.x),(height-pad.t-pad.b)/(body.max.z-body.min.z)):0;
-    if(mm)c=new THREE.Vector3(body.min.x-(pad.l+(width-pad.l-pad.r-(body.max.x-body.min.x)*mm)/2)/mm+width/mm/2,(body.min.y+body.max.y)/2,body.min.z-(pad.t+(height-pad.t-pad.b-(body.max.z-body.min.z)*mm)/2)/mm+height/mm/2);
-    const cam=new THREE.OrthographicCamera();
-    cam.position.copy(c).add(new THREE.Vector3(...spec.view).normalize().multiplyScalar(400));cam.up.set(...(spec.up||[0,1,0]));
-    cam.lookAt(c);cam.updateMatrixWorld();
+    const body=focus.clone(),aspect=width/height,ahead=new THREE.Vector3(...spec.view).normalize(),cam=new THREE.OrthographicCamera();
+    cam.up.set(...(spec.up||[0,1,0]));cam.position.copy(ahead);cam.lookAt(0,0,0);cam.updateMatrixWorld();
     const right=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,0),up=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,1);
-    if(mm)half=height/mm/2;
-    else{for(const x of [focus.min.x,focus.max.x])for(const y of [focus.min.y,focus.max.y])for(const z of [focus.min.z,focus.max.z]){const v=new THREE.Vector3(x,y,z).sub(c);half=Math.max(half,Math.abs(v.dot(right))/aspect,Math.abs(v.dot(up)));}
-      half*=spec.tight||1.04;}
+    // Dimensions, in the model's own millimetres: each runs between visible edges, so its ends sit on what it measures.
+    const dims=[],box=m=>new THREE.Box3().setFromObject(m),mmText=v=>`${+v.toFixed(1)} mm`;
+    if(spec.annotate==='height'){
+      // the case's lowest edge to the frame's top, at the right end of the half
+      const frame=box(picked.find(m=>m.userData.kind==='frame')),low=Math.min(...picked.filter(m=>m.userData.kind==='case').map(m=>box(m).min.y));
+      dims.push({side:'right',a:new THREE.Vector3(body.max.x,low,body.max.z),b:new THREE.Vector3(frame.max.x,frame.max.y,frame.max.z),label:mmText(frame.max.y-low)});
+    }else if(spec.annotate==='pitch'){
+      // the main grid by column (thumbs aside), each column's keys from the top
+      const grid=new Map();for(const m of picked)if(m.userData.kind==='cap'&&m.userData.r[1]!=='3'){const col=+m.userData.r[2];if(!grid.has(col))grid.set(col,[]);grid.get(col).push(box(m));}
+      for(const keys of grid.values())keys.sort((a,b)=>a.min.z-b.min.z);
+      const cols=[...grid.keys()].sort((a,b)=>a-b),[a,b]=grid.get(cols[0]),p=grid.get(cols.at(-2))[0],q=grid.get(cols.at(-1))[0],y=body.max.y;
+      // row pitch: top edge to top edge of the outer column's first two keys, on the left
+      dims.push({side:'left',a:new THREE.Vector3(a.min.x,y,a.min.z),b:new THREE.Vector3(b.min.x,y,b.min.z),label:mmText(b.min.z-a.min.z)});
+      // column pitch: left edge to left edge of the two inner columns' top keys, above
+      dims.push({side:'top',a:new THREE.Vector3(p.min.x,y,p.min.z),b:new THREE.Vector3(q.min.x,y,q.min.z),label:mmText(q.min.x-p.min.x)});
+    }
+    // labels keep fixed room in CSS pixels; an annotated drawing sits at the bottom left of its box, like the card's text
+    const fontPx=height>=110?11:10,font=k=>`500 ${fontPx*k}px "JetBrains Mono", ui-monospace, monospace`,GAP=7,TICK=3.5,SPACE=5;
+    const meter=document.createElement('canvas').getContext('2d');meter.font=font(1);
+    const room={left:3,right:3,top:3,bottom:3};
+    for(const d of dims){const w=Math.ceil(meter.measureText(d.label).width);
+      if(d.side==='left')room.left=Math.max(room.left,GAP+TICK+SPACE+w+2);if(d.side==='right')room.right=Math.max(room.right,GAP+TICK+SPACE+w+2);if(d.side==='top')room.top=Math.max(room.top,GAP+TICK+SPACE+fontPx+2);}
+    const corners=[];for(const x of [body.min.x,body.max.x])for(const y of [body.min.y,body.max.y])for(const z of [body.min.z,body.max.z])corners.push(new THREE.Vector3(x,y,z));
+    const along=axis=>[Math.min(...corners.map(v=>v.dot(axis))),Math.max(...corners.map(v=>v.dot(axis)))],[r0,r1]=along(right),[u0,u1]=along(up);
+    let c,half;
+    if(dims.length){
+      const mm=Math.min((width-room.left-room.right)/(r1-r0),(height-room.top-room.bottom)/(u1-u0)),depth=body.getCenter(new THREE.Vector3()).dot(ahead);
+      c=right.clone().multiplyScalar(r0-room.left/mm+width/mm/2).add(up.clone().multiplyScalar(u0-room.bottom/mm+height/mm/2)).add(ahead.clone().multiplyScalar(depth));half=height/mm/2;
+    }else{
+      c=focus.getCenter(new THREE.Vector3());half=0;
+      for(const v of corners){const d=v.clone().sub(c);half=Math.max(half,Math.abs(d.dot(right))/aspect,Math.abs(d.dot(up)));}
+      half*=spec.tight||1.04;
+    }
+    cam.position.copy(c).add(ahead.clone().multiplyScalar(400));cam.lookAt(c);cam.updateMatrixWorld();
     Object.assign(cam,{left:-half*aspect,right:half*aspect,top:half,bottom:-half,near:1,far:2000});cam.updateProjectionMatrix();
     target??=new THREE.WebGLRenderTarget(W,H,{samples:4,colorSpace:THREE.SRGBColorSpace});target.setSize(W,H);
     renderer.setRenderTarget(target);renderer.clear();renderer.render(s,cam);renderer.setRenderTarget(null);
@@ -286,33 +311,25 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
     for(let y=0;y<H;y++){const from=(H-1-y)*W*4,to=y*W*4;for(let i=0;i<W*4;i+=4){const a=px[from+i+3];
       if(a){const k=255/a;img.data[to+i]=Math.min(255,px[from+i]*k);img.data[to+i+1]=Math.min(255,px[from+i+1]*k);img.data[to+i+2]=Math.min(255,px[from+i+2]*k);img.data[to+i+3]=a;}}}
     ctx.putImageData(img,0,0);
-    if(spec.annotate){
-      // real dimensions, projected from the model: lines and labels in the page's ink
-      const at=v=>{const n=new THREE.Vector3(...v).project(cam);return [(n.x+1)/2*out.width,(1-n.y)/2*out.height];};
-      ctx.strokeStyle=ink;ctx.fillStyle=ink;ctx.lineWidth=dpr;ctx.font=`500 ${11*dpr}px "JetBrains Mono", ui-monospace, monospace`;ctx.textBaseline='middle';
-      const tick=(a,b,label,offset)=>{
-        const [x0,y0]=at(a),[x1,y1]=at(b),dx=x1-x0,dy=y1-y0,l=Math.hypot(dx,dy),nx=-dy/l*4*dpr,ny=dx/l*4*dpr;
-        ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);for(const [x,y] of [[x0,y0],[x1,y1]]){ctx.moveTo(x-nx,y-ny);ctx.lineTo(x+nx,y+ny);}ctx.stroke();
-        ctx.textAlign=offset[0]>0?'left':offset[0]<0?'right':'center';ctx.fillText(label,(x0+x1)/2+offset[0]*dpr,(y0+y1)/2+offset[1]*dpr);
-      };
-      if(spec.annotate==='height'){
-        const base=picked.filter(m=>m.userData.kind==='case'),frame=picked.find(m=>m.userData.kind==='frame');
-        const bottom=Math.min(...base.map(m=>new THREE.Box3().setFromObject(m).min.y)),top=new THREE.Box3().setFromObject(frame).max.y,x=body.max.x+5;
-        tick([x,bottom,body.max.z],[x,top,body.max.z],`${(top-bottom).toFixed(1)} mm`,[8,0]);
-      }else{
-        // pitch between real keys: thin extension lines from the keycaps out to each dimension
-        const grid=new Map();for(const m of picked)if(m.userData.kind==='cap'&&m.userData.r[1]!=='3'){const col=+m.userData.r[2];if(!grid.has(col))grid.set(col,[]);grid.get(col).push(m.position);}
-        for(const keys of grid.values())keys.sort((a,b)=>a.z-b.z);
-        const cols=[...grid.keys()].sort((a,b)=>a-b),y=body.max.y+1,cap=[8.75,8.25],gap=1.2;
-        const extend=(a,b)=>{const [x0,y0]=at(a),[x1,y1]=at(b);ctx.globalAlpha=.4;ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.globalAlpha=1;};
-        // rows: the outer column's top two keys, measured on the left
-        const [a,b]=grid.get(cols[0]),x=body.min.x-5;
-        for(const k of [a,b])extend([k.x-cap[0]-gap,y,k.z],[x-2,y,k.z]);
-        tick([x,y,a.z],[x,y,b.z],`${+(b.z-a.z).toFixed(1)} mm`,[-7,0]);
-        // columns: the top keys of the two inner columns, measured above
-        const p=grid.get(cols.at(-2))[0],q=grid.get(cols.at(-1))[0],z=body.min.z-5;
-        for(const k of [p,q])extend([k.x,y,k.z-cap[1]-gap],[k.x,y,z-2]);
-        tick([p.x,y,z],[q.x,y,z],`${+(q.x-p.x).toFixed(1)} mm`,[0,-10]);
+    if(dims.length){
+      // drawn at 1:1 in device pixels: lines on the pixel grid, labels in the page's ink and type
+      const lw=Math.max(1,Math.round(dpr)),snap=v=>Math.round(v)+(lw%2?.5:0),at=v=>{const n=v.clone().project(cam);return [(n.x+1)/2*W,(1-n.y)/2*H];};
+      const edge={left:(r0-cam.position.dot(right))/half/aspect,right:(r1-cam.position.dot(right))/half/aspect,top:(u1-cam.position.dot(up))/half};
+      const line=(x0,y0,x1,y1,alpha=1)=>{ctx.globalAlpha=alpha;ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.globalAlpha=1;};
+      ctx.strokeStyle=ink;ctx.fillStyle=ink;ctx.lineWidth=lw;ctx.lineCap='butt';ctx.font=font(dpr);
+      for(const d of dims){
+        const [ax,ay]=at(d.a),[bx,by]=at(d.b),k=dpr;
+        if(d.side==='top'){
+          const y=snap((1-edge.top)/2*H-GAP*k),x0=snap(ax),x1=snap(bx);
+          line(x0,ay-2*k,x0,y-TICK*k,.45);line(x1,by-2*k,x1,y-TICK*k,.45);
+          line(x0,y,x1,y);line(x0,y-TICK*k,x0,y+TICK*k);line(x1,y-TICK*k,x1,y+TICK*k);
+          ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.fillText(d.label,(x0+x1)/2,y-(TICK+SPACE)*k);
+        }else{
+          const toLeft=d.side==='left',x=snap(((toLeft?edge.left:edge.right)+1)/2*W+(toLeft?-GAP:GAP)*k),y0=snap(ay),y1=snap(by),from=toLeft?-1:1;
+          line(ax+from*2*k,y0,x+from*TICK*k,y0,.45);line(bx+from*2*k,y1,x+from*TICK*k,y1,.45);
+          line(x,y0,x,y1);line(x-TICK*k,y0,x+TICK*k,y0);line(x-TICK*k,y1,x+TICK*k,y1);
+          ctx.textAlign=toLeft?'right':'left';ctx.textBaseline='middle';ctx.fillText(d.label,x+from*(TICK+SPACE)*k,(y0+y1)/2);
+        }
       }
     }
     for(const m of made)m.dispose();
