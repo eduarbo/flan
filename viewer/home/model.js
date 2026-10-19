@@ -217,7 +217,8 @@ export function createModel({canvas,packs,onChange=()=>{}}){
   canvas.addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKey))return;e.preventDefault();zoom=THREE.MathUtils.clamp(zoom*Math.exp(-e.deltaY*.01),.8,3.6);frame();state.idle=0;render();},{passive:false});
   new ResizeObserver(resize).observe(canvas);
   // nothing to draw while the hero is scrolled away
-  new IntersectionObserver(([e])=>{state.onscreen=e.isIntersecting;if(state.onscreen)render();}).observe(canvas);
+  // scrolled away mid-intro: finish it at once, so nothing waits on motion no one sees
+  new IntersectionObserver(([e])=>{state.onscreen=e.isIntersecting;if(state.onscreen)render();else if(state.ready&&Math.abs(state.target-state.explode)>.0005){state.explode=state.target;if(state.intro){state.intro=false;onChange({explode:state.target});}place();}}).observe(canvas);
   document.addEventListener('visibilitychange',render);
 
   // Option and spec previews: a second small renderer, transparent PNGs in the current colours.
@@ -298,7 +299,7 @@ export function createModel({canvas,packs,onChange=()=>{}}){
   function quiet(){
     return new Promise(function check(resolve){
       // the intro's slow tail counts as still: its last few percent hardly move
-      const busy=state.interacting||tweens.length>0||Math.abs(state.target-state.explode)>.06;
+      const busy=state.onscreen&&(state.interacting||tweens.length>0||Math.abs(state.target-state.explode)>.06);
       if(busy)setTimeout(()=>check(resolve),120);else if(window.requestIdleCallback)requestIdleCallback(()=>resolve(),{timeout:400});else setTimeout(resolve,30);
     });
   }
