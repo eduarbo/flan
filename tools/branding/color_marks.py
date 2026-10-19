@@ -135,16 +135,32 @@ R2 = [
     ("tinta-caramelo", "Tinta caramelo", "La marca actual en una sola tinta caramelo; en modo oscuro pasa a natilla."),
 ]
 
-def svg_classes(layers, title, dark=None):
-    """A square SVG (centred), with optional classes recoloured under prefers-color-scheme: dark."""
+def svg_classes(layers, title, dark=None, tight=False):
+    """A square SVG (centred), or one fitted to the mark with `tight`, with optional classes
+    recoloured under prefers-color-scheme: dark."""
     x0, y0, x1, y1 = unary_union([geom for geom, _, _ in layers]).bounds
     w, h = x1 - x0, y1 - y0; side = max(w, h); pad = side * .03
+    if tight:
+        body = "\n".join(f'<path{f" class={chr(34)}{cls}{chr(34)}" if cls else ""} fill="{c}" fill-rule="evenodd" d="{d(geom)}"/>'
+                          for geom, c, cls in layers if not geom.is_empty)
+        style = f"<style>@media (prefers-color-scheme: dark) {{ {dark} }}</style>\n" if dark else ""
+        return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{x0:.3f} {y0:.3f} {w:.3f} {h:.3f}">\n'
+                f'<title>{title}</title>\n{style}{body}\n</svg>\n')
     vx, vy = x0 - (side - w) / 2 - pad, y0 - (side - h) / 2 - pad
     style = f"<style>@media (prefers-color-scheme: dark) {{ {dark} }}</style>\n" if dark else ""
     paths = "\n".join(f'<path{f" class={chr(34)}{cls}{chr(34)}" if cls else ""} fill="{c}" fill-rule="evenodd" d="{d(geom)}"/>'
                       for geom, c, cls in layers if not geom.is_empty)
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vx:.3f} {vy:.3f} {side + 2 * pad:.3f} {side + 2 * pad:.3f}">\n'
             f'<title>{title}</title>\n{style}{paths}\n</svg>\n')
+
+def marca_color():
+    """The selected colour mark (Eduardo, 2026-10-18: "La marca, a color"): the one-colour mark's
+    geometry with custard faces, caramel and a caramel outline that lightens on dark chrome.
+    Returns the layers and the dark-scheme rule for svg_classes()."""
+    k, full = R2_INK, regions()
+    layers = [(full["left"], k["custard_lit"], ""), (full["right"], k["custard"], ""), (full["caramel"], k["caramel"], ""),
+              (full["outline"], k["caramel_ink"], "o"), (full["front"], k["caramel_ink"], "o")]
+    return layers, f".o {{ fill: {k['dark_stroke']}; }}"
 
 def build_r2(out):
     out.mkdir(parents=True, exist_ok=True)
@@ -158,8 +174,7 @@ def build_r2(out):
         "natilla": ([(two["left"], k["custard_lit"], ""), (two["right"], k["custard"], ""), (two["caramel"], k["caramel"], "")], None),
         "natilla-borde": ([(two["left"], k["custard_lit"], ""), (two["right"], k["custard"], ""), (two["caramel"], k["caramel"], "")]
                           + stroke(two, 3.4), f".o {{ fill: {k['dark_stroke']}; }}"),
-        "marca-color": ([(full["left"], k["custard_lit"], ""), (full["right"], k["custard"], ""), (full["caramel"], k["caramel"], "")]
-                        + [(full["outline"], k["caramel_ink"], "o"), (full["front"], k["caramel_ink"], "o")], f".o {{ fill: {k['dark_stroke']}; }}"),
+        "marca-color": marca_color(),
         "tinta-caramelo": ([(iso(), k["caramel_mono"], "m")], f".m {{ fill: {k['dark_mono']}; }}"),
     }
     meta = []

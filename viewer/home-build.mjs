@@ -145,7 +145,7 @@ export async function buildHome({scene=read('build/viewer-scene.json')}={}){
   const page=await homePage({scene,files});
   const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
   const sources=['viewer/home-build.mjs','viewer/home/app.js','viewer/home/model.js','viewer/home/tokens.js','viewer/home/style.css','viewer/home/template.html',
-    'design/themes.json','design/frame-finishes.json','design/variants.json','viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}));
+    'design/themes.json','design/frame-finishes.json','design/variants.json','docs/branding/flan/flan-mark-color.svg','viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}));
   const receipt={revision:scene.revision,page:{path:'docs/index.html',sha256:hash('docs/index.html'),bytes:page.bytes},
     packs:Object.fromEntries(Object.entries(files).map(([k,f])=>[k,{path:'docs/assets/'+f,sha256:hash('docs/assets/'+f),bytes:bytes[k]}])),
     error_mm:ERROR,triangles:stats,omitted:'Fasteners, magnets, feet, the underside diodes and the reset switch; the battery is the default Adafruit 1570 profile.',
@@ -166,8 +166,9 @@ async function homePage({scene,files}){
   const data={packs:Object.fromEntries(Object.entries(files).map(([k,f])=>[k,'assets/'+f])),themes,
     sizes:SIZES.map(id=>({id,title:family[id].title,grid:family[id].grid_per_half,keys:family[id].keys_total})),
     frames:Object.entries(scene.catalog.frame_styles).map(([id,label])=>({id,label}))};
-  const mark=fs.readFileSync(path.join(root,'docs/branding/flan/flan-mark.svg'),'utf8').replace(/<\?xml[^>]*>|<title>[^<]*<\/title>/g,'')
-    .replace(/<svg[^>]*viewBox="([^"]+)"[^>]*>/,'<svg class="mark" viewBox="$1" aria-hidden="true" fill="currentColor">').replace(/ fill="#000"/g,'');
+  // the colour mark; its outline follows the page's theme here (style.css), not the system's
+  const mark=fs.readFileSync(path.join(root,'docs/branding/flan/flan-mark-color.svg'),'utf8').replace(/<\?xml[^>]*>|<title>[^<]*<\/title>|<style>[^<]*<\/style>/g,'')
+    .replace(/<svg[^>]*viewBox="([^"]+)"[^>]*>/,'<svg class="mark" viewBox="$1" aria-hidden="true">');
   const html=fs.readFileSync(path.join(dir,'template.html'),'utf8')
     .replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(dir,'style.css'),'utf8'))
     .replace('<!--__MARK__-->',()=>mark.trim())

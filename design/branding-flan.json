@@ -33,7 +33,8 @@
     "flan-mark.svg": "a176c65eedf1388f6638f05a7079c428c0ba22a68afcf2c355769dc23d742e50",
     "flan-mark-white.svg": "59d774f4f92faed1ccafde30aa50763f29a61187555fe2b342cab636fc960f95",
     "flan-lockup-pcb.svg": "4e581aa7fbe050c34c6089a0c1d6356af064d03dc412440cc5835616b564cb04",
-    "flan-mark-pcb.svg": "67a697d05afe951996dbdea55b8ad840ba921c76bc9a95e71e363def782f15d2"
+    "flan-mark-pcb.svg": "67a697d05afe951996dbdea55b8ad840ba921c76bc9a95e71e363def782f15d2",
+    "flan-mark-color.svg": "06fd8773c343fc1b41640cc09310ed0b7e83116afdcb8e64d11b821b3e80fa4c"
   },
-  "kit_sha256": "4194343f750cb65f4d69b26d599e1e9459190cb01926ff4402130c98816c4c02"
+  "kit_sha256": "96d9aa7101434cee7c37b306a043ce135b27ad048ea0b06d0d1e35c2c7096829"
 }

@@ -8,8 +8,9 @@ The selected logo (2026-10-17): the **tecla-flan** mark — a low-profile keycap
 | `flan-mark.svg`, `flan-mark-white.svg` | Mark alone (avatar, keycap legend, small relief) | 20 mm |
 | `flan-lockup-pcb.svg` | Silkscreen construction, exactly as installed on the revI boards | 15.05 mm |
 | `flan-mark-pcb.svg` | Silkscreen mark alone | 6 mm |
+| `flan-mark-color.svg` | Colour mark: custard faces, caramel and a caramel outline that lightens under a dark browser theme. The site's favicon and header mark | 20 mm |
 
-All files are black (or white) closed outlines in millimetres, with no fonts, strokes or bitmaps. Use the display files above about 20 mm. Below that, use the `-pcb` construction: heavier mark lines, two drips instead of four, and the wordmark at weight 450, so no line prints thinner than 0.17 mm.
+All files except the colour mark are black (or white) closed outlines in millimetres, with no fonts, strokes or bitmaps. The colour mark keeps the same geometry in five fills; its palette is in `tools/branding/color_marks.py` (`marca_color`). Use the display files above about 20 mm. Below that, use the `-pcb` construction: heavier mark lines, two drips instead of four, and the wordmark at weight 450, so no line prints thinner than 0.17 mm.
 
 **Wordmark.** “flan” is set in [Fraunces](https://github.com/google/fonts/tree/main/ofl/fraunces) (SIL Open Font License 1.1) at SOFT 100, opsz 144 and weight 300 (450 for silkscreen), shaped with HarfBuzz, including the “fl” ligature, and converted to outlines. The font itself is not distributed here.
 
@@ -18,5 +19,7 @@ All files are black (or white) closed outlines in millimetres, with no fonts, st
 **KiCad.** Use *File → Import → Graphics* at scale 1 onto F/B.SilkS. On the back, mirror it so it reads from below. The revI boards already carry the signature as the `flan-signature` group (`tools/install_signature.py`).
 
 **FreeCAD.** Import as *SVG as geometry*, make faces and pad or pocket them.
+
+**Favicons.** The same build writes `docs/favicon.svg` (adaptive), `docs/favicon.ico` (16, 32 and 48 px; pages without their own icon, like the explorer, get it from the site root) and `docs/apple-touch-icon.png` from the colour mark. Proposals that led to it: [the favicon tester](https://flankbd.com/proposals/favicon/) and `design/proposals/logo-color-r1/`.
 
 Regenerate: `python tools/build_flan_logo.py` (needs the pinned Fraunces file in `build/fonts/`; source and hash in `design/branding-flan.json`).

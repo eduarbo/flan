@@ -2,8 +2,8 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "eebf23eabe421c6231d9cdb72b9a6984cf56ca61e81cd1ab114ab5697f97e1fc",
-    "bytes": 647097
+    "sha256": "a0ffee01c93e0c95a8c87d738db5ba08897cae2d74a09860b7fe4459130aa1dd",
+    "bytes": 654744
   },
   "packs": {
     "common": {
@@ -1563,7 +1563,7 @@
   "sources": [
     {
       "path": "viewer/home-build.mjs",
-      "sha256": "eff3d952803498786e90d9a2cfe2a02a8352b9bf5e1c4993d647dc568d28d003"
+      "sha256": "7a459ea610a7065b43fe86c901ba16947c5f65285b2b5ae457a06d680aef270a"
     },
     {
       "path": "viewer/home/app.js",
@@ -1579,11 +1579,11 @@
     },
     {
       "path": "viewer/home/style.css",
-      "sha256": "e2ba7e179079826c28669ac8c15e07c86079c354514a5e792f78b7433dc542b3"
+      "sha256": "105462d4ec30556c8bfe286a5483cccd40b5b7ba5e0b1c3d703ac0b104059c8f"
     },
     {
       "path": "viewer/home/template.html",
-      "sha256": "bca3cbca763d8481d57dd6034b56e0b4121a17965ea10fd24a3af6ffd86182ec"
+      "sha256": "b1ed5e48af3cd404ec650470f4b1b534f0bc13a0677f1911a451448b9ab890fb"
     },
     {
       "path": "design/themes.json",
@@ -1596,6 +1596,10 @@
     {
       "path": "design/variants.json",
       "sha256": "23a9787ae73d074ce01cd13b188660472c96f1975be3a01b6f0fde337fd6c1e4"
+    },
+    {
+      "path": "docs/branding/flan/flan-mark-color.svg",
+      "sha256": "06fd8773c343fc1b41640cc09310ed0b7e83116afdcb8e64d11b821b3e80fa4c"
     },
     {
       "path": "viewer/package-lock.json",
