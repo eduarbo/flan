@@ -129,10 +129,11 @@ def iso(small=False):
     g = iso_regions(small)
     return unary_union([g["outline"], g["caramel"], g["front"]])
 
-def iso_regions(small=False):
+def iso_regions(small=False, H=8.6, top_half=7.2, top_r=2.6, bottom_half=9.0, bottom_r=1.6, drips=None, band=1.4):
     """The three-quarter mark's parts, scaled into the 100 box: the silhouette, the top face, the
     caramel, the front corner edge, and the one-colour mark's outline and front-edge strokes.
-    The colour marks (tools/branding/color_marks.py) fill these regions."""
+    The defaults are the mark; the colour proposals (tools/branding/color_marks.py) vary the cap's
+    proportions and drips, and add parts through `ring` and `place`."""
     w = 5.0 if small else 2.8
     c30, s30 = math.cos(math.radians(30)), math.sin(math.radians(30))
     def proj(x, y, z):
@@ -140,23 +141,22 @@ def iso_regions(small=False):
     def ring_pts(half, r, z):
         sq = rounded([(-half, -half), (half, -half), (half, half), (-half, half)], [r] * 4)
         return [proj(x, y, z) for x, y in sq.exterior.coords]
-    H = 8.6
-    top = Polygon(ring_pts(7.2, 2.6, H))
-    bot = Polygon(ring_pts(9.0, 1.6, 0))
+    top = Polygon(ring_pts(top_half, top_r, H))
+    bot = Polygon(ring_pts(bottom_half, bottom_r, 0))
     sil = unary_union([top, bot]).convex_hull
     # front corner edge
-    fc_top = proj(7.2 - 2.6 + 2.6 * math.cos(math.radians(45)), 7.2 - 2.6 + 2.6 * math.sin(math.radians(45)), H)
-    fc_bot = proj(9.0 - 1.6 + 1.6 * math.cos(math.radians(45)), 9.0 - 1.6 + 1.6 * math.sin(math.radians(45)), 0)
+    fc_top = proj(top_half - top_r + top_r * math.cos(math.radians(45)), top_half - top_r + top_r * math.sin(math.radians(45)), H)
+    fc_bot = proj(bottom_half - bottom_r + bottom_r * math.cos(math.radians(45)), bottom_half - bottom_r + bottom_r * math.sin(math.radians(45)), 0)
     # caramel: top face, a band below its front edges, and vertical drips on the front faces
-    band = unary_union([top, affinity.translate(top, 0, 1.4)])
-    drip_specs = [(-0.62, 1.15, 5.4), (-0.22, 0.85, 3.6), (0.30, 1.05, 6.2), (0.70, 0.8, 3.9)]
-    if small:
+    band = unary_union([top, affinity.translate(top, 0, band)])
+    drip_specs = drips or [(-0.62, 1.15, 5.4), (-0.22, 0.85, 3.6), (0.30, 1.05, 6.2), (0.70, 0.8, 3.9)]
+    if small and not drips:
         drip_specs = [(-0.5, 1.4, 5.2), (0.42, 1.4, 5.8)]
     tongues = []
     for t, r, depth in drip_specs:
         # a point along the front edges of the top face (t in -1..1, 0 = front corner)
-        # front-left edge: y = 7.2, x from -7.2 (t = -1) to 7.2; front-right edge: x = 7.2
-        p = proj(7.2 + 14.4 * t, 7.2, H) if t < 0 else proj(7.2, 7.2 - 14.4 * t, H)
+        # front-left edge: y = half, x from -half (t = -1) to half; front-right edge: x = half
+        p = proj(top_half + 2 * top_half * t, top_half, H) if t < 0 else proj(top_half, top_half - 2 * top_half * t, H)
         x, y = p
         y_edge = y + 0.4
         tongues.append(unary_union([Point(x, y_edge).buffer(r * 0.75, quad_segs=Q),
@@ -174,7 +174,8 @@ def iso_regions(small=False):
     outline = g_sil.exterior.buffer(w / 2, quad_segs=Q)
     front = g_edge.difference(g_car).buffer(w / 2, quad_segs=Q, cap_style="round")
     return {"silhouette": g_sil, "top": tf(top), "caramel": g_car, "edge": g_edge, "outline": outline, "front": front,
-            "stroke": w, "project": lambda x, y, z: tf(Point(proj(x, y, z)))}
+            "stroke": w, "project": lambda x, y, z: tf(Point(proj(x, y, z))),
+            "ring": lambda half, r, z: tf(Polygon(ring_pts(half, r, z))), "place": tf}
 
 VARIANTS = {
     "glaseado": ("Glaseado", "Flan de perfil sobre su plato: contorno fino y caramelo sólido.", glaseado),

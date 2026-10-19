@@ -3,8 +3,8 @@
 top with its gloss, darker caramel running down the front, optional plate, and square tiles for
 favicons. Same geometry as the one-colour mark (tools/branding/flankey.iso_regions).
 
-R1 (--r1) writes design/proposals/logo-color-r1/; R2 (default) writes the favicon tester's icons to
-docs/proposals/favicon/icons/. python3 tools/branding/color_marks.py   (needs shapely; rsvg-convert)
+R1 (--r1) writes design/proposals/logo-color-r1/; R2 (--r2) and R3 (default) write the favicon
+tester's icons to docs/proposals/favicon/icons/. python3 tools/branding/color_marks.py   (needs shapely; rsvg-convert)
 SPDX-License-Identifier: GPL-3.0-or-later
 """
 from pathlib import Path
@@ -179,8 +179,82 @@ def build_r2(out):
     (out / "variants.json").write_text(json.dumps({"palette": k, "variants": meta}, indent=2, ensure_ascii=False) + "\n")
     print("wrote", len(meta), "R2 marks to", out.relative_to(ROOT))
 
+# ---------------------------------------------------------------------------- R3
+# Eduardo kept "La marca, a color" and asked for variants that read more as a keycap, or in another
+# drawing style. Same palette and outline; the cap's proportions, top and stand change.
+R3 = [
+    ("r3-choc", "Choc", "Proporciones de tecla low-profile Choc: más ancha y más baja, gotas cortas."),
+    ("r3-choc-dish", "Choc con dish", "La Choc con su cara cóncava y la barra de homing de la F y la J."),
+    ("r3-dish", "Con dish", "La marca de hoy con dish y barra de homing en el caramelo."),
+    ("r3-switch", "En su switch", "La tecla Choc montada sobre su switch: se lee como tecla de teclado aun a 16 px."),
+    ("r3-sticker", "Sticker", "La marca a color con un halo recortado, como estampa; destaca en pestañas oscuras."),
+    ("r3-linea", "Línea", "Otro trazo: una línea fina dibuja la tecla y el borde del caramelo, con rellenos claros."),
+    ("r3-patitas", "Patitas", "De frente, el flan parado sobre los dos stems rojos de un switch Choc."),
+]
+R3_INK = {**R2_INK, "dish": "#965627", "homing": "#C68446", "housing_top": "#E2E5DD", "housing": "#C9CDC4",
+          "housing_shade": "#B7BBB2", "stem": "#C8484A", "halo": "#FFFDF8", "halo_edge": "#E6DCCB", "caramel_soft": "#D9A066"}
+CHOC = dict(H=4.4, top_half=7.7, top_r=2.2, bottom_half=8.8, bottom_r=1.5, band=1.0,
+            drips=[(-0.62, 1.0, 3.0), (-0.22, 0.8, 2.0), (0.30, 0.95, 3.4), (0.70, 0.75, 2.2)])
+
+def build_r3(out):
+    from branding.flankey import cap, caramel, open_
+    from shapely.geometry import LineString
+    k, w = R3_INK, 2.8
+    stroke = lambda geom, width=w: geom.buffer(width / 2, quad_segs=Q)
+    def faces(g):
+        x = g["edge"].coords[0][0]; f = g["silhouette"].difference(g["top"])
+        return f.intersection(box(-99, -99, x, 199)), f.intersection(box(x, -99, 199, 199))
+    def coloured(g):
+        left, right = faces(g)
+        fill = [(left, k["custard_lit"], ""), (right, k["custard"], ""), (g["caramel"], k["caramel"], "")]
+        lines = [(stroke(g["silhouette"].exterior), k["caramel_ink"], "o"),
+                 (stroke(g["edge"].difference(g["caramel"])), k["caramel_ink"], "o")]
+        return fill, lines
+    def dish(g, half, r, H, inset):
+        a, b = g["project"](half - inset - 1.3, -1.3, H - .25).coords[0], g["project"](half - inset - 1.3, 1.3, H - .25).coords[0]
+        return [(g["ring"](half - inset, max(r - .6, .6), H - .25), k["dish"], ""),
+                (LineString([a, b]).buffer(1.0, quad_segs=Q, cap_style="round"), k["homing"], "")]
+    def switch(g, gap=3.2, half=7.2, r=1.4, depth=3.4):
+        top, bot = g["ring"](half, r, -gap), g["ring"](half, r, -gap - depth)
+        body = unary_union([top, bot]).convex_hull; x = g["edge"].coords[0][0]; f = body.difference(top)
+        return [(top, k["housing_top"], ""), (f.intersection(box(-99, -99, x, 199)), k["housing"], ""),
+                (f.intersection(box(x, -99, 199, 199)), k["housing_shade"], ""),
+                (stroke(body.exterior), k["caramel_ink"], "o"), (stroke(top.exterior, w * .7).intersection(body.buffer(-.1)), k["caramel_ink"], "o")]
+    base, choc = iso_regions(), iso_regions(**CHOC)
+    sets = {}
+    fill, lines = coloured(choc); sets["r3-choc"] = fill + lines
+    sets["r3-choc-dish"] = fill + dish(choc, 7.7, 2.2, 4.4, 1.7) + lines
+    sets["r3-switch"] = switch(choc) + fill + dish(choc, 7.7, 2.2, 4.4, 1.7) + lines
+    fill, lines = coloured(base)
+    sets["r3-dish"] = fill + dish(base, 7.2, 2.6, 8.6, 1.9) + lines
+    halo = base["silhouette"].buffer(4.6, quad_segs=Q)
+    sets["r3-sticker"] = [(halo.buffer(.9, quad_segs=Q), k["halo_edge"], ""), (halo, k["halo"], "")] + fill + lines
+    fine = 2.2
+    edge = base["caramel"].boundary.difference(base["silhouette"].exterior.buffer(fine * .3))
+    sets["r3-linea"] = [(base["silhouette"], k["custard_lit"], ""), (base["caramel"], k["caramel_soft"], ""),
+                        (stroke(base["silhouette"].exterior, fine), k["caramel_ink"], "o"),
+                        (edge.buffer(fine / 2, quad_segs=Q, cap_style="round"), k["caramel_ink"], "o"),
+                        (stroke(base["edge"].difference(base["caramel"]), fine), k["caramel_ink"], "o")]
+    body = cap(bottom=66.0, top=33.0); glaze = caramel(body, 43.0, [(29, 3.2, 53), (45, 2.5, 48.5), (63, 3.9, 58)])
+    stems = [open_(box(x - 2.8, 60, x + 2.8, 74), 2.2).difference(body) for x in (40.0, 60.0)]
+    sets["r3-patitas"] = ([(body, k["custard_lit"], ""), (glaze, k["caramel"], "")] + [(st, k["stem"], "") for st in stems]
+                          + [(stroke(body.exterior), k["caramel_ink"], "o")] + [(stroke(st.exterior).difference(body), k["caramel_ink"], "o") for st in stems])
+    dark = f".o {{ fill: {k['dark_stroke']}; }}"
+    meta = []
+    for key, name, note in R3:
+        f = out / f"{key}.svg"; text = svg_classes(sets[key], f"Flan — {name}", dark); f.write_text(text)
+        (out / f"{key}-dark.svg").write_text(text.replace("@media (prefers-color-scheme: dark) {", "").replace("; } }</style>", "; }</style>"))
+        (out / f"{key}-light.svg").write_text(text.replace(f"<style>@media (prefers-color-scheme: dark) {{ {dark} }}</style>\n", ""))
+        for px in (16, 32, 180):
+            subprocess.run(["rsvg-convert", "-w", str(px), "-h", str(px), str(f), "-o", str(out / f"{key}-{px}.png")], check=True)
+        meta.append({"id": key, "name": name, "note": note, "dark": True})
+    (out / "variants-r3.json").write_text(json.dumps({"palette": k, "variants": meta}, indent=2, ensure_ascii=False) + "\n")
+    print("wrote", len(meta), "R3 marks to", out.relative_to(ROOT))
+
 if __name__ == "__main__":
     if "--r1" in sys.argv:
         build()
-    else:
+    elif "--r2" in sys.argv:
         build_r2(ROOT / "docs/proposals/favicon/icons")
+    else:
+        build_r3(ROOT / "docs/proposals/favicon/icons")

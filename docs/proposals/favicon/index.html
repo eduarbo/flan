@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Flan Keyboard</title>
 <meta name="robots" content="noindex">
-<link id="icon-svg" rel="icon" type="image/svg+xml" href="icons/natilla.svg">
-<link id="icon-png" rel="icon" type="image/png" sizes="32x32" href="icons/natilla-32.png">
+<link id="icon-svg" rel="icon" type="image/svg+xml" href="icons/r3-choc.svg">
+<link id="icon-png" rel="icon" type="image/png" sizes="32x32" href="icons/r3-choc-32.png">
 <style>
 @font-face { font-family: Fraunces; src: url(../../assets/fonts/Fraunces-latin.woff2) format("woff2"); font-weight: 300 500; font-display: swap; }
 @font-face { font-family: Inter; src: url(../../assets/fonts/Inter-latin.woff2) format("woff2"); font-weight: 400 600; font-display: swap; }
@@ -36,23 +36,28 @@ h2 { margin: 2px 0 0; font-size: 16px; font-weight: 600; }
 .row button, .row a { flex: 1; white-space: nowrap; padding: 0 12px; display: inline-flex; justify-content: center; align-items: center; height: 38px; border-radius: 999px; font: 500 13px Inter, sans-serif; text-decoration: none; cursor: pointer; }
 .row button { border: 0; background: var(--ink); color: var(--bg); }
 .row a { border: 1px solid var(--line); color: var(--ink); }
+.round { font: 600 10.5px/1 Inter, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .now { font-size: 12px; color: var(--accent); font-weight: 600; min-height: 18px; }
 </style>
 </head>
 <body>
 <main>
   <h1>Probador de favicon</h1>
-  <p class="lede">Cada opción se pone de verdad en esta pestaña de tu navegador, así que ves el favicon tal como se vería en flankbd.com, a su tamaño real y con tu tema claro u oscuro.</p>
+  <p class="lede">R3: variantes de «La marca, a color» que se parecen más a una tecla, y otros estilos de dibujo. Cada opción se pone de verdad en esta pestaña de tu navegador, así que ves el favicon tal como se vería en flankbd.com, a su tamaño real y con tu tema claro u oscuro.</p>
   <p class="how"><b>Cómo compararlas:</b> pulsa <b>Nueva pestaña</b> en cada una y mira tu barra de pestañas. Cambia tu navegador o sistema a modo oscuro: las versiones con borde se aclaran solas.</p>
   <div class="grid" id="grid"></div>
 </main>
 <script>
 const OPTIONS=[
-  ['natilla','Natilla','Natilla suave y caramelo de leche, dos gotas grandes, sin contorno.',false],
-  ['natilla-borde','Natilla con borde','La misma con un contorno caramelo; en modo oscuro el borde se aclara.',true],
-  ['marca-color','La marca, a color','La marca actual con sus cuatro gotas, rellena de natilla y con contorno caramelo.',true],
-  ['tinta-caramelo','Tinta caramelo','La marca actual en una sola tinta caramelo; en modo oscuro pasa a natilla.',true],
-  ['actual','Actual','El favicon de hoy, para comparar.',false],
+  ['r3-choc','Choc','Proporciones de tecla low-profile Choc: más ancha y más baja, gotas cortas.',true,'R3'],
+  ['r3-choc-dish','Choc con dish','La Choc con su cara cóncava y la barra de homing de la F y la J.',true,'R3'],
+  ['r3-dish','Con dish','La marca de hoy con dish y barra de homing en el caramelo.',true,'R3'],
+  ['r3-switch','En su switch','La tecla Choc montada sobre su switch: se lee como tecla de teclado aun a 16 px.',true,'R3'],
+  ['r3-sticker','Sticker','La marca a color con un halo recortado, como estampa; destaca en pestañas oscuras.',true,'R3'],
+  ['r3-linea','Línea','Otro trazo: una línea fina dibuja la tecla y el borde del caramelo, con rellenos claros.',true,'R3'],
+  ['r3-patitas','Patitas','De frente, el flan parado sobre los dos stems rojos de un switch Choc.',true,'R3'],
+  ['marca-color','La marca, a color','Tu elegida de R2: la marca de hoy rellena de natilla, con contorno caramelo.',true,'Base'],
+  ['actual','Actual','El favicon de hoy, para comparar.',false,'Base'],
 ];
 const ids=OPTIONS.map(o=>o[0]),q=new URLSearchParams(location.search);
 let current=ids.includes(q.get('icon'))?q.get('icon'):ids[0];
@@ -65,11 +70,11 @@ function use(id){
   history.replaceState(null,'',`?icon=${id}`);
   for(const card of document.querySelectorAll('.opt')){const on=card.dataset.id===id;card.setAttribute('aria-current',String(on));card.querySelector('.now').textContent=on?'En esta pestaña':'';}
 }
-document.getElementById('grid').innerHTML=OPTIONS.map(([id,name,note,dark])=>`
+document.getElementById('grid').innerHTML=OPTIONS.map(([id,name,note,dark,round])=>`
   <section class="opt" data-id="${id}">
     <div class="big"><span class="l"><img src="icons/${id}${dark?'-light':''}.svg" alt="${name} en fondo claro"></span><span class="d"><img src="icons/${id}${dark?'-dark':''}.svg" alt="${name} en fondo oscuro"></span></div>
     <div class="real"><i class="l"><img src="icons/${id}${dark?'-light':''}.svg" width="16" height="16" alt="">16 px</i><i class="d"><img src="icons/${id}${dark?'-dark':''}.svg" width="16" height="16" alt="">16 px</i><i class="l"><img src="icons/${id}${dark?'-light':''}.svg" width="32" height="32" alt="">32 px</i></div>
-    <h2>${name}</h2><p>${note}</p><span class="now"></span>
+    <span class="round">${round}</span><h2>${name}</h2><p>${note}</p><span class="now"></span>
     <div class="row"><button type="button" data-use="${id}">Usar aquí</button><a href="?icon=${id}" target="_blank" rel="noopener">Nueva pestaña ↗</a></div>
   </section>`).join('');
 for(const b of document.querySelectorAll('[data-use]'))b.addEventListener('click',()=>use(b.dataset.use));
