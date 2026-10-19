@@ -58,7 +58,7 @@ function lights(scene){
 }
 const surface=color=>new THREE.MeshStandardMaterial({color,roughness:.78,metalness:0});
 
-export function createModel({canvas,packs,onChange=()=>{}}){
+export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
   // A browser without hardware acceleration renders on the CPU: find out before creating the context,
   // then skip antialiasing, render smaller and keep still until the reader moves the keyboard.
   const software=(()=>{try{const g=document.createElement('canvas').getContext('webgl2'),i=g?.getExtension('WEBGL_debug_renderer_info'),
@@ -145,9 +145,16 @@ export function createModel({canvas,packs,onChange=()=>{}}){
   function syncInstances(){
     for(const {mesh,proxies} of instanced){let n=0;for(const o of proxies)if(o.visible){o.updateMatrix();mesh.setMatrixAt(n++,o.matrix);}mesh.count=n;mesh.instanceMatrix.needsUpdate=true;}
   }
+  // The canvas fills the whole hero so the keyboard is never cut off where it passes under the text;
+  // a view offset keeps it framed in the stage area.
+  const view={w:1,h:1,sw:1,sh:1};
   function resize(){
     const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;
-    renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();frame();render();
+    const c=canvas.getBoundingClientRect(),a=area.getBoundingClientRect();
+    Object.assign(view,{w,h,sw:a.width||w,sh:a.height||h});
+    renderer.setSize(w,h,false);camera.aspect=w/h;
+    camera.setViewOffset(w,h,w/2-(a.left-c.left+view.sw/2),h/2-(a.top-c.top+view.sh/2),w,h);
+    camera.updateProjectionMatrix();frame();render();
   }
   // keep the whole keyboard in view at any aspect: every part's box corner, with the layers apart, must
   // project inside the view; the model is centred on what is seen, not on its box
@@ -169,8 +176,9 @@ export function createModel({canvas,packs,onChange=()=>{}}){
     let r0=Infinity,r1=-Infinity,t0=Infinity,t1=-Infinity;
     for(const p of fitPoints){const r=p.dot(right),t=p.dot(top);r0=Math.min(r0,r);r1=Math.max(r1,r);t0=Math.min(t0,t);t1=Math.max(t1,t);}
     controls.target.copy(right).multiplyScalar((r0+r1)/2).addScaledVector(top,(t0+t1)/2);
-    const tan=Math.tan(THREE.MathUtils.degToRad(camera.fov)/2);let distance=0;
-    for(const p of fitPoints){const v=p.clone().sub(controls.target),depth=v.dot(dir);distance=Math.max(distance,Math.abs(v.dot(top))/tan+depth,Math.abs(v.dot(right))/(tan*camera.aspect)+depth);}
+    // fit the stage area, not the whole canvas: the vertical field spans the canvas height
+    const tan=Math.tan(THREE.MathUtils.degToRad(camera.fov)/2),th=tan*view.sh/view.h,tw=tan*view.sw/view.h;let distance=0;
+    for(const p of fitPoints){const v=p.clone().sub(controls.target),depth=v.dot(dir);distance=Math.max(distance,Math.abs(v.dot(top))/th+depth,Math.abs(v.dot(right))/tw+depth);}
     distance=distance*1.04/zoom;
     camera.position.copy(dir).multiplyScalar(distance).add(controls.target);camera.near=distance/20;camera.far=distance*20;camera.updateProjectionMatrix();
   }
@@ -215,7 +223,7 @@ export function createModel({canvas,packs,onChange=()=>{}}){
   controls.addEventListener('change',render);
   // zoom only on a pinch or ⌘/Ctrl + scroll, so the page still scrolls
   canvas.addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKey))return;e.preventDefault();zoom=THREE.MathUtils.clamp(zoom*Math.exp(-e.deltaY*.01),.8,3.6);frame();state.idle=0;render();},{passive:false});
-  new ResizeObserver(resize).observe(canvas);
+  const resizer=new ResizeObserver(resize);resizer.observe(canvas);if(area!==canvas)resizer.observe(area);
   // nothing to draw while the hero is scrolled away
   // scrolled away mid-intro: finish it at once, so nothing waits on motion no one sees
   new IntersectionObserver(([e])=>{state.onscreen=e.isIntersecting;if(state.onscreen)render();else if(state.ready&&Math.abs(state.target-state.explode)>.0005){state.explode=state.target;if(state.intro){state.intro=false;onChange({explode:state.target});}place();}}).observe(canvas);

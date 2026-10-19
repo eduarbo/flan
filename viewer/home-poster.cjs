@@ -11,8 +11,10 @@ const root=path.resolve(__dirname,'..'),out=path.join(__dirname,'home'),work=pat
   const ready=async p=>{await p.addInitScript(()=>{try{localStorage.clear();}catch{}});await p.goto(server.base);await p.waitForSelector('#stage.live',{timeout:120000});
     await p.evaluate(()=>{document.getElementById('standby').click();scrollTo(0,0);});await p.waitForTimeout(4000);};
   const page=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFactor:2});await ready(page);
-  await page.addStyleTag({content:'html,body,.hero::before{background:transparent!important}.hero>*:not(.stage),.stage>*:not(canvas),.stage::before,main,footer{visibility:hidden!important}'});
-  const raw=path.join(work,'home-poster.png');await page.locator('#canvas').screenshot({path:raw,omitBackground:true});
+  // the canvas fills the hero; the poster covers the stage area it frames the model in
+  await page.addStyleTag({content:'html,body,.hero::before{background:transparent!important}.hero>*:not(.scene),.glow,main,footer{visibility:hidden!important}'});
+  const clip=await page.locator('#stage').boundingBox();
+  const raw=path.join(work,'home-poster.png');await page.screenshot({path:raw,clip,omitBackground:true});
   execFileSync('magick',[raw,'-resize','1600x>','-quality','84','-define','webp:alpha-quality=90',path.join(out,'home-poster.webp')]);
   // the desktop layout at 1200 × 630
   const og=await browser.newPage({viewport:{width:1440,height:756},deviceScaleFactor:1200/1440});await ready(og);

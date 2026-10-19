@@ -38,7 +38,7 @@ h1, h2, h3, .lockup .word, .lockup .kbd { font-family: var(--serif); font-variat
   background: linear-gradient(transparent 80%, var(--bg1)), radial-gradient(980px 700px at 36% 60%, var(--bg0) 0, var(--bg1) 58%, var(--bg2) 100%); }
 /* soft light behind the model: a gradient, not a blur filter, so theme changes repaint cheaply */
 .glow { position: absolute; left: 0; top: 24%; width: 72%; height: 76%; background: radial-gradient(closest-side, color-mix(in srgb, var(--glow) 40%, transparent), transparent); z-index: -1; pointer-events: none; }
-.top { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: max(20px, env(safe-area-inset-top)); }
+.top { position: relative; z-index: 3; grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: max(20px, env(safe-area-inset-top)); }
 .lockup { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: var(--ink); }
 .lockup .mark { width: 38px; height: 31px; }
 .lockup .mark .o { transition: fill .6s ease-out; } :root[data-scheme=dark] .lockup .mark .o { fill: #E9B871; }
@@ -49,31 +49,31 @@ nav a { color: var(--muted); text-decoration: none; } nav a:hover { color: var(-
 .lang { display: inline-flex; gap: 2px; font: 500 11px var(--mono); }
 .lang button { padding: 5px 8px; border-radius: 999px; color: var(--muted); }
 .lang button[aria-pressed=true] { background: color-mix(in srgb, var(--ink) 10%, transparent); color: var(--ink); }
-.copy { grid-column: 1; grid-row: 2; padding-top: 30px; position: relative; z-index: 1; }
+.copy { grid-column: 1; grid-row: 2; padding-top: 30px; position: relative; z-index: 2; pointer-events: none; }
 h1 { margin: 8px 0 0; font-size: clamp(48px, 5.2vw, 78px); line-height: 1; letter-spacing: -.03em; }
 .sub { margin: 12px 0 0; font-size: 18px; max-width: 40ch; color: var(--muted); text-wrap: pretty; }
 
 .stage { grid-column: 1; grid-row: 3; position: relative; min-height: 400px; margin: -10px -20px 0 -40px; }
-.stage canvas, .poster { position: absolute; inset: 0; width: 100%; height: 100%; }
-.stage canvas { opacity: 0; transition: opacity .6s ease-out; cursor: grab; outline: none; }
-.stage canvas:active { cursor: grabbing; }
-.stage.live canvas { opacity: 1; }
-.poster { object-fit: contain; transition: opacity .6s ease-out; }
+/* the model's canvas fills the hero: text and controls float over it, nothing is cut off */
+.scene { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; transition: opacity .6s ease-out; cursor: grab; outline: none; }
+.scene:active { cursor: grabbing; }
+.hero.live .scene { opacity: 1; }
+.poster { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; object-fit: contain; transition: opacity .6s ease-out; }
 .stage.live .poster { opacity: 0; pointer-events: none; }
 /* a still ground shadow: cheaper than filtering every frame */
-.stage::before { content: ""; position: absolute; left: 12%; right: 12%; top: 64%; height: 26%; background: radial-gradient(closest-side, color-mix(in srgb, var(--ink) 20%, transparent), transparent 92%); opacity: 0; transition: opacity .6s; }
+.stage::before { content: ""; z-index: 0; position: absolute; left: 12%; right: 12%; top: 64%; height: 26%; background: radial-gradient(closest-side, color-mix(in srgb, var(--ink) 20%, transparent), transparent 92%); opacity: 0; transition: opacity .6s; }
 .stage.live::before { opacity: 1; }
-.note { position: absolute; left: 40px; top: 12px; margin: 0; padding: 8px 14px; border-radius: 12px; font-size: 13px; background: color-mix(in srgb, var(--on) 60%, transparent); max-width: 44ch; }
-.stagebar { position: absolute; left: 40px; bottom: 4px; display: flex; gap: 8px; align-items: center; }
+.note { z-index: 2; position: absolute; left: 40px; top: 12px; margin: 0; padding: 8px 14px; border-radius: 12px; font-size: 13px; background: color-mix(in srgb, var(--on) 60%, transparent); max-width: 44ch; }
+.stagebar { position: absolute; z-index: 2; left: 40px; bottom: 4px; display: flex; gap: 8px; align-items: center; }
 .chip { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px; border-radius: 999px; font-size: 13px; color: var(--ink);
   background: color-mix(in srgb, var(--on) 62%, transparent); }
 .chip svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .chip.icon { width: 34px; padding: 0; justify-content: center; }
 #standby svg { fill: currentColor; stroke: none; } #standby .play, #standby[aria-pressed=false] .pause { display: none; } #standby[aria-pressed=false] .play { display: block; }
-.preview-tag { position: absolute; left: 50%; top: 4px; transform: translateX(-50%); background: var(--ink); color: var(--bg0); white-space: nowrap; }
+.preview-tag { z-index: 2; position: absolute; left: 50%; top: 4px; transform: translateX(-50%); background: var(--ink); color: var(--bg0); white-space: nowrap; }
 
 /* vertical layers slider: up separates, down reassembles */
-.layers { grid-column: 2; grid-row: 3; align-self: center; height: min(440px, 62%); min-height: 260px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.layers { position: relative; z-index: 2; grid-column: 2; grid-row: 3; align-self: center; height: min(440px, 62%); min-height: 260px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .layers .ico { width: 30px; height: 30px; fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-linejoin: round; }
 .layers .cap { font: 500 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .vtrack { position: relative; flex: 1; width: 30px; cursor: pointer; touch-action: none; border-radius: 15px; }
@@ -85,7 +85,7 @@ h1 { margin: 8px 0 0; font-size: clamp(48px, 5.2vw, 78px); line-height: 1; lette
 .vtrack:focus-visible { outline-offset: 2px; }
 
 /* rail: no outline, no panel */
-.rail, .browser { grid-column: 3; grid-row: 2 / 4; display: flex; flex-direction: column; gap: 14px; padding-top: 30px; min-width: 0; position: relative; z-index: 1; }
+.rail, .browser { grid-column: 3; grid-row: 2 / 4; display: flex; flex-direction: column; gap: 14px; padding-top: 30px; min-width: 0; position: relative; z-index: 2; }
 .browser { gap: 12px; }
 .tabs { display: none; }
 .grp { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
@@ -189,7 +189,7 @@ footer .links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
   .tabs button small { font-size: 11px; font-weight: 400; } .tabs button::after { content: ""; width: 16px; height: 3px; border-radius: 2px; margin-top: 2px; }
   .tabs button[aria-selected=true] { color: var(--ink); font-weight: 600; } .tabs button[aria-selected=true]::after { background: var(--accent); }
   .grp { display: none; } .grp.active { display: flex; } .grp .row { display: none; }
-  .grp .opts, .grp .sw { display: flex; gap: 10px; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 6px; scroll-snap-type: x proximity; scrollbar-width: none; }
+  .grp .opts, .grp .sw { display: flex; gap: 10px; overflow-x: auto; margin: 0 -16px; padding: 7px 16px 8px; scroll-snap-type: x proximity; scrollbar-width: none; }
   .grp .opts::-webkit-scrollbar, .grp .sw::-webkit-scrollbar { display: none; }
   .opt { flex: none; min-width: 76px; scroll-snap-align: start; }
   .sw button { flex: none; width: 52px; height: auto; border-radius: 0; background: none; box-shadow: none !important; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11px; line-height: 1.2; text-align: center; }
@@ -204,4 +204,4 @@ footer .links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
   .art { height: 84px; margin-bottom: 12px; } .art.sizes img { height: 52px; } .art.frames { gap: 4px; } .art.frames img { width: 20px; height: 64px; }
   footer { flex-direction: column; align-items: flex-start; gap: 10px; padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right)); }
 }
-@media (prefers-reduced-motion: reduce) { :root { transition: none; } .stage canvas, .poster { transition: none; } }
+@media (prefers-reduced-motion: reduce) { :root { transition: none; } .scene, .poster { transition: none; } }

@@ -261,9 +261,9 @@ const probe=document.createElement('canvas');
 if(!(probe.getContext('webgl2')||probe.getContext('webgl'))){$('note').hidden=false;$('note').textContent=t('stage.nogl');$('layers').hidden=true;document.querySelector('.stagebar').hidden=true;}
 else{
   try{
-    model=createModel({canvas:$('canvas'),packs:data.packs,onChange:({explode})=>showSlider(explode)});
+    model=createModel({canvas:$('canvas'),frame:$('stage'),packs:data.packs,onChange:({explode})=>showSlider(explode)});
     model.init(look,theme()).then(()=>{
-      $('stage').classList.add('live');if(!model.intro())showSlider(model.explode);renderPreviews();
+      $('stage').classList.add('live');$('hero').classList.add('live');if(!model.intro())showSlider(model.explode);renderPreviews();
       $('standby').setAttribute('aria-pressed',String(model.standby));translate();
     }).catch(failed);
   }catch(e){failed(e);}

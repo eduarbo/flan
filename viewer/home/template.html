@@ -20,6 +20,7 @@
 <body>
 <div class="hero" id="hero">
   <div class="glow" aria-hidden="true"></div>
+  <canvas id="canvas" class="scene" aria-label="Drag to turn the keyboard" data-t-label="stage.canvas"></canvas>
   <header class="top">
     <a class="lockup" href="./" aria-label="Flan Keyboard home"><!--__MARK__--><span class="word">flan</span><span class="kbd">keyboard</span></a>
     <nav aria-label="Site">
@@ -35,8 +36,7 @@
     <p class="sub" data-t="hero.sub">Four sizes, 28 themes and six magnetic frames. Turn it, take it apart, make it yours.</p>
   </div>
   <section class="stage" id="stage" aria-label="3D keyboard" data-t-label="stage.label">
-    <img class="poster" id="poster" src="assets/home-poster.webp" alt="Flan36 in the SNES theme, layers apart" width="1600" height="959" data-t-alt="stage.poster">
-    <canvas id="canvas" aria-label="Drag to turn the keyboard" data-t-label="stage.canvas"></canvas>
+    <img class="poster" id="poster" src="assets/home-poster.webp" alt="Flan36 in the SNES theme, layers apart" width="1600" height="1043" data-t-alt="stage.poster">
     <p class="note" id="note" role="status" hidden></p>
     <div class="stagebar">
       <span class="chip hint"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg><span data-t="stage.hint">Drag to turn · pinch to zoom</span></span>
