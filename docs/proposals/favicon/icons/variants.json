@@ -1,0 +1,37 @@
+{
+  "palette": {
+    "custard_lit": "#F8DA97",
+    "custard": "#EFCB7F",
+    "caramel": "#A8652E",
+    "caramel_ink": "#8A5428",
+    "caramel_mono": "#9A5420",
+    "dark_stroke": "#E9B871",
+    "dark_mono": "#F3CF86"
+  },
+  "variants": [
+    {
+      "id": "natilla",
+      "name": "Natilla",
+      "note": "Natilla suave y caramelo de leche, dos gotas grandes, sin contorno.",
+      "dark": false
+    },
+    {
+      "id": "natilla-borde",
+      "name": "Natilla con borde",
+      "note": "La misma con un contorno caramelo; en modo oscuro el borde se aclara.",
+      "dark": true
+    },
+    {
+      "id": "marca-color",
+      "name": "La marca, a color",
+      "note": "La marca actual con sus cuatro gotas, rellena de natilla y con contorno caramelo.",
+      "dark": true
+    },
+    {
+      "id": "tinta-caramelo",
+      "name": "Tinta caramelo",
+      "note": "La marca actual en una sola tinta caramelo; en modo oscuro pasa a natilla.",
+      "dark": true
+    }
+  ]
+}

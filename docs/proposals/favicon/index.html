@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Flan Keyboard</title>
+<meta name="robots" content="noindex">
+<link id="icon-svg" rel="icon" type="image/svg+xml" href="icons/natilla.svg">
+<link id="icon-png" rel="icon" type="image/png" sizes="32x32" href="icons/natilla-32.png">
+<style>
+@font-face { font-family: Fraunces; src: url(../../assets/fonts/Fraunces-latin.woff2) format("woff2"); font-weight: 300 500; font-display: swap; }
+@font-face { font-family: Inter; src: url(../../assets/fonts/Inter-latin.woff2) format("woff2"); font-weight: 400 600; font-display: swap; }
+:root { --bg: #f6f1e7; --card: #fffaf0; --ink: #2b1d14; --muted: #6d5a4b; --line: #e6dccb; --accent: #8a5428; color-scheme: light; }
+@media (prefers-color-scheme: dark) { :root { --bg: #1d1915; --card: #28221d; --ink: #f4ead9; --muted: #b8a893; --line: #3a322a; --accent: #e9b871; color-scheme: dark; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 15px/1.5 Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased;
+  padding-block: 40px 56px; padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right)); }
+main { max-width: 1100px; margin: 0 auto; }
+h1 { margin: 0; font: 300 40px/1.05 Fraunces, Georgia, serif; font-variation-settings: "SOFT" 100, "opsz" 144; letter-spacing: -.02em; }
+.lede { margin: 10px 0 0; color: var(--muted); max-width: 64ch; }
+.how { margin: 18px 0 0; padding: 14px 18px; border-radius: 14px; background: var(--card); max-width: 72ch; }
+.how b { color: var(--ink); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 28px; }
+.opt { background: var(--card); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px; border: 2px solid transparent; }
+.opt[aria-current=true] { border-color: var(--accent); }
+.big { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.big span { display: grid; place-items: center; aspect-ratio: 1; border-radius: 12px; }
+.big .l { background: #ffffff; } .big .d { background: #202124; }
+.big img { width: 62%; height: 62%; }
+.real { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.real i { display: flex; align-items: center; gap: 6px; padding: 6px 9px; border-radius: 8px; font-style: normal; white-space: nowrap; }
+.real .l { background: #ffffff; color: #202124; } .real .d { background: #35363a; color: #e8eaed; }
+h2 { margin: 2px 0 0; font-size: 16px; font-weight: 600; }
+.opt p { margin: 0; font-size: 13px; color: var(--muted); }
+.row { display: flex; gap: 8px; margin-top: auto; }
+.row button, .row a { flex: 1; white-space: nowrap; padding: 0 12px; display: inline-flex; justify-content: center; align-items: center; height: 38px; border-radius: 999px; font: 500 13px Inter, sans-serif; text-decoration: none; cursor: pointer; }
+.row button { border: 0; background: var(--ink); color: var(--bg); }
+.row a { border: 1px solid var(--line); color: var(--ink); }
+.now { font-size: 12px; color: var(--accent); font-weight: 600; min-height: 18px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Probador de favicon</h1>
+  <p class="lede">Cada opción se pone de verdad en esta pestaña de tu navegador, así que ves el favicon tal como se vería en flankbd.com, a su tamaño real y con tu tema claro u oscuro.</p>
+  <p class="how"><b>Cómo compararlas:</b> pulsa <b>Nueva pestaña</b> en cada una y mira tu barra de pestañas. Cambia tu navegador o sistema a modo oscuro: las versiones con borde se aclaran solas.</p>
+  <div class="grid" id="grid"></div>
+</main>
+<script>
+const OPTIONS=[
+  ['natilla','Natilla','Natilla suave y caramelo de leche, dos gotas grandes, sin contorno.',false],
+  ['natilla-borde','Natilla con borde','La misma con un contorno caramelo; en modo oscuro el borde se aclara.',true],
+  ['marca-color','La marca, a color','La marca actual con sus cuatro gotas, rellena de natilla y con contorno caramelo.',true],
+  ['tinta-caramelo','Tinta caramelo','La marca actual en una sola tinta caramelo; en modo oscuro pasa a natilla.',true],
+  ['actual','Actual','El favicon de hoy, para comparar.',false],
+];
+const ids=OPTIONS.map(o=>o[0]),q=new URLSearchParams(location.search);
+let current=ids.includes(q.get('icon'))?q.get('icon'):ids[0];
+function use(id){
+  current=id;
+  document.getElementById('icon-svg').href=`icons/${id}.svg`;
+  // a PNG fallback where one exists; the current mark is SVG only
+  const png=document.getElementById('icon-png');if(id==='actual')png.removeAttribute('href');else png.href=`icons/${id}-32.png`;
+  document.title=`Flan Keyboard`;
+  history.replaceState(null,'',`?icon=${id}`);
+  for(const card of document.querySelectorAll('.opt')){const on=card.dataset.id===id;card.setAttribute('aria-current',String(on));card.querySelector('.now').textContent=on?'En esta pestaña':'';}
+}
+document.getElementById('grid').innerHTML=OPTIONS.map(([id,name,note,dark])=>`
+  <section class="opt" data-id="${id}">
+    <div class="big"><span class="l"><img src="icons/${id}${dark?'-light':''}.svg" alt="${name} en fondo claro"></span><span class="d"><img src="icons/${id}${dark?'-dark':''}.svg" alt="${name} en fondo oscuro"></span></div>
+    <div class="real"><i class="l"><img src="icons/${id}${dark?'-light':''}.svg" width="16" height="16" alt="">16 px</i><i class="d"><img src="icons/${id}${dark?'-dark':''}.svg" width="16" height="16" alt="">16 px</i><i class="l"><img src="icons/${id}${dark?'-light':''}.svg" width="32" height="32" alt="">32 px</i></div>
+    <h2>${name}</h2><p>${note}</p><span class="now"></span>
+    <div class="row"><button type="button" data-use="${id}">Usar aquí</button><a href="?icon=${id}" target="_blank" rel="noopener">Nueva pestaña ↗</a></div>
+  </section>`).join('');
+for(const b of document.querySelectorAll('[data-use]'))b.addEventListener('click',()=>use(b.dataset.use));
+use(current);
+</script>
+</body>
+</html>

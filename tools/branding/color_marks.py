@@ -3,8 +3,8 @@
 top with its gloss, darker caramel running down the front, optional plate, and square tiles for
 favicons. Same geometry as the one-colour mark (tools/branding/flankey.iso_regions).
 
-Writes design/proposals/logo-color-r1/: one SVG per variant, PNGs at favicon sizes, and the
-review sheet's data. python3 tools/branding/color_marks.py   (needs shapely; rsvg-convert)
+R1 (--r1) writes design/proposals/logo-color-r1/; R2 (default) writes the favicon tester's icons to
+docs/proposals/favicon/icons/. python3 tools/branding/color_marks.py   (needs shapely; rsvg-convert)
 SPDX-License-Identifier: GPL-3.0-or-later
 """
 from pathlib import Path
@@ -123,5 +123,64 @@ def build():
     (OUT / "variants.json").write_text(json.dumps({"palette": INK, "variants": meta}, indent=2, ensure_ascii=False) + "\n")
     print("wrote", len(meta), "variants to", OUT.relative_to(ROOT))
 
+# ---------------------------------------------------------------------------- R2
+# R1 read as clip art (saturated, glossy, busy drips). R2 returns to the selected "Caramel" concept:
+# pastel custard, milky caramel, few large drips, no gloss. Strokes lighten on dark browser chrome.
+R2_INK = {"custard_lit": "#F8DA97", "custard": "#EFCB7F", "caramel": "#A8652E", "caramel_ink": "#8A5428",
+          "caramel_mono": "#9A5420", "dark_stroke": "#E9B871", "dark_mono": "#F3CF86"}
+R2 = [
+    ("natilla", "Natilla", "Natilla suave y caramelo de leche, dos gotas grandes, sin contorno."),
+    ("natilla-borde", "Natilla con borde", "La misma con un contorno caramelo; en modo oscuro el borde se aclara."),
+    ("marca-color", "La marca, a color", "La marca actual con sus cuatro gotas, rellena de natilla y con contorno caramelo."),
+    ("tinta-caramelo", "Tinta caramelo", "La marca actual en una sola tinta caramelo; en modo oscuro pasa a natilla."),
+]
+
+def svg_classes(layers, title, dark=None):
+    """A square SVG (centred), with optional classes recoloured under prefers-color-scheme: dark."""
+    x0, y0, x1, y1 = unary_union([geom for geom, _, _ in layers]).bounds
+    w, h = x1 - x0, y1 - y0; side = max(w, h); pad = side * .03
+    vx, vy = x0 - (side - w) / 2 - pad, y0 - (side - h) / 2 - pad
+    style = f"<style>@media (prefers-color-scheme: dark) {{ {dark} }}</style>\n" if dark else ""
+    paths = "\n".join(f'<path{f" class={chr(34)}{cls}{chr(34)}" if cls else ""} fill="{c}" fill-rule="evenodd" d="{d(geom)}"/>'
+                      for geom, c, cls in layers if not geom.is_empty)
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vx:.3f} {vy:.3f} {side + 2 * pad:.3f} {side + 2 * pad:.3f}">\n'
+            f'<title>{title}</title>\n{style}{paths}\n</svg>\n')
+
+def build_r2(out):
+    out.mkdir(parents=True, exist_ok=True)
+    k = R2_INK
+    two = regions(small=True)                                   # two large drips: clearest at 16 px
+    full = regions()                                            # today's mark: four drips
+    stroke = lambda g, w: [(g["silhouette"].exterior.buffer(w / 2, quad_segs=Q), k["caramel_ink"], "o"),
+                           (g["edge"].difference(g["caramel"]).buffer(w / 2, quad_segs=Q), k["caramel_ink"], "o")]
+    from branding.flankey import iso
+    sets = {
+        "natilla": ([(two["left"], k["custard_lit"], ""), (two["right"], k["custard"], ""), (two["caramel"], k["caramel"], "")], None),
+        "natilla-borde": ([(two["left"], k["custard_lit"], ""), (two["right"], k["custard"], ""), (two["caramel"], k["caramel"], "")]
+                          + stroke(two, 3.4), f".o {{ fill: {k['dark_stroke']}; }}"),
+        "marca-color": ([(full["left"], k["custard_lit"], ""), (full["right"], k["custard"], ""), (full["caramel"], k["caramel"], "")]
+                        + [(full["outline"], k["caramel_ink"], "o"), (full["front"], k["caramel_ink"], "o")], f".o {{ fill: {k['dark_stroke']}; }}"),
+        "tinta-caramelo": ([(iso(), k["caramel_mono"], "m")], f".m {{ fill: {k['dark_mono']}; }}"),
+    }
+    meta = []
+    for key, name, note in R2:
+        layers, dark = sets[key]
+        f = out / f"{key}.svg"
+        f.write_text(svg_classes(layers, f"Flan — {name}", dark))
+        for px in (16, 32, 180):
+            subprocess.run(["rsvg-convert", "-w", str(px), "-h", str(px), str(f), "-o", str(out / f"{key}-{px}.png")], check=True)
+        # the dark-chrome look as its own file, for previews that cannot switch the scheme
+        # and both looks as fixed files, for previews that must not follow the page's own scheme
+        if dark:
+            text = f.read_text()
+            (out / f"{key}-dark.svg").write_text(text.replace("@media (prefers-color-scheme: dark) {", "").replace("; } }</style>", "; }</style>"))
+            (out / f"{key}-light.svg").write_text(text.replace(f"<style>@media (prefers-color-scheme: dark) {{ {dark} }}</style>\n", ""))
+        meta.append({"id": key, "name": name, "note": note, "dark": bool(dark)})
+    (out / "variants.json").write_text(json.dumps({"palette": k, "variants": meta}, indent=2, ensure_ascii=False) + "\n")
+    print("wrote", len(meta), "R2 marks to", out.relative_to(ROOT))
+
 if __name__ == "__main__":
-    build()
+    if "--r1" in sys.argv:
+        build()
+    else:
+        build_r2(ROOT / "docs/proposals/favicon/icons")
