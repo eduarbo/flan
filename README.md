@@ -42,6 +42,10 @@ Flan36 is a low-profile wireless split keyboard in development by [Eduardo Ruiz]
 
 Flan36 is inspired by [Piantor by beekeeb](https://github.com/beekeeb/piantor) and keeps its 36 key positions and angles; the wireless PCBs, case outline, cases, frames and firmware are original. The viewer uses [KLP Lamé by braindefender](https://github.com/braindefender/KLP-Lame-Keycaps). [Credits and licenses](ATTRIBUTION.md). [Contributing](CONTRIBUTING.md).
 
+## Support Flan
+
+Flan is free to build. If it is useful to you, [support it on Ko-fi](https://ko-fi.com/eduarbo): it funds prototypes, test boards and new sizes.
+
 ## License, trademark and official kits
 
 Build, modify, share and sell Flan under [GPL-3.0-or-later](LICENSE), with the third-party terms listed in [ATTRIBUTION.md](ATTRIBUTION.md). The license covers the files, not the **Flan** name and logos: products sold under the Flan name or carrying its marks need permission. Official kits come only from Eduardo or licensed sellers. [Trademark policy and official kits →](TRADEMARKS.md)

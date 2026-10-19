@@ -2,8 +2,8 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "a8bc7fb18f31b71624e2811fe725c63bef6c7d2caceee7dbea8c91f6d5d005cf",
-    "bytes": 655512
+    "sha256": "ebafc444cd4b0d8ad410eeeeeb87e8b3f81e8b71eab8112617b0887a19d21b8b",
+    "bytes": 657577
   },
   "packs": {
     "common": {
@@ -17,19 +17,19 @@
       "bytes": 150173
     },
     "flan42": {
-      "path": "docs/assets/home-flan42-69094b30bda94527.bin",
-      "sha256": "69094b30bda94527e7d9a9b55f042419ac6601cee8ebb2b082830561add2fbdc",
-      "bytes": 156514
+      "path": "docs/assets/home-flan42-8cea88359b3c06b7.bin",
+      "sha256": "8cea88359b3c06b73890d42caaa5aeb1be9137a2e7530dde4e9119a6e7bfcece",
+      "bytes": 164497
     },
     "flan46": {
-      "path": "docs/assets/home-flan46-42babf86eb458239.bin",
-      "sha256": "42babf86eb45823992bce5b9cc1e2956cec327990cb60b27adf7c125fb72c088",
-      "bytes": 156099
+      "path": "docs/assets/home-flan46-67e0a45fb1dca82f.bin",
+      "sha256": "67e0a45fb1dca82f5b7c777866df655a91102bd1c1c0c3c11e933190f649f0ae",
+      "bytes": 171286
     },
     "flan54": {
-      "path": "docs/assets/home-flan54-4f902937da55152b.bin",
-      "sha256": "4f902937da55152bfbb099ba40004ce8af1c90f1c0b19ffc0aabfb2d450f8c6c",
-      "bytes": 166879
+      "path": "docs/assets/home-flan54-2098039f3015c2e9.bin",
+      "sha256": "2098039f3015c2e92cf41cafe27f69036112581687c6a8e1ed4d57149cec6f84",
+      "bytes": 192507
     }
   },
   "error_mm": {
@@ -68,8 +68,8 @@
       "triangles": 154502
     },
     "pcbs": {
-      "source": 585360,
-      "triangles": 70992
+      "source": 686272,
+      "triangles": 83910
     }
   },
   "omitted": "Fasteners, magnets, feet, the underside diodes and the reset switch; the battery is the default Adafruit 1570 profile.",
@@ -1065,7 +1065,7 @@
     },
     {
       "path": "validation/flan42-case.json",
-      "sha256": "8842922f9829ac5ccb4fea3b7eb32c41cd653e75d5cdef60b9d9ed23ad8eff72"
+      "sha256": "7122d3af50d62cac7e77b60587953524f1c3466b1fb26d18c1746ed44108dcbf"
     },
     {
       "path": "mechanical/flan42/left-case-solid-base.stl",
@@ -1101,7 +1101,7 @@
     },
     {
       "path": "mechanical/flan42/left-pcb.stl",
-      "sha256": "d3fa92a1e327f048a367321bae21b184fa09d0267055c6620b8e8e5ee28e93d5"
+      "sha256": "baee837106ffcadd7c74bc94fc1b2876152472b4a48757d7ec2f6732f38c316b"
     },
     {
       "path": "mechanical/flan42/right-case-solid-base.stl",
@@ -1137,7 +1137,7 @@
     },
     {
       "path": "mechanical/flan42/right-pcb.stl",
-      "sha256": "154bee5d126e2573c56439c84688dc632493f56ce99efd48af9eec80b6fb4bf9"
+      "sha256": "1546e511aeca775b5ff4f4386e56eb48d52213507b7e5850420c67235eee1cff"
     },
     {
       "path": "hardware/flan42/fabrication/flan42-left-prototype.zip",
@@ -1197,7 +1197,7 @@
     },
     {
       "path": "validation/flan46-case.json",
-      "sha256": "c9431fb8e18939e7f87701c201f3167bc977dd6ebc47dfef918422e67ee7feb9"
+      "sha256": "f19fb2267ba9665ae23a2d1609bee9fa2e767ad8a4703a6c7152049df4c9cfb0"
     },
     {
       "path": "mechanical/flan46/left-case-solid-base.stl",
@@ -1233,7 +1233,7 @@
     },
     {
       "path": "mechanical/flan46/left-pcb.stl",
-      "sha256": "cb5dcf7734117bf3cb40b57d9adc9551b4ea9c3d46a1d4f9b8d0b297d6d74cd7"
+      "sha256": "4b712d765266000aae6ec67ad75e7a1bec9cbc8e1c6a27fb25bb49a351425744"
     },
     {
       "path": "mechanical/flan46/right-case-solid-base.stl",
@@ -1269,7 +1269,7 @@
     },
     {
       "path": "mechanical/flan46/right-pcb.stl",
-      "sha256": "9100ac97842a6e79baf7ba3426055b00c8d061f6e3ebe2f3c457c7736b587e43"
+      "sha256": "e14536aa4dcf635bb75a37de626c13a8f379b1adce43f4a339c55fc4ccef2c13"
     },
     {
       "path": "hardware/flan46/fabrication/flan46-left-prototype.zip",
@@ -1329,7 +1329,7 @@
     },
     {
       "path": "validation/flan54-case.json",
-      "sha256": "b97f52608a489b9231da89458c3ab97cc4463b17f4510ddc93364c822e9e94fd"
+      "sha256": "676807babcedacffe747cc8b73850e92a1d176a629bf8e86312ff19b67d7a183"
     },
     {
       "path": "mechanical/flan54/left-case-solid-base.stl",
@@ -1365,7 +1365,7 @@
     },
     {
       "path": "mechanical/flan54/left-pcb.stl",
-      "sha256": "5c44434b46d49800fb65760b7e2a73681922344ce901817e101eebeba2beedf4"
+      "sha256": "1da029db0cf9927e4b2af9dfcfd4d3ea730e67b07e1953baf69fe8b545623940"
     },
     {
       "path": "mechanical/flan54/right-case-solid-base.stl",
@@ -1401,7 +1401,7 @@
     },
     {
       "path": "mechanical/flan54/right-pcb.stl",
-      "sha256": "c422f722bd057524fd504d547405cedf29b5d18f6b1e25634f1f9ed22c06425f"
+      "sha256": "ab0eb692ee5159aa1daeff43c62951c6cafe175d3e629065c50c0ffd3ba571d0"
     },
     {
       "path": "hardware/flan54/fabrication/flan54-left-prototype.zip",
@@ -1567,11 +1567,11 @@
     },
     {
       "path": "viewer/home/app.js",
-      "sha256": "308c29caed0ef2fb1b473ca8f3bb528f5a6b2f3cd2ccd7056654a3d11aaed287"
+      "sha256": "3e079242da55a5062dcde936b181a893402af5b2272fc0dac21b16c6301c0901"
     },
     {
       "path": "viewer/home/model.js",
-      "sha256": "25adba00d05e3a64a9f392404c5f0cd4caf1d88dd391343f661d747d62792b8c"
+      "sha256": "06acb3da4a7052706c0a188a6e2181d0beb40fea121c2e5362704a60e5f8fca4"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -1579,11 +1579,11 @@
     },
     {
       "path": "viewer/home/style.css",
-      "sha256": "eb3a336e74cd4cfaac9f6c3eda79d2f900bbfc12cfa6a370f8c53e272596dfe1"
+      "sha256": "17911fd1b900361f04cec6061264025b01474d1584bf1caa0f8f641f8c5b00cc"
     },
     {
       "path": "viewer/home/template.html",
-      "sha256": "fbecf803fb8ca18e866adf475a3d55f6d86c1d40a5b57792a75926ff2b68b1f1"
+      "sha256": "bc985fbf4d857040d012b1df51e8d6bea6d335d25355fa062519314f0e7331c7"
     },
     {
       "path": "design/themes.json",

@@ -15,7 +15,7 @@ const T={
     'layers.apart':'Apart','layers.together':'Together','layers.label':'Separate the layers','rail.label':'Make it yours','g.size':'Size','g.theme':'Theme','g.case':'Case','g.keys':'Keycaps','g.frame':'Frame','g.frames':'Frames',
     'frame.browse':'Browse 6','frame.count':'· 6 magnetic designs','frame.cancel':'Cancel','frame.hover':'Hover a frame to preview it on the model','frame.apply':'Apply {name}','frame.from':'Colors from {theme}','frame.own':'Use {name}’s own palette','frame.ownOn':'Use the {theme} colors','frame.current':'Current','frame.previewing':'Previewing {name} · not applied yet',
     'side.both':'Both halves','side.left':'Left','side.right':'Right','cta.open':'Open this build in 3D','keys':'keys','specs.eyebrow':'Spec sheet','specs.title':'What’s under the frame',
-    'f.parts':'Parts','f.pcbs':'Order PCBs','f.status':'Digital prototype · physical tests in progress','f.by':'by',
+    'f.parts':'Parts','f.pcbs':'Order PCBs','f.support':'Support Flan on Ko-fi','nav.support':'Support','f.status':'Digital prototype · physical tests in progress','f.by':'by',
     'role.body':'Body','role.detail':'Detail','role.accent':'Accent','role.secondary':'Secondary'},
   es:{'nav.explore':'Explorar en 3D','nav.build':'Guía de armado','hero.eyebrow':'Teclado inalámbrico de código abierto','hero.title':'Bajo. Dividido. Tuyo.','hero.sub':'Cuatro tamaños, 28 temas y seis marcos magnéticos. Gíralo, sepáralo y hazlo tuyo.',
     'stage.label':'Teclado en 3D','stage.canvas':'Arrastra para girar el teclado','stage.poster':'Flan36 con el tema SNES, capas separadas','stage.hint':'Arrastra para girar · pellizca para acercar','stage.pause':'Pausar el movimiento en reposo','stage.play':'Reanudar el movimiento en reposo','stage.reset':'Restablecer la vista',
@@ -23,7 +23,7 @@ const T={
     'layers.apart':'Separado','layers.together':'Unido','layers.label':'Separar las capas','rail.label':'Hazlo tuyo','g.size':'Tamaño','g.theme':'Tema','g.case':'Caja','g.keys':'Keycaps','g.frame':'Marco','g.frames':'Marcos',
     'frame.browse':'Ver los 6','frame.count':'· 6 diseños magnéticos','frame.cancel':'Cancelar','frame.hover':'Pasa el cursor por un marco para verlo en el modelo','frame.apply':'Aplicar {name}','frame.from':'Colores de {theme}','frame.own':'Usar la paleta propia de {name}','frame.ownOn':'Usar los colores de {theme}','frame.current':'Actual','frame.previewing':'Vista previa: {name} · sin aplicar',
     'side.both':'Ambas mitades','side.left':'Izquierda','side.right':'Derecha','cta.open':'Abrir este teclado en 3D','keys':'teclas','specs.eyebrow':'Ficha técnica','specs.title':'Lo que hay bajo el marco',
-    'f.parts':'Piezas','f.pcbs':'Pedir PCB','f.status':'Prototipo digital · pruebas físicas en curso','f.by':'por',
+    'f.parts':'Piezas','f.pcbs':'Pedir PCB','f.support':'Apoya Flan en Ko-fi','nav.support':'Apoyar','f.status':'Prototipo digital · pruebas físicas en curso','f.by':'por',
     'role.body':'Cuerpo','role.detail':'Detalle','role.accent':'Acento','role.secondary':'Secundario'},
 };
 const SHAPES={

@@ -152,6 +152,11 @@ footer { max-width: 1600px; margin: 0 auto; display: flex; flex-wrap: wrap; just
   padding-block: 26px max(34px, env(safe-area-inset-bottom)); padding-inline: max(60px, env(safe-area-inset-left)) max(56px, env(safe-area-inset-right)); }
 footer a { text-decoration: none; } footer a:hover { color: var(--ink); }
 footer .links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+/* donations: a quiet heart in the nav, one clear pill in the footer */
+nav .support { display: inline-flex; align-items: center; gap: 5px; }
+.support svg, .support-pill svg { width: 15px; height: 15px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linejoin: round; }
+.support-pill { display: inline-flex; align-items: center; gap: 7px; padding: 8px 15px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--ink); font-weight: 500; }
+footer .support-pill:hover { background: color-mix(in srgb, var(--accent) 20%, transparent); color: var(--ink); }
 .maker { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; } .maker svg { width: 15px; height: 15px; }
 
 /* tall desktop screens: the R4 spacing */

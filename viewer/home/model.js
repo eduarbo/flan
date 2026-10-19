@@ -239,7 +239,8 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
     frame:{keep:p=>['frame','screen'].includes(p.kind)||p.group==='display',view:[0,1,.0001],up:[0,0,-1],focusKind:'frame'},
     // specs
     profile:{keep:p=>!['connectors','supports'].includes(p.group),view:[0,.02,1],annotate:'height'},
-    layout:{keep:p=>p.kind==='cap'&&p.k[1]!=='3'&&p.k[1]!=='4'&&p.k[2]!=='0',view:[0,1,.0001],up:[0,0,-1],annotate:'pitch',tight:1.22},
+    // every key of the chosen size, thumbs included, on its key plate, from above
+    layout:{keep:p=>p.kind==='cap'||(p.kind==='case'&&p.group==='plate'),view:[0,1,.0001],up:[0,0,-1],annotate:'pitch'},
     controller:{keep:p=>p.group==='mcu',view:[.55,1.25,.9]},
     display:{keep:p=>p.group==='display'||p.kind==='screen',view:[.25,1.5,.85]},
     stack:{keep:p=>STACK.includes(p.group)||p.kind==='battery'||p.kind==='screen',view:[1,.42,1.25],explode:1},
@@ -258,19 +259,24 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
       if(p.kind==='pcb')g=pack.mesh('left-pcb');
       if(p.kind==='frame'){g=common.mesh(`left-frame-${look.frame.left}`);material=framePalette({...look,own:{left:kind==='frame'?false:look.own?.left}},theme,'left').map(mat);}
       if(p.kind==='cap'){const [variant,turn]=common.presets[look.keys].left[p.k],cap=common.caps[variant],key=common.layout.left[p.k];g=common.mesh(cap.mesh);rot=THREE.MathUtils.degToRad(key.angle+turn);y=cap.seat;material=mat(capColor(theme.keycaps,key));}
-      const m=new THREE.Mesh(g,material);m.position.set(p.p[0],y,p.p[2]);m.rotation.y=rot;m.userData={kind:p.kind,group:p.group,k:p.k};s.add(m);picked.push(m);
+      const m=new THREE.Mesh(g,material);m.position.set(p.p[0],y,p.p[2]);m.rotation.y=rot;m.userData={kind:p.kind,group:p.group,k:p.k,r:p.r};s.add(m);picked.push(m);
     }
     const focus=new THREE.Box3();
     if(spec.focus)focus.set(new THREE.Vector3(...spec.focus[0]),new THREE.Vector3(...spec.focus[1]));
     else for(const m of picked)if(!spec.focusKind||m.userData.kind===spec.focusKind)focus.expandByObject(m);
     // room for the dimension labels
-    const body=focus.clone();if(spec.annotate==='height')focus.max.x+=34;if(spec.annotate==='pitch'){focus.max.x+=22;focus.max.z+=12;}
-    const c=focus.getCenter(new THREE.Vector3()),cam=new THREE.OrthographicCamera();
+    const body=focus.clone(),aspect=width/height;if(spec.annotate==='height')focus.max.x+=34;
+    let c=focus.getCenter(new THREE.Vector3()),half=0;
+    // the plan view keeps fixed room in CSS pixels: the 17 mm label on the left, the 18 mm label on top
+    const pad={l:52,r:4,t:26,b:4},mm=spec.annotate==='pitch'?Math.min((width-pad.l-pad.r)/(body.max.x-body.min.x),(height-pad.t-pad.b)/(body.max.z-body.min.z)):0;
+    if(mm)c=new THREE.Vector3(body.min.x-(pad.l+(width-pad.l-pad.r-(body.max.x-body.min.x)*mm)/2)/mm+width/mm/2,(body.min.y+body.max.y)/2,body.min.z-(pad.t+(height-pad.t-pad.b-(body.max.z-body.min.z)*mm)/2)/mm+height/mm/2);
+    const cam=new THREE.OrthographicCamera();
     cam.position.copy(c).add(new THREE.Vector3(...spec.view).normalize().multiplyScalar(400));cam.up.set(...(spec.up||[0,1,0]));
     cam.lookAt(c);cam.updateMatrixWorld();
-    const right=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,0),up=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,1),aspect=width/height;
-    let half=0;for(const x of [focus.min.x,focus.max.x])for(const y of [focus.min.y,focus.max.y])for(const z of [focus.min.z,focus.max.z]){const v=new THREE.Vector3(x,y,z).sub(c);half=Math.max(half,Math.abs(v.dot(right))/aspect,Math.abs(v.dot(up)));}
-    half*=spec.tight||1.04;
+    const right=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,0),up=new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld,1);
+    if(mm)half=height/mm/2;
+    else{for(const x of [focus.min.x,focus.max.x])for(const y of [focus.min.y,focus.max.y])for(const z of [focus.min.z,focus.max.z]){const v=new THREE.Vector3(x,y,z).sub(c);half=Math.max(half,Math.abs(v.dot(right))/aspect,Math.abs(v.dot(up)));}
+      half*=spec.tight||1.04;}
     Object.assign(cam,{left:-half*aspect,right:half*aspect,top:half,bottom:-half,near:1,far:2000});cam.updateProjectionMatrix();
     target??=new THREE.WebGLRenderTarget(W,H,{samples:4,colorSpace:THREE.SRGBColorSpace});target.setSize(W,H);
     renderer.setRenderTarget(target);renderer.clear();renderer.render(s,cam);renderer.setRenderTarget(null);
@@ -294,9 +300,19 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
         const bottom=Math.min(...base.map(m=>new THREE.Box3().setFromObject(m).min.y)),top=new THREE.Box3().setFromObject(frame).max.y,x=body.max.x+5;
         tick([x,bottom,body.max.z],[x,top,body.max.z],`${(top-bottom).toFixed(1)} mm`,[8,0]);
       }else{
-        const key=k=>{const m=picked.find(m=>m.userData.k===k);return m.position;},a=key('K22'),b=key('K23'),e=key('K13'),y=a.y+8;
-        const z=body.max.z+4;tick([a.x,y,z],[b.x,y,z],`${b.x-a.x} mm`,[0,10]);
-        const x=body.max.x+4;tick([x,y,e.z],[x,y,b.z],`${b.z-e.z} mm`,[7,0]);
+        // pitch between real keys: thin extension lines from the keycaps out to each dimension
+        const grid=new Map();for(const m of picked)if(m.userData.kind==='cap'&&m.userData.r[1]!=='3'){const col=+m.userData.r[2];if(!grid.has(col))grid.set(col,[]);grid.get(col).push(m.position);}
+        for(const keys of grid.values())keys.sort((a,b)=>a.z-b.z);
+        const cols=[...grid.keys()].sort((a,b)=>a-b),y=body.max.y+1,cap=[8.75,8.25],gap=1.2;
+        const extend=(a,b)=>{const [x0,y0]=at(a),[x1,y1]=at(b);ctx.globalAlpha=.4;ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();ctx.globalAlpha=1;};
+        // rows: the outer column's top two keys, measured on the left
+        const [a,b]=grid.get(cols[0]),x=body.min.x-5;
+        for(const k of [a,b])extend([k.x-cap[0]-gap,y,k.z],[x-2,y,k.z]);
+        tick([x,y,a.z],[x,y,b.z],`${+(b.z-a.z).toFixed(1)} mm`,[-7,0]);
+        // columns: the top keys of the two inner columns, measured above
+        const p=grid.get(cols.at(-2))[0],q=grid.get(cols.at(-1))[0],z=body.min.z-5;
+        for(const k of [p,q])extend([k.x,y,k.z-cap[1]-gap],[k.x,y,z-2]);
+        tick([p.x,y,z],[q.x,y,z],`${+(q.x-p.x).toFixed(1)} mm`,[0,-10]);
       }
     }
     for(const m of made)m.dispose();
