@@ -23,12 +23,12 @@ function design(size,theme,keys,style){
   }
   return applyTheme(c,themes[theme],['left','right']);
 }
-const hide='.stage > :not(canvas){visibility:hidden!important}';
+const hide='.stage > :not(canvas){visibility:hidden!important}body{background:#eef0f3!important}';
 const settle=p=>p.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(r,250)))));
 (async()=>{
   const b=await chromium.launch({executablePath:process.env.FLAN36_BROWSER,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
   const p=await b.newPage({viewport:{width:1400,height:900},deviceScaleFactor:1.5});const errors=[];p.on('pageerror',e=>errors.push(e.message));
-  await p.goto('file://'+path.join(root,'docs/explore/offline.html'));await p.waitForSelector('#loading',{state:'hidden',timeout:400000});
+  await p.goto('file://'+path.join(root,'docs/explore/offline.html')+'?diagnostics');await p.waitForSelector('#loading',{state:'hidden',timeout:400000});await p.waitForFunction(()=>window.flan36);await p.evaluate(()=>window.flan36.ground(false));
   const load=async c=>{await p.setInputFiles('#load-config',{name:'showcase.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(c))});await settle(p);};
   const manifest={schema:'flan-showcase-1',sizes:SIZES,themes:THEMES.map(id=>({id,name:themes[id].name,swatch:[themes[id].base,themes[id].plate,themes[id].frame.accent]})),
     keycaps:Object.keys(KEYCAPS),cases:CASES,default:{size:'flan36',theme:'snes',keycaps:'original',case:'rim'},images:{}};

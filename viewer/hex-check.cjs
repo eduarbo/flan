@@ -2,6 +2,8 @@
 // Run against generated HTML with an isolated disposable browser profile.
 const fs=require('fs'),path=require('path'),assert=require('assert/strict'),crypto=require('crypto');
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
+// Open a Design section's Fine-tune so every control in it is reachable.
+const tune=async(page,name)=>{const t=page.locator(`#panel-${name} .tune[aria-expanded=false]`);if(await t.count()&&await t.isVisible())await t.click();};
 const root=path.resolve(__dirname,'..'),out=path.join(root,'build/hex-check');
 const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/explore/offline.html');
 (async()=>{
@@ -11,7 +13,7 @@ const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/explore/
  const page=await context.newPage(),errors=[],checks=[];page.on('pageerror',e=>errors.push(e.message));
  try{
   const panel=async mode=>{if(await page.locator('body').getAttribute('data-panel-open')!=='true'||await page.locator('body').getAttribute('data-mode')!==mode||await page.locator('body').getAttribute('data-detail')==='true')await page.click('#nav-'+mode);};
-  const category=async name=>{await panel('customize');await page.click(`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);};
+  const category=async name=>{await panel('customize');await page.click(`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);await tune(page,name);};
   const ready=async()=>{await page.waitForFunction(()=>window.flan36,null,{timeout:60000});await category('cases');await page.waitForSelector('#case-base_color-hex',{timeout:60000});};
   await page.goto(url+(url.includes('?')?'&':'?')+'diagnostics');await ready();
   await page.evaluate(()=>document.querySelector('#default-config').click());

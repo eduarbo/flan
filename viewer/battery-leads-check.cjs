@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),zlib=require('node:zlib'),crypto=require('node:crypto');
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
+// Open a Design section's Fine-tune so every control in it is reachable.
+const tune=async(page,name)=>{const t=page.locator(`#panel-${name} .tune[aria-expanded=false]`);if(await t.count()&&await t.isVisible())await t.click();};
 const root=path.resolve(__dirname,'..'),out=path.join(root,'build/slim-flush/battery-viewer');fs.mkdirSync(out,{recursive:true});
 const html=fs.readFileSync(path.join(root,'docs/explore/offline.html'),'utf8');
 const scene=JSON.parse(zlib.gunzipSync(Buffer.from(html.match(/<script id="scene-data" type="application\/octet-stream">([\s\S]*?)<\/script>/)[1],'base64')));
@@ -24,7 +26,7 @@ const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/explore/
     await panel('files');await page.locator('#load-config').setInputFiles({name:'mixed.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(cfg))});
     assert.equal(await page.locator('#config-status').getAttribute('data-error'),'false');
    }else{
-    await panel('customize');await page.click('#editor-tabs [data-panel=battery]');await page.click('#battery-target [data-side=both]');await page.click(`[data-battery="${c.profiles.left}"]`);
+    await panel('customize');await page.click('#editor-tabs [data-panel=battery]');await tune(page,'battery');await page.click('#battery-target [data-side=both]');await page.click(`[data-battery="${c.profiles.left}"]`);
    }
    await panel('files');const pending=page.waitForEvent('download');await page.click('#glb');const download=await pending;
    const filename=path.join(out,c.name+'.glb');await download.saveAs(filename);const bytes=fs.readFileSync(filename),jsonLength=bytes.readUInt32LE(12),gltf=JSON.parse(bytes.toString('utf8',20,20+jsonLength));

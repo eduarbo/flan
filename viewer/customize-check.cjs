@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 const fs=require('fs'),path=require('path'),assert=require('assert/strict'),crypto=require('crypto'),zlib=require('zlib');
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
+// Open a Design section's Fine-tune so every control in it is reachable.
+const tune=async(page,name)=>{const t=page.locator(`#panel-${name} .tune[aria-expanded=false]`);if(await t.count()&&await t.isVisible())await t.click();};
 const root=path.resolve(__dirname,'..'),out=path.join(root,'build/themes-print');fs.mkdirSync(out,{recursive:true});
 const html=fs.readFileSync(path.join(root,'docs/explore/offline.html'));const scene=JSON.parse(zlib.gunzipSync(Buffer.from(html.toString().match(/<script id="scene-data" type="application\/octet-stream">([\s\S]*?)<\/script>/)[1],'base64')));
 for(const [alias,id] of Object.entries(scene.geometryAliases||{}))scene.geometries[alias]=scene.geometries[id];
@@ -13,7 +15,7 @@ assert.equal(new Set(themes.map(t=>t.id)).size,themes.length);
  const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/explore/offline.html');await p.goto(url);await p.waitForFunction(()=>document.querySelector('#status').textContent.includes('visible components'),null,{timeout:60000});
  // Opening the already-open destination closes the editor; open each panel only when needed.
  async function panel(mode,page=p){if(await page.locator('body').getAttribute('data-panel-open')!=='true'||await page.locator('body').getAttribute('data-mode')!==mode||await page.locator('body').getAttribute('data-detail')==='true')await page.click('#nav-'+mode);}
- async function category(name,page=p){await panel('customize',page);await page.click(`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);}
+ async function category(name,page=p){await panel('customize',page);await page.click(`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);await tune(page,name);}
  // Installed display frames live in Parts → Frame; Show / Solo there never change them.
  async function installFrames(sides){await panel('inspect');await p.click('#part-lid');for(const [side,on] of Object.entries(sides))await p.locator('#install-frame-'+side).setChecked(on);await p.click('#panel-back');}
  // Reset is camera-only, so Solo stays pressed until Show all or a second press.
@@ -21,7 +23,7 @@ assert.equal(new Set(themes.map(t=>t.id)).size,themes.length);
  async function save(name){await panel('files');const wait=p.waitForEvent('download');await p.click('#save-config');const d=await wait,file=path.join(out,name+'.json');await d.saveAs(file);return JSON.parse(fs.readFileSync(file));}
  async function color(id,value){await p.locator(id).evaluate((e,v)=>{e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));},value);}
  const initial=await save('initial');await category('cases');await p.click('[data-case=rim]');await category('frames');await p.click('[data-style=gameboy]');await installFrames({left:false,right:false});
- await category('themes');assert.deepEqual(await p.locator('[data-theme]').evaluateAll(a=>a.map(x=>x.dataset.theme)),themes.map(t=>t.id));assert.equal(new Set(await p.locator('#themes-grid img').evaluateAll(a=>a.map(x=>x.src))).size,themes.length);
+ await category('themes');assert.deepEqual(await p.locator('[data-theme]').evaluateAll(a=>a.map(x=>x.dataset.theme)),themes.map(t=>t.id));assert.equal(new Set(await p.locator('#themes-grid [data-theme]').evaluateAll(a=>a.map(x=>x.style.cssText))).size,themes.length,'Every theme swatch shows its own colours');
  await p.locator('[data-theme=cyber-mint]').focus();await p.keyboard.press('Enter');let c=await save('theme');assert.equal(c.cases.left.style,'rim');assert.equal(c.frames.left.style,'gameboy');assert.equal(c.cases.left.cover,false);assert.equal(c.cases.left.base_color,c.frames.left.color);assert.equal(c.cases.left.match_frame,true);for(const side of ['left','right'])for(const ref of Object.keys(c.keycaps[side])){assert.equal(c.keycaps[side][ref].variant,initial.keycaps[side][ref].variant);assert.equal(c.keycaps[side][ref].rotation_deg,initial.keycaps[side][ref].rotation_deg);}assert.notDeepEqual(c.keycaps,initial.keycaps);
  await category('cases');await p.click('#case-target [data-side=left]');await color('#case-base_color','#bb2244');await color('#case-plate_color','#272737');c=await save('custom-case');assert.equal(c.frames.left.color,'#bb2244');assert.notEqual(c.frames.left.color,c.frames.right.color);
  await category('frames');await p.click('#frame-target [data-side=left]');await color('#frame-color','#cc5533');await color('#frame-detail','#313131');await color('#frame-accent','#eeee88');await color('#frame-secondary','#6688ee');c=await save('custom-frame');assert.equal(c.cases.left.base_color,'#cc5533');assert.deepEqual(c.frames.left.accents,{detail:'#313131',accent:'#eeee88',secondary:'#6688ee'});

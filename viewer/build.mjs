@@ -71,8 +71,11 @@ for(const [id,v] of Object.entries(scene.variants||{}))if(v.printing){
  const hash=crypto.createHash('sha256').update(bytes).digest('hex'),file=`docs/explore/assets/variant-${id}-${hash}.bin`;
  fs.writeFileSync(path.join(root,file),bytes);variantAssets[id]={bytes,hash,file};
 }
+// Size thumbnails: the home page's own renders (viewer/thumbs, from design/proposals/explorer-r1/assets via
+// magick snes-size-<id>.png -resize 192x -quality 84 size-<id>.webp), inline for the CSP.
+const thumb=id=>{const f=path.join(here,'thumbs',`size-${id}.webp`);return fs.existsSync(f)?'data:image/webp;base64,'+fs.readFileSync(f).toString('base64'):undefined;};
 const variants=Object.fromEntries(Object.entries(scene.variants||{}).map(([id,{printing,meshes,silkscreen,...rest}])=>
- [id,variantAssets[id]?{...rest,asset:{url:`./assets/variant-${id}-${variantAssets[id].hash}.bin`,sha256:variantAssets[id].hash}}:rest]));
+ [id,{...(variantAssets[id]?{...rest,asset:{url:`./assets/variant-${id}-${variantAssets[id].hash}.bin`,sha256:variantAssets[id].hash}}:rest),thumb:thumb(id)}]));
 // Only this build's deferred assets are published; earlier ones stay in Git history.
 const current=new Set([assetPath,silkPath,...Object.values(variantAssets).map(a=>a.file)].map(p=>path.basename(p)));
 for(const f of fs.readdirSync(path.join(root,'docs/explore/assets')))
@@ -80,17 +83,20 @@ for(const f of fs.readdirSync(path.join(root,'docs/explore/assets')))
 const packedScene={...scene,geometries:unique,geometryAliases,printing:{url:`./assets/printing-${printHash}.bin`,sha256:printHash},
   silkscreen:{...scene.silkscreen,textures:{url:`./assets/silkscreen-${silkHash}.bin`,sha256:silkHash}},variants};
 const packed=gzipSync(Buffer.from(JSON.stringify(packedScene)),{level:9}).toString('base64');
-// the Flan mark, inline: the viewer's CSP loads no external images
-const mark=fs.readFileSync(path.join(root,'docs/branding/flan/flan-mark.svg'),'utf8').replace(/<\?xml[^>]*>|<title>[^<]*<\/title>/g,'')
-  .replace(/<svg[^>]*viewBox="([^"]+)"[^>]*>/,'<svg class="mark" viewBox="$1" aria-hidden="true" fill="currentColor">').replace(/ fill="#000"/g,'').trim();
-function page(offline){return template.replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(here,'style.css'),'utf8'))
+// the colour mark, inline: the viewer's CSP loads no external images. Its outline follows the page's theme.
+const mark=fs.readFileSync(path.join(root,'docs/branding/flan/flan-mark-color.svg'),'utf8').replace(/<\?xml[^>]*>|<title>[^<]*<\/title>|<style>[^<]*<\/style>/g,'')
+  .replace(/<svg[^>]*viewBox="([^"]+)"[^>]*>/,'<svg class="mark" viewBox="$1" aria-hidden="true">').trim();
+// the home page's typefaces, inline for the same reason (latin subsets, about 140 KB)
+const fonts=[['Fraunces','Fraunces-latin.woff2','300 500'],['Inter','Inter-latin.woff2','400 600'],['JetBrains Mono','JetBrainsMono-latin.woff2','400 500']]
+  .map(([family,file,weight])=>`@font-face{font-family:"${family}";src:url(data:font/woff2;base64,${fs.readFileSync(path.join(here,'home/fonts',file)).toString('base64')}) format("woff2");font-weight:${weight};font-display:swap}`).join('');
+function page(offline){return template.replace('/*__FONTS__*/',()=>fonts).replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(here,'style.css'),'utf8'))
  .replace('<!--__MARK__-->',()=>mark)
  .replace('<!--__LICENSES__-->',()=>credits+licenses)
  .replace('/*__DATA__*/',()=>packed)
  .replace('/*__PRINT__*/',()=>offline?printBytes.toString('base64'):'')
  .replace('/*__SILK__*/',()=>offline?silkBytes.toString('base64'):'')
  .replace('/*__VARIANTS__*/',()=>JSON.stringify(offline?Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,a.bytes.toString('base64')])):{}))
- .replace('href="../" id="nav-home"',()=>offline?'href="https://eduarbo.github.io/flan/" id="nav-home"':'href="../" id="nav-home"')
+ .replace('href="../" id="nav-home"',()=>offline?'href="https://flankbd.com/" id="nav-home"':'href="../" id="nav-home"')
  .replace('/*__APP__*/',()=>bundle.outputFiles[0].text.replaceAll('</script','<\\/script'))
  .replaceAll('\r\n','\n');}
 const html=page(false),offlineHtml=page(true);
@@ -98,7 +104,7 @@ new Script([...html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g)].at(-1)
 fs.writeFileSync(path.join(root,'docs/explore/index.html'),html);
 fs.writeFileSync(path.join(root,'docs/explore/offline.html'),offlineHtml);
 fs.writeFileSync(path.join(root,'docs/.nojekyll'),'');
-const sources=[...scene.sources,...['viewer/app.js','viewer/config.js','viewer/storage.js','viewer/history.js','viewer/assets.js','viewer/keycap-colors.js','viewer/color-input.js','design/keycap-themes.json','viewer/appearance.js','viewer/printing.js','design/themes.json','viewer/explorer.js','viewer/previews.js','viewer/finishes.js','design/frame-finishes.json','viewer/style.css','viewer/template.html','viewer/build.mjs','viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}))];
+const sources=[...scene.sources,...['viewer/app.js','viewer/config.js','viewer/storage.js','viewer/history.js','viewer/assets.js','viewer/keycap-colors.js','viewer/color-input.js','design/keycap-themes.json','viewer/appearance.js','viewer/printing.js','design/themes.json','viewer/explorer.js','viewer/previews.js','viewer/finishes.js','design/frame-finishes.json','viewer/style.css','viewer/template.html','viewer/build.mjs','viewer/home/tokens.js','docs/branding/flan/flan-mark-color.svg',...['Fraunces','Inter','JetBrainsMono'].map(f=>`viewer/home/fonts/${f}-latin.woff2`),...['flan36','flan42','flan46','flan54'].map(id=>`viewer/thumbs/size-${id}.webp`),'viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}))];
 const receipt={revision:scene.revision,units:'mm',objects:scene.parts.length,unique_meshes:Object.keys(scene.geometries).length,
   keycaps:scene.parts.filter(p=>p.group==='keycaps').length,geometry_changed:false,
   sources,viewer_sha256:hash('docs/explore/index.html'),measurements:scene.measurements,

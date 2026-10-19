@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 const fs=require('fs'),path=require('path'),assert=require('assert/strict'),crypto=require('crypto');
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
+// Open a Design section's Fine-tune so every control in it is reachable.
+const tune=async(page,name)=>{const t=page.locator(`#panel-${name} .tune[aria-expanded=false]`);if(await t.count()&&await t.isVisible())await t.click();};
 const root=path.resolve(__dirname,'..'),url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/explore/offline.html');
 const style=process.env.FLAN36_FRAME_STYLE||'gameboy';assert(['gameboy','hanafuda'].includes(style));
 const out=path.join(root,'build/frame-orientation',url.startsWith('http')?'public':'viewer',style);fs.mkdirSync(out,{recursive:true});
@@ -28,7 +30,7 @@ function glb(bytes){
  try{
   const p=await browser.newPage({viewport:{width:1500,height:1050}});p.on('pageerror',e=>errors.push(e.message));
   await p.goto(url+(url.includes('?')?'&':'?')+'diagnostics');await p.waitForFunction(()=>window.flan36,null,{timeout:120000});
-  await p.click('#nav-customize');await p.click('#editor-tabs [data-panel=frames]');await p.click('#frame-target [data-side=both]');const before=await p.evaluate(()=>window.flan36.snapshot());
+  await p.click('#nav-customize');await p.click('#editor-tabs [data-panel=frames]');await tune(p,'frames');await p.click('#frame-target [data-side=both]');const before=await p.evaluate(()=>window.flan36.snapshot());
   await p.click(`[data-style=${style}]`);await p.click('#theme-colors');await p.evaluate(()=>window.flan36.idle());
   const after=await p.evaluate(()=>window.flan36.snapshot());assert.deepEqual(after.camera,before.camera);assert.deepEqual(after.view,before.view);
   for(const side of ['left','right'])assert.equal(after.configuration.frames[side].style,style);

@@ -3,15 +3,17 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 const fs=require('fs'),path=require('path'),{execFileSync}=require('child_process');
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
+// Open a Design section's Fine-tune so every control in it is reachable.
+const tune=async(page,name)=>{const t=page.locator(`#panel-${name} .tune[aria-expanded=false]`);if(await t.count()&&await t.isVisible())await t.click();};
 const root=path.resolve(__dirname,'..'),out=path.join(root,'docs/images/home');
-const hide='.stage > :not(canvas){visibility:hidden!important}';
+const hide='.stage > :not(canvas){visibility:hidden!important}body{background:#eef0f3!important}';
 const settle=p=>p.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(r,500)))));
 (async()=>{
   const b=await chromium.launch({executablePath:process.env.FLAN36_BROWSER,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
   const p=await b.newPage({viewport:{width:1600,height:1000},deviceScaleFactor:1.5});const errs=[];p.on('pageerror',e=>errs.push(e.message));
-  await p.goto('file://'+path.join(root,'docs/explore/offline.html'));await p.waitForSelector('#loading',{state:'hidden',timeout:400000});
+  await p.goto('file://'+path.join(root,'docs/explore/offline.html')+'?diagnostics');await p.waitForSelector('#loading',{state:'hidden',timeout:400000});await p.waitForFunction(()=>window.flan36);await p.evaluate(()=>window.flan36.ground(false));
   for(const id of ['flan36','flan42','flan46','flan54']){
-    await p.click('.app-nav [data-mode="customize"]');await p.click('[data-panel="cases"]');await p.click(`#size-grid [data-variant="${id}"]`);
+    await p.click('.app-nav [data-mode="customize"]');await p.click('[data-panel="cases"]');await tune(p,'cases');await p.click(`#size-grid [data-variant="${id}"]`);
     await p.waitForFunction(id=>document.querySelector(`#size-grid [data-variant="${id}"]`).getAttribute('aria-pressed')==='true',id,{timeout:120000});
     await p.click('#panel-close');await settle(p);
     for(const view of ['iso','top']){

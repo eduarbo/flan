@@ -3,19 +3,21 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 const fs=require('fs'),path=require('path'),{pathToFileURL}=require('url'),{execFileSync}=require('child_process');
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
+// Open a Design section's Fine-tune so every control in it is reachable.
+const tune=async(page,name)=>{const t=page.locator(`#panel-${name} .tune[aria-expanded=false]`);if(await t.count()&&await t.isVisible())await t.click();};
 const root=path.resolve(__dirname,'..'),images=path.join(root,'docs/images');
 const catalog=JSON.parse(fs.readFileSync(path.join(root,'keycaps/catalog.json'),'utf8'));
-const hide='.stage > :not(canvas){visibility:hidden!important}';
+const hide='.stage > :not(canvas){visibility:hidden!important}body{background:#eef0f3!important}';
 
 async function viewer(browser,{width,height}){
   const page=await browser.newPage({viewport:{width,height},deviceScaleFactor:1.5});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(pathToFileURL(path.join(root,'docs/explore/offline.html')).href);
-  await page.waitForSelector('#loading',{state:'hidden',timeout:180000});
+  await page.goto(pathToFileURL(path.join(root,'docs/explore/offline.html')).href+'?diagnostics');
+  await page.waitForSelector('#loading',{state:'hidden',timeout:180000});await page.waitForFunction(()=>window.flan36);await page.evaluate(()=>window.flan36.ground(false));
   page.errors=errors;return page;
 }
 const settle=page=>page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(r,400)))));
-async function open(page,panel){await page.click('.app-nav [data-mode="customize"]');await page.click(`[data-panel="${panel}"]`);await settle(page);}
+async function open(page,panel){await page.click('.app-nav [data-mode="customize"]');await page.click(`[data-panel="${panel}"]`);await tune(page,panel);await settle(page);}
 async function close(page){if(await page.locator('#workspace').isVisible())await page.click('#panel-close');await settle(page);}
 // Fit, capture the canvas without floating controls, then trim to the model with an even margin.
 async function shot(page,file){

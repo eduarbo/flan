@@ -21,14 +21,17 @@ for(const side of ['left','right'])assert.equal(scene.parts.filter(p=>p.part_id=
 const target=process.env.FLAN36_VIEWER_URL||pathToFileURL(path.join(root,'docs/explore/offline.html')).href;
 const offline=target.startsWith('file:');
 // WebGL-only captures: floating stage controls and the drawer keep their layout and hover/focus, but not their pixels.
-const bare='.stage > :not(canvas),#workspace{opacity:0!important}';
+// The page's themed gradient becomes one flat colour, and the contact shadow is off (ground(false) after load).
+const bare='.stage > :not(canvas),#workspace{opacity:0!important}body{background:#eef0f3!important}';
+const withDiagnostics=url=>url+(url.includes('?')?'&':'?')+'diagnostics';
 
 // Touch pages tap; desktop pages click.
 const press=(page,selector)=>page.touch?page.locator(selector).tap():page.click(selector);
 const settle=page=>page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(r,60)))));
 // Selecting the already-open destination closes the editor; open each panel only when needed.
 async function panel(page,mode){if(await page.locator('body').getAttribute('data-panel-open')!=='true'||await page.locator('body').getAttribute('data-mode')!==mode||await page.locator('body').getAttribute('data-detail')==='true')await press(page,'#nav-'+mode);await settle(page);}
-async function category(page,name){await panel(page,'customize');await press(page,`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);}
+// A Design section, with its Fine-tune open so every control in it is reachable.
+async function category(page,name){await panel(page,'customize');await press(page,`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);const tune=page.locator(`#panel-${name} .tune[aria-expanded=false]`);if(await tune.count()&&await tune.isVisible())await press(page,`#panel-${name} .tune`);}
 async function close(page){if(await page.locator('#workspace').isVisible())await press(page,'#panel-close');await settle(page);}
 async function recovery(page){await panel(page,'files');if(await page.locator('#recovery').getAttribute('open')===null)await press(page,'#recovery summary');}
 // Installed display frames live in Parts → Frame; eyes, Solo and Show all never change them.
@@ -52,12 +55,14 @@ async function checkDirectory(page){
     }));
   }
   assert.ok(entries.every(e=>e.visible&&e.textFits),'All 12 component rows must be unclipped: '+JSON.stringify(entries.filter(e=>!e.visible||!e.textFits)));
-  // Seven camera views, Fit and Separate layers float over the model and stay reachable.
+  // Seven camera views, Fit and Separate layers float over the model and stay reachable; a narrow scene folds the views into one menu.
+  if(await page.locator('#view-menu').isVisible()&&await page.locator('#camera-views').getAttribute('data-open')===null)await press(page,'#view-menu');
   const controls=await page.locator('.camera-widget [data-view],#fit,#explode').evaluateAll(nodes=>nodes.map(e=>{
     const r=e.getBoundingClientRect(),at=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);
     return {id:e.id||e.dataset.view,visible:r.width>0&&r.height>=25&&r.x>=0&&r.right<=innerWidth+1&&r.y>=0&&r.bottom<=innerHeight&&!!at&&(at===e||e.contains(at))};
   }));
   assert.equal(controls.length,9);assert.ok(controls.every(c=>c.visible),'Persistent view controls: '+JSON.stringify(controls));
+  if(await page.locator('#camera-views').getAttribute('data-open')!==null)await press(page,'#view-menu');
   const height=await page.evaluate(()=>document.querySelector('#canvas').getBoundingClientRect().height);
   assert.ok(height>=120,'The drawer must leave a model region: '+height);
 }
@@ -68,13 +73,13 @@ async function checkFramedPixels(page){
     const c=document.createElement('canvas');c.width=image.width;c.height=image.height;const ctx=c.getContext('2d');ctx.drawImage(image,0,0);
     const {data}=ctx.getImageData(0,0,c.width,c.height),bg=[...data.slice(0,3)];let x0=c.width,y0=c.height,x1=0,y1=0;
     for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++){const i=(y*c.width+x)*4;if(bg.reduce((s,v,j)=>s+Math.abs(v-data[i+j]),0)>35){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y);}}
-    // Fit reserves the strips under the floating camera views and stage tools (CSS pixels, scaled to the capture).
+    // Fit reserves the strip above the camera chip and the layers slider on the right (CSS pixels, scaled to the capture).
     const r=document.querySelector('#canvas').getBoundingClientRect(),scale=c.width/r.width,cam=document.querySelector('.camera-widget'),tools=document.querySelector('.stage-tools');
-    const free={top:(cam.getClientRects().length?cam.getBoundingClientRect().bottom-r.top+12:8)*scale,right:(r.width-(tools.getClientRects().length?tools.offsetWidth+24:8))*scale};
+    const free={bottom:(cam.getClientRects().length?cam.getBoundingClientRect().top-r.top-12:r.height-8)*scale,right:(tools.getClientRects().length?tools.getBoundingClientRect().left-r.left-8:r.width-8)*scale};
     return{x0,y0,x1,y1,w:c.width,h:c.height,free,scale};
   },png);
   assert.ok(bounds.x1>bounds.x0&&bounds.y1>bounds.y0&&bounds.x0>5&&bounds.y0>5&&bounds.x1<bounds.w-6&&bounds.y1<bounds.h-6,'Fit view must contain the actually rendered assembly: '+JSON.stringify(bounds));
-  assert.ok(bounds.y0>=bounds.free.top-3*bounds.scale&&bounds.x1<=bounds.free.right+3*bounds.scale,'View controls must not cover the fitted model: '+JSON.stringify(bounds));
+  assert.ok(bounds.y1<=bounds.free.bottom+3*bounds.scale&&bounds.x1<=bounds.free.right+3*bounds.scale,'View controls must not cover the fitted model: '+JSON.stringify(bounds));
 }
 // Direct canvas picking: hover the Frame row, and its x-ray marks the frame pixels to tap.
 async function framePixel(page){
@@ -101,7 +106,7 @@ async function framePixel(page){
   const requests=[],errors=[];
   if(offline)await context.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(target);
+  await page.goto(withDiagnostics(target));
   if(!offline){
     // Hash the actual loaded scene in the browser. Large document responses can
     // be evicted from Chromium's inspector cache; DOM data remains available.
@@ -109,7 +114,7 @@ async function framePixel(page){
     const embedded=html.match(/<script id="scene-data" type="application\/octet-stream">([\s\S]*?)<\/script>/)[1];
     assert.equal(delivered,hash(Buffer.from(embedded)),'Public browser must load the exact current CAD scene');
   }
-  await page.waitForFunction(n=>document.querySelector('#status').textContent.includes(`${n} visible components`),expectedCount,{timeout:60000});
+  await page.waitForFunction(n=>document.querySelector('#status').textContent.includes(`${n} visible components`),expectedCount,{timeout:60000});await page.evaluate(()=>window.flan36.ground(false));
   for(const [key,value] of Object.entries(scene.measurements))if(['bay_width_mm','cover_top_mm','plate_top_mm'].includes(key))assert.equal(await page.locator(`[data-measurement=${key}]`).textContent(),String(value));
   await checkFramedPixels(page);
   await checkDirectory(page);
@@ -354,8 +359,8 @@ async function framePixel(page){
   await page.keyboard.press('Escape');
   const mobile=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});
   if(offline)await mobile.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});
-  const phone=await mobile.newPage();phone.touch=true;phone.on('pageerror',e=>errors.push(e.message));await phone.goto(target);
-  await phone.waitForFunction(n=>document.querySelector('#status').textContent.includes(`${n} visible components`),expectedCount);
+  const phone=await mobile.newPage();phone.touch=true;phone.on('pageerror',e=>errors.push(e.message));await phone.goto(withDiagnostics(target));
+  await phone.waitForFunction(n=>document.querySelector('#status').textContent.includes(`${n} visible components`),expectedCount);await phone.evaluate(()=>window.flan36.ground(false));
   await checkFramedPixels(phone);
   assert.equal(await phone.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'No horizontal overflow');
   await category(phone,'cases');await phone.locator('[data-case=rim]').tap();await checkDirectory(phone);
@@ -410,7 +415,7 @@ async function framePixel(page){
   await phone.evaluate(()=>document.querySelector('#inspector').scrollTop=0);
   await phone.screenshot({path:path.join(root,'build/viewer-multicolor/mobile.png')});await checkDirectory(phone);
   await recovery(page);await page.click('#default-config');await page.click('#reset');await category(page,'cases');await page.click('#case-target [data-side=both]');await page.click('[data-case=rim]');await page.mouse.move(10,20);await page.evaluate(()=>document.querySelector('#inspector').scrollTop=0);
-  assert.equal(await page.locator('#case-grid').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length),2);
+  assert.equal(await page.locator('#case-grid').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length),4);
   await page.screenshot({path:path.join(root,'build/viewer-cases-desktop.png')});await checkDirectory(page);
   await category(phone,'cases');await phone.locator('[data-case=rim]').tap();await phone.evaluate(()=>document.querySelector('#inspector').scrollTop=0);
   await phone.screenshot({path:path.join(root,'build/viewer-cases-mobile.png')});await checkDirectory(phone);

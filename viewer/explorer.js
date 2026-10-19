@@ -91,5 +91,6 @@ export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,req
   }
   return {update,highlight:setHover,select,clear,
     invalidate(){revision++;requestRender();},layoutChanged(){requestRender();},cameraChanged(){requestRender();},
+    tint(color){glow.color.set(color);xray.color.set(color);requestRender();},
     motion(value){moving=value;clearTimeout(pickTimer);if(value)hovered=null;requestRender();},get selected(){return selected;}};
 }

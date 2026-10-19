@@ -40,6 +40,8 @@ assert.equal(py.status,0,py.stderr);assert.deepEqual(JSON.parse(py.stdout),fixtu
 for(const preset of Object.values(scene.presets))for(const frame of Object.values(preset.frames))assert(styles.includes(frame.style));
 const report={styles,viewer_sha256:sha(fs.readFileSync(path.join(root,'docs/explore/offline.html'))),native_3mf:materials,checks:{},runtime_errors:[]};
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
+// Open a Design section's Fine-tune so every control in it is reachable.
+const tune=async(page,name)=>{const t=page.locator(`#panel-${name} .tune[aria-expanded=false]`);if(await t.count()&&await t.isVisible())await t.click();};
 (async()=>{
  const browser=await chromium.launch({headless:true,executablePath:process.env.FLAN36_BROWSER});
  try{
@@ -48,7 +50,7 @@ const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
   const open=async(page)=>{if(page!==p)page.on('pageerror',e=>report.runtime_errors.push(e.message));await page.goto(url+(url.includes('?')?'&':'?')+'diagnostics');await page.waitForFunction(()=>window.flan36,null,{timeout:120000});};
   const snap=()=>p.evaluate(()=>window.flan36.snapshot()),idle=()=>p.evaluate(()=>window.flan36.idle());
   const panel=async(page,mode)=>{if(await page.locator('body').getAttribute('data-panel-open')!=='true'||await page.locator('body').getAttribute('data-mode')!==mode||await page.locator('body').getAttribute('data-detail')==='true')await page.click('#nav-'+mode);};
-  const category=async(name,page=p)=>{await panel(page,'customize');await page.click(`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);};
+  const category=async(name,page=p)=>{await panel(page,'customize');await page.click(`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);await tune(page,name);};
   const recovery=async()=>{await panel(p,'files');if(await p.locator('#recovery').getAttribute('open')===null)await p.click('#recovery summary');};
   await open(p);const initial=await snap();assert.deepEqual(initial.configuration,withPcb(catalog.default_configuration));
   await category('frames');assert.deepEqual(await p.locator('[data-style]').evaluateAll(es=>es.map(e=>e.dataset.style)),styles);

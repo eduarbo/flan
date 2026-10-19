@@ -10,7 +10,7 @@ assert.ok(!(baseline&&smoke),'--smoke measures only the current viewer');
 const file=baseline?path.join(out,'baseline.html'):path.join(root,'docs/explore/offline.html');
 if(baseline)fs.writeFileSync(file,execFileSync('git',['show',revision+':docs/index.html'],{cwd:root,maxBuffer:50*1024*1024}));
 const scene=baseline?null:JSON.parse(fs.readFileSync(path.join(root,'build/viewer-scene.json')));
-const expectedCount=baseline?168:scene.parts.length;
+const expectedCount=baseline?168:scene.parts.filter(p=>!p.variants).length;   // a family variant's added parts start hidden on Flan36
 const percentile=(arr,p)=>[...arr].sort((a,b)=>a-b)[Math.min(arr.length-1,Math.floor(arr.length*p))]||0;
 (async()=>{
  const browser=await chromium.launch({headless:true,...(process.env.FLAN36_BROWSER?{executablePath:process.env.FLAN36_BROWSER}:{})});
@@ -36,14 +36,14 @@ const percentile=(arr,p)=>[...arr].sort((a,b)=>a-b)[Math.min(arr.length-1,Math.f
    return{elapsed_ms:Date.now()-begin,frame_count:samples.frames.length,p50_frame_ms:percentile(samples.frames,.5),p95_frame_ms:percentile(samples.frames,.95),long_tasks:samples.longTasks.length,long_task_ms:samples.longTasks.reduce((a,b)=>a+b,0)};
   }
   results.viewer_sha256=crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
-  if(!baseline){await page.locator('#part-lid').click();await page.waitForTimeout(120);}
+  if(!baseline){await page.locator('#nav-inspect').click();await page.locator('#part-lid').click();await page.waitForTimeout(120);}
   results.link_state=baseline?'all floating labels':'selected frame linked to sidebar';
   results.orbit=await drag();await page.locator('#reset').click();
   const timings=[];
   const styles=baseline?['handheld','tv','cyberpunk','smooth','bevel','facet']:Object.keys(scene.catalog.frame_styles);
   for(const style of styles)timings.push(await page.evaluate(async style=>{const start=performance.now();document.querySelector(`[data-style=${style}]`).click();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));return performance.now()-start},style));
   results.frame_choice={styles,p50_ms:percentile(timings,.5),p95_ms:percentile(timings,.95),samples_ms:timings};
-  if(!baseline){await page.locator('#part-base').click();const cases=[];for(const style of ['solid','rim','terrace'])cases.push(await page.evaluate(async style=>{const start=performance.now();document.querySelector(`[data-case=${style}]`).click();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));return performance.now()-start},style));results.case_choice={p50_ms:percentile(cases,.5),p95_ms:percentile(cases,.95),samples_ms:cases};}
+  if(!baseline){await page.locator('#panel-back').click();await page.locator('#part-base').click();const cases=[];for(const style of ['solid','rim','terrace'])cases.push(await page.evaluate(async style=>{const start=performance.now();document.querySelector(`[data-case=${style}]`).click();await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));return performance.now()-start},style));results.case_choice={p50_ms:percentile(cases,.5),p95_ms:percentile(cases,.95),samples_ms:cases};}
   if(baseline){await page.locator('#annotations').click();await page.locator('#reset').click();results.orbit_without_labels=await drag();}
   assert.deepEqual(errors,[]);results.runtime_errors=errors;
   fs.writeFileSync(path.join(out,baseline?'baseline-performance.json':'performance.json'),JSON.stringify(results,null,2)+'\n');console.log(JSON.stringify(results,null,2));

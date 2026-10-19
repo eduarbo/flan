@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
+// Open a Design section's Fine-tune so every control in it is reachable.
+const tune=async(page,name)=>{const t=page.locator(`#panel-${name} .tune[aria-expanded=false]`);if(await t.count()&&await t.isVisible())await t.click();};
 const root=path.resolve(__dirname,'..'),out=path.join(root,'build/display-seam/viewer');
 const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
 fs.mkdirSync(out,{recursive:true});
@@ -12,9 +14,9 @@ fs.mkdirSync(out,{recursive:true});
   page.on('pageerror',e=>errors.push(e.message));
   await page.goto('file://'+path.join(root,'docs/explore/offline.html')+'?diagnostics');
   await page.waitForFunction(()=>window.flan36,null,{timeout:120000});
-  await page.click('#nav-customize');await page.click('#editor-tabs [data-panel=frames]');await page.click('#frame-target [data-side=left]');
+  await page.click('#nav-customize');await page.click('#editor-tabs [data-panel=frames]');await tune(page,'frames');await page.click('#frame-target [data-side=left]');
   await page.click('[data-style=talavera]');await page.click('#theme-colors');
-  assert.equal(await page.locator('#panel-frames a.case-guide').getAttribute('href'),'https://eduarbo.github.io/flan/frame-proposals/');
+  assert.equal(await page.locator('#panel-frames a.case-guide').getAttribute('href'),'https://flankbd.com/frame-proposals/');
   // Frames alone, then the displays and their support ledges; each piece's eye leaves only the left half.
   await page.click('#nav-inspect');await page.click('[data-solo-group=lid]');
   await page.check('#layer-display');await page.check('#layer-supports');

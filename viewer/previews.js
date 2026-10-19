@@ -3,7 +3,7 @@ import * as THREE from 'three';
 
 // Reuse the main renderer during startup. No extra WebGL contexts or animation loop.
 export function createPreviewRenderer(renderer, geometryFor) {
-  const scene=new THREE.Scene();scene.background=new THREE.Color('#f0f3ec');
+  const scene=new THREE.Scene();   // transparent: thumbnails sit on the page's own colour
   scene.add(new THREE.HemisphereLight('#ffffff','#8d9c88',2));
   for(const [p,intensity] of [[[-60,150,80],3],[[100,80,-60],.8]]){
     const light=new THREE.DirectionalLight('#fff',intensity);light.position.fromArray(p);scene.add(light);

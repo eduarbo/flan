@@ -16,6 +16,7 @@ import {createKeycapColors} from './keycap-colors.js';
 import {createExplorer,partInfo,matchesPart,isMagnet} from './explorer.js';
 import {createPreviewRenderer} from './previews.js';
 import {createFrameFinishes,framePalette,finishes} from './finishes.js';
+import {pageTokens} from './home/tokens.js';
 
 async function start(){
 const $=id=>document.getElementById(id);
@@ -58,11 +59,12 @@ const variants=new Map(catalog.variants.map(v=>[v.id,v]));
 const labels={base:'Bases',plate:'Plates',lid:'Frames / covers',keycaps:'Keycaps',switches:'Switches',pcb:'PCB',battery:'Batteries',mcu:'Controllers',display:'Displays',connectors:'Connectors',supports:'Supports',fasteners:'Fasteners / feet'};
 const state={half:'both',layers:Object.fromEntries(Object.keys(labels).map(k=>[k,true])),explode:0,view:'iso'};
 const directions={iso:[.35,1.6,1.75],top:[0,1,.0001],front:[0,0,1],back:[0,0,-1],right:[1,0,0],left:[-1,0,0],bottom:[0,-1,-.0001]};   // bottom: rear edge up, so the back silkscreen reads correctly
-const scene=new THREE.Scene();scene.background=new THREE.Color('#eef0f3');
+// The scene is transparent: the model floats on the page, whose colours follow the keyboard's theme.
+const scene=new THREE.Scene();
 const camera=new THREE.OrthographicCamera(-180,180,100,-100,.1,3000);
 const canvas=$('canvas');
 let renderer;
-try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});}
+try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});renderer.setClearColor(0x000000,0);}
 catch(error){$('error').hidden=false;$('error').textContent='WebGL 2 could not start. Use a current Safari, Chrome or Firefox browser, or download the STEP files from the guide.';throw error;}
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
 renderer.outputColorSpace=THREE.SRGBColorSpace;
@@ -76,6 +78,16 @@ scene.add(new THREE.HemisphereLight('#ffffff','#9cafa0',2));
 for(const [pos,power] of [[[20,250,160],2.4],[[-220,100,-180],1.1],[[360,30,20],.7],[[30,-300,60],1.9]]){
   const light=new THREE.DirectionalLight('#ffffff',power);light.position.fromArray(pos);scene.add(light);
 }
+// A soft contact shadow under what is shown. It belongs to the scene, so it turns with the model and is
+// seen only from above; it is not a part, so picking, fitting and exports ignore it.
+const ground=(()=>{
+  const art=document.createElement('canvas');art.width=art.height=128;const g=art.getContext('2d'),r=g.createRadialGradient(64,64,0,64,64,64);
+  r.addColorStop(0,'rgba(255,255,255,.34)');r.addColorStop(.55,'rgba(255,255,255,.14)');r.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=r;g.fillRect(0,0,128,128);
+  const texture=new THREE.CanvasTexture(art),material=new THREE.MeshBasicMaterial({map:texture,color:'#20212a',transparent:true,depthWrite:false,toneMapped:false}),plane=new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2);
+  // one soft shadow per half
+  const halves=Object.fromEntries(['left','right'].map(side=>{const mesh=new THREE.Mesh(plane,material);mesh.renderOrder=-1;mesh.raycast=()=>{};scene.add(mesh);return [side,mesh];}));
+  return {material,halves,enabled:true};
+})();
 
 function decode(text,Type){const bytes=decodeBytes(text);return new Type(bytes.buffer);}
 const geometries=new Map();
@@ -156,11 +168,12 @@ function projectedSize(){
   }
   return {w,h};
 }
+// Fit keeps the model clear of the camera chip below it and the layers slider on its right.
 function stageFrame(width,height){
   const cameraWidget=document.querySelector('.camera-widget'),tools=document.querySelector('.stage-tools');
-  const top=cameraWidget.getClientRects().length?cameraWidget.offsetTop+cameraWidget.offsetHeight+12:8;
-  const right=tools.getClientRects().length?tools.offsetWidth+24:8;
-  return {width,height,top,right,left:12,bottom:12};
+  const bottom=cameraWidget.getClientRects().length?Math.max(12,height-cameraWidget.offsetTop+12):12;
+  const right=tools.getClientRects().length?Math.max(8,width-tools.offsetLeft+8):8;
+  return {width,height,top:16,right,left:16,bottom};
 }
 function fittedHalfHeight({w,h},f){return Math.max(h*f.height/Math.max(30,f.height-f.top-f.bottom),w*f.height/Math.max(30,f.width-f.left-f.right),10)*1.06;}
 function resize(){
@@ -200,7 +213,7 @@ function layoutPanel(){
 }
 function rememberPanelScroll(){if(panelOpen)panelScroll.set(currentScrollKey,$('inspector').scrollTop);}
 function updatePanelButtons(){
-  for(const b of document.querySelectorAll('.app-nav [data-mode]')){const active=panelOpen&&b.dataset.mode===(detailRef?'inspect':activeMode);b.setAttribute('aria-expanded',String(active));if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');}
+  for(const b of document.querySelectorAll('button[data-mode]')){const active=panelOpen&&b.dataset.mode===(detailRef?'inspect':activeMode);b.setAttribute('aria-expanded',String(active));if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');}
 }
 function setPanelOpen(open,{opener,focus=false}={}){
   if(!open)rememberPanelScroll();
@@ -253,16 +266,22 @@ function sync(){
     o.visible=o.userData.installed!==false&&!hiddenObjects.has(o.userData.objectIndex)&&state.layers[o.userData.group]&&(state.half==='both'||state.half===o.userData.side);
     o.position.fromArray(o.userData.base);o.position.y+=o.userData.explode*state.explode;
   }
-  $('explode').value=Math.round(state.explode*100);
+  $('explode').value=Math.round(state.explode*100);$('explode').style.setProperty('--v',String(state.explode));
   $('explosion').textContent=Math.round(state.explode*100)+' %';
+  for(const [side,mesh] of Object.entries(ground.halves)){
+    const shown=objects.filter(o=>o.visible&&o.userData.side===side);mesh.visible=ground.enabled&&shown.length>0;if(!mesh.visible)continue;
+    const box=new THREE.Box3();for(const o of shown)box.union(new THREE.Box3().setFromObject(o));const size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
+    mesh.position.set(center.x,box.min.y-.4,center.z+4);mesh.scale.set(size.x*1.45+16,1,size.z*1.7+20);
+  }
   for(const key of Object.keys(labels)){
     const nodes=objects.filter(o=>o.userData.group===key&&o.userData.installed!==false),shown=nodes.filter(o=>state.layers[key]&&!hiddenObjects.has(o.userData.objectIndex)).length,input=$('layer-'+key);
-    input.disabled=nodes.length===0;input.checked=shown>0;input.indeterminate=shown>0&&shown<nodes.length;input.parentElement.title=nodes.length?(shown?'Hide ':'Show ')+labels[key]:'No covers installed. Pick a frame to reinstall them.';
+    $('count-'+key).textContent=nodes.length||'';input.disabled=nodes.length===0;input.checked=shown>0;input.indeterminate=shown>0&&shown<nodes.length;input.parentElement.title=nodes.length?(shown?'Hide ':'Show ')+labels[key]:'No covers installed. Pick a frame to reinstall them.';
   }
   refreshPartVisibility();
   const count=objects.filter(o=>o.visible).length;
   $('status').textContent=`Rev${data.revision} · ${count} visible components${state.explode?' · Exploded view':''}`;
   for(const button of document.querySelectorAll('[data-view]'))button.setAttribute('aria-pressed',String(button.dataset.view===state.view));
+  $('view-current').textContent=document.querySelector(`[data-view="${state.view}"]`).textContent;
   const isComplete=state.half==='both'&&state.explode===0&&Object.values(state.layers).every(Boolean)&&hiddenObjects.size===0;
   $('show-all').setAttribute('aria-pressed',String(isComplete));
   const presetMatches=keys=>hiddenObjects.size===0&&Object.entries(state.layers).every(([key,shown])=>shown===keys.includes(key));
@@ -277,17 +296,37 @@ function reset(){
   sync();fit(directions.iso);
 }
 const editablePanel={base:'cases',plate:'cases',lid:'frames',keycaps:'keycaps',battery:'battery',pcb:'pcb'};
+// Design sections: stacked in the panel beside the model; on a phone the sheet shows one at a time, by tab.
+const designPanels=['size','themes','cases','keycaps','frames','battery','pcb'];
+const stacked=()=>!portraitLayout.matches;
+// Each section keeps its usual options in view; Fine-tune opens the rest in place.
+const tunes=new Set();
+function setTune(name,open){
+  const button=$('panel-'+name)?.querySelector('.tune');if(!button)return;
+  if(open)tunes.add(name);else tunes.delete(name);
+  button.setAttribute('aria-expanded',String(open));$(button.getAttribute('aria-controls')).hidden=!open;
+  const act=button.querySelector('.act');if(act)act.textContent=open?(stacked()?'Done':'Hide'):act.dataset.label;
+}
+for(const button of document.querySelectorAll('.tune'))button.onclick=()=>{const name=button.closest('.sec').id.slice(6);setTune(name,!tunes.has(name));};
+function revealPanel(name){if(stacked()&&!$('panel-'+name).hidden)$('panel-'+name).scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
 function showWorkspace(){
   document.body.dataset.mode=activeMode;document.body.dataset.detail=String(Boolean(detailRef));
-  currentScrollKey=detailRef?'detail:'+JSON.stringify(detailRef):activeMode==='customize'?activeMode+':'+activePanel:activeMode;
-  for(const name of ['cases','frames','themes','keycaps','battery','pcb','inspect','files','about'])$('panel-'+name).hidden=Boolean(detailRef)||!(activeMode==='customize'?name===activePanel:name===activeMode);
-  $('selection').hidden=!detailRef;$('editor-tabs').hidden=activeMode!=='customize'||Boolean(detailRef);
+  const design=activeMode==='customize'&&!detailRef,stack=stacked();
+  currentScrollKey=detailRef?'detail:'+JSON.stringify(detailRef):activeMode==='customize'?activeMode+(stack?'':':'+activePanel):activeMode;
+  for(const name of designPanels)$('panel-'+name).hidden=!design||(!stack&&name!==activePanel);
+  for(const name of ['inspect','files','about'])$('panel-'+name).hidden=Boolean(detailRef)||name!==activeMode;
+  $('selection').hidden=!detailRef;$('editor-tabs').hidden=!design;
   for(const b of document.querySelectorAll('[data-panel]')){b.setAttribute('aria-selected',String(b.dataset.panel===activePanel));b.tabIndex=b.dataset.panel===activePanel?0:-1;}
-  $('workspace-title').textContent=detailRef?(detailRef.collection==='magnets'?'Magnets':partInfo[detailRef.group].short):{customize:'Design',inspect:'Components',files:'Files',about:'About'}[activeMode];
+  // On a phone the Build tabs have nothing but their options: show them open.
+  if(!stack&&['battery','pcb'].includes(activePanel))setTune(activePanel,true);
+  if(!stack&&design)requestAnimationFrame(()=>{const chosen=$('panel-'+activePanel).querySelector(':is(.preview-grid,.size-grid,.theme-grid) [aria-pressed=true]'),strip=chosen?.parentElement;if(strip&&strip.scrollWidth>strip.clientWidth)strip.scrollLeft=Math.max(0,chosen.offsetLeft-strip.offsetLeft-(strip.clientWidth-chosen.offsetWidth)/2);});
+  for(const name of tunes)setTune(name,true);
+  $('workspace-title').textContent=detailRef?'Selected part':{customize:'Design',inspect:'Parts',files:'Files',about:'About'}[activeMode];
   $('panel-back').hidden=!detailRef;$('show-all').hidden=!detailRef&&activeMode!=='inspect';
   updatePanelButtons();layoutPanel();$('inspector').scrollTop=panelScroll.get(currentScrollKey)||0;
   explorer?.layoutChanged();appearance?.sync();keycapColors?.sync();
   if(activeMode==='customize'&&activePanel==='pcb'&&!detailRef)silkHook?.();
+  if(activeMode==='files'&&!detailRef)refreshShare();
 }
 function leaveDetail(){
   const previous=detailReturn;detailRef=null;detailReturn=null;
@@ -301,19 +340,21 @@ function openPanel(id,opener=canvas){
   if(['files','about','inspect'].includes(id))activeMode=id;else{activeMode='customize';activePanel=id;}
   showWorkspace();setPanelOpen(true,{opener:panelOpen?undefined:opener});
 }
-for(const button of document.querySelectorAll('.app-nav [data-mode]'))button.onclick=()=>{
-  if(panelOpen&&!detailRef&&activeMode===button.dataset.mode){setPanelOpen(false,{focus:true});return;}
+for(const button of document.querySelectorAll('button[data-mode]'))button.onclick=()=>{
+  // Modes are tabs: the open one stays open; the panel's own › hides it.
+  if(panelOpen&&!detailRef&&activeMode===button.dataset.mode)return;
   openPanel(button.dataset.mode==='customize'?activePanel:button.dataset.mode,button);if(activeMode==='files')refreshRecovery();
 };
-for(const button of document.querySelectorAll('[data-panel]'))button.onclick=()=>{rememberPanelScroll();activePanel=button.dataset.panel;showWorkspace();};
+for(const button of document.querySelectorAll('[data-panel]'))button.onclick=()=>{rememberPanelScroll();activePanel=button.dataset.panel;showWorkspace();revealPanel(activePanel);};
 $('editor-tabs').addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;const list=[...$('editor-tabs').querySelectorAll('[data-panel]')],at=list.indexOf(document.activeElement);if(at<0)return;e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?list.length-1:(at+(e.key==='ArrowRight'?1:-1)+list.length)%list.length;list[next].click();list[next].focus();});
 function editPart(ref){
   if(!ref||!editablePanel[ref.group]||ref.collection)return;
+  setTune(editablePanel[ref.group],true);
   if(ref.group==='lid')setFrameSide(ref.side||'both');
   else if(ref.group==='keycaps')keycapColors?.focus(ref.side,ref.key);
   else if(['base','plate'].includes(ref.group)){caseSide=ref.side||'both';syncConfigurationUI();}
   else if(ref.group==='battery'){batterySide=ref.side||'both';syncConfigurationUI();}
-  openPanel(editablePanel[ref.group]);
+  openPanel(editablePanel[ref.group]);revealPanel(editablePanel[ref.group]);
 }
 $('edit-selection').onclick=()=>editPart(explorer.selected);
 $('layers').replaceChildren();
@@ -328,7 +369,8 @@ for(const [id,label] of Object.entries(labels)){
   const button=document.createElement('button');button.type='button';button.className='part-item';button.dataset.group=id;button.id='part-'+id;button.setAttribute('aria-expanded','false');button.setAttribute('aria-controls','inspector');button.title=partInfo[id].name;button.setAttribute('aria-label',partInfo[id].name);
   const item=objects.find(o=>o.userData.group===id),color='#'+(Array.isArray(item.material)?item.material[0]:item.material).color.getHexString();
   const dot=document.createElement('span');dot.className='part-anchor';dot.dataset.group=id;dot.style.setProperty('--part-color',color);
-  const name=document.createElement('span');name.className='part-name';name.textContent=partInfo[id].short;button.append(dot,name);
+  const name=document.createElement('span');name.className='part-name';name.textContent=label;
+  const count=document.createElement('span');count.className='part-count';count.id='count-'+id;button.append(dot,name,count);
   const ref=()=>({group:id,side:state.half==='both'?null:state.half});
   row.onpointerenter=e=>{if(e.pointerType!=='touch')explorer.highlight(ref());};row.onpointerleave=()=>explorer.highlight(null);
   row.onfocusin=()=>explorer.highlight(ref());row.onfocusout=e=>{if(!row.contains(e.relatedTarget))explorer.highlight(null);};
@@ -339,7 +381,12 @@ for(const [id,label] of Object.entries(labels)){
   const solo=document.createElement('button');solo.className='part-solo';solo.textContent='Solo';solo.dataset.soloGroup=id;solo.setAttribute('aria-label','Solo '+label);solo.onclick=()=>toggleSolo(ref());
   row.append(button,visibility,solo);$('layers').append(row);
 }
-function chooseView(view){state.view=view;sync();fit(directions[view]);}
+function chooseView(view){state.view=view;sync();fit(directions[view]);viewMenu(false);}
+// On a narrow scene the views fold into one menu.
+function viewMenu(open){$('camera-views').toggleAttribute('data-open',open);$('view-menu').setAttribute('aria-expanded',String(open));}
+$('view-menu').onclick=()=>viewMenu(!$('camera-views').hasAttribute('data-open'));
+document.addEventListener('pointerdown',e=>{if($('camera-views').hasAttribute('data-open')&&!e.target.closest('.camera-widget'))viewMenu(false);});
+$('camera-views').addEventListener('keydown',e=>{if(e.key==='Escape'&&$('camera-views').hasAttribute('data-open')){e.preventDefault();e.stopPropagation();viewMenu(false);$('view-menu').focus();}});
 for(const button of document.querySelectorAll('[data-view]'))button.onclick=()=>chooseView(button.dataset.view);
 $('explode').addEventListener('input',e=>{state.explode=Number(e.target.value)/100;sync();});
 $('reset').onclick=()=>{state.view='iso';sync();fit(directions.iso);$('view-feedback').textContent='Camera reset.';};
@@ -376,7 +423,9 @@ $('glb').onclick=async()=>{
   finally{button.disabled=false;}
 };
 const saveWarnings=new Map();
-function storageNotice(text,error,scope){if(error)saveWarnings.set(scope,text);else saveWarnings.delete(scope);$('save-warning').hidden=saveWarnings.size===0;$('save-warning').title=[...saveWarnings.values()].join(' ');message(text,error);}
+function storageNotice(text,error,scope){if(error)saveWarnings.set(scope,text);else saveWarnings.delete(scope);$('save-warning').hidden=saveWarnings.size===0;$('save-warning').title=[...saveWarnings.values()].join(' ');if(scope==='configuration')saveState(error?'':'Saved ✓',error?'error':'saved');message(text,error);}
+// The top bar's quiet save state; a failure shows the Not saved button instead.
+function saveState(text,state){$('save-state').textContent=text;$('save-state').dataset.state=state;}
 $('save-warning').onclick=()=>{openPanel('files',$('save-warning'));refreshRecovery();$('recovery').open=true;};
 const message=(text,error=false)=>{$('config-status').textContent=text;$('config-status').dataset.error=String(error);};
 const history=createHistory(configuration);
@@ -411,7 +460,7 @@ function applyConfiguration(next,{record=true,persist=true}={}){
   try{commit(prepared);configuration=copy(next);sync();syncConfigurationUI();}
   catch(error){commit(old);configuration=previous;sync();throw error;}
   if(record)history.record(next,gesture);syncHistory();
-  if(persist){message('Saving changes…');store.save(configuration);}
+  if(persist){message('Saving changes…');if(!saveWarnings.has('configuration'))saveState('Saving…','saving');store.save(configuration);}
   // A design that names a variant not loaded yet (a loaded file, undo, a link) shows it once it arrives.
   if(shownVariant(next)!==next.variant&&builtVariant(next.variant))loadVariant(next.variant).then(()=>{if(configuration.variant===next.variant){applyConfiguration(copy(configuration),{record:false,persist:false});fit();}}).catch(e=>message(e.message,true));
 }
@@ -428,9 +477,9 @@ function card(id,label,src){
 // Keyboard size: Flan36 and every built variant; layout-only variants are listed but not offered.
 for(const [id,v] of Object.entries(family)){
   const button=document.createElement('button');button.type='button';button.className='size-card';button.dataset.variant=id;button.setAttribute('aria-pressed','false');
-  if(v.drawing){const img=document.createElement('img');img.src=v.drawing;img.alt='';img.width=240;img.height=90;button.append(img);}
-  const title=document.createElement('strong');title.textContent=v.title;const meta=document.createElement('span');meta.textContent=`${v.grid} per half · ${v.keys_total} keys`+(builtVariant(id)?'':' · coming');
-  button.append(title,meta);button.disabled=!builtVariant(id);button.title=builtVariant(id)?`${v.title}: ${v.grid} per half`:`${v.title}: layout only; PCB and case are not built yet`;
+  if(v.thumb||v.drawing){const img=document.createElement('img');img.src=v.thumb||v.drawing;img.alt='';img.width=192;img.height=132;button.append(img);}
+  const title=document.createElement('strong');title.textContent=v.title.replace(/^Flan/,'');const meta=document.createElement('span');meta.textContent=`${v.grid} per half · ${v.keys_total} keys`+(builtVariant(id)?'':' · coming');
+  button.append(title,meta);button.setAttribute('aria-label',`${v.title}: ${meta.textContent}`);button.disabled=!builtVariant(id);button.title=builtVariant(id)?`${v.title}: ${v.grid} per half`:`${v.title}: layout only; PCB and case are not built yet`;
   button.onclick=async()=>{
     if(shownVariant(configuration)===id)return;
     $('size-note').textContent=`Loading ${v.title}…`;
@@ -470,10 +519,10 @@ for(const [color,label] of [['#304d4e','Deep teal'],['#ded8c6','Linen'],['#ad765
 const frameHex=enhanceColorInput($('frame-color'));
 $('frame-color').oninput=e=>applyConfiguration(setColor(configuration,frameTargets(),'frame','body',e.target.value));
 $('theme-colors').onclick=()=>{const cfg=copy(configuration);for(const side of frameTargets()){const p=framePalette(cfg.frames[side].style);cfg.frames[side].color=p.body;cfg.frames[side].accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,p[k]]));if(cfg.cases[side].match_frame){cfg.cases[side].base_color=p.body;if(cfg.cases[side].style==='level')cfg.cases[side].plate_color=p.body;}}applyConfiguration(cfg);};
-for(const [id,label] of [['default','Original'],['normal-sculpted','Sculpted Normal'],['saddle-sculpted','Sculpted Saddle']]){
+for(const [id,label] of [['default','Original'],['normal-sculpted','Sculpted'],['saddle-sculpted','Saddle']]){
   // Show an actual front-to-back column at the shared stem seating datum.
-  const entries=['K01','K11','K21'].map((key,i)=>{const choice=data.presets[id].keycaps.left[key],v=variants.get(choice.variant);return {path:v.path,rotation:choice.rotation_deg,position:[0,v.seating_z_mm,(i-1)*17]};});
-  const button=card(id,label,preview.image(entries,[-1,.35,.1]));button.dataset.preset=id;
+  const entries=['K01','K11','K21'].map((key,i)=>{const choice=data.presets[id].keycaps.left[key],v=variants.get(choice.variant);return {path:v.path,rotation:choice.rotation_deg,position:[0,v.seating_z_mm,(i-1)*17],material:material('#d9d2c4')};});
+  const button=card(id,label,preview.image(entries,[-1,.35,.1],{width:300,height:150}));button.dataset.preset=id;{const img=button.querySelector('img');img.width=300;img.height=150;}
   button.onclick=()=>{const cfg=copy(configuration);for(const [side,keys] of Object.entries(cfg.keycaps))for(const ref of Object.keys(keys))cfg.keycaps[side][ref]={...data.presets[id].keycaps[side][ref],color:keys[ref].color};try{applyConfiguration(cfg);}catch(e){message(e.message,true);}};$('key-presets').append(button);
 }
 preview.finish();
@@ -600,6 +649,23 @@ function syncConfigurationUI(){
   frameHex.sync(frames.map(f=>f.color));
   appearance?.sync();keycapColors?.sync();
   for(const button of $('key-presets').children){const preset=data.presets[button.dataset.preset];const same=Object.entries(configuration.keycaps).every(([side,keys])=>Object.entries(keys).every(([ref,c])=>c.variant===preset.keycaps[side][ref].variant&&c.rotation_deg===preset.keycaps[side][ref].rotation_deg));button.setAttribute('aria-pressed',String(same));}
+  $('keys-current').textContent=$('key-presets').querySelector('[aria-pressed=true]')?.getAttribute('aria-label')||'Custom shapes';
+  $('size-layout').textContent=family[size]?.grid?' · '+family[size].grid:'';
+  // the phone's tabs name each section's current choice
+  for(const [tab,source,short] of [['size','size-current',t=>t.replace(/^Flan/,'')],['themes','theme-current'],['cases','case-current'],['keycaps','keys-current'],['frames','frame-current'],['battery','battery-current'],['pcb','pcb-current']])
+    $('tab-'+tab).textContent=(short||(t=>t))($(source).textContent);
+  paintPage();refreshShare();
+}
+// The page takes its colours from the keyboard, as the home page does: the named theme when the left half
+// wears one, otherwise its own case and frame colours.
+function paintPage(){
+  const cs=configuration.cases.left,f=configuration.frames.left,lower=v=>v.toLowerCase(),accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,lower(f.accents[k])]));
+  const theme=themeLibrary.themes.find(t=>t.base===lower(cs.base_color)&&t.frame.body===lower(f.color)&&['detail','accent','secondary'].every(k=>t.frame[k]===accents[k]))
+    ||{base:lower(cs.base_color),plate:lower(cs.plate_color),frame:{body:lower(f.color),...accents}};
+  const k=pageTokens(theme),root=document.documentElement;
+  for(const name of ['bg0','bg1','bg2','glow','ink','muted','accent','on'])root.style.setProperty('--'+name,k[name]);
+  root.dataset.scheme=k.scheme;document.querySelector('meta[name=theme-color]').content=k.bg1;
+  ground.material.color.set(k.scheme==='dark'?'#000000':k.ink);ground.material.opacity=k.scheme==='dark'?1:.85;explorer?.tint(k.accent);render();
 }
 function isSolo(ref){const installed=objects.filter(o=>o.userData.installed!==false);return installed.some(o=>matchesPart(o,ref))&&installed.every(o=>o.visible===Boolean(matchesPart(o,ref)));}
 function refreshPartVisibility(){
@@ -693,10 +759,37 @@ function refreshRecovery(){
  }catch{list.textContent='Device storage is unavailable. Export the current design instead.';}
 }
 window.addEventListener('storage',e=>{if(e.key===savedKey)message('Another tab changed the saved design. Your current view stays here; use Files to load or keep a separate copy.',true);});
+// Share: the short look when it says everything about this keyboard, otherwise the whole design, deflated.
+const base64url=bytes=>btoa(String.fromCharCode(...bytes)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const fromBase64url=text=>Uint8Array.from(atob(text.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+const streamBytes=(bytes,transform)=>new Response(new Blob([bytes]).stream().pipeThrough(transform)).arrayBuffer().then(b=>new Uint8Array(b));
+function lookParams(c){
+  const same=JSON.stringify(c),preset=Object.entries({original:'default',normal:'normal-sculpted',saddle:'saddle-sculpted'}).find(([,id])=>Object.entries(c.keycaps).every(([side,keys])=>Object.entries(keys).every(([ref,k])=>k.variant===data.presets[id].keycaps[side][ref].variant&&k.rotation_deg===data.presets[id].keycaps[side][ref].rotation_deg)));
+  if(!preset||c.cases.left.style!==c.cases.right.style)return null;
+  const frame=c.frames.left.style===c.frames.right.style?c.frames.left.style:c.frames.left.style+','+c.frames.right.style;
+  for(const theme of themeLibrary.themes)for(const palette of ['','frame']){
+    const q=new URLSearchParams({size:c.variant,theme:theme.id,case:c.cases.left.style,keys:preset[0],frame});if(palette)q.set('palette',palette);
+    try{if(JSON.stringify(lookConfiguration(q))===same)return q;}catch{}
+  }
+  return null;
+}
+async function shareLink(){
+  const base=location.protocol.startsWith('http')?location.origin+location.pathname:'https://flankbd.com/explore/';
+  const look=lookParams(configuration);if(look)return base+'?'+look;
+  return base+'?design='+base64url(await streamBytes(new TextEncoder().encode(JSON.stringify(configuration)),new CompressionStream('deflate-raw')));
+}
+// The Files link follows the design while Files is open; the top bar's Share builds its own.
+let shareTimer=0,shareTicket=0;
+function refreshShare(){clearTimeout(shareTimer);if($('panel-files').hidden||!panelOpen)return;shareTimer=setTimeout(()=>{const ticket=++shareTicket;shareLink().then(link=>{if(ticket===shareTicket)$('share-link').value=link;}).catch(()=>{});},250);}
+async function copyLink(button){
+  const link=await shareLink();$('share-link').value=link;
+  try{await navigator.clipboard.writeText(link);$('share-status').textContent='Link copied. It opens this exact keyboard.';return true;}
+  catch{if(activeMode!=='files'||!panelOpen)openPanel('files',button);$('share-link').focus();$('share-link').select();$('share-status').textContent='Copy the selected link with your keyboard or text menu.';return false;}
+}
 appearance=createAppearance({$,get:()=>configuration,apply:applyConfiguration,targets:kind=>kind==='case'?caseTargets():frameTargets(),preview,frameFinish,material,resize,catalog,geometryFor});
 keycapColors=createKeycapColors({$,catalog,get:()=>configuration,apply:applyConfiguration,message,storageNotice:(text,error)=>storageNotice(text,error,'palettes')});
 applyConfiguration(configuration,{record:false,persist:false});
-if(storageMessage)storageNotice(storageMessage,true,'configuration');else if(restored)message('Restored your saved configuration.');else message('Changes save on this device.');
+if(storageMessage)storageNotice(storageMessage,true,'configuration');else if(restored){message('Restored your saved configuration.');saveState('Saved ✓','saved');}else{message('Changes save on this device.');saveState('','');}
 if(keycapColors.initialWarning)storageNotice(keycapColors.initialWarning,true,'palettes');
 // A look from the home page opens as a new design: ?size=&theme=&case=&keys=&frame=left[,right]&palette=frame|theme[,…].
 // Undo returns to the saved design; the parameters then leave the address so a reload keeps later edits.
@@ -721,16 +814,28 @@ function lookConfiguration(q){
   }
   return c;
 }
-if(LOOK_KEYS.some(k=>lookQuery.has(k))){
-  try{applyConfiguration(lookConfiguration(lookQuery));message(restored?'Opened the look from the home page. Undo returns to your saved design.':'Opened the look from the home page.');}
+$('share').onclick=async()=>{if(await copyLink($('share'))){const b=$('share'),label=b.querySelector('span');b.dataset.copied='true';label.textContent='Copied ✓';$('view-feedback').textContent='Link copied.';setTimeout(()=>{b.dataset.copied='false';label.textContent='Share';},2200);}};
+$('share-copy').onclick=()=>copyLink($('share-copy'));
+$('share-link').addEventListener('focus',e=>e.target.select());
+if(LOOK_KEYS.some(k=>lookQuery.has(k))||lookQuery.has('design')){
+  try{
+    if(lookQuery.has('design')){
+      const text=lookQuery.get('design');if(text.length>40000)throw Error('the link is too long.');
+      const bytes=await streamBytes(fromBase64url(text),new DecompressionStream('deflate-raw'));if(bytes.length>400000)throw Error('the design is too large.');
+      applyConfiguration(JSON.parse(new TextDecoder().decode(bytes)));message(restored?'Opened a shared design. Undo returns to your saved design.':'Opened a shared design.');
+    }else{applyConfiguration(lookConfiguration(lookQuery));message(restored?'Opened the look from the home page. Undo returns to your saved design.':'Opened the look from the home page.');}
+  }
   catch(e){message('Could not open that link: '+e.message,true);}
-  for(const k of LOOK_KEYS)lookQuery.delete(k);
+  for(const k of [...LOOK_KEYS,'design'])lookQuery.delete(k);
   window.history.replaceState(null,'',location.pathname+(lookQuery.size?'?'+lookQuery:'')+location.hash);
 }
 
 
-resize();reset();showWorkspace();
-if(new URLSearchParams(location.search).has('diagnostics'))window.flan36=Object.freeze({snapshot:()=>({configuration:copy(configuration),view:copy(state),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:controls.target.toArray(),zoom:camera.zoom,halfHeight},hidden:[...hiddenObjects],selected:copy(explorer.selected),visible:objects.filter(o=>o.visible).map(o=>o.userData.objectIndex),undo:history.canUndo,redo:history.canRedo}),idle:()=>Promise.all([store.idle(),keycapColors.idle()])});
+// The design opens beside the model, as the home page's rail does.
+showWorkspace();setPanelOpen(true);resize();reset();
+portraitLayout.addEventListener('change',()=>{showWorkspace();if(activeMode==='customize')revealPanel(activePanel);});
+// ground(false) hides the contact shadow so checks and captures measure only the model.
+if(new URLSearchParams(location.search).has('diagnostics'))window.flan36=Object.freeze({snapshot:()=>({configuration:copy(configuration),view:copy(state),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:controls.target.toArray(),zoom:camera.zoom,halfHeight},hidden:[...hiddenObjects],selected:copy(explorer.selected),visible:objects.filter(o=>o.visible).map(o=>o.userData.objectIndex),undo:history.canUndo,redo:history.canRedo}),idle:()=>Promise.all([store.idle(),keycapColors.idle()]),ground:shown=>{ground.enabled=shown;sync();}});
 
 
 }

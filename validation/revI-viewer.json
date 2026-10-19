@@ -1492,7 +1492,7 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "283d573b271b7ebd4d0645c0fe55b069c1bc24c8fd3c8a1c5f12540a47c77acd"
+      "sha256": "323a78c35b6100c6a7513b7906496b6f6f3db694cfa948f4e8e1ee1143650910"
     },
     {
       "path": "viewer/config.js",
@@ -1524,7 +1524,7 @@
     },
     {
       "path": "viewer/appearance.js",
-      "sha256": "25779ccacbae08407a9768ee61fc5314720fda04fedacf33af15f877c62677cd"
+      "sha256": "6bfbf60e2c99cd16a149a97f211b8fe02f40bfe5251fd2099a88d32f2f04bd4f"
     },
     {
       "path": "viewer/printing.js",
@@ -1536,11 +1536,11 @@
     },
     {
       "path": "viewer/explorer.js",
-      "sha256": "594f5b3b4a01fc2ab899c3bec4af68e7f36bc6ecb94d4424223b72fd3d87bba9"
+      "sha256": "fe6180a103018470e14a023475383e84cf58088548e8c48c94e21af0ecbe1c96"
     },
     {
       "path": "viewer/previews.js",
-      "sha256": "700c21e97c8896f63c5dac209ed443345b3f763b8a7bc253b5d00d78d751ed15"
+      "sha256": "e51873a6b36e2c0d6762b303302b13d64f2fc6e4b83e02981096f332364b78a1"
     },
     {
       "path": "viewer/finishes.js",
@@ -1552,22 +1552,58 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "e7571ee7ef1e733b46f1690197ee7d3a0d0757f4c4ed62d861c8cc5e78b94bb7"
+      "sha256": "d86a00a3ecd6a4da0d5a5795216b551a8d4db96cf5a95ce3479bae3be63b4c78"
     },
     {
       "path": "viewer/template.html",
-      "sha256": "7a8c8ba5fec09b5a96cbab27026ae4d9b4e04fe7d395f649cb44b39a2728f76d"
+      "sha256": "027cf9c32c1b63c3eff1dc170687d963ccd280b832c3d56d05c48c1194f36833"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "7286f90f6d97c97a6ccc8f90b25c44105f05195d7b1bc012bbc1a00637ccfa08"
+      "sha256": "d5ebfa7bc92a16f6362f9f1fd107f45407c195abcd851c05c65751f9afa903a8"
+    },
+    {
+      "path": "viewer/home/tokens.js",
+      "sha256": "4063044955b5c941db7d6b1c767610f75b9aa9e347715e5d1f2a21825ae47f8d"
+    },
+    {
+      "path": "docs/branding/flan/flan-mark-color.svg",
+      "sha256": "06fd8773c343fc1b41640cc09310ed0b7e83116afdcb8e64d11b821b3e80fa4c"
+    },
+    {
+      "path": "viewer/home/fonts/Fraunces-latin.woff2",
+      "sha256": "5097cb6923bb6938dcfc373e6f99a19fbb603cc32f740cc1ecd9791af359470b"
+    },
+    {
+      "path": "viewer/home/fonts/Inter-latin.woff2",
+      "sha256": "c940764593d0fe5d596be327ca7558855e018039fb78509aa21921fd3644c3e4"
+    },
+    {
+      "path": "viewer/home/fonts/JetBrainsMono-latin.woff2",
+      "sha256": "2c32b9b3ee358c119e210f6f5195f9bd34894d78a785ff2e95d60e718e400af4"
+    },
+    {
+      "path": "viewer/thumbs/size-flan36.webp",
+      "sha256": "c8f9880514c8f4402433efc08463b06326d9178409dd126b34a0642fd18476a5"
+    },
+    {
+      "path": "viewer/thumbs/size-flan42.webp",
+      "sha256": "da76993e567110297b7d1a84cad2fc196af27b191933aa6f614a7f1e36092870"
+    },
+    {
+      "path": "viewer/thumbs/size-flan46.webp",
+      "sha256": "ff4b24ec43fda5387f7266bd65f26c162efbaf0d64c2ec430406907479be6925"
+    },
+    {
+      "path": "viewer/thumbs/size-flan54.webp",
+      "sha256": "183392eb062791c5e7bfaeceac06bb19443fe575ed5f9423a4c2ea6a60875e3b"
     },
     {
       "path": "viewer/package-lock.json",
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "1e1a0290300ae2ba84c98218a465b4cfd649d5caf8d035eed3df7089c468e1ed",
+  "viewer_sha256": "471d4c0b2e5a01185369c6bdfa6fa9ab207b8601bd38d67877d145cad9457b4b",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -1579,7 +1615,7 @@
     "cover_ahead_of_adjacent_cap_mm": 0
   },
   "offline": "docs/explore/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/explore/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.",
-  "offline_sha256": "40f90072b1b1455f208c8c95c90dcb0a10fcb9772a245a5caf2208ba08110b91",
+  "offline_sha256": "8099163c6ead8bdfe42cdbb732a53638535f00e6cb4ca323612be82c76c3a92f",
   "printing": {
     "path": "docs/explore/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
@@ -1617,8 +1653,8 @@
     ]
   },
   "geometry_aliases": 18,
-  "online_bytes": 53356455,
-  "offline_bytes": 85196890,
+  "online_bytes": 53601681,
+  "offline_bytes": 85442105,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

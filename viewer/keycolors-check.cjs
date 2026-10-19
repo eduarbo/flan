@@ -5,6 +5,8 @@
 'use strict';
 const fs=require('fs'),path=require('path'),assert=require('assert/strict'),crypto=require('crypto');
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
+// Open a Design section's Fine-tune so every control in it is reachable.
+const tune=async(page,name)=>{const t=page.locator(`#panel-${name} .tune[aria-expanded=false]`);if(await t.count()&&await t.isVisible())await t.click();};
 const root=process.env.FLAN36_ROOT||path.resolve(__dirname,'..');
 const out=process.env.FLAN36_KEYCOLORS_OUT||path.join(root,'build/keycolors');
 const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/explore/offline.html');
@@ -32,7 +34,7 @@ let step='launch',browser;
  async function saved(){await p.evaluate(()=>new Promise(requestAnimationFrame));await p.evaluate(()=>window.flan36.idle());return p.evaluate(()=>{for(const value of Object.values(localStorage)){try{const c=JSON.parse(value);if(c?.schema==='flan36-config-1')return c;}catch{}}throw Error('No persisted Flan36 configuration');});}
  async function library(){await p.evaluate(()=>new Promise(requestAnimationFrame));await p.evaluate(()=>window.flan36.idle());return p.evaluate(()=>{for(const value of Object.values(localStorage)){try{const c=JSON.parse(value);if(c?.schema==='flan36-keycap-palettes-1')return c;}catch{}}return null;});}
  async function panel(mode){if(await p.locator('body').getAttribute('data-panel-open')!=='true'||await p.locator('body').getAttribute('data-mode')!==mode||await p.locator('body').getAttribute('data-detail')==='true')await activate('#nav-'+mode);}
- async function category(name){await panel('customize');await activate('#editor-tabs [data-panel="'+name+'"]');assert.equal(await p.locator('#panel-'+name).isVisible(),true);}
+ async function category(name){await panel('customize');await activate('#editor-tabs [data-panel="'+name+'"]');assert.equal(await p.locator('#panel-'+name).isVisible(),true);await tune(p,name);}
  async function caps(){await category('keycaps');assert.equal(await p.locator('#cap-colors').evaluate(e=>Boolean(e.closest('details'))),false,'Key colors are an inline editor');}
  async function libraryOpen(){await caps();await openDetails('#cap-palette-name');}
  async function download(selector,filename){const pending=p.waitForEvent('download');await activate(selector);const d=await pending,file=path.join(out,filename);await d.saveAs(file);assert.equal(await d.failure(),null);return fs.readFileSync(file);}
