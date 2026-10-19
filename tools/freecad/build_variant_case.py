@@ -11,12 +11,15 @@ Opens mechanical/revI/Flan36.FCStd (never saved back) and, per half:
 3. adds each added fastener as a translated copy of H1's pillar, pilot, washer seat, board
    drill, plate hole, washer, screw and Level driver access, spliced into the same chains;
 4. regenerates the Level cap openings for the variant's keys with level_stack's rule.
+The viewer's PCB is revI's board in the variant outline, with each added key drilled like its
+template key (the same Choc hot-swap footprint the routed variant boards place there).
 Then recomputes, checks every case part (one valid solid, closed mesh, no base/plate overlap,
 caps clear of the Level shell) and exports them like export_revI.py.
 
 Writes build/variants/<id>/<Title>.FCStd, mechanical/<id>/<side>-case-<style>-<base|plate>
 .{step,stl} and validation/<id>-case.json. Physical fit is untested.
 Run: python3 tools/freecad/run_macos.py tools/freecad/build_variant_case.py --variant flan42
+--reuse --pcb-only re-exports only the viewer PCB from the saved document and updates its receipt entry.
 SPDX-License-Identifier: GPL-3.0-or-later
 """
 import argparse, hashlib, json, math, os, sys, time
@@ -129,12 +132,41 @@ def rewire(doc, old, new, skip=()):
                 if old in v:
                     setattr(user, prop, [new if x is old else x for x in v])
 
+def template_ref(k):
+    """The revI key an added key copies: the same row of column 1 for the outer column, the same
+    column of row 0 for the number row, K01 for the corner."""
+    return "K01" if k["ref"] == "K40" else (f"K{k['row']}1" if k["col"] == 0 else f"K0{k['col']}")
+
+def drill_added_keys(pcb, keys, added):
+    """Copy each template key's footprint holes (the switch, its pegs and the socket pins, not vias)
+    to the added key's position, and drill them through the board."""
+    by = {k["ref"]: k for k in keys}
+    z0, z1 = pcb.BoundBox.ZMin - .2, pcb.BoundBox.ZMax + .2
+    holes = {}
+    for e in pcb.Edges:
+        c = e.Curve
+        if isinstance(c, Part.Circle) and abs(abs(c.Axis.z) - 1) < 1e-6 and .45 <= c.Radius <= 2.2:
+            holes.setdefault((round(c.Center.x, 3), round(c.Center.y, 3), round(c.Radius, 3)), True)
+    tools, made = [], {}
+    for ref in added:
+        k = by[ref]; t = by[template_ref(k)]
+        own = sorted((x - t["x"], y + t["y"], r) for x, y, r in holes if abs(x - t["x"]) <= 6.6 and abs(y + t["y"]) <= 6.6)
+        assert own, (ref, "template key has no footprint holes")
+        for dx, dy, r in own:
+            tools.append(Part.makeCylinder(r, z1 - z0, V(k["x"] + dx, -k["y"] + dy, z0)))
+        made[ref] = [round(r, 3) for _, _, r in own]
+    signatures = {tuple(sorted(v)) for v in made.values()}
+    assert len(signatures) == 1, ("added keys copied different footprints", made)
+    drilled = pcb.cut(Part.makeCompound(tools)) if tools else pcb
+    assert drilled.isValid() and len(drilled.Solids) == len(pcb.Solids), "drilled PCB"
+    return drilled, {"keys": len(made), "holes_per_key": len(next(iter(signatures))) if made else 0, "radii_mm": sorted(next(iter(signatures))) if made else []}
+
 def add_keys(doc, p, keys, added, report):
     by = {k["ref"]: k for k in keys}
     chain_end = doc.getObject(p + "PlateDrill1").Base
     for ref in added:
         k = by[ref]
-        tref = "K01" if ref == "K40" else (f"K{k['row']}1" if k["col"] == 0 else f"K0{k['col']}")
+        tref = template_ref(k)
         t = by[tref]
         assert k["angle"] == 0 and t["angle"] == 0, ref
         move = V(k["x"] - t["x"], -(k["y"] - t["y"]), 0)
@@ -222,14 +254,25 @@ def cap_sweeps(doc, p, keys, report):
     report["level_cap_openings"] = {"pieces": len(new), "poses": len(polys), "admitted_variants": nvariants}
 
 # ---------------------------------------------------------------- main
+def export_pcb(doc, p, keys, added, path):
+    """The variant PCB for the viewer, from the same object revI exports as <side>-pcb, drilled for the added keys."""
+    pcb = doc.getObject(p + "SlimPCBLeadNotch").Shape
+    assert pcb.isValid(), (p, "PCB")
+    pcb, drilled = drill_added_keys(pcb, keys, added)
+    mesh = MeshPart.meshFromShape(Shape=pcb, LinearDeflection=.03, AngularDeflection=.12, Relative=False)
+    mesh.write(str(path))
+    return {"size_mm": [round(pcb.BoundBox.XLength, 2), round(pcb.BoundBox.YLength, 2)], "added_key_holes": drilled, "stl_sha256": sha(path)}
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--variant", required=True)
     ap.add_argument("--reuse", action="store_true", help="check and export the saved, already recomputed document")
+    ap.add_argument("--pcb-only", action="store_true", help="with --reuse: export only the viewer PCB and update its receipt entry")
     argv = sys.argv[1:]
     while argv and not argv[0].startswith("--"):      # run_macos.py passes its lib path and this script first
         argv.pop(0)
     a, _ = ap.parse_known_args(argv)            # e.g. -NSAppSleepDisabled YES, read by macOS for this run only
+    assert a.reuse or not a.pcb_only, "--pcb-only needs --reuse"
     vid = a.variant
     t0 = time.time()
     variants = json.loads((ROOT / "design/variants.json").read_text())["variants"]
@@ -287,6 +330,14 @@ def main():
         say("recomputed", round(time.time() - t0), "s")
         doc.saveAs(str(saved))
         (build / "edit-report.json").write_text(json.dumps(report, indent=2) + "\n")
+    if a.pcb_only:
+        receipt = json.loads((ROOT / f"validation/{vid}-case.json").read_text())
+        for side, p in (("left", "L_"), ("right", "R_")):
+            receipt["halves"][side]["pcb"] = export_pcb(doc, p, v["keys"][side], v["added_per_half"], out_dir / f"{side}-pcb.stl")
+            say(side, "PCB", receipt["halves"][side]["pcb"], round(time.time() - t0), "s")
+        (ROOT / f"validation/{vid}-case.json").write_text(json.dumps(receipt, indent=2) + "\n")
+        say("PASS", vid, "viewer PCB exported", round(time.time() - t0), "s")
+        os._exit(0)
     styles = json.loads((ROOT / "design/cases.json").read_text())["styles"]
     for side, p in (("left", "L_"), ("right", "R_")):
         rep = report["halves"][side]
@@ -325,12 +376,7 @@ def main():
             entry["base_plate_overlap_mm3"] = round(overlap, 4)
             rep["cases"][style] = entry
             say(side, style, "ok", round(time.time() - t0), "s")
-        # the variant PCB for the viewer, from the same object revI exports as <side>-pcb
-        pcb = doc.getObject(p + "SlimPCBLeadNotch").Shape
-        assert pcb.isValid(), (side, "PCB")
-        mesh = MeshPart.meshFromShape(Shape=pcb, LinearDeflection=.03, AngularDeflection=.12, Relative=False)
-        mesh.write(str(out_dir / f"{side}-pcb.stl"))
-        rep["pcb"] = {"size_mm": [round(pcb.BoundBox.XLength, 2), round(pcb.BoundBox.YLength, 2)], "stl_sha256": sha(out_dir / f"{side}-pcb.stl")}
+        rep["pcb"] = export_pcb(doc, p, keys, v["added_per_half"], out_dir / f"{side}-pcb.stl")
         for n, f in rep.get("fasteners", {}).items():
             x, y = f["xy_mm"]
             base = doc.getObject(f"{p}Case_solid_base").Shape

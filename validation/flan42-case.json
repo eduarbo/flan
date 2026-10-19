@@ -138,7 +138,20 @@
           131.45,
           91.27
         ],
-        "stl_sha256": "d3fa92a1e327f048a367321bae21b184fa09d0267055c6620b8e8e5ee28e93d5"
+        "added_key_holes": {
+          "keys": 3,
+          "holes_per_key": 7,
+          "radii_mm": [
+            0.635,
+            0.635,
+            0.851,
+            0.851,
+            1.5,
+            1.5,
+            1.714
+          ]
+        },
+        "stl_sha256": "baee837106ffcadd7c74bc94fc1b2876152472b4a48757d7ec2f6732f38c316b"
       }
     },
     "right": {
@@ -271,7 +284,20 @@
           131.45,
           91.27
         ],
-        "stl_sha256": "154bee5d126e2573c56439c84688dc632493f56ce99efd48af9eec80b6fb4bf9"
+        "added_key_holes": {
+          "keys": 3,
+          "holes_per_key": 7,
+          "radii_mm": [
+            0.635,
+            0.635,
+            0.851,
+            0.851,
+            1.5,
+            1.5,
+            1.714
+          ]
+        },
+        "stl_sha256": "1546e511aeca775b5ff4f4386e56eb48d52213507b7e5850420c67235eee1cff"
       }
     }
   },
