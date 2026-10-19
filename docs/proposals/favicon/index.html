@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Flan Keyboard</title>
 <meta name="robots" content="noindex">
-<link id="icon-svg" rel="icon" type="image/svg+xml" href="icons/r3-choc.svg">
-<link id="icon-png" rel="icon" type="image/png" sizes="32x32" href="icons/r3-choc-32.png">
+<link id="icon-svg" rel="icon" type="image/svg+xml" href="icons/r4-tecla-f.svg">
+<link id="icon-png" rel="icon" type="image/png" sizes="32x32" href="icons/r4-tecla-f-32.png">
 <style>
 @font-face { font-family: Fraunces; src: url(../../assets/fonts/Fraunces-latin.woff2) format("woff2"); font-weight: 300 500; font-display: swap; }
 @font-face { font-family: Inter; src: url(../../assets/fonts/Inter-latin.woff2) format("woff2"); font-weight: 400 600; font-display: swap; }
@@ -43,19 +43,17 @@ h2 { margin: 2px 0 0; font-size: 16px; font-weight: 600; }
 <body>
 <main>
   <h1>Probador de favicon</h1>
-  <p class="lede">R3: variantes de «La marca, a color» que se parecen más a una tecla, y otros estilos de dibujo. Cada opción se pone de verdad en esta pestaña de tu navegador, así que ves el favicon tal como se vería en flankbd.com, a su tamaño real y con tu tema claro u oscuro.</p>
+  <p class="lede">R4: cinco conceptos distintos, cada uno con su silueta y su estilo de dibujo, en la natilla y el caramelo de «La marca, a color». Cada opción se pone de verdad en esta pestaña de tu navegador, así que ves el favicon tal como se vería en flankbd.com, a su tamaño real y con tu tema claro u oscuro.</p>
   <p class="how"><b>Cómo compararlas:</b> pulsa <b>Nueva pestaña</b> en cada una y mira tu barra de pestañas. Cambia tu navegador o sistema a modo oscuro: las versiones con borde se aclaran solas.</p>
   <div class="grid" id="grid"></div>
 </main>
 <script>
 const OPTIONS=[
-  ['r3-choc','Choc','Proporciones de tecla low-profile Choc: más ancha y más baja, gotas cortas.',true,'R3'],
-  ['r3-choc-dish','Choc con dish','La Choc con su cara cóncava y la barra de homing de la F y la J.',true,'R3'],
-  ['r3-dish','Con dish','La marca de hoy con dish y barra de homing en el caramelo.',true,'R3'],
-  ['r3-switch','En su switch','La tecla Choc montada sobre su switch: se lee como tecla de teclado aun a 16 px.',true,'R3'],
-  ['r3-sticker','Sticker','La marca a color con un halo recortado, como estampa; destaca en pestañas oscuras.',true,'R3'],
-  ['r3-linea','Línea','Otro trazo: una línea fina dibuja la tecla y el borde del caramelo, con rellenos claros.',true,'R3'],
-  ['r3-patitas','Patitas','De frente, el flan parado sobre los dos stems rojos de un switch Choc.',true,'R3'],
+  ['r4-arriba','Desde arriba','La tecla vista desde arriba: el caramelo cubre la cara y escurre por los cuatro lados.',true,'R4'],
+  ['r4-tecla-f','Tecla F','La leyenda «f» en caramelo, con una gota en el travesaño y la barra de homing de la F.',true,'R4'],
+  ['r4-perfil','De perfil','Una tecla esculpida de lado, con el caramelo sobre su dish y el stem rojo de un Choc.',true,'R4'],
+  ['r4-pixel','Pixel','Dibujada píxel a píxel a 16 × 16: nítida justo al tamaño del favicon.',true,'R4'],
+  ['r4-geometrico','Geométrico','Solo dos formas: la natilla y el caramelo con una gota grande. Sin contorno.',false,'R4'],
   ['marca-color','La marca, a color','Tu elegida de R2: la marca de hoy rellena de natilla, con contorno caramelo.',true,'Base'],
   ['actual','Actual','El favicon de hoy, para comparar.',false,'Base'],
 ];

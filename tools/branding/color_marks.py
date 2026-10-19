@@ -3,8 +3,8 @@
 top with its gloss, darker caramel running down the front, optional plate, and square tiles for
 favicons. Same geometry as the one-colour mark (tools/branding/flankey.iso_regions).
 
-R1 (--r1) writes design/proposals/logo-color-r1/; R2 (--r2) and R3 (default) write the favicon
-tester's icons to docs/proposals/favicon/icons/. python3 tools/branding/color_marks.py   (needs shapely; rsvg-convert)
+R1 (--r1) writes design/proposals/logo-color-r1/; R2 (--r2), R3 (--r3) and R4 (default) write the
+favicon tester's icons to docs/proposals/favicon/icons/. python3 tools/branding/color_marks.py   (needs shapely; rsvg-convert)
 SPDX-License-Identifier: GPL-3.0-or-later
 """
 from pathlib import Path
@@ -251,10 +251,98 @@ def build_r3(out):
     (out / "variants-r3.json").write_text(json.dumps({"palette": k, "variants": meta}, indent=2, ensure_ascii=False) + "\n")
     print("wrote", len(meta), "R3 marks to", out.relative_to(ROOT))
 
+# ---------------------------------------------------------------------------- R4
+# R3 read as one design tweaked seven times. R4 changes the concept, not the detail: a different
+# silhouette and drawing style each, in the same custard and caramel.
+R4 = [
+    ("r4-arriba", "Desde arriba", "La tecla vista desde arriba: el caramelo cubre la cara y escurre por los cuatro lados."),
+    ("r4-tecla-f", "Tecla F", "La leyenda «f» en caramelo, con una gota en el travesaño y la barra de homing de la F."),
+    ("r4-perfil", "De perfil", "Una tecla esculpida de lado, con el caramelo sobre su dish y el stem rojo de un Choc."),
+    ("r4-pixel", "Pixel", "Dibujada píxel a píxel a 16 × 16: nítida justo al tamaño del favicon."),
+    ("r4-geometrico", "Geométrico", "Solo dos formas: la natilla y el caramelo con una gota grande. Sin contorno."),
+]
+PIXEL = ["................", "....OOOOOOOO....", "...OHHCCCCCCO...", "..OHCCCCCCCCCO..", "..OCCCCCCCCCCO..", ".OCCCCCCCCCCCCO.",
+         ".OCCCCCCCCCCCCO.", "OCCCCCCCCCCCCCCO", "OYCCYYCYYCCYCSSO", "OYCCYYCYYCCYYSSO", "OYYCYYYYYCCYYSSO", "OYYYYYYYYCYYYSSO",
+         "OYYYYYYYYYYYYSSO", "OYYYYYYYYYYYYSSO", ".OOOOOOOOOOOOOO.", "................"]
+
+def build_r4(out):
+    from branding.flankey import rounded, open_, close
+    from branding.outline_text import outline
+    from shapely.geometry import LineString
+    k = {**R3_INK, "side": "#E9BC68", "homing": "#D7A65C", "geo_custard": "#F6D27E", "geo_caramel": "#8E4E22", "pixel_gloss": "#C98545"}
+    ink = lambda g, w=3.0: g.buffer(w / 2, quad_segs=Q)
+    rr = lambda x0, y0, x1, y1, r: box(x0, y0, x1, y1).buffer(-r, quad_segs=Q).buffer(r, quad_segs=Q)
+    drop = lambda a, b, r: unary_union([Point(*a).buffer(r * .78, quad_segs=Q), Point(*b).buffer(r, quad_segs=Q)]).convex_hull
+    sets = {}
+    # from above: the sloped sides frame the top face; caramel pools there and runs down each side
+    outer, top = rr(6, 6, 94, 94, 15), rr(17, 17, 83, 83, 10)
+    tongues = []
+    for side in range(4):
+        for along, length, r in ((.3, 6.5, 2.6), (.62, 9.5, 3.0)):
+            a, e = 17 + 66 * along, 82
+            p0, p1 = {0: ((a, e), (a, e + length)), 1: ((e, 100 - a), (e + length, 100 - a)),
+                      2: ((100 - a, 100 - e), (100 - a, 100 - e - length)), 3: ((100 - e, a), (100 - e - length, a))}[side]
+            tongues.append(drop(p0, p1, r))
+    pool = close(unary_union([top.buffer(-1.5, quad_segs=Q)] + tongues), 2.0)
+    sets["r4-arriba"] = [(outer, k["side"], ""), (top, k["custard_lit"], ""), (pool, k["caramel"], ""), (ink(outer.exterior), k["caramel_ink"], "o")]
+    # the F key: Fraunces "f" in caramel, a drip from the crossbar, the homing bar
+    f, _ = outline("f", ROOT / "build/fonts/Fraunces[SOFT,WONK,opsz,wght].ttf", {"wght": 560, "opsz": 144, "SOFT": 100})
+    f = affinity.scale(f, 1, -1, origin=(0, 0)); fx0, fy0, fx1, fy1 = f.bounds; sc = 50 / (fy1 - fy0)
+    f = affinity.translate(affinity.scale(f, sc, sc, origin=(fx0, fy0)), 50 - (fx1 - fx0) * sc / 2 - fx0, 22 - fy0)
+    fb = f.bounds; h = fb[3] - fb[1]
+    def reach(y):
+        g = f.intersection(LineString([(0, y), (100, y)]))
+        pts = list(g.coords) if g.geom_type == "LineString" else [p for gg in getattr(g, "geoms", []) for p in gg.coords]
+        return max((p[0] for p in pts), default=0)
+    bar_y = max((fb[1] + h * i / 100 for i in range(28, 55)), key=reach); bar_x = reach(bar_y)
+    legend = close(unary_union([f, drop((bar_x - 3, bar_y + 1), (bar_x - 3, bar_y + 11), 2.9)]), 1.0)
+    sets["r4-tecla-f"] = [(outer, k["side"], ""), (top.buffer(4, quad_segs=Q), k["custard_lit"], ""), (legend, k["caramel"], ""),
+                          (LineString([(42, 80), (58, 80)]).buffer(2.0, quad_segs=Q), k["homing"], ""), (ink(outer.exterior), k["caramel_ink"], "o")]
+    # in profile: a sculpted cap with a slanted dish, caramel along it and down the face, on its stem
+    body = open_(rounded([(12, 74), (88, 74), (82, 30), (18, 42)], [2.4, 2.4, 5, 5]).difference(Point(50, -118).buffer(152, quad_segs=360)), 1.2)
+    bx0, by0, bx1, by1 = body.bounds
+    glaze = body.intersection(body.boundary.intersection(box(bx0 + 4, 0, bx1 - 4, by0 + 20)).buffer(7.5, quad_segs=Q))
+    glaze = close(unary_union([glaze] + [drop((x, 40), (x, dep), r) for x, dep, r in ((24, 60, 3.4), (44, 52, 2.6), (66, 57, 3.2))]), 1.2).intersection(body)
+    stem = rr(44, 70, 56, 86, 2.2).difference(body)
+    sets["r4-perfil"] = [(body, k["custard_lit"], ""), (glaze, k["caramel"], ""), (stem, k["stem"], ""),
+                         (ink(body.exterior), k["caramel_ink"], "o"), (ink(stem.exterior).difference(body), k["caramel_ink"], "o")]
+    # pixel art, one unit per pixel
+    colors = {"O": (k["caramel_ink"], "o"), "C": (k["caramel"], ""), "H": (k["pixel_gloss"], ""), "Y": (k["custard_lit"], ""), "S": (k["side"], "")}
+    cells = {}
+    for y, row in enumerate(PIXEL):
+        for x, ch in enumerate(row):
+            if ch in colors:
+                cells.setdefault(ch, []).append(box(x, y, x + 1, y + 1))
+    sets["r4-pixel"] = [(unary_union(v), *colors[ch]) for ch, v in cells.items()]
+    # two shapes
+    tz = rounded([(10, 80), (90, 80), (76, 34), (24, 34)], [5, 5, 7, 7])
+    capc = close(unary_union([tz.intersection(box(0, 0, 100, 48)), drop((62, 46), (62, 62), 7.2)]), 2.6).intersection(tz)
+    sets["r4-geometrico"] = [(tz, k["geo_custard"], ""), (capc, k["geo_caramel"], "")]
+    dark = f".o {{ fill: {k['dark_stroke']}; }}"
+    meta = []
+    for key, name, note in R4:
+        layers = sets[key]; has_dark = any(cls for _, _, cls in layers)
+        text = svg_classes(layers, f"Flan — {name}", dark if has_dark else None)
+        if key == "r4-pixel":   # the 16-unit grid, square, with no padding and crisp edges
+            text = text.replace('<svg xmlns="http://www.w3.org/2000/svg" viewBox="', '<svg xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" viewBox="', 1)
+            text = text[:text.index('viewBox="') + 9] + "0 0 16 16" + text[text.index('"', text.index('viewBox="') + 9):]
+        (out / f"{key}.svg").write_text(text)
+        if has_dark:
+            (out / f"{key}-dark.svg").write_text(text.replace("@media (prefers-color-scheme: dark) {", "").replace("; } }</style>", "; }</style>"))
+            (out / f"{key}-light.svg").write_text(text.replace(f"<style>@media (prefers-color-scheme: dark) {{ {dark} }}</style>\n", ""))
+        for px in (16, 32, 180):
+            subprocess.run(["rsvg-convert", "-w", str(px), "-h", str(px), str(out / f"{key}.svg"), "-o", str(out / f"{key}-{px}.png")], check=True)
+        meta.append({"id": key, "name": name, "note": note, "dark": has_dark})
+    (out / "variants-r4.json").write_text(json.dumps({"palette": k, "variants": meta}, indent=2, ensure_ascii=False) + "\n")
+    print("wrote", len(meta), "R4 marks to", out.relative_to(ROOT))
+
 if __name__ == "__main__":
+    out = ROOT / "docs/proposals/favicon/icons"
     if "--r1" in sys.argv:
         build()
     elif "--r2" in sys.argv:
-        build_r2(ROOT / "docs/proposals/favicon/icons")
+        build_r2(out)
+    elif "--r3" in sys.argv:
+        build_r3(out)
     else:
-        build_r3(ROOT / "docs/proposals/favicon/icons")
+        build_r4(out)
