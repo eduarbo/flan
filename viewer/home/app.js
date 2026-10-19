@@ -146,8 +146,13 @@ async function renderPreviews(){
     for(const [kind,w,h] of ART)if(w)jobs.push([kind,'spec',{width:w,height:h,ink}]);
   }
   for(const [kind,value,size] of jobs){
-    try{const url=await model.preview(kind,value,size);if(seq!==previewSeq)return;previews.get(value==='spec'?'spec:'+kind:`${kind}:${value}`).src=url;}catch(e){console.warn(kind,value,e);}
-    await new Promise(r=>setTimeout(r,0));
+    // one at a time, only while the model is still
+    await model.quiet();if(seq!==previewSeq)return;
+    try{
+      const url=await model.preview(kind,value,size);if(seq!==previewSeq){URL.revokeObjectURL(url);return;}
+      const img=previews.get(value==='spec'?'spec:'+kind:`${kind}:${value}`),old=img.getAttribute('src');img.src=url;
+      if(old?.startsWith('blob:'))setTimeout(()=>URL.revokeObjectURL(old),5000);
+    }catch(e){console.warn(kind,value,e);}
     if(kind==='frame'||kind==='size')for(const [img,key] of mirror)setSrc(img,previews.get(key).getAttribute('src'));
   }
   if(!$('browser').hidden)focusFrame(browsing.focus);

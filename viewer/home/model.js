@@ -59,8 +59,16 @@ function lights(scene){
 const surface=color=>new THREE.MeshStandardMaterial({color,roughness:.78,metalness:0});
 
 export function createModel({canvas,packs,onChange=()=>{}}){
-  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.setClearColor(0,0);
+  // A browser without hardware acceleration renders on the CPU: find out before creating the context,
+  // then skip antialiasing, render smaller and keep still until the reader moves the keyboard.
+  const software=(()=>{try{const g=document.createElement('canvas').getContext('webgl2'),i=g?.getExtension('WEBGL_debug_renderer_info'),
+    name=i?g.getParameter(i.UNMASKED_RENDERER_WEBGL):'';g?.getExtension('WEBGL_lose_context')?.loseContext();return /swiftshader|llvmpipe|software|basic render/i.test(name);}catch{return false;}})();
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:!software,alpha:true,powerPreference:'high-performance'});
+  renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.setClearColor(0,0);
+  // Resolution follows the frame rate: start sharp but not at full retina, step down while frames run
+  // long, up once when there is room.
+  const quality={max:Math.min(devicePixelRatio,software?.75:1.75),ratio:Math.min(devicePixelRatio,software?.6:1.5),min:software?.5:.75,samples:[],raised:false};
+  renderer.setPixelRatio(quality.ratio);
   const scene=new THREE.Scene();lights(scene);
   const camera=new THREE.PerspectiveCamera(20,1,10,6000);
   const controls=new OrbitControls(camera,canvas);
@@ -68,7 +76,7 @@ export function createModel({canvas,packs,onChange=()=>{}}){
   // vertical swipes keep scrolling the page; a horizontal drag turns the keyboard
   canvas.style.touchAction='pan-y';
   const turntable=new THREE.Group(),model=new THREE.Group();turntable.add(model);scene.add(turntable);
-  const sizes={},state={onscreen:true,look:null,theme:null,explode:0,target:EXPLODED,standby:!reduced.matches,interacting:false,idle:0,amp:0,phase:0,ready:false};
+  const sizes={},state={onscreen:true,look:null,theme:null,explode:0,target:EXPLODED,standby:!reduced.matches&&!software,interacting:false,idle:0,amp:0,phase:0,ready:false};
   let common,objects=[],tweens=[];
 
   const load=id=>sizes[id]??=fetchPack(packs[id]);
@@ -82,10 +90,12 @@ export function createModel({canvas,packs,onChange=()=>{}}){
       if(p.kind==='frame')mesh.material=finishes.roles.map(()=>surface('#ffffff'));
       model.add(mesh);objects.push(mesh);
     }
+    instance();
     await apply(look,theme,{animate:false});
     // the keyboard's own centre, fitted with its layers apart so the frame never jumps
     measure();resetView();
-    state.ready=true;state.explode=reduced.matches?EXPLODED:0;state.target=EXPLODED;place();
+    await renderer.compileAsync(scene,camera).catch(()=>{});
+    state.ready=true;state.explode=reduced.matches||software?EXPLODED:0;state.target=EXPLODED;place();
     // the other sizes in the background, so a size change is instant
     for(const id of Object.keys(packs))if(id!=='common')load(id).catch(()=>{});
     loop();
@@ -119,7 +129,22 @@ export function createModel({canvas,packs,onChange=()=>{}}){
     render();
   }
   let tweenStart=0;
-  function place(){for(const o of objects)o.position.y=o.userData.base[1]+o.userData.e*state.explode;}
+  function place(){for(const o of objects)o.position.y=o.userData.base[1]+o.userData.e*state.explode;syncInstances();}
+  // Switch housings, stems and sockets repeat once per key: one instanced draw per mesh and material
+  // instead of one per key. The per-key meshes stay as hidden proxies for fitting and previews.
+  const instanced=[];
+  function instance(){
+    const groups=new Map();
+    for(const o of objects)if(o.userData.kind==='fixed'){const id=o.userData.mesh;if(!groups.has(id))groups.set(id,[]);groups.get(id).push(o);}
+    for(const list of groups.values())if(list.length>=8){
+      const mesh=new THREE.InstancedMesh(list[0].geometry,list[0].material,list.length);mesh.frustumCulled=false;model.add(mesh);
+      for(const o of list)o.layers.set(1);
+      instanced.push({mesh,proxies:list});
+    }
+  }
+  function syncInstances(){
+    for(const {mesh,proxies} of instanced){let n=0;for(const o of proxies)if(o.visible){o.updateMatrix();mesh.setMatrixAt(n++,o.matrix);}mesh.count=n;mesh.instanceMatrix.needsUpdate=true;}
+  }
   function resize(){
     const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;
     renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();frame();render();
@@ -168,8 +193,22 @@ export function createModel({canvas,packs,onChange=()=>{}}){
     if(state.amp>.001){state.phase+=dt;turntable.rotation.y=state.amp*.12*Math.sin(state.phase*TAU/11);turntable.position.y=state.amp*1.6*Math.sin(state.phase*TAU/7);moving=true;}
     if(tweens.length){const t=Math.min(1,(now-tweenStart)/600),e=1-Math.pow(1-t,3);for(const x of tweens)x.m.color.copy(x.from).lerp(x.to,e);if(t>=1)tweens=[];moving=true;}
     if(controls.update())moving=true;
-    if(needs||moving){renderer.render(scene,camera);needs=false;}
-    if((moving||state.standby)&&state.onscreen)frameId=requestAnimationFrame(tick);
+    // the standby motion alone draws every other frame; the intro, a drag and colour changes draw them all
+    const full=needs||state.intro||state.interacting||tweens.length>0||Math.abs(state.target-state.explode)>.0005;
+    state.skip=!full&&moving&&!state.skip;
+    if((needs||moving)&&!state.skip){renderer.render(scene,camera);needs=false;pace(now,full);}
+    // a 'change' from controls.update() may already have scheduled the next frame
+    if((moving||state.standby)&&state.onscreen){if(!frameId)frameId=requestAnimationFrame(tick);}
+    else quality.last=0;
+  }
+  function pace(now,full){
+    const q=quality,gap=q.last?now-q.last:0;q.last=now;if(!gap||gap>250)return;
+    q.samples.push(full?gap:gap/2);if(q.samples.length<40)return;
+    const s=q.samples.sort((a,b)=>a-b),median=s[s.length>>1],best=s[2];q.samples=[];
+    if(median>Math.max(best*1.6,21)&&q.ratio>q.min)q.ratio=Math.max(q.min,q.ratio-.25);
+    else if(median<best*1.15&&!q.raised&&q.ratio<q.max){q.ratio=Math.min(q.max,q.ratio+.25);q.raised=true;}
+    else return;
+    renderer.setPixelRatio(q.ratio);resize();
   }
   controls.addEventListener('start',()=>{state.interacting=true;state.idle=0;render();});
   controls.addEventListener('end',()=>{state.interacting=false;state.idle=0;render();});
@@ -197,10 +236,9 @@ export function createModel({canvas,packs,onChange=()=>{}}){
     stack:{keep:p=>STACK.includes(p.group)||p.kind==='battery'||p.kind==='screen',view:[1,.42,1.25],explode:1},
     pcb:{keep:p=>p.group==='pcb',view:[0,1,.0001],up:[0,0,-1]},
   };
-  let previewRenderer;
+  let target=null;
   async function preview(kind,value,{width=160,height=110,ink='#20212a'}={}){
-    previewRenderer??=new THREE.WebGLRenderer({canvas:document.createElement('canvas'),antialias:true,alpha:true,preserveDrawingBuffer:true});
-    const r=previewRenderer,dpr=Math.min(devicePixelRatio,2),spec=KINDS[kind];r.setPixelRatio(dpr);r.setSize(width,height,false);r.outputColorSpace=THREE.SRGBColorSpace;r.setClearColor(0,0);
+    const dpr=Math.min(devicePixelRatio,2),spec=KINDS[kind],W=Math.round(width*dpr),H=Math.round(height*dpr);
     const look={...state.look,frame:{...state.look.frame}},theme=state.theme,s=new THREE.Scene();lights(s);
     if(kind==='size')look.size=value;else if(kind==='case')look.case=value;else if(kind==='keys')look.keys=value;else if(kind==='frame')look.frame.left=value;
     const pack=await sizes[look.size],picked=[],made=[],mat=c=>{const m=surface(c);made.push(m);return m;};
@@ -225,17 +263,20 @@ export function createModel({canvas,packs,onChange=()=>{}}){
     let half=0;for(const x of [focus.min.x,focus.max.x])for(const y of [focus.min.y,focus.max.y])for(const z of [focus.min.z,focus.max.z]){const v=new THREE.Vector3(x,y,z).sub(c);half=Math.max(half,Math.abs(v.dot(right))/aspect,Math.abs(v.dot(up)));}
     half*=spec.tight||1.04;
     Object.assign(cam,{left:-half*aspect,right:half*aspect,top:half,bottom:-half,near:1,far:2000});cam.updateProjectionMatrix();
-    r.render(s,cam);
-    let url;
-    if(!spec.annotate)url=r.domElement.toDataURL('image/png');
-    else{
+    target??=new THREE.WebGLRenderTarget(W,H,{samples:4,colorSpace:THREE.SRGBColorSpace});target.setSize(W,H);
+    renderer.setRenderTarget(target);renderer.clear();renderer.render(s,cam);renderer.setRenderTarget(null);
+    const px=new Uint8Array(W*H*4);await renderer.readRenderTargetPixelsAsync(target,0,0,W,H,px);
+    // rows bottom-up and colours premultiplied by the antialiased edges' alpha
+    const out=document.createElement('canvas');out.width=W;out.height=H;const ctx=out.getContext('2d'),img=ctx.createImageData(W,H);
+    for(let y=0;y<H;y++){const from=(H-1-y)*W*4,to=y*W*4;for(let i=0;i<W*4;i+=4){const a=px[from+i+3];
+      if(a){const k=255/a;img.data[to+i]=Math.min(255,px[from+i]*k);img.data[to+i+1]=Math.min(255,px[from+i+1]*k);img.data[to+i+2]=Math.min(255,px[from+i+2]*k);img.data[to+i+3]=a;}}}
+    ctx.putImageData(img,0,0);
+    if(spec.annotate){
       // real dimensions, projected from the model: lines and labels in the page's ink
-      const out=document.createElement('canvas');out.width=width*dpr;out.height=height*dpr;
-      const ctx=out.getContext('2d');ctx.drawImage(r.domElement,0,0);
-      const px=v=>{const n=new THREE.Vector3(...v).project(cam);return [(n.x+1)/2*out.width,(1-n.y)/2*out.height];};
+      const at=v=>{const n=new THREE.Vector3(...v).project(cam);return [(n.x+1)/2*out.width,(1-n.y)/2*out.height];};
       ctx.strokeStyle=ink;ctx.fillStyle=ink;ctx.lineWidth=dpr;ctx.font=`500 ${11*dpr}px "JetBrains Mono", ui-monospace, monospace`;ctx.textBaseline='middle';
       const tick=(a,b,label,offset)=>{
-        const [x0,y0]=px(a),[x1,y1]=px(b),dx=x1-x0,dy=y1-y0,l=Math.hypot(dx,dy),nx=-dy/l*4*dpr,ny=dx/l*4*dpr;
+        const [x0,y0]=at(a),[x1,y1]=at(b),dx=x1-x0,dy=y1-y0,l=Math.hypot(dx,dy),nx=-dy/l*4*dpr,ny=dx/l*4*dpr;
         ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);for(const [x,y] of [[x0,y0],[x1,y1]]){ctx.moveTo(x-nx,y-ny);ctx.lineTo(x+nx,y+ny);}ctx.stroke();
         ctx.textAlign=offset[0]>0?'left':offset[0]<0?'right':'center';ctx.fillText(label,(x0+x1)/2+offset[0]*dpr,(y0+y1)/2+offset[1]*dpr);
       };
@@ -248,17 +289,26 @@ export function createModel({canvas,packs,onChange=()=>{}}){
         const z=body.max.z+4;tick([a.x,y,z],[b.x,y,z],`${b.x-a.x} mm`,[0,10]);
         const x=body.max.x+4;tick([x,y,e.z],[x,y,b.z],`${b.z-e.z} mm`,[7,0]);
       }
-      url=out.toDataURL('image/png');
     }
     for(const m of made)m.dispose();
-    return url;
+    // encoded off the main thread
+    const blob=await new Promise(r=>out.toBlob(r,'image/png'));return URL.createObjectURL(blob);
   }
+  // previews wait for a quiet moment: not while the layers move fast, during a drag or a colour change
+  function quiet(){
+    return new Promise(function check(resolve){
+      // the intro's slow tail counts as still: its last few percent hardly move
+      const busy=state.interacting||tweens.length>0||Math.abs(state.target-state.explode)>.06;
+      if(busy)setTimeout(()=>check(resolve),120);else if(window.requestIdleCallback)requestIdleCallback(()=>resolve(),{timeout:400});else setTimeout(resolve,30);
+    });
+  }
+  if(new URLSearchParams(location.search).has('diagnostics'))window.flanHome={info:()=>({...renderer.info.render,ratio:quality.ratio,software})};
   return {
-    init,apply,resize,resetView,preview,load,
+    init,apply,resize,resetView,preview,load,quiet,
     get explode(){return state.target;},
     setExplode(v,{immediate=false}={}){state.target=THREE.MathUtils.clamp(v,0,1);state.idle=0;state.intro=false;if(immediate){state.explode=state.target;place();}render();},
     // false with reduced motion: the layers are already apart
-    intro(){if(reduced.matches)return false;state.intro=true;state.explode=0;state.target=EXPLODED;place();render();return true;},
+    intro(){if(reduced.matches||software)return false;state.intro=true;state.explode=0;state.target=EXPLODED;place();render();return true;},
     get standby(){return state.standby;},
     setStandby(on){state.standby=on;state.idle=on?3:0;render();},
   };
