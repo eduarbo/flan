@@ -1,13 +1,15 @@
 # Build status
 
+**Start here:** [first Flan36 build, purchasing sequence and blank acceptance record](first-build.md). For another size, use its own PCBs/firmware and the [per-size quantities](parts.md#quantities-by-size); test every key of that size.
+
 The current design is a routed digital prototype. [Gerber/drill packages and ordering instructions](electronics.md#order-the-two-pcbs) and [compiled UF2 firmware](firmware.md) are available. Both boards pass DRC, ERC and schematic parity with no disconnected nets. The [purchasing BOM](parts.md) specifies the supplied nice!view connector and exact Mill-Max controller sockets/pins. Printed fit, retention and electrical operation have not been physically qualified.
 
 The intended sequence is:
 
 1. Use the selected BOM and inspect the delivered components, dimensions and battery polarity.
-2. Print a Choc fit coupon and three KLP Lamé samples. Check stem fit, return and comfort before printing the full set.
+2. Print the three magnetic/thread coupons below and three KLP Lamé samples. Check stem fit, return and comfort before printing the full set.
 3. Order the matching left and right prototype PCB packages. Solder the small parts, then sockets/connectors using the heights below; check continuity and polarity before fitting either controller.
-4. Follow the [firmware guide](firmware.md) to flash each half and test all 36 keys, combinations, layers and key releases.
+4. Follow the [firmware guide](firmware.md) to flash each half and test all keys of the selected size, combinations, layers and key releases.
 5. Install the supported battery, controller, display and frames without loading the pouch or glass.
 6. Verify BLE, charging, sleep/wake and measured power use.
 
@@ -59,7 +61,7 @@ No item below has been physically accepted. Record the supplied part number, mea
 |---|---|
 | Actual parts | Selected Adafruit 1570 envelope, protection wrapping, lead exit and polarity; specified controller/display connector seating and installed heights |
 | Printed interfaces | Choc stem/return, screw engagement, captive base/frame magnet retention and paired polarity, frame peel/sliding and battery service without pouch or glass loading |
-| Bare assembly | Continuity, no power short, diode orientation and 36 unique switches without stuck/reversed keys |
+| Bare assembly | Continuity, no power short, diode orientation and all switches of the selected size without stuck/reversed keys |
 | Firmware and displays | Correct half images, four layers, simultaneous keys, both screens or selected single-screen option, reset and wake recovery |
 | Wireless operation | Pairing, reconnect after power cycle, sleep/wake and usable range in the complete case |
 | Charging and power | Correct cell charge limit and polarity, SW1 behavior, measured active/idle/sleep current and no abnormal heating |

@@ -5,6 +5,7 @@ import family from '../design/variants.json';
 import {t} from './i18n.js';
 export const pcbEditionIds=pcbOptions.editions.map(e=>e.id),pcbMaskIds=pcbOptions.masks.map(m=>m.id);
 export const variantIds=Object.keys(family.variants),defaultVariant=family.base;
+export const templateRef=ref=>ref==='K40'?'K01':ref[2]==='0'?`K${ref[1]}1`:ref[1]==='4'?`K0${ref[2]}`:ref;
 export const copy=x=>JSON.parse(JSON.stringify(x));
 export function polygon(hull,key,turn){const a=(-key.angle-turn)*Math.PI/180,c=Math.cos(a),s=Math.sin(a);return hull.map(([x,y])=>[key.x+x*c-y*s,key.y+x*s+y*c]);}
 export function gap(a,b){
@@ -39,8 +40,9 @@ export function check(config,c){
    if(Object.keys(record(config.keycaps[side])?config.keycaps[side]:{}).sort().join()!==keys.map(k=>k.ref).sort().join())return {errors:[t('cfg.keys')]};
    const f=config.frames[side];if(typeof f.style!=='string'||(!Object.hasOwn(c.frame_styles,f.style)&&!Object.hasOwn(c.retired_frame_styles||{},f.style))||!color(f.color))errors.push(t('cfg.frameColor'));
    const shapes=[];
-   for(const k of keys){
-     const x=config.keycaps[side][k.ref];if(!record(x))return {errors:[t('cfg.keycap')]};const v=variants.get(x.variant);
+   const effectiveKeys=family.variants[config.variant||defaultVariant].keys[side];
+   for(const k of effectiveKeys){
+     const x=config.keycaps[side][k.ref]||config.keycaps[side][templateRef(k.ref)];if(!record(x))return {errors:[t('cfg.keycap')]};const v=variants.get(x.variant);
      if(x&&'color' in x&&(typeof x.color!=='string'||!/^#[0-9a-f]{6}$/i.test(x.color)))return {errors:[t('cfg.keycapColor')]};
      if(!v||!v.rotations_deg.includes(x?.rotation_deg)||!v.qualified_reference_positions.length){errors.push(t('cfg.variantKey',{side:t('half.'+side),ref:k.ref}));continue;}
      const p=polygon(v.hull_xy_mm,k,x.rotation_deg);shapes.push([k.ref,p]);const d=gap(p,c.frame_envelopes[side]);minimum=Math.min(minimum,d);

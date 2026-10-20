@@ -34,6 +34,8 @@ Flan is a low-profile wireless split keyboard in development by [Eduardo Ruiz](h
 
 **Status: routed prototype; physical qualification pending.** Both Flan36 PCBs pass DRC, schematic parity and ERC with no unconnected items. Three [ZMK firmware builds](docs/firmware.md) cover two displays or a left-only display. [Prototype fabrication files and verification](docs/electronics.md) are included. Exact connectors, printed retention, BLE, charging and measured power still need hardware tests.
 
+**First build:** [Flan36 purchase sequence and test record](docs/first-build.md). **Introducing Flan:** [copy, images and verified claim boundaries](docs/launch.md).
+
 | Level | Solid | Color rim | Terrace |
 |---|---|---|---|
 | ![Level case in deep teal, its upper shell covering the switches](docs/images/revI-case-level.png) | ![Solid case in deep teal](docs/images/revI-case-solid.png) | ![Color rim case, red base and dark plate](docs/images/revI-case-rim.png) | ![Terrace case, sage base and dark plate](docs/images/revI-case-terrace.png) |

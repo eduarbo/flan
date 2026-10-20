@@ -6,7 +6,7 @@ const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(__dirname,'..'),shots=path.join(root,'build/home-check');fs.mkdirSync(shots,{recursive:true});
 (async()=>{
   const server=await serve(),base=server.base;
-  const browser=await chromium.launch({executablePath:process.env.FLAN36_BROWSER,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+  const browser=await chromium.launch({executablePath:process.env.FLAN36_BROWSER,args:process.env.FLAN36_BROWSER_ANGLE?['--use-angle='+process.env.FLAN36_BROWSER_ANGLE]:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
   const errors=[],out={};
   const watch=(p,name)=>{p.on('pageerror',e=>errors.push(name+': '+e.message));p.on('console',m=>{if(m.type()==='error')errors.push(name+': '+m.text());});p.on('requestfailed',r=>errors.push(name+': failed '+r.url()));};
   const page=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFactor:1});watch(page,'desktop');

@@ -11,7 +11,13 @@
 | Firmware and fabrication files | Digital candidate | Three compiled UF2 variants and source-bound Gerber/drill packages; complete purchasing list; physical acceptance pending |
 | Printing and assembly | Pending | Fit coupon, sample caps and actual component measurements |
 | Working keyboard | Pending | All keys, BLE, charging, sleep/wake and measured consumption |
-| Flan42, Flan46, Flan54 | Digital builds | [Family](variants.md): routed PCBs with editions, four case styles, ZMK firmware and viewer; keycap qualification and physical tests pending |
+| Flan42, Flan46, Flan54 | Digital builds | [Family](variants.md): routed PCBs with editions, four case styles, ZMK firmware and viewer; complete-configuration cap envelopes checked; physical tests pending |
+
+## Stability and first-build preparation · 2026-10-20
+
+Flan36 is the reference for the first physical build; all four sizes remain in the digital audit. The explorer now blocks geometry exports until the requested size has loaded, keeps PCB/firmware links on that size even after a network failure, and preserves the latest selection during overlapping loads. Configuration validation checks the added keys in Flan42/46/54. The home page now describes physical tests as pending and distinguishes nominal frame height and battery envelopes from measured fit.
+
+The [first-build guide](first-build.md) provides the order sequence, frozen file package and blank acceptance record. The [introduction kit](launch.md) provides English/Spanish copy and existing visual assets. Current evidence, reproduction and remaining limits are in the [stability audit](reviews/2026-10-20-stability.md). No parts have been ordered and no campaign has been sent.
 
 ## Explorer redesign and a consolidated repository
 

@@ -80,6 +80,7 @@
     <div class="sec-head"><h2 id="size-title" class="lab" data-t="size">Size</h2><span class="cur"><span id="size-current"></span><span id="size-layout" class="cur-note"></span></span></div>
     <div id="size-grid" class="size-grid" role="group" aria-label="Flan family sizes" data-t-label="size.grid"></div>
     <p id="size-note" class="micro" role="status"></p>
+    <p id="variant-status" class="micro" role="status" hidden></p>
   </section>
   <section id="panel-themes" class="sec" role="tabpanel" aria-labelledby="themes-title">
     <div class="sec-head"><h2 id="themes-title" class="lab" data-t="theme">Theme</h2><button class="tune" aria-expanded="false" aria-controls="tune-themes"><span id="theme-current" class="cur"></span><span class="act" data-label="Per half" data-t="act.themes">Per half</span></button></div>
@@ -135,6 +136,7 @@
     <div id="tune-pcb" class="tune-body" hidden><p id="pcb-variant-note" class="micro" hidden></p><h3 class="lab" data-t="pcb.silk">Back silkscreen</h3><div id="pcb-grid" class="preview-grid pcb-grid" role="group" aria-label="Silkscreen editions" data-t-label="pcb.grid"></div><section class="inline-section" aria-labelledby="pcb-mask-title"><h3 id="pcb-mask-title" class="lab" data-t="pcb.mask">Solder mask <small id="pcb-mask-current"></small></h3><div id="pcb-masks" class="swatch-row" role="group" aria-label="Solder mask colours" data-t-label="pcb.masks"></div><p id="pcb-mask-note" class="micro"></p></section><button id="pcb-underside" class="palette-reset" type="button" data-t="pcb.underside">Show the underside</button><p class="hint" data-t="pcb.hint">One edition covers both halves: each pattern is drawn across the pair, around the Flan signature. Only the back silkscreen changes; copper, mask, outline and drills are identical.</p><div class="downloads" id="pcb-downloads" aria-label="Gerber packages for this edition" data-t-label="pcb.downloads"></div><p id="pcb-status" class="micro" role="status"></p><a class="case-guide" href="https://github.com/eduarbo/flan/blob/main/docs/electronics.md#editions" data-t="pcb.order">How to order the PCBs ↗</a></div>
   </section>
   <section id="panel-files" aria-labelledby="files-title" hidden>
+    <p id="build-variant-status" class="micro" role="status" hidden></p>
     <h2 id="files-title" class="title" data-t="build">Build your keyboard</h2><p class="hint" data-t="build.hint">Everything for the keyboard you designed, in the order you will need it.</p>
     <ol class="steps" aria-label="Build steps" data-t-label="build.steps">
       <li class="step"><h3 data-t="build.parts">Buy the parts</h3><p id="build-parts" class="hint"></p><a class="go" href="https://github.com/eduarbo/flan/blob/main/docs/parts.md#quantities-by-size" target="_blank" rel="noopener" data-t="build.parts.link">Parts and buying guide ↗</a></li>

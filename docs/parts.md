@@ -6,6 +6,8 @@ This is the selected purchasing BOM for the routed revI prototype, an original d
 
 [Custom PCBs](electronics.md) · [Quantities by size](#quantities-by-size) · [Typeractive shopping list](#typeractive-shopping-list) · [Controllers](#controllers) · [Displays](#displays) · [Switches](#switches-and-hot-swap) · [Battery](#battery) · [Connectors](#removable-connectors) · [Small parts](#small-electrical-parts) · [Printed parts](#printed-parts)
 
+**First prototype:** follow the [Flan36 purchase sequence and test record](first-build.md). [Current supply check](#supply-check-2026-10-20).
+
 **Custom PCBs: 1 left + 1 right**, two layers, 1.6 mm FR4, nominal 1 oz copper. Download the [left fabrication ZIP](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/revI/fabrication/flan36-left-revI-prototype.zip) and [right fabrication ZIP](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/revI/fabrication/flan36-right-revI-prototype.zip), then follow the [ordering settings](electronics.md#order-the-two-pcbs). The supplied pin maps differ between halves; neither board is interchangeable with Piantor or the historical placement studies.
 
 ## Quantities by size
@@ -53,6 +55,19 @@ No additional display connector pack is needed. The selected controller connecto
 | [Olimex KAPTON-TAPE10MM](https://www.digikey.com/en/products/detail/olimex-ltd/KAPTON-TAPE10MM/19204468) | **1 roll** | Insulating tape, 10 mm × 30 m; DigiKey 1188-KAPTON-TAPE10MM-ND; $2.88 when checked |
 
 The 64-position strip replaces the unavailable 12-position version in the same 315 family and suffix. The PCM12SMTR is obsolete but was stocked when this list was checked; a different switch requires a footprint check. Prices and availability were checked on October 10, 2026 and can change at checkout. Lithium batteries require an eligible US ground service; do not select an air or prohibited postal service. Custom PCBs and printed parts are separate.
+
+## Supply check 2026-10-20
+
+Observed catalog availability is a snapshot, not a reservation or a delivery promise. Recheck the exact selection and final shipping/tax total at checkout.
+
+| Supplier / line | Observed result |
+|---|---|
+| Typeractive: nice!nano v2, nice!view, Pro Red, Choc sockets, diodes, white battery jack | All selected variants marked available in the supplier's product data. Two controllers, two displays, four packs each of switches/sockets/diodes and one jack pack: **US$128** before shipping/tax. Product links are above. |
+| DigiKey: Adafruit 1570, PCM12SMTR, TL3342F160QG/TR, 315-43-164-41-003000, 3320-0-00-15-00-00-03-0 | All five selected lines listed in stock. The PCM12SMTR remains obsolete; do not treat its remaining inventory as a production supply plan. Exact product links are above. |
+| [NBK SLH-M2-6](https://www.nbk1560.com/en-US/products/specialscrew/nedzicom/socketheadcapscrew/SLH/) | Exact low-head reference: Ø3.8 × 1.3 mm head, M2 × 6. Catalog pack of **50**, US$27.54; six used. Dispatch availability not verified. |
+| [NBK SSH-M2-4](https://www.nbk1560.com/en-US/products/specialscrew/nedzicom/socketheadcapscrew/SSH/) | Exact ultra-low-head reference: Ø4 × 1.1 mm head, M2 × 4. Catalog pack of **10**, US$15.91; four used. Dispatch availability not verified. |
+
+The two NBK packs are **US$43.45** before shipping/tax. An ordinary M2 socket-head screw is not an established substitute for these head envelopes. These are catalog selections, not placed orders. Feet, cable and tape retain their existing references; their October 10 prices are historical.
 
 ## Magnets from existing stock
 

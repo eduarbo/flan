@@ -3,7 +3,7 @@
 // visitor's choice, which both pages share (flan.lang). English is the default. Option names that the home
 // page shows as names (themes, frames and their palettes, case styles, keycap shapes) stay the same in both.
 const T={
-  en:{'page.title':'Flan Keyboard · Explore in 3D','lang':'Language','home':'Flan Keyboard home',
+  en:{'size.resources':'{name} geometry is loading or unavailable. Print and 3D exports wait for the matching files. Select the size again to retry.','page.title':'Flan Keyboard · Explore in 3D','lang':'Language','home':'Flan Keyboard home',
     'nav':'Viewer modes','mode.customize':'Design','mode.inspect':'Parts','mode.files':'Build','mode.about':'About','mode.detail':'Selected part',
     'history':'Design history','undo':'Undo design change','undo.title':'Undo design change (Ctrl/Cmd Z)','redo':'Redo design change','redo.title':'Redo design change (Ctrl/Cmd Shift Z)',
     'save.idle':'Saved','save.done':'Saved ✓','save.saving':'Saving…','save.warning':'Not saved','save.warning.title':'Open saved-data recovery',
@@ -158,7 +158,7 @@ const T={
     'cfg.keyClearance':'{side} {a}/{b}: insufficient keycap clearance.',
     'hex.label':'{name} HEX','hex.copy':'Copy {name} HEX','hex.copyText':'Copy','hex.invalid':'Use 3 or 6 hex digits, e.g. #34A87C.','hex.copied':'Copied.',
     'hex.selected':'Selected — copy with your keyboard or text menu.','hex.mixed':'Mixed'},
-  es:{'page.title':'Flan Keyboard · Explorar en 3D','lang':'Idioma','home':'Inicio de Flan Keyboard',
+  es:{'size.resources':'La geometría de {name} está cargando o no está disponible. La impresión y la exportación 3D esperan sus archivos. Vuelve a elegir el tamaño para reintentar.','page.title':'Flan Keyboard · Explorar en 3D','lang':'Idioma','home':'Inicio de Flan Keyboard',
     'nav':'Modos del explorador','mode.customize':'Diseño','mode.inspect':'Piezas','mode.files':'Construir','mode.about':'Acerca de','mode.detail':'Pieza elegida',
     'history':'Historial del diseño','undo':'Deshacer el cambio','undo.title':'Deshacer el cambio (Ctrl/Cmd Z)','redo':'Rehacer el cambio','redo.title':'Rehacer el cambio (Ctrl/Cmd Shift Z)',
     'save.idle':'Guardado','save.done':'Guardado ✓','save.saving':'Guardando…','save.warning':'Sin guardar','save.warning.title':'Abrir la recuperación de datos guardados',

@@ -94,7 +94,7 @@ The script expects the pinned ZMK checkout at `app/` and Zephyr at `zephyr/`, bo
 
 1. Verify battery connector polarity and inspect the assembled PCB for shorts before applying power. Keep the nice!nano **BOOST jumper open**: the selected small cells must not use its 500 mA charge mode.
 2. Connect a USB data cable, double-tap reset and copy the matching UF2 to the bootloader drive. Do each half separately.
-3. Power both halves, select profile 1 and pair **Flan36** with the computer. Verify all 36 keys and layer/thumb functions, including simultaneous presses and releases.
+3. Power both halves, select profile 1 and pair the selected **Flan** size with the computer. Verify all 36/42/46/54 keys for that size and layer/thumb functions, including simultaneous presses and releases. Keep the [first-build record](first-build.md).
 4. Check both displays, reset recovery, BLE reconnection, sleep/wake and measured current with the final assembled case. Repeat wake testing with both displays installed.
 5. For charging, SW1 must connect the cell. With USB attached, opening SW1 disconnects the cell from charging but does not necessarily turn off the controller. Confirm the actual pack's permitted charge current before connecting it.
 

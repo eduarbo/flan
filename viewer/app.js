@@ -46,6 +46,14 @@ const family=data.variants||{},baseVariant='flan36',variantLoads=new Map();
 const variantData=(()=>{try{return JSON.parse($('variant-data').textContent||'{}');}catch{return {};}})();
 const variantDir=id=>id===baseVariant?'revI':id,builtVariant=id=>id===baseVariant||Boolean(family[id]?.built&&family[id]?.asset);
 const shownVariant=config=>config.variant===baseVariant||family[config.variant]?.loaded?config.variant:baseVariant;
+let printBusy=false,glbBusy=false;
+function syncBuildAvailability(){
+  const ready=shownVariant(configuration)===configuration.variant;
+  $('print-kit').disabled=printBusy||!ready;$('glb').disabled=glbBusy||!ready;
+  for(const id of ['variant-status','build-variant-status']){
+    $(id).hidden=ready;$(id).textContent=ready?'':t('size.resources',{name:family[configuration.variant]?.title||configuration.variant});
+  }
+}
 // A variant's render meshes come from its exact STL files: CAD (x, y, z) -> viewer (x, z, -y), creased at 45°
 // like the scene builder's normals.
 function stlGeometry(bytes){
@@ -437,13 +445,15 @@ for(const id of ['print-half','print-scope'])for(const button of $(id).children)
 // The offline copy can't reach them; its kit lists them instead.
 const keycapLoads=new Map(),gunzip=bytes=>new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer().then(b=>new Uint8Array(b));
 const keycapStl=id=>{const asset=data.keycapAssets?.[id];if(!asset||$('print-data').textContent.trim())return Promise.resolve(null);if(!keycapLoads.has(id))keycapLoads.set(id,printLoader(asset,{textContent:''},gunzip));return keycapLoads.get(id)().catch(()=>null);};
-$('print-kit').onclick=async()=>{const b=$('print-kit');b.disabled=true;try{const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;b.textContent=t('kit.loading');const base=await loadPrinting(),variant=shownVariant(selected),registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing},fasteners:family[variant].fasteners};
+$('print-kit').onclick=async()=>{const b=$('print-kit');printBusy=true;b.disabled=true;try{const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;b.textContent=t('kit.loading');await loadVariant(selected.variant);const base=await loadPrinting(),variant=selected.variant,registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing},fasteners:family[variant].fasteners};
   let keycaps=null;if(scope==='complete'){const plan=keycapPlan(selected,catalog,variant===baseVariant?[]:family[variant].added||[],half),ids=[...new Set(plan.groups.map(g=>g.variant))];keycaps={plan,stl:Object.fromEntries(await Promise.all(ids.map(async id=>[id,await keycapStl(id)])))};}
-  const {bytes,manifest}=await printKit(selected,registry,{half,scope,keycaps,title:variant===baseVariant?'Flan36':family[variant].title,progress:(i,n)=>b.textContent=t('kit.preparing',{i,n})});const url=URL.createObjectURL(new Blob([bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=`${variant===baseVariant?'Flan36':family[variant].title}-${manifest.half}-${manifest.scope}.zip`;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);say('print-status',manifest.keycaps?(manifest.keycaps.missing.length?'kit.doneCapsMissing':'kit.doneCaps'):'kit.done',{n:manifest.parts.length,caps:manifest.keycaps?.groups.reduce((n,g)=>n+g.count,0)});}catch(e){say('print-status','kit.failed',{error:e.message});}finally{b.disabled=false;b.textContent=t('kit.download');}};
+  const {bytes,manifest}=await printKit(selected,registry,{half,scope,keycaps,title:variant===baseVariant?'Flan36':family[variant].title,progress:(i,n)=>b.textContent=t('kit.preparing',{i,n})});const url=URL.createObjectURL(new Blob([bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=`${variant===baseVariant?'Flan36':family[variant].title}-${manifest.half}-${manifest.scope}.zip`;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);say('print-status',manifest.keycaps?(manifest.keycaps.missing.length?'kit.doneCapsMissing':'kit.doneCaps'):'kit.done',{n:manifest.parts.length,caps:manifest.keycaps?.groups.reduce((n,g)=>n+g.count,0)});}catch(e){say('print-status','kit.failed',{error:e.message});}finally{printBusy=false;syncBuildAvailability();b.textContent=t('kit.download');}};
 $('glb').onclick=async()=>{
-  const button=$('glb');button.disabled=true;setText(button,t('glb.preparing'));
+  const button=$('glb');glbBusy=true;button.disabled=true;setText(button,t('glb.preparing'));
   try{
-    const assembly=new THREE.Group();assembly.name=`Flan36 rev${data.revision} · nominal`;assembly.scale.setScalar(.001);
+    if(shownVariant(configuration)!==configuration.variant)throw Error(t('size.resources',{name:family[configuration.variant]?.title}));
+    const title=family[configuration.variant]?.title||'Flan36';
+    const assembly=new THREE.Group();assembly.name=`${title} rev${data.revision} · nominal`;assembly.scale.setScalar(.001);
     for(const object of objects){if(object.userData.installed===false)continue;const clone=object.clone();for(const child of [...clone.children])if(child.userData.silkscreen)clone.remove(child);clone.visible=true;clone.position.fromArray(object.userData.base);assembly.add(clone);}
     assembly.userData={configuration:copy(configuration),units:'metres',source:'https://github.com/eduarbo/flan',limitations:data.limits,
       attribution:'Flan36 / Eduardo Ruiz, original PCBs, case and CAD design; inspired by Piantor by beekeeb, keeping its key positions and angles (GPL-3.0); KLP Lame keycaps by braindefender (CC-BY-SA-4.0), unchanged meshes, placed and coloured. Choc models by keyswitch-kicad-library contributors (MIT); reset and power switch geometry by KiCad (CC-BY-SA-4.0 with library exception).',
@@ -453,10 +463,10 @@ $('glb').onclick=async()=>{
       keycap_source:'https://github.com/braindefender/KLP-Lame-Keycaps/tree/4a67a824232d3054c61599ea047c56a340faaba2'};
     const buffer=await new GLTFExporter().parseAsync(assembly,{binary:true,onlyVisible:true});
     const url=URL.createObjectURL(new Blob([buffer],{type:'model/gltf-binary'}));const link=document.createElement('a');
-    link.href=url;link.download=`Flan36-rev${data.revision}-assembled.glb`;link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
+    link.href=url;link.download=`${title}-rev${data.revision}-assembled.glb`;link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
     setText(button,t('glb.done'));
   }catch(error){setText(button,t('glb.failed'));console.error(error);}
-  finally{button.disabled=false;}
+  finally{glbBusy=false;syncBuildAvailability();}
 };
 const saveWarnings=new Map();
 function storageNotice(text,error,scope){if(error)saveWarnings.set(scope,text);else saveWarnings.delete(scope);$('save-warning').hidden=saveWarnings.size===0;$('save-warning').title=[...saveWarnings.values()].join(' ');if(scope==='configuration')saveState(error?'':'save.done',error?'error':'saved');message(text,error);}
@@ -521,9 +531,9 @@ for(const [id,v] of Object.entries(family)){
   const title=document.createElement('strong');title.textContent=v.title.replace(/^Flan/,'');const meta=document.createElement('span');
   button.append(title,meta);button.disabled=!builtVariant(id);
   button.onclick=async()=>{
-    if(shownVariant(configuration)===id)return;
+    if(configuration.variant===id&&shownVariant(configuration)===id)return;
     say('size-note','size.loading',{name:v.title});
-    try{await loadVariant(id);const c=copy(configuration);c.variant=id;applyConfiguration(c);fit();
+    try{const c=copy(configuration);c.variant=id;applyConfiguration(c);fit();
       if(id===baseVariant)say('size-note',null,'');else say('size-note','size.note',{name:v.title,added:v.added.join(', ')});}
     catch(e){say('size-note',null,e.message);}
   };
@@ -678,11 +688,12 @@ function labelPcb(){
 }
 labelPcb();onLanguage(labelPcb);
 function syncConfigurationUI(){
-  const size=shownVariant(configuration);$('size-current').textContent=family[size]?.title||'Flan36';
+  syncBuildAvailability();
+  const size=configuration.variant;$('size-current').textContent=family[size]?.title||'Flan36';
   for(const b of $('size-grid').children)b.setAttribute('aria-pressed',String(b.dataset.variant===size));
   const edition=silk.editions.find(e=>e.id===configuration.pcb_edition);
   $('pcb-current').textContent=editionName(edition);
-  const variant=shownVariant(configuration),flan36=variant===baseVariant,editions=flan36||Boolean(family[variant].silk);
+  const variant=configuration.variant,flan36=variant===baseVariant,editions=flan36||Boolean(edition.variants?.[variant]);
   for(const b of $('pcb-grid').children){b.setAttribute('aria-pressed',String(editions&&b.dataset.edition===edition.id));b.disabled=!editions;}
   $('pcb-variant-note').hidden=editions;$('pcb-variant-note').textContent=editions?'':t('pcb.variant',{name:family[variant].title});
   if(!flan36)$('pcb-current').textContent=family[variant].title+' · '+(editions?editionName(edition):t('pcb.signature'));

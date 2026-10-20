@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {zipSync,strToU8} from 'three/addons/libs/fflate.module.js';
 import {framePalette,finishes} from './finishes.js';
+import {templateRef} from './config.js';
+export {templateRef} from './config.js';
 const utf8=x=>strToU8(typeof x==='string'?x:JSON.stringify(x,null,2)+'\n');
 const decode=s=>s instanceof Uint8Array?s:Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 const xml=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
@@ -13,7 +15,6 @@ export function selectedParts(config,registry,half='both',scope='shells'){
 }
 // A larger size's added key copies its template: the same row of column 1 for the outer column, the same
 // column of row 0 for the number row, K01 for the corner (tools/freecad/build_variant_case.py).
-export const templateRef=ref=>ref==='K40'?'K01':ref[2]==='0'?`K${ref[1]}1`:ref[1]==='4'?`K0${ref[2]}`:ref;
 // Every keycap of the design: which KLP Lamé file, which color, where. Groups print together.
 export function keycapPlan(config,catalog,added=[],half='both'){
  const byId=new Map(catalog.variants.map(v=>[v.id,v])),keys=[],groups=new Map();

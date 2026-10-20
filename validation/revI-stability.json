@@ -1,0 +1,249 @@
+{
+  "schema": "flan-stability-1",
+  "date": "2026-10-20",
+  "baseline_commit": "541e2975942cbd2368f3de35701b0d5a6c9feab7",
+  "physical_acceptance": false,
+  "variants": [
+    "flan36",
+    "flan42",
+    "flan46",
+    "flan54"
+  ],
+  "first_build": "flan36",
+  "sources": [
+    {
+      "path": "viewer/app.js",
+      "sha256": "39b5f344b7eafcc8f3823af34f1a3df728e04a2e8781b3fc07d4367824662543"
+    },
+    {
+      "path": "viewer/config.js",
+      "sha256": "46dc6987ae44ff634811a32e283c33d1d0a9117c4134f504da4faa215d94116a"
+    },
+    {
+      "path": "viewer/printing.js",
+      "sha256": "1cfe55e87675491bda2f7f72a3371116e640a8e39f92bf95ad763c48a999a1da"
+    },
+    {
+      "path": "viewer/template.html",
+      "sha256": "aac94d6f46184bfb9a7302aa872e16744d16185c5f0c55f5e366f22dc1fc929f"
+    },
+    {
+      "path": "viewer/i18n.js",
+      "sha256": "dd1f0810cae2b49ac549442fc6d727091b17d056762ea5513a4aad5241ea310c"
+    },
+    {
+      "path": "viewer/home/app.js",
+      "sha256": "ed3260cc7c0a12f396fddf90c217d91c2a0f77b083836141a4a59ce0276c1655"
+    },
+    {
+      "path": "viewer/home/template.html",
+      "sha256": "e395a330fde44c0aea4150d76d55fa0a21b3b042361ec5d1309557412debb36b"
+    },
+    {
+      "path": "viewer/stability-check.cjs",
+      "sha256": "ae99595b04809501bc5ce0b9f008f8a5919e8814a4ad07af683da0ef7a6959c8"
+    },
+    {
+      "path": "viewer/home-check.cjs",
+      "sha256": "24593a6ed4c478fd772428bfcf5811adb1e351958c3c2d5b488fb2bf944a4365"
+    },
+    {
+      "path": "viewer/config-contract-check.cjs",
+      "sha256": "5e5595a5140942dafb62593cea146ee957d2a21442e47e79cb4189707a61f444"
+    },
+    {
+      "path": "tools/keycap_config.py",
+      "sha256": "01f97dc6c80c7d04e43fdae77f889a2efab738e2bef8ec1535962c4637f3670d"
+    },
+    {
+      "path": "tools/check_build_candidate.py",
+      "sha256": "8259b6900eae6c4ff519ed323ed3c01b785b6241e9acbb1325718498097b7f17"
+    },
+    {
+      "path": "tools/prepare_first_build.py",
+      "sha256": "a8051cd054dc61d7abd592da533f13a0e9a9f5ec97c753dc2bac2c4dc845aabb"
+    },
+    {
+      "path": "docs/explore/index.html",
+      "sha256": "47235568c0a2141db1f2936187a60a17ee7336be22fcaaa6eb4972de1465105f"
+    },
+    {
+      "path": "docs/explore/offline.html",
+      "sha256": "6acc82f7600c79d33daa434f39689277dd381537166d9e6aa0b42b9b1e80bd7d"
+    },
+    {
+      "path": "docs/index.html",
+      "sha256": "93642101c7e6ef49042b631f65d0456a0b7d02c103e6c9c0080f20454f1ac824"
+    }
+  ],
+  "configuration_contract": {
+    "fixture_count": 150,
+    "js_python_exact_parity": true,
+    "family_presets": 12,
+    "added_key_collision_rejected_in_js_and_python": true,
+    "fixed_legacy_solid": true,
+    "rejected_raw_preserved": true,
+    "serialized_concurrent_saves": true,
+    "recovery_before_replace": true,
+    "lock_and_quota_fallback": true,
+    "history_coalescing": true
+  },
+  "browser": {
+    "failed_variant_blocks_geometry_exports": true,
+    "pcb_and_firmware_match_requested_size": true,
+    "retry_succeeds": true,
+    "latest_size_wins": true,
+    "kits": {
+      "flan36": {
+        "file": "build/stability-check/Flan36-both-complete.zip",
+        "sha256": "e8369188cd21c1d23721080aee954e25ac8d4e8713e090e5908f51ce9d1fcb88",
+        "parts": 20,
+        "keycaps": 36
+      },
+      "flan54": {
+        "file": "build/stability-check/Flan54-both-complete.zip",
+        "sha256": "0b02cfdec954a21eb854901b69970a2d6a476bf3b3389178d2fac5834b74abbc",
+        "parts": 26,
+        "keycaps": 54
+      }
+    },
+    "glb": {
+      "file": "build/stability-check/Flan54-revI-assembled.glb",
+      "sha256": "a2ebbee0837d0498c90f883dd18fe560a9ed967b5cfca15b66aa9336400c99bc",
+      "variant": "flan54"
+    },
+    "uncaught_errors": [],
+    "physical_acceptance": false
+  },
+  "home": {
+    "desktop": true,
+    "phone_width": 390,
+    "tablet_width": 1024,
+    "shared_look": "flan54/terrace/talavera+gameboy",
+    "uncaught_errors": 0
+  },
+  "fresh_checks": {
+    "boards": 8,
+    "drc_violations": 0,
+    "erc_violations": 0,
+    "parity_issues": 0,
+    "unconnected_items": 0,
+    "firmware_variants": 12
+  },
+  "candidate": {
+    "physical_acceptance": false,
+    "variants": {
+      "flan36": {
+        "pcb_packages": {
+          "hardware/revI/fabrication/flan36-left-revI-prototype.zip": "3059989d66670d037612d859b66e01940c63b6ebc62f7301f475a38439078422",
+          "hardware/revI/fabrication/editions/flan36-left-revI-asanoha.zip": "7eb051e067fdd508f8e9932c7b200a4b8b7179a98b52e1809a7c1699963e800e",
+          "hardware/revI/fabrication/editions/flan36-left-revI-kikko.zip": "6ed5a93d8a5f8dd279cc1829d167c85ee81ef2b3d39a3ddc49c088371cc09575",
+          "hardware/revI/fabrication/editions/flan36-left-revI-sayagata.zip": "12322492b4bc1231b759cf5e4223cf3dbb96401de6c88d05b9e4742317e902db",
+          "hardware/revI/fabrication/editions/flan36-left-revI-seigaiha.zip": "6dacefafdf183b18ad33bc8f7a77ed7829ae3ef5e919988d96c821272da92d25",
+          "hardware/revI/fabrication/editions/flan36-left-revI-meandro.zip": "258a42e80b996b16f3e3e5172197e1a4c3c8e53868c2440c770a085ce1bcdf8d",
+          "hardware/revI/fabrication/editions/flan36-left-revI-vias.zip": "dcb313586d20a4b8fce5e347e146f0eb4dc68b24ecf287a8b22e2fe065a89e05",
+          "hardware/revI/fabrication/flan36-right-revI-prototype.zip": "ce1fce500f28335346de740b97dbc54346ce13cb9257498b26f62e742d5ee5ec",
+          "hardware/revI/fabrication/editions/flan36-right-revI-asanoha.zip": "3068d481f02a82341eefcaae18adb064d9ae2d7c3c0440168b3222d0ea5bf1b6",
+          "hardware/revI/fabrication/editions/flan36-right-revI-kikko.zip": "a3a8c059dc709bb74c6a57884de88c15ea914c49efe1d6494af4cae0df2a918a",
+          "hardware/revI/fabrication/editions/flan36-right-revI-sayagata.zip": "57d668b51a0e4b5b6a0b86b8986735152f4faadf5b7b5a2180fa8a513c783eb5",
+          "hardware/revI/fabrication/editions/flan36-right-revI-seigaiha.zip": "3fc02b882a3df8ab827cc2bde77584c48f4492e7b47bf02e7a1b719e99c7b4ac",
+          "hardware/revI/fabrication/editions/flan36-right-revI-meandro.zip": "c21bc604964e07016075558ef7e809ba7418162910afd9f8f43cd29420395e18",
+          "hardware/revI/fabrication/editions/flan36-right-revI-vias.zip": "85e55acc36b64fdb50f64d72b62a396199082425dcbdde8afee7bfe2071ac7fd"
+        },
+        "firmware": {
+          "firmware/uf2/flan36-left.uf2": "423de39b25680547805cf32f92f06b0c49147a9b7b7140bf6506f0f8c09d9abb",
+          "firmware/uf2/flan36-right.uf2": "82785921609bc8fca9fc8158ce7e1b28d04281f82fba81f9f5f78fcc4f192464",
+          "firmware/uf2/flan36-right-no-display.uf2": "08190e7f6c0f8218546162afb7bf8d74a1c7885ca3a7719095c0b02bde332bb1"
+        }
+      },
+      "flan42": {
+        "pcb_packages": {
+          "hardware/flan42/fabrication/flan42-left-prototype.zip": "64ca818b92e661447fc039c7c2e3a3b3d3c53e4c70467f44fa48a40a0ca47e36",
+          "hardware/flan42/fabrication/editions/flan42-left-asanoha.zip": "f2c7d0369b5d1a60b38c4d85bd777e1bdc6f29cf8a1981c48c0ad61954618b83",
+          "hardware/flan42/fabrication/editions/flan42-left-kikko.zip": "73fc0b122534cb3c66226037f885de9d4a22f56df0b740a41776f3ccc9d19cbf",
+          "hardware/flan42/fabrication/editions/flan42-left-sayagata.zip": "c850254d15d2550b88effec530c1c18771a60bbebce83fce2185cc419d9f7193",
+          "hardware/flan42/fabrication/editions/flan42-left-seigaiha.zip": "8232449f70912becef48d706022139153c3f55850b50f0a5729656c3c6d47423",
+          "hardware/flan42/fabrication/editions/flan42-left-meandro.zip": "f78ccd996832e0f3a5c5155e7e49f33bb7bb58e6294e6beccda2def0011cd2c8",
+          "hardware/flan42/fabrication/editions/flan42-left-vias.zip": "ee5ec27ff02b0ebe89cdd07862a2db2284e158ec2512a5020f398fc9fe355032",
+          "hardware/flan42/fabrication/flan42-right-prototype.zip": "0466bc1b49e3dc9eed9fb1fb360c10905232758825d0b58c97a350bc1fcc2a0d",
+          "hardware/flan42/fabrication/editions/flan42-right-asanoha.zip": "b54527ce2817de20085a9116f4f31de6ce489d5df1fd6bb9af637591604d22b6",
+          "hardware/flan42/fabrication/editions/flan42-right-kikko.zip": "12fae3731051237d78aed63e88f216ec85b05db3389ddc2d5cb68f70ac8f9ee0",
+          "hardware/flan42/fabrication/editions/flan42-right-sayagata.zip": "3f8a4f3c89fdd4a58c3465d6f062c88470b0183fa5c287d808d22f880cf9ef53",
+          "hardware/flan42/fabrication/editions/flan42-right-seigaiha.zip": "8a223ab78cb90cf64a8cfff238a701e39e31abbae07d58aa7d6e8a9e12a613cd",
+          "hardware/flan42/fabrication/editions/flan42-right-meandro.zip": "a4474f8d745ebd8705da3defa1afbba3f2b2479745bbb95f487ac37f567e31f7",
+          "hardware/flan42/fabrication/editions/flan42-right-vias.zip": "77a0aa5daa7456a41c85b6622316dcb34bab39a459b747e24d3d311c9bbdda68"
+        },
+        "firmware": {
+          "firmware/uf2/flan42-left.uf2": "a9215cc69a4f0f683a8902a6ce8b93460cb4bdfbeaf141afa5f62462a892fe28",
+          "firmware/uf2/flan42-right.uf2": "e6bb4e68af7347de5dd8682baf620e5df294ce638ebedee95fbd95c0de79abd7",
+          "firmware/uf2/flan42-right-no-display.uf2": "643dd39685779fa77c3dcc442322c6e9f1afbf0e2f7a99fa0ba761e0d28ee3f1"
+        }
+      },
+      "flan46": {
+        "pcb_packages": {
+          "hardware/flan46/fabrication/flan46-left-prototype.zip": "f4684b8d59bf2f227822d07aecfe28b111eced362d2aea544fd3d3b9f5035b4f",
+          "hardware/flan46/fabrication/editions/flan46-left-asanoha.zip": "865ebbf831466ede93355cf43cb7219d1f5d296e9016853177b794c701e85e74",
+          "hardware/flan46/fabrication/editions/flan46-left-kikko.zip": "8caf92e17a37652a388480b51f31b0b0ed7bd469452d6b5c0adcf9b92f9ab2e7",
+          "hardware/flan46/fabrication/editions/flan46-left-sayagata.zip": "78e7b737394c9375bfd1ec11e10f7aa059b59deff2f1bed7ca7a616e14f01ead",
+          "hardware/flan46/fabrication/editions/flan46-left-seigaiha.zip": "58f2f3eef650176f843f24d4b2ab0fc9a24adc993c464b2deb0fe7b937b69bf0",
+          "hardware/flan46/fabrication/editions/flan46-left-meandro.zip": "374f02249cd0e459a2ead97b7758535af9b0ca51378c72736a374af9eaec91d4",
+          "hardware/flan46/fabrication/editions/flan46-left-vias.zip": "e8a87c28ed73ab75d3a031cec590145d905a81bac40da9e295f961971dd543aa",
+          "hardware/flan46/fabrication/flan46-right-prototype.zip": "e41ddb23b723e5aa7f7b5111d5f682f23fc5b21ebd7853f0b43a8fcb968a30f1",
+          "hardware/flan46/fabrication/editions/flan46-right-asanoha.zip": "d954c064b2e8f8380e7dd51d7c3676d6fa40bf071a8bcae45f9406495a366d86",
+          "hardware/flan46/fabrication/editions/flan46-right-kikko.zip": "0cdf0002ba24f95b991e439923a52f4d54d234cb66192be5f568387b2e273f48",
+          "hardware/flan46/fabrication/editions/flan46-right-sayagata.zip": "ed0d8c8d061ac2ae292681e5f73a5e0518a00592da8c5252fd34af52cb23eeb8",
+          "hardware/flan46/fabrication/editions/flan46-right-seigaiha.zip": "f4d6a8607b2989b50f8a2dbf41870b2273cd95b1bf3e2c1a0b37f8b89a40fd19",
+          "hardware/flan46/fabrication/editions/flan46-right-meandro.zip": "3fa84d4129282d7be5a20196c9f72acc485ac474e013bb6bcfb6e1faf443f5aa",
+          "hardware/flan46/fabrication/editions/flan46-right-vias.zip": "052627314aad7905cc01854ace8800415b9e69dd4dc24f2814b30ee12188cf42"
+        },
+        "firmware": {
+          "firmware/uf2/flan46-left.uf2": "4e15ccfe0ebe13df899cf508f3cbfddb103d0febb78dc26ad1d05893feda443a",
+          "firmware/uf2/flan46-right.uf2": "32dcce1c2875ce880ebd4ec46070dd18ce97e19b4a7eee6d71fda6ada884452e",
+          "firmware/uf2/flan46-right-no-display.uf2": "a07e6ac341e7fd6466802cba917b63d1019c62340694e196e85848acc75c0c84"
+        }
+      },
+      "flan54": {
+        "pcb_packages": {
+          "hardware/flan54/fabrication/flan54-left-prototype.zip": "a2c13c24c15ab140205ab8ef497bcb85e3d705b1fecb4cd11914dc6c26d7a320",
+          "hardware/flan54/fabrication/editions/flan54-left-asanoha.zip": "9c5c461eae40d6c9cd531a500b6f228f6807ac46263a43e6b5fc44fe88227a12",
+          "hardware/flan54/fabrication/editions/flan54-left-kikko.zip": "42a34c116f78d697d97c1b62e2558e2ddafc328d79f16b7eb02f03ddab1754c2",
+          "hardware/flan54/fabrication/editions/flan54-left-sayagata.zip": "103fb6b7176d40c5b33161165c18af010b6382bc0dc0dab9af37e79ff052f2d5",
+          "hardware/flan54/fabrication/editions/flan54-left-seigaiha.zip": "d2fb13d67ecdb456cfa9d4aab693f58e0d6458d0206c506345c1aa6f4ffe4d50",
+          "hardware/flan54/fabrication/editions/flan54-left-meandro.zip": "022aec1140a418a832e834f9a5e6e1cb656ba126fe27e32c28ae6c05dc9c640a",
+          "hardware/flan54/fabrication/editions/flan54-left-vias.zip": "9b10733390e6a79db5e1557d454b90278a5a7db3d586cf0e7b7242e0c66a61a1",
+          "hardware/flan54/fabrication/flan54-right-prototype.zip": "336898ceac3a6bfda21605ea346a9e2ac90fdad8f8c5942e4eab2b5266fd7930",
+          "hardware/flan54/fabrication/editions/flan54-right-asanoha.zip": "67c7ebd58e56d628f387ea086d0f908e89143f6544122bc6725081756d016087",
+          "hardware/flan54/fabrication/editions/flan54-right-kikko.zip": "b08f254f273fc2e30e26881556101f4b4c30a5af1b82cf85d6b9f1137493f546",
+          "hardware/flan54/fabrication/editions/flan54-right-sayagata.zip": "c5de4179df795d6dbbff45d7d64a0e7eea897697898540ae25db9cb2b4457763",
+          "hardware/flan54/fabrication/editions/flan54-right-seigaiha.zip": "29393ac6aa720b3c77066aef8022072b55ca1f781b0dca9eeee662f2903f161c",
+          "hardware/flan54/fabrication/editions/flan54-right-meandro.zip": "d2804d3fccc244413943dfe49e851a1eaa74680736ac6297244c2ddc9a370a48",
+          "hardware/flan54/fabrication/editions/flan54-right-vias.zip": "02bafcc2b80ebcd1a04c153c1fae472ff60e80b9d3814a834504f47faae6ec54"
+        },
+        "firmware": {
+          "firmware/uf2/flan54-left.uf2": "5c7ea78fdb67d07f6a7b68ebb919745967c6106ae35c551637eb5e94040707f3",
+          "firmware/uf2/flan54-right.uf2": "921a69dbcd6fdd7db19dcd81118f020cdb5ed8b16fccb1c9c542b18a5de00f47",
+          "firmware/uf2/flan54-right-no-display.uf2": "6910b0c4da0df6daebdf25769d8108bf2ec6bc21c5c65d47954fce3eb2de88d0"
+        }
+      }
+    },
+    "mechanical": {
+      "native_sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399",
+      "revI_exports": 448,
+      "generation_tools_changed_since_export": [
+        "tools/keycap_config.py"
+      ],
+      "verification": "Current files match recorded CAD checks; no new physical or CAD-kernel test"
+    }
+  },
+  "review": {
+    "lenses": [
+      "domain_constructive",
+      "adversarial_risk"
+    ],
+    "recommendation": "Bounded digital stabilization and first prototype preparation; no physical qualification claim",
+    "high_findings_resolved": [
+      "Wrong-size export during pending/failed variant loading"
+    ]
+  },
+  "reproduction": "docs/reviews/2026-10-20-stability.md"
+}

@@ -13,6 +13,9 @@ PCB_MASK_IDS=[m['id'] for m in PCB_OPTIONS['masks']]
 FAMILY=json.loads((ROOT/'design/variants.json').read_text())
 VARIANT_IDS=list(FAMILY['variants'])
 
+def template_ref(ref):
+    return 'K01' if ref=='K40' else f'K{ref[1]}1' if ref[2]=='0' else f'K0{ref[2]}' if ref[1]=='4' else ref
+
 def polygon(hull,key,turn):
     a=math.radians(-key['angle']-turn);c,s=math.cos(a),math.sin(a)
     return [[key['x']+x*c-y*s,key['y']+x*s+y*c] for x,y in hull]
@@ -87,8 +90,9 @@ def check(config,catalog=None):
         color=f.get('color','')
         if not valid_color(color):errors.append('Invalid frame color.')
         shapes[side]={}
-        for k in keys:
-            x=config['keycaps'][side][k['ref']]
+        effective_keys=FAMILY['variants'][config.get('variant',FAMILY['base'])]['keys'][side]
+        for k in effective_keys:
+            x=config['keycaps'][side].get(k['ref'],config['keycaps'][side].get(template_ref(k['ref'])))
             if not isinstance(x,dict):return ['Invalid keycap choice.'],None
             v=variants.get(x.get('variant')) if isinstance(x.get('variant'),str) else None;turn=x.get('rotation_deg')
             if 'color' in x and not valid_color(x['color']):return ['Invalid keycap color.'],None
