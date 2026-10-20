@@ -1,7 +1,7 @@
 {
   "schema": "flan36-readme-images-2",
-  "viewer_sha256": "34c8de66a0e1b055687bb083e4429a0366512d93c8e00c49dfe0a6da38d0e79f",
-  "home_sha256": "b078d0fcf21d45be68e64fe4f2c5ccd34fee14df68bf0e1cea43c6ce96a48258",
+  "viewer_sha256": "90ecd151742327ffc1d5ccde482f2bba220d643261205795d8f1bf3ed811d768",
+  "home_sha256": "ce24028776ad61e1245bd38f5feca8c0ba7b4e85054ba07bd085c6b90b377ae5",
   "capture_sha256": "5f7c8586e5fe2463573da40ee36ddcfee276f17b0ca42443958291b2b6c5b0ad",
   "renderer": "GPU",
   "note": "Rendered from the built site served like GitHub Pages; supersedes the image hashes in earlier delivery receipts.",
@@ -32,23 +32,23 @@
     },
     {
       "path": "docs/images/site-explorer.webp",
-      "sha256": "cfff08502ff00bc2fb4c33d1e371787eda1f9cdc08413c1a679ea43ff9fa29c8"
+      "sha256": "ffa4b8ee558df470b05f7f9c429cf6130d5e07b749ca0ac014c2786d965a5a8d"
     },
     {
       "path": "docs/images/revI-themes.png",
-      "sha256": "6cb65f4c795cf7682bda32f7a020bb727029aeaff14bfe9bec033a36216e0631"
+      "sha256": "944e612e9c50356ae71552656b62fb9e3bfbc8a1f9814e2b0478a26a5f894ce8"
     },
     {
       "path": "docs/images/revI-key-colors.png",
-      "sha256": "82cc5b4baa6fcaa3ab62f6590c22b8c4a33b5ef537ca37a6aebb7557770514cd"
+      "sha256": "db8fa7fe5d9ef7eb8ea6e7a0f2ccbc50a2bd87bb429befcc7ce34ee80ff7b5af"
     },
     {
       "path": "docs/images/site-home.webp",
-      "sha256": "5bce627ec7b76fe20e76588ceebe7fd6f770fe3ec8aa78fd717988e392157855"
+      "sha256": "2af5814daba69ae7505ff4e069cf44c1e18294456136a3f54ef2cdc794e08da2"
     },
     {
       "path": "docs/images/site-phone.webp",
-      "sha256": "03530fe0bf08d99fe49341785dee134966acfecfeca7a7ffc880d2dbc6462c19"
+      "sha256": "05f3e7282e6d0766aec155d19c1625b53652b931e49b7505fa1d8049a6229b0e"
     }
   ]
 }

@@ -10,7 +10,7 @@ Open **Design → Keycaps → Paint keys**. Choose **Both / Left / Right**, then
 
 Eight keycap palettes provide starting points with coordinated thumb accents and a whole-row Sunset option. None gives the pinky column a separate color. They change key colors only. **My palettes** saves the exact colors of all 36 keys, with JSON import/export for sharing or another device. **Design → Theme** applies a coordinated palette to the case, frame and keys. Selecting a keycap shape preset preserves its colors; imported JSON also retains valid per-key variants and rotations.
 
-Configuration JSON, GLB and the FreeCAD import/export macro retain individual key colors. STL has no color data: assign filament per key or paint in the slicer. The case/frame print kit does not include keycap toolpaths; use the unchanged KLP source meshes for those.
+Configuration JSON, GLB and the FreeCAD import/export macro retain individual key colors. STL has no color data: assign filament per key or paint in the slicer. The explorer's complete print kit carries the unchanged KLP source file of every keycap your design uses, once each, and `Keycaps/plan.csv`: which key gets which file and color. Its READ-ME groups them by file and color, ready to print in batches.
 
 ## KLP Lamé
 
@@ -83,7 +83,7 @@ The [new frame recipes](frames-extra.md) are editable native features. The [slim
 ## Save a configuration for FreeCAD
 
 1. In **Design**, choose keycap presets, frame styles and colors. Under **Battery**, select Adafruit 1570 or 301230. Previously imported per-key choices remain until explicitly replaced.
-2. Open **Files** and click **Save JSON** to download `Flan36-config.json`, or enter a design name first.
+2. Open **Build** and click **Save JSON** under **Keep your design** to download `Flan36-config.json`, or enter a design name first.
 3. Download and unzip the full repository. Open `mechanical/revI/Flan36.FCStd` in FreeCAD.
 4. Use **Macro → Macros → Execute** on `tools/freecad/Configure.FCMacro`. Keep the macro beside its companion files in the repository.
 5. Choose **Import viewer configuration**, select the JSON and use **Save As**.

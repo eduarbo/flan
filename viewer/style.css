@@ -354,6 +354,22 @@ details > :not(summary) { margin-top: 10px; }
 .part-label { display: flex; align-items: center; flex: 1; min-width: 0; padding: 8px 6px; font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
 #frame-install-options { padding: 16px; border-radius: 18px; background: var(--card); }
 
+/* Build: the way on from Design, then numbered steps */
+.build-cta { position: sticky; bottom: 14px; z-index: 3; flex: none; display: flex; align-items: center; justify-content: center; min-height: 52px; margin-top: 4px; padding: 0 22px;
+  background: var(--ink); color: var(--bg0); font-size: 15px; font-weight: 600; box-shadow: 0 10px 26px color-mix(in srgb, var(--ink) 28%, transparent), 0 0 0 6px color-mix(in srgb, var(--bg1) 80%, transparent); }
+.build-cta:hover { background: color-mix(in srgb, var(--ink) 86%, var(--accent)); }
+body:not([data-mode=customize]) .build-cta, body[data-detail=true] .build-cta { display: none; }
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; counter-reset: step; }
+.step { position: relative; display: flex; flex-direction: column; gap: 9px; padding: 16px 18px 18px 56px; border-radius: 18px; background: var(--card); counter-increment: step; }
+.step::before { content: counter(step); position: absolute; left: 16px; top: 14px; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent); color: var(--on); font: 600 13px var(--sans); }
+.step h3 { margin: 4px 0 0; font-size: 15.5px; font-weight: 600; }
+.step .hint { margin: 0; }
+.step .downloads a, .step .downloads button { min-height: 48px; padding: 8px 0; }
+.go { align-self: flex-start; color: var(--accent); font-size: 13.5px; font-weight: 600; text-decoration: none; min-height: 32px; display: inline-flex; align-items: center; }
+.go:hover { text-decoration: underline; text-underline-offset: 4px; }
+.keep-title { margin-top: 10px; }
+
 /* Files and About */
 #panel-files, #panel-about { display: flex; flex-direction: column; gap: 14px; }
 #panel-files > .hint { margin-top: -6px; }

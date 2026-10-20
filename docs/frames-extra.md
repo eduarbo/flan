@@ -41,7 +41,7 @@ R4 centered the complete display chain by +0.20 mm X on the left and −0.20 mm 
 
 The approved [R4 master](../design/proposals/frame-master-r4/master.json) owns palettes, circular arcs, Bézier curves and painter order. The [seam-only delta](../design/proposals/display-seam-r1/master.json) updates the opening and uniform screen bezel. The [native builder](../tools/freecad/approved_frames.py) chooses the recorded master for each document and checks each material's top face on both halves, closed volumes, separation and thickness domains. No artwork is traced or clipped to an older support mask.
 
-Download **Files → Print kit** for registered multipart 3MF and STL files. STEP material bodies and the editable [FreeCAD assembly](../mechanical/revI/Flan36.FCStd) share the same coordinates. These are co-print regions, not press-fit inserts. Assign compatible filament to each role, keeping the assembly registered. [Print workflow](themes-printing.md).
+Download the print kit from **Build → Print the parts** for registered multipart 3MF and STL files. STEP material bodies and the editable [FreeCAD assembly](../mechanical/revI/Flan36.FCStd) share the same coordinates. These are co-print regions, not press-fit inserts. Assign compatible filament to each role, keeping the assembly registered. [Print workflow](themes-printing.md).
 
 The 0.40 mm cover targets a standard 0.4 mm nozzle workflow. Thickness and digital collision checks do not prove sliced feature retention, bridging, strength or physical fit. Inspect the toolpaths and print a sample; the [current PCBs are routed](electronics.md), with physical qualification pending.
 

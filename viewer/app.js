@@ -4,7 +4,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 
 import {retiredFrames,retiredReplacementNames,copy,check,normalize,variantIds} from './config.js';
-import {printKit} from './printing.js';
+import {printKit,keycapPlan} from './printing.js';
 import {createAppearance,setColor,savedKey,applyTheme} from './appearance.js';
 import themeLibrary from '../design/themes.json';
 import {restoreConfiguration,createStore,recoveryPrefix} from './storage.js';
@@ -354,6 +354,8 @@ function leaveDetail(){
   if(previous){$('inspector').scrollTop=previous.scroll;setPanelOpen(previous.open);if(previous.opener?.isConnected&&previous.open)previous.opener.focus({preventScroll:true});}
 }
 $('panel-back').onclick=()=>explorer.clear();
+// the way on once the design is done: Build, pinned at the foot of Design
+$('go-build').onclick=()=>{openPanel('files',$('go-build'));refreshRecovery();$('inspector').scrollTop=0;$('files-title').focus?.({preventScroll:true});};
 function openPanel(id,opener=canvas){
   rememberPanelScroll();detailRef=null;detailReturn=null;explorer?.clear();
   if(['files','about','inspect'].includes(id))activeMode=id;else{activeMode='customize';activePanel=id;}
@@ -431,7 +433,13 @@ $('credits').onclick=()=>{$('licenses').showModal();$('licenses').querySelector(
 $('close-credits').onclick=()=>$('licenses').close();$('licenses').addEventListener('close',()=>$('credits').focus({preventScroll:true}));
 canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();$('error').hidden=false;$('error').textContent=t('msg.contextLost');});
 for(const id of ['print-half','print-scope'])for(const button of $(id).children)button.onclick=()=>{for(const option of $(id).children)option.setAttribute('aria-pressed',String(option===button));};
-$('print-kit').onclick=async()=>{const b=$('print-kit');b.disabled=true;try{const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;b.textContent=t('kit.loading');const base=await loadPrinting(),variant=shownVariant(selected),registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing}};const {bytes,manifest}=await printKit(selected,registry,{half,scope,progress:(i,n)=>b.textContent=t('kit.preparing',{i,n})});const url=URL.createObjectURL(new Blob([bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=`${variant===baseVariant?'Flan36':family[variant].title}-${manifest.half}-${manifest.scope}.zip`;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);say('print-status','kit.done',{n:manifest.parts.length});}catch(e){say('print-status','kit.failed',{error:e.message});}finally{b.disabled=false;b.textContent=t('kit.download');}};
+// The complete kit's keycaps: each KLP Lamé file the design uses, fetched once and checked against its hash.
+// The offline copy can't reach them; its kit lists them instead.
+const keycapLoads=new Map(),gunzip=bytes=>new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer().then(b=>new Uint8Array(b));
+const keycapStl=id=>{const asset=data.keycapAssets?.[id];if(!asset||$('print-data').textContent.trim())return Promise.resolve(null);if(!keycapLoads.has(id))keycapLoads.set(id,printLoader(asset,{textContent:''},gunzip));return keycapLoads.get(id)().catch(()=>null);};
+$('print-kit').onclick=async()=>{const b=$('print-kit');b.disabled=true;try{const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;b.textContent=t('kit.loading');const base=await loadPrinting(),variant=shownVariant(selected),registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing},fasteners:family[variant].fasteners};
+  let keycaps=null;if(scope==='complete'){const plan=keycapPlan(selected,catalog,variant===baseVariant?[]:family[variant].added||[],half),ids=[...new Set(plan.groups.map(g=>g.variant))];keycaps={plan,stl:Object.fromEntries(await Promise.all(ids.map(async id=>[id,await keycapStl(id)])))};}
+  const {bytes,manifest}=await printKit(selected,registry,{half,scope,keycaps,title:variant===baseVariant?'Flan36':family[variant].title,progress:(i,n)=>b.textContent=t('kit.preparing',{i,n})});const url=URL.createObjectURL(new Blob([bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=`${variant===baseVariant?'Flan36':family[variant].title}-${manifest.half}-${manifest.scope}.zip`;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);say('print-status',manifest.keycaps?(manifest.keycaps.missing.length?'kit.doneCapsMissing':'kit.doneCaps'):'kit.done',{n:manifest.parts.length,caps:manifest.keycaps?.groups.reduce((n,g)=>n+g.count,0)});}catch(e){say('print-status','kit.failed',{error:e.message});}finally{b.disabled=false;b.textContent=t('kit.download');}};
 $('glb').onclick=async()=>{
   const button=$('glb');button.disabled=true;setText(button,t('glb.preparing'));
   try{
@@ -683,6 +691,13 @@ function syncConfigurationUI(){
   paintThumbs();
   const packages=flan36?edition.packages:(editions&&edition.variants?.[variant])||family[variant].gerbers;
   $('pcb-downloads').replaceChildren(...['left','right'].map(side=>{const a=document.createElement('a');a.href=raw(packages[side]);const note=document.createElement('span');note.textContent=t('pcb.package',{edition:editionName(edition),mask:maskName(maskSpec()).toLowerCase()});a.append(t('pcb.'+side),note);return a;}));
+  // Build: the same Gerbers, and the parts and firmware of the chosen size
+  const sizeInfo=family[variant]||{title:'Flan36',keys_total:36},extra=Object.keys(family[variant]?.fasteners?.left||{}).length;
+  $('build-parts').textContent=t('build.parts.text',{size:sizeInfo.title,keys:sizeInfo.keys_total,packs:Math.ceil((sizeInfo.keys_total+4)/10),m6:6+2*extra});
+  $('build-pcb').textContent=t('build.pcb.text',{size:sizeInfo.title,edition:editions?editionName(edition):t('pcb.signature'),mask:maskName(maskSpec()).toLowerCase()});
+  $('build-pcb-downloads').replaceChildren(...[...$('pcb-downloads').children].map(a=>a.cloneNode(true)));
+  $('build-firmware').replaceChildren(...[['left','build.firmware.left'],['right','build.firmware.right'],['right-no-display','build.firmware.rightNoDisplay']].map(([file,key])=>{
+    const a=document.createElement('a');a.href=raw(`firmware/uf2/${variant}-${file}.uf2`);const note=document.createElement('span');note.textContent=t('build.firmware.sub',{size:sizeInfo.title});a.append(t(key)+' ↓',note);return a;}));
   showSilk();
   for(const b of $('battery-target').children)b.setAttribute('aria-pressed',String(b.dataset.side===batterySide));
   const batteries=(batterySide==='both'?['left','right']:[batterySide]).map(side=>configuration.batteries[side]);

@@ -76,20 +76,30 @@ for(const [id,v] of Object.entries(scene.variants||{}))if(v.printing){
 const thumb=id=>{const f=path.join(here,'thumbs',`size-${id}.webp`);return fs.existsSync(f)?'data:image/webp;base64,'+fs.readFileSync(f).toString('base64'):undefined;};
 const variants=Object.fromEntries(Object.entries(scene.variants||{}).map(([id,{printing,meshes,silkscreen,...rest}])=>
  [id,{...(variantAssets[id]?{...rest,asset:{url:`./assets/variant-${id}-${variantAssets[id].hash}.bin`,sha256:variantAssets[id].hash}}:rest),thumb:thumb(id)}]));
+// The KLP Lamé keycaps the complete print kit carries: every variant the three presets use, unchanged upstream
+// STLs, one deferred file each so a kit fetches only its own. The offline copy lists them instead (size limit).
+const keycapIds=[...new Set(Object.values(scene.presets).flatMap(p=>Object.values(p.keycaps).flatMap(keys=>Object.values(keys).map(k=>k.variant))))].sort();
+const keycapAssets={},keycapFiles=[];
+for(const id of keycapIds){
+ const v=scene.catalog.variants.find(v=>v.id===id),raw=fs.readFileSync(path.join(root,v.path));if(hash(v.path)!==v.sha256)throw Error(`Stale keycap: ${v.path}`);
+ const bytes=deferredBinary('keycap-'+id,raw),digest=crypto.createHash('sha256').update(bytes).digest('hex'),file=`docs/explore/assets/keycap-${id}-${digest}.bin`;
+ fs.writeFileSync(path.join(root,file),bytes);keycapFiles.push(file);keycapAssets[id]={url:`./assets/keycap-${id}-${digest}.bin`,sha256:digest,path:v.path,source_sha256:v.sha256};
+}
 // Only this build's deferred assets are published; earlier ones stay in Git history.
-const current=new Set([assetPath,silkPath,...Object.values(variantAssets).map(a=>a.file)].map(p=>path.basename(p)));
+const current=new Set([assetPath,silkPath,...Object.values(variantAssets).map(a=>a.file),...keycapFiles].map(p=>path.basename(p)));
 for(const f of fs.readdirSync(path.join(root,'docs/explore/assets')))
- if(/^(printing|silkscreen|variant-[a-z0-9]+)-[0-9a-f]{64}\.bin$/.test(f)&&!current.has(f))fs.rmSync(path.join(root,'docs/explore/assets',f));
+ if(/^(printing|silkscreen|variant-[a-z0-9]+|keycap-[a-z0-9_]+)-[0-9a-f]{64}\.bin$/.test(f)&&!current.has(f))fs.rmSync(path.join(root,'docs/explore/assets',f));
 const packedScene={...scene,geometries:unique,geometryAliases,printing:{url:`./assets/printing-${printHash}.bin`,sha256:printHash},
-  silkscreen:{...scene.silkscreen,textures:{url:`./assets/silkscreen-${silkHash}.bin`,sha256:silkHash}},variants};
+  silkscreen:{...scene.silkscreen,textures:{url:`./assets/silkscreen-${silkHash}.bin`,sha256:silkHash}},variants,keycapAssets};
 const packed=gzipSync(Buffer.from(JSON.stringify(packedScene)),{level:9}).toString('base64');
 // the colour mark, inline: the viewer's CSP loads no external images. Its outline follows the page's theme.
 const mark=fs.readFileSync(path.join(root,'docs/branding/flan/flan-mark-color.svg'),'utf8').replace(/<\?xml[^>]*>|<title>[^<]*<\/title>|<style>[^<]*<\/style>/g,'')
   .replace(/<svg[^>]*viewBox="([^"]+)"[^>]*>/,'<svg class="mark" viewBox="$1" aria-hidden="true">').trim();
-// the home page's typefaces, inline for the same reason (latin subsets, about 140 KB)
-const fonts=[['Fraunces','Fraunces-latin.woff2','300 500'],['Inter','Inter-latin.woff2','400 600'],['JetBrains Mono','JetBrainsMono-latin.woff2','400 500']]
-  .map(([family,file,weight])=>`@font-face{font-family:"${family}";src:url(data:font/woff2;base64,${fs.readFileSync(path.join(here,'home/fonts',file)).toString('base64')}) format("woff2");font-weight:${weight};font-display:swap}`).join('');
-function page(offline){return template.replace('/*__FONTS__*/',()=>fonts).replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(here,'style.css'),'utf8'))
+// the home page's typefaces (latin subsets, about 140 KB): online, the home's own files, already cached from it;
+// the offline copy carries them inline
+const fonts=offline=>[['Fraunces','Fraunces-latin.woff2','300 500'],['Inter','Inter-latin.woff2','400 600'],['JetBrains Mono','JetBrainsMono-latin.woff2','400 500']]
+  .map(([family,file,weight])=>`@font-face{font-family:"${family}";src:url(${offline?'data:font/woff2;base64,'+fs.readFileSync(path.join(here,'home/fonts',file)).toString('base64'):'../assets/fonts/'+file}) format("woff2");font-weight:${weight};font-display:swap}`).join('');
+function page(offline){return template.replace('/*__FONTS__*/',()=>fonts(offline)).replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(here,'style.css'),'utf8'))
  .replace('<!--__MARK__-->',()=>mark)
  .replace('<!--__LICENSES__-->',()=>credits+licenses)
  .replace('/*__DATA__*/',()=>packed)

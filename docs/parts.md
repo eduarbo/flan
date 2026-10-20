@@ -158,7 +158,7 @@ Put the male header's **short solder tails into the display PCB** and its long m
 
 | Part | Quantity | Files / options |
 |---|---:|---|
-| KLP Lamé keycaps | 36 | [Variant guide](customize.md); [38 source STLs](../keycaps/variants); original preset: 28 Normal + 2 Homing + 6 Thumb |
+| KLP Lamé keycaps | 36 | In the explorer's complete print kit, by your design; [variant guide](customize.md); [38 source STLs](../keycaps/variants); original preset: 28 Normal + 2 Homing + 6 Thumb |
 | Case bases and key plates / upper shells | 2 each | Level, Solid, Color rim or Terrace; [editable CAD, STEP and STL](cad.md) |
 | Display frames | 2 | Six selectable approved designs; 14.50 mm shared roof, separate color per half |
 | Battery locators and retainers | 2 each | Open-bottom locator and rigid cage; cell on the floor, cage feet captured under PCB |
