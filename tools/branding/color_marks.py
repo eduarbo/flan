@@ -4,7 +4,7 @@ top with its gloss, darker caramel running down the front, optional plate, and s
 favicons. Same geometry as the one-colour mark (tools/branding/flankey.iso_regions).
 
 R1 (--r1) writes design/proposals/logo-color-r1/; R2 (--r2), R3 (--r3) and R4 (default) write the
-favicon tester's icons to docs/proposals/favicon/icons/. python3 tools/branding/color_marks.py   (needs shapely; rsvg-convert)
+retired favicon tester's icons to build/favicon-proposals/icons/ (its page lives in Git history). python3 tools/branding/color_marks.py   (needs shapely; rsvg-convert)
 SPDX-License-Identifier: GPL-3.0-or-later
 """
 from pathlib import Path
@@ -352,7 +352,8 @@ def build_r4(out):
     print("wrote", len(meta), "R4 marks to", out.relative_to(ROOT))
 
 if __name__ == "__main__":
-    out = ROOT / "docs/proposals/favicon/icons"
+    out = ROOT / "build/favicon-proposals/icons"
+    out.mkdir(parents=True, exist_ok=True)
     if "--r1" in sys.argv:
         build()
     elif "--r2" in sys.argv:

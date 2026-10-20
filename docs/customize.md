@@ -1,20 +1,20 @@
 # Choose your keycaps and frames
 
-Open the **[3D configurator](https://eduarbo.github.io/flan/explore/)**. No account or paid software is required.
+Open the **[3D explorer](https://flankbd.com/explore/)**. No account or paid software is required. The usual choices sit in each **Design** section; its link (**Per half**, **Paint keys** or **Fine-tune**) opens the rest in place.
 
 ## Keycap colors
 
-![Keycap color editor using the actual KLP meshes](images/revI-key-colors.png)
+![Paint keys in the explorer: one key of the left half painted in the frame's accent](images/revI-key-colors.png)
 
-Open **Design → Keys** and use the inline **Colors** section. Choose **Both / Left / Right**, then the **All / Row / Column / Key** segmented control. Tap the key map to select a key or its group; pick a color to apply it immediately. Finger columns exclude thumbs. The **Thumbs** row colors all three thumb keys on the selected halves.
+Open **Design → Keycaps → Paint keys**. Choose **Both / Left / Right**, then **All / Row / Column / Key**. Tap the key map to select a key or its group; pick a color to apply it immediately. Finger columns exclude thumbs. The **Thumbs** row colors all three thumb keys on the selected halves.
 
-Eight keycap palettes provide starting points with coordinated thumb accents and a whole-row Sunset option. None gives the pinky column a separate color. They change key colors only. **My palettes** saves the exact colors of all 36 keys, with JSON import/export for sharing or another device. **Design → Colors** applies a coordinated palette to the case, frame and keys. Selecting a keycap shape preset preserves its colors; imported JSON also retains valid per-key variants and rotations.
+Eight keycap palettes provide starting points with coordinated thumb accents and a whole-row Sunset option. None gives the pinky column a separate color. They change key colors only. **My palettes** saves the exact colors of all 36 keys, with JSON import/export for sharing or another device. **Design → Theme** applies a coordinated palette to the case, frame and keys. Selecting a keycap shape preset preserves its colors; imported JSON also retains valid per-key variants and rotations.
 
 Configuration JSON, GLB and the FreeCAD import/export macro retain individual key colors. STL has no color data: assign filament per key or paint in the slicer. The case/frame print kit does not include keycap toolpaths; use the unchanged KLP source meshes for those.
 
 ## KLP Lamé
 
-Open **Design → Keys**, then click **Original**, **Sculpted Normal** or **Sculpted Saddle** to apply a complete set. The viewer exposes these curated presets; the previous advanced shape/rotation form has been removed. Existing valid per-key variants and rotations remain in saved or imported configuration JSON. Configuration changes still check the complete combination, including neighboring keycaps and the frame.
+Open **Design → Keycaps**, then click **Original**, **Sculpted** or **Saddle** to apply a complete set. The explorer exposes these curated presets; the previous advanced shape/rotation form has been removed. Existing valid per-key variants and rotations remain in saved or imported configuration JSON. Configuration changes still check the complete combination, including neighboring keycaps and the frame.
 
 | Choc-stem family | Files | Qualified reference positions |
 |---|---:|---|
@@ -34,9 +34,9 @@ The check uses unchanged STL convex envelopes with **at least 0.20 mm XY clearan
 
 For the lowest profile, start with the flat variants. At the common nominal seating datum, Choc-size Normal/Thumb tops reach **17.87 mm**, Saddle **17.78 mm**, and Tilted variants **21.34 mm**, before feet. Tilted caps therefore add about **3.5 mm** locally; their comfort and final seated height need a physical trial.
 
-Presets: **Original**, **Sculpted Normal** and **Sculpted Saddle**. The sculpted presets place the high edges away from the home row: top row **180°**, bottom row **0°**, on both halves. Their previews show the actual three-row side profile at the shared stem seating datum. They are starting points for comfort trials, not an ergonomic prescription.
+Presets: **Original**, **Sculpted** (Sculpted Normal) and **Saddle** (Sculpted Saddle). The sculpted presets place the high edges away from the home row: top row **180°**, bottom row **0°**, on both halves. Their previews show the actual three-row side profile at the shared stem seating datum. They are starting points for comfort trials, not an ergonomic prescription.
 
-Older saved configurations keep their explicit rotations. In **Design → Keys**, **Fix top/bottom slopes** turns only the reversed, unrotated-stem Tilted caps in the finger rows. Colors, custom cap variants, home keys, thumbs and other components stay as selected. Alternatively, select either corrected sculpted preset to replace the complete cap arrangement while retaining your colors. [Directional geometry and export checks](../validation/revI-cap-rows.json).
+Older saved configurations keep their explicit rotations. In **Design → Keycaps**, **Fix top/bottom slopes** turns only the reversed, unrotated-stem Tilted caps in the finger rows. Colors, custom cap variants, home keys, thumbs and other components stay as selected. Alternatively, select either corrected sculpted preset to replace the complete cap arrangement while retaining your colors. [Directional geometry and export checks](../validation/revI-cap-rows.json).
 
 ![Corrected Sculpted Normal, actual viewer side profile](images/revI-sculpted-normal.png)
 
@@ -44,7 +44,7 @@ Older saved configurations keep their explicit rotations. In **Design → Keys**
 
 ![Six approved native frame designs](images/revI-frame-gallery.png)
 
-Open **Design → Frame**, choose **Both halves / Left / Right**, then click a frame thumbnail to apply it immediately. **Colors & finish** stays visible below the previews, without a collapsible card. Each preview shows that actual mesh with its original palette. Switching shapes preserves customized colors. Use **Restore design colors** to apply the original palette. **Body** changes the shell color without changing the accent colors; **Restore design colors** restores the palette for the selected half or halves. You can also select a frame in the model, then use **Customize this part** on its detail page to open the Frame tab for that half. **Back** in the detail header returns to the previous panel.
+Open **Design → Frame** and click a frame thumbnail to apply it immediately. **Fine-tune** opens **Both halves / Left / Right** and **Colors & finish** in place. Each preview shows that actual mesh with its original palette. Switching shapes preserves customized colors. Use **Restore design colors** to apply the original palette. **Body** changes the shell color without changing the accent colors; **Restore design colors** restores the palette for the selected half or halves. You can also select a frame in the model, then use **Customize this part** on its detail page to open the Frame tab for that half. **Back** in the detail header returns to the previous panel.
 
 See the [six installed frame designs](frames-extra.md): Talavera, Game Boy, SNES, 2000s Phone, iPod and Hanafuda. All use solid colors, with Talavera as the default.
 
@@ -94,11 +94,11 @@ The JSON stores selections, not arbitrary FreeCAD shape edits. If you change wal
 
 KLP Lamé by braindefender, CC-BY-SA-4.0, pinned to commit `4a67a824232d3054c61599ea047c56a340faaba2`. Meshes are unchanged. [Upstream files and guidance](https://github.com/braindefender/KLP-Lame-Keycaps).
 
-Configurations are tagged revision I. Older revision H JSON is not silently converted: reselect its options in the current viewer and save a new configuration. Manual FCStd edits stay in their original file.
+Configurations are tagged revision I. Older revision H JSON is not silently converted: reselect its options in the current explorer and save a new configuration. Manual FCStd edits stay in their original file.
 
 ## Case geometry
 
-Open **Design → Case** and choose **Level / Solid / Color rim / Terrace**. Colors and finish controls sit directly below the previews. Use **Parts → Frame → Installed display frames** to omit or reinstall either printed display frame; the row eye is only a preview visibility toggle. Each half has its own `cases` entry, for example `"left": {"style": "rim", "cover": false}`. `cover: false` omits the printed display cover and its three frame magnets; it retains the display, supports and base magnets. JSON import validates both halves before changing anything. Older configurations without `cases` use Solid with covers. [Geometry, files and printing](cases.md).
+Open **Design → Case** and choose **Level / Solid / Color rim / Terrace**. **Per half** opens the halves and the colors and finish in place. Use **Parts → Frame → Installed display frames** to omit or reinstall either printed display frame; the row eye is only a preview visibility toggle. Each half has its own `cases` entry, for example `"left": {"style": "rim", "cover": false}`. `cover: false` omits the printed display cover and its three frame magnets; it retains the display, supports and base magnets. JSON import validates both halves before changing anything. Older configurations without `cases` use Solid with covers. [Geometry, files and printing](cases.md).
 
 ## Coordinated themes and print kits
 

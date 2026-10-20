@@ -2,8 +2,8 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "b078d0fcf21d45be68e64fe4f2c5ccd34fee14df68bf0e1cea43c6ce96a48258",
-    "bytes": 659017
+    "sha256": "ce24028776ad61e1245bd38f5feca8c0ba7b4e85054ba07bd085c6b90b377ae5",
+    "bytes": 659006
   },
   "packs": {
     "common": {
@@ -1583,7 +1583,7 @@
     },
     {
       "path": "viewer/home/template.html",
-      "sha256": "bc985fbf4d857040d012b1df51e8d6bea6d335d25355fa062519314f0e7331c7"
+      "sha256": "bea8614ffc2efc48b2ee0d03049addf2224bb187b4a8df8bf39382918e996083"
     },
     {
       "path": "design/themes.json",

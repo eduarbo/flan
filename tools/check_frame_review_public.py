@@ -15,7 +15,7 @@ def verify(commit,revision='R8',selected_only=False):
     def check(path):
         expected=subprocess.check_output(['git','show',commit+':'+path],cwd=ROOT)
         if path.startswith('docs/'):
-            url='https://eduarbo.github.io/flan/'+path.removeprefix('docs/')+'?rev='+commit
+            url='https://flankbd.com/'+path.removeprefix('docs/')+'?rev='+commit
         else:url='https://raw.githubusercontent.com/eduarbo/flan/'+commit+'/'+path
         request=urllib.request.Request(url,headers={'Cache-Control':'no-cache','User-Agent':'Flan36-public-readback'})
         with urllib.request.urlopen(request,timeout=45) as response:actual=response.read();status=response.status
@@ -31,7 +31,7 @@ def verify(commit,revision='R8',selected_only=False):
         assert 'evangelion' not in page.lower() and 'data-state="proposed"' not in page
         assert page.count('data-state="selected"')==len(selection['selected'])==6
         for name in ['evangelion.png','evangelion-card.png','evangelion-dimensioned.png','evangelion-preview.svg','evangelion.svg','native-review.png','native-top.png']:
-            url='https://eduarbo.github.io/flan/frame-proposals/r8/'+name+'?rev='+commit
+            url='https://flankbd.com/frame-proposals/r8/'+name+'?rev='+commit
             try:
                 with urllib.request.urlopen(url,timeout=30) as response:
                     raise AssertionError((name,'retired asset still public',response.status))
@@ -39,7 +39,7 @@ def verify(commit,revision='R8',selected_only=False):
                 assert error.code==404,(name,error.code)
             removed.append(name)
     result={'schema_version':1,'verified_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_commit':commit,
-        'gallery_url':'https://eduarbo.github.io/flan/frame-proposals/?rev='+commit,
+        'gallery_url':'https://flankbd.com/frame-proposals/?rev='+commit,
         'checked_assets':len(assets),'assets':assets,'artwork_status':({'R8':'SELECTED_COLLECTION_EVANGELION_PENDING','R7':'HANAFUDA_SELECTED_MECHA_AND_KUMIKO_PENDING'}.get(revision,'PROPOSALS_AWAITING_USER_APPROVAL')),'physical_acceptance':False}
     if selected_only:result.update(artwork_status='APPROVED_ONLY',removed_public_assets_404=removed)
     out=ROOT/('validation/revI-frame-selection-public.json' if selected_only else 'validation/revI-'+folder+'-public.json');out.write_text(json.dumps(result,indent=2)+'\n')

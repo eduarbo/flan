@@ -25,7 +25,7 @@ with zipfile.ZipFile(path) as archive:
         raw=archive.read(prefix+name)
         assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==digest,name
 print('Anonymous archive verified:',len(expected),'files',flush=True)
-pageurl='https://eduarbo.github.io/flan/'
+pageurl='https://flankbd.com/'
 html=urllib.request.urlopen(pageurl+'explore/?rev='+commit,timeout=60).read()
 assert hashlib.sha1(b'blob '+str(len(html)).encode()+b'\0'+html).hexdigest()==expected['docs/explore/index.html'],'Pages is not yet the published source revision'
 extra={}

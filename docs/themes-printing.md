@@ -1,10 +1,10 @@
 # Make it yours
 
-Open [the 3D explorer](https://eduarbo.github.io/flan/explore/), choose **Themes**, and pick a starting palette. Twenty-eight presets coordinate the case, frame and keycaps. Their previews use your selected shapes.
+Open [the 3D explorer](https://flankbd.com/explore/) and pick a swatch under **Design → Theme**. Twenty-eight presets coordinate the case, frame and keycaps; **Per half** applies one to a single half.
 
 All five finger columns share the same base color. Each thumb gets its own coordinated accent, mirrored between halves. In **Caps → Colors**, eight independent palettes follow the same approach: **Sunset rows** colors whole finger rows and **Arcade thumbs** puts its bright accents on the three thumbs. **Original** keeps matching green thumbs.
 
-![Theme gallery and coordinated rim/frame colors](images/revI-themes.png)
+![Design → Theme in the explorer, with Per half open](images/revI-themes.png)
 
 1. Choose **Both halves**, **Left** or **Right**.
 2. Pick a theme. It changes colors while preserving shapes, keycap geometry and installed covers.

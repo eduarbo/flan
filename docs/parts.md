@@ -1,12 +1,30 @@
 # Parts and buying guide
 
-**One complete 36-key split. Quantities cover both halves.**
+**One complete split keyboard. Quantities cover both halves of Flan36; [other sizes](#quantities-by-size) change only the per-key parts and a few screws.**
 
 This is the selected purchasing BOM for the routed revI prototype, an original design by Eduardo Ruiz. The display uses the connector supplied with nice!view; the controller sockets and pins are specified below. **Physical assembly has not been qualified:** supplied-part tolerances, printed fit, magnetic retention and electrical operation still need the [build checks](build.md).
 
-[Custom PCBs](electronics.md) · [Typeractive shopping list](#typeractive-shopping-list) · [Controllers](#controllers) · [Displays](#displays) · [Switches](#switches-and-hot-swap) · [Battery](#battery) · [Connectors](#removable-connectors) · [Small parts](#small-electrical-parts) · [Printed parts](#printed-parts)
+[Custom PCBs](electronics.md) · [Quantities by size](#quantities-by-size) · [Typeractive shopping list](#typeractive-shopping-list) · [Controllers](#controllers) · [Displays](#displays) · [Switches](#switches-and-hot-swap) · [Battery](#battery) · [Connectors](#removable-connectors) · [Small parts](#small-electrical-parts) · [Printed parts](#printed-parts)
 
 **Custom PCBs: 1 left + 1 right**, two layers, 1.6 mm FR4, nominal 1 oz copper. Download the [left fabrication ZIP](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/revI/fabrication/flan36-left-revI-prototype.zip) and [right fabrication ZIP](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/revI/fabrication/flan36-right-revI-prototype.zip), then follow the [ordering settings](electronics.md#order-the-two-pcbs). The supplied pin maps differ between halves; neither board is interchangeable with Piantor or the historical placement studies.
+
+## Quantities by size
+
+Everything not listed here is the same for every size: two controllers, two displays, two batteries, two power switches, two reset buttons, the controller connectors, magnets, feet, cable and tape. Packs of switches, sockets and diodes come in tens; each count keeps at least four spares.
+
+| | Flan36 | Flan42 | Flan46 | Flan54 |
+|---|:-:|:-:|:-:|:-:|
+| Keys per half | 3 × 5 + 3 | 3 × 6 + 3 | 4 × 5 + 3 | 4 × 6 + 3 |
+| Choc v1 switches | 36 · **4 packs** | 42 · **5 packs** | 46 · **5 packs** | 54 · **6 packs** |
+| Choc hot-swap sockets | 36 · **4 packs** | 42 · **5 packs** | 46 · **5 packs** | 54 · **6 packs** |
+| 1N4148W diodes | 36 · **4 packs** | 42 · **5 packs** | 46 · **5 packs** | 54 · **6 packs** |
+| KLP Lamé keycaps (printed) | 36 | 42 | 46 | 54 |
+| M2 × 6 screws | 6 | 8 | 8 | 12 |
+| M2 × 4 screws | 4 | 4 | 4 | 4 |
+| Printed spacers/washers | 6 | 8 | 8 | 12 |
+| PCB fabrication ZIPs | [left](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/revI/fabrication/flan36-left-revI-prototype.zip) · [right](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/revI/fabrication/flan36-right-revI-prototype.zip) | [left](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/flan42/fabrication/flan42-left-prototype.zip) · [right](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/flan42/fabrication/flan42-right-prototype.zip) | [left](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/flan46/fabrication/flan46-left-prototype.zip) · [right](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/flan46/fabrication/flan46-right-prototype.zip) | [left](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/flan54/fabrication/flan54-left-prototype.zip) · [right](https://raw.githubusercontent.com/eduarbo/flan/main/hardware/flan54/fabrication/flan54-right-prototype.zip) |
+
+Every key has its own diode. The added fasteners (H6 on Flan42, H7 on Flan46, H6–H8 on Flan54, per half) copy H1 or H2, so they take M2 × 6 screws and a printed washer. The other sizes are built digitally only; Flan36 is the reference for a first build. [The Flan family](variants.md)
 
 ## Typeractive shopping list
 
@@ -92,7 +110,7 @@ All 36 sockets are represented in the nominal assembly and registered to their P
 
 **Typeractive alternative: 301230, 110 mAh, 3 × 12 × 30 mm.** [Product and connector variants](https://typeractive.xyz/products/lithium-battery-110mah). The black PH connector version has shorter leads; the white version includes a mating wired jack. No cell-specific datasheet is linked on the listing.
 
-**Both profiles use the same case, PCB opening, open-bottom locator and cage.** The cell rests at **Z = 1.4 mm** on the case floor; there is no printed saddle beneath it. Select the battery in **Battery** in the sidebar in the viewer; configuration JSON and FreeCAD retain the choice per half.
+**Both profiles use the same case, PCB opening, open-bottom locator and cage.** The cell rests at **Z = 1.4 mm** on the case floor; there is no printed saddle beneath it. Select the battery under **Design → Battery** in the explorer; configuration JSON and FreeCAD retain the choice per half.
 
 | Profile | Nominal W × L × H | Aperture side gap | Gap below rigid cage roof |
 |---|---|---:|---:|
@@ -136,7 +154,7 @@ Put the male header's **short solder tails into the display PCB** and its long m
 
 ## Printed parts
 
-![Flan36 revI case CAD and KLP Lamé reference assembly](images/revI-assembled.png)
+![Flan36 in the SNES theme with its layers apart, rendered in the explorer](images/revI-assembled.png)
 
 | Part | Quantity | Files / options |
 |---|---:|---|

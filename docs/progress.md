@@ -13,9 +13,13 @@
 | Working keyboard | Pending | All keys, BLE, charging, sleep/wake and measured consumption |
 | Flan42, Flan46, Flan54 | Digital builds | [Family](variants.md): routed PCBs with editions, four case styles, ZMK firmware and viewer; keycap qualification and physical tests pending |
 
+## Explorer redesign and a consolidated repository
+
+On 2026-10-18 and 19 the [explorer](viewer.md) took the home page's look and became bilingual. Its spec art now draws dimensions between the edges they measure, at 1:1 on every screen. The Flan42, Flan46 and Flan54 viewer PCBs now have every added key's footprint drilled. The README and guide images come from the current site ([`capture-readme.cjs`](../viewer/capture-readme.cjs)). The [parts guide](parts.md) lists quantities for every size. Superseded proposal pages, the home configurator's old renders and revE–revH images left the published site; they remain in Git history.
+
 ## Home page and explorer address
 
-On 2026-10-18 the site root became the **Flan Keyboard** home: a live, simplified configurator of size, theme, case, keycaps and the six frames, with the layers easing apart and a slow standby motion. Its page colours follow the chosen theme. The full explorer moved to [`/explore/`](https://eduarbo.github.io/flan/explore/) and opens on the home's look from its address; the flan lockup returns home. See [the home page](viewer.md#the-home-page). The old `offline.html` address redirects.
+On 2026-10-18 the site root became the **Flan Keyboard** home: a live, simplified configurator of size, theme, case, keycaps and the six frames, with the layers easing apart and a slow standby motion. Its page colors follow the chosen theme. The full explorer moved to [`/explore/`](https://flankbd.com/explore/) and opens on the home's look from its address; the flan lockup returns home. See [the home page](viewer.md#the-home-page). The old `offline.html` address redirects.
 
 ## The Flan family: PCBs, cases, firmware and viewer
 

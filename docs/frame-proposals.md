@@ -1,6 +1,6 @@
 # Selected frames
 
-[Open the mobile gallery](https://eduarbo.github.io/flan/frame-proposals/).
+[Open the mobile gallery](https://flankbd.com/frame-proposals/).
 
 The collection contains only **Talavera, Game Boy, SNES, Phone, iPod and Hanafuda**. Their artwork and palettes remain unchanged. No new proposals await approval.
 

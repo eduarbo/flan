@@ -2,7 +2,7 @@
 
 Flan42, Flan46 and Flan54 have the same four styles, built from this case; see [their cases](variants.md#cases).
 
-[Open the 3D explorer](https://eduarbo.github.io/flan/explore/) → **Base** or **Plate** → choose a thumbnail. Apply a design to both halves or mix them.
+[Open the 3D explorer](https://flankbd.com/explore/) → **Design → Case** → choose a thumbnail. **Per half** applies a style to one half, so the halves can differ.
 
 ![Level case with flush glass and frame](images/revI-level.png)
 

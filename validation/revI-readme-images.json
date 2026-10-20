@@ -1,13 +1,54 @@
 {
-  "schema": "flan36-readme-images-1",
-  "viewer_sha256": "3e60a5941f61457eb83be26b1035f1a035de91cccefd6c2744baea41e099445d",
-  "capture_sha256": "a38901d6e78150ae02f0cd257042e88fae491a3ceab204c852dffd46ce940926",
-  "note": "Rendered from docs/offline.html with SwiftShader; supersedes the case and assembled image hashes in earlier delivery receipts.",
-  "images": {
-    "docs/images/revI-assembled.png": "5e41b9645e90d1d69b82d6094bb8116fe30995237c3919e91f62cc53ae447a7c",
-    "docs/images/revI-case-solid.png": "169d508d376c8629745b286272e779c128d8c9225183ab9f2868b32d5efdb075",
-    "docs/images/revI-case-rim.png": "0055aaf7cc1d6987cdad330a9a81194c8f97efec72770dd2671561c4849d7de0",
-    "docs/images/revI-case-terrace.png": "1f3f197cb626e5ecefe8f000d75db7794806533acfa7fc2bfb1b096873ab9d22",
-    "docs/images/revI-pcb-underside.png": "8e88c0302971f25217b3c9b2edae819cc9ae63047af8e29f173966d9fd2618a1"
-  }
+  "schema": "flan36-readme-images-2",
+  "viewer_sha256": "34c8de66a0e1b055687bb083e4429a0366512d93c8e00c49dfe0a6da38d0e79f",
+  "home_sha256": "b078d0fcf21d45be68e64fe4f2c5ccd34fee14df68bf0e1cea43c6ce96a48258",
+  "capture_sha256": "5f7c8586e5fe2463573da40ee36ddcfee276f17b0ca42443958291b2b6c5b0ad",
+  "renderer": "GPU",
+  "note": "Rendered from the built site served like GitHub Pages; supersedes the image hashes in earlier delivery receipts.",
+  "images": [
+    {
+      "path": "docs/images/revI-assembled.png",
+      "sha256": "fd898d61e0870a660e739601fded46762921d9f9ad96c96f42a3cac7dfb3a44e"
+    },
+    {
+      "path": "docs/images/revI-case-level.png",
+      "sha256": "483b4d8aaae9ceeac57795660f1fb95ffec44d4ce3349c15ed03e9e201d3f7ea"
+    },
+    {
+      "path": "docs/images/revI-case-solid.png",
+      "sha256": "80a10dca5ae4c0c79991b3df88945ce12daa7c55e4d5e7378daccadc6389648d"
+    },
+    {
+      "path": "docs/images/revI-case-rim.png",
+      "sha256": "7f347a363f7ac37846162d0c28fef12ae979af5b3687aa8146eb88516998f09e"
+    },
+    {
+      "path": "docs/images/revI-case-terrace.png",
+      "sha256": "ebd0d490419d74bb7c330bb631545ab933bb3af0f2dab81a68a486cc053bca38"
+    },
+    {
+      "path": "docs/images/revI-pcb-underside.png",
+      "sha256": "4faca14411d6586219651dca91c946b43c669a2cc21e28e8af64237cfb1ee70a"
+    },
+    {
+      "path": "docs/images/site-explorer.webp",
+      "sha256": "cfff08502ff00bc2fb4c33d1e371787eda1f9cdc08413c1a679ea43ff9fa29c8"
+    },
+    {
+      "path": "docs/images/revI-themes.png",
+      "sha256": "6cb65f4c795cf7682bda32f7a020bb727029aeaff14bfe9bec033a36216e0631"
+    },
+    {
+      "path": "docs/images/revI-key-colors.png",
+      "sha256": "82cc5b4baa6fcaa3ab62f6590c22b8c4a33b5ef537ca37a6aebb7557770514cd"
+    },
+    {
+      "path": "docs/images/site-home.webp",
+      "sha256": "5bce627ec7b76fe20e76588ceebe7fd6f770fe3ec8aa78fd717988e392157855"
+    },
+    {
+      "path": "docs/images/site-phone.webp",
+      "sha256": "03530fe0bf08d99fe49341785dee134966acfecfeca7a7ffc880d2dbc6462c19"
+    }
+  ]
 }

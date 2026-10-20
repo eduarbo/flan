@@ -107,7 +107,7 @@ ZMK firmware for every variant is in [`docs/firmware.md`](firmware.md#family-var
 
 ## In the viewer
 
-**Design → Case → Keyboard size** switches between the four sizes. A variant's case, PCB and silkscreen textures load on demand. Its added keys and fasteners appear only on the variants that have them; the added keys follow the key beside them. The print kit and the PCB tab's Gerber links follow the chosen size. [Viewer guide](viewer.md).
+**Design → Size** switches between the four sizes. A variant's case, PCB and silkscreen textures load on demand. Its added keys and fasteners appear only on the variants that have them; the added keys follow the key beside them. The print kit and the Gerber links under **Design → PCB** follow the chosen size. [Explorer guide](viewer.md).
 
 ## Still open
 

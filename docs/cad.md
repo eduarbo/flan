@@ -1,6 +1,6 @@
 # Editable CAD and 3D files
 
-**[Editing guide](freecad.md)** · **[3D configurator](https://eduarbo.github.io/flan/explore/)** · **[Configuration format and examples](customize.md)**
+**[Editing guide](freecad.md)** · **[3D explorer](https://flankbd.com/explore/)** · **[Configuration format and examples](customize.md)**
 
 The current mechanical source is [`mechanical/revI/Flan36.FCStd`](../mechanical/revI/Flan36.FCStd). It contains both halves, native sketches/operations, editable parameters and 36 original KLP meshes. Commercial modules use [nominal component models](../components/README.md); some connectors remain dimensional reserves. The matching revI KiCad studies use the chosen contour and internal battery/magnet clearances. The specified auxiliary/mounting footprints move, J1 uses a 2 mm side-entry PH footprint, and SW2 moves to the underside; all key transforms and nets are preserved.
 
@@ -127,7 +127,6 @@ The isolated [floor/Level installer](level-stack.md#reproduce) preserves its sou
 
 ```sh
 node viewer/keycolors-check.cjs
-node viewer/capture-customization.cjs
 node viewer/customize-check.cjs
 node viewer/hex-check.cjs
 node viewer/finishes-check.cjs
