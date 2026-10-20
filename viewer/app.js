@@ -354,7 +354,7 @@ function leaveDetail(){
   if(previous){$('inspector').scrollTop=previous.scroll;setPanelOpen(previous.open);if(previous.opener?.isConnected&&previous.open)previous.opener.focus({preventScroll:true});}
 }
 $('panel-back').onclick=()=>explorer.clear();
-// the way on once the design is done: Build, pinned at the foot of Design
+// the way on once the design is done: Build, at the end of Design
 $('go-build').onclick=()=>{openPanel('files',$('go-build'));refreshRecovery();$('inspector').scrollTop=0;$('files-title').focus?.({preventScroll:true});};
 function openPanel(id,opener=canvas){
   rememberPanelScroll();detailRef=null;detailReturn=null;explorer?.clear();

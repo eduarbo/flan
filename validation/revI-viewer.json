@@ -1492,7 +1492,7 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "7470867234796bd9c56bfb48e3b9be2933847b5f45a2205abc679adff6d1ecda"
+      "sha256": "554fa4398738b91658ed9286d127d3df7dda31d834b8e885002d616e83c652b4"
     },
     {
       "path": "viewer/i18n.js",
@@ -1556,7 +1556,7 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "634457e7e14bd00bb245835db49e4fd52d2e0f49a45f466ebf14c25b533d58fe"
+      "sha256": "654111faa80df8908135dac13580b48a3b40e7b42684f672a2fd272c7d6798b5"
     },
     {
       "path": "viewer/template.html",
@@ -1607,7 +1607,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "53f3c54748053aac29b11a06ca6c59486f89b258b6d2ed10bf35eaa8c6a24de9",
+  "viewer_sha256": "1b34a6ebe7ae2e3910ce724a966baba3e6fe89210491b4518f150f04354feb9b",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -1619,7 +1619,7 @@
     "cover_ahead_of_adjacent_cap_mm": 0
   },
   "offline": "docs/explore/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/explore/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.",
-  "offline_sha256": "80a3bc6555c854dd7b2a536ef9f784bb5e0122b6d59f512bbfa0951c914a6dea",
+  "offline_sha256": "efb424ff67bc5bca94bab5ee296115dddd9ca8281acef2f8198d2bc2c9005df9",
   "printing": {
     "path": "docs/explore/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
@@ -1657,8 +1657,8 @@
     ]
   },
   "geometry_aliases": 18,
-  "online_bytes": 53481500,
-  "offline_bytes": 87188359,
+  "online_bytes": 53481367,
+  "offline_bytes": 87188226,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

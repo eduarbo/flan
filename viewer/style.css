@@ -354,9 +354,9 @@ details > :not(summary) { margin-top: 10px; }
 .part-label { display: flex; align-items: center; flex: 1; min-width: 0; padding: 8px 6px; font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
 #frame-install-options { padding: 16px; border-radius: 18px; background: var(--card); }
 
-/* Build: the way on from Design, then numbered steps */
-.build-cta { position: sticky; bottom: 14px; z-index: 3; flex: none; display: flex; align-items: center; justify-content: center; min-height: 52px; margin-top: 4px; padding: 0 22px;
-  background: var(--ink); color: var(--bg0); font-size: 15px; font-weight: 600; box-shadow: 0 10px 26px color-mix(in srgb, var(--ink) 28%, transparent), 0 0 0 6px color-mix(in srgb, var(--bg1) 80%, transparent); }
+/* Build: the way on at the end of Design (in line, never over the options), then numbered steps */
+.build-cta { flex: none; display: flex; align-items: center; justify-content: center; min-height: 52px; margin-top: 4px; padding: 0 22px;
+  background: var(--ink); color: var(--bg0); font-size: 15px; font-weight: 600; }
 .build-cta:hover { background: color-mix(in srgb, var(--ink) 86%, var(--accent)); }
 body:not([data-mode=customize]) .build-cta, body[data-detail=true] .build-cta { display: none; }
 .steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; counter-reset: step; }
