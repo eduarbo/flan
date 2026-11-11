@@ -7,6 +7,13 @@ export const pcbEditionIds=pcbOptions.editions.map(e=>e.id),pcbMaskIds=pcbOption
 export const variantIds=Object.keys(family.variants),defaultVariant=family.base;
 export const templateRef=ref=>ref==='K40'?'K01':ref[2]==='0'?`K${ref[1]}1`:ref[1]==='4'?`K0${ref[2]}`:ref;
 export const copy=x=>JSON.parse(JSON.stringify(x));
+export const pcbEdition=(config,side)=>config.pcb_editions?.[side]??config.pcb_edition??pcbOptions.default_edition;
+export function setPcbEdition(config,sides,edition){
+ const result=copy(config),editions=Object.fromEntries(['left','right'].map(side=>[side,pcbEdition(config,side)]));
+ for(const side of sides)editions[side]=edition;
+ if(editions.left===editions.right){result.pcb_edition=edition;delete result.pcb_editions;}else result.pcb_editions=editions;
+ return result;
+}
 export function polygon(hull,key,turn){const a=(-key.angle-turn)*Math.PI/180,c=Math.cos(a),s=Math.sin(a);return hull.map(([x,y])=>[key.x+x*c-y*s,key.y+x*s+y*c]);}
 export function gap(a,b){
  const xs=p=>p.map(v=>v[0]),ys=p=>p.map(v=>v[1]);
@@ -31,6 +38,7 @@ export function check(config,c){
  if(Object.keys(record(config.batteries)?config.batteries:{}).sort().join()!=='left,right')return {errors:[t('cfg.batteries')]};
  if('variant' in config&&!variantIds.includes(config.variant))return {errors:[t('cfg.variant')]};
  if('pcb_edition' in config&&!pcbEditionIds.includes(config.pcb_edition))return {errors:[t('cfg.edition')]};
+ if('pcb_editions' in config&&(!record(config.pcb_editions)||Object.keys(config.pcb_editions).sort().join()!=='left,right'||Object.values(config.pcb_editions).some(id=>!pcbEditionIds.includes(id))))return {errors:[t('cfg.edition')]};
  if('pcb_mask' in config&&!pcbMaskIds.includes(config.pcb_mask))return {errors:[t('cfg.mask')]};
  if('cases' in config){if(Object.keys(record(config.cases)?config.cases:{}).sort().join()!=='left,right')return {errors:[t('cfg.cases')]};for(const choice of Object.values(config.cases))if(!record(choice)||typeof choice.style!=='string'||!Object.hasOwn(c.case_styles,choice.style)||typeof choice?.cover!=='boolean')return {errors:[t('cfg.case')]};}
  const color=v=>typeof v==='string'&&/^#[0-9a-f]{6}$/i.test(v);

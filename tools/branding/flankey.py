@@ -1,8 +1,8 @@
 """Tecla-flan marks: a low-profile keycap read as a flan. Filled geometry in a 100 × 100 box (y down).
 
 Curves are built from tangent arcs and smoothed with morphological closing, so every join
-between caramel and drip has a real fillet. Each variant takes a `small` flag that thickens
-strokes and drops a drip for the 6–10 mm back-silkscreen plate.
+between caramel and drip has a real fillet. The selected iso mark keeps its four drips
+at every scale; `small` thickens strokes for the back-silkscreen plate.
 """
 import math
 from shapely.geometry import LineString, Point, Polygon, box
@@ -10,6 +10,7 @@ from shapely.ops import unary_union
 from shapely import affinity
 
 Q = 32   # arc resolution
+ISO_DRIPS = [(-0.62, 1.15, 5.4), (-0.22, 0.85, 3.6), (0.30, 1.05, 6.2), (0.70, 0.8, 3.9)]
 
 def rounded(points, radii):
     """Closed polygon through `points` with a tangent arc of radius radii[i] at each corner."""
@@ -124,8 +125,7 @@ def linea(small=False):
     return unary_union(parts)
 
 def iso(small=False):
-    """A keycap in three-quarter view: caramel pooled on the top face, dripping down the
-    two front faces."""
+    """The selected mark: four canonical drips at every scale; small only thickens ink."""
     g = iso_regions(small)
     return unary_union([g["outline"], g["caramel"], g["front"]])
 
@@ -149,9 +149,7 @@ def iso_regions(small=False, H=8.6, top_half=7.2, top_r=2.6, bottom_half=9.0, bo
     fc_bot = proj(bottom_half - bottom_r + bottom_r * math.cos(math.radians(45)), bottom_half - bottom_r + bottom_r * math.sin(math.radians(45)), 0)
     # caramel: top face, a band below its front edges, and vertical drips on the front faces
     band = unary_union([top, affinity.translate(top, 0, band)])
-    drip_specs = drips or [(-0.62, 1.15, 5.4), (-0.22, 0.85, 3.6), (0.30, 1.05, 6.2), (0.70, 0.8, 3.9)]
-    if small and not drips:
-        drip_specs = [(-0.5, 1.4, 5.2), (0.42, 1.4, 5.8)]
+    drip_specs = drips or ISO_DRIPS
     tongues = []
     for t, r, depth in drip_specs:
         # a point along the front edges of the top face (t in -1..1, 0 = front corner)

@@ -10,6 +10,7 @@ LOGO = load_logo(KIT / "flan36-outline-black.svg")
 # largest free back-side rectangles on the routed revI boards (space.rects)
 PLATE = {"right": (82.65, 54.3, 105.05, 60.5), "left": (53.7, 54.1, 77.1, 60.5)}
 HAND = {"right": "RIGHT", "left": "LEFT"}
+# Typing hands, not screen positions: looking at B.SilkS mirrors each board.
 LOGO_GROW = 0.022   # the 5.5 mm logo's caramel line is ~0.13 mm; grow it to print reliably
 
 def plate(name):
@@ -38,12 +39,13 @@ FLAN_PLATE = {"right": (82.6, 54.3, 105.0, 60.5), "left": (53.7, 54.1, 77.1, 60.
 FLAN_CREDIT = {"right": (60.8, 59.1, 77.0, 62.9), "left": (86.7, 59.9, 99.3, 63.9)}
 FLAN_EM = 4.6          # wordmark em (mm): the mark is 5.5 mm tall, no hairline under 0.17 mm at wght 450
 FLAN_TEXT = {"w": 1.0, "h": 1.0, "t": 0.15}
-# "by", the eduarbo cube, "eduarbo": ink widths in KiCad's stroke font at 1.0 mm (kicad_text.py)
-CREDIT = {"by": 1.443, "by_left": 0.258, "name": "eduarbo", "name_w": 5.777, "name_left": 0.21,
-          "mark_h": 2.6, "mark_cut": 0.25, "gap": 0.75, "centre": -0.045}
+CREDIT_TEXT = {"w": 0.85, "h": 0.85, "t": 0.15}
+# Ink metrics from KiCad's stroke font at 0.85 mm (kicad_text.py).
+CREDIT = {"by": 1.250363, "by_left": 0.222203, "name": "eduarbo.com", "name_w": 7.929703, "name_left": 0.181176,
+          "mark_h": 2.6, "mark_cut": 0.25, "gap": 0.45, "centre": -0.039}
 
 def flan_plate(name, font_path):
-    """The Flan lockup, a rule and REV I / 2026 / RIGHT|LEFT, plus "by <cube> eduarbo" nearby.
+    """The Flan lockup/site and aligned revision column, plus "by <cube> eduarbo.com".
 
     Built in reading coordinates (as seen from below) and mirrored onto B.SilkS. Returns
     (shapes, KiCad text specs, cartouche zones)."""
@@ -56,8 +58,6 @@ def flan_plate(name, font_path):
     g = affinity.scale(g, FLAN_EM, FLAN_EM, origin=(0, 0))
     lw, lh = met["width_em"] * FLAN_EM, met["mark_em"] * FLAN_EM
     lines = ["REV I", "2026", HAND[name]]
-    pitch = 1.5
-    block_h = 1.16 + pitch * (len(lines) - 1)
     widest = 4.11                                  # "RIGHT" in KiCad's stroke font at 1.0 mm
     rule_gap = 0.9
     total = lw + rule_gap + 0.2 + rule_gap + widest
@@ -65,21 +65,29 @@ def flan_plate(name, font_path):
     # reading x -> board x: the reading left edge is the board's right edge
     rx = lambda r: x1 - r
     g = affinity.translate(g, left, cy - lh / 2)
+    site_y = y1 - 0.55
+    # Align actual ink, not text anchors: REV I starts at the logo's top; the
+    # hand label ends at the URL's bottom. Metrics come from kicad_text.py.
+    block_top, block_bottom = g.bounds[1], site_y + 0.464753
+    first_y, last_y = block_top + 0.624042, block_bottom - 0.532819
+    pitch = (last_y - first_y) / (len(lines) - 1)
     shapes = [affinity.scale(g, -1, 1, origin=(0, 0)).buffer(0)]
     shapes[0] = affinity.translate(shapes[0], x1, 0)
     rule_r = left + lw + rule_gap + 0.1
-    shapes.append(LineString([(rx(rule_r), cy - block_h / 2), (rx(rule_r), cy + block_h / 2)]).buffer(0.1, cap_style="flat"))
+    shapes.append(LineString([(rx(rule_r), block_top), (rx(rule_r), block_bottom)]).buffer(0.1, cap_style="flat"))
     tx = rx(rule_r + 0.1 + rule_gap)
-    texts = [{"id": f"{name}-{i}", "text": t, "x": tx, "y": cy - block_h / 2 + 0.62 + pitch * i, **FLAN_TEXT,
+    texts = [{"id": f"{name}-{i}", "text": t, "x": tx, "y": first_y + pitch * i, **FLAN_TEXT,
               "layer": "B", "mirror": True, "hj": "left"} for i, t in enumerate(lines)]
+    texts.append({"id": f"{name}-site", "text": "flankbd.com", "x": (x0 + x1) / 2 - 1.0, "y": site_y,
+                  "w": 0.85, "h": 0.85, "t": 0.15, "layer": "B", "mirror": True})
     credit, ctexts, czone = credit_line(name)
     shapes.append(credit)
     texts += ctexts
-    zones = [box(rx(left + total), cy - lh / 2, rx(left), cy + lh / 2), czone]
+    zones = [box(rx(left + total), cy - lh / 2, rx(left), y1), czone]
     return unary_union(shapes), texts, zones
 
 def credit_line(name):
-    """by <eduarbo cube> eduarbo, centred in FLAN_CREDIT and mirrored onto B.SilkS."""
+    """by <eduarbo cube> eduarbo.com on one line, mirrored onto B.SilkS."""
     from shapely.geometry import box
     from branding.eduarbo import mark
     c = CREDIT
@@ -92,8 +100,8 @@ def credit_line(name):
     rx = lambda r: x1 - r                          # reading x -> board x, as in flan_plate
     m_r = left + c["by"] + c["gap"]
     cube = affinity.translate(affinity.scale(cube, -1, 1, origin=(0, 0)), rx(m_r), cy - c["mark_h"] / 2)
-    texts = [{"id": f"{name}-by", "text": "by", "x": rx(left - c["by_left"]), "y": cy - c["centre"], **FLAN_TEXT,
+    texts = [{"id": f"{name}-by", "text": "by", "x": rx(left - c["by_left"]), "y": cy - c["centre"], **CREDIT_TEXT,
               "layer": "B", "mirror": True, "hj": "left"},
              {"id": f"{name}-maker", "text": c["name"], "x": rx(m_r + mw + c["gap"] - c["name_left"]), "y": cy - c["centre"],
-              **FLAN_TEXT, "layer": "B", "mirror": True, "hj": "left"}]
+              **CREDIT_TEXT, "layer": "B", "mirror": True, "hj": "left"}]
     return cube, texts, box(rx(left + total), cy - c["mark_h"] / 2, rx(left), cy + c["mark_h"] / 2)

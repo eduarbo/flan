@@ -33,9 +33,16 @@ keycaps.left.K01.rotation_deg
 cases.left
 frames.right.accents
 pcb_edition
+pcb_editions
 pcb_mask
 variant`.split('\n');
 for(const location of locations)for(const value of [null,[],{},true,0,'constructor','__proto__','toString']){const c=clone(base),parts=location.split('.'),last=parts.pop();let target=c;for(const k of parts)target=target[k];target[last]=value;fixtures.push(c);}
+const mixed=api.setPcbEdition(base,['left'],'asanoha');
+assert.equal(api.pcbEdition(mixed,'left'),'asanoha');assert.equal(api.pcbEdition(mixed,'right'),base.pcb_edition);
+const pair=api.setPcbEdition(mixed,['right'],'seigaiha');fixtures.push(pair);
+assert.equal(api.pcbEdition(pair,'left'),'asanoha');assert.equal(api.pcbEdition(pair,'right'),'seigaiha');
+const reunited=api.setPcbEdition(pair,['left','right'],'kikko');assert.equal(reunited.pcb_edition,'kikko');assert.equal(reunited.pcb_editions,undefined);fixtures.push(reunited);
+for(const editions of [{left:'asanoha'},{left:'asanoha',right:'wrong'},{left:[],right:'base'},{left:'base',right:'base',extra:'base'}])fixtures.push({...base,pcb_editions:editions});
 const js=fixtures.map(c=>{const errors=api.check(c,catalog).errors;return {valid:!errors.length,normalized:errors.length?null:api.normalize(c,catalog)};});
 const py=spawnSync('python3',['-c',"import sys,json;sys.path.insert(0,'tools');from keycap_config import check,normalize;xs=json.load(sys.stdin);print(json.dumps([{'valid':not check(x)[0],'normalized':normalize(x) if not check(x)[0] else None} for x in xs]))"],{cwd:root,input:JSON.stringify(fixtures),encoding:'utf8',maxBuffer:5e6});assert.equal(py.status,0,py.stderr);assert.deepEqual(js,JSON.parse(py.stdout));assert.equal(js[7].normalized.cases.left.style,'solid');assert.equal(js[7].normalized.cases.right.cover,true);
 const values=new Map(),storage={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v)};let chain=Promise.resolve();const locks={request:(_key,_options,callback)=>{const p=chain.then(callback);chain=p.catch(()=>{});return p;}};

@@ -1141,59 +1141,59 @@
     },
     {
       "path": "hardware/flan42/fabrication/flan42-left-prototype.zip",
-      "sha256": "64ca818b92e661447fc039c7c2e3a3b3d3c53e4c70467f44fa48a40a0ca47e36"
+      "sha256": "9e1d0c94eecdb27db4cb4b5307835ac3845cb5bd8fa3e21991d187502dd103aa"
     },
     {
       "path": "hardware/flan42/fabrication/flan42-right-prototype.zip",
-      "sha256": "0466bc1b49e3dc9eed9fb1fb360c10905232758825d0b58c97a350bc1fcc2a0d"
+      "sha256": "ba903cdda0f192bd32f75f35652adde53bd7de79346a61130204e4194d4f85ed"
     },
     {
       "path": "hardware/flan42/fabrication/editions/flan42-left-asanoha.zip",
-      "sha256": "f2c7d0369b5d1a60b38c4d85bd777e1bdc6f29cf8a1981c48c0ad61954618b83"
+      "sha256": "a593415aa9b6edb1f0a8b1be534b03dc4fbf4f0a9512c095001b56b639922ad1"
     },
     {
       "path": "hardware/flan42/fabrication/editions/flan42-right-asanoha.zip",
-      "sha256": "b54527ce2817de20085a9116f4f31de6ce489d5df1fd6bb9af637591604d22b6"
+      "sha256": "161d91ecd26714bdd9f1630c358f4ba8e0f56410ad9643bc8a0176ecb3c9f54e"
     },
     {
       "path": "hardware/flan42/fabrication/editions/flan42-left-kikko.zip",
-      "sha256": "73fc0b122534cb3c66226037f885de9d4a22f56df0b740a41776f3ccc9d19cbf"
+      "sha256": "66ddefcd63d97ca23e43c203193e3adc709685cdf096281c9858279349cbd87e"
     },
     {
       "path": "hardware/flan42/fabrication/editions/flan42-right-kikko.zip",
-      "sha256": "12fae3731051237d78aed63e88f216ec85b05db3389ddc2d5cb68f70ac8f9ee0"
+      "sha256": "15b9315cf75419c981f291ea1a3a1c30ca59eead525fa3e79e03a0a407391dd8"
     },
     {
       "path": "hardware/flan42/fabrication/editions/flan42-left-sayagata.zip",
-      "sha256": "c850254d15d2550b88effec530c1c18771a60bbebce83fce2185cc419d9f7193"
+      "sha256": "8cfb36cd50fac8ffc5fce43733d0103a6b4deb97d9fed587ec62e4c69f36334b"
     },
     {
       "path": "hardware/flan42/fabrication/editions/flan42-right-sayagata.zip",
-      "sha256": "3f8a4f3c89fdd4a58c3465d6f062c88470b0183fa5c287d808d22f880cf9ef53"
+      "sha256": "000205ca17262f915e8394121ecaa0851adc0df46327f7053bdafc528231a522"
     },
     {
       "path": "hardware/flan42/fabrication/editions/flan42-left-seigaiha.zip",
-      "sha256": "8232449f70912becef48d706022139153c3f55850b50f0a5729656c3c6d47423"
+      "sha256": "3a4acad1e7505bf419e83e17084b21f26edd945a0af720a7e7801db2c8c25fde"
     },
     {
       "path": "hardware/flan42/fabrication/editions/flan42-right-seigaiha.zip",
-      "sha256": "8a223ab78cb90cf64a8cfff238a701e39e31abbae07d58aa7d6e8a9e12a613cd"
+      "sha256": "87738f1e95bf484b96fe4b21ef4742839e8fb006ebc99974b44a56fb7c9939ee"
     },
     {
       "path": "hardware/flan42/fabrication/editions/flan42-left-meandro.zip",
-      "sha256": "f78ccd996832e0f3a5c5155e7e49f33bb7bb58e6294e6beccda2def0011cd2c8"
+      "sha256": "4d1468931216b8d84b838dee584e5504fdcf9888d96ad54caccb5456776cfb8c"
     },
     {
       "path": "hardware/flan42/fabrication/editions/flan42-right-meandro.zip",
-      "sha256": "a4474f8d745ebd8705da3defa1afbba3f2b2479745bbb95f487ac37f567e31f7"
+      "sha256": "6c5e1dadd0261b28c6a987d9cc2f67c221024ec28e448fef233652c21a4d0442"
     },
     {
       "path": "hardware/flan42/fabrication/editions/flan42-left-vias.zip",
-      "sha256": "ee5ec27ff02b0ebe89cdd07862a2db2284e158ec2512a5020f398fc9fe355032"
+      "sha256": "8a66e7feebde8bbbcf252f8c2d0b79060ba0a47b2564025d2c19871d3825ecec"
     },
     {
       "path": "hardware/flan42/fabrication/editions/flan42-right-vias.zip",
-      "sha256": "77a0aa5daa7456a41c85b6622316dcb34bab39a459b747e24d3d311c9bbdda68"
+      "sha256": "d3893f2badbb3df2702c367863312091c97e3ca2a092c018181c1677ddbf6a7f"
     },
     {
       "path": "validation/flan46-case.json",
@@ -1273,59 +1273,59 @@
     },
     {
       "path": "hardware/flan46/fabrication/flan46-left-prototype.zip",
-      "sha256": "f4684b8d59bf2f227822d07aecfe28b111eced362d2aea544fd3d3b9f5035b4f"
+      "sha256": "938e1636e7df53ca478ee10a790b8d05571bf340e107625f729ef5bd1278ccba"
     },
     {
       "path": "hardware/flan46/fabrication/flan46-right-prototype.zip",
-      "sha256": "e41ddb23b723e5aa7f7b5111d5f682f23fc5b21ebd7853f0b43a8fcb968a30f1"
+      "sha256": "5614c522b93d0465296f3ace801e7fb870cf00e8fbf6d979ed17e1b56181e3b1"
     },
     {
       "path": "hardware/flan46/fabrication/editions/flan46-left-asanoha.zip",
-      "sha256": "865ebbf831466ede93355cf43cb7219d1f5d296e9016853177b794c701e85e74"
+      "sha256": "5dae61e845fa61b99c0f0ee9e88fe2a56e428c82dd2bc8bfe8c88b1c762d8a2c"
     },
     {
       "path": "hardware/flan46/fabrication/editions/flan46-right-asanoha.zip",
-      "sha256": "d954c064b2e8f8380e7dd51d7c3676d6fa40bf071a8bcae45f9406495a366d86"
+      "sha256": "c17866bc29518d86d99aefffee57af5c0c7ee41e55f1bfafc7823873aa673ed4"
     },
     {
       "path": "hardware/flan46/fabrication/editions/flan46-left-kikko.zip",
-      "sha256": "8caf92e17a37652a388480b51f31b0b0ed7bd469452d6b5c0adcf9b92f9ab2e7"
+      "sha256": "705ff23067080db064eae7d087581e7ec0bfdfa2d57519af73481d558cf7cc0e"
     },
     {
       "path": "hardware/flan46/fabrication/editions/flan46-right-kikko.zip",
-      "sha256": "0cdf0002ba24f95b991e439923a52f4d54d234cb66192be5f568387b2e273f48"
+      "sha256": "068a82d5eab6786633088ddc3b97c993fae7269852448d6205775edf137d5d5a"
     },
     {
       "path": "hardware/flan46/fabrication/editions/flan46-left-sayagata.zip",
-      "sha256": "78e7b737394c9375bfd1ec11e10f7aa059b59deff2f1bed7ca7a616e14f01ead"
+      "sha256": "172b73571b35843274e4d7234af8512db98a8e031652940e99ceae045645dbb8"
     },
     {
       "path": "hardware/flan46/fabrication/editions/flan46-right-sayagata.zip",
-      "sha256": "ed0d8c8d061ac2ae292681e5f73a5e0518a00592da8c5252fd34af52cb23eeb8"
+      "sha256": "bccedfe3f5c09ce9b244a841609ebce160c455983193ed33e31c92046820898d"
     },
     {
       "path": "hardware/flan46/fabrication/editions/flan46-left-seigaiha.zip",
-      "sha256": "58f2f3eef650176f843f24d4b2ab0fc9a24adc993c464b2deb0fe7b937b69bf0"
+      "sha256": "faf34fed9ad8b6fa6722ba256764e4da9e80461f8bf51feed19f696f0122c05b"
     },
     {
       "path": "hardware/flan46/fabrication/editions/flan46-right-seigaiha.zip",
-      "sha256": "f4d6a8607b2989b50f8a2dbf41870b2273cd95b1bf3e2c1a0b37f8b89a40fd19"
+      "sha256": "0bd11947c3a11a9ab60294a2139f8341f3413ff61a7f44d85d25b1e92a3afa7a"
     },
     {
       "path": "hardware/flan46/fabrication/editions/flan46-left-meandro.zip",
-      "sha256": "374f02249cd0e459a2ead97b7758535af9b0ca51378c72736a374af9eaec91d4"
+      "sha256": "2a019216c708a82d6cb183ae775eb5b78598433cbf38f577c5a9318925e3927b"
     },
     {
       "path": "hardware/flan46/fabrication/editions/flan46-right-meandro.zip",
-      "sha256": "3fa84d4129282d7be5a20196c9f72acc485ac474e013bb6bcfb6e1faf443f5aa"
+      "sha256": "d1b2de99a0eeff5c3abe658d02b1c2a430805cf041a243448ee78c452717221c"
     },
     {
       "path": "hardware/flan46/fabrication/editions/flan46-left-vias.zip",
-      "sha256": "e8a87c28ed73ab75d3a031cec590145d905a81bac40da9e295f961971dd543aa"
+      "sha256": "16d35124f8ec30376973ed00a07c82c49f9fc0494b722535cfd4c80cb5f341f9"
     },
     {
       "path": "hardware/flan46/fabrication/editions/flan46-right-vias.zip",
-      "sha256": "052627314aad7905cc01854ace8800415b9e69dd4dc24f2814b30ee12188cf42"
+      "sha256": "57c6d10c92c578fe1ce31095af60b8c819ab45718c58c9ce3b35633c0b310563"
     },
     {
       "path": "validation/flan54-case.json",
@@ -1405,59 +1405,59 @@
     },
     {
       "path": "hardware/flan54/fabrication/flan54-left-prototype.zip",
-      "sha256": "a2c13c24c15ab140205ab8ef497bcb85e3d705b1fecb4cd11914dc6c26d7a320"
+      "sha256": "6fa0fd543bb6a59634536433abe021bcb0b8ede13a646bcf9f893abc83db27b4"
     },
     {
       "path": "hardware/flan54/fabrication/flan54-right-prototype.zip",
-      "sha256": "336898ceac3a6bfda21605ea346a9e2ac90fdad8f8c5942e4eab2b5266fd7930"
+      "sha256": "586c2412efe24908d07cbf73bf57199fdac97a515056316c9cd131c29254424c"
     },
     {
       "path": "hardware/flan54/fabrication/editions/flan54-left-asanoha.zip",
-      "sha256": "9c5c461eae40d6c9cd531a500b6f228f6807ac46263a43e6b5fc44fe88227a12"
+      "sha256": "cfd30dda1ecf6ba15e9ac7f73d3b26e783d87f40c967aff44249431e97e87eb3"
     },
     {
       "path": "hardware/flan54/fabrication/editions/flan54-right-asanoha.zip",
-      "sha256": "67c7ebd58e56d628f387ea086d0f908e89143f6544122bc6725081756d016087"
+      "sha256": "e696f3e4fc24def7a59c7fbdc48e64d0eff1c3fb6f15446fa567d2c9c936abb5"
     },
     {
       "path": "hardware/flan54/fabrication/editions/flan54-left-kikko.zip",
-      "sha256": "42a34c116f78d697d97c1b62e2558e2ddafc328d79f16b7eb02f03ddab1754c2"
+      "sha256": "cee35d4f7b601996627e19c7ce05bb118b9ab12e998e8f11a6321180f88511a5"
     },
     {
       "path": "hardware/flan54/fabrication/editions/flan54-right-kikko.zip",
-      "sha256": "b08f254f273fc2e30e26881556101f4b4c30a5af1b82cf85d6b9f1137493f546"
+      "sha256": "070e5ed1c8b3ae6dbab80fb848304f33b68a8a61d865de774530bf243ab6c727"
     },
     {
       "path": "hardware/flan54/fabrication/editions/flan54-left-sayagata.zip",
-      "sha256": "103fb6b7176d40c5b33161165c18af010b6382bc0dc0dab9af37e79ff052f2d5"
+      "sha256": "d3b570e03adff82e54f362a43af7d452d42f16784b6a525e04bdbcb59726ad9e"
     },
     {
       "path": "hardware/flan54/fabrication/editions/flan54-right-sayagata.zip",
-      "sha256": "c5de4179df795d6dbbff45d7d64a0e7eea897697898540ae25db9cb2b4457763"
+      "sha256": "007d48a3291b81cd760326c2eb4a755347bd6132abd3aae7b512230707e0b922"
     },
     {
       "path": "hardware/flan54/fabrication/editions/flan54-left-seigaiha.zip",
-      "sha256": "d2fb13d67ecdb456cfa9d4aab693f58e0d6458d0206c506345c1aa6f4ffe4d50"
+      "sha256": "95f1aefa8266d35001f3042bcad3e4c47bf5f6980a2285e5893b2660c573c365"
     },
     {
       "path": "hardware/flan54/fabrication/editions/flan54-right-seigaiha.zip",
-      "sha256": "29393ac6aa720b3c77066aef8022072b55ca1f781b0dca9eeee662f2903f161c"
+      "sha256": "97e035df3f158e054b3f04ac9d9d342f52258f23e6405ea5cfb172f0616de4f6"
     },
     {
       "path": "hardware/flan54/fabrication/editions/flan54-left-meandro.zip",
-      "sha256": "022aec1140a418a832e834f9a5e6e1cb656ba126fe27e32c28ae6c05dc9c640a"
+      "sha256": "735f92abb2b3c6d4409ac481f66f8547b6bd776d4cd9a780df277f3ec6bdc22b"
     },
     {
       "path": "hardware/flan54/fabrication/editions/flan54-right-meandro.zip",
-      "sha256": "d2804d3fccc244413943dfe49e851a1eaa74680736ac6297244c2ddc9a370a48"
+      "sha256": "deb4554d07559a30355071d6954d5ecc1a07bdb10a71c3f51868f6c10393670b"
     },
     {
       "path": "hardware/flan54/fabrication/editions/flan54-left-vias.zip",
-      "sha256": "9b10733390e6a79db5e1557d454b90278a5a7db3d586cf0e7b7242e0c66a61a1"
+      "sha256": "3ff764e5dd7b512f357f00e486c2a82ba079d71ba4d43b861efc74a639c8b69c"
     },
     {
       "path": "hardware/flan54/fabrication/editions/flan54-right-vias.zip",
-      "sha256": "02bafcc2b80ebcd1a04c153c1fae472ff60e80b9d3814a834504f47faae6ec54"
+      "sha256": "d1a82d39a5d3b431641af1f4ba2359592927ad6a47378c22e776bec7f1bdaa4b"
     },
     {
       "path": "design/revI.json",
@@ -1501,59 +1501,59 @@
     },
     {
       "path": "hardware/revI/fabrication/flan36-left-revI-prototype.zip",
-      "sha256": "3059989d66670d037612d859b66e01940c63b6ebc62f7301f475a38439078422"
+      "sha256": "8d6cb1806e169ce8364a0bb0340867aa103b5c3cf20f79196479c9eea0156c8f"
     },
     {
       "path": "hardware/revI/fabrication/flan36-right-revI-prototype.zip",
-      "sha256": "ce1fce500f28335346de740b97dbc54346ce13cb9257498b26f62e742d5ee5ec"
+      "sha256": "adefca5b47448af35a519c83a6126d431cf840196ff8a2153f5b7ec20d1eac46"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-left-revI-asanoha.zip",
-      "sha256": "7eb051e067fdd508f8e9932c7b200a4b8b7179a98b52e1809a7c1699963e800e"
+      "sha256": "e9ee5f07474f1e0a4ae5df9bfb26e816132f221a44ff8f646896b1ea8d017cc6"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-right-revI-asanoha.zip",
-      "sha256": "3068d481f02a82341eefcaae18adb064d9ae2d7c3c0440168b3222d0ea5bf1b6"
+      "sha256": "a312f08d3ba81d2577c93d61553a872bd2cc54a7df776387cd6f29dfd27f36d1"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-left-revI-kikko.zip",
-      "sha256": "6ed5a93d8a5f8dd279cc1829d167c85ee81ef2b3d39a3ddc49c088371cc09575"
+      "sha256": "09c2096622457e7568cd03ea5458676addb7a17e8c79c08fcfcedf6ee50dd40b"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-right-revI-kikko.zip",
-      "sha256": "a3a8c059dc709bb74c6a57884de88c15ea914c49efe1d6494af4cae0df2a918a"
+      "sha256": "2a08d36d2983a44db3acc67723d03262ec05bf235da47e4d194f4c6117895f02"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-left-revI-sayagata.zip",
-      "sha256": "12322492b4bc1231b759cf5e4223cf3dbb96401de6c88d05b9e4742317e902db"
+      "sha256": "024b8723056aa3e71cc13bbdfe37ed3a977450cebb72ba379828cfe02cf156d4"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-right-revI-sayagata.zip",
-      "sha256": "57d668b51a0e4b5b6a0b86b8986735152f4faadf5b7b5a2180fa8a513c783eb5"
+      "sha256": "144c3586f4351d50fb58caf714bb5310b80fb0d9efdba0f401c48df0e689728d"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-left-revI-seigaiha.zip",
-      "sha256": "6dacefafdf183b18ad33bc8f7a77ed7829ae3ef5e919988d96c821272da92d25"
+      "sha256": "0be17693958ba8375010bb97a1ae46505877858842aaf23d0aed0212bd23e076"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-right-revI-seigaiha.zip",
-      "sha256": "3fc02b882a3df8ab827cc2bde77584c48f4492e7b47bf02e7a1b719e99c7b4ac"
+      "sha256": "5ffef81ae5b3009e3c8d466bd433528c868d06cec0a6f7e3c87493015d933ab3"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-left-revI-meandro.zip",
-      "sha256": "258a42e80b996b16f3e3e5172197e1a4c3c8e53868c2440c770a085ce1bcdf8d"
+      "sha256": "61d9764b99e40fcfb5c466de2a06ba3c858179ea9ec791385cd96c88f67f9491"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-right-revI-meandro.zip",
-      "sha256": "c21bc604964e07016075558ef7e809ba7418162910afd9f8f43cd29420395e18"
+      "sha256": "b75dbac9e1f4c5280f0dff344889393587e9a4322abc2f822998a34e7c51ec9b"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-left-revI-vias.zip",
-      "sha256": "dcb313586d20a4b8fce5e347e146f0eb4dc68b24ecf287a8b22e2fe065a89e05"
+      "sha256": "720a000056baaa3438cb265301f106b200743e0fb8895024faf474d86b82139d"
     },
     {
       "path": "hardware/revI/fabrication/editions/flan36-right-revI-vias.zip",
-      "sha256": "85e55acc36b64fdb50f64d72b62a396199082425dcbdde8afee7bfe2071ac7fd"
+      "sha256": "88201da42c1d5a3556f8193fb9c1c55a32c82ad34e81d38d5655033cdead1571"
     },
     {
       "path": "design/pcb-options.json",

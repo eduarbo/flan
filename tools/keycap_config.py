@@ -64,6 +64,9 @@ def check(config,catalog=None):
     if set(config.get('batteries',{}))!={'left','right'}:return ['Select a battery for each half.'],None
     if 'variant' in config and (not isinstance(config['variant'],str) or config['variant'] not in VARIANT_IDS):return ['Unknown Flan variant.'],None
     if 'pcb_edition' in config and (not isinstance(config['pcb_edition'],str) or config['pcb_edition'] not in PCB_EDITION_IDS):return ['Unknown PCB edition.'],None
+    if 'pcb_editions' in config:
+        editions=config['pcb_editions']
+        if not isinstance(editions,dict) or set(editions)!={'left','right'} or any(not isinstance(v,str) or v not in PCB_EDITION_IDS for v in editions.values()):return ['Unknown PCB edition.'],None
     if 'pcb_mask' in config and (not isinstance(config['pcb_mask'],str) or config['pcb_mask'] not in PCB_MASK_IDS):return ['Unknown PCB solder mask colour.'],None
     if 'cases' in config:
         cases=config['cases']

@@ -16,8 +16,8 @@ from shapely import affinity
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 from branding.lockup import lockup, font_file, FONT       # noqa: E402
-from branding.flankey import iso                           # noqa: E402
-from branding.color_marks import marca_color, svg_classes  # noqa: E402
+from branding.flankey import iso, iso_regions, ISO_DRIPS    # noqa: E402
+from branding.color_marks import marca_color, svg_classes, regions  # noqa: E402
 
 OUT = ROOT / "docs/branding/flan"
 PNG = ROOT / "docs/images/branding/flan-lockup.png"
@@ -53,6 +53,9 @@ def favicons(mark):
 def main():
     font = font_file(ROOT)
     assert hashlib.sha256(font.read_bytes()).hexdigest() == FONT["sha256"], "pinned Fraunces missing from build/fonts/"
+    display_parts, pcb_parts, color_parts = iso_regions(), iso_regions(small=True), regions()
+    for part in ("silhouette", "caramel", "edge"):
+        assert display_parts[part].equals(pcb_parts[part]) and display_parts[part].equals(color_parts[part]), (part, "logo geometry differs")
     OUT.mkdir(parents=True, exist_ok=True)
     display, dm = lockup(font)
     pcb, pm = lockup(font, small=True)
@@ -78,7 +81,9 @@ def main():
     PNG.parent.mkdir(parents=True, exist_ok=True)
     preview = OUT / "flan-lockup.svg"
     subprocess.run(["rsvg-convert", "-w", "1200", "-b", "#f6f5f1", preview, "-o", PNG], check=True)
-    record = {"schema": "flan-logo-1", "mark": "flankey.iso", "wordmark": {"text": "flan", "font": FONT,
+    record = {"schema": "flan-logo-1", "mark": "flankey.iso",
+              "shared_geometry": {"source": "tools/branding/flankey.py:iso_regions", "drips": len(ISO_DRIPS), "display_pcb_color_match": True},
+              "wordmark": {"text": "flan", "font": FONT,
               "display": {"wght": dm["wght"], "opsz": 144, "SOFT": 100, "glyphs": dm["glyphs"]},
               "pcb": {"wght": pm["wght"], "opsz": 144, "SOFT": 100, "note": "heavier weight so no hairline falls below 0.17 mm at 4.6 mm em"}},
               "files": {n: hashlib.sha256(t.encode()).hexdigest() for n, t in files.items()},

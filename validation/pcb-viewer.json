@@ -1,0 +1,16 @@
+{
+  "mixed_halves": true,
+  "rendered_choices_all_sizes": true,
+  "correct_downloads_all_sizes": true,
+  "shared_link_fresh_context": true,
+  "reload": true,
+  "undo_redo": true,
+  "paired_choice": true,
+  "mobile_width": 390,
+  "browser": "151.0.7922.34",
+  "errors": [],
+  "preview": {
+    "path": "docs/images/revI-pcb-underside.png",
+    "sha256": "4e35849e566dc293e8c3366cabc932ee2376cd4ea36c37b009b36b542c193d6c"
+  }
+}

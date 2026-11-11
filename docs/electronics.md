@@ -23,7 +23,9 @@ The connector-height correction changes the printed assembly, not these routed P
 
 ### Editions
 
-Each edition adds an all-over back-silkscreen pattern, drawn as one design across both halves. It stops along the signature's own outline and calms down within 6 mm of it, so the signature sits inside the pattern rather than in a cut-out box: Vías dots shrink, the Asanoha and Kikkō lattices keep their frames and drop their spokes, Meandro runs straight, Seigaiha fans lose their inner arcs and Sayagata its centre vias. To order an edition, upload its two ZIPs instead of the base ones; everything else above is the same. The viewer's **Design → PCB** tab shows each edition from below in any mask color and links its ZIPs.
+![The two PCB signatures, seen from below](images/pcb-signature.png)
+
+Each edition adds an all-over back-silkscreen pattern, drawn as one design across both halves. It stops along the signature's own outline and calms down within 6 mm of it, so the signature sits inside the pattern rather than in a cut-out box: Vías dots shrink, the Asanoha and Kikkō lattices keep their frames and drop their spokes, Meandro runs straight, Seigaiha fans lose their inner arcs and Sayagata its centre vias. To order an edition, upload its two ZIPs instead of the base ones; everything else above is the same. The viewer's **Design → PCB** tab lets you apply an edition to both halves or choose Left and Right separately. Each download matches that half's selected edition. Solder mask color applies to both halves. The view is from below: LEFT/RIGHT on the boards identify your hands in the typing position, so their screen positions reverse when turned over. The maker credit is a single line, by [symbol] eduarbo.com. The Flan wordmark has flankbd.com underneath; the revision/year/hand column and divider span the same ink height.
 
 | Edition | Both halves from below | Gerber/drill ZIPs |
 |---|---|---|
@@ -46,7 +48,7 @@ Every edition and half passes KiCad DRC with schematic parity (0 violations, 0 u
 - Two copper layers; **1.6 mm FR4**, nominal **1 oz copper**.
 - Minimum routed track **0.20 mm**; netclass clearance **0.20 mm**; copper-to-edge **0.50 mm**.
 - ZIPs include both copper, mask and silkscreen layers, Edge.Cuts, separate plated/non-plated drills, drill maps, source hashes and a prototype notice. Internal battery/station openings belong to Edge.Cuts.
-- Back silkscreen: signature lines ≥ 0.17 mm and text 1.0 mm; edition patterns 0.22–0.30 mm, ≥ 0.24 mm apart, 0.30 mm from pads and legends, 0.35 mm from holes and 0.8 mm from the signature's outline (closed over 0.9 mm). Check that the fabricator preview keeps the fine lines.
+- Back silkscreen: signature lines ≥ 0.17 mm, main text 1.0 mm and URLs 0.85 mm high with 0.15 mm strokes; edition patterns 0.22–0.30 mm, ≥ 0.24 mm apart, 0.30 mm from pads and legends, 0.35 mm from holes and 0.8 mm from the signature's outline (closed over 0.9 mm). Check that the fabricator preview keeps the fine lines.
 - Inspect the fabricator's Gerber and drill preview, including internal cutouts and the narrow north bridge. No panelization or assembly service is specified here.
 
 The exact original key angles, all footprint/pad geometry, holes, model references and outer/internal contours were preserved against `fe8c7fd`. The FreeCAD case did not change. The router's sub-micron coordinate rounding was restored before the final checks.

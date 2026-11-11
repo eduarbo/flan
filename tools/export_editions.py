@@ -47,6 +47,13 @@ DATE = re.compile(rb"CreationDate|^G04 Created|^; DRILL file|SVG Image created",
 def undated(path):
     return b"\n".join(l for l in path.read_bytes().split(b"\n") if not DATE.search(l))
 
+def project_link(link, target):
+    # Generated absolute links can outlive a checkout rename.
+    if link.is_symlink() and not link.exists():
+        link.unlink()
+    if not link.exists():
+        link.symlink_to(target, target_is_directory=target.is_dir())
+
 def export(cli, pcb, out):
     if out.exists():
         shutil.rmtree(out)
@@ -103,10 +110,9 @@ def main():
         work = BUILD / ed
         work.mkdir(exist_ok=True)
         for name in ("fp-lib-table", "sym-lib-table") + (() if family else ("libraries", "models")):
-            if not (work / name).exists():
-                (work / name).symlink_to(HW / name)
-        if family and not (BUILD / "revI").exists():   # the variant tables point at ${KIPRJMOD}/../revI/
-            (BUILD / "revI").symlink_to(ROOT / "hardware/revI", target_is_directory=True)
+            project_link(work / name, HW / name)
+        if family:   # the variant tables point at ${KIPRJMOD}/../revI/
+            project_link(BUILD / "revI", ROOT / "hardware/revI")
         for half, b in cv.boards.items():
             g = parts[half]
             e = check(b, "B", g)

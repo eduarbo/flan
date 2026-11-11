@@ -13,16 +13,16 @@
   "physical_acceptance": false,
   "halves": {
     "left": {
-      "pcb_before_sha256": "c0d2b9b33fe5f76b970b671684e1bd65032e65c2abb0879dc5d7c6c8a92ff857",
+      "pcb_before_sha256": "e4eb3b5ddd2e35fa5e97dc139a7c7548fca2a26bb49d672fdc1fbad92843d4d4",
       "routed_base_sha256": "c0d2b9b33fe5f76b970b671684e1bd65032e65c2abb0879dc5d7c6c8a92ff857",
-      "pcb_after_sha256": "0be6361f7a734f3c4fbb71511289812fdd8e76546d80f095589d9e4ad2005cb4",
-      "art_sha256": "e6fa75465c540834e73d00e52603d0da67ca67cd1a2ae19fd2da96ef2f130755",
+      "pcb_after_sha256": "f3584b97243740fa17fe528371b3faee7ec81317667fd24946a9b1f6d9bacdb6",
+      "art_sha256": "4fb310e30a87246a08bea9bec4df1b584563f8861de19297d3d5daa548204dfe",
       "checks": {
         "keepout_overlap_mm2": 0.0,
         "existing_silk_overlap_mm2": 0.0,
         "outside_edge_clearance_mm2": 0.0,
-        "min_distance_to_keepout_mm": 1.32,
-        "art_area_mm2": 34.2,
+        "min_distance_to_keepout_mm": 0.285,
+        "art_area_mm2": 37.93,
         "largest_thin_piece_mm2": 0.005,
         "min_counter_mm": 0.648
       },
@@ -31,13 +31,13 @@
           54.820473145145684,
           54.56084293590367,
           75.97952685485431,
-          60.03915706409632
+          60.5
         ],
         [
-          87.48202479793667,
-          60.555,
-          98.51797520206333,
-          63.154999999999994
+          86.80199179793668,
+          60.561,
+          99.19800820206332,
+          63.160999999999994
         ]
       ],
       "free_back_rectangles": [
@@ -56,16 +56,16 @@
       ]
     },
     "right": {
-      "pcb_before_sha256": "6252396df92de6beed5a6724282bebdcbe4c8b9163de98ed75523acb6bf767f6",
+      "pcb_before_sha256": "b7d404136bb0f8f0ef86770932819e361a9028027a40198ae28f368c5af221bd",
       "routed_base_sha256": "6252396df92de6beed5a6724282bebdcbe4c8b9163de98ed75523acb6bf767f6",
-      "pcb_after_sha256": "0a82947e1752ed664c35b3f10bfffa77d63ca6402cecf8d45b94f21afd9a4292",
-      "art_sha256": "dbb8a66d5f535479c0c4807bcf977c9385c0872193bb516c9bd2ac2feb23bb9b",
+      "pcb_after_sha256": "a38599ff8f3675dc35b70a4e19d46bd209ee282bdd2911a645171150bcbb0803",
+      "art_sha256": "ffe127caea48e46fbed758c53e82ee15d0e093baaa07cada8a004fa673acc538",
       "checks": {
         "keepout_overlap_mm2": 0.0,
         "existing_silk_overlap_mm2": 0.0,
         "outside_edge_clearance_mm2": 0.0,
-        "min_distance_to_keepout_mm": 0.67,
-        "art_area_mm2": 34.73,
+        "min_distance_to_keepout_mm": 0.287,
+        "art_area_mm2": 38.44,
         "largest_thin_piece_mm2": 0.005,
         "min_counter_mm": 0.648
       },
@@ -74,13 +74,13 @@
           83.22047314514569,
           54.66084293590367,
           104.37952685485432,
-          60.139157064096324
+          60.5
         ],
         [
-          63.38202479793667,
-          59.655,
-          74.41797520206333,
-          62.254999999999995
+          62.70199179793667,
+          59.661,
+          75.09800820206333,
+          62.260999999999996
         ]
       ],
       "free_back_rectangles": [

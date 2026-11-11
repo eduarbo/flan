@@ -11,6 +11,13 @@ from pathlib import Path
 from check_build_candidate import ROOT, read, sha, verify
 
 
+def pcb_packages(config):
+    options = read('design/pcb-options.json')
+    editions = {e['id']: e for e in options['editions']}
+    return [editions[config.get('pcb_editions', {}).get(side, config.get('pcb_edition', options['default_edition']))]['packages'][side]
+            for side in ('left', 'right')]
+
+
 def prepare(print_kit, output):
     verify()
     files = {'printing/' + print_kit.name: print_kit.read_bytes()}
@@ -27,8 +34,7 @@ def prepare(print_kit, output):
         for filename in manifest['keycaps']['bundled']:
             files['samples/' + filename] = archive.read('Keycaps/' + filename)
     files['configuration.json'] = (json.dumps(config, indent=2) + '\n').encode()
-    edition = next(e for e in read('design/pcb-options.json')['editions'] if e['id'] == config['pcb_edition'])
-    paths = list(edition['packages'].values())
+    paths = pcb_packages(config)
     paths += [f'firmware/uf2/flan36-{side}.uf2' for side in ('left', 'right', 'right-no-display')]
     paths += [f'mechanical/revI/coupon-{name}.stl' for name in ('magnet-base', 'magnet-frame', 'm2-thread')]
     paths += [f'docs/{name}.md' for name in ('first-build', 'parts', 'build', 'electronics', 'firmware', 'launch')]
@@ -42,7 +48,7 @@ def prepare(print_kit, output):
         'Imprime una copia de cada cap de samples/ y los tres cupones de mechanical/revI/.\n'
         'Después imprime las placas y comprueba el encaje del switch antes de las demás piezas.\n'
         'printing/ contiene el kit completo y sus licencias, instrucciones, STL y 3MF.\n'
-        'hardware/ contiene los dos trabajos PCB: izquierdo y derecho, misma edición.\n'
+        'hardware/ contiene los trabajos PCB izquierdo y derecho, cada uno con su edición elegida.\n'
         'firmware/ contiene izquierda, derecha y la alternativa derecha sin pantalla.\n'
         'Conserva configuration.json y manifest.json junto con los resultados del montaje.\n'
         'Los enlaces auxiliares de las guías se pueden consultar en https://github.com/eduarbo/flan/tree/main/docs\n'

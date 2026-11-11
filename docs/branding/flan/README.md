@@ -10,7 +10,7 @@ The selected logo (2026-10-17): the **tecla-flan** mark — a low-profile keycap
 | `flan-mark-pcb.svg` | Silkscreen mark alone | 6 mm |
 | `flan-mark-color.svg` | Color mark: custard faces, caramel and a caramel outline that lightens under a dark browser theme. The site's favicon and header mark | 20 mm |
 
-All files except the color mark are black (or white) closed outlines in millimetres, with no fonts, strokes or bitmaps. The color mark keeps the same geometry in five fills; its palette is in `tools/branding/color_marks.py` (`marca_color`). Use the display files above about 20 mm. Below that, use the `-pcb` construction: heavier mark lines, two drips instead of four, and the wordmark at weight 450, so no line prints thinner than 0.17 mm.
+All files except the color mark are black (or white) closed outlines in millimetres, with no fonts, strokes or bitmaps. All current marks share the same four caramel drips and cap proportions, defined in `tools/branding/flankey.py` (`ISO_DRIPS` and `iso_regions`). The color mark uses five fills; its palette is in `tools/branding/color_marks.py` (`marca_color`). Use the display files above about 20 mm. Below that, the `-pcb` construction only thickens the outline and uses wordmark weight 450 so no line prints thinner than 0.17 mm; it does not substitute a different drip design.
 
 **Wordmark.** “flan” is set in [Fraunces](https://github.com/google/fonts/tree/main/ofl/fraunces) (SIL Open Font License 1.1) at SOFT 100, opsz 144 and weight 300 (450 for silkscreen), shaped with HarfBuzz, including the “fl” ligature, and converted to outlines. The font itself is not distributed here.
 

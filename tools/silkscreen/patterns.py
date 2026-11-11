@@ -323,8 +323,17 @@ def spaced(parts, gap=0.26, opening=0.21):
     area. A trimmed stroke can split at a thin neck; its pieces go back into the queue so
     they are checked against everything kept, each other included."""
     import heapq
+    from functools import lru_cache
     from shapely.strtree import STRtree
+    # A round buffer uses inscribed chords. Compensate their sagitta so a trimmed
+    # arc really clears gap, instead of re-entering the queue with the same near pair.
+    trim_radius = gap / math.cos(math.pi / 32) + 1e-6  # quad_segs=8; 1 nm roundoff margin
     kept, tree, dirty = [], None, False
+    @lru_cache(maxsize=64)
+    def clearance(indices):
+        # Kept polygons are immutable and indices survive appended neighbours.
+        # A connected lattice can border many pieces; buffer that same set once.
+        return unary_union([kept[j] for j in indices]).buffer(trim_radius, quad_segs=8)
     queue = [(-g.area, i, g) for i, g in enumerate(parts)]
     heapq.heapify(queue)
     n = len(parts)
@@ -333,9 +342,9 @@ def spaced(parts, gap=0.26, opening=0.21):
         if kept:
             if dirty:
                 tree, dirty = STRtree(kept), False
-            near = [kept[j] for j in tree.query(p.buffer(gap)) if kept[j].distance(p) < gap]
+            near = tuple(j for j in tree.query(p.buffer(gap)) if kept[j].distance(p) < gap - 1e-6)
             if near:
-                p = p.difference(unary_union(near).buffer(gap, quad_segs=8))
+                p = p.difference(clearance(near))
                 p = p.buffer(-opening / 2, quad_segs=6).buffer(opening / 2, quad_segs=6)
                 for q in getattr(p, "geoms", [p]):
                     if q.geom_type == "Polygon" and q.area > 0.03:
