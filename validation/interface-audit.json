@@ -1,0 +1,502 @@
+{
+  "layouts": [
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "size",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "themes",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "cases",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "keycaps",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "frames",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "battery",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "pcb",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "size",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "themes",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "cases",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "keycaps",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "frames",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "battery",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "pcb",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "size",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "themes",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "cases",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "keycaps",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "frames",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "battery",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "pcb",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "size",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "themes",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "cases",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "keycaps",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "frames",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "battery",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "pcb",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "size",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "themes",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "cases",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "keycaps",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "frames",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "battery",
+      "clipped": 0
+    },
+    {
+      "language": "en",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "pcb",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "size",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "themes",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "cases",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "keycaps",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "frames",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "battery",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "Home",
+      "panel": "pcb",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "size",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "themes",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "cases",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "keycaps",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "frames",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "battery",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 1440,
+      "panelEdge": "End",
+      "panel": "pcb",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "size",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "themes",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "cases",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "keycaps",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "frames",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "battery",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 768,
+      "panelEdge": null,
+      "panel": "pcb",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "size",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "themes",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "cases",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "keycaps",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "frames",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "battery",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 390,
+      "panelEdge": null,
+      "panel": "pcb",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "size",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "themes",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "cases",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "keycaps",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "frames",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "battery",
+      "clipped": 0
+    },
+    {
+      "language": "es",
+      "viewport": 320,
+      "panelEdge": null,
+      "panel": "pcb",
+      "clipped": 0
+    }
+  ],
+  "complete_control_labels": true,
+  "keyboard_battery_per_half": true,
+  "undo_preserved": true,
+  "case_print_entry": true,
+  "home_workflow_links": true,
+  "compact_expanded_previews": true,
+  "wide_color_and_key_columns": true,
+  "errors": []
+}

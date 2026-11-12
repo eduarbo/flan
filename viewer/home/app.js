@@ -3,6 +3,7 @@
 import finishes from '../../design/frame-finishes.json';
 import {createModel} from './model.js';
 import {pageTokens} from './tokens.js';
+import {createDesignURL,designKeys} from '../design-url.js';
 
 const data=JSON.parse(document.getElementById('home-data').textContent);
 const $=id=>document.getElementById(id);
@@ -14,7 +15,7 @@ const T={
     'stage.nogl':'The live 3D view needs WebGL. The explorer shows every part.','stage.failed':'The 3D model could not load. Check the connection and reload.',
     'layers.apart':'Apart','layers.together':'Together','layers.label':'Separate the layers','rail.label':'Make it yours','g.size':'Size','g.theme':'Theme','g.case':'Case','g.keys':'Keycaps','g.frame':'Frame','g.frames':'Frames',
     'frame.browse':'Browse 6','frame.count':'· 6 magnetic designs','frame.cancel':'Cancel','frame.hover':'Hover a frame to preview it on the model','frame.apply':'Apply {name}','frame.from':'Colors from {theme}','frame.own':'Use {name}’s own palette','frame.ownOn':'Use the {theme} colors','frame.current':'Current','frame.previewing':'Previewing {name} · not applied yet',
-    'side.both':'Both halves','side.left':'Left','side.right':'Right','cta.open':'Open this build in 3D','keys':'keys','specs.eyebrow':'Spec sheet','specs.title':'What’s under the frame',
+    'side.both':'Both halves','side.left':'Left','side.right':'Right','cta.open':'Customize this look','cta.resume':'Continue my saved design →','keys':'keys','specs.eyebrow':'Spec sheet','specs.title':'What’s under the frame',
     'f.parts':'Parts','f.pcbs':'Order PCBs','f.support':'Support Flan on Ko-fi','nav.support':'Support','f.status':'Digital prototype · physical tests pending','f.by':'by',
     'role.body':'Body','role.detail':'Detail','role.accent':'Accent','role.secondary':'Secondary'},
   es:{'nav.explore':'Explorar en 3D','nav.build':'Guía de armado','hero.eyebrow':'Teclado inalámbrico de código abierto','hero.title':'Bajo. Dividido. Tuyo.','hero.sub':'Cuatro tamaños, 28 temas y seis marcos magnéticos. Gíralo, sepáralo y hazlo tuyo.',
@@ -22,7 +23,7 @@ const T={
     'stage.nogl':'La vista 3D necesita WebGL. El explorador muestra cada pieza.','stage.failed':'No se pudo cargar el modelo 3D. Revisa la conexión y recarga.',
     'layers.apart':'Separado','layers.together':'Unido','layers.label':'Separar las capas','rail.label':'Hazlo tuyo','g.size':'Tamaño','g.theme':'Tema','g.case':'Caja','g.keys':'Keycaps','g.frame':'Marco','g.frames':'Marcos',
     'frame.browse':'Ver los 6','frame.count':'· 6 diseños magnéticos','frame.cancel':'Cancelar','frame.hover':'Pasa el cursor por un marco para verlo en el modelo','frame.apply':'Aplicar {name}','frame.from':'Colores de {theme}','frame.own':'Usar la paleta propia de {name}','frame.ownOn':'Usar los colores de {theme}','frame.current':'Actual','frame.previewing':'Vista previa: {name} · sin aplicar',
-    'side.both':'Ambas mitades','side.left':'Izquierda','side.right':'Derecha','cta.open':'Abrir este teclado en 3D','keys':'teclas','specs.eyebrow':'Ficha técnica','specs.title':'Lo que hay bajo el marco',
+    'side.both':'Ambas mitades','side.left':'Izquierda','side.right':'Derecha','cta.open':'Personalizar esta selección','cta.resume':'Continuar mi diseño guardado →','keys':'teclas','specs.eyebrow':'Ficha técnica','specs.title':'Lo que hay bajo el marco',
     'f.parts':'Piezas','f.pcbs':'Pedir PCB','f.support':'Apoya Flan en Ko-fi','nav.support':'Apoyar','f.status':'Prototipo digital · pruebas físicas pendientes','f.by':'por',
     'role.body':'Cuerpo','role.detail':'Detalle','role.accent':'Acento','role.secondary':'Secundario'},
 };
@@ -58,6 +59,14 @@ function valid(l){
 }
 let look=structuredClone(DEFAULT);
 try{const saved=JSON.parse(store.get('flan.home.look'));if(valid(saved))look=saved;}catch{}
+const incoming=new URLSearchParams(location.search);
+if(designKeys.some(key=>key!=='design'&&incoming.has(key))){
+ const next=structuredClone(DEFAULT);
+ for(const key of ['size','theme','case','keys'])if(incoming.has(key))next[key]=incoming.get(key);
+ const fallback=themes.get(next.theme)?.recommended_frame,frames=(incoming.get('frame')||(frameIds.includes(fallback)?fallback:'snes')).split(','),palette=(incoming.get('palette')||'').split(',');
+ for(const [i,side] of ['left','right'].entries()){next.frame[side]=frames[i]||frames[0];next.own[side]=(palette[i]||palette[0])==='frame';}
+ if(valid(next))look=next;
+}
 const theme=()=>themes.get(look.theme);
 const sizeOf=id=>data.sizes.find(s=>s.id===id);
 function exploreUrl(l=look){
@@ -65,6 +74,11 @@ function exploreUrl(l=look){
   if(l.own.left||l.own.right)q.set('palette',l.own.left===l.own.right?'frame':`${l.own.left?'frame':'theme'},${l.own.right?'frame':'theme'}`);
   return 'explore/?'+q;
 }
+const address=createDesignURL({encode:l=>new URL(exploreUrl(l),location.href).href,onLink:()=>{},onError:()=>{}});
+// The home look is a selection to customize; advanced saved choices have their own entry.
+let hasSavedDesign=false;
+try{const c=JSON.parse(store.get('flan36.configuration.v1'));hasSavedDesign=c?.schema==='flan36-config-1'&&data.sizes.some(s=>s.id===c.variant);}catch{}
+$('resume-design').hidden=!hasSavedDesign;
 
 // page colours follow the theme
 function paint(){
@@ -110,6 +124,9 @@ function syncRail(){
   const small={size:s.keys,theme:theme().name,case:caseName(look.case).replace('Color r','R'),keys:keysName(look.keys),frame:frames};
   for(const b of $('tabs').children)b.replaceChildren(t('g.'+b.dataset.tab),el('small',{textContent:String(small[b.dataset.tab])}));
   $('open').href=exploreUrl();
+  for(const a of document.querySelectorAll('[data-explore]'))a.href=exploreUrl();
+  for(const a of document.querySelectorAll('[data-build-step]'))a.href=exploreUrl()+'#'+a.dataset.buildStep;
+  address.schedule(look);
 }
 // phones: keep the chosen option in the visible part of its strip
 function reveal(){

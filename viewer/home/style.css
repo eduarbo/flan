@@ -197,7 +197,7 @@ footer .support-pill:hover { background: color-mix(in srgb, var(--accent) 20%, t
   .grp .opts, .grp .sw { display: flex; gap: 10px; overflow-x: auto; margin: 0 -16px; padding: 7px 16px 8px; scroll-snap-type: x proximity; scrollbar-width: none; }
   .grp .opts::-webkit-scrollbar, .grp .sw::-webkit-scrollbar { display: none; }
   .opt { flex: none; min-width: 76px; scroll-snap-align: start; }
-  .sw button { flex: none; width: 52px; height: auto; border-radius: 0; background: none; box-shadow: none !important; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11px; line-height: 1.2; text-align: center; }
+  .sw button { flex: none; width: max-content; min-width: 52px; max-width: 100px; height: auto; border-radius: 0; background: none; box-shadow: none !important; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 11px; line-height: 1.2; text-align: center; }
   .sw button::before { content: ""; width: 40px; height: 40px; border-radius: 50%; background: radial-gradient(circle at 68% 74%, var(--c) 0 5px, transparent 5.6px), linear-gradient(var(--a) 0 56%, var(--b) 56%); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent); }
   .sw button[aria-pressed=true]::before { box-shadow: 0 0 0 2px var(--bg1), 0 0 0 4px var(--ink); } .sw button[aria-pressed=true] { font-weight: 600; }
   .sw span { display: block; }
@@ -210,3 +210,8 @@ footer .support-pill:hover { background: color-mix(in srgb, var(--accent) 20%, t
   footer { flex-direction: column; align-items: flex-start; gap: 10px; padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right)); }
 }
 @media (prefers-reduced-motion: reduce) { :root { transition: none; } .scene, .poster { transition: none; } }
+
+/* Returning visitors can keep every advanced choice from the explorer. */
+.resume-design { display: inline-flex; align-items: center; align-self: flex-start; min-height: 44px; color: var(--accent); font-size: 13px; text-decoration: none; }
+.resume-design:hover { text-decoration: underline; }
+.resume-design[hidden] { display: none; }

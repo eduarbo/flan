@@ -52,7 +52,7 @@ const T={
     'themes.noteHalf':'Themes change colors only, on the {side} half. Case, keycap and frame colors fine-tune in their own sections.',
     // case
     'case':'Case','case.grid':'Case styles','case.target':'Apply case changes to','colors.finish':'Colors & finish','match':'Match frame and rim',
-    'case.guide':'Case files & printing guide ↗','case.mixed':'Mixed cases','color.base':'Base / color rim','color.plate':'Upper shell / key plate',
+    'case.guide':'Print this case →','case.mixed':'Mixed cases','color.base':'Base / color rim','color.plate':'Upper shell / key plate',
     'role.detail':'Detail','role.accent':'Accent','role.secondary':'Secondary',
     'case.solid':'Clean, continuous plate and base.','case.rim':'Raised 0.9 mm rim, inset black plate.','case.terrace':'Two shallow recessed bands in the sidewall.',
     'case.level':'Switch-covering upper shell, flush with the display frame. Original removable 1.3 mm plate underneath.',
@@ -201,7 +201,7 @@ const T={
     'themes.note':'Los temas solo cambian los colores. Los colores de la caja, las keycaps y el marco se ajustan en sus propias secciones.',
     'themes.noteHalf':'Los temas solo cambian los colores, en la mitad {side}. Los colores de la caja, las keycaps y el marco se ajustan en sus propias secciones.',
     'case':'Caja','case.grid':'Estilos de caja','case.target':'Aplicar los cambios de la caja a','colors.finish':'Colores y acabado','match':'Igualar marco y borde',
-    'case.guide':'Archivos de la caja y guía de impresión ↗','case.mixed':'Cajas mixtas','color.base':'Base / borde de color','color.plate':'Carcasa superior / placa de teclas',
+    'case.guide':'Imprimir esta caja →','case.mixed':'Cajas mixtas','color.base':'Base / borde de color','color.plate':'Carcasa superior / placa de teclas',
     'role.detail':'Detalle','role.accent':'Acento','role.secondary':'Secundario',
     'case.solid':'Placa y base limpias y continuas.','case.rim':'Borde elevado de 0.9 mm y placa negra hundida.','case.terrace':'Dos bandas hundidas y poco profundas en la pared lateral.',
     'case.level':'Carcasa superior que cubre los switches, al ras del marco. Debajo va la placa original removible de 1.3 mm.',

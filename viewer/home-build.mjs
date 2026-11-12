@@ -144,7 +144,7 @@ export async function buildHome({scene=read('build/viewer-scene.json')}={}){
   const bytes=Object.fromEntries(Object.entries(files).map(([k,f])=>[k,fs.statSync(path.join(assets,f)).size]));
   const page=await homePage({scene,files});
   const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
-  const sources=['viewer/home-build.mjs','viewer/home/app.js','viewer/home/model.js','viewer/home/tokens.js','viewer/home/style.css','viewer/home/template.html',
+  const sources=['viewer/home-build.mjs','viewer/home/app.js','viewer/design-url.js','viewer/home/model.js','viewer/home/tokens.js','viewer/home/style.css','viewer/home/template.html',
     'design/themes.json','design/frame-finishes.json','design/variants.json','docs/branding/flan/flan-mark-color.svg','viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}));
   const receipt={revision:scene.revision,page:{path:'docs/index.html',sha256:hash('docs/index.html'),bytes:page.bytes},
     packs:Object.fromEntries(Object.entries(files).map(([k,f])=>[k,{path:'docs/assets/'+f,sha256:hash('docs/assets/'+f),bytes:bytes[k]}])),

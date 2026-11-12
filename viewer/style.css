@@ -184,8 +184,8 @@ body[data-mode=customize]:not([data-detail=true]) #workspace-title { display: no
 
 /* Design: one section per choice, the usual options in view */
 .sec { display: flex; flex-direction: column; gap: 9px; min-width: 0; }
-.sec-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 30px; }
-.cur { font-size: 13px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.sec-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 12px; min-height: 30px; }
+.cur { font-size: 13px; font-weight: 500; color: var(--ink); white-space: normal; overflow-wrap: anywhere; min-width: 0; }
 .cur-note { font-weight: 400; color: var(--muted); }
 .tune { display: inline-flex; align-items: center; gap: 0; min-width: 0; min-height: 34px; padding: 0 2px 0 8px; color: var(--accent); font-size: 13px; font-weight: 500; }
 .tune .cur { color: inherit; }
@@ -222,7 +222,7 @@ h3 small { margin-left: 6px; text-transform: none; letter-spacing: 0; font-famil
 .preview-card:hover, .size-card:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 8%, transparent); }
 .preview-card[aria-pressed=true], .size-card[aria-pressed=true] { background: var(--sel); }
 .preview-card img, .size-card img { display: block; width: 100%; height: 54px; object-fit: contain; pointer-events: none; }
-.preview-card span, .size-card strong { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11.5px; font-weight: 500; }
+.preview-card span, .size-card strong { max-width: 100%; white-space: normal; overflow-wrap: anywhere; text-align: center; font-size: 11.5px; font-weight: 500; }
 .preview-card[aria-pressed=true] span, .size-card[aria-pressed=true] strong { font-weight: 600; }
 .size-card span { display: none; }
 .size-card img { height: 46px; }
@@ -244,10 +244,10 @@ h3 small { margin-left: 6px; text-transform: none; letter-spacing: 0; font-famil
 #fix-cap-rows { align-self: flex-start; }
 
 /* fine-tune controls */
-.segments { display: flex; gap: 2px; padding: 3px; border-radius: 999px; background: var(--soft); min-width: 0; }
-.segments button { flex: 1; min-width: 0; min-height: 36px; padding: 0 6px; color: var(--muted); font-size: 12.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.segments { display: flex; flex-wrap: wrap; align-self: flex-start; gap: 6px; padding: 0; border-radius: 0; min-width: 0; max-width: 100%; }
+.segments button { flex: 0 1 auto; min-width: 0; max-width: 100%; min-height: 44px; padding: 8px 10px; border: 1px solid transparent; border-radius: 8px; background: var(--soft); color: var(--muted); font-size: 12.5px; font-weight: 500; white-space: normal; overflow-wrap: anywhere; line-height: 1.4; }
 .segments button:hover { color: var(--ink); }
-.segments button[aria-pressed=true] { background: var(--bg0); color: var(--ink); box-shadow: 0 1px 3px color-mix(in srgb, var(--ink) 18%, transparent); }
+.segments button[aria-pressed=true] { border-color: var(--ink); background: var(--bg0); color: var(--ink); box-shadow: none; }
 .color-fields { display: grid; gap: 10px; }
 .color-field { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px 10px; min-width: 0; }
 .color-field > span { font-size: 13px; min-width: 0; }
@@ -277,7 +277,8 @@ input[type=color]::-moz-color-swatch { border: 0; border-radius: 50%; }
 .text-action { display: flex; justify-content: space-between; width: 100%; }
 input:not([type]), input[type=text], select { display: block; width: 100%; min-width: 0; min-height: 42px; margin: 6px 0 0; padding: 0 14px; border: 0; border-radius: 12px; background: var(--field); color: var(--ink); font-size: 14px; }
 .hex-input { margin: 0; min-height: 0; }
-#battery-options button { min-height: 40px; }
+#battery-options { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,175px),1fr)); width: 100%; max-width: 480px; }
+#battery-options button { text-align: left; }
 .cap-maps { display: grid; gap: 16px; }
 .cap-map { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
 .cap-map-label { grid-column: 1 / -1; font: 400 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
@@ -466,7 +467,7 @@ dialog pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 11px/1.6 var(
   .frame-grid .preview-card { width: 60px; }
   .pcb-grid .preview-card { width: 168px; }
   .theme-grid { gap: 10px; }
-  .theme-grid button { flex: none; width: 56px; height: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; border-radius: 0; background: none; box-shadow: none !important;
+  .theme-grid button { flex: none; width: max-content; min-width: 56px; max-width: 100px; height: auto; display: flex; flex-direction: column; align-items: center; gap: 6px; border-radius: 0; background: none; box-shadow: none !important;
     font-size: 11.5px; line-height: 1.2; text-align: center; scroll-snap-align: start; }
   .theme-grid button::before { content: ""; width: 42px; height: 42px; border-radius: 50%; background: radial-gradient(circle at 68% 74%, var(--c) 0 5px, transparent 5.6px), linear-gradient(var(--a) 0 56%, var(--b) 56%);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent); transition: box-shadow .2s; }
@@ -618,4 +619,11 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
  .print-choice { width: 100%; }
  .print-choice .segments { width: 100%; flex-direction: column; }
  .print-choice .segments button { text-align: left; }
+}
+
+/* Expanded docks keep previews compact and put independent color/key fields side by side. */
+@container editor (min-width: 850px) {
+ .preview-grid, .size-grid { grid-template-columns: repeat(var(--n,4),minmax(0,120px)); }
+ .pcb-grid { grid-template-columns: repeat(2,minmax(0,240px)); }
+ .color-fields, .cap-maps { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px 24px; max-width: 900px; }
 }

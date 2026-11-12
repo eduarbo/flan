@@ -372,6 +372,12 @@ function leaveDetail(){
 $('panel-back').onclick=()=>explorer.clear();
 // the way on once the design is done: Build, at the end of Design
 $('go-build').onclick=()=>{openPanel('files',$('go-build'));refreshRecovery();$('inspector').scrollTop=0;$('files-title').focus?.({preventScroll:true});};
+function openBuildStep(id,opener=canvas){
+  if(!['build-buy','build-boards','build-print','build-solder','build-program','build-close'].includes(id))return;
+  openPanel('files',opener);refreshRecovery();
+  requestAnimationFrame(()=>document.getElementById(id).scrollIntoView({block:'start',behavior:'instant'}));
+}
+for(const button of document.querySelectorAll('[data-build-step]'))button.onclick=()=>openBuildStep(button.dataset.buildStep,button);
 function openPanel(id,opener=canvas){
   rememberPanelScroll();detailRef=null;detailReturn=null;explorer?.clear();
   if(['files','about','inspect'].includes(id))activeMode=id;else{activeMode='customize';activePanel=id;}
@@ -987,6 +993,8 @@ onLanguage(()=>{
 
 // The design opens beside the model, as the home page's rail does.
 showWorkspace();setPanelOpen(true);resize();reset();
+openBuildStep(location.hash.slice(1));
+window.addEventListener('hashchange',()=>openBuildStep(location.hash.slice(1)));
 portraitLayout.addEventListener('change',()=>{showWorkspace();if(activeMode==='customize')revealPanel(activePanel);});
 // ground(false) hides the contact shadow so checks and captures measure only the model.
 if(new URLSearchParams(location.search).has('diagnostics'))window.flan36=Object.freeze({snapshot:()=>({configuration:copy(configuration),pcb:Object.fromEntries(objects.filter(o=>o.userData.part_id===o.userData.side+'-pcb').map(o=>[o.userData.side,{mask:o.userData.pcb_mask,color:o.material.color.getHexString()}])),silkscreen:Object.fromEntries(silkOverlays.map(o=>[o.userData.silkscreen,{visible:o.visible,ink:o.material.color.getHexString(),texture:[...silkTextures].find(([,texture])=>texture===o.material.alphaMap)?.[0]}])),view:copy(state),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:controls.target.toArray(),zoom:camera.zoom,halfHeight},hidden:[...hiddenObjects],selected:copy(explorer.selected),visible:objects.filter(o=>o.visible).map(o=>o.userData.objectIndex),undo:history.canUndo,redo:history.canRedo}),idle:()=>Promise.all([store.idle(),keycapColors.idle()]),ground:shown=>{ground.enabled=shown;sync();}});

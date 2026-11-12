@@ -2,8 +2,8 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "93642101c7e6ef49042b631f65d0456a0b7d02c103e6c9c0080f20454f1ac824",
-    "bytes": 659276
+    "sha256": "3002f594cb723ccb26c833c3792916f547fc24aadbb399312c8003d1e1499032",
+    "bytes": 661186
   },
   "packs": {
     "common": {
@@ -1563,11 +1563,15 @@
   "sources": [
     {
       "path": "viewer/home-build.mjs",
-      "sha256": "7a459ea610a7065b43fe86c901ba16947c5f65285b2b5ae457a06d680aef270a"
+      "sha256": "370cd604087a8395e3b10543566b9fbac08145094e5cc45fce4e78a114bd5bbc"
     },
     {
       "path": "viewer/home/app.js",
-      "sha256": "ed3260cc7c0a12f396fddf90c217d91c2a0f77b083836141a4a59ce0276c1655"
+      "sha256": "b79c73fc3ad09c7b5927c1ddf6b7bd0e0e89fe48b7f0af221a3e96ffbc7513a6"
+    },
+    {
+      "path": "viewer/design-url.js",
+      "sha256": "31a48f3c30fed05e4dc3b960d8693b3fb61fe29861990ce035ba0f9b6ed43a26"
     },
     {
       "path": "viewer/home/model.js",
@@ -1579,11 +1583,11 @@
     },
     {
       "path": "viewer/home/style.css",
-      "sha256": "17911fd1b900361f04cec6061264025b01474d1584bf1caa0f8f641f8c5b00cc"
+      "sha256": "cea6cb12ba1d1e2d7780d8ffdfb6f6952d30a97aeb1b689ba2091d2c7644d763"
     },
     {
       "path": "viewer/home/template.html",
-      "sha256": "e395a330fde44c0aea4150d76d55fa0a21b3b042361ec5d1309557412debb36b"
+      "sha256": "745200a2b28ed355f161120aae791ed9c3b395d611cd669847c94485992a577a"
     },
     {
       "path": "design/themes.json",

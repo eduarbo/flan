@@ -39,8 +39,8 @@ const root=path.resolve(__dirname,'..'),shots=path.join(root,'build/home-check')
   await page.click('#sides [data-side=left]');await page.click('#f-apply');
   out.applied=await state();assert(out.applied.href.endsWith('frame=talavera%2Cgameboy'),out.applied.href);
   // Spanish
-  await page.click('[data-lang=es]');out.es=await page.textContent('#open');assert(/Abrir/.test(out.es));await page.click('[data-lang=en]');
-  // the explorer opens on this look and keeps a clean address
+  await page.click('[data-lang=es]');out.es=await page.textContent('#open');assert(/Personalizar/.test(out.es));await page.click('[data-lang=en]');
+  // the explorer opens on this look and retains a copyable address
   const href=await page.getAttribute('#open','href');
   const viewer=await browser.newPage({viewport:{width:1440,height:900}});watch(viewer,'explore');
   await viewer.goto(base+href+'&diagnostics');await viewer.waitForSelector('#loading',{state:'hidden',timeout:400000});
@@ -48,7 +48,7 @@ const root=path.resolve(__dirname,'..'),shots=path.join(root,'build/home-check')
   const c=await viewer.evaluate(()=>window.flan36.snapshot().configuration);
   out.explore={variant:c.variant,cases:[c.cases.left.style,c.cases.right.style],frames:[c.frames.left.style,c.frames.right.style],base:c.cases.left.base_color,url:viewer.url()};
   assert.deepEqual(out.explore.cases,['terrace','terrace']);assert.deepEqual(out.explore.frames,['talavera','gameboy']);assert.equal(c.cases.left.base_color,'#dcd6ba');
-  assert(!/theme=/.test(out.explore.url),'the look leaves the address');
+  assert(/theme=|design=/.test(out.explore.url),'the design remains in the address');
   out.homeLink=await viewer.getAttribute('#nav-home','href');assert.equal(out.homeLink,'../');
   await viewer.screenshot({path:path.join(shots,'explore.png')});
   // software rendering is slow: free the CPU before the next layouts
@@ -65,7 +65,7 @@ const root=path.resolve(__dirname,'..'),shots=path.join(root,'build/home-check')
   await phone.close();await tablet.goto(base,{timeout:120000});await tablet.waitForSelector('#stage.live',{timeout:120000});await tablet.waitForTimeout(1500);
   out.tablet=await tablet.evaluate(()=>({lang:document.documentElement.lang,cta:document.getElementById('open').textContent.trim(),standby:document.getElementById('standby').getAttribute('aria-pressed'),
     explode:+document.getElementById('explode').getAttribute('aria-valuenow'),scroll:document.documentElement.scrollWidth,railBelow:document.getElementById('rail').getBoundingClientRect().top>document.getElementById('stage').getBoundingClientRect().bottom-1}));
-  assert.equal(out.tablet.lang,'es');assert(/Abrir/.test(out.tablet.cta));assert.equal(out.tablet.standby,'false');assert.equal(out.tablet.explode,75);
+  assert.equal(out.tablet.lang,'es');assert(/Personalizar/.test(out.tablet.cta));assert.equal(out.tablet.standby,'false');assert.equal(out.tablet.explode,75);
   assert(out.tablet.railBelow,'rail below the model');assert(out.tablet.scroll<=1024,'no sideways scroll');
   await tablet.screenshot({path:path.join(shots,'tablet-es.png'),fullPage:true,timeout:180000});
   assert.deepEqual(errors,[]);
