@@ -5,6 +5,7 @@ import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 
 import {retiredFrames,retiredReplacementNames,copy,check,normalize,variantIds,pcbEdition,setPcbEdition,pcbMask,setPcbMask} from './config.js';
 import {printKit,keycapPlan} from './printing.js';
+import {createBuildGuide} from './build-guide.js';
 import {createAppearance,setColor,savedKey,applyTheme} from './appearance.js';
 import themeLibrary from '../design/themes.json';
 import {restoreConfiguration,createStore,recoveryPrefix} from './storage.js';
@@ -220,12 +221,12 @@ let activeMode='customize',activePanel='cases',panelOpen=false,panelOpener=null,
 let detailRef=null,detailReturn=null;
 const panelSizes=new Map(),panelScroll=new Map();
 const portraitLayout=matchMedia('(max-width:700px),(max-width:1000px) and (orientation:portrait)');
-function sizeKey(){return portraitLayout.matches?'portrait':'landscape';}
+function sizeKey(){return (portraitLayout.matches?'portrait':'landscape')+(activeMode==='files'&&!detailRef?':build':'');}
 function panelBounds(){
   const portrait=portraitLayout.matches,rect=document.querySelector('main').getBoundingClientRect(),total=portrait?rect.height:rect.width;
   return {portrait,total,min:portrait?72:280,max:Math.max(portrait?72:280,total-(portrait?72:240))};
 }
-function defaultPanelRatio(){const {portrait,total}=panelBounds();return portrait?.48:Math.min(400/total,.45);}
+function defaultPanelRatio(){const {portrait,total}=panelBounds();if(activeMode==='files'&&!detailRef)return portrait?.82:Math.min(720/total,.65);return portrait?.48:Math.min(400/total,.45);}
 function layoutPanel(){
   if(!panelOpen)return;
   const {portrait,total,min,max}=panelBounds(),input=document.activeElement;
@@ -440,7 +441,7 @@ $('locate-magnets').onclick=()=>{
 $('credits').onclick=()=>{$('licenses').showModal();$('licenses').querySelector('.dialog-body').scrollTop=0;};
 $('close-credits').onclick=()=>$('licenses').close();$('licenses').addEventListener('close',()=>$('credits').focus({preventScroll:true}));
 canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();$('error').hidden=false;$('error').textContent=t('msg.contextLost');});
-for(const id of ['print-half','print-scope'])for(const button of $(id).children)button.onclick=()=>{for(const option of $(id).children)option.setAttribute('aria-pressed',String(option===button));};
+for(const id of ['print-half','print-scope'])for(const button of $(id).children)button.onclick=()=>{for(const option of $(id).children)option.setAttribute('aria-pressed',String(option===button));buildGuide.update(configuration);};
 // The complete kit's keycaps: each KLP Lamé file the design uses, fetched once and checked against its hash.
 // The offline copy can't reach them; its kit lists them instead.
 const keycapLoads=new Map(),gunzip=bytes=>new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer().then(b=>new Uint8Array(b));
@@ -668,6 +669,8 @@ function ensureSilk(){
 function showUnderside(){
   reset();for(const k of ['base','fasteners'])state.layers[k]=false;state.view='bottom';sync();fit(directions.bottom);ensureSilk();
 }
+const buildGuide=createBuildGuide({catalog,family,inventory:__FLAN_PRINT_INVENTORY__,getDesignLink:shareLink});
+$('pcb-order').onclick=()=>{openPanel('files',$('pcb-order'));refreshRecovery();$('build-boards').scrollIntoView({block:'start'});};
 const raw=path=>'https://raw.githubusercontent.com/eduarbo/flan/main/'+path;
 for(const edition of silk.editions){
   // the image is painted by paintThumbs() with the chosen mask colour
@@ -710,12 +713,11 @@ function syncConfigurationUI(){
   paintThumbs();
   $('pcb-downloads').replaceChildren(...['left','right'].map(side=>{const edition=selectedEditions[side],packages=flan36?edition.packages:edition.variants?.[variant]||family[variant].gerbers;const a=document.createElement('a');a.href=raw(packages[side]);const note=document.createElement('span');note.textContent=t('pcb.package',{edition:editionName(edition),mask:maskName(selectedMasks[side]).toLowerCase()});a.append(t('pcb.'+side),note);return a;}));
   // Build: the same Gerbers, and the parts and firmware of the chosen size
-  const sizeInfo=family[variant]||{title:'Flan36',keys_total:36},extra=Object.keys(family[variant]?.fasteners?.left||{}).length;
-  $('build-parts').textContent=t('build.parts.text',{size:sizeInfo.title,keys:sizeInfo.keys_total,packs:Math.ceil((sizeInfo.keys_total+4)/10),m6:6+2*extra});
+  const sizeInfo=family[variant]||{title:'Flan36',keys_total:36};
+  $('build-parts').textContent=t('build.parts.text',{size:sizeInfo.title,keys:sizeInfo.keys_total});
   $('build-pcb').textContent=t('build.pcb.text',{size:sizeInfo.title,edition:editions?editionSummary:t('pcb.signature'),mask:maskSummary.toLowerCase()});
   $('build-pcb-downloads').replaceChildren(...[...$('pcb-downloads').children].map(a=>a.cloneNode(true)));
-  $('build-firmware').replaceChildren(...[['left','build.firmware.left'],['right','build.firmware.right'],['right-no-display','build.firmware.rightNoDisplay']].map(([file,key])=>{
-    const a=document.createElement('a');a.href=raw(`firmware/uf2/${variant}-${file}.uf2`);const note=document.createElement('span');note.textContent=t('build.firmware.sub',{size:sizeInfo.title});a.append(t(key)+' ↓',note);return a;}));
+  buildGuide.update(configuration);
   showSilk();
   for(const b of $('battery-target').children)b.setAttribute('aria-pressed',String(b.dataset.side===batterySide));
   const batteries=(batterySide==='both'?['left','right']:[batterySide]).map(side=>configuration.batteries[side]);

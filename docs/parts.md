@@ -1,5 +1,7 @@
 # Parts and buying guide
 
+**Use [Build in the explorer](https://flankbd.com/explore/) for your configuration’s itemized list, supplier links, quantities and CSV export.** The reference below documents the component selections.
+
 **One complete split keyboard. Quantities cover both halves of Flan36; [other sizes](#quantities-by-size) change only the per-key parts and a few screws.**
 
 This is the selected purchasing BOM for the routed revI prototype, an original design by Eduardo Ruiz. The display uses the connector supplied with nice!view; the controller sockets and pins are specified below. **Physical assembly has not been qualified:** supplied-part tolerances, printed fit, magnetic retention and electrical operation still need the [build checks](build.md).

@@ -1492,11 +1492,19 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "d46b9090bb8d0f06c360c73ca217dfe0fc5d38a6d707dbac1c97b251e4350b6f"
+      "sha256": "16d4c920256beafec0c7ea1e03444df251feb7eb88b8cb242ed325aef93e20d4"
+    },
+    {
+      "path": "viewer/build-guide.js",
+      "sha256": "18476e1b50e28a7467f4212de8b3a15ddf5dc9588837ef6deae442b15a56b8b4"
+    },
+    {
+      "path": "design/build-parts.json",
+      "sha256": "b870128477710bc6e61a99bdf24a2787f7268c1adff2c0e5e0b389a0fd8853a7"
     },
     {
       "path": "viewer/i18n.js",
-      "sha256": "db26bc5e17aa076e81ffbb0c239e1b12e9944415f6d4098cf2f95d03753e0ccc"
+      "sha256": "d0f1da35c2ce99855ae489de6efb96c870a00a16683d823597ba40c1f2b3b262"
     },
     {
       "path": "viewer/config.js",
@@ -1556,15 +1564,15 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "654111faa80df8908135dac13580b48a3b40e7b42684f672a2fd272c7d6798b5"
+      "sha256": "d8a3db63583fe3b2fdf4d2c587e9c4030097b14f87ad6ffb0441c77f8c02291e"
     },
     {
       "path": "viewer/template.html",
-      "sha256": "184188583d9faa26a976d2f5d1bf8a3370011440c13fbecbcddeb89329159645"
+      "sha256": "55c783f5643442e16cfefe49da877b9502e4572eb0df96c7a6f58ec25b9eb5b3"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "1a71fc47cb2619621a217db86d77b108331dac0013b6802f7921d81ead9bb1f1"
+      "sha256": "16a70e37e0b5fb6513a2df53c152cc2a3414749c44b8520c02c351254e64e2ae"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -1607,7 +1615,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "d7e4c89a0fa61792e9a2368143ff98d28ce91a41ac1bb8c380426af453d4fc07",
+  "viewer_sha256": "ffa44a15f27ba731c2468c437a2b8b3116d7920c6892f29e2abc1c6963df1f74",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -1619,7 +1627,7 @@
     "cover_ahead_of_adjacent_cap_mm": 0
   },
   "offline": "docs/explore/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/explore/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.",
-  "offline_sha256": "202a6ca491188141dbb75b866510c3a99433315808aff176ed585dd99d2a4994",
+  "offline_sha256": "ddae802f29678102483f4e8229f42f3f0c21089fac6173d3f68c9b64bb063f95",
   "printing": {
     "path": "docs/explore/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
@@ -1657,8 +1665,8 @@
     ]
   },
   "geometry_aliases": 18,
-  "online_bytes": 53711607,
-  "offline_bytes": 87488990,
+  "online_bytes": 53762666,
+  "offline_bytes": 87540049,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

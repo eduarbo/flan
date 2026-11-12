@@ -1,0 +1,305 @@
+{
+  "source": "docs/parts.md",
+  "items": [
+    {
+      "id": "nano",
+      "supplier": "Typeractive",
+      "name": {
+        "en": "nice!nano v2 controller",
+        "es": "Controlador nice!nano v2"
+      },
+      "quantity": 2,
+      "url": "https://typeractive.xyz/products/nice-nano",
+      "note": {
+        "en": "Genuine v2; one per half.",
+        "es": "v2 original; uno por mitad."
+      }
+    },
+    {
+      "id": "view",
+      "supplier": "Typeractive",
+      "name": {
+        "en": "nice!view display",
+        "es": "Pantalla nice!view"
+      },
+      "quantity": 2,
+      "url": "https://typeractive.xyz/products/nice-view",
+      "note": {
+        "en": "Includes its 5-pin socket and header. Hiding a frame does not remove the display.",
+        "es": "Incluye zócalo y header de 5 pines. Quitar el marco no elimina la pantalla."
+      }
+    },
+    {
+      "id": "switch",
+      "supplier": "Typeractive",
+      "name": {
+        "en": "Kailh Choc v1 switches",
+        "es": "Switches Kailh Choc v1"
+      },
+      "quantity": "keys",
+      "url": "https://typeractive.xyz/products/choc-switches?variant=46024772387047",
+      "note": {
+        "en": "Select Pro Red, the reference switch. Includes at least four spares.",
+        "es": "Elige Pro Red, el switch de referencia. Incluye al menos cuatro repuestos."
+      },
+      "pack": 10
+    },
+    {
+      "id": "socket",
+      "supplier": "Typeractive",
+      "name": {
+        "en": "Kailh Choc hot-swap sockets",
+        "es": "Sockets hot-swap Kailh Choc"
+      },
+      "quantity": "keys",
+      "url": "https://typeractive.xyz/products/hotswap-sockets?variant=45742200324327",
+      "note": {
+        "en": "Select Choc (CPG135001S30). MX does not fit.",
+        "es": "Elige Choc (CPG135001S30). MX no es compatible."
+      },
+      "pack": 10
+    },
+    {
+      "id": "diode",
+      "supplier": "Typeractive",
+      "name": {
+        "en": "1N4148W SOD-123 diodes",
+        "es": "Diodos 1N4148W SOD-123"
+      },
+      "quantity": "keys",
+      "url": "https://typeractive.xyz/products/smd-diodes",
+      "note": {
+        "en": "One per key; match the cathode band to the PCB.",
+        "es": "Uno por tecla; alinea la banda del cátodo con la PCB."
+      },
+      "pack": 10
+    },
+    {
+      "id": "jack",
+      "supplier": "Typeractive",
+      "name": {
+        "en": "White PH 2.0 mm battery jack",
+        "es": "Conector de batería PH 2.0 mm blanco"
+      },
+      "quantity": 2,
+      "url": "https://typeractive.xyz/products/battery-jack?variant=45597492707559",
+      "note": {
+        "en": "Select white, side entry; reference JST S2B-PH-K-S.",
+        "es": "Elige blanco, de entrada lateral; referencia JST S2B-PH-K-S."
+      },
+      "pack": 2
+    },
+    {
+      "id": "301230",
+      "supplier": "Typeractive",
+      "name": {
+        "en": "301230 · 110 mAh battery",
+        "es": "Batería 301230 · 110 mAh"
+      },
+      "quantity": "battery:301230",
+      "url": "https://typeractive.xyz/products/lithium-battery-110mah?variant=43294731665639",
+      "note": {
+        "en": "Select WHT PH 2.0mm; verify polarity, finished size and lead routing. The loose wired jack supplied with white is not the PCB jack.",
+        "es": "Elige WHT PH 2.0mm; verifica polaridad, tamaño final y recorrido del cable. El jack con cable de la versión blanca no sustituye el de PCB."
+      }
+    },
+    {
+      "id": "adafruit-1570",
+      "supplier": "DigiKey",
+      "name": {
+        "en": "Adafruit 1570 · 100 mAh battery",
+        "es": "Batería Adafruit 1570 · 100 mAh"
+      },
+      "quantity": "battery:adafruit-1570",
+      "url": "https://www.digikey.com/en/products/detail/adafruit-industries-llc/1570/5054546",
+      "note": {
+        "en": "Protected 1S LiPo. Confirm pack polarity and charge limit; keep BOOST open.",
+        "es": "LiPo 1S protegida. Confirma polaridad y límite de carga; deja BOOST abierto."
+      }
+    },
+    {
+      "id": "power",
+      "supplier": "DigiKey",
+      "name": {
+        "en": "C&K PCM12SMTR power switch",
+        "es": "Interruptor C&K PCM12SMTR"
+      },
+      "quantity": 2,
+      "url": "https://www.digikey.com/en/products/detail/c-k/PCM12SMTR/1640112",
+      "note": {
+        "en": "Exact footprint. Obsolete part: confirm stock; substitutes require a fit check.",
+        "es": "Huella exacta. Pieza obsoleta: confirma stock; los sustitutos requieren verificar compatibilidad."
+      }
+    },
+    {
+      "id": "reset",
+      "supplier": "DigiKey",
+      "name": {
+        "en": "E-Switch TL3342F160QG/TR reset",
+        "es": "Reset E-Switch TL3342F160QG/TR"
+      },
+      "quantity": 2,
+      "url": "https://www.digikey.com/en/products/detail/e-switch/TL3342F160QG-TR/379003",
+      "note": {
+        "en": "Cut tape; underside reset button.",
+        "es": "Cinta cortada; botón de reset en la cara inferior."
+      }
+    },
+    {
+      "id": "strip",
+      "supplier": "DigiKey",
+      "name": {
+        "en": "Mill-Max 315-43-164-41-003000",
+        "es": "Mill-Max 315-43-164-41-003000"
+      },
+      "quantity": 1,
+      "url": "https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/315-43-164-41-003000/1212143",
+      "note": {
+        "en": "One 64-contact strip. Cut four 12-contact strips; allow sacrificial contacts.",
+        "es": "Una tira de 64 contactos. Corta cuatro tiras de 12; reserva contactos para los cortes."
+      }
+    },
+    {
+      "id": "pins",
+      "supplier": "DigiKey",
+      "name": {
+        "en": "Mill-Max 3320-0-00-15-00-00-03-0 pins",
+        "es": "Pines Mill-Max 3320-0-00-15-00-00-03-0"
+      },
+      "quantity": 48,
+      "url": "https://www.digikey.com/en/products/detail/mill-max-manufacturing-corp/3320-0-00-15-00-00-03-0/4147392",
+      "note": {
+        "en": "Round pins. Buy 50: 48 installed, two spares.",
+        "es": "Pines redondos. Compra 50: se usan 48 y quedan dos repuestos."
+      },
+      "buy": 50
+    },
+    {
+      "id": "feet",
+      "supplier": "DigiKey",
+      "name": {
+        "en": "Essentra RBS-5BK feet",
+        "es": "Patas Essentra RBS-5BK"
+      },
+      "quantity": 8,
+      "url": "https://www.digikey.com/en/products/detail/essentra-components/RBS-5BK/1878940",
+      "note": {
+        "en": "Adhesive, Ø12.7 × 1.6 mm; four per half.",
+        "es": "Adhesivas, Ø12.7 × 1.6 mm; cuatro por mitad."
+      }
+    },
+    {
+      "id": "cable",
+      "supplier": "DigiKey",
+      "name": {
+        "en": "Adafruit 4199 USB-C data cable",
+        "es": "Cable de datos USB-C Adafruit 4199"
+      },
+      "quantity": 1,
+      "url": "https://www.digikey.com/en/products/detail/adafruit-industries-llc/4199/10230016",
+      "note": {
+        "en": "USB-C to USB-C, 1 m. Reuse an equivalent data cable if you have one.",
+        "es": "USB-C a USB-C, 1 m. Puedes usar un cable de datos equivalente que ya tengas."
+      }
+    },
+    {
+      "id": "tape",
+      "supplier": "DigiKey",
+      "name": {
+        "en": "Olimex KAPTON-TAPE10MM",
+        "es": "Olimex KAPTON-TAPE10MM"
+      },
+      "quantity": 1,
+      "url": "https://www.digikey.com/en/products/detail/olimex-ltd/KAPTON-TAPE10MM/19204468",
+      "note": {
+        "en": "One roll of insulating tape; keep contacts clear and do not compress the cell.",
+        "es": "Un rollo de cinta aislante; deja libres los contactos y no comprimas la batería."
+      }
+    },
+    {
+      "id": "m6",
+      "supplier": "NBK",
+      "name": {
+        "en": "SLH-M2-6 low-head screws",
+        "es": "Tornillos de cabeza baja SLH-M2-6"
+      },
+      "quantity": "m6",
+      "url": "https://www.nbk1560.com/en-US/products/specialscrew/nedzicom/socketheadcapscrew/SLH/",
+      "note": {
+        "en": "Select M2 × 6; head Ø3.8 × 1.3 mm. Confirm pack quantity in the quote.",
+        "es": "Elige M2 × 6; cabeza Ø3.8 × 1.3 mm. Confirma las unidades por paquete al cotizar."
+      }
+    },
+    {
+      "id": "m4",
+      "supplier": "NBK",
+      "name": {
+        "en": "SSH-M2-4 ultra-low-head screws",
+        "es": "Tornillos de cabeza ultrabaja SSH-M2-4"
+      },
+      "quantity": 4,
+      "url": "https://www.nbk1560.com/en-US/products/specialscrew/nedzicom/socketheadcapscrew/SSH/",
+      "note": {
+        "en": "Select M2 × 4; head Ø4 × 1.1 mm. Ordinary socket heads are not equivalent.",
+        "es": "Elige M2 × 4; cabeza Ø4 × 1.1 mm. Una cabeza Allen normal no es equivalente."
+      }
+    },
+    {
+      "id": "base-magnets",
+      "supplier": "workbench",
+      "name": {
+        "en": "Ø2 × 3 mm axial magnets",
+        "es": "Imanes axiales Ø2 × 3 mm"
+      },
+      "quantity": 6,
+      "url": "",
+      "note": {
+        "en": "Three captive magnets in each base. Measure your actual magnets.",
+        "es": "Tres imanes cautivos en cada base. Mide los imanes reales."
+      }
+    },
+    {
+      "id": "frame-magnets",
+      "supplier": "workbench",
+      "name": {
+        "en": "Ø2 × 4 mm axial magnets",
+        "es": "Imanes axiales Ø2 × 4 mm"
+      },
+      "quantity": "frame-magnets",
+      "url": "",
+      "note": {
+        "en": "Three per installed frame. Check mating polarity before enclosing.",
+        "es": "Tres por marco instalado. Comprueba la polaridad de cada pareja antes de cerrar."
+      }
+    },
+    {
+      "id": "solder-tools",
+      "supplier": "workbench",
+      "name": {
+        "en": "Soldering and inspection tools",
+        "es": "Herramientas de soldadura e inspección"
+      },
+      "quantity": 1,
+      "url": "",
+      "note": {
+        "en": "Fine-tip iron, solder, flux, tweezers, cutters, multimeter and calipers.",
+        "es": "Cautín de punta fina, soldadura, flux, pinzas, cortadores, multímetro y calibrador."
+      }
+    },
+    {
+      "id": "print-tools",
+      "supplier": "workbench",
+      "name": {
+        "en": "Printing and assembly tools",
+        "es": "Herramientas de impresión y armado"
+      },
+      "quantity": 1,
+      "url": "",
+      "note": {
+        "en": "3D printer, filament, M2 tap and matching hex drivers. Qualify sample fit first.",
+        "es": "Impresora 3D, filamento, macho M2 y llaves Allen correspondientes. Prueba primero las muestras."
+      }
+    }
+  ],
+  "variant_links_checked": "2026-11-11"
+}

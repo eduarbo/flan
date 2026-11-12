@@ -17,7 +17,7 @@ Download the **[left Gerber/drill ZIP](https://raw.githubusercontent.com/eduarbo
 
 Select **2 layers, FR4, 1.6 mm thickness, 1 oz copper and lead-free HASL**, with **no assembly and no stencil**. For **PCB Color**, any of JLCPCB's seven solder masks works: green, purple, red, yellow, blue, white or black. The Gerbers are the same for every color; green has the fastest turnaround. Silkscreen is white, or black on white boards. Black and white need 0.13 mm mask bridges, and Flan's smallest is 0.47 mm ([capabilities](https://jlcpcb.com/capabilities/pcb-capabilities), checked 2026-10-17). Preview the combination in the viewer's **Design → PCB** tab. Both outlines measure **113.45 × 91.272757 mm**; let the Gerber importer detect them and inspect both outer contours and internal cutouts. The files already contain the separate plated and non-plated drill programs. No manual redraw or Piantor PCB substitution is needed. Shipping and the final price depend on the live quote and destination; no fabrication order or price is implied here.
 
-The back of both boards carries the **Flan signature**: the logo, `REV I · 2026 · RIGHT/LEFT` and the credit `by`, the eduarbo cube and `eduarbo` ([logo](branding.md), [receipt](../validation/revI-signature.json)). The base ZIPs above have the signature and no pattern.
+The back of both boards carries the **Flan signature**: the logo, `REV I · 2026 · RIGHT/LEFT`, `flankbd.com` below the wordmark, and the single credit `by`, the eduarbo cube and `eduarbo.com` ([logo](branding.md), [receipt](../validation/revI-signature.json)). The base ZIPs above have the signature and no pattern.
 
 The connector-height correction changes the printed assembly, not these routed PCBs.
 

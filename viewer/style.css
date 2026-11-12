@@ -498,3 +498,48 @@ dialog pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 11px/1.6 var(
   .color-field > .color-editor { justify-self: start; }
 }
 @media (prefers-reduced-motion: reduce) { :root, .tune.row svg, .view-menu svg, .theme-grid button, .theme-grid button::before { transition: none; } * { scroll-behavior: auto !important; } }
+
+/* The selected build: buying quantities and instructions stay beside their actions. */
+#build-workflow { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.build-summary { padding: 14px 16px; border-left: 3px solid var(--accent); background: var(--soft); border-radius: 0 12px 12px 0; }
+.build-summary p { margin: 4px 0; }
+.build-size { font-weight: 600; font-size: 16px; }
+.build-actions { display: grid; grid-template-columns: 1fr; }
+.build-actions button { min-height: 44px; padding: 10px 16px; line-height: 1.4; }
+.build-jumps { position: sticky; top: 0; z-index: 3; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: thin; padding: 6px 0; background: var(--bg0); border-radius: 10px; box-shadow: 0 -16px 0 var(--bg0), 0 6px 0 var(--bg0); }
+.build-jumps button { flex: none; white-space: nowrap; min-height: 36px; padding: 6px 10px; color: var(--accent); background: var(--soft); font-size: 12px; }
+#build-workflow .step { padding: 16px 18px 18px; gap: 12px; scroll-margin-top: 64px; }
+#build-workflow .step > h3 { padding-left: 38px; min-height: 28px; display: flex; align-items: center; margin: 0; }
+#build-workflow .step::before { top: 16px; left: 18px; }
+#build-workflow .micro { margin: 0; line-height: 1.6; }
+#build-shopping-progress { font-weight: 600; color: var(--accent); }
+.shopping-group h4, .print-inventory h4 { margin: 18px 0 6px; font: 500 12px/1.5 var(--sans); color: var(--muted); }
+.shopping-group:first-child h4 { margin-top: 0; }
+.shopping-row { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.shopping-row:last-child { border-bottom: 0; }
+.shopping-check { display: flex; align-items: flex-start; justify-content: center; padding-top: 2px; min-height: 44px; cursor: pointer; }
+.shopping-check input { width: 19px; height: 19px; margin: 0; accent-color: var(--accent); cursor: pointer; }
+.shopping-body { min-width: 0; }
+.shopping-body strong { font-size: 13.5px; font-weight: 600; overflow-wrap: anywhere; }
+.shopping-body .shopping-quantity { margin: 4px 0; font-size: 12.5px; font-weight: 500; }
+.shopping-buy { display: inline-flex; align-items: center; min-height: 36px; font-size: 12.5px; color: var(--accent); text-underline-offset: 3px; }
+.build-settings { margin: 8px 0 12px; }
+.build-settings > div { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
+.build-settings dt { color: var(--muted); }
+.build-settings dd { margin: 0; text-align: right; font-weight: 500; }
+.build-instructions { margin: 6px 0; padding-left: 20px; font-size: 13px; line-height: 1.65; color: var(--muted); }
+.build-instructions li { margin: 0 0 12px; padding-left: 3px; }
+.build-instructions li:last-child { margin-bottom: 0; }
+.build-detail { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 4px; }
+.build-detail summary { padding: 12px 0; font-size: 13px; font-weight: 500; cursor: pointer; line-height: 1.5; }
+.build-detail > a { display: inline-flex; min-height: 44px; align-items: center; color: var(--accent); font-size: 13px; }
+.print-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
+.print-row > span { min-width: 0; overflow-wrap: anywhere; }
+.print-row small { display: block; color: var(--muted); font-size: 11px; margin-top: 3px; }
+.print-row strong { flex: none; font-weight: 500; }
+.color-dot { display: inline-block; width: 9px; height: 9px; border: 1px solid var(--line); border-radius: 50%; background: var(--sample); margin-right: 4px; }
+#pcb-order { text-align: left; }
+#recovery .config-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
+#recovery .config-actions button { text-align: left; min-height: 44px; padding: 12px 16px; line-height: 1.4; overflow-wrap: anywhere; }
+#recovery-list:empty { display: none; }
+#recovery .config-actions + .config-actions { margin-top: 8px; }

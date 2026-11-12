@@ -1,0 +1,22 @@
+{
+  "all_four_sizes": true,
+  "per_half_batteries": true,
+  "supplier_variants_preselected": true,
+  "installed_frame_quantities": true,
+  "shopping_progress_reload": true,
+  "quantity_changes_invalidate_progress": true,
+  "csv": true,
+  "portable_guide": true,
+  "guide_reopens_exact_design": true,
+  "per_half_pcb_and_firmware": true,
+  "print_subset_and_actual_kit_match": true,
+  "recovery_download": true,
+  "recovery_alignment": true,
+  "desktop_and_mobile": true,
+  "languages": [
+    "en",
+    "es"
+  ],
+  "browser": "151.0.7922.34",
+  "errors": []
+}
