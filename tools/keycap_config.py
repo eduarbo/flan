@@ -68,6 +68,9 @@ def check(config,catalog=None):
         editions=config['pcb_editions']
         if not isinstance(editions,dict) or set(editions)!={'left','right'} or any(not isinstance(v,str) or v not in PCB_EDITION_IDS for v in editions.values()):return ['Unknown PCB edition.'],None
     if 'pcb_mask' in config and (not isinstance(config['pcb_mask'],str) or config['pcb_mask'] not in PCB_MASK_IDS):return ['Unknown PCB solder mask colour.'],None
+    if 'pcb_masks' in config:
+        masks=config['pcb_masks']
+        if not isinstance(masks,dict) or set(masks)!={'left','right'} or any(not isinstance(v,str) or v not in PCB_MASK_IDS for v in masks.values()):return ['Unknown PCB solder mask colour.'],None
     if 'cases' in config:
         cases=config['cases']
         if not isinstance(cases,dict) or set(cases)!={'left','right'}:return ['Select a case for each half.'],None

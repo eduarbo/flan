@@ -14,6 +14,13 @@ export function setPcbEdition(config,sides,edition){
  if(editions.left===editions.right){result.pcb_edition=edition;delete result.pcb_editions;}else result.pcb_editions=editions;
  return result;
 }
+export const pcbMask=(config,side)=>config.pcb_masks?.[side]??config.pcb_mask??pcbOptions.default_mask;
+export function setPcbMask(config,sides,mask){
+ const result=copy(config),masks=Object.fromEntries(['left','right'].map(side=>[side,pcbMask(config,side)]));
+ for(const side of sides)masks[side]=mask;
+ if(masks.left===masks.right){result.pcb_mask=mask;delete result.pcb_masks;}else result.pcb_masks=masks;
+ return result;
+}
 export function polygon(hull,key,turn){const a=(-key.angle-turn)*Math.PI/180,c=Math.cos(a),s=Math.sin(a);return hull.map(([x,y])=>[key.x+x*c-y*s,key.y+x*s+y*c]);}
 export function gap(a,b){
  const xs=p=>p.map(v=>v[0]),ys=p=>p.map(v=>v[1]);
@@ -40,6 +47,7 @@ export function check(config,c){
  if('pcb_edition' in config&&!pcbEditionIds.includes(config.pcb_edition))return {errors:[t('cfg.edition')]};
  if('pcb_editions' in config&&(!record(config.pcb_editions)||Object.keys(config.pcb_editions).sort().join()!=='left,right'||Object.values(config.pcb_editions).some(id=>!pcbEditionIds.includes(id))))return {errors:[t('cfg.edition')]};
  if('pcb_mask' in config&&!pcbMaskIds.includes(config.pcb_mask))return {errors:[t('cfg.mask')]};
+ if('pcb_masks' in config&&(!record(config.pcb_masks)||Object.keys(config.pcb_masks).sort().join()!=='left,right'||Object.values(config.pcb_masks).some(id=>!pcbMaskIds.includes(id))))return {errors:[t('cfg.mask')]};
  if('cases' in config){if(Object.keys(record(config.cases)?config.cases:{}).sort().join()!=='left,right')return {errors:[t('cfg.cases')]};for(const choice of Object.values(config.cases))if(!record(choice)||typeof choice.style!=='string'||!Object.hasOwn(c.case_styles,choice.style)||typeof choice?.cover!=='boolean')return {errors:[t('cfg.case')]};}
  const color=v=>typeof v==='string'&&/^#[0-9a-f]{6}$/i.test(v);
  for(const side of ['left','right']){const cs=config.cases?.[side]||{},f=config.frames[side];if(!record(f))return {errors:[t('cfg.frame')]};if(['base_color','plate_color'].some(k=>k in cs&&!color(cs[k])))return {errors:[t('cfg.caseColor')]};if('match_frame' in cs&&typeof cs.match_frame!=='boolean')return {errors:[t('cfg.link')]};if('accents' in f&&(!f.accents||typeof f.accents!=='object'||Array.isArray(f.accents)||Object.entries(f.accents).some(([k,v])=>!['detail','accent','secondary'].includes(k)||!color(v))))return {errors:[t('cfg.accent')]};if(cs.match_frame&&cs.style==='level'&&cs.plate_color?.toLowerCase()!==String(f.color||'').toLowerCase())return {errors:[t('cfg.level')]};if(cs.match_frame&&cs.base_color?.toLowerCase()!==String(f.color||'').toLowerCase())return {errors:[t('cfg.rim')]};}

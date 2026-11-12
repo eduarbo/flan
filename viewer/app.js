@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 
-import {retiredFrames,retiredReplacementNames,copy,check,normalize,variantIds,pcbEdition,setPcbEdition} from './config.js';
+import {retiredFrames,retiredReplacementNames,copy,check,normalize,variantIds,pcbEdition,setPcbEdition,pcbMask,setPcbMask} from './config.js';
 import {printKit,keycapPlan} from './printing.js';
 import {createAppearance,setColor,savedKey,applyTheme} from './appearance.js';
 import themeLibrary from '../design/themes.json';
@@ -501,7 +501,7 @@ function applyConfiguration(next,{record=true,persist=true}={}){
     }
     if(group==='lid'&&userData.frame_style!==undefined){const f=next.frames[side],finish=frameFinish(f.style,side,f.color,f.accents);geometry=finish.geometry;mat=finish.material;userData.frame_style=f.style;userData.frame_palette=finish.palette;}
     if(group==='battery'){const id=next.batteries[side];geometry=geometryFor(`mechanical/revI/${side}-battery-${id}.stl`);userData.battery_profile=id;}
-    if(userData.part_id===`${side}-pcb`){geometry=geometryFor(`mechanical/${dir}/${side}-pcb.stl`);mat=material(data.silkscreen.masks.find(m=>m.id===next.pcb_mask).mask);userData.pcb_mask=next.pcb_mask;}
+    if(userData.part_id===`${side}-pcb`){const mask=pcbMask(next,side);geometry=geometryFor(`mechanical/${dir}/${side}-pcb.stl`);mat=material(data.silkscreen.masks.find(m=>m.id===mask).mask);userData.pcb_mask=mask;}
     if(Number.isInteger(userData.battery_lead_index)){const id=next.batteries[side],wire=data.batteryLeadProfiles[`${side}-${id}`].find(p=>p.index===userData.battery_lead_index);geometry=geometryFor(wire.geometry);mat=material(wire.color);userData.battery_profile=id;}
     return {o,geometry,mat,rotation,userData};
   });
@@ -629,14 +629,14 @@ function silkTexture(edition,side){
   if(!silkTextures.has(key)){const t=new THREE.Texture(src.images[edition][side]);t.flipY=false;t.anisotropy=renderer.capabilities.getMaxAnisotropy();t.needsUpdate=true;silkTextures.set(key,t);}
   return silkTextures.get(key);
 }
-const maskSpec=()=>silk.masks.find(m=>m.id===configuration.pcb_mask);
+const maskSpec=side=>silk.masks.find(m=>m.id===pcbMask(configuration,side));
 function showSilk(){
   if(!silkImages)return;
   const src=silkSource();
   for(const overlay of silkOverlays){
     if(!src.images){overlay.visible=false;continue;}          // a variant without edition textures shows its plain mask
     fitOverlay(overlay,src.id,src.bounds);
-    overlay.material.alphaMap=silkTexture(pcbEdition(configuration,overlay.userData.silkscreen),overlay.userData.silkscreen);overlay.material.color.set(maskSpec().silk);overlay.material.needsUpdate=true;overlay.visible=true;
+    overlay.material.alphaMap=silkTexture(pcbEdition(configuration,overlay.userData.silkscreen),overlay.userData.silkscreen);overlay.material.color.set(maskSpec(overlay.userData.silkscreen).silk);overlay.material.needsUpdate=true;overlay.visible=true;
   }
   render();
 }
@@ -645,13 +645,15 @@ const thumbImages=new Map();let paintedMask=null;
 function thumbImage(id){const src=silkSource(),key=src.id+'/'+id;if(!thumbImages.has(key)){const img=new Image();img.src=(src.thumbnails||silk.thumbnails)[id];thumbImages.set(key,img.decode().then(()=>img));}return thumbImages.get(key);}
 const rgb=hex=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
 async function paintThumbs(){
-  const spec=maskSpec(),painted=silkSource().id+'/'+spec.id;if(paintedMask===painted)return;paintedMask=painted;
-  const [mr,mg,mb]=rgb(spec.mask),[sr,sg,sb]=rgb(spec.silk);
+  const source=silkSource(),specs=['right','left'].map(maskSpec),painted=source.id+'/'+specs.map(s=>s.id).join('/');if(paintedMask===painted)return;paintedMask=painted;
+  const colors=specs.map(s=>[...rgb(s.mask),...rgb(s.silk)]),bounds=source.bounds||silk.bounds;
+  // The generated thumbnails place right then left, with 3 mm margins and a 12 mm gap.
+  const width=side=>bounds[side][2]-bounds[side][0],split=(3+width('right')+6)/(6+width('right')+12+width('left'));
   for(const button of $('pcb-grid').children){
     const src=await thumbImage(button.dataset.edition);if(paintedMask!==painted)return;
     const c=document.createElement('canvas');c.width=src.naturalWidth;c.height=src.naturalHeight;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(src,0,0);
     const d=x.getImageData(0,0,c.width,c.height),p=d.data;
-    for(let i=0;i<p.length;i+=4){const board=p[i]/255,ink=p[i+1]/255;p[i]=mr+(sr-mr)*ink;p[i+1]=mg+(sg-mg)*ink;p[i+2]=mb+(sb-mb)*ink;p[i+3]=255*board;}
+    for(let i=0;i<p.length;i+=4){const [mr,mg,mb,sr,sg,sb]=colors[(i/4)%c.width<c.width*split?0:1],board=p[i]/255,ink=p[i+1]/255;p[i]=mr+(sr-mr)*ink;p[i+1]=mg+(sg-mg)*ink;p[i+2]=mb+(sb-mb)*ink;p[i+3]=255*board;}
     x.putImageData(d,0,0);button.querySelector('img').src=c.toDataURL();
   }
 }
@@ -677,7 +679,7 @@ for(const edition of silk.editions){
 $('pcb-underside').onclick=showUnderside;silkHook=ensureSilk;
 for(const spec of silk.masks){
   const button=document.createElement('button');button.type='button';button.dataset.mask=spec.id;button.setAttribute('aria-pressed','false');button.style.setProperty('--swatch',spec.mask);
-  button.onclick=()=>{const c=copy(configuration);c.pcb_mask=spec.id;try{applyConfiguration(c);}catch(e){message(e.message,true);return;}showUnderside();};
+  button.onclick=()=>{try{applyConfiguration(setPcbMask(configuration,pcbTargets(),spec.id));}catch(e){message(e.message,true);return;}showUnderside();};
   $('pcb-masks').append(button);
 }
 // Edition and mask names: the patterns keep theirs; the signature edition and the colours are translated.
@@ -701,14 +703,16 @@ function syncConfigurationUI(){
   for(const b of $('pcb-grid').children){b.setAttribute('aria-pressed',String(editions&&pcbTargets().every(side=>b.dataset.edition===selectedEditions[side].id)));b.disabled=!editions;}
   $('pcb-variant-note').hidden=editions;$('pcb-variant-note').textContent=editions?'':t('pcb.variant',{name:family[variant].title});
   if(!flan36)$('pcb-current').textContent=family[variant].title+' · '+(editions?editionSummary:t('pcb.signature'));
-  const spec=maskSpec();$('pcb-mask-current').textContent=maskName(spec);
-  for(const b of $('pcb-masks').children)b.setAttribute('aria-pressed',String(b.dataset.mask===spec.id));
+  const selectedMasks=Object.fromEntries(['left','right'].map(side=>[side,maskSpec(side)]));
+  const maskSummary=selectedMasks.left.id===selectedMasks.right.id?maskName(selectedMasks.left):['left','right'].map(side=>t('side.'+side)+': '+maskName(selectedMasks[side])).join(' · ');
+  $('pcb-mask-current').textContent=pcbSide==='both'?maskSummary:maskName(selectedMasks[pcbSide]);
+  for(const b of $('pcb-masks').children)b.setAttribute('aria-pressed',String(pcbTargets().every(side=>b.dataset.mask===selectedMasks[side].id)));
   paintThumbs();
-  $('pcb-downloads').replaceChildren(...['left','right'].map(side=>{const edition=selectedEditions[side],packages=flan36?edition.packages:edition.variants?.[variant]||family[variant].gerbers;const a=document.createElement('a');a.href=raw(packages[side]);const note=document.createElement('span');note.textContent=t('pcb.package',{edition:editionName(edition),mask:maskName(maskSpec()).toLowerCase()});a.append(t('pcb.'+side),note);return a;}));
+  $('pcb-downloads').replaceChildren(...['left','right'].map(side=>{const edition=selectedEditions[side],packages=flan36?edition.packages:edition.variants?.[variant]||family[variant].gerbers;const a=document.createElement('a');a.href=raw(packages[side]);const note=document.createElement('span');note.textContent=t('pcb.package',{edition:editionName(edition),mask:maskName(selectedMasks[side]).toLowerCase()});a.append(t('pcb.'+side),note);return a;}));
   // Build: the same Gerbers, and the parts and firmware of the chosen size
   const sizeInfo=family[variant]||{title:'Flan36',keys_total:36},extra=Object.keys(family[variant]?.fasteners?.left||{}).length;
   $('build-parts').textContent=t('build.parts.text',{size:sizeInfo.title,keys:sizeInfo.keys_total,packs:Math.ceil((sizeInfo.keys_total+4)/10),m6:6+2*extra});
-  $('build-pcb').textContent=t('build.pcb.text',{size:sizeInfo.title,edition:editions?editionSummary:t('pcb.signature'),mask:maskName(maskSpec()).toLowerCase()});
+  $('build-pcb').textContent=t('build.pcb.text',{size:sizeInfo.title,edition:editions?editionSummary:t('pcb.signature'),mask:maskSummary.toLowerCase()});
   $('build-pcb-downloads').replaceChildren(...[...$('pcb-downloads').children].map(a=>a.cloneNode(true)));
   $('build-firmware').replaceChildren(...[['left','build.firmware.left'],['right','build.firmware.right'],['right-no-display','build.firmware.rightNoDisplay']].map(([file,key])=>{
     const a=document.createElement('a');a.href=raw(`firmware/uf2/${variant}-${file}.uf2`);const note=document.createElement('span');note.textContent=t('build.firmware.sub',{size:sizeInfo.title});a.append(t(key)+' ↓',note);return a;}));
@@ -935,7 +939,7 @@ onLanguage(()=>{
 showWorkspace();setPanelOpen(true);resize();reset();
 portraitLayout.addEventListener('change',()=>{showWorkspace();if(activeMode==='customize')revealPanel(activePanel);});
 // ground(false) hides the contact shadow so checks and captures measure only the model.
-if(new URLSearchParams(location.search).has('diagnostics'))window.flan36=Object.freeze({snapshot:()=>({configuration:copy(configuration),silkscreen:Object.fromEntries(silkOverlays.map(o=>[o.userData.silkscreen,{visible:o.visible,texture:[...silkTextures].find(([,texture])=>texture===o.material.alphaMap)?.[0]}])),view:copy(state),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:controls.target.toArray(),zoom:camera.zoom,halfHeight},hidden:[...hiddenObjects],selected:copy(explorer.selected),visible:objects.filter(o=>o.visible).map(o=>o.userData.objectIndex),undo:history.canUndo,redo:history.canRedo}),idle:()=>Promise.all([store.idle(),keycapColors.idle()]),ground:shown=>{ground.enabled=shown;sync();}});
+if(new URLSearchParams(location.search).has('diagnostics'))window.flan36=Object.freeze({snapshot:()=>({configuration:copy(configuration),pcb:Object.fromEntries(objects.filter(o=>o.userData.part_id===o.userData.side+'-pcb').map(o=>[o.userData.side,{mask:o.userData.pcb_mask,color:o.material.color.getHexString()}])),silkscreen:Object.fromEntries(silkOverlays.map(o=>[o.userData.silkscreen,{visible:o.visible,ink:o.material.color.getHexString(),texture:[...silkTextures].find(([,texture])=>texture===o.material.alphaMap)?.[0]}])),view:copy(state),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:controls.target.toArray(),zoom:camera.zoom,halfHeight},hidden:[...hiddenObjects],selected:copy(explorer.selected),visible:objects.filter(o=>o.visible).map(o=>o.userData.objectIndex),undo:history.canUndo,redo:history.canRedo}),idle:()=>Promise.all([store.idle(),keycapColors.idle()]),ground:shown=>{ground.enabled=shown;sync();}});
 
 
 }
