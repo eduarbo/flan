@@ -72,7 +72,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink}){
    }
    const a=link(say('Open the complete print kit · ZIP','Abrir el kit completo de impresión · ZIP'),'Print-kit.zip');a.removeAttribute('target');copy.querySelector('#build-print-list').before(a);
   }
-  copy.querySelectorAll('button,.build-jumps,[role=status]').forEach(n=>n.remove());
+  copy.querySelectorAll('button,.build-jumps,.print-options,[role=status]').forEach(n=>n.remove());
   copy.querySelectorAll('details').forEach(n=>n.open=true);
   copy.querySelectorAll('input').forEach(n=>{if(n.type==='checkbox'){if(n.checked)n.setAttribute('checked','');n.disabled=true;}else n.remove();});
   const designLabel=say('Reopen this exact design','Volver a abrir este diseño exacto');const a=link(designLabel,await exactLink);a.id='build-design-link';copy.prepend(a);
@@ -89,7 +89,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink}){
  function activeSection(){
   scrollFrame=0;const nav=$('build-nav');if(!nav.getClientRects().length)return;
   const threshold=Math.max(nav.getBoundingClientRect().bottom,$('inspector').getBoundingClientRect().top+nav.offsetHeight)+24;
-  let active=sectionIds[0];for(const id of sectionIds)if($(id).getBoundingClientRect().top<=threshold)active=id;
+  let active=sectionIds[0];for(const id of sectionIds)if($(id).getBoundingClientRect().top<=threshold+1)active=id;
   for(const button of nav.children){
    const selected=button.dataset.target===active,was=button.hasAttribute('aria-current');
    if(selected){button.setAttribute('aria-current','step');if(!was){const left=button.offsetLeft,right=left+button.offsetWidth;if(left<nav.scrollLeft||right>nav.scrollLeft+nav.clientWidth)nav.scrollTo({left:Math.max(0,left-(nav.clientWidth-button.offsetWidth)/2),behavior:'instant'});}}

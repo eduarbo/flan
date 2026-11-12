@@ -89,3 +89,58 @@ scroll interaction at narrow and wide widths, then exercise real output files
 and ensure the published Git tree contains every runtime asset. Passing only
 text/download existence or overflow assertions is insufficient visual evidence.
 Delivery remains public eduarbo/flan origin/main and its existing Pages explorer.
+
+
+Follow-up: readable options and proportionate actions (baseline e545e81).
+The user's screenshot disproved the earlier broad UI verification: Print's
+shrink-wrapped segments inherited equal flex widths and ellipsis, clipping Both,
+Right and Shells + frame inside a wide card. An older width:100% on #print-kit
+remained active despite its newer align-self rule. Page-overflow assertions and
+Overview/PCB captures did not catch clipped control labels or button proportions.
+
+Two new independent read-only reviews (design/domain and adversarial interaction)
+recommended the same bounded correction and conditional publication: two labeled
+option groups share a wrapping row, options size to complete labels, and the
+download action sizes to its content. Use the actual panel width, including the
+280 px shared-3D minimum, and preserve native buttons, group labels, IDs, direct
+children, selection state, exports, inventory and fit instructions. The narrowest
+panel stacks whole choices; words are never abbreviated or elided. Save/Open JSON
+actions also stop stretching across a wide card; file and recovery rows retain
+their established list alignment. The guide omits the interactive control wrapper.
+No CRITICAL findings; both HIGH truncation/verification findings and the MEDIUM
+button-width finding are addressed. Reviewed source hashes stayed unchanged
+during the review round.
+
+The shared 280 px check also exposed fractional scroll rounding: scrollIntoView
+placed Print at y=208.109 while the activation boundary was 208, leaving PCBs
+active. A one-pixel boundary tolerance accommodates integer scroll offsets; the
+acceptance assertion remains unchanged.
+
+Reproduction for this correction: run the viewer build, then
+`node viewer/build-controls-check.cjs` and `node viewer/build-focus-check.cjs`
+with the same Playwright runtime above. The controls check captures Print in
+EN/ES at 320, 390, 768, 1024 and 1440 px, plus a 280 px shared-3D panel. It checks
+actual label clipping/ellipsis, card containment, touch height, side-by-side
+fields where space permits, intrinsic download width, visible keyboard focus,
+Tab/Space/Enter selection, a real selected-right-shell ZIP and the portable guide.
+The existing focus check covers the complete-build ZIP independently of that
+subset. Acceptance includes inspecting the actual Print captures; no prior
+expectation was removed to accommodate the narrow-panel failure.
+
+Before correction at 1440 px, Right had 39 px of width for 43 px of content,
+Shells + frame had 93 px for 98 px, and the print download occupied 976 px of a
+1024 px card. Screenshots and exported test files under build/build-controls/
+are ignored and reproduced by the focused check. Its outcome is recorded in
+validation/build-controls.json. Temporary baseline/debug captures and review
+hashes are removed after comparison. Source PCB, firmware, printing geometry,
+complete-build asset copies and configuration format remain unchanged.
+
+Final readback: all 12 language/layout cases pass, including the real 280 px
+shared panel. English Print download measures 144.875 px on a 1024 px card,
+instead of 976 px. Spanish measures 212.891 px when room permits and wraps within
+198 px in the minimum panel. All option labels remain complete, targets are at
+least 44 px, keyboard selection/download works, and individual/full ZIP and guide
+checks pass without page errors. Desktop, 320 px, Spanish 390 px and the minimum
+Spanish panel captures were visually inspected. The complete package asset
+metadata matches baseline byte-for-byte. Both reviewed publication conditions
+are satisfied; no unresolved HIGH/CRITICAL finding remains.

@@ -1,0 +1,157 @@
+{
+  "cases": [
+    {
+      "name": "en-1440",
+      "card_width": 1024,
+      "download_width": 144.875,
+      "labels": [
+        "Both",
+        "Left",
+        "Right",
+        "Complete kit",
+        "Shells + frame"
+      ]
+    },
+    {
+      "name": "en-1024",
+      "card_width": 942.09375,
+      "download_width": 144.875,
+      "labels": [
+        "Both",
+        "Left",
+        "Right",
+        "Complete kit",
+        "Shells + frame"
+      ]
+    },
+    {
+      "name": "en-768",
+      "card_width": 706.5625,
+      "download_width": 144.875,
+      "labels": [
+        "Both",
+        "Left",
+        "Right",
+        "Complete kit",
+        "Shells + frame"
+      ]
+    },
+    {
+      "name": "en-390",
+      "card_width": 358,
+      "download_width": 144.875,
+      "labels": [
+        "Both",
+        "Left",
+        "Right",
+        "Complete kit",
+        "Shells + frame"
+      ]
+    },
+    {
+      "name": "en-320",
+      "card_width": 288,
+      "download_width": 144.875,
+      "labels": [
+        "Both",
+        "Left",
+        "Right",
+        "Complete kit",
+        "Shells + frame"
+      ]
+    },
+    {
+      "name": "en-shared-280",
+      "card_width": 230,
+      "download_width": 144.875,
+      "labels": [
+        "Both",
+        "Left",
+        "Right",
+        "Complete kit",
+        "Shells + frame"
+      ]
+    },
+    {
+      "name": "es-1440",
+      "card_width": 1024,
+      "download_width": 212.890625,
+      "labels": [
+        "Ambas",
+        "Izquierda",
+        "Derecha",
+        "Kit completo",
+        "Carcasas + marco"
+      ]
+    },
+    {
+      "name": "es-1024",
+      "card_width": 942.09375,
+      "download_width": 212.890625,
+      "labels": [
+        "Ambas",
+        "Izquierda",
+        "Derecha",
+        "Kit completo",
+        "Carcasas + marco"
+      ]
+    },
+    {
+      "name": "es-768",
+      "card_width": 706.5625,
+      "download_width": 212.890625,
+      "labels": [
+        "Ambas",
+        "Izquierda",
+        "Derecha",
+        "Kit completo",
+        "Carcasas + marco"
+      ]
+    },
+    {
+      "name": "es-390",
+      "card_width": 358,
+      "download_width": 212.890625,
+      "labels": [
+        "Ambas",
+        "Izquierda",
+        "Derecha",
+        "Kit completo",
+        "Carcasas + marco"
+      ]
+    },
+    {
+      "name": "es-320",
+      "card_width": 288,
+      "download_width": 212.890625,
+      "labels": [
+        "Ambas",
+        "Izquierda",
+        "Derecha",
+        "Kit completo",
+        "Carcasas + marco"
+      ]
+    },
+    {
+      "name": "es-shared-280",
+      "card_width": 230,
+      "download_width": 198,
+      "labels": [
+        "Ambas",
+        "Izquierda",
+        "Derecha",
+        "Kit completo",
+        "Carcasas + marco"
+      ]
+    }
+  ],
+  "all_labels_visible": true,
+  "content_sized_download": true,
+  "wrapped_fields": true,
+  "shared_panel_minimum": 280,
+  "keyboard_selection_and_download": true,
+  "individual_zip_matches_selection": true,
+  "portable_guide_preserved": true,
+  "browser": "151.0.7922.34",
+  "errors": []
+}

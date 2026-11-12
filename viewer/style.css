@@ -380,7 +380,6 @@ body:not([data-mode=customize]) .build-cta, body[data-detail=true] .build-cta { 
 .share-row { display: flex; gap: 8px; align-items: center; }
 #share-link { margin: 0; flex: 1; font: 400 12px var(--mono); text-overflow: ellipsis; }
 #share-copy { flex: none; }
-#print-kit { width: 100%; margin-top: 4px; }
 .downloads { display: flex; flex-direction: column; }
 .downloads button, .downloads a { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-height: 58px; padding: 10px 0; border-radius: 0;
   border-bottom: 1px solid var(--line); color: var(--ink); font-size: 13.5px; font-weight: 500; text-align: left; text-decoration: none; }
@@ -574,9 +573,14 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
 .build-detail { margin-top: 4px; border-top: 1px solid var(--line); padding-top: 4px; }
 .build-detail summary { padding: 12px 0; min-height: 44px; font-size: 13px; font-weight: 500; cursor: pointer; line-height: 1.5; }
 .build-detail > a { display: inline-flex; min-height: 44px; align-items: center; color: var(--accent); font-size: 13px; }
-#build-workflow .segments { align-self: flex-start; max-width: 100%; min-height: 40px; }
-#build-workflow .field-label { margin-bottom: -12px; }
-#print-kit { align-self: flex-start; border-radius: 8px; padding: 10px 16px; }
+.print-options { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 20px 32px; }
+.print-choice { display: flex; flex-direction: column; gap: 8px; min-width: 0; max-width: 100%; }
+.print-choice .field-label { margin: 0; }
+.print-choice .segments { width: max-content; max-width: 100%; flex-wrap: wrap; gap: 6px; padding: 0; border-radius: 0; background: none; }
+.print-choice .segments button { flex: 0 0 auto; max-width: 100%; min-height: 44px; padding: 8px 12px; border: 1px solid transparent; border-radius: 8px; background: var(--soft); white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.4; }
+.print-choice .segments button[aria-pressed=true] { border-color: var(--ink); background: var(--bg0); color: var(--ink); box-shadow: none; }
+#print-kit { align-self: flex-start; width: fit-content; max-width: 100%; margin-top: 4px; border-radius: 8px; padding: 10px 16px; white-space: normal; }
+#project-menu .config-actions button { flex: 0 1 auto; max-width: 100%; border-radius: 8px; padding: 10px 16px; }
 .print-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
 .print-row > span { min-width: 0; overflow-wrap: anywhere; }
 .print-row small { display: block; color: var(--muted); font-size: 11px; margin-top: 3px; }
@@ -610,3 +614,9 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
 }
 
 @media (prefers-reduced-motion: reduce) { .build-jumps button { transition: none; } }
+
+@container editor (max-width: 310px) {
+ .print-choice { width: 100%; }
+ .print-choice .segments { width: 100%; flex-direction: column; }
+ .print-choice .segments button { text-align: left; }
+}
