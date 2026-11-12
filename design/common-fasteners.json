@@ -1,0 +1,10 @@
+{
+  "schema": "flan-common-fasteners-1",
+  "thread": "M2 x 0.4 machine screw",
+  "head_envelope_mm": {"diameter": 4.0, "height": 2.0},
+  "short_head_pocket_mm": {"radius": 2.3, "bottom": 5.3, "top": 7.7},
+  "lengths_mm": {"plate": 6, "pcb": 4},
+  "reference": "https://monsterbolts.com/pages/m2-bolt-size",
+  "scope": "Common socket-cap, button and low heads within the stated envelope; not countersunk or self-tapping screws. Existing PCB holes, bearing seats and thread engagement are preserved.",
+  "physical_acceptance": false
+}

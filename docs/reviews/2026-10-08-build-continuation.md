@@ -2,6 +2,53 @@
 
 The original outcome is a buildable, slim, completely wireless 36-key split with the retained Piantor key poses, Choc hot-swap, removable electronics, nice!nano v2, low-power displays, both battery envelopes and printable KLP Lamé caps/cases/approved frames. Finishing the digital audit does not finish that outcome.
 
+## Common fasteners, 2026-11-11
+
+The owner rejected the cost of specialty screw catalog packs and authorized
+changing the case to accept accessible screws, or evaluating screwless retention.
+The existing PCB, key positions, battery access, replaceable modules, case exterior
+and frame artwork must remain intact. A screwless candidate must retain the PCB
+and plate independently of the magnetic display cover and allow service without
+loading the battery or glass.
+
+The bounded candidate uses ordinary M2 × 0.4 machine screws, with the existing
+6 mm and 4 mm lengths. It enlarges only the underside head pockets and admits a
+maximum Ø4 × 2 mm head. Acceptance requires saved/reopened editable CAD, preserved
+unaffected geometry and configuration, connected printable solids, head/tool and
+keycap-travel clearance, matching STL/3MF output, and an updated purchase list.
+Printed fit, thread strength and repeated service remain physical checks. The
+baseline native file and explorer downloads remain unchanged; the common-M2
+candidate is delivered as a separate configured kit.
+
+One round of two independent read-only reviews (mechanical/procurement and
+adversarial service/fit) supported this bounded common-screw option. No critical
+objection remained. The high-priority finding was an untraceable head assumption:
+the travel checker now accepts an explicit profile and records its hash and the
+effective dimensions. Driver access and delivered cost are separate checks;
+the screw price alone is not the delivered price. No screwless retention is
+represented as qualified.
+
+The first all-style check caught Level's added wall limiting short-head clearance
+to 0.20 mm. The same editable head relief now cuts that local wall too, targeting
+0.30 mm without changing the exterior. The check covers every current Flan36 case
+and frame, including alternatives hidden by the selected configuration.
+
+Digital checks passed: both native files saved/reopened; protected parts, keycap
+geometry, configuration and case/frame bounds preserved; 40 connected case/frame
+solids and ten head/driver paths checked. The explicit Ø4 × 2 mm profile passed
+2,268 full-travel cap/head pairs with 3.983098 mm minimum conservative XY clearance.
+The original profile also passed its regression check. The configured kit contains
+20 parts and 36 keycaps, with exact source STL bytes, every 3MF triangle and material
+color verified. Existing 56 PCB packages and 12 firmware images still match their
+source-bound evidence. No physical fit, slicing, assembly or purchase is claimed.
+
+The selected ordinary screws are sold individually: six M2×6 and four M2×4.
+Procurement preparation records full shipping/tax estimates separately from the
+US$0.96 merchandise price. Source recipes and checkers are Git-safe; generated
+CAD/STEP/STL, kit and reports under `build/common-fasteners/` are ignored and
+reproducible with [the documented commands](../common-fasteners.md). User-specific
+configuration, shopping history and the delivered bundle remain outside Git.
+
 Source: Eduardo's continued build request, including “si no has terminado, por que vuelves a parar?” on 2026-10-08. Starting point: `fe8c7fdc1b13b8eac6383c3315af8e749b1b8d4c`.
 
 Required outcomes:

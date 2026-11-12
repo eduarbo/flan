@@ -33,6 +33,8 @@ Uncheck **Printed display cover** to expose the current stack. The display, cont
 
 ## Edit and print
 
+For Flan36, the optional [common M2 screw variant](common-fasteners.md) enlarges the hidden head pockets for ordinary socket-cap screws. It has a separate print kit and does not change the original explorer downloads.
+
 Download [Flan36.FCStd](../mechanical/revI/Flan36.FCStd) and use the [FreeCAD guide](freecad.md). `ActiveTray` and `ActivePlate` link to native `Case_solid`, `Case_rim`, `Case_terrace` or `Case_level` bodies. Edit their source sketches and boolean operations under **Construction**. No custom Python proxy is needed to reopen the document.
 
 [All case parts](../mechanical/revI) use `left-case-{solid,rim,terrace,level}-{base,plate}.{step,stl}` and matching `right-` names. Exported parts retain assembly coordinates. The viewer saves per-half case and cover choices in JSON; import that JSON with the configuration macro. JSON without case settings inherits the current default with covers installed. The assembled GLB includes the selected meshes, including when view layers are hidden.

@@ -1,0 +1,49 @@
+# Flan36 with common M2 screws
+
+This optional Flan36 variant enlarges the hidden head pockets in the plate and display frame. It accepts ordinary M2 × 0.4 machine screws with a head **no larger than Ø4 × 2 mm**. It keeps the PCB holes, bearing seats, thread engagement, exterior height, battery cage and removable magnetic frame.
+
+Use its complete print kit. The original explorer download and `mechanical/revI/Flan36.FCStd` retain the original low-head specification; importing a configuration does **not** change those pockets. The optional native file is `Flan36-common-screws.FCStd`.
+
+## Hardware for both halves
+
+| Quantity | Screw | Example | Unit price observed 2026-11-11 |
+|---|---|---|---|
+| 6 | M2 × 6 mm, 0.4 mm pitch | [Bolt Depot 6363](https://boltdepot.com/Product-Details?product=6363) | US$0.10 |
+| 4 | M2 × 4 mm, 0.4 mm pitch | [Bolt Depot 6358](https://boltdepot.com/Product-Details?product=6358) | US$0.09 |
+
+These stainless DIN 912 / ISO 4762 socket-cap examples specify a head diameter of 3.62–3.98 mm, height of 1.86–2.00 mm and a **1.5 mm hex key**. The required ten screws total **US$0.96 before shipping and tax**. Bolt Depot states [no minimum order or quantity](https://boltdepot.com/Service); delivered cost and availability must be checked at checkout. Equivalent local screws within the same dimensional limits also qualify for the nominal geometry.
+
+Tap the unchanged Ø1.7 mm pilots with an M2 tap. These are not self-tapping screws. Do not substitute countersunk heads or longer screws. Print the existing M2 coupon first; check actual thread grip, seating and repeated disassembly before the full build.
+
+## What changes
+
+Only the two short-head pockets per half grow: radius 2.15 → 2.30 mm, ceiling Z6.75 → Z7.70 mm. A maximum-size short head ends at Z7.40 mm, leaving 0.30 mm nominal clearance to the pocket ceiling and wall. The original PCB seat remains at Z5.40 mm. The three longer screws still seat at Z7.60 mm.
+
+Level's added upper wall receives the same local relief. Its outer surface and the 14.50 mm frame plane remain unchanged. Existing long-screw openings retain their original width; verify actual driver access and printed fit before assembly.
+
+Keep the five structural screws per half. They retain the PCB and battery cage when the magnetic frame is removed. A screwless alternative would need independent positive retention, removal access and measured clip fatigue/creep; magnetic attraction alone does not replace that function.
+
+For service, disconnect USB and power, remove the magnetic frame and keycaps, then remove the three M2×6 screws and plate. The two M2×4 screws then become accessible. Retain the existing battery-disconnection and module-removal sequence in the [assembly guide](build.md#magnetic-frame-and-service).
+
+## Reproduce the optional kit
+
+Keep the baseline source unchanged. Use the installed FreeCAD runtime and existing viewer dependencies. The configuration must select Flan36; other sizes have not been qualified for this option.
+
+```sh
+python3 tools/freecad/run_macos.py tools/freecad/install_common_fasteners.py \
+  --source mechanical/revI/Flan36.FCStd --output build/common-fasteners/Flan36.FCStd
+python3 tools/freecad/run_macos.py tools/freecad/check_common_fastener_service.py \
+  --source mechanical/revI/Flan36.FCStd --candidate build/common-fasteners/Flan36.FCStd \
+  --configuration configuration.json --output build/common-fasteners/Flan36-common-screws.FCStd
+/Applications/FreeCAD.app/Contents/Resources/bin/python tools/check_revI_fasteners.py \
+  --head-profile design/common-fasteners.json --output build/common-fasteners/cap-travel.json
+# If build/viewer-scene.json is absent, regenerate it with the existing scene inputs:
+# /Applications/FreeCAD.app/Contents/Resources/bin/python tools/build_viewer_revI.py
+node tools/prepare_common_fastener_kit.mjs --configuration configuration.json \
+  --candidate build/common-fasteners --output build/common-fasteners/Print-kit.zip
+python3 tools/check_configured_print_kit.py build/common-fasteners/Print-kit.zip
+```
+
+The installer refuses to overwrite an existing native output. `installation.json` binds the source, recipe, exports and reopened file; `service.json` records continuous driver access and saved frame colors. The kit checker compares every delivered STL byte and every translated 3MF triangle with the native exports. `cap-travel.json` records the full-travel keycap/head check with the explicit head profile.
+
+These are digital checks, not physical acceptance. Print fit, thread strength, driver usability, battery service, printer material assignment and electrical operation still require a first prototype.
