@@ -6,6 +6,7 @@ import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 import {retiredFrames,retiredReplacementNames,copy,check,normalize,variantIds,pcbEdition,setPcbEdition,pcbMask,setPcbMask} from './config.js';
 import {printKit,keycapPlan} from './printing.js';
 import {createBuildGuide} from './build-guide.js';
+import {buildFile,buildWait,completeBuild} from './build-package.js';
 import {createAppearance,setColor,savedKey,applyTheme} from './appearance.js';
 import themeLibrary from '../design/themes.json';
 import {restoreConfiguration,createStore,recoveryPrefix} from './storage.js';
@@ -47,10 +48,10 @@ const family=data.variants||{},baseVariant='flan36',variantLoads=new Map();
 const variantData=(()=>{try{return JSON.parse($('variant-data').textContent||'{}');}catch{return {};}})();
 const variantDir=id=>id===baseVariant?'revI':id,builtVariant=id=>id===baseVariant||Boolean(family[id]?.built&&family[id]?.asset);
 const shownVariant=config=>config.variant===baseVariant||family[config.variant]?.loaded?config.variant:baseVariant;
-let printBusy=false,glbBusy=false;
+let printBusy=false,glbBusy=false,buildBusy=false;
 function syncBuildAvailability(){
   const ready=shownVariant(configuration)===configuration.variant;
-  $('print-kit').disabled=printBusy||!ready;$('glb').disabled=glbBusy||!ready;
+  $('print-kit').disabled=printBusy||buildBusy||!ready;$('download-build').disabled=buildBusy||printBusy||!ready;$('glb').disabled=glbBusy||!ready;
   for(const id of ['variant-status','build-variant-status']){
     $(id).hidden=ready;$(id).textContent=ready?'':t('size.resources',{name:family[configuration.variant]?.title||configuration.variant});
   }
@@ -218,7 +219,7 @@ function resize(){
 new ResizeObserver(()=>resize()).observe(canvas);
 canvas.tabIndex=0;
 let activeMode='customize',activePanel='cases',panelOpen=false,panelOpener=null,currentScrollKey='customize:cases';
-let detailRef=null,detailReturn=null;
+let detailRef=null,detailReturn=null,buildFocus=true;
 const panelSizes=new Map(),panelScroll=new Map();
 const portraitLayout=matchMedia('(max-width:700px),(max-width:1000px) and (orientation:portrait)');
 function sizeKey(){return (portraitLayout.matches?'portrait':'landscape')+(activeMode==='files'&&!detailRef?':build':'');}
@@ -228,12 +229,15 @@ function panelBounds(){
 }
 function defaultPanelRatio(){const {portrait,total}=panelBounds();if(activeMode==='files'&&!detailRef)return portrait?.82:Math.min(720/total,.65);return portrait?.48:Math.min(400/total,.45);}
 function layoutPanel(){
+  document.body.dataset.buildFocus=String(activeMode==='files'&&!detailRef&&buildFocus);
+  $('build-focus-toggle').textContent=t(buildFocus?'build.show3d':'build.hide3d');
+  $('build-focus-toggle').setAttribute('aria-pressed',String(!buildFocus));
   if(!panelOpen)return;
   const {portrait,total,min,max}=panelBounds(),input=document.activeElement;
   const keyboard=portrait&&(window.visualViewport?.height||innerHeight)<520&&input?.matches('input:not([type]),input[type=text],textarea');
   const ratio=panelSizes.get(sizeKey())??defaultPanelRatio(),size=Math.max(min,Math.min(max,keyboard?max:total*ratio));
   document.querySelector('main').style.setProperty('--panel-size',size+'px');
-  const peek=portrait&&size<=min+5;
+  const peek=portrait&&size<=min+5&&!(activeMode==='files'&&buildFocus);
   document.body.dataset.drawerSnap=peek?'peek':size>=max-5?'full':Math.abs(size-total*.48)<6?'half':'custom';
   $('inspector').inert=peek;$('editor-tabs').inert=peek;
   const handle=$('panel-resize');handle.setAttribute('aria-orientation',portrait?'horizontal':'vertical');handle.setAttribute('aria-valuemin',Math.round(min/total*100));handle.setAttribute('aria-valuemax',Math.round(max/total*100));handle.setAttribute('aria-valuenow',Math.round(size/total*100));
@@ -446,9 +450,47 @@ for(const id of ['print-half','print-scope'])for(const button of $(id).children)
 // The offline copy can't reach them; its kit lists them instead.
 const keycapLoads=new Map(),gunzip=bytes=>new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer().then(b=>new Uint8Array(b));
 const keycapStl=id=>{const asset=data.keycapAssets?.[id];if(!asset||$('print-data').textContent.trim())return Promise.resolve(null);if(!keycapLoads.has(id))keycapLoads.set(id,printLoader(asset,{textContent:''},gunzip));return keycapLoads.get(id)().catch(()=>null);};
-$('print-kit').onclick=async()=>{const b=$('print-kit');printBusy=true;b.disabled=true;try{const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;b.textContent=t('kit.loading');await loadVariant(selected.variant);const base=await loadPrinting(),variant=selected.variant,registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing},fasteners:family[variant].fasteners};
-  let keycaps=null;if(scope==='complete'){const plan=keycapPlan(selected,catalog,variant===baseVariant?[]:family[variant].added||[],half),ids=[...new Set(plan.groups.map(g=>g.variant))];keycaps={plan,stl:Object.fromEntries(await Promise.all(ids.map(async id=>[id,await keycapStl(id)])))};}
-  const {bytes,manifest}=await printKit(selected,registry,{half,scope,keycaps,title:variant===baseVariant?'Flan36':family[variant].title,progress:(i,n)=>b.textContent=t('kit.preparing',{i,n})});const url=URL.createObjectURL(new Blob([bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=`${variant===baseVariant?'Flan36':family[variant].title}-${manifest.half}-${manifest.scope}.zip`;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);say('print-status',manifest.keycaps?(manifest.keycaps.missing.length?'kit.doneCapsMissing':'kit.doneCaps'):'kit.done',{n:manifest.parts.length,caps:manifest.keycaps?.groups.reduce((n,g)=>n+g.count,0)});}catch(e){say('print-status','kit.failed',{error:e.message});}finally{printBusy=false;syncBuildAvailability();b.textContent=t('kit.download');}};
+async function makePrintKit(selected,{half='both',scope='complete',strict=false,signal,progress=()=>{}}={}){
+ await buildWait(loadVariant(selected.variant),signal);signal?.throwIfAborted();
+ const base=await buildWait(loadPrinting(),signal),variant=selected.variant,registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing},fasteners:family[variant].fasteners};
+ let keycaps=null;
+ if(scope==='complete'){
+  const plan=keycapPlan(selected,catalog,variant===baseVariant?[]:family[variant].added||[],half),ids=[...new Set(plan.groups.map(g=>g.variant))];
+  keycaps={plan,stl:Object.fromEntries(await Promise.all(ids.map(async id=>[id,strict?await buildFile(catalog.variants.find(v=>v.id===id).path,__FLAN_BUILD_ASSETS__,signal):await keycapStl(id)])))};
+ }
+ signal?.throwIfAborted();
+ return printKit(selected,registry,{half,scope,keycaps,title:family[variant].title,progress:(i,n)=>{signal?.throwIfAborted();progress(i,n);}});
+}
+$('print-kit').onclick=async()=>{const b=$('print-kit');printBusy=true;b.disabled=true;syncBuildAvailability();try{
+ const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;b.textContent=t('kit.loading');
+ const {bytes,manifest}=await makePrintKit(selected,{half,scope,progress:(i,n)=>b.textContent=t('kit.preparing',{i,n})});
+ const url=URL.createObjectURL(new Blob([bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=family[selected.variant].title+'-'+manifest.half+'-'+manifest.scope+'.zip';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
+ say('print-status',manifest.keycaps?(manifest.keycaps.missing.length?'kit.doneCapsMissing':'kit.doneCaps'):'kit.done',{n:manifest.parts.length,caps:manifest.keycaps?.groups.reduce((n,g)=>n+g.count,0)});
+ }catch(e){say('print-status','kit.failed',{error:e.message});}finally{printBusy=false;syncBuildAvailability();b.textContent=t('kit.download');}};
+let buildController=null;
+$('build-cancel').onclick=()=>buildController?.abort();
+$('download-build').onclick=async()=>{
+ if(buildBusy||printBusy)return;
+ if(location.protocol==='file:'){
+  const status=$('build-export-status');status.textContent=t('build.online');
+  try{const a=document.createElement('a');a.href=await shareLink();a.textContent=t('build.openOnline');a.target='_blank';a.rel='noopener';status.append(' ',a);}catch{status.textContent=t('build.failed',{error:t('share.failed')});}
+  return;
+ }
+ const selected=copy(configuration),button=$('download-build');
+ // Capture documents synchronously with the configuration before any downloads begin.
+ buildBusy=true;buildController=new AbortController();button.disabled=true;button.dataset.busy='true';$('build-cancel').hidden=false;syncBuildAvailability();
+ try{
+  const snapshot=buildGuide.capture({complete:true,bundled:true});
+  const guide=await snapshot.guide;buildController.signal.throwIfAborted();
+  const result=await completeBuild({configuration:selected,assets:__FLAN_BUILD_ASSETS__,editions:data.silkscreen.editions,catalog,signal:buildController.signal,
+   print:(c,options)=>makePrintKit(c,{...options,strict:true}),guide,csv:snapshot.csv,
+   progress:(phase,i,n)=>{$('build-export-status').textContent=t('build.progress.'+phase,{i:i||0,n:n||0});}});
+  const url=URL.createObjectURL(new Blob([result.bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=family[selected.variant].title+'-complete-build.zip';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
+  $('build-export-status').textContent=t('build.ready',{name:family[selected.variant].title});
+ }catch(e){const cancelled=buildController.signal.aborted;buildController.abort();$('build-export-status').textContent=t(cancelled?'build.cancelled':'build.failed',{error:e.message});}
+ finally{buildBusy=false;buildController=null;button.disabled=false;delete button.dataset.busy;$('build-cancel').hidden=true;syncBuildAvailability();}
+};
+
 $('glb').onclick=async()=>{
   const button=$('glb');glbBusy=true;button.disabled=true;setText(button,t('glb.preparing'));
   try{
@@ -669,6 +711,8 @@ function ensureSilk(){
 function showUnderside(){
   reset();for(const k of ['base','fasteners'])state.layers[k]=false;state.view='bottom';sync();fit(directions.bottom);ensureSilk();
 }
+$('build-focus-toggle').onclick=()=>{buildFocus=!buildFocus;layoutPanel();};
+$('build-edit').onclick=()=>openPanel(activePanel,$('build-edit'));
 const buildGuide=createBuildGuide({catalog,family,inventory:__FLAN_PRINT_INVENTORY__,getDesignLink:shareLink});
 $('pcb-order').onclick=()=>{openPanel('files',$('pcb-order'));refreshRecovery();$('build-boards').scrollIntoView({block:'start'});};
 const raw=path=>'https://raw.githubusercontent.com/eduarbo/flan/main/'+path;

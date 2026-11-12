@@ -7,3 +7,6 @@
 
 # Preserve upstream STEP bytes exactly for pinned source hashes.
 components/sources/*.step -text
+
+# Content-addressed build downloads must preserve exact source bytes.
+docs/explore/assets/build/* -text

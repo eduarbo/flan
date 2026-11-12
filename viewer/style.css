@@ -499,47 +499,114 @@ dialog pre { white-space: pre-wrap; overflow-wrap: anywhere; font: 11px/1.6 var(
 }
 @media (prefers-reduced-motion: reduce) { :root, .tune.row svg, .view-menu svg, .theme-grid button, .theme-grid button::before { transition: none; } * { scroll-behavior: auto !important; } }
 
-/* The selected build: buying quantities and instructions stay beside their actions. */
-#build-workflow { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.build-summary { padding: 14px 16px; border-left: 3px solid var(--accent); background: var(--soft); border-radius: 0 12px 12px 0; }
-.build-summary p { margin: 4px 0; }
-.build-size { font-weight: 600; font-size: 16px; }
-.build-actions { display: grid; grid-template-columns: 1fr; }
-.build-actions button { min-height: 44px; padding: 10px 16px; line-height: 1.4; }
-.build-jumps { position: sticky; top: 0; z-index: 3; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: thin; padding: 6px 0; background: var(--bg0); border-radius: 10px; box-shadow: 0 -16px 0 var(--bg0), 0 6px 0 var(--bg0); }
-.build-jumps button { flex: none; white-space: nowrap; min-height: 36px; padding: 6px 10px; color: var(--accent); background: var(--soft); font-size: 12px; }
-#build-workflow .step { padding: 16px 18px 18px; gap: 12px; scroll-margin-top: 64px; }
-#build-workflow .step > h3 { padding-left: 38px; min-height: 28px; display: flex; align-items: center; margin: 0; }
-#build-workflow .step::before { top: 16px; left: 18px; }
+/* Build is a reading workspace; the model can be brought back alongside it. */
+body[data-mode=files][data-build-focus=true][data-panel-open=true] main { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(0,1fr); }
+body[data-mode=files][data-build-focus=true][data-panel-open=true] .stage { display: none; }
+body[data-mode=files][data-build-focus=true] #workspace { grid-area: 1 / 1; padding: 0; border-radius: 0; background: none; box-shadow: none; }
+body[data-mode=files][data-build-focus=true] :is(#panel-resize,.panel-tools) { display: none; }
+body[data-mode=files][data-build-focus=true] .inspector { display: flex; padding: 0; scroll-padding: 0; }
+body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120px); margin: 0 auto; padding: 24px clamp(16px,4vw,48px) 64px; }
+#panel-files { gap: 24px; }
+#build-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+#build-toolbar > div { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+#build-toolbar button { min-height: 40px; padding: 8px 12px; border-radius: 8px; background: var(--soft); font-size: 12px; }
+#build-workflow { display: flex; flex-direction: column; gap: 24px; min-width: 0; --build-nav-height: 66px; }
+.build-hero { display: grid; gap: 24px; align-items: start; padding: 12px 0 8px; }
+.build-hero .title { font-size: clamp(30px,3vw,42px); }
+.build-hero .hint { margin: 12px 0 20px; max-width: 48ch; }
+.build-summary { display: grid; gap: 6px; }
+.build-summary p { margin: 0; }
+.build-selection { border: 0; }
+.build-selection summary { min-height: 36px; padding: 6px 0; font-size: 12px; justify-content: flex-start; }
+.build-selection summary::after { margin-left: 4px; font-size: 14px; }
+.build-selection .micro { margin-top: 6px !important; }
+.build-size { font: 500 12px/1.5 var(--mono); text-transform: uppercase; letter-spacing: .05em; }
+.build-summary > .micro:last-child { margin-top: 8px !important; font-size: 11px; }
+.build-export { display: flex; flex-direction: column; align-items: stretch; gap: 12px; padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+#download-build { border-radius: 9px; min-height: 48px; padding: 12px 16px; line-height: 1.35; }
+#download-build[data-busy] { cursor: progress; }
+#build-export-status:empty { display: none; }
+#build-cancel { align-self: flex-start; padding: 8px 12px; min-height: 40px; border-radius: 8px; background: var(--soft); font-size: 12px; }
+.build-more { border-top: 1px solid var(--line); padding-top: 4px; }
+.build-more summary { min-height: 40px; padding: 10px 0; font-size: 12px; cursor: pointer; }
+.build-actions { display: grid; gap: 8px; margin-top: 8px; }
+.build-actions button { min-height: 40px; border-radius: 8px; padding: 10px 12px; line-height: 1.4; text-align: left; font-size: 12px; }
+.build-jumps { position: sticky; top: 0; z-index: 3; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: thin; padding: 10px 0; background: var(--bg0); border-block: 1px solid var(--line); border-radius: 0; }
+.build-jumps button { display: flex; align-items: center; justify-content: center; gap: 6px; flex: 1 0 auto; white-space: nowrap; min-height: 42px; padding: 8px 10px; color: var(--muted); border-radius: 7px; font-size: 12px; transition: color .15s,background .15s; }
+.build-jumps button > span { opacity: .55; font: 10px var(--mono); }
+.build-jumps button:hover { background: var(--soft); color: var(--ink); }
+.build-jumps button[aria-current] { color: var(--bg0); background: var(--ink); font-weight: 500; }
+.build-jumps button[aria-current] > span { opacity: .75; }
+#build-workflow .steps { gap: 24px; }
+#build-workflow .step { padding: 24px; gap: 16px; border-radius: 14px; scroll-margin-top: calc(var(--build-nav-height) + 20px); }
+#build-workflow .step > h3 { padding-left: 40px; min-height: 28px; display: flex; align-items: center; margin: 0; font-size: 18px; }
+#build-workflow .step::before { top: 24px; left: 24px; width: 28px; height: 28px; font-size: 12px; }
 #build-workflow .micro { margin: 0; line-height: 1.6; }
-#build-shopping-progress { font-weight: 600; color: var(--accent); }
-.shopping-group h4, .print-inventory h4 { margin: 18px 0 6px; font: 500 12px/1.5 var(--sans); color: var(--muted); }
-.shopping-group:first-child h4 { margin-top: 0; }
-.shopping-row { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+#build-shopping-note { max-width: 76ch; }
+#build-shopping-progress { font-weight: 500; color: var(--accent); padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.shopping-group + .shopping-group { margin-top: 24px; }
+.shopping-group h4, .print-inventory h4 { margin: 0 0 8px; font: 500 11px/1.5 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.print-inventory h4 { margin-top: 18px; }
+.shopping-row { display: grid; grid-template-columns: 28px minmax(0,1fr) auto; align-items: start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
 .shopping-row:last-child { border-bottom: 0; }
-.shopping-check { display: flex; align-items: flex-start; justify-content: center; padding-top: 2px; min-height: 44px; cursor: pointer; }
-.shopping-check input { width: 19px; height: 19px; margin: 0; accent-color: var(--accent); cursor: pointer; }
+.shopping-check { display: flex; align-items: center; justify-content: center; min-height: 44px; cursor: pointer; }
+.shopping-check input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); cursor: pointer; }
 .shopping-body { min-width: 0; }
-.shopping-body strong { font-size: 13.5px; font-weight: 600; overflow-wrap: anywhere; }
-.shopping-body .shopping-quantity { margin: 4px 0; font-size: 12.5px; font-weight: 500; }
-.shopping-buy { display: inline-flex; align-items: center; min-height: 36px; font-size: 12.5px; color: var(--accent); text-underline-offset: 3px; }
-.build-settings { margin: 8px 0 12px; }
-.build-settings > div { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
+.shopping-info { border: 0; }
+.shopping-info summary { display: block; position: relative; padding: 4px 16px 4px 0; min-height: 44px; cursor: pointer; list-style: none; }
+.shopping-info summary::-webkit-details-marker { display: none; }
+.shopping-info summary::after { content: '+'; position: absolute; right: 0; top: 5px; color: var(--muted); font-size: 14px; }
+.shopping-info[open] summary::after { content: '−'; }
+.shopping-info > .micro { padding: 6px 0 8px; max-width: 64ch; }
+.shopping-body strong { font-size: 13px; font-weight: 500; overflow-wrap: anywhere; }
+.shopping-body .shopping-quantity { margin: 2px 0 0; color: var(--muted); font-size: 11.5px; }
+.shopping-row:has(input:checked) .shopping-body strong { color: var(--muted); }
+.shopping-buy { display: inline-flex; align-items: center; justify-content: flex-end; min-height: 44px; max-width: 190px; font-size: 12px; text-align: right; color: var(--accent); text-decoration: none; }
+.shopping-buy:hover { text-decoration: underline; }
+.build-settings { margin: 0 0 16px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 24px; }
+.build-settings > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
 .build-settings dt { color: var(--muted); }
 .build-settings dd { margin: 0; text-align: right; font-weight: 500; }
-.build-instructions { margin: 6px 0; padding-left: 20px; font-size: 13px; line-height: 1.65; color: var(--muted); }
-.build-instructions li { margin: 0 0 12px; padding-left: 3px; }
+#build-order-settings > .go { display: inline-flex; padding-top: 12px; }
+.build-instructions { margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.75; color: var(--muted); max-width: 80ch; }
+.build-instructions li { margin: 0 0 16px; padding-left: 6px; }
 .build-instructions li:last-child { margin-bottom: 0; }
-.build-detail { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 4px; }
-.build-detail summary { padding: 12px 0; font-size: 13px; font-weight: 500; cursor: pointer; line-height: 1.5; }
+.build-detail { margin-top: 4px; border-top: 1px solid var(--line); padding-top: 4px; }
+.build-detail summary { padding: 12px 0; min-height: 44px; font-size: 13px; font-weight: 500; cursor: pointer; line-height: 1.5; }
 .build-detail > a { display: inline-flex; min-height: 44px; align-items: center; color: var(--accent); font-size: 13px; }
+#build-workflow .segments { align-self: flex-start; max-width: 100%; min-height: 40px; }
+#build-workflow .field-label { margin-bottom: -12px; }
+#print-kit { align-self: flex-start; border-radius: 8px; padding: 10px 16px; }
 .print-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
 .print-row > span { min-width: 0; overflow-wrap: anywhere; }
 .print-row small { display: block; color: var(--muted); font-size: 11px; margin-top: 3px; }
 .print-row strong { flex: none; font-weight: 500; }
 .color-dot { display: inline-block; width: 9px; height: 9px; border: 1px solid var(--line); border-radius: 50%; background: var(--sample); margin-right: 4px; }
 #pcb-order { text-align: left; }
-#recovery .config-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
-#recovery .config-actions button { text-align: left; min-height: 44px; padding: 12px 16px; line-height: 1.4; overflow-wrap: anywhere; }
+#recovery .config-actions { display: grid; grid-template-columns: minmax(0,1fr); gap: 8px; }
+#recovery .config-actions button { text-align: left; min-height: 44px; border-radius: 8px; padding: 12px 16px; line-height: 1.4; overflow-wrap: anywhere; }
 #recovery-list:empty { display: none; }
 #recovery .config-actions + .config-actions { margin-top: 8px; }
+@container editor (min-width: 850px) {
+ .build-hero { grid-template-columns: minmax(0,1fr) 320px; gap: 40px; padding-block: 16px; }
+ .shopping-info summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-right: 24px; }
+ .shopping-info summary::after { top: 11px; }
+ .shopping-body .shopping-quantity { flex: none; margin: 0; }
+ .shopping-buy { min-width: 160px; }
+}
+@container editor (max-width: 520px) {
+ #build-toolbar { gap: 8px; }
+ #build-toolbar > .lab { display: none; }
+ #build-toolbar > div { width: 100%; justify-content: space-between; }
+ #build-workflow .step { padding: 18px 16px; gap: 14px; }
+ #build-workflow .step::before { top: 18px; left: 16px; }
+ #build-workflow .step > h3 { font-size: 16px; }
+ .shopping-row { grid-template-columns: 24px minmax(0,1fr); gap: 0 8px; }
+ .shopping-buy { grid-column: 2; justify-self: start; justify-content: start; text-align: left; min-height: 36px; }
+ .build-settings { grid-template-columns: 1fr; }
+ .build-export { padding: 16px; }
+ .build-jumps button { padding: 8px; font-size: 11px; }
+ .build-jumps button > span { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) { .build-jumps button { transition: none; } }

@@ -17,8 +17,14 @@ const printMeta=assets=>Object.fromEntries(Object.entries(assets).map(([id,a])=>
 const printInventory=Object.fromEntries(Object.entries(scene.variants).map(([id,v])=>[id,{
  assets:printMeta({...scene.printing.assets,...v.printing}),supports:scene.printing.supports,fasteners:v.fasteners
 }]));
+// Package assets stay on this origin and are pinned to this viewer's bytes.
+const packagePaths=new Set(['LICENSE','LICENSES/CC-BY-SA-4.0.txt',...scene.catalog.variants.map(v=>v.path),...['coupon-magnet-base','coupon-magnet-frame','coupon-m2-thread'].map(n=>'mechanical/revI/'+n+'.stl')]);
+for(const edition of scene.silkscreen.editions){for(const file of Object.values(edition.packages))packagePaths.add(file);for(const pair of Object.values(edition.variants||{}))for(const file of Object.values(pair))packagePaths.add(file);}
+for(const variant of Object.keys(scene.variants))for(const side of ['left','right','right-no-display'])packagePaths.add('firmware/uf2/'+variant+'-'+side+'.uf2');
+const packageAssets={},packageDirectory=path.join(root,'docs/explore/assets/build');fs.mkdirSync(packageDirectory,{recursive:true});
+for(const source of packagePaths){const bytes=fs.readFileSync(path.join(root,source)),digest=hash(source),filename=digest+path.extname(source);fs.writeFileSync(path.join(packageDirectory,filename),bytes);packageAssets[source]={url:'./assets/build/'+filename,sha256:digest,bytes:bytes.length};}
 const bundle=await build({entryPoints:[path.join(here,'app.js')],bundle:true,write:false,minify:true,
-  define:{__FLAN_PRINT_INVENTORY__:JSON.stringify(printInventory)},format:'iife',target:['es2020'],legalComments:'inline'});
+  define:{__FLAN_PRINT_INVENTORY__:JSON.stringify(printInventory),__FLAN_BUILD_ASSETS__:JSON.stringify(packageAssets)},format:'iife',target:['es2020'],legalComments:'inline'});
 const license=fs.readFileSync(path.join(here,'node_modules/three/LICENSE'),'utf8');
 fs.writeFileSync(path.join(root,'LICENSES/Three-MIT.txt'),license);
 const escape=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
@@ -119,12 +125,12 @@ new Script([...html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g)].at(-1)
 fs.writeFileSync(path.join(root,'docs/explore/index.html'),html);
 fs.writeFileSync(path.join(root,'docs/explore/offline.html'),offlineHtml);
 fs.writeFileSync(path.join(root,'docs/.nojekyll'),'');
-const sources=[...scene.sources,...['viewer/app.js','viewer/build-guide.js','design/build-parts.json','viewer/i18n.js','viewer/config.js','viewer/storage.js','viewer/history.js','viewer/assets.js','viewer/keycap-colors.js','viewer/color-input.js','design/keycap-themes.json','viewer/appearance.js','viewer/printing.js','design/themes.json','viewer/explorer.js','viewer/previews.js','viewer/finishes.js','design/frame-finishes.json','viewer/style.css','viewer/template.html','viewer/build.mjs','viewer/home/tokens.js','docs/branding/flan/flan-mark-color.svg',...['Fraunces','Inter','JetBrainsMono'].map(f=>`viewer/home/fonts/${f}-latin.woff2`),...['flan36','flan42','flan46','flan54'].map(id=>`viewer/thumbs/size-${id}.webp`),'viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}))];
+const sources=[...scene.sources,...['viewer/app.js','viewer/build-guide.js','viewer/build-package.js','design/build-parts.json','viewer/i18n.js','viewer/config.js','viewer/storage.js','viewer/history.js','viewer/assets.js','viewer/keycap-colors.js','viewer/color-input.js','design/keycap-themes.json','viewer/appearance.js','viewer/printing.js','design/themes.json','viewer/explorer.js','viewer/previews.js','viewer/finishes.js','design/frame-finishes.json','viewer/style.css','viewer/template.html','viewer/build.mjs','viewer/home/tokens.js','docs/branding/flan/flan-mark-color.svg',...['Fraunces','Inter','JetBrainsMono'].map(f=>`viewer/home/fonts/${f}-latin.woff2`),...['flan36','flan42','flan46','flan54'].map(id=>`viewer/thumbs/size-${id}.webp`),'viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}))];
 const receipt={revision:scene.revision,units:'mm',objects:scene.parts.length,unique_meshes:Object.keys(scene.geometries).length,
   keycaps:scene.parts.filter(p=>p.group==='keycaps').length,geometry_changed:false,
   sources,viewer_sha256:hash('docs/explore/index.html'),measurements:scene.measurements,
   offline:'docs/explore/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/explore/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.',
-  offline_sha256:hash('docs/explore/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},variants:Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),silkscreen:{path:silkPath,sha256:silkHash,bytes:silkBytes.length,editions:scene.silkscreen.editions.map(e=>e.id)},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
+  build_assets:packageAssets,offline_sha256:hash('docs/explore/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},variants:Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),silkscreen:{path:silkPath,sha256:silkHash,bytes:silkBytes.length,editions:scene.silkscreen.editions.map(e=>e.id)},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
   limitations:scene.limits};
 fs.writeFileSync(path.join(root,`validation/rev${scene.revision}-viewer.json`),JSON.stringify(receipt,null,2)+'\n');
 console.log(`Online viewer: ${(Buffer.byteLength(html)/1048576).toFixed(2)} MiB; ${scene.parts.length} objects.`);

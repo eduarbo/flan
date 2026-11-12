@@ -1,0 +1,31 @@
+{
+  "focus_default": true,
+  "optional_3d": true,
+  "edit_preserves_configuration": true,
+  "responsive_widths": [
+    320,
+    390,
+    768,
+    1440
+  ],
+  "scrollspy_all_sections": true,
+  "active_nav_visible": true,
+  "sticky_spacing": true,
+  "languages": [
+    "en",
+    "es"
+  ],
+  "pinned_assets": 111,
+  "real_complete_zip": true,
+  "per_half_pcbs": true,
+  "complete_despite_subset": true,
+  "configuration_snapshot": true,
+  "guide_local_links": true,
+  "hashes_verified": true,
+  "corruption_rejected": true,
+  "cancellation_and_retry": true,
+  "cancellation_during_geometry_load": true,
+  "offline_exact_design_link": true,
+  "browser": "151.0.7922.34",
+  "errors": []
+}

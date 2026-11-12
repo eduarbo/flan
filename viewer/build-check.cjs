@@ -12,7 +12,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/build-workflow
   const ready=async()=>{await page.waitForFunction(()=>window.flan36,null,{timeout:120000});await page.evaluate(()=>window.flan36.idle());};
   const open=async()=>{await page.click('#nav-files');};
   const count=async(id)=>Number(await page.locator('[data-part="'+id+'"]').getAttribute('data-required'));
-  const download=async(id)=>{const event=page.waitForEvent('download');await page.click(id);const d=await event;const file=path.join(out,d.suggestedFilename());await d.saveAs(file);return file;};
+  const download=async(id)=>{if(['#build-csv','#build-plan'].includes(id))await page.locator('#build-more').evaluate(n=>n.open=true);const event=page.waitForEvent('download');await page.click(id);const d=await event;const file=path.join(out,d.suggestedFilename());await d.saveAs(file);return file;};
   const jump=async(id)=>page.locator(id).evaluate(n=>n.scrollIntoView({block:'start'}));
   console.log('Loading build workflow');await page.goto(server.base+'explore/?diagnostics');await ready();await open();
   assert.equal(await count('switch'),36);assert.equal(await count('m6'),6);assert.equal(await count('adafruit-1570'),2);

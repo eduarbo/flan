@@ -137,8 +137,11 @@
   </section>
   <section id="panel-files" aria-labelledby="files-title" hidden>
     <p id="build-variant-status" class="micro" role="status" hidden></p>
-    <div id="build-workflow"><h2 id="files-title" class="title" data-t="build">Build your keyboard</h2><p class="hint" data-t="build.hint">Everything for the keyboard you designed, in the order you will need it.</p>
-    <div id="build-overview" class="build-summary"></div><div id="build-actions" class="config-actions build-actions"></div><nav id="build-nav" class="build-jumps" aria-label="Build sections"></nav>
+    <div id="build-toolbar"><p class="lab" data-t="build.workspace">Your build</p><div><button id="build-edit" data-t="build.edit">Edit design</button><button id="build-focus-toggle" aria-pressed="false" data-t="build.show3d">Show 3D</button></div></div>
+    <div id="build-workflow">
+    <header class="build-hero"><div><h2 id="files-title" class="title" data-t="build">Build your keyboard</h2><p class="hint" data-t="build.hint">Everything for the keyboard you designed, in the order you will need it.</p><div id="build-overview" class="build-summary"></div></div>
+    <div class="build-export"><button id="download-build" class="primary" data-t="build.zip">Download complete build ↓</button><p class="micro" data-t="build.zipHint">Shopping list, PCBs, firmware, print kit, guide and configuration.</p><p id="build-export-status" class="micro" role="status"></p><button id="build-cancel" hidden data-t="build.cancel">Cancel</button><details id="build-more" class="build-more"><summary data-t="build.more">Individual documents</summary><div id="build-actions" class="build-actions"></div></details></div></header>
+    <nav id="build-nav" class="build-jumps" aria-label="Build sections"></nav>
     <ol class="steps" aria-label="Build steps" data-t-label="build.steps">
       <li id="build-buy" class="step"><h3 data-t="build.parts">Buy the parts</h3><p id="build-parts" class="hint"></p><p id="build-shopping-note" class="micro"></p><p id="build-shopping-progress" class="micro" aria-live="polite"></p><div id="build-shopping"></div><p id="build-shopping-status" class="micro" role="status"></p></li>
       <li id="build-boards" class="step"><h3 data-t="build.pcb">Order the PCBs</h3><p id="build-pcb" class="hint"></p><div class="downloads" id="build-pcb-downloads"></div><div id="build-order-settings"></div></li>

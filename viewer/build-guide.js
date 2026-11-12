@@ -43,9 +43,9 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink}){
     input.onchange=()=>{if(input.checked)checked[row.id]=row.token;else delete checked[row.id];try{localStorage.setItem(storageKey,JSON.stringify(checked));}catch{$('build-shopping-status').textContent=say('Checklist stays in this tab. Download the list to keep it.','La lista marcada queda en esta pestaña. Descárgala para conservarla.');}progress();};
     const body=node('div','shopping-body'),name=node('strong','',local(row.name));
     const quantity=node('p','shopping-quantity',say('Need ','Necesitas ')+row.required+(row.halves.length?' · '+row.halves.map(s=>t('side.'+s)).join(' + '):''));
-    body.append(name,quantity,node('p','micro',local(row.note)));
-    if(row.url){const a=link(orderText(row)+' ↗',row.url);a.className='shopping-buy';body.append(a);}
-    item.append(label,body);group.append(item);
+    const info=details('part-'+row.id,'',[]),summary=info.querySelector('summary');info.className='shopping-info';summary.append(name,quantity);info.append(node('p','micro',local(row.note)));body.append(info);
+    if(row.url){const a=link(orderText(row)+' ↗',row.url);a.className='shopping-buy';item.append(a);}
+    item.prepend(label,body);group.append(item);
    }target.append(group);
   }progress();
  }
@@ -54,20 +54,57 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink}){
   const values=rows.map(r=>[local(r.name),r.supplier==='workbench'?say('Workbench','Taller'):r.supplier,r.required,r.buy,r.packs||'',checked[r.id]===r.token?say('Yes','Sí'):'',r.halves.map(s=>t('side.'+s)).join(' + '),local(r.note),r.url]);
   return '\uFEFF'+[header,...values].map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n')+'\r\n';
  }
- async function exportPlan(){
-  const copy=$('build-workflow').cloneNode(true),title=family[current.variant].title+' · '+say('Build plan','Plan de construcción'),filename=family[current.variant].title+'-build-plan.html';
-  const exactLink=getDesignLink();
+ async function planHTML({complete=false,bundled=false}={}){
+  const copy=$('build-workflow').cloneNode(true),title=family[current.variant].title+' · '+say('Build plan','Plan de construcción');
+  const exactLink=getDesignLink(),locale=language(),footer=say('Generated from your design. Use your browser’s Print command to save as PDF.','Generado con tu diseño. Usa Imprimir en el navegador para guardarlo como PDF.');
+  if(complete)renderPrint({half:'both',scope:'complete',host:copy.querySelector('#build-print-list'),fitHost:copy.querySelector('#build-fit')});
+  copy.querySelector('.build-export')?.remove();
+  if(bundled){
+   for(const a of copy.querySelectorAll('a[href]')){
+    const source=a.getAttribute('href');let relative;
+    if(source.startsWith(raw(''))){
+     const path=source.slice(raw('').length),name=path.split('/').pop();
+     if(path.startsWith('hardware/')&&name.endsWith('.zip'))relative='PCB/'+name;
+     else if(path.startsWith('firmware/uf2/'))relative='Firmware/'+(name.includes('no-display')?'optional/':'')+name;
+     else if(name.endsWith('.stl'))relative='Fit-samples/'+name;
+    }
+    if(relative){a.href=relative;a.removeAttribute('target');}
+   }
+   const a=link(say('Open the complete print kit · ZIP','Abrir el kit completo de impresión · ZIP'),'Print-kit.zip');a.removeAttribute('target');copy.querySelector('#build-print-list').before(a);
+  }
   copy.querySelectorAll('button,.build-jumps,[role=status]').forEach(n=>n.remove());
   copy.querySelectorAll('details').forEach(n=>n.open=true);
   copy.querySelectorAll('input').forEach(n=>{if(n.type==='checkbox'){if(n.checked)n.setAttribute('checked','');n.disabled=true;}else n.remove();});
-  try{const a=link(say('Open this exact design to download its print kit','Abrir este diseño exacto para descargar su kit de impresión'),await exactLink);a.id='build-design-link';copy.prepend(a);}catch{$('build-shopping-status').textContent=say('Could not prepare the design link. Try saving the guide again.','No se pudo preparar el enlace al diseño. Intenta guardar la guía otra vez.');return;}
+  const designLabel=say('Reopen this exact design','Volver a abrir este diseño exacto');const a=link(designLabel,await exactLink);a.id='build-design-link';copy.prepend(a);
   const css='body{font:15px/1.6 system-ui,sans-serif;color:#172b35;max-width:920px;margin:32px auto;padding:0 24px}h2,h3{line-height:1.2}h3{margin-top:32px}h4{margin-bottom:8px}a{color:#715719}li{margin-bottom:8px}summary{font-weight:600;margin:16px 0 8px}.steps{padding-left:24px}.step{break-inside:auto;margin-bottom:28px}.shopping-row{display:flex;gap:12px;border-bottom:1px solid #ddd;padding:10px 0;break-inside:avoid}.shopping-body{flex:1}.shopping-body p{margin:3px 0}.micro{font-size:13px;color:#485b63}.shopping-quantity{font-weight:600}.downloads a{display:block;margin:12px 0}.downloads span{display:block;font-size:13px}dl>div{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #ddd;padding:6px 0}dd{margin:0;text-align:right}.config-actions,.sr-only,.segments,.field-label,#print-status{display:none}.build-summary{padding:12px 0;border-bottom:1px solid #ddd}.print-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #ddd}.print-row small{display:block}.color-dot{display:inline-block;width:10px;height:10px;border:1px solid #888;border-radius:50%;margin-right:5px;background:var(--sample)}@media print{body{margin:0;font-size:11pt}a{color:inherit;text-decoration:none}details{break-inside:auto}h3,h4,summary{break-after:avoid}}';
-  download(filename,'<!doctype html><html lang="'+language()+'"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>'+css+'</style><body>'+copy.outerHTML+'<p>'+say('Generated from your design. Use your browser’s Print command to save as PDF.','Generado con tu diseño. Usa Imprimir en el navegador para guardarlo como PDF.')+'</p></body></html>','text/html');
+  return '<!doctype html><html lang="'+locale+'"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>'+css+'</style><body>'+copy.outerHTML+'<p>'+footer+'</p></body></html>';
  }
+ async function exportPlan(){
+  const filename=family[current.variant].title+'-build-plan.html';
+  try{download(filename,await planHTML(),'text/html');}
+  catch{$('build-shopping-status').textContent=say('Could not prepare the guide. Try again.','No se pudo preparar la guía. Inténtalo otra vez.');}
+ }
+ const sectionIds=['build-buy','build-boards','build-print','build-solder','build-program','build-close'];
+ let scrollFrame=0;
+ function activeSection(){
+  scrollFrame=0;const nav=$('build-nav');if(!nav.getClientRects().length)return;
+  const threshold=Math.max(nav.getBoundingClientRect().bottom,$('inspector').getBoundingClientRect().top+nav.offsetHeight)+24;
+  let active=sectionIds[0];for(const id of sectionIds)if($(id).getBoundingClientRect().top<=threshold)active=id;
+  for(const button of nav.children){
+   const selected=button.dataset.target===active,was=button.hasAttribute('aria-current');
+   if(selected){button.setAttribute('aria-current','step');if(!was){const left=button.offsetLeft,right=left+button.offsetWidth;if(left<nav.scrollLeft||right>nav.scrollLeft+nav.clientWidth)nav.scrollTo({left:Math.max(0,left-(nav.clientWidth-button.offsetWidth)/2),behavior:'instant'});}}
+   else button.removeAttribute('aria-current');
+  }
+ }
+ const scheduleSection=()=>{if(!scrollFrame)scrollFrame=requestAnimationFrame(activeSection);};
+ $('inspector').addEventListener('scroll',scheduleSection,{passive:true});
+ new ResizeObserver(()=>{const h=$('build-nav').offsetHeight;$('build-workflow').style.setProperty('--build-nav-height',h+'px');scheduleSection();}).observe($('build-nav'));
+ $('build-workflow').addEventListener('toggle',scheduleSection,true);
  function renderOverview(){
   const size=family[current.variant],summary=$('build-overview');summary.replaceChildren(node('p','build-size',size.title+' · '+size.keys_total+' '+say('keys','teclas')));
+  const selection=details('build-selection',say('Case, frame & battery choices','Carcasa, marco y batería'),[]);selection.className='build-selection';summary.append(selection);
   for(const side of sides){
-   const row=node('p','micro'),c=current.cases[side];row.textContent=t('side.'+side)+': '+catalog.case_styles[c.style].label+' · '+(c.cover?catalog.frame_styles[current.frames[side].style]:say('no frame','sin marco'))+' · '+catalog.battery_profiles[current.batteries[side]].label;summary.append(row);
+   const row=node('p','micro'),c=current.cases[side];row.textContent=t('side.'+side)+': '+catalog.case_styles[c.style].label+' · '+(c.cover?catalog.frame_styles[current.frames[side].style]:say('no frame','sin marco'))+' · '+catalog.battery_profiles[current.batteries[side]].label;selection.append(row);
   }
   summary.append(node('p','micro',say('Digital prototype: start with fit samples and inspect the actual parts before the complete build.','Prototipo digital: empieza con muestras de ajuste e inspecciona las piezas reales antes del armado completo.')));
   const actions=$('build-actions');actions.replaceChildren();
@@ -76,7 +113,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink}){
   }
   const nav=$('build-nav');nav.setAttribute('aria-label',say('Build sections','Secciones de construcción'));nav.replaceChildren();
   for(const [id,en,es] of [['build-buy','Parts','Piezas'],['build-boards','PCBs','PCB'],['build-print','Print','Imprimir'],['build-solder','Solder','Soldar'],['build-program','Firmware','Firmware'],['build-close','Assemble','Armar']]){
-   const b=node('button','',say(en,es));b.onclick=()=>$(id).scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});nav.append(b);
+   const b=node('button','',say(en,es));b.dataset.target=id;b.setAttribute('aria-controls',id);b.prepend(node('span','',String(sectionIds.indexOf(id)+1)));b.onclick=()=>$(id).scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});nav.append(b);
   }
  }
  function renderOrder(){
@@ -86,10 +123,9 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink}){
   const quote=link(say('Quote both boards at JLCPCB ↗','Cotizar las placas en JLCPCB ↗'),'https://cart.jlcpcb.com/quote');quote.className='go';
   $('build-order-settings').replaceChildren(dl,node('p','micro',say('Upload each ZIP as a separate job. You need one left and one right board; confirm the minimum lot in each quote. Select each color shown above: color is not encoded in the ZIP. Let the importer detect the outline and inspect the internal cutouts.','Sube cada ZIP como un trabajo distinto. Necesitas una placa izquierda y una derecha; confirma el lote mínimo de cada cotización. Elige el color indicado arriba: el ZIP no contiene el color. Deja que el importador detecte el contorno y revisa los recortes internos.')),quote);
  }
- function renderPrint(){
-  const half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;
+ function renderPrint({half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value,host=$('build-print-list'),fitHost=$('build-fit')}={}){
   const registry=inventory[current.variant],selected=selectedParts(current,registry,half,scope),caps=keycapPlan(current,catalog,family[current.variant].added||[],half);
-  const host=$('build-print-list'),rows=node('div','print-inventory');
+  const rows=node('div','print-inventory');
   const supportLabels={cradle:say('Battery locator','Guía de batería'),'battery-retainer':say('Battery cage','Jaula de batería'),'mcu-riser':say('Controller support','Soporte del controlador'),'display-sled':say('Display support','Soporte de pantalla')};
   for(const side of half==='both'?sides:[half]){
    rows.append(node('h4','',t('side.'+side)));
@@ -111,7 +147,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink}){
   for(const [name,file] of [[say('Base magnet sample','Muestra de imán de base'),'coupon-magnet-base'],[say('Frame magnet sample','Muestra de imán de marco'),'coupon-magnet-frame'],[say('M2 thread sample','Muestra de rosca M2'),'coupon-m2-thread']])samples.append(link(name+' · STL ↓',raw('mechanical/revI/'+file+'.stl')));
   const seen=new Set();
   for(const g of caps.groups){if(seen.has(g.file))continue;seen.add(g.file);samples.append(link(say('Keycap sample · ','Muestra de keycap · ')+g.label+' ↓',raw(catalog.variants.find(v=>v.id===g.variant).path)));}
-  $('build-fit').replaceChildren(details('build-fit-details',say('Start with fit samples','Empieza con las muestras de ajuste'),[
+  fitHost.replaceChildren(details('build-fit-details',say('Start with fit samples','Empieza con las muestras de ajuste'),[
    node('p','micro',say('Print one of each selected keycap shape, plus the magnet and M2 coupons. Check stem fit, full key travel, magnet capture and tapped screw engagement before printing everything.','Imprime una de cada forma de keycap elegida, más las muestras de imán y M2. Revisa el encaje del vástago, recorrido, captura de imanes y rosca antes de imprimir todo.')),samples,
    ...printInstructions()
   ]));
@@ -156,9 +192,9 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink}){
  }
  function update(config){
   current=config;savedDetails=new Set([...$('build-workflow').querySelectorAll('details[open]')].map(d=>d.id));
-  renderOverview();renderShopping();renderOrder();renderPrint();renderAssembly();renderFirmware();
+  renderOverview();renderShopping();renderOrder();renderPrint();renderAssembly();renderFirmware();scheduleSection();
   for(const id of savedDetails){const d=$(id);if(d)d.open=true;}
   $('build-shopping-note').textContent=say('Quantities cover the complete keyboard, even when you export one half for printing. Mark parts you already have. Confirm price, stock and pack sizes at checkout.','Las cantidades cubren el teclado completo, aunque exportes una sola mitad para imprimir. Marca lo que ya tienes. Confirma precio, stock y tamaño de paquete al comprar.');
  }
- return {update};
+ return {update,capture:options=>({csv:csv(),guide:planHTML(options)})};
 }

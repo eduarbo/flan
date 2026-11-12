@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 .DS_Store
 build/
+!docs/explore/assets/build/
 .venv/
 node_modules/
 *.kicad_prl
