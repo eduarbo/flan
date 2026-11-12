@@ -6,6 +6,9 @@ import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 import {retiredFrames,retiredReplacementNames,copy,check,normalize,variantIds,pcbEdition,setPcbEdition,pcbMask,setPcbMask} from './config.js';
 import {printKit,keycapPlan} from './printing.js';
 import {createBuildGuide} from './build-guide.js';
+import {createDesignURL} from './design-url.js';
+import {deflateSync} from 'three/addons/libs/fflate.module.js';
+import {createPartIllustrations} from './part-illustrations.js';
 import {buildFile,buildWait,completeBuild} from './build-package.js';
 import {createAppearance,setColor,savedKey,applyTheme} from './appearance.js';
 import themeLibrary from '../design/themes.json';
@@ -634,6 +637,7 @@ for(const [id,label] of [['default','Original'],['normal-sculpted','Sculpted'],[
   const button=card(id,label,preview.image(entries,[-1,.35,.1],{width:300,height:150}));button.dataset.preset=id;{const img=button.querySelector('img');img.width=300;img.height=150;}
   button.onclick=()=>{const cfg=copy(configuration);for(const [side,keys] of Object.entries(cfg.keycaps))for(const ref of Object.keys(keys))cfg.keycaps[side][ref]={...data.presets[id].keycaps[side][ref],color:keys[ref].color};try{applyConfiguration(cfg);}catch(e){message(e.message,true);}};$('key-presets').append(button);
 }
+const partIllustrations=createPartIllustrations({preview,parts:data.parts,material});
 preview.finish();
 // Legacy files contain literal per-key choices, without preset provenance.
 // Repair only on an explicit click, preserving custom variants and colors.
@@ -713,7 +717,7 @@ function showUnderside(){
 }
 $('build-focus-toggle').onclick=()=>{buildFocus=!buildFocus;layoutPanel();};
 $('build-edit').onclick=()=>openPanel(activePanel,$('build-edit'));
-const buildGuide=createBuildGuide({catalog,family,inventory:__FLAN_PRINT_INVENTORY__,getDesignLink:shareLink});
+const buildGuide=createBuildGuide({catalog,family,inventory:__FLAN_PRINT_INVENTORY__,getDesignLink:shareLink,illustrations:partIllustrations});
 $('pcb-order').onclick=()=>{openPanel('files',$('pcb-order'));refreshRecovery();$('build-boards').scrollIntoView({block:'start'});};
 const raw=path=>'https://raw.githubusercontent.com/eduarbo/flan/main/'+path;
 for(const edition of silk.editions){
@@ -912,14 +916,14 @@ function lookParams(c){
   }
   return null;
 }
-async function shareLink(){
+function shareLink(design=configuration){
   const base=location.protocol.startsWith('http')?location.origin+location.pathname:'https://flankbd.com/explore/';
-  const look=lookParams(configuration);if(look)return base+'?'+look;
-  return base+'?design='+base64url(await streamBytes(new TextEncoder().encode(JSON.stringify(configuration)),new CompressionStream('deflate-raw')));
+  const look=lookParams(design);if(look)return base+'?'+look;
+  return base+'?design='+base64url(deflateSync(new TextEncoder().encode(JSON.stringify(design))));
 }
-// The Files link follows the design while Files is open; the top bar's Share builds its own.
-let shareTimer=0,shareTicket=0;
-function refreshShare(){clearTimeout(shareTimer);if($('panel-files').hidden||!panelOpen)return;shareTimer=setTimeout(()=>{const ticket=++shareTicket;shareLink().then(link=>{if(ticket===shareTicket)$('share-link').value=link;}).catch(()=>{});},250);}
+// Start after the incoming URL is restored, so saved data cannot race its decoding.
+let liveURL;
+function refreshShare(){liveURL?.schedule(configuration);}
 async function copyLink(button){
   const link=await shareLink();$('share-link').value=link;
   try{await navigator.clipboard.writeText(link);say('share-status','files.copied');return true;}
@@ -931,7 +935,7 @@ applyConfiguration(configuration,{record:false,persist:false});
 if(storageMessage)storageNotice(storageMessage,true,'configuration');else if(restored){message(t('msg.restored'));saveState('save.done','saved');}else{message(t('msg.local'));saveState('','');}
 if(keycapColors.initialWarning)storageNotice(keycapColors.initialWarning,true,'palettes');
 // A look from the home page opens as a new design: ?size=&theme=&case=&keys=&frame=left[,right]&palette=frame|theme[,…].
-// Undo returns to the saved design; the parameters then leave the address so a reload keeps later edits.
+// Undo returns to the saved design; subsequent edits keep the address current.
 const LOOK_KEYS=['size','theme','case','keys','frame','palette'],lookQuery=new URLSearchParams(location.search);
 function lookConfiguration(q){
   let c=normalize(catalog.default_configuration,catalog);const sides=['left','right'];
@@ -965,9 +969,9 @@ if(LOOK_KEYS.some(k=>lookQuery.has(k))||lookQuery.has('design')){
     }else{applyConfiguration(lookConfiguration(lookQuery));message(t(restored?'msg.lookSaved':'msg.look'));}
   }
   catch(e){message(t('msg.badLink',{error:e.message}),true);}
-  for(const k of [...LOOK_KEYS,'design'])lookQuery.delete(k);
-  window.history.replaceState(null,'',location.pathname+(lookQuery.size?'?'+lookQuery:'')+location.hash);
 }
+liveURL=createDesignURL({encode:shareLink,onLink:link=>{$('share-link').value=link;},onError:()=>message(t('files.linkError'),true)});
+refreshShare();
 
 
 // A new language redraws what the scripts wrote; translate() has already done the page's own text.

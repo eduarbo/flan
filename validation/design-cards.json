@@ -1,0 +1,78 @@
+{
+  "cases": [
+    {
+      "name": "en-1440",
+      "columns": 3,
+      "width": 976
+    },
+    {
+      "name": "en-1024",
+      "columns": 3,
+      "width": 894
+    },
+    {
+      "name": "en-768",
+      "columns": 2,
+      "width": 659
+    },
+    {
+      "name": "en-390",
+      "columns": 1,
+      "width": 326
+    },
+    {
+      "name": "en-320",
+      "columns": 1,
+      "width": 256
+    },
+    {
+      "name": "en-shared-280",
+      "columns": 1,
+      "width": 198
+    },
+    {
+      "name": "es-1440",
+      "columns": 3,
+      "width": 976
+    },
+    {
+      "name": "es-1024",
+      "columns": 3,
+      "width": 894
+    },
+    {
+      "name": "es-768",
+      "columns": 2,
+      "width": 659
+    },
+    {
+      "name": "es-390",
+      "columns": 1,
+      "width": 326
+    },
+    {
+      "name": "es-320",
+      "columns": 1,
+      "width": 256
+    },
+    {
+      "name": "es-shared-280",
+      "columns": 1,
+      "width": 198
+    }
+  ],
+  "live_url_without_share": true,
+  "exact_fresh_context": true,
+  "undo_redo_reload": true,
+  "unrelated_query_hash_preserved": true,
+  "no_browser_history_growth": true,
+  "synchronous_address_update": true,
+  "immediate_reload_twice": true,
+  "checklist_persists": true,
+  "all_21_illustrations_embedded": true,
+  "portable_illustrated_guide": true,
+  "offline_no_network": true,
+  "denied_storage_link": true,
+  "browser": "151.0.7922.34",
+  "errors": []
+}

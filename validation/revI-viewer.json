@@ -1492,11 +1492,19 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "324de5afc55045e99c8511aeb1e4724c630da64b38a669f168ab58e6fc1b46f1"
+      "sha256": "a2d9712791e5e63aae3b26532174e7087f48ca5b310739a5491250c65d55851d"
     },
     {
       "path": "viewer/build-guide.js",
-      "sha256": "c34583e19cacb9fad82f52fef701a93bf803f740b9590b95f37b61850d6d5d50"
+      "sha256": "c83293348dfb9f30d1ac11605812d4cc2eb6d87fa9a0e3a57d592e108d7efc06"
+    },
+    {
+      "path": "viewer/design-url.js",
+      "sha256": "31a48f3c30fed05e4dc3b960d8693b3fb61fe29861990ce035ba0f9b6ed43a26"
+    },
+    {
+      "path": "viewer/part-illustrations.js",
+      "sha256": "ee8055c954876f348348b7f70293033f50f0f5c9c0740eb4a9d46948147feaa8"
     },
     {
       "path": "viewer/build-package.js",
@@ -1508,7 +1516,7 @@
     },
     {
       "path": "viewer/i18n.js",
-      "sha256": "dbe8b681e8869effc50a42c24661035b345e3c7bc43102481907c0d5dff494e7"
+      "sha256": "311d1bd7a7f3a097bcb346e2df9c4ca5db2f9149d129b429735bf91b5851a219"
     },
     {
       "path": "viewer/config.js",
@@ -1568,7 +1576,7 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "caa81cfbc12a6ddd6dda9a3b2779b669b2617fc84af4c6e6ea2de7cef2777ed2"
+      "sha256": "14037b1f339422f4cfba87068994188c1ca6ab37af525831b7c755d9abe31eca"
     },
     {
       "path": "viewer/template.html",
@@ -1576,7 +1584,7 @@
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "e8f73be36d9cc6483fe391dfb66121e9990ad14123b2b8db0a316cf95c61f8b0"
+      "sha256": "d9e2f684ffefccec69e2538d106ca5a209eac7e6e620f2f54bd19dc2e22c4965"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -1619,7 +1627,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "48b370f933e3fff83c187c777adc3943a2560c51e08fb705a743ed5da6fbca47",
+  "viewer_sha256": "a2440b024fe5b89fd3a3dbc7a4334f45af98dd63924a65ebb2b74a84ef74c123",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2188,7 +2196,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "ae08c4c086c94cc7bca26a98bd1fed34195c94fe0b83a75ecafcce6f7c7ac43e",
+  "offline_sha256": "cb09dfe3e5156d2ad88d5340d9b733ef7285b4327e9ed4e7278fc44c23e8c2e1",
   "printing": {
     "path": "docs/explore/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
@@ -2226,8 +2234,8 @@
     ]
   },
   "geometry_aliases": 18,
-  "online_bytes": 53806542,
-  "offline_bytes": 87583925,
+  "online_bytes": 53826559,
+  "offline_bytes": 87603942,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

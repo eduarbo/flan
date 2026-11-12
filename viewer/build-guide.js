@@ -26,7 +26,7 @@ const list=(items,ordered=true)=>{const n=node(ordered?'ol':'ul','build-instruct
 function details(id,title,contents){const d=node('details','build-detail');d.id=id;d.append(node('summary','',title),...contents);return d;}
 const orderText=row=>row.packs?say('Buy '+row.packs+' pack'+(row.packs===1?'':'s')+' × '+row.pack+' = '+row.buy,'Compra '+row.packs+' paquete'+(row.packs===1?'':'s')+' × '+row.pack+' = '+row.buy):say('Order '+row.buy,'Pide '+row.buy);
 
-export function createBuildGuide({catalog,family,inventory,getDesignLink}){
+export function createBuildGuide({catalog,family,inventory,getDesignLink,illustrations}){
  const $=id=>document.getElementById(id),storageKey='flan.build-parts.v1';
  let current,rows=[],checked={},savedDetails=new Set();
  try{const value=JSON.parse(localStorage.getItem(storageKey)||'{}');if(value&&typeof value==='object'&&!Array.isArray(value))checked=value;}catch{}
@@ -34,18 +34,22 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink}){
  function renderShopping(){
   rows=shoppingList(current,family);const target=$('build-shopping');target.replaceChildren();
   for(const supplier of [...new Set(rows.map(r=>r.supplier))]){
-   const group=node('section','shopping-group');group.append(node('h4','',supplier==='workbench'?say('Magnets & tools','Imanes y herramientas'):supplier));
+   const group=node('section','shopping-group'),grid=node('div','shopping-grid');group.append(node('h4','',supplier==='workbench'?say('Magnets & tools','Imanes y herramientas'):supplier),grid);
    for(const row of rows.filter(r=>r.supplier===supplier)){
     const item=node('div','shopping-row');item.dataset.part=row.id;item.dataset.required=row.required;item.dataset.buy=row.buy;
     const label=node('label','shopping-check'),input=node('input');input.type='checkbox';input.checked=checked[row.id]===row.token;
     input.setAttribute('aria-label',say('Ready: ','Listo: ')+local(row.name));
-    label.append(input,node('span','sr-only',say('Ready','Listo')));
+    label.append(input,node('span','',say('Ready','Listo')));
     input.onchange=()=>{if(input.checked)checked[row.id]=row.token;else delete checked[row.id];try{localStorage.setItem(storageKey,JSON.stringify(checked));}catch{$('build-shopping-status').textContent=say('Checklist stays in this tab. Download the list to keep it.','La lista marcada queda en esta pestaña. Descárgala para conservarla.');}progress();};
-    const body=node('div','shopping-body'),name=node('strong','',local(row.name));
+    const body=node('div','shopping-body'),name=node('strong','',local(row.name)),art=node('img','shopping-art');
+    art.src=illustrations[row.id];art.alt='';art.width=240;art.height=180;
     const quantity=node('p','shopping-quantity',say('Need ','Necesitas ')+row.required+(row.halves.length?' · '+row.halves.map(s=>t('side.'+s)).join(' + '):''));
-    const info=details('part-'+row.id,'',[]),summary=info.querySelector('summary');info.className='shopping-info';summary.append(name,quantity);info.append(node('p','micro',local(row.note)));body.append(info);
-    if(row.url){const a=link(orderText(row)+' ↗',row.url);a.className='shopping-buy';item.append(a);}
-    item.prepend(label,body);group.append(item);
+    body.append(name,quantity);
+    const info=details('part-'+row.id,say('Details','Detalles'),[node('p','micro',local(row.note))]);info.className='shopping-info';
+    info.querySelector('summary').setAttribute('aria-label',say('Details: ','Detalles: ')+local(row.name));
+    const footer=node('div','shopping-footer');footer.append(label);
+    if(row.url){const a=link(orderText(row)+' ↗',row.url);a.className='shopping-buy';footer.append(a);}
+    item.append(art,body,info,footer);grid.append(item);
    }target.append(group);
   }progress();
  }
@@ -76,8 +80,9 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink}){
   copy.querySelectorAll('details').forEach(n=>n.open=true);
   copy.querySelectorAll('input').forEach(n=>{if(n.type==='checkbox'){if(n.checked)n.setAttribute('checked','');n.disabled=true;}else n.remove();});
   const designLabel=say('Reopen this exact design','Volver a abrir este diseño exacto');const a=link(designLabel,await exactLink);a.id='build-design-link';copy.prepend(a);
-  const css='body{font:15px/1.6 system-ui,sans-serif;color:#172b35;max-width:920px;margin:32px auto;padding:0 24px}h2,h3{line-height:1.2}h3{margin-top:32px}h4{margin-bottom:8px}a{color:#715719}li{margin-bottom:8px}summary{font-weight:600;margin:16px 0 8px}.steps{padding-left:24px}.step{break-inside:auto;margin-bottom:28px}.shopping-row{display:flex;gap:12px;border-bottom:1px solid #ddd;padding:10px 0;break-inside:avoid}.shopping-body{flex:1}.shopping-body p{margin:3px 0}.micro{font-size:13px;color:#485b63}.shopping-quantity{font-weight:600}.downloads a{display:block;margin:12px 0}.downloads span{display:block;font-size:13px}dl>div{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #ddd;padding:6px 0}dd{margin:0;text-align:right}.config-actions,.sr-only,.segments,.field-label,#print-status{display:none}.build-summary{padding:12px 0;border-bottom:1px solid #ddd}.print-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #ddd}.print-row small{display:block}.color-dot{display:inline-block;width:10px;height:10px;border:1px solid #888;border-radius:50%;margin-right:5px;background:var(--sample)}@media print{body{margin:0;font-size:11pt}a{color:inherit;text-decoration:none}details{break-inside:auto}h3,h4,summary{break-after:avoid}}';
-  return '<!doctype html><html lang="'+locale+'"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>'+css+'</style><body>'+copy.outerHTML+'<p>'+footer+'</p></body></html>';
+  const css='body{font:15px/1.6 system-ui,sans-serif;color:#172b35;max-width:920px;margin:32px auto;padding:0 24px}h2,h3{line-height:1.2}h3{margin-top:32px}h4{margin-bottom:8px}a{color:#715719}li{margin-bottom:8px}summary{font-weight:600;margin:16px 0 8px}.steps{padding-left:24px}.step{break-inside:auto;margin-bottom:28px}.shopping-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;align-items:start}.shopping-row{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px 12px;border:1px solid #ddd;border-radius:10px;padding:12px;break-inside:avoid}.shopping-art{width:80px;height:72px;object-fit:contain;align-self:center}.shopping-body{min-width:0;align-self:center;overflow-wrap:anywhere}.shopping-body p{margin:4px 0}.shopping-info,.shopping-footer{grid-column:1/-1}.shopping-info summary{margin:0}.shopping-footer{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;border-top:1px solid #ddd;padding-top:8px}.shopping-check{display:flex;gap:6px;align-items:center}.micro{font-size:13px;color:#485b63}.shopping-quantity{font-weight:600;font-size:12px}.downloads a{display:block;margin:12px 0}.downloads span{display:block;font-size:13px}dl>div{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #ddd;padding:6px 0}dd{margin:0;text-align:right}.config-actions,.sr-only,.segments,.field-label,#print-status{display:none}.build-summary{padding:12px 0;border-bottom:1px solid #ddd}.print-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #ddd}.print-row small{display:block}.color-dot{display:inline-block;width:10px;height:10px;border:1px solid #888;border-radius:50%;margin-right:5px;background:var(--sample)}@media print{body{margin:0;font-size:11pt}a{color:inherit;text-decoration:none}details{break-inside:auto}h3,h4,summary{break-after:avoid}}';
+  const credits=say('Part illustrations: original Flan nominal models and drawings; Choc switch/socket © 2019–2022 keyswitch-kicad-library contributors (MIT); power/reset models by KiCad library contributors (CC-BY-SA-4.0, library exception). Rendered for this guide.','Ilustraciones: modelos nominales y dibujos originales de Flan; switch/socket Choc © 2019–2022 keyswitch-kicad-library contributors (MIT); modelos de interruptor/reset por KiCad library contributors (CC-BY-SA-4.0, excepción de biblioteca). Renderizados para esta guía.');
+  return '<!doctype html><html lang="'+locale+'"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>'+css+'</style><body>'+copy.outerHTML+'<p>'+footer+'</p><p class="micro">'+credits+' <a href="https://github.com/eduarbo/flan/blob/main/components/README.md">'+say('Sources & licenses','Fuentes y licencias')+'</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA-4.0</a> · <a href="https://github.com/eduarbo/flan/blob/main/components/sources/KiSwitch-MIT.txt">MIT</a></p></body></html>';
  }
  async function exportPlan(){
   const filename=family[current.variant].title+'-build-plan.html';
