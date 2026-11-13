@@ -1632,7 +1632,7 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "68cb3c74340ae18275eefe1cc0f82813ab66d1eee8e87b93e5cbd50f894a7e6a"
+      "sha256": "0882ce362b6d674d001831e7e2e7d46bf5b35e1d569f0c9184e797aa863958bc"
     },
     {
       "path": "viewer/build-guide.js",
@@ -1656,7 +1656,7 @@
     },
     {
       "path": "viewer/i18n.js",
-      "sha256": "4bf0389c9ab0ab3401427cc8dc0c858ffa133e8134ae796216276a39600050d3"
+      "sha256": "b62b7bbaf1dfe4fc1aad714d6835ef1513a6d923781c3bcb0400dc8177a42831"
     },
     {
       "path": "viewer/config.js",
@@ -1672,7 +1672,7 @@
     },
     {
       "path": "viewer/assets.js",
-      "sha256": "c3b8586b14df71860100a13a17798fab1b902fdc56ef5019a49d4b90c21b3796"
+      "sha256": "e2a5711abb61a63df22feafb45024a1ac387923f6c49d3c6bd12faeca8c1f97b"
     },
     {
       "path": "viewer/keycap-colors.js",
@@ -1696,7 +1696,7 @@
     },
     {
       "path": "design/themes.json",
-      "sha256": "b82f421192e9096fb4a39f3cf1e482478b36dbb0cccfa9f3943b67dc5c70e743"
+      "sha256": "21a324a9153df68bac77700ec4d8f43b01e3411a70f321bf2f74aa26cbba1a7b"
     },
     {
       "path": "viewer/explorer.js",
@@ -1704,7 +1704,7 @@
     },
     {
       "path": "viewer/previews.js",
-      "sha256": "e51873a6b36e2c0d6762b303302b13d64f2fc6e4b83e02981096f332364b78a1"
+      "sha256": "79c1bfb7a9bfc1bceba5c0fb13e4ba9e0b3d8c0130a4e0dbc11abaa51c4496ac"
     },
     {
       "path": "viewer/finishes.js",
@@ -1716,15 +1716,15 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "265456687046e1a1463b7602e4908604a1660e5bd7c7ffd36991510c10a0fa89"
+      "sha256": "3c7627c0cd24cad41643a05984553b9b9ddf7f639b1d456bbcd0cf97cdfafe7f"
     },
     {
       "path": "viewer/template.html",
-      "sha256": "af6b4a5c7de6776a4d6889f89eb4a425ffd37ec6c445c204650d25648a98a717"
+      "sha256": "bff76cc0b804bbed5d2d2fef38ab14cb11cbeea3f86f6297d158095df86bac25"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "c72d8bba323e637cbd5413b53c509322196b578c0f741bd7f50e2af727cd6505"
+      "sha256": "34485adf7f3a78c9d4b7884a8c8afd9954e890b3271f2b6ff8a31aafbc1d55db"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -1767,7 +1767,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "007d768444e0a8d4659cc11282dcc024adbd3bb96009b761deac8149827fdbbd",
+  "viewer_sha256": "26d40715aa1a106a4fc435aab58f9e632424d4b0a6263df083f383b007f0a978",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -1778,7 +1778,17 @@
     "cover_ahead_of_top_cap_mm": 0,
     "cover_ahead_of_adjacent_cap_mm": 0
   },
-  "offline": "docs/explore/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/explore/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.",
+  "offline": "docs/explore/offline.zip holds the single-file offline copy, which embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses; docs/explore/offline.html is that file, built locally and not published. docs/explore/index.html fetches the hashed scene at start, the print payload on export and the silkscreen textures when an edition is shown.",
+  "scene": {
+    "path": "docs/explore/assets/scene-5357dd62e8cc6c9b3970d7dd7c4b92d50c8afe9f7cb900199005aa9ace150af1.bin",
+    "sha256": "5357dd62e8cc6c9b3970d7dd7c4b92d50c8afe9f7cb900199005aa9ace150af1",
+    "bytes": 39420679
+  },
+  "offline_zip": {
+    "path": "docs/explore/offline.zip",
+    "sha256": "bbf46312fcda2495d1c290078d5c5f0debe85852a371fd2eb351389be41c85c5",
+    "bytes": 68145637
+  },
   "build_assets": {
     "LICENSE": {
       "url": "./assets/build/3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
@@ -2336,7 +2346,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "de03c94cae0b47aa1ce5031961d9b5aa9b522d40c5bea1866965d9918c0e9c49",
+  "offline_sha256": "4971eeba3645b71da92a8928623526da75787155c737b6e5bb288cc9e4ed91f5",
   "printing": {
     "path": "docs/explore/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
@@ -2381,8 +2391,8 @@
     ]
   },
   "geometry_aliases": 18,
-  "online_bytes": 53614799,
-  "offline_bytes": 90611503,
+  "online_bytes": 1069639,
+  "offline_bytes": 90627082,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",
