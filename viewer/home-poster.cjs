@@ -1,12 +1,13 @@
 // The home page's poster (shown until the live model is ready) and its social image, rendered from the
 // built home itself so the swap to the live canvas is seamless. Then rebuild: node viewer/home-build.mjs
 // FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright-core FLAN36_BROWSER=/path/to/chromium node viewer/home-poster.cjs
+// FLAN36_BROWSER_ANGLE=metal renders with the GPU, which the lit, shadowed look needs; software rendering shows the flat one.
 // SPDX-License-Identifier: GPL-3.0-or-later
 const path=require('path'),{execFileSync}=require('child_process'),serve=require('./serve-docs.cjs');
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(__dirname,'..'),out=path.join(__dirname,'home'),work=path.join(root,'build');
 (async()=>{
-  const server=await serve(),browser=await chromium.launch({executablePath:process.env.FLAN36_BROWSER,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+  const server=await serve(),browser=await chromium.launch({executablePath:process.env.FLAN36_BROWSER,args:process.env.FLAN36_BROWSER_ANGLE?['--use-angle='+process.env.FLAN36_BROWSER_ANGLE,'--enable-gpu','--ignore-gpu-blocklist']:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
   // the default look, layers apart, standby paused at rest
   const ready=async p=>{await p.addInitScript(()=>{try{localStorage.clear();}catch{}});await p.goto(server.base);await p.waitForSelector('#stage.live',{timeout:120000});
     await p.evaluate(()=>{document.getElementById('standby').click();scrollTo(0,0);});await p.waitForTimeout(4000);};

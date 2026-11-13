@@ -22,6 +22,7 @@ import {createExplorer,partInfo,matchesPart,isMagnet} from './explorer.js';
 import {createPreviewRenderer} from './previews.js';
 import {createFrameFinishes,framePalette,finishes} from './finishes.js';
 import {pageTokens} from './home/tokens.js';
+import {createStudio} from './studio.js';
 import {t,tOr,translate,setLanguage,onLanguage,setText,partName} from './i18n.js';
 
 // The page speaks the visitor's language from the first frame; what the scripts write follows onLanguage.
@@ -195,7 +196,11 @@ for(const part of data.parts){
 }
 // Runtime scene uses x=CAD x, y=CAD z, z=CAD y; right-hand meshes are not mirrored again.
 let explorer,appearance,keycapColors,renderFrame=0,silkHook=null;   // silkHook: set once the silkscreen layer exists
-function render(){if(renderFrame)return;renderFrame=requestAnimationFrame(()=>{renderFrame=0;explorer?.update();renderer.render(scene,camera);$('loading').hidden=true;});}
+// The lit, shadowed look (studio.js). ?render=flat keeps the earlier evenly lit one, and so does a browser
+// without hardware acceleration, where shadow maps on the CPU would be too slow.
+const software=(()=>{try{const gl=renderer.getContext(),info=gl.getExtension('WEBGL_debug_renderer_info');return /swiftshader|llvmpipe|software|basic render/i.test(info?gl.getParameter(info.UNMASKED_RENDERER_WEBGL):'');}catch{return false;}})();
+const studio=software||new URLSearchParams(location.search).get('render')==='flat'?null:createStudio({renderer,scene,objects,ground});
+function render(){if(renderFrame)return;renderFrame=requestAnimationFrame(()=>{renderFrame=0;explorer?.update();studio?.dress();renderer.render(scene,camera);$('loading').hidden=true;});}
 let orbiting=false;
 controls.addEventListener('start',()=>{orbiting=true;explorer?.motion(true);});controls.addEventListener('end',()=>{orbiting=false;explorer?.motion(false);});
 controls.addEventListener('change',()=>{
@@ -536,7 +541,7 @@ $('glb').onclick=async()=>{
     if(shownVariant(configuration)!==configuration.variant)throw Error(t('size.resources',{name:family[configuration.variant]?.title}));
     const title=family[configuration.variant]?.title||'Flan36';
     const assembly=new THREE.Group();assembly.name=`${title} rev${data.revision} · nominal`;assembly.scale.setScalar(.001);
-    for(const object of objects){if(object.userData.installed===false)continue;const clone=object.clone();for(const child of [...clone.children])if(child.userData.silkscreen)clone.remove(child);clone.visible=true;clone.position.fromArray(object.userData.base);assembly.add(clone);}
+    for(const object of objects){if(object.userData.installed===false)continue;const clone=object.clone();studio?.plain(clone);for(const child of [...clone.children])if(child.userData.silkscreen)clone.remove(child);clone.visible=true;clone.position.fromArray(object.userData.base);assembly.add(clone);}
     assembly.userData={configuration:copy(configuration),units:'metres',source:'https://github.com/eduarbo/flan',limitations:data.limits,
       attribution:'Flan36 / Eduardo Ruiz, original PCBs, case and CAD design; inspired by Piantor by beekeeb, keeping its key positions and angles (GPL-3.0); KLP Lame keycaps by braindefender (CC-BY-SA-4.0), unchanged meshes, placed and coloured. Choc models by keyswitch-kicad-library contributors (MIT); reset and power switch geometry by KiCad (CC-BY-SA-4.0 with library exception).',
       licenses:['https://www.gnu.org/licenses/gpl-3.0.html','https://creativecommons.org/licenses/by-sa/4.0/'],
