@@ -10,7 +10,7 @@ export async function unpackVariant(bytes){
  const data=new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
  const n=new DataView(data.buffer).getUint32(0,true),header=JSON.parse(new TextDecoder().decode(data.subarray(4,4+n))),base=4+n;
  const blob=i=>data.subarray(base+header.blobs[i][0],base+header.blobs[i][0]+header.blobs[i][1]);
- for(const asset of Object.values(header.printing))asset.stl=blob(asset.blob);
+ for(const asset of Object.values(header.printing)){asset.stl=blob(asset.blob);for(const part of asset.material_parts||[])part.stl=blob(part.blob);}
  header.meshes=Object.fromEntries(Object.entries(header.meshes).map(([path,i])=>[path,blob(i)]));
  return header;
 }

@@ -33,7 +33,7 @@ Uncheck **Printed display cover** to expose the current stack. The display, cont
 
 ## Edit and print
 
-For Flan36, the optional [common M2 screw variant](common-fasteners.md) enlarges the hidden head pockets for ordinary socket-cap screws. It has a separate print kit and does not change the original explorer downloads.
+For Flan36, the optional [common M2 screw variant](common-fasteners.md) enlarges the hidden head pockets for ordinary socket-cap screws. Choose it in the explorer under **Build → Buy the parts → Screws**; the low-head reference screws remain the default.
 
 Download [Flan36.FCStd](../mechanical/revI/Flan36.FCStd) and use the [FreeCAD guide](freecad.md). `ActiveTray` and `ActivePlate` link to native `Case_solid`, `Case_rim`, `Case_terrace` or `Case_level` bodies. Edit their source sketches and boolean operations under **Construction**. No custom Python proxy is needed to reopen the document.
 

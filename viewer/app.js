@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 
-import {retiredFrames,retiredReplacementNames,copy,check,normalize,variantIds,pcbEdition,setPcbEdition,pcbMask,setPcbMask} from './config.js';
+import {retiredFrames,retiredReplacementNames,copy,check,normalize,variantIds,pcbEdition,setPcbEdition,pcbMask,setPcbMask,fastenersOf,fastenersFit,defaultFasteners} from './config.js';
 import {printKit,keycapPlan} from './printing.js';
 import {createBuildGuide} from './build-guide.js';
 import {createDesignURL} from './design-url.js';
@@ -53,8 +53,8 @@ const variantDir=id=>id===baseVariant?'revI':id,builtVariant=id=>id===baseVarian
 const shownVariant=config=>config.variant===baseVariant||family[config.variant]?.loaded?config.variant:baseVariant;
 let printBusy=false,glbBusy=false,buildBusy=false;
 function syncBuildAvailability(){
-  const ready=shownVariant(configuration)===configuration.variant;
-  $('print-kit').disabled=printBusy||buildBusy||!ready;$('download-build').disabled=buildBusy||printBusy||!ready;$('glb').disabled=glbBusy||!ready;
+  const ready=shownVariant(configuration)===configuration.variant,hardware=!configuration.fasteners||Boolean(fastenerProfiles[configuration.fasteners]?.loaded);
+  $('print-kit').disabled=printBusy||buildBusy||!ready;$('download-build').disabled=buildBusy||printBusy||!ready;$('glb').disabled=glbBusy||!ready||!hardware;
   for(const id of ['variant-status','build-variant-status']){
     $(id).hidden=ready;$(id).textContent=ready?'':t('size.resources',{name:family[configuration.variant]?.title||configuration.variant});
   }
@@ -81,6 +81,30 @@ async function loadVariant(id){
     for(const [edition,halves] of Object.entries(s.textures)){images[edition]={};for(const [side,png] of Object.entries(halves))images[edition][side]=await createImageBitmap(new Blob([decodeBytes(png)],{type:'image/png'}));}
     family[id].silk={bounds:s.bounds,images,thumbnails:s.thumbnails};}
   family[id].loaded=true;
+}
+// Optional screw profiles: the same plates and frames with other head pockets. Their exact STLs load on demand,
+// like a variant's; the design shows and prints them once they arrive.
+const fastenerProfiles=data.fasteners?.profiles||{},fastenerLoads=new Map();
+const shownFasteners=config=>config.fasteners&&fastenerProfiles[config.fasteners]?.loaded?config.fasteners:null;
+// A frame renders from its native material volumes, one group per role, as the scene builder packs them.
+function stlMaterialGeometry(parts){
+  const built=parts.map(p=>[finishes.roles.indexOf(p.role),stlGeometry(p.stl)]),count=built.reduce((n,[,g])=>n+g.attributes.position.count,0);
+  const positions=new Float32Array(count*3),normals=new Float32Array(count*3),index=new Uint32Array(count),geometry=new THREE.BufferGeometry();let offset=0;
+  for(const [role,g] of built){
+    if(role<0)throw Error('Invalid native material role.');
+    const n=g.attributes.position.count;positions.set(g.attributes.position.array,offset*3);normals.set(g.attributes.normal.array,offset*3);geometry.addGroup(offset,n,role);offset+=n;g.dispose();
+  }
+  for(let i=0;i<count;i++)index[i]=i;
+  geometry.setAttribute('position',new THREE.BufferAttribute(positions,3));geometry.setAttribute('normal',new THREE.BufferAttribute(normals,3));
+  geometry.setIndex(new THREE.BufferAttribute(index,1));geometry.computeBoundingBox();return geometry;
+}
+async function loadFasteners(id){
+  const profile=fastenerProfiles[id];if(!profile?.asset)throw Error(t('msg.fasteners'));
+  if(profile.loaded)return;
+  if(!fastenerLoads.has(id))fastenerLoads.set(id,printLoader(profile.asset,{textContent:variantData['fasteners:'+id]||''},unpackVariant));
+  let payload;try{payload=await fastenerLoads.get(id)();}catch{fastenerLoads.delete(id);throw Error(t('msg.fasteners'));}
+  for(const asset of Object.values(payload.printing))geometries.set(asset.path,asset.material_parts?.length?stlMaterialGeometry(asset.material_parts):stlGeometry(asset.stl));
+  profile.printing=payload.printing;profile.loaded=true;
 }
 if($('print-data').textContent.trim())document.querySelector('[download="Flan36-revI.html"]').href=location.href;
 for(const node of document.querySelectorAll('[data-measurement]'))node.textContent=String(data.measurements[node.dataset.measurement]);
@@ -461,19 +485,24 @@ const keycapLoads=new Map(),gunzip=bytes=>new Response(new Blob([bytes]).stream(
 const keycapStl=id=>{const asset=data.keycapAssets?.[id];if(!asset||$('print-data').textContent.trim())return Promise.resolve(null);if(!keycapLoads.has(id))keycapLoads.set(id,printLoader(asset,{textContent:''},gunzip));return keycapLoads.get(id)().catch(()=>null);};
 async function makePrintKit(selected,{half='both',scope='complete',strict=false,signal,progress=()=>{}}={}){
  await buildWait(loadVariant(selected.variant),signal);signal?.throwIfAborted();
- const base=await buildWait(loadPrinting(),signal),variant=selected.variant,registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing},fasteners:family[variant].fasteners};
+ const base=await buildWait(loadPrinting(),signal),variant=selected.variant;
+ let registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing},fasteners:family[variant].fasteners};
+ if(selected.fasteners){
+  await buildWait(loadFasteners(selected.fasteners),signal);signal?.throwIfAborted();const profile=fastenerProfiles[selected.fasteners];
+  registry={...registry,assets:{...registry.assets,...profile.printing},joining:{...registry.joining,case:profile.joining_case,profile:profile.spec}};
+ }
  let keycaps=null;
  if(scope==='complete'){
   const plan=keycapPlan(selected,catalog,variant===baseVariant?[]:family[variant].added||[],half),ids=[...new Set(plan.groups.map(g=>g.variant))];
   keycaps={plan,stl:Object.fromEntries(await Promise.all(ids.map(async id=>[id,strict?await buildFile(catalog.variants.find(v=>v.id===id).path,__FLAN_BUILD_ASSETS__,signal):await keycapStl(id)])))};
  }
  signal?.throwIfAborted();
- return printKit(selected,registry,{half,scope,keycaps,title:family[variant].title,progress:(i,n)=>{signal?.throwIfAborted();progress(i,n);}});
+ return printKit(selected,registry,{half,scope,keycaps,title:family[variant].title+(selected.fasteners?'-'+selected.fasteners:''),progress:(i,n)=>{signal?.throwIfAborted();progress(i,n);}});
 }
 $('print-kit').onclick=async()=>{const b=$('print-kit');printBusy=true;b.disabled=true;syncBuildAvailability();try{
  const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;b.textContent=t('kit.loading');
  const {bytes,manifest}=await makePrintKit(selected,{half,scope,progress:(i,n)=>b.textContent=t('kit.preparing',{i,n})});
- const url=URL.createObjectURL(new Blob([bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=family[selected.variant].title+'-'+manifest.half+'-'+manifest.scope+'.zip';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
+ const url=URL.createObjectURL(new Blob([bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=family[selected.variant].title+(selected.fasteners?'-'+selected.fasteners:'')+'-'+manifest.half+'-'+manifest.scope+'.zip';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
  say('print-status',manifest.keycaps?(manifest.keycaps.missing.length?'kit.doneCapsMissing':'kit.doneCaps'):'kit.done',{n:manifest.parts.length,caps:manifest.keycaps?.groups.reduce((n,g)=>n+g.count,0)});
  }catch(e){say('print-status','kit.failed',{error:e.message});}finally{printBusy=false;syncBuildAvailability();b.textContent=t('kit.download');}};
 let buildController=null;
@@ -539,19 +568,20 @@ function applyConfiguration(next,{record=true,persist=true}={}){
   const result=check(next,catalog);if(result.errors.length)throw Error(result.errors[0]);
   next=normalize(next,catalog);
   // Resolve every resource before touching any live object, including both wires.
+  const hardware=shownFasteners(next),swapped=name=>hardware?fastenerProfiles[hardware].printing[name]?.path:undefined;
   const prepared=objects.map(o=>{
     const userData=copy(o.userData),{side,key,group}=userData;
     let geometry=o.geometry,mat=o.material,rotation=o.rotation.y;
     const dir=variantDir(shownVariant(next));
     if(userData.variants)userData.installed=userData.variants.includes(shownVariant(next));
-    if(group==='base'||group==='plate'){const style=next.cases[side].style;geometry=geometryFor(`mechanical/${dir}/${side}-case-${style}-${group}.stl`);mat=material(next.cases[side][group+'_color']);userData.case_style=style;}
+    if(group==='base'||group==='plate'){const style=next.cases[side].style,path=swapped(`${side}-case-${style}-${group}`)||`mechanical/${dir}/${side}-case-${style}-${group}.stl`;geometry=geometryFor(path);mat=material(next.cases[side][group+'_color']);userData.case_style=style;userData.mesh_source=path;}
     if(group==='lid')userData.installed=next.cases[side].cover;
     if(group==='keycaps'){
       const choice=next.keycaps[side][key],v=variants.get(choice.variant),k=catalog.layout[side].find(k=>k.ref===key);
       mat=material(choice.color);userData.color=choice.color;geometry=geometryFor(v.path);rotation=THREE.MathUtils.degToRad(k.angle+choice.rotation_deg);userData.base[1]=v.seating_z_mm;
       userData.variant=v.id;userData.cap_rotation_deg=choice.rotation_deg;
     }
-    if(group==='lid'&&userData.frame_style!==undefined){const f=next.frames[side],finish=frameFinish(f.style,side,f.color,f.accents);geometry=finish.geometry;mat=finish.material;userData.frame_style=f.style;userData.frame_palette=finish.palette;}
+    if(group==='lid'&&userData.frame_style!==undefined){const f=next.frames[side],path=swapped(`${side}-frame-${f.style}`),finish=frameFinish(f.style,side,f.color,f.accents,path);geometry=finish.geometry;mat=finish.material;userData.frame_style=f.style;userData.frame_palette=finish.palette;userData.mesh_source=path||`mechanical/revI/${side}-frame-${f.style}.stl`;}
     if(group==='battery'){const id=next.batteries[side];geometry=geometryFor(`mechanical/revI/${side}-battery-${id}.stl`);userData.battery_profile=id;}
     if(userData.part_id===`${side}-pcb`){const mask=pcbMask(next,side);geometry=geometryFor(`mechanical/${dir}/${side}-pcb.stl`);mat=material(data.silkscreen.masks.find(m=>m.id===mask).mask);userData.pcb_mask=mask;}
     if(Number.isInteger(userData.battery_lead_index)){const id=next.batteries[side],wire=data.batteryLeadProfiles[`${side}-${id}`].find(p=>p.index===userData.battery_lead_index);geometry=geometryFor(wire.geometry);mat=material(wire.color);userData.battery_profile=id;}
@@ -563,7 +593,8 @@ function applyConfiguration(next,{record=true,persist=true}={}){
   catch(error){commit(old);configuration=previous;sync();throw error;}
   if(record)history.record(next,gesture);syncHistory();
   if(persist){message(t('msg.saving'));if(!saveWarnings.has('configuration'))saveState('save.saving','saving');store.save(configuration);}
-  // A design that names a variant not loaded yet (a loaded file, undo, a link) shows it once it arrives.
+  // A design that names a variant or a screw profile not loaded yet (a loaded file, undo, a link) shows it once it arrives.
+  if(next.fasteners&&!hardware)loadFasteners(next.fasteners).then(()=>{if(configuration.fasteners===next.fasteners)applyConfiguration(copy(configuration),{record:false,persist:false});}).catch(e=>message(e.message,true));
   if(shownVariant(next)!==next.variant&&builtVariant(next.variant))loadVariant(next.variant).then(()=>{if(configuration.variant===next.variant){applyConfiguration(copy(configuration),{record:false,persist:false});fit();}}).catch(e=>message(e.message,true));
 }
 function syncHistory(){$('undo').disabled=!history.canUndo;$('redo').disabled=!history.canRedo;}
@@ -585,8 +616,8 @@ for(const [id,v] of Object.entries(family)){
   button.onclick=async()=>{
     if(configuration.variant===id&&shownVariant(configuration)===id)return;
     say('size-note','size.loading',{name:v.title});
-    try{const c=copy(configuration);c.variant=id;applyConfiguration(c);fit();
-      if(id===baseVariant)say('size-note',null,'');else say('size-note','size.note',{name:v.title,added:v.added.join(', ')});}
+    try{const c=copy(configuration),dropped=Boolean(c.fasteners)&&!fastenersFit(c.fasteners,id);c.variant=id;if(dropped)delete c.fasteners;applyConfiguration(c);fit();
+      if(id===baseVariant)say('size-note',null,'');else say('size-note',dropped?'size.noteScrews':'size.note',{name:v.title,added:v.added.join(', ')});}
     catch(e){say('size-note',null,e.message);}
   };
   $('size-grid').append(button);
@@ -656,6 +687,7 @@ function reversedTiltedRows(){return Object.entries(catalog.layout).flatMap(([si
 rowRepair.onclick=()=>{const cfg=copy(configuration);for(const [side,ref] of reversedTiltedRows())cfg.keycaps[side][ref].rotation_deg=(cfg.keycaps[side][ref].rotation_deg+180)%360;try{applyConfiguration(cfg);message(t('keys.fixed'));}catch(e){message(e.message,true);}};
 for(const [id,spec] of Object.entries(catalog.battery_profiles)){const b=document.createElement('button');b.type='button';b.dataset.battery=id;b.textContent=spec.label;b.title=`${spec.width} × ${spec.length} × ${spec.height} mm`;b.onclick=()=>{const c=copy(configuration);for(const side of batterySide==='both'?['left','right']:[batterySide])c.batteries[side]=id;applyConfiguration(c);};$('battery-options').append(b);}
 for(const b of $('battery-target').children)b.onclick=()=>{batterySide=b.dataset.side;syncConfigurationUI();};
+for(const b of $('fastener-options').children)b.onclick=()=>{const c=copy(configuration);if(b.dataset.value===defaultFasteners)delete c.fasteners;else c.fasteners=b.dataset.value;try{applyConfiguration(c);}catch(e){message(e.message,true);}};
 // Each half's back silkscreen comes from its matching committed Gerber
 // packages; the online viewer downloads them the first time the underside is shown.
 const silk=data.silkscreen,loadSilk=printLoader(silk.textures,$('silk-data'),undefined,'silk'),silkOverlays=[],silkTextures=new Map();
@@ -771,6 +803,9 @@ function syncConfigurationUI(){
   $('build-parts').textContent=t('build.parts.text',{size:sizeInfo.title,keys:sizeInfo.keys_total});
   $('build-pcb').textContent=t('build.pcb.text',{size:sizeInfo.title,edition:editions?editionSummary:t('pcb.signature'),mask:maskSummary.toLowerCase()});
   $('build-pcb-downloads').replaceChildren(...[...$('pcb-downloads').children].map(a=>a.cloneNode(true)));
+  const screws=fastenersOf(configuration),screwChoice=fastenersFit('common-m2',variant);
+  for(const b of $('fastener-options').children){b.setAttribute('aria-pressed',String(b.dataset.value===screws));b.disabled=!fastenersFit(b.dataset.value,variant);}
+  $('fasteners-note').textContent=t(screwChoice?'fasteners.note.'+screws:'fasteners.note.size',{name:sizeInfo.title});
   buildGuide.update(configuration);
   showSilk();
   for(const b of $('battery-target').children)b.setAttribute('aria-pressed',String(b.dataset.side===batterySide));
@@ -997,7 +1032,7 @@ openBuildStep(location.hash.slice(1));
 window.addEventListener('hashchange',()=>openBuildStep(location.hash.slice(1)));
 portraitLayout.addEventListener('change',()=>{showWorkspace();if(activeMode==='customize')revealPanel(activePanel);});
 // ground(false) hides the contact shadow so checks and captures measure only the model.
-if(new URLSearchParams(location.search).has('diagnostics'))window.flan36=Object.freeze({snapshot:()=>({configuration:copy(configuration),pcb:Object.fromEntries(objects.filter(o=>o.userData.part_id===o.userData.side+'-pcb').map(o=>[o.userData.side,{mask:o.userData.pcb_mask,color:o.material.color.getHexString()}])),silkscreen:Object.fromEntries(silkOverlays.map(o=>[o.userData.silkscreen,{visible:o.visible,ink:o.material.color.getHexString(),texture:[...silkTextures].find(([,texture])=>texture===o.material.alphaMap)?.[0]}])),view:copy(state),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:controls.target.toArray(),zoom:camera.zoom,halfHeight},hidden:[...hiddenObjects],selected:copy(explorer.selected),visible:objects.filter(o=>o.visible).map(o=>o.userData.objectIndex),undo:history.canUndo,redo:history.canRedo}),idle:()=>Promise.all([store.idle(),keycapColors.idle()]),ground:shown=>{ground.enabled=shown;sync();}});
+if(new URLSearchParams(location.search).has('diagnostics'))window.flan36=Object.freeze({snapshot:()=>({configuration:copy(configuration),fasteners:{shown:shownFasteners(configuration)||defaultFasteners,meshes:Object.fromEntries(objects.filter(o=>o.userData.mesh_source&&(o.userData.group==='plate'||o.userData.group==='lid')).map(o=>[o.userData.side+'-'+o.userData.group,o.userData.mesh_source]))},pcb:Object.fromEntries(objects.filter(o=>o.userData.part_id===o.userData.side+'-pcb').map(o=>[o.userData.side,{mask:o.userData.pcb_mask,color:o.material.color.getHexString()}])),silkscreen:Object.fromEntries(silkOverlays.map(o=>[o.userData.silkscreen,{visible:o.visible,ink:o.material.color.getHexString(),texture:[...silkTextures].find(([,texture])=>texture===o.material.alphaMap)?.[0]}])),view:copy(state),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:controls.target.toArray(),zoom:camera.zoom,halfHeight},hidden:[...hiddenObjects],selected:copy(explorer.selected),visible:objects.filter(o=>o.visible).map(o=>o.userData.objectIndex),undo:history.canUndo,redo:history.canRedo}),idle:()=>Promise.all([store.idle(),keycapColors.idle()]),ground:shown=>{ground.enabled=shown;sync();}});
 
 
 }

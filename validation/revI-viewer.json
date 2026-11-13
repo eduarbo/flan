@@ -1391,6 +1391,146 @@
       "sha256": "d1a82d39a5d3b431641af1f4ba2359592927ad6a47378c22e776bec7f1bdaa4b"
     },
     {
+      "path": "design/fastener-profiles.json",
+      "sha256": "94d3f369b89209c6a5f1fe7096ffcaae895198278a1e08e55fb6d996063613cb"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-case-solid-plate.stl",
+      "sha256": "f2083861da725b8be0f0ab0d6f9a01bacd1b4d8f382b8a5eb4308d323e1422f1"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-case-rim-plate.stl",
+      "sha256": "c4bd565212b9f7a35061e391508868c56a69fb3a870c8cb0b703bad8d1a28f8e"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-case-terrace-plate.stl",
+      "sha256": "f2083861da725b8be0f0ab0d6f9a01bacd1b4d8f382b8a5eb4308d323e1422f1"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-case-level-plate.stl",
+      "sha256": "5160f22d73784901cd3753545884ab7bdaa481d9e7bd8a034f4ae677be567bf8"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-talavera.stl",
+      "sha256": "415ac0ad9d2af9b52754e690f42c567517b246a6ca37c42d1f00936e153685bb"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-talavera-body.stl",
+      "sha256": "103f20121db7da2e9865496e66154b51e4442899fe1c50939a917ee3c02065f4"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-gameboy.stl",
+      "sha256": "6b6ca0bc93b6e77fd3b56be89f20ec1a3ef6f6d966d8608d66151fab50dde26c"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-gameboy-body.stl",
+      "sha256": "b2a32fc4c6ae0aa5c3d34d6b270c32090edff6700ebaa1252ac1f7de16aa9216"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-snes.stl",
+      "sha256": "81554095a75c3e85cefb3065f3296d6e4e3714bfb8535f8f6fd8640e25179393"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-snes-body.stl",
+      "sha256": "37f548af2c383d315817d0d544444bd51ec21531d4d966aabf8d7ae3870167b1"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-phone.stl",
+      "sha256": "a17d4f003381f51809925a3d93c729e924be69d06e93ba3e7dcedc782a4cf0f8"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-phone-body.stl",
+      "sha256": "75d327aee9d355e697a87974d67a2428ccccd384471e69d2cb3703cb9782c1f4"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-ipod.stl",
+      "sha256": "f7f05cf30b3033542a5dbb11c6105d98dadf0bf11a7e8502325f08a0d0e441d9"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-ipod-body.stl",
+      "sha256": "3ecee5cb5f4be9df528eece20d69fe8713654cf71f5ff93a642bf61b5f255457"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-hanafuda.stl",
+      "sha256": "a28250fb7fdcd14b0f412e8537e655faf5a1b0e2986e32f73fc270b580fd59df"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-hanafuda-body.stl",
+      "sha256": "90cc825f75c179ebc4402efa64a6a46a11cb365123f2d877f42d0e4c84723f00"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-case-solid-plate.stl",
+      "sha256": "2ce21942526b66731d6a2d2314ee1360bcfe4270fcb817a5a90991553e999000"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-case-rim-plate.stl",
+      "sha256": "ff9efba08cc91567450f60ff6c98685a4508315f80d176c65fdefe94e0ac9eb9"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-case-terrace-plate.stl",
+      "sha256": "2ce21942526b66731d6a2d2314ee1360bcfe4270fcb817a5a90991553e999000"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-case-level-plate.stl",
+      "sha256": "1be99f0415f341d5e1e201a72b9d49d174b844bfc4deb6654a4f3c6126689161"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-talavera.stl",
+      "sha256": "97b82223adf7bbc04c0be96d9683480585af61ce65cfdc952b2bf589200502a7"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-talavera-body.stl",
+      "sha256": "4be6baaeca227b9dbf722cdcd5d6088d29028a51496dcf4de2222444bc44a27c"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-gameboy.stl",
+      "sha256": "94a8d342cf33c57199262f2c3ea353cba2a95cf09a7cad93f8407015c4184dbf"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-gameboy-body.stl",
+      "sha256": "99acbba0017341dbab91d4c9d631932984e91b79ade5173a269020c20f674ab9"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-snes.stl",
+      "sha256": "28f421695a6c7008a75de16806e1fe12df300a858fcd4d6c0d40099f944280a8"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-snes-body.stl",
+      "sha256": "900ce758df00f18d6b7ded78f76180012227e26f960249e10ed424a0b894c238"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-phone.stl",
+      "sha256": "7198987c8f6617b60d003e215f97c049affc187c25e32f2d7d2ff290a72862fa"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-phone-body.stl",
+      "sha256": "0ea3e788831135ccaee598171c8a2c03f6dc7a07fdc6296bbaa28257d08312d0"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-ipod.stl",
+      "sha256": "84657786ffeb04e35e640f2fe5101f0347f2a9ac5cf96be0381d2353a30427b2"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-ipod-body.stl",
+      "sha256": "d0006e8644c98054db8704450a999dfed998cadd561c16e2889dac8215571664"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-hanafuda.stl",
+      "sha256": "d0754098363e94ed55006b5ec2212d3f3e0717a0463a5f6b77c5a1003b36a74b"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-hanafuda-body.stl",
+      "sha256": "fac90c33d04138c7ebf96fa264e96730973513a4341fcbc8f1c486739e70009c"
+    },
+    {
+      "path": "design/common-fasteners.json",
+      "sha256": "f13994a306d33c4060553898c0118a98200ea205a26638613c169b06cf0f87d7"
+    },
+    {
+      "path": "validation/revI-common-fasteners.json",
+      "sha256": "bc1b6c6f415b1b4ab1e14ccd6648c88fb772b3e9385137103a1fde8c1ca9940a"
+    },
+    {
       "path": "design/revI.json",
       "sha256": "939da95663f38b8668cf4f07eedbb38e40d04fc12d104720f165440c01a4a78b"
     },
@@ -1404,7 +1544,7 @@
     },
     {
       "path": "tools/build_viewer_revI.py",
-      "sha256": "009a53192084f0549fe47bcf1e7e1997c2cec4ec8a691f2d10929ab66397dfde"
+      "sha256": "edf10d913f22fe625f98261fe8f93c6ac99fd68c29f466813d1b6d78c1d37905"
     },
     {
       "path": "tools/viewer_frame_selection.py",
@@ -1492,11 +1632,11 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "8306548714fff863b2a49c57c17fa6a75bd1980310b8708ae22453294c4bd16d"
+      "sha256": "75c9ca63819843a0efa291aec44b7a1931628730b6d2a9db63721ba75a86a3e7"
     },
     {
       "path": "viewer/build-guide.js",
-      "sha256": "c83293348dfb9f30d1ac11605812d4cc2eb6d87fa9a0e3a57d592e108d7efc06"
+      "sha256": "8278d310435ae43022a65ade4bc9858cc2967d2d7b4c3b1ba19a299e181f5a2b"
     },
     {
       "path": "viewer/design-url.js",
@@ -1504,23 +1644,23 @@
     },
     {
       "path": "viewer/part-illustrations.js",
-      "sha256": "ee8055c954876f348348b7f70293033f50f0f5c9c0740eb4a9d46948147feaa8"
+      "sha256": "dae99ef13f65b39412e4288ec97249988df1bc278113ba6465732556406e70b8"
     },
     {
       "path": "viewer/build-package.js",
-      "sha256": "bd47ce95c2a0b1076d841949dae6efb619024dd940ff9e2e3dffe36f6e423a17"
+      "sha256": "f4bde2b781ea7abccfb63a86ee316d3bfaa6851ea6888e420deb4335242820c0"
     },
     {
       "path": "design/build-parts.json",
-      "sha256": "b870128477710bc6e61a99bdf24a2787f7268c1adff2c0e5e0b389a0fd8853a7"
+      "sha256": "b793fce892ba08a64e02f81f99f8ae963d7186b0e78a5bfd56b9d88585674099"
     },
     {
       "path": "viewer/i18n.js",
-      "sha256": "9b9d82f411e44a27e9a9efd9441bd8c302d0998331ceb851265b41280a72e588"
+      "sha256": "7f9359d051d068b0749cca2ef633631b482db2ce25ffd3507df08796e13158fc"
     },
     {
       "path": "viewer/config.js",
-      "sha256": "2a6a0e98248f1d1914af46ed1fbbc9ec322648fbd2cc4b7cc5db7c1cb0b409c1"
+      "sha256": "7d87f7cc39b85c4bcaa1e03537b7d08213f98524d0df25e2eab197e8ee25896f"
     },
     {
       "path": "viewer/storage.js",
@@ -1532,7 +1672,7 @@
     },
     {
       "path": "viewer/assets.js",
-      "sha256": "8abf84160f92c4a81cb7958a6aff0a0c63258b71bafb49b3b01d73a198a08c7e"
+      "sha256": "c3b8586b14df71860100a13a17798fab1b902fdc56ef5019a49d4b90c21b3796"
     },
     {
       "path": "viewer/keycap-colors.js",
@@ -1568,7 +1708,7 @@
     },
     {
       "path": "viewer/finishes.js",
-      "sha256": "466fda4cc8aff474ec017ae639169d982471ae0f367f62cb104144353f2cb4ba"
+      "sha256": "d2c4bb6c66601655c158785aca2b7fe2d8c53c33e752b7856352aca0e0e0f66f"
     },
     {
       "path": "design/frame-finishes.json",
@@ -1576,15 +1716,15 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "82aa84b0becae9c966ab19c003987ffd90045087adad7bacd0149b89aae76b14"
+      "sha256": "265456687046e1a1463b7602e4908604a1660e5bd7c7ffd36991510c10a0fa89"
     },
     {
       "path": "viewer/template.html",
-      "sha256": "9d02be62e879cc06f8c24bc9de44be6403bc781ccd2e2dbf331c390f75138e76"
+      "sha256": "245f6661456b71b955f90a08faadc8b11c077c572278f7b3611383a30da72901"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "d9e2f684ffefccec69e2538d106ca5a209eac7e6e620f2f54bd19dc2e22c4965"
+      "sha256": "c72d8bba323e637cbd5413b53c509322196b578c0f741bd7f50e2af727cd6505"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -1627,7 +1767,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "170173837f4b9ef2dc731df7a27d9628470e7aea7211a96e245364fb33363eeb",
+  "viewer_sha256": "6965258d829f1d17cc537a6c8d7278c8f546e42fcfe500f6c359dcf610b0584c",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2196,7 +2336,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "e8adca49004eec66d24d852d112ac042770591ec3d638cd1167f1603c1b4a6ad",
+  "offline_sha256": "7388fef70c136b659ac7bc7a7b47e4be8aed563cbbe2bd702a6bd0297a2cbacc",
   "printing": {
     "path": "docs/explore/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
@@ -2219,6 +2359,13 @@
       "bytes": 6174599
     }
   },
+  "fasteners": {
+    "common-m2": {
+      "path": "docs/explore/assets/fasteners-common-m2-586c21557420ed05f27247c4e2d8fa979419fc906ad299675bfb966917cab523.bin",
+      "sha256": "586c21557420ed05f27247c4e2d8fa979419fc906ad299675bfb966917cab523",
+      "bytes": 2447128
+    }
+  },
   "silkscreen": {
     "path": "docs/explore/assets/silkscreen-4fb19a5ef3df171777c16743dafc326f472ed7b86b9435e7b88247f1b6f90004.bin",
     "sha256": "4fb19a5ef3df171777c16743dafc326f472ed7b86b9435e7b88247f1b6f90004",
@@ -2234,8 +2381,8 @@
     ]
   },
   "geometry_aliases": 18,
-  "online_bytes": 53827613,
-  "offline_bytes": 87604996,
+  "online_bytes": 53611927,
+  "offline_bytes": 90652175,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

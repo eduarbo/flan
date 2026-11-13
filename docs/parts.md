@@ -69,7 +69,7 @@ Observed catalog availability is a snapshot, not a reservation or a delivery pro
 | [NBK SLH-M2-6](https://www.nbk1560.com/en-US/products/specialscrew/nedzicom/socketheadcapscrew/SLH/) | Exact low-head reference: Ø3.8 × 1.3 mm head, M2 × 6. Catalog pack of **50**, US$27.54; six used. Dispatch availability not verified. |
 | [NBK SSH-M2-4](https://www.nbk1560.com/en-US/products/specialscrew/nedzicom/socketheadcapscrew/SSH/) | Exact ultra-low-head reference: Ø4 × 1.1 mm head, M2 × 4. Catalog pack of **10**, US$15.91; four used. Dispatch availability not verified. |
 
-The two NBK packs are **US$43.45** before shipping/tax. An ordinary M2 socket-head screw is not an established substitute for these head envelopes. These are catalog selections, not placed orders. Feet, cable and tape retain their existing references; their October 10 prices are historical.
+The two NBK packs are **US$43.45** before shipping/tax. An ordinary M2 socket-head screw does not fit these head pockets; for Flan36, the explorer's optional [common M2 screws](common-fasteners.md) setting prints plates and frames with deeper pockets for them instead. These are catalog selections, not placed orders. Feet, cable and tape retain their existing references; their October 10 prices are historical.
 
 ## Magnets from existing stock
 
@@ -186,7 +186,7 @@ Put the male header's **short solder tails into the display PCB** and its long m
 
 ## Fasteners, cable and tools
 
-- **6 × M2 × 6 low-head screws:** nominal NBK SLH envelope, Ø3.8 × 1.3 mm head. [Drawing](https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SLH-TZB/SLH-TZB_1.pdf). **4 × M2 × 4:** NBK SSH envelope, Ø4 × 1.1 mm head. [Drawing](https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SSH/SSH_1.pdf). Tap the printed Ø1.7 mm pilots M2; engagement is 2.2–2.4 mm. Thread strength remains untested.
+- **6 × M2 × 6 low-head screws:** nominal NBK SLH envelope, Ø3.8 × 1.3 mm head. [Drawing](https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SLH-TZB/SLH-TZB_1.pdf). **4 × M2 × 4:** NBK SSH envelope, Ø4 × 1.1 mm head. [Drawing](https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SSH/SSH_1.pdf). Tap the printed Ø1.7 mm pilots M2; engagement is 2.2–2.4 mm. Thread strength remains untested. Flan36 alternative: [common M2 screws](common-fasteners.md), chosen in the explorer.
 - **6 × Ø2 × 3 mm axial neodymium magnets from existing stock:** three stay in each base. The original S-02-03-N, N45 reference has [product information](https://www.supermagnete.de/stabmagnete-neodym-rund/stabmagnet-2mm-3mm_S-02-03-N) and a [datasheet](https://www.supermagnete.fr/data_sheet_S-02-03-N.pdf); its 80°C limit does not establish the grade or thermal limit of the actual stock. Qualify the capture process using the actual magnets.
 - **6 × Ø2 × 4 mm axial neodymium magnets from existing stock:** three per frame; see [magnet quantities and polarity](#magnets-from-existing-stock). Every additional pair of frames needs six more. No steel targets are required.
 - **8 × Essentra RBS-5BK adhesive feet:** Ø12.7 × 1.6 mm, [DigiKey RPC1381-ND](https://www.digikey.com/en/products/detail/essentra-components/RBS-5BK/1878940). The checked eight-piece line was $1.30. Their 1.6 mm height adds externally without changing the internal stack; place them clear of reset access and screw holes.

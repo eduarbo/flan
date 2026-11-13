@@ -577,12 +577,12 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
 .build-detail { margin-top: 4px; border-top: 1px solid var(--line); padding-top: 4px; }
 .build-detail summary { padding: 12px 0; min-height: 44px; font-size: 13px; font-weight: 500; cursor: pointer; line-height: 1.5; }
 .build-detail > a { display: inline-flex; min-height: 44px; align-items: center; color: var(--accent); font-size: 13px; }
-.print-options { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 20px 32px; }
-.print-choice { display: flex; flex-direction: column; gap: 8px; min-width: 0; max-width: 100%; }
-.print-choice .field-label { margin: 0; }
-.print-choice .segments { width: max-content; max-width: 100%; flex-wrap: wrap; gap: 6px; padding: 0; border-radius: 0; background: none; }
-.print-choice .segments button { flex: 0 0 auto; max-width: 100%; min-height: 44px; padding: 8px 12px; border: 1px solid transparent; border-radius: 8px; background: var(--soft); white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.4; }
-.print-choice .segments button[aria-pressed=true] { border-color: var(--ink); background: var(--bg0); color: var(--ink); box-shadow: none; }
+.print-options, .build-options { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 20px 32px; }
+.print-choice, .build-choice { display: flex; flex-direction: column; gap: 8px; min-width: 0; max-width: 100%; }
+.print-choice .field-label, .build-choice .field-label { margin: 0; }
+.print-choice .segments, .build-choice .segments { width: max-content; max-width: 100%; flex-wrap: wrap; gap: 6px; padding: 0; border-radius: 0; background: none; }
+.print-choice .segments button, .build-choice .segments button { flex: 0 0 auto; max-width: 100%; min-height: 44px; padding: 8px 12px; border: 1px solid transparent; border-radius: 8px; background: var(--soft); white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.4; }
+.print-choice .segments button[aria-pressed=true], .build-choice .segments button[aria-pressed=true] { border-color: var(--ink); background: var(--bg0); color: var(--ink); box-shadow: none; }
 #print-kit { align-self: flex-start; width: fit-content; max-width: 100%; margin-top: 4px; border-radius: 8px; padding: 10px 16px; white-space: normal; }
 #project-menu .config-actions button { flex: 0 1 auto; max-width: 100%; border-radius: 8px; padding: 10px 16px; }
 .print-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
@@ -616,9 +616,9 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
 @container editor (max-width: 310px) {
  .shopping-row { grid-template-columns: 56px minmax(0,1fr); padding: 10px; gap: 4px 8px; }
  .shopping-art { width: 56px; height: 68px; }
- .print-choice { width: 100%; }
- .print-choice .segments { width: 100%; flex-direction: column; }
- .print-choice .segments button { text-align: left; }
+ .print-choice, .build-choice { width: 100%; }
+ .print-choice .segments, .build-choice .segments { width: 100%; flex-direction: column; }
+ .print-choice .segments button, .build-choice .segments button { text-align: left; }
 }
 
 /* Expanded docks keep previews compact and put independent color/key fields side by side. */

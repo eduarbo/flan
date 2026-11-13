@@ -2,9 +2,14 @@
 import {framePalette} from './finishes.js';
 import pcbOptions from '../design/pcb-options.json';
 import family from '../design/variants.json';
+import fastenerProfiles from '../design/fastener-profiles.json';
 import {t} from './i18n.js';
 export const pcbEditionIds=pcbOptions.editions.map(e=>e.id),pcbMaskIds=pcbOptions.masks.map(m=>m.id);
 export const variantIds=Object.keys(family.variants),defaultVariant=family.base;
+// Screw head pockets: the reference low-head screws unless a design names another profile.
+export const fastenerIds=Object.keys(fastenerProfiles.profiles),defaultFasteners=fastenerProfiles.default;
+export const fastenersOf=config=>config?.fasteners??defaultFasteners;
+export const fastenersFit=(id,variant)=>(fastenerProfiles.profiles[id]?.variants||variantIds).includes(variant||defaultVariant);
 export const templateRef=ref=>ref==='K40'?'K01':ref[2]==='0'?`K${ref[1]}1`:ref[1]==='4'?`K0${ref[2]}`:ref;
 export const copy=x=>JSON.parse(JSON.stringify(x));
 export const pcbEdition=(config,side)=>config.pcb_editions?.[side]??config.pcb_edition??pcbOptions.default_edition;
@@ -34,7 +39,7 @@ export function gap(a,b){
  return result;
 }
 export const retiredFrames=(config,c)=>['left','right'].filter(side=>Object.hasOwn(c.retired_frame_styles||{},config?.frames?.[side]?.style));
-export function normalize(config,c){const result=copy(config);result.schema="flan36-config-1";result.variant??=defaultVariant;result.pcb_edition??=pcbOptions.default_edition;result.pcb_mask??=pcbOptions.default_mask;for(const [side,keys] of Object.entries(c.layout))for(const key of keys)result.keycaps[side][key.ref].color??=key.row===3?'#45967b':'#e9dfc6';if(!('cases' in result))result.cases=Object.fromEntries(['left','right'].map(side=>[side,{style:'solid',cover:true}]));for(const side of ['left','right']){const cs=result.cases[side],style=c.case_styles[cs.style];cs.base_color??=style.base_color;cs.plate_color??=style.plate_color;cs.match_frame??=false;const f=result.frames[side],retired=Object.hasOwn(c.retired_frame_styles||{},f.style),paletteStyle=retired?(c.retired_frame_palette_styles?.[f.style]||c.retired_frame_styles[f.style]):f.style;const p=framePalette(paletteStyle,f.color,f.accents);if(retired)f.style=c.retired_frame_styles[f.style];f.accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,p[k]]));}return result;}
+export function normalize(config,c){const result=copy(config);result.schema="flan36-config-1";result.variant??=defaultVariant;if(result.fasteners===defaultFasteners)delete result.fasteners;result.pcb_edition??=pcbOptions.default_edition;result.pcb_mask??=pcbOptions.default_mask;for(const [side,keys] of Object.entries(c.layout))for(const key of keys)result.keycaps[side][key.ref].color??=key.row===3?'#45967b':'#e9dfc6';if(!('cases' in result))result.cases=Object.fromEntries(['left','right'].map(side=>[side,{style:'solid',cover:true}]));for(const side of ['left','right']){const cs=result.cases[side],style=c.case_styles[cs.style];cs.base_color??=style.base_color;cs.plate_color??=style.plate_color;cs.match_frame??=false;const f=result.frames[side],retired=Object.hasOwn(c.retired_frame_styles||{},f.style),paletteStyle=retired?(c.retired_frame_palette_styles?.[f.style]||c.retired_frame_styles[f.style]):f.style;const p=framePalette(paletteStyle,f.color,f.accents);if(retired)f.style=c.retired_frame_styles[f.style];f.accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,p[k]]));}return result;}
 export function retiredReplacementNames(config,c){return [...new Set(retiredFrames(config,c).map(side=>c.frame_styles[c.retired_frame_styles[config.frames[side].style]]))].join(', ');}
 export function check(config,c){
  const record=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
@@ -44,6 +49,7 @@ export function check(config,c){
  if(Object.keys(record(config.keycaps)?config.keycaps:{}).sort().join()!=='left,right'||Object.keys(record(config.frames)?config.frames:{}).sort().join()!=='left,right')return {errors:[t('cfg.halves')]};
  if(Object.keys(record(config.batteries)?config.batteries:{}).sort().join()!=='left,right')return {errors:[t('cfg.batteries')]};
  if('variant' in config&&!variantIds.includes(config.variant))return {errors:[t('cfg.variant')]};
+ if('fasteners' in config){if(typeof config.fasteners!=='string'||!fastenerIds.includes(config.fasteners))return {errors:[t('cfg.fasteners')]};if(!fastenersFit(config.fasteners,config.variant))return {errors:[t('cfg.fastenersSize')]};}
  if('pcb_edition' in config&&!pcbEditionIds.includes(config.pcb_edition))return {errors:[t('cfg.edition')]};
  if('pcb_editions' in config&&(!record(config.pcb_editions)||Object.keys(config.pcb_editions).sort().join()!=='left,right'||Object.values(config.pcb_editions).some(id=>!pcbEditionIds.includes(id))))return {errors:[t('cfg.edition')]};
  if('pcb_mask' in config&&!pcbMaskIds.includes(config.pcb_mask))return {errors:[t('cfg.mask')]};

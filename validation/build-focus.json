@@ -26,6 +26,6 @@
   "cancellation_and_retry": true,
   "cancellation_during_geometry_load": true,
   "offline_exact_design_link": true,
-  "browser": "151.0.7922.34",
+  "browser": "149.0.7827.55",
   "errors": []
 }

@@ -9,8 +9,7 @@ export function framePalette(style,body,accents){
 }
 export function createFrameFinishes(geometryFor,material){
   const cache=new Map();
-  return function frame(style,side,body,accents){
-    const path=`mechanical/revI/${side}-frame-${style}.stl`;
+  return function frame(style,side,body,accents,path=`mechanical/revI/${side}-frame-${style}.stl`){
     if(!cache.has(path)){
       // Groups come from exact native material volumes. Geometry, winding and
       // role boundaries must survive unchanged into previews and GLB exports.

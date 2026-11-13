@@ -228,7 +228,8 @@
       "note": {
         "en": "Select M2 × 6; head Ø3.8 × 1.3 mm. Confirm pack quantity in the quote.",
         "es": "Elige M2 × 6; cabeza Ø3.8 × 1.3 mm. Confirma las unidades por paquete al cotizar."
-      }
+      },
+      "fasteners": "low-head"
     },
     {
       "id": "m4",
@@ -242,6 +243,37 @@
       "note": {
         "en": "Select M2 × 4; head Ø4 × 1.1 mm. Ordinary socket heads are not equivalent.",
         "es": "Elige M2 × 4; cabeza Ø4 × 1.1 mm. Una cabeza Allen normal no es equivalente."
+      },
+      "fasteners": "low-head"
+    },
+    {
+      "id": "m6-common",
+      "supplier": "Bolt Depot",
+      "name": {
+        "en": "M2 × 6 socket-cap screws",
+        "es": "Tornillos Allen M2 × 6"
+      },
+      "quantity": "m6",
+      "fasteners": "common-m2",
+      "url": "https://boltdepot.com/Product-Details?product=6363",
+      "note": {
+        "en": "DIN 912 / ISO 4762, pitch 0.4 mm, stainless; head up to Ø4 × 2 mm, 1.5 mm hex key. Any M2 × 6 machine screw within that head size works.",
+        "es": "DIN 912 / ISO 4762, paso 0.4 mm, inoxidable; cabeza de hasta Ø4 × 2 mm, llave Allen de 1.5 mm. Sirve cualquier tornillo de máquina M2 × 6 con esa cabeza."
+      }
+    },
+    {
+      "id": "m4-common",
+      "supplier": "Bolt Depot",
+      "name": {
+        "en": "M2 × 4 socket-cap screws",
+        "es": "Tornillos Allen M2 × 4"
+      },
+      "quantity": 4,
+      "fasteners": "common-m2",
+      "url": "https://boltdepot.com/Product-Details?product=6358",
+      "note": {
+        "en": "DIN 912 / ISO 4762, pitch 0.4 mm, stainless; head up to Ø4 × 2 mm, 1.5 mm hex key. No countersunk, longer or self-tapping screws.",
+        "es": "DIN 912 / ISO 4762, paso 0.4 mm, inoxidable; cabeza de hasta Ø4 × 2 mm, llave Allen de 1.5 mm. No uses tornillos avellanados, más largos ni autorroscantes."
       }
     },
     {

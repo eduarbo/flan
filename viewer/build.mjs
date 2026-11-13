@@ -82,6 +82,24 @@ for(const [id,v] of Object.entries(scene.variants||{}))if(v.printing){
  const hash=crypto.createHash('sha256').update(bytes).digest('hex'),file=`docs/explore/assets/variant-${id}-${hash}.bin`;
  fs.writeFileSync(path.join(root,file),bytes);variantAssets[id]={bytes,hash,file};
 }
+// Optional screw profiles: their plates and frames as exact STL bytes, fetched when a design chooses one.
+const fastenerAssets={};
+function fastenerContainer(profile){
+ const blobs=[],index=new Map(),parts=[];let offset=0;
+ const add=b64=>{const bytes=Buffer.from(b64,'base64'),key=crypto.createHash('sha256').update(bytes).digest('hex');
+  if(!index.has(key)){index.set(key,blobs.length);blobs.push([offset,bytes.length]);parts.push(bytes);offset+=bytes.length;}return index.get(key);};
+ const printing=Object.fromEntries(Object.entries(profile.printing).map(([name,{stl,material_parts,...a}])=>
+  [name,{...a,blob:add(stl),...(material_parts?{material_parts:material_parts.map(({stl,...m})=>({...m,blob:add(stl)}))}:{})}]));
+ const header=Buffer.from(JSON.stringify({schema:'flan-fasteners-1',printing,meshes:{},blobs})),length=Buffer.alloc(4);length.writeUInt32LE(header.length);
+ return Buffer.concat([length,header,...parts]);
+}
+for(const [id,profile] of Object.entries(scene.fasteners?.profiles||{})){
+ const bytes=deferredBinary('fasteners-'+id,fastenerContainer(profile));
+ const digest=crypto.createHash('sha256').update(bytes).digest('hex'),file=`docs/explore/assets/fasteners-${id}-${digest}.bin`;
+ fs.writeFileSync(path.join(root,file),bytes);fastenerAssets[id]={bytes,hash:digest,file};
+}
+const fasteners=scene.fasteners&&{...scene.fasteners,profiles:Object.fromEntries(Object.entries(scene.fasteners.profiles).map(([id,{printing,...rest}])=>
+ [id,{...rest,asset:{url:`./assets/fasteners-${id}-${fastenerAssets[id].hash}.bin`,sha256:fastenerAssets[id].hash}}]))};
 // Size thumbnails: the home page's own renders (viewer/thumbs, from design/proposals/explorer-r1/assets via
 // magick snes-size-<id>.png -resize 192x -quality 84 size-<id>.webp), inline for the CSP.
 const thumb=id=>{const f=path.join(here,'thumbs',`size-${id}.webp`);return fs.existsSync(f)?'data:image/webp;base64,'+fs.readFileSync(f).toString('base64'):undefined;};
@@ -97,11 +115,11 @@ for(const id of keycapIds){
  fs.writeFileSync(path.join(root,file),bytes);keycapFiles.push(file);keycapAssets[id]={url:`./assets/keycap-${id}-${digest}.bin`,sha256:digest,path:v.path,source_sha256:v.sha256};
 }
 // Only this build's deferred assets are published; earlier ones stay in Git history.
-const current=new Set([assetPath,silkPath,...Object.values(variantAssets).map(a=>a.file),...keycapFiles].map(p=>path.basename(p)));
+const current=new Set([assetPath,silkPath,...Object.values(variantAssets).map(a=>a.file),...Object.values(fastenerAssets).map(a=>a.file),...keycapFiles].map(p=>path.basename(p)));
 for(const f of fs.readdirSync(path.join(root,'docs/explore/assets')))
- if(/^(printing|silkscreen|variant-[a-z0-9]+|keycap-[a-z0-9_]+)-[0-9a-f]{64}\.bin$/.test(f)&&!current.has(f))fs.rmSync(path.join(root,'docs/explore/assets',f));
+ if(/^(printing|silkscreen|variant-[a-z0-9]+|fasteners-[a-z0-9-]+|keycap-[a-z0-9_]+)-[0-9a-f]{64}\.bin$/.test(f)&&!current.has(f))fs.rmSync(path.join(root,'docs/explore/assets',f));
 const packedScene={...scene,geometries:unique,geometryAliases,printing:{url:`./assets/printing-${printHash}.bin`,sha256:printHash},
-  silkscreen:{...scene.silkscreen,textures:{url:`./assets/silkscreen-${silkHash}.bin`,sha256:silkHash}},variants,keycapAssets};
+  silkscreen:{...scene.silkscreen,textures:{url:`./assets/silkscreen-${silkHash}.bin`,sha256:silkHash}},variants,keycapAssets,...(fasteners?{fasteners}:{})};
 const packed=gzipSync(Buffer.from(JSON.stringify(packedScene)),{level:9}).toString('base64');
 // the colour mark, inline: the viewer's CSP loads no external images. Its outline follows the page's theme.
 const mark=fs.readFileSync(path.join(root,'docs/branding/flan/flan-mark-color.svg'),'utf8').replace(/<\?xml[^>]*>|<title>[^<]*<\/title>|<style>[^<]*<\/style>/g,'')
@@ -116,7 +134,7 @@ function page(offline){return template.replace('/*__FONTS__*/',()=>fonts(offline
  .replace('/*__DATA__*/',()=>packed)
  .replace('/*__PRINT__*/',()=>offline?printBytes.toString('base64'):'')
  .replace('/*__SILK__*/',()=>offline?silkBytes.toString('base64'):'')
- .replace('/*__VARIANTS__*/',()=>JSON.stringify(offline?Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,a.bytes.toString('base64')])):{}))
+ .replace('/*__VARIANTS__*/',()=>JSON.stringify(offline?Object.fromEntries([...Object.entries(variantAssets).map(([id,a])=>[id,a.bytes.toString('base64')]),...Object.entries(fastenerAssets).map(([id,a])=>['fasteners:'+id,a.bytes.toString('base64')])]):{}))
  .replace('href="../" id="nav-home"',()=>offline?'href="https://flankbd.com/" id="nav-home"':'href="../" id="nav-home"')
  .replace('/*__APP__*/',()=>bundle.outputFiles[0].text.replaceAll('</script','<\\/script'))
  .replaceAll('\r\n','\n');}
@@ -130,7 +148,7 @@ const receipt={revision:scene.revision,units:'mm',objects:scene.parts.length,uni
   keycaps:scene.parts.filter(p=>p.group==='keycaps').length,geometry_changed:false,
   sources,viewer_sha256:hash('docs/explore/index.html'),measurements:scene.measurements,
   offline:'docs/explore/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/explore/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.',
-  build_assets:packageAssets,offline_sha256:hash('docs/explore/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},variants:Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),silkscreen:{path:silkPath,sha256:silkHash,bytes:silkBytes.length,editions:scene.silkscreen.editions.map(e=>e.id)},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
+  build_assets:packageAssets,offline_sha256:hash('docs/explore/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},variants:Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),fasteners:Object.fromEntries(Object.entries(fastenerAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),silkscreen:{path:silkPath,sha256:silkHash,bytes:silkBytes.length,editions:scene.silkscreen.editions.map(e=>e.id)},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
   limitations:scene.limits};
 fs.writeFileSync(path.join(root,`validation/rev${scene.revision}-viewer.json`),JSON.stringify(receipt,null,2)+'\n');
 console.log(`Online viewer: ${(Buffer.byteLength(html)/1048576).toFixed(2)} MiB; ${scene.parts.length} objects.`);

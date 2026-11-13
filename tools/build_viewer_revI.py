@@ -301,6 +301,34 @@ for side in ['left','right']:
                         'path':material_path,'sha256':digest(material_path),
                         'stl':base64.b64encode((ROOT/material_path).read_bytes()).decode()})
 scene['printing']=printing
+# Optional screw profiles: the default kit's plates and frames with other head pockets. Exact native
+# exports bound to their delivery receipt; viewer/build.mjs defers them like a variant's files.
+fastener_profiles=json.loads((ROOT/'design/fastener-profiles.json').read_text())
+scene['fasteners']={'default':fastener_profiles['default'],'profiles':{}}
+scene['sources'].append({'path':'design/fastener-profiles.json','sha256':digest('design/fastener-profiles.json')})
+for ident,profile in fastener_profiles['profiles'].items():
+    if 'meshes' not in profile:continue
+    receipt=json.loads((ROOT/profile['receipt']).read_text());folder=profile['meshes']
+    assert receipt['spec']['sha256']==digest(profile['spec']),(ident,'specification changed after its receipt')
+    def native(path):
+        """The profile's export of a default file, or that file where the profile leaves it unchanged."""
+        candidate=f'{folder}/{Path(path).name}'
+        if candidate in receipt['files']:
+            assert digest(candidate)==receipt['files'][candidate],(candidate,'stale profile mesh')
+            scene['sources'].append({'path':candidate,'sha256':digest(candidate)});return candidate
+        assert Path(path).stem in receipt['unchanged'],(path,'not covered by the profile receipt')
+        return path
+    packed=lambda path:{'path':path,'sha256':digest(path),'stl':base64.b64encode((ROOT/path).read_bytes()).decode()}
+    entry={'id':ident,'variants':profile['variants'],'spec':json.loads((ROOT/profile['spec']).read_text()),
+           'joining_case':profile['joining_case'],'printing':{}}
+    for name,asset in printing['assets'].items():
+        if not (name.endswith('-plate') or '-frame-' in name):continue
+        path=native(asset['path']);assert path!=asset['path'],(name,'the profile does not change this printable')
+        entry['printing'][name]={'id':name,**packed(path)}
+        if 'material_parts' in asset:
+            entry['printing'][name]['material_parts']=[{'role':part['role'],**packed(native(part['path']))} for part in asset['material_parts']]
+    for path in (profile['spec'],profile['receipt']):scene['sources'].append({'path':path,'sha256':digest(path)})
+    scene['fasteners']['profiles'][ident]=entry
 top_key=min(k['y']-8.244852066 for k in layout['halves']['left'] if k['row']==0)
 adjacent=next(k for k in layout['halves']['left'] if k['ref']=='K05')['y']-8.244852066
 hood_min=min(p[1] for p in model['halves']['left']['electronics_cover'])

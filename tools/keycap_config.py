@@ -12,6 +12,8 @@ PCB_EDITION_IDS=[e['id'] for e in PCB_OPTIONS['editions']]
 PCB_MASK_IDS=[m['id'] for m in PCB_OPTIONS['masks']]
 FAMILY=json.loads((ROOT/'design/variants.json').read_text())
 VARIANT_IDS=list(FAMILY['variants'])
+FASTENERS=json.loads((ROOT/'design/fastener-profiles.json').read_text())
+FASTENER_IDS=list(FASTENERS['profiles'])
 
 def template_ref(ref):
     return 'K01' if ref=='K40' else f'K{ref[1]}1' if ref[2]=='0' else f'K0{ref[2]}' if ref[1]=='4' else ref
@@ -41,6 +43,7 @@ def default_config(catalog=None):
 
 def normalize(config,catalog=None):
     c=catalog or load();result=copy.deepcopy(config);result['schema']='flan36-config-1'
+    if result.get('fasteners')==FASTENERS['default']:del result['fasteners']
     result.setdefault('variant',FAMILY['base']);result.setdefault('pcb_edition',PCB_OPTIONS['default_edition']);result.setdefault('pcb_mask',PCB_OPTIONS['default_mask'])
     for side,keys in c['layout'].items():
         for key in keys:result['keycaps'][side][key['ref']].setdefault('color','#45967b' if key['row']==3 else '#e9dfc6')
@@ -63,6 +66,9 @@ def check(config,catalog=None):
     if not isinstance(config.get('batteries'),dict):return ['Select a battery for each half.'],None
     if set(config.get('batteries',{}))!={'left','right'}:return ['Select a battery for each half.'],None
     if 'variant' in config and (not isinstance(config['variant'],str) or config['variant'] not in VARIANT_IDS):return ['Unknown Flan variant.'],None
+    if 'fasteners' in config:
+        if not isinstance(config['fasteners'],str) or config['fasteners'] not in FASTENER_IDS:return ['Unknown screw option.'],None
+        if config.get('variant',FAMILY['base']) not in FASTENERS['profiles'][config['fasteners']].get('variants',VARIANT_IDS):return ['Common M2 screws are only available for Flan36.'],None
     if 'pcb_edition' in config and (not isinstance(config['pcb_edition'],str) or config['pcb_edition'] not in PCB_EDITION_IDS):return ['Unknown PCB edition.'],None
     if 'pcb_editions' in config:
         editions=config['pcb_editions']

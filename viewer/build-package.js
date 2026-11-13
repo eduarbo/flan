@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {zipSync,strToU8} from 'three/addons/libs/fflate.module.js';
-import {pcbEdition,pcbMask} from './config.js';
+import {pcbEdition,pcbMask,fastenersOf} from './config.js';
 export const sha256=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),n=>n.toString(16).padStart(2,'0')).join('');
 // Shared geometry loads may finish caching; cancelling must release this export immediately.
 export function buildWait(work,signal){
@@ -51,7 +51,7 @@ export async function completeBuild({configuration,assets,editions,print,guide,c
  add('READ-ME.txt','FLAN / COMPLETE BUILD / BUILD COMPLETO\n\nOpen Guide.html / Abre Guide.html\nShopping.csv: quantities and supplier links / cantidades y proveedores.\nPCB/: upload each ZIP separately; choose its color from ORDER.txt.\nPCB/: sube cada ZIP por separado; elige su color segun ORDER.txt.\nFirmware/: use the left and right UF2 for this size. The optional folder is only for a deliberately omitted right display.\nFirmware/: usa los UF2 izquierdo y derecho de este tamano. La carpeta optional solo aplica si omites la pantalla derecha.\nPrint-kit.zip: both halves, all selected parts and keycaps, STL + 3MF and placement plan.\nPrint-kit.zip: ambas mitades, piezas y keycaps elegidas, STL + 3MF y plan de colocacion.\nFit-samples/: print and check fit before the full kit / imprime y prueba antes del kit completo.\nConfiguration.json: reopen your design / vuelve a abrir tu diseno.\nmanifest.json: SHA-256 for every file / SHA-256 de cada archivo.\n\nDigital prototype. No printer profile or G-code. Physical fit and electrical operation require validation.\nPrototipo digital. Sin perfil de impresora ni G-code. Verifica ajuste fisico y funcionamiento electrico.\n\nFlan: Eduardo Ruiz, GPL-3.0-or-later. KLP Lame keycaps: braindefender, CC-BY-SA-4.0.\nhttps://flankbd.com/\n');
  signal?.throwIfAborted();progress('zip');
  const entries=await Promise.all(Object.entries(files).map(async([path,bytes])=>({path,bytes:bytes.length,sha256:await sha256(bytes),...(sources[path]?{source:sources[path]}:{})})));
- add('manifest.json',JSON.stringify({schema:'flan-build-1',variant,revision:config.revision,configuration:config,pcbs,files:entries},null,2)+'\n');
+ add('manifest.json',JSON.stringify({schema:'flan-build-1',variant,revision:config.revision,fasteners:fastenersOf(config),configuration:config,pcbs,files:entries},null,2)+'\n');
  signal?.throwIfAborted();
  return {bytes:zipSync(files,{level:6}),entries};
 }

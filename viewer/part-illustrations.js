@@ -31,7 +31,7 @@ export function createPartIllustrations({preview,parts,material}){
  render('cable',[wire([[-8,0,5],[-12,0,12],[-10,0,20],[0,0,22],[10,0,18],[8,0,12],[0,0,12],[-2,0,6],[6,0,0]],dark,.7),
   box(3,1.6,5,dark,[-8,0,2]),box(2.7,1.2,2,silver,[-8,0,-1]),box(3,1.6,5,dark,[6,0,-2]),box(2.7,1.2,2,silver,[6,0,-5])]);
  const roll=(color)=>[ring(9,3,color),ring(6.4,.6,'#d9ccb2'),box(9,.5,6,color,[10,0,6])];render('tape',roll('#b77b28'));
- for(const [id,length,radius,head] of [['m6',6,1.9,1.3],['m4',4,2,1.1]]){
+ for(const [id,length,radius,head] of [['m6',6,1.9,1.3],['m4',4,2,1.1],['m6-common',6,1.9,2],['m4-common',4,1.9,2]]){
   const screw=[cylinder(1,length,silver,[0,length/2,0]),cylinder(radius,head,silver,[0,length+head/2,0]),entry(new THREE.CylinderGeometry(.8,.8,.02,6),dark,[0,length+head+.02,0])];
   for(let y=.3;y<length;y+=.45)screw.push(ring(1,.09,'#77868e',[0,y,0]));render(id,screw,[1,1,1]);
  }

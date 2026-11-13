@@ -1460,6 +1460,146 @@
       "sha256": "d1a82d39a5d3b431641af1f4ba2359592927ad6a47378c22e776bec7f1bdaa4b"
     },
     {
+      "path": "design/fastener-profiles.json",
+      "sha256": "94d3f369b89209c6a5f1fe7096ffcaae895198278a1e08e55fb6d996063613cb"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-case-solid-plate.stl",
+      "sha256": "f2083861da725b8be0f0ab0d6f9a01bacd1b4d8f382b8a5eb4308d323e1422f1"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-case-rim-plate.stl",
+      "sha256": "c4bd565212b9f7a35061e391508868c56a69fb3a870c8cb0b703bad8d1a28f8e"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-case-terrace-plate.stl",
+      "sha256": "f2083861da725b8be0f0ab0d6f9a01bacd1b4d8f382b8a5eb4308d323e1422f1"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-case-level-plate.stl",
+      "sha256": "5160f22d73784901cd3753545884ab7bdaa481d9e7bd8a034f4ae677be567bf8"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-talavera.stl",
+      "sha256": "415ac0ad9d2af9b52754e690f42c567517b246a6ca37c42d1f00936e153685bb"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-talavera-body.stl",
+      "sha256": "103f20121db7da2e9865496e66154b51e4442899fe1c50939a917ee3c02065f4"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-gameboy.stl",
+      "sha256": "6b6ca0bc93b6e77fd3b56be89f20ec1a3ef6f6d966d8608d66151fab50dde26c"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-gameboy-body.stl",
+      "sha256": "b2a32fc4c6ae0aa5c3d34d6b270c32090edff6700ebaa1252ac1f7de16aa9216"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-snes.stl",
+      "sha256": "81554095a75c3e85cefb3065f3296d6e4e3714bfb8535f8f6fd8640e25179393"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-snes-body.stl",
+      "sha256": "37f548af2c383d315817d0d544444bd51ec21531d4d966aabf8d7ae3870167b1"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-phone.stl",
+      "sha256": "a17d4f003381f51809925a3d93c729e924be69d06e93ba3e7dcedc782a4cf0f8"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-phone-body.stl",
+      "sha256": "75d327aee9d355e697a87974d67a2428ccccd384471e69d2cb3703cb9782c1f4"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-ipod.stl",
+      "sha256": "f7f05cf30b3033542a5dbb11c6105d98dadf0bf11a7e8502325f08a0d0e441d9"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-ipod-body.stl",
+      "sha256": "3ecee5cb5f4be9df528eece20d69fe8713654cf71f5ff93a642bf61b5f255457"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-hanafuda.stl",
+      "sha256": "a28250fb7fdcd14b0f412e8537e655faf5a1b0e2986e32f73fc270b580fd59df"
+    },
+    {
+      "path": "mechanical/revI/common-m2/left-frame-hanafuda-body.stl",
+      "sha256": "90cc825f75c179ebc4402efa64a6a46a11cb365123f2d877f42d0e4c84723f00"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-case-solid-plate.stl",
+      "sha256": "2ce21942526b66731d6a2d2314ee1360bcfe4270fcb817a5a90991553e999000"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-case-rim-plate.stl",
+      "sha256": "ff9efba08cc91567450f60ff6c98685a4508315f80d176c65fdefe94e0ac9eb9"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-case-terrace-plate.stl",
+      "sha256": "2ce21942526b66731d6a2d2314ee1360bcfe4270fcb817a5a90991553e999000"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-case-level-plate.stl",
+      "sha256": "1be99f0415f341d5e1e201a72b9d49d174b844bfc4deb6654a4f3c6126689161"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-talavera.stl",
+      "sha256": "97b82223adf7bbc04c0be96d9683480585af61ce65cfdc952b2bf589200502a7"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-talavera-body.stl",
+      "sha256": "4be6baaeca227b9dbf722cdcd5d6088d29028a51496dcf4de2222444bc44a27c"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-gameboy.stl",
+      "sha256": "94a8d342cf33c57199262f2c3ea353cba2a95cf09a7cad93f8407015c4184dbf"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-gameboy-body.stl",
+      "sha256": "99acbba0017341dbab91d4c9d631932984e91b79ade5173a269020c20f674ab9"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-snes.stl",
+      "sha256": "28f421695a6c7008a75de16806e1fe12df300a858fcd4d6c0d40099f944280a8"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-snes-body.stl",
+      "sha256": "900ce758df00f18d6b7ded78f76180012227e26f960249e10ed424a0b894c238"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-phone.stl",
+      "sha256": "7198987c8f6617b60d003e215f97c049affc187c25e32f2d7d2ff290a72862fa"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-phone-body.stl",
+      "sha256": "0ea3e788831135ccaee598171c8a2c03f6dc7a07fdc6296bbaa28257d08312d0"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-ipod.stl",
+      "sha256": "84657786ffeb04e35e640f2fe5101f0347f2a9ac5cf96be0381d2353a30427b2"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-ipod-body.stl",
+      "sha256": "d0006e8644c98054db8704450a999dfed998cadd561c16e2889dac8215571664"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-hanafuda.stl",
+      "sha256": "d0754098363e94ed55006b5ec2212d3f3e0717a0463a5f6b77c5a1003b36a74b"
+    },
+    {
+      "path": "mechanical/revI/common-m2/right-frame-hanafuda-body.stl",
+      "sha256": "fac90c33d04138c7ebf96fa264e96730973513a4341fcbc8f1c486739e70009c"
+    },
+    {
+      "path": "design/common-fasteners.json",
+      "sha256": "f13994a306d33c4060553898c0118a98200ea205a26638613c169b06cf0f87d7"
+    },
+    {
+      "path": "validation/revI-common-fasteners.json",
+      "sha256": "bc1b6c6f415b1b4ab1e14ccd6648c88fb772b3e9385137103a1fde8c1ca9940a"
+    },
+    {
       "path": "design/revI.json",
       "sha256": "939da95663f38b8668cf4f07eedbb38e40d04fc12d104720f165440c01a4a78b"
     },
@@ -1473,7 +1613,7 @@
     },
     {
       "path": "tools/build_viewer_revI.py",
-      "sha256": "009a53192084f0549fe47bcf1e7e1997c2cec4ec8a691f2d10929ab66397dfde"
+      "sha256": "edf10d913f22fe625f98261fe8f93c6ac99fd68c29f466813d1b6d78c1d37905"
     },
     {
       "path": "tools/viewer_frame_selection.py",

@@ -1,0 +1,14 @@
+{
+  "schema": "flan-fastener-profiles-1",
+  "default": "low-head",
+  "profiles": {
+    "low-head": {},
+    "common-m2": {
+      "variants": ["flan36"],
+      "spec": "design/common-fasteners.json",
+      "meshes": "mechanical/revI/common-m2",
+      "receipt": "validation/revI-common-fasteners.json",
+      "joining_case": "Common-M2 variant: 3 M2x6 + 2 M2x4 machine screws per half, pitch 0.4 mm; head diameter <=4 mm and height <=2 mm (DIN 912 / ISO 4762 socket caps fit, 1.5 mm hex key). Tap the unchanged 1.7 mm pilots to M2. No countersunk or self-tapping screws"
+    }
+  }
+}

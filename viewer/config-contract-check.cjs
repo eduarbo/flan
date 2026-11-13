@@ -36,6 +36,7 @@ pcb_edition
 pcb_editions
 pcb_mask
 pcb_masks
+fasteners
 variant`.split('\n');
 for(const location of locations)for(const value of [null,[],{},true,0,'constructor','__proto__','toString']){const c=clone(base),parts=location.split('.'),last=parts.pop();let target=c;for(const k of parts)target=target[k];target[last]=value;fixtures.push(c);}
 const mixed=api.setPcbEdition(base,['left'],'asanoha');
@@ -51,6 +52,13 @@ assert.deepEqual(mixedMasks.pcb_editions,pair.pcb_editions);assert.deepEqual(mix
 const pairedMask=api.setPcbMask(mixedMasks,['left','right'],'black');fixtures.push(pairedMask);
 assert.equal(pairedMask.pcb_mask,'black');assert.equal(pairedMask.pcb_masks,undefined);assert.deepEqual(pairedMask.pcb_editions,pair.pcb_editions);
 for(const masks of [{left:'white'},{left:'white',right:'wrong'},{left:[],right:'green'},{left:'green',right:'green',extra:'green'}])fixtures.push({...base,pcb_masks:masks});
+// Screws: the reference low-head profile is the absence of the key, so earlier designs and links stay byte-identical.
+const commonScrews={...clone(base),fasteners:'common-m2'};fixtures.push(commonScrews,{...clone(base),fasteners:'low-head'},{...clone(base),fasteners:'common-m2',variant:'flan42'},{...clone(base),fasteners:'Common-M2'});
+assert.equal(api.fastenersOf(base),'low-head');assert.equal('fasteners' in base,false);
+assert.deepEqual(api.check(commonScrews,catalog).errors,[]);assert.equal(api.normalize(commonScrews,catalog).fasteners,'common-m2');
+assert.deepEqual(api.normalize({...clone(base),fasteners:'low-head'},catalog),base,'the default profile normalizes to the earlier format');
+assert.equal(api.check({...clone(base),fasteners:'common-m2',variant:'flan42'},catalog).errors.length,1,'common M2 is built for Flan36 only');
+assert.equal(api.fastenersFit('common-m2','flan36'),true);assert.equal(api.fastenersFit('common-m2','flan54'),false);assert.equal(api.fastenersFit('low-head','flan54'),true);
 const js=fixtures.map(c=>{const errors=api.check(c,catalog).errors;return {valid:!errors.length,normalized:errors.length?null:api.normalize(c,catalog)};});
 const py=spawnSync('python3',['-c',"import sys,json;sys.path.insert(0,'tools');from keycap_config import check,normalize;xs=json.load(sys.stdin);print(json.dumps([{'valid':not check(x)[0],'normalized':normalize(x) if not check(x)[0] else None} for x in xs]))"],{cwd:root,input:JSON.stringify(fixtures),encoding:'utf8',maxBuffer:5e6});assert.equal(py.status,0,py.stderr);assert.deepEqual(js,JSON.parse(py.stdout));assert.equal(js[7].normalized.cases.left.style,'solid');assert.equal(js[7].normalized.cases.right.cover,true);
 const values=new Map(),storage={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v)};let chain=Promise.resolve();const locks={request:(_key,_options,callback)=>{const p=chain.then(callback);chain=p.catch(()=>{});return p;}};
@@ -63,5 +71,5 @@ const store=()=>api.createStore({key:api.savedKey,storage:()=>storage,locks:()=>
  const throwing=api.createStore({key:api.savedKey,storage:()=>({getItem:()=>raw,setItem:()=>{throw Error('quota')}}),locks:()=>locks,validate:()=>{throw Error('bad')}});assert.equal(await throwing.save(ca),false);await assert.rejects(throwing.replace(ca));
  const h=api.createHistory(base,2);h.record(ca,'paint');h.record(cb,'paint');assert.deepEqual(h.undo(),base);assert.deepEqual(h.redo(),cb);h.record(ca);assert.equal(h.canRedo,false);const before=h.peekUndo();h.record(ca);assert.deepEqual(h.peekUndo(),before);
  for(const value of [null,{}, {schema:'flan36-keycap-palettes-1',palettes:[null]}])assert.throws(()=>api.validatePaletteFile(value,catalog));
- const report={fixture_count:fixtures.length,js_python_exact_parity:true,family_presets:familyPresets,added_key_collision_rejected_in_js_and_python:true,fixed_legacy_solid:true,rejected_raw_preserved:true,serialized_concurrent_saves:true,recovery_before_replace:true,lock_and_quota_fallback:true,history_coalescing:true};fs.writeFileSync(path.join(out,'contract.json'),JSON.stringify(report,null,2)+'\n');console.log(report);
+ const report={fixture_count:fixtures.length,js_python_exact_parity:true,fastener_profile_contract:true,family_presets:familyPresets,added_key_collision_rejected_in_js_and_python:true,fixed_legacy_solid:true,rejected_raw_preserved:true,serialized_concurrent_saves:true,recovery_before_replace:true,lock_and_quota_fallback:true,history_coalescing:true};fs.writeFileSync(path.join(out,'contract.json'),JSON.stringify(report,null,2)+'\n');console.log(report);
 })().catch(e=>{console.error(e);process.exitCode=1;});

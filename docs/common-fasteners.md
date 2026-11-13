@@ -2,7 +2,9 @@
 
 This optional Flan36 variant enlarges the hidden head pockets in the plate and display frame. It accepts ordinary M2 × 0.4 machine screws with a head **no larger than Ø4 × 2 mm**. It keeps the PCB holes, bearing seats, thread engagement, exterior height, battery cage and removable magnetic frame.
 
-Use its complete print kit. The original explorer download and `mechanical/revI/Flan36.FCStd` retain the original low-head specification; importing a configuration does **not** change those pockets. The optional native file is `Flan36-common-screws.FCStd`.
+**Choose it in the [explorer](https://flankbd.com/explore/):** open **Build → Buy the parts** and set **Screws** to **Common M2**. The model then shows the variant's plates and frames; the shopping list, the guide, the print kit and the complete build ZIP all follow that choice, and the link and saved design keep it. The reference low-head screws stay the default, so earlier designs and links open unchanged. The option is offered for Flan36 only; choosing another size returns to the low-head screws.
+
+A saved design records the choice as `"fasteners": "common-m2"`; without that key it uses the low-head screws. `mechanical/revI/Flan36.FCStd` retains the original low-head pockets, and importing a configuration into FreeCAD does **not** change them. The optional native file is `Flan36-common-screws.FCStd`.
 
 ## Hardware for both halves
 
@@ -43,6 +45,24 @@ node tools/prepare_common_fastener_kit.mjs --configuration configuration.json \
   --candidate build/common-fasteners --output build/common-fasteners/Print-kit.zip
 python3 tools/check_configured_print_kit.py build/common-fasteners/Print-kit.zip
 ```
+
+Publishing the variant in the explorer takes two more steps: check driver access for every case style, then adopt the changed exports with their receipt and rebuild the viewer.
+
+```sh
+# one driver-access report per case style (solid, rim, terrace, level): the same design with that case on both
+# halves, saved as build/common-fasteners/service-<style>/configuration.json; the report lands beside it
+python3 tools/freecad/run_macos.py tools/freecad/check_common_fastener_service.py \
+  --source mechanical/revI/Flan36.FCStd --candidate build/common-fasteners/Flan36.FCStd \
+  --configuration build/common-fasteners/service-level/configuration.json \
+  --output build/common-fasteners/service-level/Flan36-common-screws.FCStd
+python3 tools/adopt_common_fasteners.py build/common-fasteners
+/Applications/FreeCAD.app/Contents/Resources/bin/python tools/build_viewer_revI.py
+node viewer/build.mjs
+node viewer/config-contract-check.cjs
+FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium node viewer/fasteners-check.cjs
+```
+
+`adopt_common_fasteners.py` copies only the exports that differ from the default kit into `mechanical/revI/common-m2/`: the four plates, the six current frames and their body volumes, per half. The frames' detail, accent and secondary volumes are byte-identical and stay shared. It refuses any file not bound to the installer's export hash and any case style without a passed driver-access report, then writes the [delivery receipt](../validation/revI-common-fasteners.json). `fasteners-check.cjs` exercises the selection, link, saved design, view, shopping list, guide, print kit, complete build, earlier designs, other sizes, Spanish, a phone and the offline copy; every delivered STL must equal its repository file and its receipt hash.
 
 The installer refuses to overwrite an existing native output. `installation.json` binds the source, recipe, exports and reopened file; `service.json` records continuous driver access and saved frame colors. The kit checker compares every delivered STL byte and every translated 3MF triangle with the native exports. `cap-travel.json` records the full-travel keycap/head check with the explicit head profile.
 
