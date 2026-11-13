@@ -1,0 +1,6 @@
+# Flan Keyboard is an open-source project. Search engines and AI assistants are welcome to crawl,
+# index and quote this site. A plain-text summary for language models is at /llms.txt.
+User-agent: *
+Allow: /
+
+Sitemap: https://flankbd.com/sitemap.xml

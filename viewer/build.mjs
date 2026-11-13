@@ -135,6 +135,7 @@ const fonts=offline=>[['Fraunces','Fraunces-latin.woff2','300 500'],['Inter','In
   .map(([family,file,weight])=>`@font-face{font-family:"${family}";src:url(${offline?'data:font/woff2;base64,'+fs.readFileSync(path.join(here,'home/fonts',file)).toString('base64'):'../assets/fonts/'+file}) format("woff2");font-weight:${weight};font-display:swap}`).join('');
 function page(offline){return template.replace('/*__FONTS__*/',()=>fonts(offline)).replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(here,'style.css'),'utf8'))
  .replace('<!--__MARK__-->',()=>mark)
+ .replaceAll('__OG_VERSION__',()=>hash('viewer/home/home-og.png').slice(0,12))   // sharing services cache the image by address
  .replace('<!--__LICENSES__-->',()=>credits+licenses)
  .replace('/*__DATA__*/',()=>offline?sceneBytes.toString('base64'):JSON.stringify({url:`./assets/scene-${sceneHash}.bin`,sha256:sceneHash}))
  .replace('/*__PRINT__*/',()=>offline?printBytes.toString('base64'):'')

@@ -1,0 +1,39 @@
+# Flan Keyboard
+
+> Flan is an open-source, low-profile wireless split keyboard that you build yourself: you order the PCBs, 3D-print the case and keycaps, solder the parts and flash the firmware. It comes in four sizes (36, 42, 46 or 54 keys) and is free to build, modify and sell under GPL-3.0-or-later. As of November 2026 it is a digital prototype: the design files pass their electrical and geometric checks, but no board has been built and tested yet.
+
+Flan is designed by Eduardo Ruiz. The key positions of Flan36 follow Piantor by beekeeb; the wireless PCBs, cases, frames and firmware are original. Nothing is sold: there are no kits or assembled keyboards, only files and a parts list.
+
+Key facts:
+
+- Sizes: Flan36 (3 x 5 + 3 thumb keys per half), Flan42 (adds an outer pinky column), Flan46 (adds a number row), Flan54 (both).
+- Switches: Kailh Choc v1 low-profile, in hot-swap sockets.
+- Electronics: one nice!nano v2 controller per half, ZMK firmware with compiled UF2 files, Bluetooth Low Energy or USB, a nice!view display on each half (the right one is optional).
+- Case: 3D-printed in four styles (Level, Solid, Color rim, Terrace), with six interchangeable magnetic display frames (Talavera, Game Boy, SNES, 2000s Phone, iPod, Hanafuda).
+- Looks: 31 colour themes, per-key colours and printable KLP Lame keycaps.
+- Tools: a 3D explorer in the browser where you choose a design and get its shopping list, PCB files, print kit, firmware and build guide. Sources are KiCad and FreeCAD files.
+- Not measured yet: battery life, wireless reliability, printed fit, typing comfort.
+
+Good fit: someone who wants a small split keyboard, enjoys building (soldering, 3D printing, flashing ZMK) and wants to choose its look. Not a fit today: someone who wants to buy a finished or tested keyboard.
+
+## Start here
+
+- [Home page](https://flankbd.com/): the live model with sizes, themes, cases, keycaps and frames
+- [3D explorer](https://flankbd.com/explore/): design, inspect parts, and get the files for a build
+- [Full summary for language models](https://flankbd.com/llms-full.txt): everything on this page in more detail
+
+## Documentation
+
+- [README](https://github.com/eduarbo/flan/blob/main/README.md): overview and current status
+- [Sizes](https://github.com/eduarbo/flan/blob/main/docs/variants.md): the four layouts and their PCBs
+- [Parts and buying links](https://github.com/eduarbo/flan/blob/main/docs/parts.md): what one keyboard needs
+- [Ordering PCBs](https://github.com/eduarbo/flan/blob/main/docs/electronics.md): Gerber packages, silkscreen editions, checks
+- [Build guide](https://github.com/eduarbo/flan/blob/main/docs/build.md): assembly sequence and hardware tests
+- [Firmware](https://github.com/eduarbo/flan/blob/main/docs/firmware.md): ZMK builds and keymap
+- [Cases](https://github.com/eduarbo/flan/blob/main/docs/cases.md) and [themes and print kits](https://github.com/eduarbo/flan/blob/main/docs/themes-printing.md)
+
+## Optional
+
+- [Progress log](https://github.com/eduarbo/flan/blob/main/docs/progress.md): what is checked and what is pending
+- [License](https://github.com/eduarbo/flan/blob/main/LICENSE), [attribution](https://github.com/eduarbo/flan/blob/main/ATTRIBUTION.md) and [trademark policy](https://github.com/eduarbo/flan/blob/main/TRADEMARKS.md)
+- [Source repository](https://github.com/eduarbo/flan)

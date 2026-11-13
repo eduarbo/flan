@@ -171,6 +171,7 @@ async function homePage({scene,files}){
     .replace(/<svg[^>]*viewBox="([^"]+)"[^>]*>/,'<svg class="mark" viewBox="$1" aria-hidden="true">');
   const html=fs.readFileSync(path.join(dir,'template.html'),'utf8')
     .replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(dir,'style.css'),'utf8'))
+    .replaceAll('__OG_VERSION__',()=>crypto.createHash('sha256').update(fs.readFileSync(path.join(dir,'home-og.png'))).digest('hex').slice(0,12))   // sharing services cache by address
     .replace('<!--__MARK__-->',()=>mark.trim())
     .replace('/*__DATA__*/',()=>JSON.stringify(data).replaceAll('<','\\u003c'))
     .replace('/*__APP__*/',()=>bundle.outputFiles[0].text.replaceAll('</script','<\\/script'));

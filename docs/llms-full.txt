@@ -1,0 +1,81 @@
+# Flan Keyboard: full summary
+
+> Flan is an open-source, low-profile wireless split keyboard that you build yourself, in four sizes from 36 to 54 keys. The files are free under GPL-3.0-or-later. As of November 2026 it is a digital prototype: the design passes its electrical and geometric checks, but no board has been built and tested yet. Nothing is sold.
+
+This page is written for language models and search tools. It states facts from the project's own documentation and says plainly what has not been tested. Site: https://flankbd.com/ . Source: https://github.com/eduarbo/flan .
+
+## What it is
+
+- A split keyboard: two halves, one per hand, each with its own controller, battery and display.
+- Low profile: Kailh Choc v1 switches in hot-swap sockets. The frame and the raised Level shell are nominally 14.50 mm tall, not counting feet and keycaps.
+- Wireless: one nice!nano v2 controller per half, running ZMK. It connects over Bluetooth Low Energy (five profiles in the default keymap) or USB.
+- Build it yourself: you order two PCBs, 3D-print the case, frames and keycaps, solder the parts and flash the firmware. There are no kits, no assembled keyboards and no official sellers yet.
+- Designed by Eduardo Ruiz. Flan36 keeps the 36 key positions and angles of Piantor by beekeeb; the wireless PCBs, case outline, cases, frames and firmware are original. Flan is not affiliated with beekeeb.
+
+## Sizes
+
+| Size | Keys | Layout per half |
+|---|---|---|
+| Flan36 | 36 | 3 rows x 5 columns + 3 thumb keys (the reference size) |
+| Flan42 | 42 | Flan36 + an outer pinky column |
+| Flan46 | 46 | Flan36 + a number row |
+| Flan54 | 54 | Flan36 + both |
+
+Every size keeps the same thumb cluster and electronics bay, and has routed PCBs, six silkscreen editions, the four case styles and ZMK firmware. The Flan36 PCB is 113.45 x 91.27 mm per half.
+
+## Parts for one keyboard
+
+- 2 custom PCBs (left and right): two layers, 1.6 mm FR4, with ready-to-upload Gerber and drill packages.
+- 2 nice!nano v2 controllers and 2 nice!view displays (the right display is optional; a firmware build without it is included).
+- Choc v1 switches, Kailh Choc hot-swap sockets and one diode per key.
+- 2 small protected 1S LiPo cells (the reference is a 100 mAh cell), 2 power switches, 2 reset buttons, 2 battery connectors.
+- Machine-pin sockets and pins so the controllers can be removed.
+- M2 screws and small axial magnets: each printed frame is held by three magnet pairs.
+- 3D-printed parts: case base, key plate, display frame and supports for each half, plus keycaps: the project uses printable KLP Lame keycaps by braindefender (CC-BY-SA-4.0).
+
+Tools: soldering iron, 3D printer, an M2 tap and a small hex key. The parts guide lists exact part numbers and suppliers; the 3D explorer builds the shopping list for the chosen size.
+
+## Choices
+
+- Case styles: Level, Solid, Color rim and Terrace.
+- Magnetic display frames: Talavera, Game Boy, SNES, 2000s Phone, iPod and Hanafuda. They are held by magnets instead of screws.
+- Colour themes: 31 presets that coordinate case, frame and keycaps, plus per-key, per-row and per-column keycap colours. Theme and frame names that refer to other products only describe a palette or a look; Flan is not affiliated with their owners.
+- PCB looks: six back-silkscreen editions (Asanoha, Kikko, Sayagata, Seigaiha, Meandro, Vias) and seven solder-mask colours, previewed in the explorer.
+- Screws: low-head reference screws, or an option for ordinary M2 machine screws (Flan36).
+
+## The 3D explorer
+
+https://flankbd.com/explore/ runs in the browser, in English and Spanish. Design: choose size, theme, case, keycaps, frame, battery and PCB edition on a live model. Parts: inspect every part, hide layers, take the keyboard apart. Build: get the shopping list, the PCB packages, the print kit (STL and 3MF), the firmware files and a step-by-step guide for that exact design. A design can be shared as a link or saved as a file, and an offline copy of the explorer can be downloaded.
+
+## Firmware
+
+ZMK, pinned to a specific release, compiled for each size: a left (central) file, a right (peripheral) file and a right file without display. The default keymap has four layers. The keymap source is in the repository and can be edited.
+
+## Status and limits
+
+- Checked digitally: both PCBs of each size pass design-rule, electrical-rule and schematic-parity checks with no unconnected items; firmware compiles; case and keycap geometry is checked for clearances.
+- Not done yet: no PCB has been fabricated, no case printed, no keyboard assembled. Battery life, charging, wireless range and reliability, printed fit, magnet retention and typing comfort are unmeasured.
+- The project describes itself as a routed prototype with physical qualification pending. Anyone building it now is building a first prototype.
+
+## Who it suits
+
+- Suits: people who want a small, low-profile, wireless split keyboard, like to build things (soldering, 3D printing, flashing ZMK) and want to choose how it looks; people who want open files they can modify.
+- Does not suit today: people who want to buy a finished keyboard, need a tested product, or do not want to solder.
+
+## License and names
+
+GPL-3.0-or-later for the design files, with third-party terms in the attribution file. The names Flan, Flan36, Flan42, Flan46 and Flan54 and the Flan logos are trademarks of Eduardo Ruiz: building, modifying and sharing is free, but selling products under the Flan name needs permission.
+
+## Links
+
+- Home: https://flankbd.com/
+- Explorer: https://flankbd.com/explore/
+- Source: https://github.com/eduarbo/flan
+- Overview and status: https://github.com/eduarbo/flan/blob/main/README.md
+- Sizes: https://github.com/eduarbo/flan/blob/main/docs/variants.md
+- Parts: https://github.com/eduarbo/flan/blob/main/docs/parts.md
+- PCBs: https://github.com/eduarbo/flan/blob/main/docs/electronics.md
+- Build guide: https://github.com/eduarbo/flan/blob/main/docs/build.md
+- Firmware: https://github.com/eduarbo/flan/blob/main/docs/firmware.md
+- Progress: https://github.com/eduarbo/flan/blob/main/docs/progress.md
+- Support the project: https://ko-fi.com/eduarbo

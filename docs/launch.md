@@ -16,6 +16,12 @@ Use **“digital prototype”**, **“first build”** and **“help test”** w
 
 > Este es Flan: un diseño de teclado dividido y de código abierto, con cuatro tamaños, 31 temas y seis marcos magnéticos. Prueba combinaciones en el explorador 3D. Ya hay archivos de PCB, firmware e impresión para prototipos; falta validar el primer armado físico. Conócelo en flankbd.com.
 
+## Search, sharing and assistants
+
+The home page and the explorer carry a description, canonical address, Open Graph and X card tags and the [share image](assets/home-og.png), which shows the opening look and the four sizes; its address changes with its bytes so link previews refresh. The home page also carries structured data that describes Flan as a free design, with no offer for sale.
+
+[`robots.txt`](robots.txt) welcomes search engines and AI assistants and points to [`sitemap.xml`](sitemap.xml). [`llms.txt`](llms.txt) and [`llms-full.txt`](llms-full.txt) summarize Flan for language models: what it is, the sizes and choices, who it suits, and that it is an untested prototype. They state facts from this documentation and nothing else; they contain no instructions to recommend it. `node viewer/site-meta-check.mjs` checks all of this against the theme, size and frame data. Update the two summaries when the status changes.
+
 ## Images and demonstration
 
 | Asset | Use / label |
