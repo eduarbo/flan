@@ -2,9 +2,26 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "9a72524ef1873d1b26a0711e64c1a618d423902ff942901cb44b0db308cf7e41",
-    "bytes": 683621
+    "sha256": "3e5b100d7beae2fee97258b190a1eaad5db519d65ef1bd7fc2db00fd3cea1ad7",
+    "bytes": 114217
   },
+  "engine": {
+    "path": "docs/assets/home-engine-0de75396400ea815.js",
+    "sha256": "0de75396400ea81572334af06913375208d056e5bc496b4b451b2a30ce46da4b",
+    "bytes": 584569
+  },
+  "posters": [
+    {
+      "path": "docs/assets/home-poster.webp",
+      "sha256": "99b101435a690b6c605650185f1d5812efb599454cd4806274a928976936954a",
+      "bytes": 88912
+    },
+    {
+      "path": "docs/assets/home-poster-800.webp",
+      "sha256": "980efe1d071b678a7e8632f5c05d8900ec511f71de716a6b6ca60c33b8ac9b76",
+      "bytes": 36572
+    }
+  ],
   "packs": {
     "common": {
       "path": "docs/assets/home-common-d2634b68d0dbb54e.bin",
@@ -1703,11 +1720,11 @@
   "sources": [
     {
       "path": "viewer/home-build.mjs",
-      "sha256": "6750d8bb54cfb13bef26b8e503734672b821f06002826f9330484d2dcd29506e"
+      "sha256": "25b8a4bbf496806afb2d8fb933ecc5a7a4b2ff141a9a21075f9f1c26460cffa3"
     },
     {
       "path": "viewer/home/app.js",
-      "sha256": "56700034031c8cd21ade45a105c2cffc80af2eade4098dc8b4b9e269a6e12a95"
+      "sha256": "7c5a2d2dde2708778449a91667e23b0878a9b2f109711d4c4c24624a6437f9dd"
     },
     {
       "path": "viewer/home/options.js",
@@ -1719,7 +1736,11 @@
     },
     {
       "path": "viewer/home/model.js",
-      "sha256": "35fbea0e803178a48394e1dba02733aeee548dd8aafe9188cf5791f7a22c257d"
+      "sha256": "203074fb62cf45bc886c6ea834a10ff5e2cdcfedfa99ce878729f9b5ee2ce859"
+    },
+    {
+      "path": "viewer/home/creased.js",
+      "sha256": "fba8f2389b12e7351c9252b7c3bae9dae3363155758d38fd3a43e2f50f406d2f"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -1731,7 +1752,7 @@
     },
     {
       "path": "viewer/home/template.html",
-      "sha256": "d049b65e70866609ea72662339e769c1252c622dc59bd57854fd2fb03c18c407"
+      "sha256": "4a1c2df41d595b121d8b96288587f20fa4a3024b5afd51fbdc154c824be7d5eb"
     },
     {
       "path": "design/themes.json",
