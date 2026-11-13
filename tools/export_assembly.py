@@ -210,7 +210,8 @@ def export(profile):
         print('%s: %s, sides %s, %d joints; %d placements moved off the KiCad origin (max %.3f mm)' % (
             side_name, half['counts'], '+'.join(half['sides']), half['solder_joints'], len(shifted),
             max((r['origin_shift_mm'] for r in shifted), default=0)))
-    print('PASS: every placement lands on its physical pads within %.2f mm -> %s' % (TOLERANCE_MM, out.relative_to(ROOT)))
+    print('PASS (geometry only): every placement lands on its physical pads within %.2f mm under the assumed rotation '
+          'convention; confirm each part in the assembler preview -> %s' % (TOLERANCE_MM, out.relative_to(ROOT)))
 
 
 if __name__ == '__main__':
