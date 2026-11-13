@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Anonymous archive and Pages readback for an already published commit.
+"""Anonymous archive and Pages readback for an already published commit: the explorer, the home page and what each loads.
 Does not publish, create releases or change remote state.
 SPDX-License-Identifier: GPL-3.0-or-later
 """
@@ -33,9 +33,14 @@ viewer_receipt=json.loads(subprocess.check_output(['git','show',commit+':validat
 # the scene's description, every mesh file a design can ask for, and the pictures shown while they load
 meshes=[chunk['path'] for chunk in viewer_receipt.get('geometry',{}).get('chunks',{}).values()]
 pictures=viewer_receipt.get('still',{}).get('published',[])+([viewer_receipt['silk_thumbnails']['path']] if 'silk_thumbnails' in viewer_receipt else [])
-for name in ['docs/explore/offline.zip',viewer_receipt['scene']['path'],viewer_receipt['printing']['path'],*meshes,*pictures]:
+# the home page itself, then its 3D engine, mesh packs and posters
+home=urllib.request.urlopen(pageurl+'?rev='+commit,timeout=60).read()
+assert hashlib.sha1(b'blob '+str(len(home)).encode()+b'\0'+home).hexdigest()==expected['docs/index.html'],'The home page on Pages is not the published source revision'
+home_receipt=json.loads(subprocess.check_output(['git','show',commit+':validation/revI-home.json'],cwd=ROOT))
+home_files=[pack['path'] for pack in home_receipt['packs'].values()]+[item['path'] for item in [home_receipt['engine']]*('engine' in home_receipt)+home_receipt.get('posters',[])]
+for name in ['docs/explore/offline.zip',viewer_receipt['scene']['path'],viewer_receipt['printing']['path'],*meshes,*pictures,*home_files]:
     raw=urllib.request.urlopen(pageurl+name.removeprefix('docs/')+'?rev='+commit,timeout=60).read()
     assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==expected[name],name
     extra[name]=hashlib.sha256(raw).hexdigest()
-report={'additional_published_assets':extra,'source_commit':commit,'archive_files_verified':len(expected),'archive_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'pages_url':pageurl,'pages_matches_committed_html':True,'viewer_sha256':hashlib.sha256(html).hexdigest(),'authenticated_requests':False,'method':'All archive entries matched against Git blob IDs; public Pages bytes matched the committed viewer.'}
+report={'additional_published_assets':extra,'source_commit':commit,'archive_files_verified':len(expected),'archive_sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'pages_url':pageurl,'pages_matches_committed_html':True,'home_matches_committed_html':True,'home_sha256':hashlib.sha256(home).hexdigest(),'viewer_sha256':hashlib.sha256(html).hexdigest(),'authenticated_requests':False,'method':'All archive entries matched against Git blob IDs; public Pages bytes matched the committed viewer, the committed home page and every asset their receipts list.'}
 (out/'public-readback.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report),flush=True)

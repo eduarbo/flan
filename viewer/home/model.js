@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // The home page's live keyboard: packs from viewer/home-build.mjs, coloured by theme exactly as the
 // explorer's applyTheme() does, with an intro that separates the layers and a gentle standby motion.
+// Built as the page's 3D engine, a script of its own (viewer/home-build.mjs): home/app.js asks for it once the poster is up.
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
@@ -8,6 +9,7 @@ import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
 import {gunzipSync} from 'three/addons/libs/fflate.module.js';
 import {MeshoptDecoder} from 'meshoptimizer/decoder';
 import finishes from '../../design/frame-finishes.json';
+import {creasedNormals} from './creased.js';
 
 const SIDES=['left','right'],TAU=Math.PI*2,EXPLODED=.75;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
@@ -19,8 +21,9 @@ export function framePalette(look,theme,side){
   return finishes.roles.map(role=>p[role]||p.body);
 }
 
-async function fetchPack(url){
-  const response=await fetch(url);if(!response.ok)throw Error(`${url}: ${response.status}`);
+// `asked` is a request the page already made for this pack while the engine was on its way
+async function fetchPack(url,asked){
+  const response=await (asked||fetch(url));if(!response.ok)throw Error(`${url}: ${response.status}`);
   // the browser's own inflate, off the main thread; an older browser without it (Safari before 16.4) inflates in script
   const bytes=typeof DecompressionStream==='function'?new Uint8Array(await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer()):gunzipSync(new Uint8Array(await response.arrayBuffer())),view=new DataView(bytes.buffer,bytes.byteOffset);
   const length=view.getUint32(0,true),header=JSON.parse(new TextDecoder().decode(bytes.subarray(4,4+length)));
@@ -33,11 +36,15 @@ async function fetchPack(url){
     MeshoptDecoder.decodeIndexBuffer(ib,m.i,m.s,blob.subarray(m.ib[0],m.ib[0]+m.ib[1]));
     const q=new Uint16Array(vb.buffer),p=new Float32Array(m.v*3);
     for(let i=0;i<m.v;i++)for(let a=0;a<3;a++)p[i*3+a]=m.b[a]+q[i*4+a]/65535*(m.b[a+3]-m.b[a]);
-    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(p,3));
-    g.setIndex(new THREE.BufferAttribute(m.s===2?new Uint16Array(ib.buffer):new Uint32Array(ib.buffer),1));
-    for(const [start,count,material] of m.g||[])g.addGroup(start,count,material);
-    // the explorer's normals: creased at 45°
-    const geometry=toCreasedNormals(g,Math.PI/4);geometry.computeBoundingBox();g.dispose();
+    // the explorer's normals: creased at 45°, one vertex per triangle corner (creased.js gives three's own values, faster)
+    const index=m.s===2?new Uint16Array(ib.buffer):new Uint32Array(ib.buffer),made=creasedNormals(p,index,Math.PI/4);
+    let geometry=new THREE.BufferGeometry();
+    if(made){geometry.setAttribute('position',new THREE.BufferAttribute(made.position,3));geometry.setAttribute('normal',new THREE.BufferAttribute(made.normal,3));}
+    else{geometry.setAttribute('position',new THREE.BufferAttribute(p,3));geometry.setIndex(new THREE.BufferAttribute(index,1));}
+    for(const [start,count,material] of m.g||[])geometry.addGroup(start,count,material);
+    // a mesh wider than creased.js can key (none is) goes through three's own function
+    if(!made){const indexed=geometry;geometry=toCreasedNormals(indexed,Math.PI/4);indexed.dispose();}
+    geometry.computeBoundingBox();
     cache.set(id,geometry);return geometry;
   };
   return header;
@@ -62,7 +69,7 @@ const surface=color=>new THREE.MeshStandardMaterial({color,roughness:.78,metalne
 // the live model's satin plastic under the room light; the small previews keep the plain surface
 const skin=color=>new THREE.MeshPhysicalMaterial({color,roughness:.5,metalness:0,clearcoat:.12,clearcoatRoughness:.5});
 
-export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
+export function createModel({canvas,frame:area=canvas,packs,fetched={},onChange=()=>{}}){
   // A browser without hardware acceleration renders on the CPU: find out before creating the context,
   // then skip antialiasing, render smaller and keep still until the reader moves the keyboard.
   const software=(()=>{try{const g=document.createElement('canvas').getContext('webgl2'),i=g?.getExtension('WEBGL_debug_renderer_info'),
@@ -79,7 +86,6 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
   const lit=!software,paint=lit?skin:surface;
   if(lit){
     renderer.toneMapping=THREE.NeutralToneMapping;renderer.toneMappingExposure=.96;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-    const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(new RoomEnvironment(),.04).texture;scene.environmentIntensity=.42;pmrem.dispose();
     scene.traverse(o=>{if(o.isLight)o.intensity*=o.isHemisphereLight?.12:.16;});
     const small=matchMedia('(max-width: 760px), (pointer: coarse)').matches;
     // a key lamp, and a second one almost straight above whose shadow darkens the gaps between keys. This page
@@ -99,14 +105,21 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
   const sizes={},state={onscreen:true,look:null,theme:null,explode:0,target:EXPLODED,standby:!reduced.matches&&!software,interacting:false,idle:0,amp:0,phase:0,ready:false};
   let common,objects=[],tweens=[];
 
+  // each request the page made ahead is read once; after that a pack is asked for here
+  const ask=url=>{const asked=fetched[url];delete fetched[url];return fetchPack(url,asked);};
   // a pack that failed to arrive is fetched again the next time it is wanted
-  const load=id=>sizes[id]??=fetchPack(packs[id]).catch(error=>{delete sizes[id];throw error;});
+  const load=id=>sizes[id]??=ask(packs[id]).catch(error=>{delete sizes[id];throw error;});
   // Meshes are decoded and creased a few at a time, so the page can paint and take input in between.
   const breathe=()=>new Promise(resolve=>setTimeout(resolve));
   async function prepare(pack,ids){let since=performance.now();for(const id of new Set(ids)){pack.mesh(id);if(performance.now()-since>8){await breathe();since=performance.now();}}}
   async function init(look,theme){
+    // the room's light is drawn in a turn of its own, after the renderer's, while the meshes travel
+    const arriving=Promise.all([ask(packs.common),load(look.size)]);arriving.catch(()=>{});
+    // a request made ahead for a size the reader has since left is let go
+    for(const url of Object.keys(fetched)){fetched[url].then(response=>response.body?.cancel()).catch(()=>{});delete fetched[url];}
+    if(lit){await breathe();const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(new RoomEnvironment(),.04).texture;scene.environmentIntensity=.42;pmrem.dispose();}
     await MeshoptDecoder.ready;
-    const [first,sized]=await Promise.all([fetchPack(packs.common),load(look.size)]);common=first;
+    const [first,sized]=await arriving;common=first;
     await prepare(common,[...common.parts.filter(p=>p.kind==='fixed').map(p=>p.mesh),...SIDES.flatMap(side=>[`${side}-battery`,`${side}-frame-${look.frame[side]}`,
       ...Object.values(common.presets[look.keys][side]).map(([variant])=>common.caps[variant].mesh)])]);
     await prepare(sized,SIDES.flatMap(side=>[`${side}-case-${look.case}-base`,`${side}-case-${look.case}-plate`,`${side}-pcb`]));
@@ -118,7 +131,8 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
       model.add(mesh);objects.push(mesh);
     }
     instance();
-    await apply(look,theme,{animate:false});
+    // a look chosen while the meshes travelled is the one to open on
+    do{await apply(...(latest||[look,theme]),{animate:false});}while(!state.look);
     // the keyboard's own centre, fitted with its layers apart so the frame never jumps
     measure();resetView();
     await renderer.compileAsync(scene,camera).catch(()=>{});
@@ -127,8 +141,12 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
     loop();
   }
   // Size, case style, keycap shape and frames swap geometry at once; colours ease when animate is set.
+  // The look asked for last is the one shown: an earlier request whose pack arrives later, or not at all, is dropped.
+  let latest=null,turn=0;
   async function apply(look,theme,{animate=true}={}){
-    const pack=await load(look.size);
+    latest=[look,theme];const mine=++turn;let pack;
+    try{pack=await load(look.size);}catch(error){if(mine!==turn)return;throw error;}
+    if(mine!==turn)return;
     state.look=look;state.theme=theme;const next=[];
     for(const o of objects){
       const p=o.userData;o.visible=!p.v||p.v.includes(look.size);
@@ -370,9 +388,11 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
       if(busy)setTimeout(()=>check(resolve),120);else if(window.requestIdleCallback)requestIdleCallback(()=>resolve(),{timeout:400});else setTimeout(resolve,30);
     });
   }
-  if(new URLSearchParams(location.search).has('diagnostics'))window.flanHome={info:()=>({...renderer.info.render,ratio:quality.ratio,software})};
+  if(new URLSearchParams(location.search).has('diagnostics'))window.flanHome={info:()=>({...renderer.info.render,ratio:quality.ratio,software,look:state.look})};
   return {
     init,apply,resize,resetView,preview,load,quiet,
+    // true once the first look is on the canvas: previews and pictures can be drawn
+    get live(){return state.ready;},
     get explode(){return state.target;},
     setExplode(v,{immediate=false}={}){state.target=THREE.MathUtils.clamp(v,0,1);state.idle=0;state.intro=false;if(immediate){state.explode=state.target;place();}render();},
     // false with reduced motion: the layers are already apart

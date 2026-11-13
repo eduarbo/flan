@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // The home page's live model: the viewer scene's own parts, welded, simplified within a stated error in mm,
 // quantized and meshopt-encoded. One common pack (keycaps, switches, frames, electronics) and one pack per
-// size (its cases and PCB). Also writes the home page itself to docs/index.html.
+// size (its cases and PCB). Also writes the home page itself to docs/index.html and its 3D engine beside the packs.
 // Run from viewer/build.mjs, or alone: node viewer/home-build.mjs
 import fs from 'node:fs';
 import path from 'node:path';
@@ -145,9 +145,11 @@ export async function buildHome({scene=read('build/viewer-scene.json')}={}){
   const bytes=Object.fromEntries(Object.entries(files).map(([k,f])=>[k,fs.statSync(path.join(assets,f)).size]));
   const page=await homePage({scene,files});
   const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
-  const sources=['viewer/home-build.mjs','viewer/home/app.js','viewer/home/options.js','viewer/design-url.js','viewer/home/model.js','viewer/home/tokens.js','viewer/home/style.css','viewer/home/template.html',
+  const sources=['viewer/home-build.mjs','viewer/home/app.js','viewer/home/options.js','viewer/design-url.js','viewer/home/model.js','viewer/home/creased.js','viewer/home/tokens.js','viewer/home/style.css','viewer/home/template.html',
     'design/themes.json','design/frame-finishes.json','design/variants.json','docs/branding/flan/flan-mark-color.svg','viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}));
+  const published=p=>({path:p,sha256:hash(p),bytes:fs.statSync(path.join(root,p)).size});
   const receipt={revision:scene.revision,page:{path:'docs/index.html',sha256:hash('docs/index.html'),bytes:page.bytes},
+    engine:published(page.engine),posters:page.posters.map(published),
     packs:Object.fromEntries(Object.entries(files).map(([k,f])=>[k,{path:'docs/assets/'+f,sha256:hash('docs/assets/'+f),bytes:bytes[k]}])),
     error_mm:ERROR,triangles:stats,omitted:'Fasteners, magnets, feet, the underside diodes and the reset switch; the battery is the default Adafruit 1570 profile.',
     method:'Equal positions welded; each material group simplified with meshoptimizer 1.2.0 within an absolute error (borders locked between groups); positions quantized to 16 bits over each mesh box; meshopt vertex and index codecs; gzip.',
@@ -155,16 +157,24 @@ export async function buildHome({scene=read('build/viewer-scene.json')}={}){
   fs.writeFileSync(path.join(root,`validation/rev${scene.revision}-home.json`),JSON.stringify(receipt,null,2)+'\n');
   return {files,bytes,stats,page};
 }
-// docs/index.html: the bundle, the rail's data and the fonts and poster it references
+// docs/index.html: the page's own script, the rail's data and the fonts, posters and 3D engine it references
 async function homePage({scene,files}){
   const dir=path.join(here,'home'),assets=path.join(root,'docs/assets');
   fs.mkdirSync(path.join(assets,'fonts'),{recursive:true});
   for(const f of fs.readdirSync(path.join(dir,'fonts')))fs.copyFileSync(path.join(dir,'fonts',f),path.join(assets,'fonts',f));
-  for(const f of ['home-poster.webp','home-og.png'])if(fs.existsSync(path.join(dir,f)))fs.copyFileSync(path.join(dir,f),path.join(assets,f));
-  const bundle=await build({entryPoints:[path.join(dir,'app.js')],bundle:true,write:false,minify:true,format:'iife',target:['es2020'],legalComments:'inline'});
+  const posters=['home-poster.webp','home-poster-800.webp'];
+  for(const f of [...posters,'home-og.png'])fs.copyFileSync(path.join(dir,f),path.join(assets,f));
+  // Two classic scripts. The page's own (rail, language, colours) is written into the page and runs before the first
+  // paint. The 3D engine (three.js and home/model.js) is a file the page asks for once its poster is up, so the
+  // browser compiles it off the main thread and the poster never shares the line with it.
+  const script=(entry,more={})=>build({entryPoints:[path.join(dir,entry)],bundle:true,write:false,minify:true,format:'iife',target:['es2020'],legalComments:'inline',...more}).then(b=>b.outputFiles[0].text);
+  const bundle=await script('app.js'),engine=await script('model.js',{globalName:'flanHomeEngine'});
+  const engineFile=`home-engine-${crypto.createHash('sha256').update(engine).digest('hex').slice(0,16)}.js`;
+  fs.writeFileSync(path.join(assets,engineFile),engine);
+  for(const f of fs.readdirSync(assets))if(/^home-engine-[0-9a-f]{16}\.js$/.test(f)&&f!==engineFile)fs.rmSync(path.join(assets,f));
   const themes=read('design/themes.json').themes.map(({id,name,base,plate,frame,keycaps,recommended_frame})=>({id,name,base,plate,frame,keycaps,recommended_frame}));
   const family=read('design/variants.json').variants;
-  const data={packs:Object.fromEntries(Object.entries(files).map(([k,f])=>[k,'assets/'+f])),themes,
+  const data={packs:Object.fromEntries(Object.entries(files).map(([k,f])=>[k,'assets/'+f])),engine:'assets/'+engineFile,themes,
     sizes:SIZES.map(id=>({id,title:family[id].title,grid:family[id].grid_per_half,keys:family[id].keys_total})),
     frames:Object.entries(scene.catalog.frame_styles).map(([id,label])=>({id,label}))};
   // the colour mark; its outline follows the page's theme here (style.css), not the system's
@@ -193,9 +203,9 @@ async function homePage({scene,files}){
     .replaceAll('__OG_VERSION__',()=>crypto.createHash('sha256').update(fs.readFileSync(path.join(dir,'home-og.png'))).digest('hex').slice(0,12))   // sharing services cache by address
     .replace('<!--__MARK__-->',()=>mark.trim())
     .replace('/*__DATA__*/',()=>JSON.stringify(data).replaceAll('<','\\u003c'))
-    .replace('/*__APP__*/',()=>bundle.outputFiles[0].text.replaceAll('</script','<\\/script'));
+    .replace('/*__APP__*/',()=>bundle.replaceAll('</script','<\\/script'));
   fs.writeFileSync(path.join(root,'docs/index.html'),html);
-  return {bytes:Buffer.byteLength(html),script:bundle.outputFiles[0].text.length};
+  return {bytes:Buffer.byteLength(html),script:bundle.length,engine:'docs/assets/'+engineFile,engineBytes:Buffer.byteLength(engine),posters:posters.map(f=>'docs/assets/'+f)};
 }
 if(process.argv[1]===fileURLToPath(import.meta.url)){
   const result=await buildHome();

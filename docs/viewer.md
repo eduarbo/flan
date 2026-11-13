@@ -36,7 +36,7 @@ In **Build → Keep your design**, give your design a name and save its JSON. Lo
 
 [flankbd.com](https://flankbd.com/) opens on a live, simplified configurator; the full explorer is at [`/explore/`](https://flankbd.com/explore/). On load the layers ease apart, then the keyboard turns and floats slowly until you drag it. The vertical slider separates or reassembles the layers, ⏸ stops the standby motion and the cube resets the view. Pinch or ⌘/Ctrl-scroll zooms, so ordinary scrolling still moves the page.
 
-- **Size, Theme, Case, Keycaps and Frame** change the model at once. Theme colors the case, frames and keycaps exactly as the explorer's theme presets do, and the page eases to colors derived from it in about 600 ms; dark-bodied themes give a dark page. Every option's thumbnail is rendered live in the current colors. Another size's pack is fetched when its picture is first wanted: beside the model at once, on a phone when **Size** is opened or the spec sheet's size card nears the screen.
+- **Size, Theme, Case, Keycaps and Frame** change the model at once. Theme colors the case, frames and keycaps exactly as the explorer's theme presets do, and the page eases to colors derived from it in about 600 ms; dark-bodied themes give a dark page. Every option's thumbnail is rendered live in the current colors, where it can be seen: all of them beside the model, and on a phone those of the open tab, drawn when it opens. Another size's pack is fetched when its picture is first wanted: beside the model at once, on a phone when **Size** is opened or the spec sheet's size card nears the screen.
 - **Browse 6** lists the six magnetic frames. Hovering one previews it on the model; nothing changes until **Apply**, for both halves or one. A frame keeps the theme's colors unless you choose its own palette.
 - **The spec sheet** draws each card from the same model in the current colors: the 14.5 mm profile and the 18 × 17 mm pitch with dimensions measured from the meshes, the nice!nano, the nice!view, the four sizes, the separated electronics stack, the six frames and the PCB. They render when the sheet nears the screen.
 - **Open this build in 3D** opens the explorer on the same design. English by default; **ES** switches to Spanish. The last look and language stay on the device.
@@ -47,7 +47,15 @@ The explorer accepts the same look as a link: `explore/?size=flan54&theme=gamebo
 
 The build also writes the rail's buttons into the page itself, from `viewer/home/options.js`, so the page's layout is final before the script runs and nothing moves when it starts.
 
-`viewer/home-poster.cjs` renders the poster shown until WebGL is ready and the social image from the built page; `viewer/explore-still.cjs` captures the picture the explorer shows while the home page's look loads, and the build leaves that picture out when the meshes, colors or lighting it was made from have changed; `viewer/home-check.cjs` serves `docs/` and checks the page end to end, including the explorer opening on the chosen look.
+The page starts in three steps, so its text and picture never wait for 3D:
+
+1. **The page** (about 36 KB compressed) carries its own small script for the rail, the language and the colors, and paints at once. As it opens, the chosen theme is placed in view without an animated scroll: a browser stops timing a page's largest picture at the first one.
+2. **The poster** comes first on the line. A phone (up to 720 px wide) gets `home-poster-800.webp`, 37 KB, as sharp as the model it draws there; wider screens get the 1600 px file.
+3. **The 3D engine**, `assets/home-engine-<hash>.js` (three.js and `viewer/home/model.js`, about 150 KB compressed), and the two mesh packs of the look are asked for once the poster is on screen, has failed or 3 s have passed, the engine ahead of the meshes. The browser compiles the engine off the main thread; the renderer, the room light and the meshes are then prepared in separate turns. A look chosen in the meantime is the one the model opens on. Without WebGL none of them is fetched. If the engine does not arrive, the poster, a note and a working rail remain.
+
+Normals are creased at 45° by `viewer/home/creased.js`, which gives the values of three's `toCreasedNormals()` bit for bit, several times faster; `node viewer/home-normals-check.mjs` compares both on every mesh of every published pack and needs no browser.
+
+`viewer/home-poster.cjs` renders both posters shown until WebGL is ready and the social image from the built page; `viewer/explore-still.cjs` captures the picture the explorer shows while the home page's look loads, and the build leaves that picture out when the meshes, colors or lighting it was made from have changed; `viewer/home-check.cjs` serves `docs/` and checks the page end to end, including the explorer opening on the chosen look, the order the page starts in, a phone's poster and pictures, and the page without its engine.
 
 ## Saved data and recovery
 

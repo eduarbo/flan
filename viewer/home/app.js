@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Flan Keyboard home: a live, simplified configurator that opens the explorer on the same look.
 import finishes from '../../design/frame-finishes.json';
-import {createModel} from './model.js';
 import {pageTokens} from './tokens.js';
 import {createDesignURL,designKeys} from '../design-url.js';
 import {CASES,KEYS,DEFAULT,TAB} from './options.js';
@@ -101,9 +100,8 @@ function buildRail(){
 function tab(g){
   for(const b of $('tabs').children)b.setAttribute('aria-selected',String(b.dataset.tab===g));
   for(const grp of document.querySelectorAll('.grp'))grp.classList.toggle('active',grp.dataset.group===g);
-  store.set('flan.home.tab',g);reveal();
-  // the size pictures are drawn from each size's own pack, fetched when they are first wanted
-  if(g==='size'&&model&&!sizesDrawn){clearTimeout(previewTimer);previewTimer=setTimeout(renderPreviews,60);}
+  store.set('flan.home.tab',g);if(opened)reveal();   // as the page opens, the strip is placed once, after its text and colours
+  catchUp();
 }
 const caseName=id=>CASES.find(c=>c[0]===id)[1],keysName=id=>KEYS.find(k=>k[0]===id)[1],frameName=id=>data.frames.find(f=>f.id===id).label;
 function syncRail(){
@@ -120,9 +118,14 @@ function syncRail(){
   for(const a of document.querySelectorAll('[data-build-step]'))a.href=exploreUrl()+'#'+a.dataset.buildStep;
   address.schedule(look);
 }
-// phones: keep the chosen option in the visible part of its strip
+// phones: keep the chosen option in the visible part of its strip. As the page opens it is placed there at once: nothing
+// moves under the reader, and a browser stops timing the page's largest picture at the first animated scroll.
+let opened=false;
 function reveal(){
-  for(const b of document.querySelectorAll('.grp.active [aria-pressed=true]')){const strip=b.parentElement;if(strip.scrollWidth>strip.clientWidth)strip.scrollTo({left:b.offsetLeft-strip.clientWidth/2+b.offsetWidth/2,behavior:'smooth'});}
+  for(const b of document.querySelectorAll('.grp.active [aria-pressed=true]')){
+    const strip=b.parentElement,left=b.offsetLeft-strip.clientWidth/2+b.offsetWidth/2;if(strip.scrollWidth<=strip.clientWidth)continue;
+    if(opened)strip.scrollTo({left,behavior:'smooth'});else strip.scrollLeft=left;
+  }
 }
 function choose(group,value){
   const next=structuredClone(look);
@@ -135,22 +138,26 @@ function choose(group,value){
   else next[group]=value;
   commit(next);
 }
-let model=null,previewTimer=0,sizesDrawn=false,sizesNear=false;
-// a size's picture is wanted where its strip shows (always beside the model; on a phone, under the Size tab)
-// or once the spec sheet's card that repeats them is near
-const sizesWanted=()=>sizesNear||$('o-size').getClientRects().length>0;
+let model=null,previewTimer=0,sizesNear=false;
+// An option's picture is drawn where it can be seen: every strip beside the model, only the open tab's strip on a
+// phone, and the spec sheet's cards that repeat the sizes and the frames once they are near. `fresh` holds the
+// groups whose pictures are in the current look's colours; the sizes also need each size's own pack.
+const PICTURED={size:()=>data.sizes.map(s=>s.id),case:()=>CASES.map(c=>c[0]),keys:()=>KEYS.map(k=>k[0]),frame:()=>frameIds};
+const PICTURE={size:{width:128,height:88},case:{width:140,height:92},keys:{width:184,height:88},frame:{width:68,height:168}},fresh=new Set();
+const wanted=group=>!$('browser').hidden||$('o-'+group).getClientRects().length>0||group==='size'&&sizesNear||group==='frame'&&specsNear;
+// draws what has come into view since the last pass: a tab opened, the rail back from the frame browser, a phone turned
+function catchUp(){if(model?.live&&Object.keys(PICTURED).some(g=>wanted(g)&&!fresh.has(g))){clearTimeout(previewTimer);previewTimer=setTimeout(renderPreviews,60);}}
 function commit(next,{animate=true}={}){
-  const themeChanged=next.theme!==look.theme;look=next;store.set('flan.home.look',JSON.stringify(look));
+  const themeChanged=next.theme!==look.theme;look=next;store.set('flan.home.look',JSON.stringify(look));fresh.clear();looks++;
   if(themeChanged)paint();syncRail();
-  model?.apply(look,theme(),{animate}).then(()=>{$('note').hidden=true;}).catch(failed);   // a look that arrives clears an earlier failure's note
+  model?.apply(look,theme(),{animate}).then(()=>{if(model.live)$('note').hidden=true;}).catch(failed);   // a look that arrives on a running model clears an earlier failure's note
   clearTimeout(previewTimer);previewTimer=setTimeout(renderPreviews,themeChanged?650:120);
 }
 // previews in the current colours; a size's own pack may still be arriving
-let previewSeq=0;
+let previewSeq=0,looks=0;
 async function renderPreviews(){
-  if(!model)return;const seq=++previewSeq,sized=sizesWanted();
-  const jobs=[...(sized?data.sizes.map(s=>['size',s.id,{width:128,height:88}]):[]),...CASES.map(c=>['case',c[0],{width:140,height:92}]),
-    ...KEYS.map(k=>['keys',k[0],{width:184,height:88}]),...frameIds.map(f=>['frame',f,{width:68,height:168}])];
+  if(!model?.live)return;const seq=++previewSeq,drawing=looks,groups=Object.keys(PICTURED).filter(wanted),missed=new Set();
+  const jobs=groups.flatMap(g=>PICTURED[g]().map(value=>[g,value,PICTURE[g]]));
   // the spec sheet's own renders wait until it is about to be read
   if(specsNear){
     const ink=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();
@@ -164,10 +171,12 @@ async function renderPreviews(){
       const url=await model.preview(kind,value,size);if(seq!==previewSeq){URL.revokeObjectURL(url);return;}
       const img=previews.get(value==='spec'?'spec:'+kind:`${kind}:${value}`),old=img.getAttribute('src');img.src=url;
       if(old?.startsWith('blob:'))setTimeout(()=>URL.revokeObjectURL(old),5000);
-    }catch(e){console.warn(kind,value,e);}
+    }catch(e){console.warn(kind,value,e);missed.add(kind);}
     if(kind==='frame'||kind==='size')for(const [img,key] of mirror)setSrc(img,previews.get(key).getAttribute('src'));
   }
-  sizesDrawn=sized;   // a pass that left the sizes out leaves their pictures in the earlier colours
+  // A group left out keeps its pictures in the earlier colours until it is seen. So does one drawn while the look
+  // changed, or missing a picture (its pack did not arrive): neither counts as current.
+  if(drawing===looks)for(const g of groups)if(!missed.has(g))fresh.add(g);
   if(!$('browser').hidden)focusFrame(browsing.focus);
 }
 
@@ -205,7 +214,7 @@ function syncSides(){for(const b of $('sides').children)b.setAttribute('aria-pre
 function closeBrowser(apply){
   if($('browser').hidden)return;
   $('browser').hidden=true;$('rail').hidden=false;tag('');
-  if(apply)commit(browseLook(),{animate:true});else model?.apply(look,theme(),{animate:false}).catch(failed);
+  if(apply)commit(browseLook(),{animate:true});else{model?.apply(look,theme(),{animate:false}).catch(failed);catchUp();}
   $('browse').focus();
 }
 let tagEl=null;
@@ -243,13 +252,13 @@ function buildSpecs(){
 // spec art that shows option thumbnails again
 const mirror=[];
 let specsNear=false;
-new IntersectionObserver(([e],o)=>{if(e.isIntersecting){specsNear=true;o.disconnect();if(model)renderPreviews();}},{rootMargin:'600px 0px'}).observe(document.querySelector('.specs'));
+new IntersectionObserver(([e],o)=>{if(e.isIntersecting){specsNear=true;o.disconnect();renderPreviews();}},{rootMargin:'600px 0px'}).observe(document.querySelector('.specs'));
 // Each spec render matches the box it is shown in, so its lines and labels stay crisp at 1:1 (a phone's box is
 // about 152 × 84); a box that changes size, on rotation or across a breakpoint, gets new renders.
 function artSize(kind,w,h){const box=previews.get('spec:'+kind).parentElement;return {width:Math.max(96,Math.min(w,Math.floor(box.clientWidth))),height:Math.floor(box.clientHeight)||h};}
 let artSizes='';
 new ResizeObserver(()=>{if(!previews.has('spec:layout'))return;const now=JSON.stringify(ART.filter(a=>a[1]).map(([k,w,h])=>artSize(k,w,h)));if(now===artSizes)return;const first=!artSizes;artSizes=now;
-  if(!first&&specsNear&&model){clearTimeout(previewTimer);previewTimer=setTimeout(renderPreviews,250);}}).observe($('specs'));
+  if(!first&&specsNear&&model?.live){clearTimeout(previewTimer);previewTimer=setTimeout(renderPreviews,250);}}).observe($('specs'));
 function translate(){
   document.documentElement.lang=lang;
   for(const b of document.querySelectorAll('[data-lang]'))b.setAttribute('aria-pressed',String(b.dataset.lang===lang));
@@ -265,8 +274,10 @@ function translate(){
 function failed(error){console.error(error);const n=$('note');n.hidden=false;n.textContent=t('stage.failed');}
 
 lang=store.get('flan.lang')==='es'?'es':'en';
-buildRail();buildSpecs();paint();translate();reveal();
-new IntersectionObserver(([e],o)=>{if(e.isIntersecting){sizesNear=true;o.disconnect();if(model&&!sizesDrawn)renderPreviews();}},{rootMargin:'500px 0px'}).observe(document.querySelector('.art.sizes'));
+buildRail();buildSpecs();paint();translate();reveal();opened=true;
+new IntersectionObserver(([e],o)=>{if(e.isIntersecting){sizesNear=true;o.disconnect();catchUp();}},{rootMargin:'500px 0px'}).observe(document.querySelector('.art.sizes'));
+// a phone turned or a window resized across the phone layout shows strips that were hidden
+matchMedia('(max-width: 720px)').addEventListener?.('change',catchUp);
 for(const b of document.querySelectorAll('[data-lang]'))b.addEventListener('click',()=>{lang=b.dataset.lang;store.set('flan.lang',lang);translate();});
 $('browse').addEventListener('click',openBrowser);$('back').addEventListener('click',()=>closeBrowser(false));$('f-cancel').addEventListener('click',()=>closeBrowser(false));
 $('f-apply').addEventListener('click',()=>closeBrowser(true));
@@ -276,17 +287,38 @@ $('f-grid').addEventListener('pointerleave',()=>{if(!$('browser').hidden)focusFr
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeBrowser(false);});
 const showSlider=slider();
 
-// the live model; without WebGL the poster and the rail still work
+// The live model. Its engine (three.js and viewer/home/model.js) is a file of its own, and so are its meshes: the
+// page is read, painted and usable first. Both wait for the poster, the page's largest picture, to arrive (or fail,
+// or 3 s) and to be on screen, so on a slow line they never share it with the poster and on a fast one setting up
+// WebGL never holds its first frame back. Without WebGL neither is asked for: the poster and the rail still work.
+const posterUp=new Promise(resolve=>{
+  // "On screen" is the browser's own report where it gives one: its largest-contentful-paint entry for the poster.
+  // Elsewhere it is the second frame after the poster loaded. Half a second after loading is enough either way: the
+  // report does not come once the reader has scrolled or tapped, and a hidden tab draws no frame.
+  const poster=$('poster'),reports=window.PerformanceObserver?.supportedEntryTypes?.includes('largest-contentful-paint');
+  if(reports)new PerformanceObserver((list,observer)=>{if(list.getEntries().some(entry=>entry.element===poster)){observer.disconnect();resolve();}}).observe({type:'largest-contentful-paint',buffered:true});
+  const loaded=()=>{if(!reports)requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(resolve)));setTimeout(resolve,500);};
+  if(poster.complete)loaded();else{poster.addEventListener('load',loaded,{once:true});poster.addEventListener('error',loaded,{once:true});setTimeout(resolve,3000);}
+});
+const engine=()=>new Promise((resolve,reject)=>{
+  const script=el('script',{src:data.engine,fetchPriority:'high'});   // ahead of the meshes: it has work to do while they arrive
+  script.onload=()=>window.flanHomeEngine?resolve(window.flanHomeEngine):reject(Error('The 3D engine did not start.'));
+  script.onerror=()=>reject(Error('The 3D engine did not arrive.'));document.head.append(script);
+});
+async function start(){
+  await posterUp;
+  // the meshes travel while the engine does; the model reads these same responses
+  const fetched=Object.fromEntries([data.packs.common,data.packs[look.size]].map(url=>[url,fetch(url,{priority:'low'})]));
+  for(const response of Object.values(fetched))response.catch(()=>{});   // a failure is reported when the model reads it
+  const {createModel}=await engine();
+  await new Promise(resolve=>setTimeout(resolve));   // the engine has just been evaluated: the renderer gets its own turn
+  model=createModel({canvas:$('canvas'),frame:$('stage'),packs:data.packs,fetched,onChange:({explode})=>showSlider(explode)});
+  await model.init(look,theme());
+  $('stage').classList.add('live');$('hero').classList.add('live');if(!model.intro())showSlider(model.explode);renderPreviews();
+  $('standby').setAttribute('aria-pressed',String(model.standby));translate();
+}
 const probe=document.createElement('canvas');
 if(!(probe.getContext('webgl2')||probe.getContext('webgl'))){$('note').hidden=false;$('note').textContent=t('stage.nogl');$('layers').hidden=true;document.querySelector('.stagebar').hidden=true;}
-else{
-  try{
-    model=createModel({canvas:$('canvas'),frame:$('stage'),packs:data.packs,onChange:({explode})=>showSlider(explode)});
-    model.init(look,theme()).then(()=>{
-      $('stage').classList.add('live');$('hero').classList.add('live');if(!model.intro())showSlider(model.explode);renderPreviews();
-      $('standby').setAttribute('aria-pressed',String(model.standby));translate();
-    }).catch(failed);
-  }catch(e){failed(e);}
-}
+else start().catch(failed);
 $('standby').addEventListener('click',()=>{if(!model)return;model.setStandby(!model.standby);$('standby').setAttribute('aria-pressed',String(model.standby));$('standby').title=model.standby?t('stage.pause'):t('stage.play');});
 $('reset').addEventListener('click',()=>model?.resetView());

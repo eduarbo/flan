@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
 <title>Flan Keyboard · open-source low-profile wireless split keyboard</title>
 <meta name="description" content="Flan is an open-source, low-profile wireless split keyboard you print, solder and make your own: four sizes, Choc v1 hot-swap, ZMK and 31 themes. Digital prototype.">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -51,7 +51,7 @@
     <p class="sub" data-t="hero.sub">Four sizes, 31 themes and six magnetic frames. Turn it, take it apart, make it yours.</p>
   </div>
   <section class="stage" id="stage" aria-label="3D keyboard" data-t-label="stage.label">
-    <img class="poster" id="poster" src="assets/home-poster.webp" alt="Flan36 in the EVA-01 theme, layers apart" width="1600" height="1043" data-t-alt="stage.poster">
+    <picture><source media="(max-width: 720px)" srcset="assets/home-poster-800.webp" width="800" height="536"><img class="poster" id="poster" src="assets/home-poster.webp" alt="Flan36 in the EVA-01 theme, layers apart" width="1600" height="1072" fetchpriority="high" data-t-alt="stage.poster"></picture>
     <p class="note" id="note" role="status" hidden></p>
     <div class="stagebar">
       <span class="chip hint"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg><span data-t="stage.hint">Drag to turn · pinch to zoom</span></span>
