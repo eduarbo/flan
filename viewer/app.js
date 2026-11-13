@@ -47,7 +47,16 @@ async function start(){
 const $=id=>document.getElementById(id);
 // Online the page points at the scene's hashed file; the offline copy carries it inline.
 const sceneText=$('scene-data').textContent.trim();
-const data=await (sceneText[0]==='{'?printLoader(JSON.parse(sceneText),{textContent:''},unpack,'scene')():unpack(decodeBytes(sceneText)));
+const data=await (async()=>{
+ if(sceneText[0]!=='{')return unpack(decodeBytes(sceneText));
+ const retried=()=>{try{return sessionStorage.getItem('flan.scene.retry');}catch{return '1';}};
+ try{const scene=await printLoader(JSON.parse(sceneText),{textContent:''},unpack,'scene')();try{sessionStorage.removeItem('flan.scene.retry');}catch{}return scene;}
+ catch(error){
+  // A page cached from before a deploy points at a scene file that is gone: ask for the current page, once.
+  if(!retried()){try{sessionStorage.setItem('flan.scene.retry','1');}catch{}location.reload();await new Promise(()=>{});}
+  throw error;
+ }
+})();
 const loadPrinting=printLoader(data.printing,$('print-data'));
 // Flan family: Flan36's case and PCB are in the scene; a built variant brings its own on demand.
 const family=data.variants||{},baseVariant='flan36',variantLoads=new Map();

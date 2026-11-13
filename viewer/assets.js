@@ -20,7 +20,7 @@ export function printLoader(descriptor,embedded,decode=unpack,kind='print'){
  return ()=>pending??=(async()=>{
   let bytes;
   if(embedded.textContent.trim())bytes=decodeBytes(embedded.textContent);
-  else{const response=await fetch(descriptor.url);if(!response.ok)throw Error(t('load.'+kind));bytes=new Uint8Array(await response.arrayBuffer());}
+  else{const response=await fetch(descriptor.url).catch(()=>null);if(!response?.ok)throw Error(t('load.'+kind));bytes=new Uint8Array(await response.arrayBuffer());}   // a network failure reads like a missing file
   const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),v=>v.toString(16).padStart(2,'0')).join('');
   if(digest!==descriptor.sha256)throw Error(t(`load.${kind}.mismatch`));
   return decode(bytes);
