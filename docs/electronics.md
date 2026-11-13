@@ -63,6 +63,18 @@ Keep the nice!nano **BOOST jumper open**. The Adafruit reference allows at most 
 
 Check diode cathodes toward row nets, socket solder joints and every key before installing the case. The pin map and zero ERC result do not prove the actual modules, charging, BLE, sleep current or display wake work. Record those observations in the [hardware acceptance checklist](build.md#hardware-acceptance).
 
+## Optional factory assembly files
+
+The boards are designed for hand assembly, and no assembly service is qualified. If you ask a fabricator to fit parts, **do not use KiCad's automatic position export**: the hot-swap footprint sits on the front and is marked through-hole, but the Kailh socket is a surface-mount part on the back, centred between its two posts, 5.46 mm from the footprint origin. Per half, 18 sockets, 18 diodes and the reset button are on the back; the power switch and battery jack are on the front, so adding them means two-sided assembly.
+
+```sh
+"$KICAD_PY" tools/export_assembly.py                    # sockets, diodes and reset: back only
+"$KICAD_PY" tools/export_assembly.py --profile diodes   # diodes and reset: back only
+"$KICAD_PY" tools/export_assembly.py --profile full     # adds the power switch and battery jack
+```
+
+It writes a BOM and placement file per half to ignored `build/assembly/<profile>/`, in JLCPCB's column layout and a generic one. Each placement is derived from the physical pads and must land on the assembler's library footprint within 0.25 mm, pin for pin on polarized parts, or nothing is written. The back-side rotation convention is an assumption stated in `assembly.json`: on 2026-11-12 JLCPCB's preview showed the diodes and reset button placed correctly with these files, while the socket could not be previewed because it was out of stock. Check every part in the assembler's own preview, above all the thumb sockets, which are turned up to 25°. Part availability, quantities and prices belong to the live quote.
+
 ## Reproduce the checks and exports
 
 Run from the repository root with KiCad 10.0.6 and its Python module. On macOS:
