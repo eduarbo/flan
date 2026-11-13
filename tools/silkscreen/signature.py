@@ -42,7 +42,7 @@ FLAN_TEXT = {"w": 1.0, "h": 1.0, "t": 0.15}
 CREDIT_TEXT = {"w": 0.85, "h": 0.85, "t": 0.15}
 # Ink metrics from KiCad's stroke font at 0.85 mm (kicad_text.py).
 CREDIT = {"by": 1.250363, "by_left": 0.222203, "name": "eduarbo.com", "name_w": 7.929703, "name_left": 0.181176,
-          "mark_h": 2.6, "mark_cut": 0.25, "gap": 0.45, "centre": -0.039}
+          "mark_h": 2.6, "gap": 0.45, "centre": -0.039}
 
 def flan_plate(name, font_path):
     """The Flan lockup/site and aligned revision column, plus "by <cube> eduarbo.com".
@@ -91,7 +91,7 @@ def credit_line(name):
     from shapely.geometry import box
     from branding.eduarbo import mark
     c = CREDIT
-    cube = mark(c["mark_h"], cut=c["mark_cut"])
+    cube = mark(c["mark_h"])
     mw = cube.bounds[2]
     total = c["by"] + c["gap"] + mw + c["gap"] + c["name_w"]
     x0, y0, x1, y1 = FLAN_CREDIT[name]

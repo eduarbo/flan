@@ -3,12 +3,12 @@
   "physical_acceptance": false,
   "base": {
     "left": {
-      "pcb_sha256": "6cc0e7bab2f1a5da33addafba812e9ce9f074424fdcdfe9d45dc99a2641285e3",
-      "package_sha256": "938e1636e7df53ca478ee10a790b8d05571bf340e107625f729ef5bd1278ccba"
+      "pcb_sha256": "f1ffba52ec970c6e0a62afe7e77710166bdea53180ea1dfdf3feb1fa748f8a04",
+      "package_sha256": "c620cc3c1b25d6fca9df64ce4b6f4581de563c86e1f22362ee3a78369a2a9411"
     },
     "right": {
-      "pcb_sha256": "e3dce13e4f45e630f995ea603efcf5c7e19dcef17f4cb350cb04325b9f3bba46",
-      "package_sha256": "5614c522b93d0465296f3ace801e7fb870cf00e8fbf6d979ed17e1b56181e3b1"
+      "pcb_sha256": "d3a96149d5d2d78bee0cc89d0509447c917d1324abacb5d843e77e6314936938",
+      "package_sha256": "7237815499f5aef8527ee34c19dbe0892fa99d6b5fa779c38777d6bf1f3c8c91"
     }
   },
   "rules": {
@@ -29,7 +29,7 @@
           "existing_silk_overlap_mm2": 0.0,
           "outside_edge_clearance_mm2": 0.0,
           "min_distance_to_keepout_mm": 0.049,
-          "art_area_mm2": 696.75,
+          "art_area_mm2": 696.85,
           "largest_thin_piece_mm2": 0.0001,
           "strokes_closer_than_min_gap": false,
           "kicad_drc": {
@@ -42,14 +42,14 @@
             "flan46-right-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-right-asanoha.zip",
-          "package_sha256": "c17866bc29518d86d99aefffee57af5c0c7ee41e55f1bfafc7823873aa673ed4"
+          "package_sha256": "71f5201c4d0ebdb5bb13011f179f1e57c4a59ddcfedf605fcd9688f5586924d0"
         },
         "left": {
           "keepout_overlap_mm2": 0.0,
           "existing_silk_overlap_mm2": 0.0,
           "outside_edge_clearance_mm2": 0.0,
           "min_distance_to_keepout_mm": 0.049,
-          "art_area_mm2": 656.79,
+          "art_area_mm2": 656.82,
           "largest_thin_piece_mm2": 0.0001,
           "strokes_closer_than_min_gap": false,
           "kicad_drc": {
@@ -62,7 +62,7 @@
             "flan46-left-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-left-asanoha.zip",
-          "package_sha256": "5dae61e845fa61b99c0f0ee9e88fe2a56e428c82dd2bc8bfe8c88b1c762d8a2c"
+          "package_sha256": "3379082cfa08d753087c1510e563ce440c61597099936c4bb1bbe70c5032253d"
         }
       },
       "preview": "docs/images/editions/flan46/asanoha.png"
@@ -75,7 +75,7 @@
           "existing_silk_overlap_mm2": 0.0,
           "outside_edge_clearance_mm2": 0.0,
           "min_distance_to_keepout_mm": 0.049,
-          "art_area_mm2": 680.13,
+          "art_area_mm2": 680.14,
           "largest_thin_piece_mm2": 0.0001,
           "strokes_closer_than_min_gap": false,
           "kicad_drc": {
@@ -88,14 +88,14 @@
             "flan46-right-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-right-kikko.zip",
-          "package_sha256": "068a82d5eab6786633088ddc3b97c993fae7269852448d6205775edf137d5d5a"
+          "package_sha256": "53c53908c6e232c3254e702410143b16e23db33da5628b2d7ab7502bbdba487f"
         },
         "left": {
           "keepout_overlap_mm2": 0.0,
           "existing_silk_overlap_mm2": 0.0,
           "outside_edge_clearance_mm2": 0.0,
           "min_distance_to_keepout_mm": 0.049,
-          "art_area_mm2": 633.75,
+          "art_area_mm2": 633.77,
           "largest_thin_piece_mm2": 0.0008,
           "strokes_closer_than_min_gap": false,
           "kicad_drc": {
@@ -108,7 +108,7 @@
             "flan46-left-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-left-kikko.zip",
-          "package_sha256": "705ff23067080db064eae7d087581e7ec0bfdfa2d57519af73481d558cf7cc0e"
+          "package_sha256": "5e59d608528d4d0551bb34396288586a692ab159cedbcec64599bdb368e39e76"
         }
       },
       "preview": "docs/images/editions/flan46/kikko.png"
@@ -121,7 +121,7 @@
           "existing_silk_overlap_mm2": 0.0,
           "outside_edge_clearance_mm2": 0.0,
           "min_distance_to_keepout_mm": 0.049,
-          "art_area_mm2": 905.17,
+          "art_area_mm2": 905.22,
           "largest_thin_piece_mm2": 0.0007,
           "strokes_closer_than_min_gap": false,
           "kicad_drc": {
@@ -134,14 +134,14 @@
             "flan46-right-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-right-sayagata.zip",
-          "package_sha256": "bccedfe3f5c09ce9b244a841609ebce160c455983193ed33e31c92046820898d"
+          "package_sha256": "bafd9ed228ea52f071ab70764a5740315357d965630cd908813013993ae7c54d"
         },
         "left": {
           "keepout_overlap_mm2": 0.0,
           "existing_silk_overlap_mm2": 0.0,
           "outside_edge_clearance_mm2": 0.0,
           "min_distance_to_keepout_mm": 0.049,
-          "art_area_mm2": 899.67,
+          "art_area_mm2": 899.69,
           "largest_thin_piece_mm2": 0.0006,
           "strokes_closer_than_min_gap": false,
           "kicad_drc": {
@@ -154,7 +154,7 @@
             "flan46-left-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-left-sayagata.zip",
-          "package_sha256": "172b73571b35843274e4d7234af8512db98a8e031652940e99ceae045645dbb8"
+          "package_sha256": "bcafa5c91fd9b8bab976390f83693760cae24518e4f8b0dc4657a2afc20401f0"
         }
       },
       "preview": "docs/images/editions/flan46/sayagata.png"
@@ -167,7 +167,7 @@
           "existing_silk_overlap_mm2": 0.0,
           "outside_edge_clearance_mm2": 0.0,
           "min_distance_to_keepout_mm": 0.049,
-          "art_area_mm2": 930.14,
+          "art_area_mm2": 930.18,
           "largest_thin_piece_mm2": 0.0,
           "strokes_closer_than_min_gap": false,
           "kicad_drc": {
@@ -180,14 +180,14 @@
             "flan46-right-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-right-seigaiha.zip",
-          "package_sha256": "0bd11947c3a11a9ab60294a2139f8341f3413ff61a7f44d85d25b1e92a3afa7a"
+          "package_sha256": "675db7bfb05fd628e09e866d26b601dff2cdb9cf72b9152e3f9a5bbb43f401de"
         },
         "left": {
           "keepout_overlap_mm2": 0.0,
           "existing_silk_overlap_mm2": 0.0,
           "outside_edge_clearance_mm2": 0.0,
           "min_distance_to_keepout_mm": 0.049,
-          "art_area_mm2": 936.09,
+          "art_area_mm2": 936.19,
           "largest_thin_piece_mm2": 0.0,
           "strokes_closer_than_min_gap": false,
           "kicad_drc": {
@@ -200,7 +200,7 @@
             "flan46-left-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-left-seigaiha.zip",
-          "package_sha256": "faf34fed9ad8b6fa6722ba256764e4da9e80461f8bf51feed19f696f0122c05b"
+          "package_sha256": "6cf32f266554584e05403559b88b6599187e588b7edd8d3db2c31d2501707851"
         }
       },
       "preview": "docs/images/editions/flan46/seigaiha.png"
@@ -213,7 +213,7 @@
           "existing_silk_overlap_mm2": 0.0,
           "outside_edge_clearance_mm2": 0.0,
           "min_distance_to_keepout_mm": 0.049,
-          "art_area_mm2": 631.53,
+          "art_area_mm2": 631.55,
           "largest_thin_piece_mm2": 0.0,
           "strokes_closer_than_min_gap": false,
           "kicad_drc": {
@@ -226,14 +226,14 @@
             "flan46-right-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-right-meandro.zip",
-          "package_sha256": "d1b2de99a0eeff5c3abe658d02b1c2a430805cf041a243448ee78c452717221c"
+          "package_sha256": "893f2fe653b893457644fc674706a285ea52eab73ec084df85056871d8c73077"
         },
         "left": {
           "keepout_overlap_mm2": 0.0,
           "existing_silk_overlap_mm2": 0.0,
           "outside_edge_clearance_mm2": 0.0,
           "min_distance_to_keepout_mm": 0.049,
-          "art_area_mm2": 655.72,
+          "art_area_mm2": 655.77,
           "largest_thin_piece_mm2": 0.0,
           "strokes_closer_than_min_gap": false,
           "kicad_drc": {
@@ -246,7 +246,7 @@
             "flan46-left-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-left-meandro.zip",
-          "package_sha256": "2a019216c708a82d6cb183ae775eb5b78598433cbf38f577c5a9318925e3927b"
+          "package_sha256": "13b6573d79c6e6d39c1a50658f26df60c1d2dab60f8689772fd04cfbcf0fdfac"
         }
       },
       "preview": "docs/images/editions/flan46/meandro.png"
@@ -259,7 +259,7 @@
           "existing_silk_overlap_mm2": 0.0,
           "outside_edge_clearance_mm2": 0.0,
           "min_distance_to_keepout_mm": 0.049,
-          "art_area_mm2": 811.59,
+          "art_area_mm2": 811.67,
           "largest_thin_piece_mm2": 0.0,
           "strokes_closer_than_min_gap": false,
           "kicad_drc": {
@@ -272,14 +272,14 @@
             "flan46-right-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-right-vias.zip",
-          "package_sha256": "57c6d10c92c578fe1ce31095af60b8c819ab45718c58c9ce3b35633c0b310563"
+          "package_sha256": "4f251805174f02bc9eb4bbdd5b3e1f3f3d77c144cb774530c10905e61a802043"
         },
         "left": {
           "keepout_overlap_mm2": 0.0,
           "existing_silk_overlap_mm2": 0.0,
           "outside_edge_clearance_mm2": 0.0,
           "min_distance_to_keepout_mm": 0.049,
-          "art_area_mm2": 741.54,
+          "art_area_mm2": 741.65,
           "largest_thin_piece_mm2": 0.0,
           "strokes_closer_than_min_gap": false,
           "kicad_drc": {
@@ -292,7 +292,7 @@
             "flan46-left-B_Silkscreen.gbo"
           ],
           "package": "hardware/flan46/fabrication/editions/flan46-left-vias.zip",
-          "package_sha256": "16d35124f8ec30376973ed00a07c82c49f9fc0494b722535cfd4c80cb5f341f9"
+          "package_sha256": "a5bd6c78640ba5873c7c67c11cdbc81be9c757f0edfd85da92cb5a15ffaac129"
         }
       },
       "preview": "docs/images/editions/flan46/vias.png"

@@ -15,7 +15,7 @@
       "tracks_and_vias": 563,
       "minimum_track_mm": 0.2,
       "poses_pads_models_and_outline_preserved": true,
-      "pcb_sha256": "4e26e2118f028f7e66dcf8c84a6c0fcb285db3f25e66f773b34ee4578d9dda1f",
+      "pcb_sha256": "96ef2e8230b94ccdfd37baf801fd92e95096753aabc066cdc8b5d2e77e08586e",
       "schematic_sha256": "9f992431dca90841329fb1d6099e1d8ca5f35487671626ae05d74da12859e08b",
       "rules_sha256": "a9352cc6bb61091b0a61745ca0fd41fef3dd834f6e9f30e843a48bb2782a7511"
     },
@@ -30,7 +30,7 @@
       "tracks_and_vias": 564,
       "minimum_track_mm": 0.2,
       "poses_pads_models_and_outline_preserved": true,
-      "pcb_sha256": "cc1c36efb00f54c2b86f1462f254532accd9ed3157e5b6c8cfe2dd314237f7ba",
+      "pcb_sha256": "a6ad45b16f919517e475c005a93504235a0daa305a121d2bab1157bbf8f822fe",
       "schematic_sha256": "17522642e1a1fd42eedd57e41d69bcaca3db6c4704ad92ece880b47c5cff8853",
       "rules_sha256": "24a0c91fd299f8ec03704a672b3fff97d209da99ef8c6294daf80b3e619fead9"
     }
