@@ -294,6 +294,66 @@
       }
     },
     {
+      "id": "eva-00",
+      "name": "EVA-00",
+      "base": "#e6a02d",
+      "plate": "#2f3640",
+      "frame": {
+        "body": "#e6a02d",
+        "detail": "#f1ede3",
+        "accent": "#cf3f33",
+        "secondary": "#5f7186"
+      },
+      "keycaps": {
+        "base": "#f1ede3",
+        "thumbs": [
+          "#5f7186",
+          "#cf3f33",
+          "#e6a02d"
+        ]
+      }
+    },
+    {
+      "id": "eva-01",
+      "name": "EVA-01",
+      "base": "#5b3f93",
+      "plate": "#1d1a2a",
+      "frame": {
+        "body": "#5b3f93",
+        "detail": "#8fd43a",
+        "accent": "#f28f1f",
+        "secondary": "#3b2f63"
+      },
+      "keycaps": {
+        "base": "#5b3f93",
+        "thumbs": [
+          "#8fd43a",
+          "#f28f1f",
+          "#8fd43a"
+        ]
+      }
+    },
+    {
+      "id": "eva-02",
+      "name": "EVA-02",
+      "base": "#c5262e",
+      "plate": "#2a2226",
+      "frame": {
+        "body": "#c5262e",
+        "detail": "#f2ead8",
+        "accent": "#f29a1f",
+        "secondary": "#4f9e62"
+      },
+      "keycaps": {
+        "base": "#c5262e",
+        "thumbs": [
+          "#f2ead8",
+          "#f29a1f",
+          "#4f9e62"
+        ]
+      }
+    },
+    {
       "id": "matcha",
       "name": "Matcha",
       "base": "#9baa83",

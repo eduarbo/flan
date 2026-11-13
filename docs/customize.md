@@ -102,7 +102,7 @@ Open **Design → Case** and choose **Level / Solid / Color rim / Terrace**. **P
 
 ## Coordinated themes and print kits
 
-See [Make it yours](themes-printing.md) for twenty-eight palettes, linked frame/rim colors, individual color regions, device saving and the selected-parts print kit.
+See [Make it yours](themes-printing.md) for thirty-one palettes, linked frame/rim colors, individual color regions, device saving and the selected-parts print kit.
 
 ### Copy and paste colors
 

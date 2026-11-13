@@ -10,11 +10,11 @@ Use **“digital prototype”**, **“first build”** and **“help test”** w
 
 ## Short post · English
 
-> Meet Flan: an open-source split keyboard design in four sizes, with 28 themes and six magnetic display frames. Choose your look in the 3D explorer. PCB, firmware and print files are available for prototypes; the first physical build still needs testing. Explore the design at flankbd.com.
+> Meet Flan: an open-source split keyboard design in four sizes, with 31 themes and six magnetic display frames. Choose your look in the 3D explorer. PCB, firmware and print files are available for prototypes; the first physical build still needs testing. Explore the design at flankbd.com.
 
 ## Short post · Español
 
-> Este es Flan: un diseño de teclado dividido y de código abierto, con cuatro tamaños, 28 temas y seis marcos magnéticos. Prueba combinaciones en el explorador 3D. Ya hay archivos de PCB, firmware e impresión para prototipos; falta validar el primer armado físico. Conócelo en flankbd.com.
+> Este es Flan: un diseño de teclado dividido y de código abierto, con cuatro tamaños, 31 temas y seis marcos magnéticos. Prueba combinaciones en el explorador 3D. Ya hay archivos de PCB, firmware e impresión para prototipos; falta validar el primer armado físico. Conócelo en flankbd.com.
 
 ## Images and demonstration
 

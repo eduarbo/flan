@@ -2,7 +2,7 @@
 
 # Flan
 
-**Low. Split. Yours.** An open-source wireless split keyboard in four sizes, with interchangeable cases, magnetic display frames, 28 themes and your own keycap colors.
+**Low. Split. Yours.** An open-source wireless split keyboard in four sizes, with interchangeable cases, magnetic display frames, 31 themes and your own keycap colors.
 
 **[flankbd.com →](https://flankbd.com/)** · **[Explore and customize in 3D →](https://flankbd.com/explore/)** · **[Parts and buying links →](docs/parts.md)** · **[Order PCBs →](docs/electronics.md#order-the-two-pcbs)** · **[Build guide →](docs/build.md)** · **[Edit in FreeCAD →](docs/freecad.md)**
 
