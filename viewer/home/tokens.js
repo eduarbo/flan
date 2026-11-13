@@ -17,17 +17,29 @@ function hex([L,C,H]){
     if(rgb.every(v=>v>=-.0005&&v<=1.0005)||c<.0005)return '#'+rgb.map(v=>Math.round(Math.min(1,Math.max(0,gam(Math.min(1,Math.max(0,v)))))*255).toString(16).padStart(2,'0')).join('');
   }
 }
+// WCAG contrast of two hex colours, and a colour moved along lightness until it reads on a page tone.
+const lum=h=>{const [r,g,b]=[1,3,5].map(i=>lin(parseInt(h.slice(i,i+2),16)/255));return .2126*r+.7152*g+.0722*b;};
+const ratio=(a,b)=>{const [x,y]=[lum(a),lum(b)].sort((p,q)=>q-p);return (x+.05)/(y+.05);};
+function legible([L,C,H],page,least,step){let out=hex([L,C,H]);for(let l=L+step;ratio(out,page)<least&&l>.02&&l<.99;l+=step)out=hex([l,C,H]);return out;}
+// The case must stand out from the page behind it: at least GAP of OKLCH lightness from the two inner page tones.
+const GAP=.1;
+function pageLevels(body,dark){
+  if(!dark)return body<=.905-GAP?[.968,.905,.815]:[body-GAP,body-GAP-.05,body-GAP-.13];            // a pale case gets a page darker than itself
+  if(body>=.36+GAP)return [.36,.27,.2];
+  if(body>=.3)return [body-GAP,body-GAP-.06,Math.max(body-GAP-.11,.08)];
+  const mid=Math.max(body+GAP,.3);return [mid+.07,mid,mid-.06];                                    // a near-black case gets a lighter one
+}
 export function pageTokens(theme){
-  const base=oklch(theme.base),dark=base[0]<.5;
+  const base=oklch(theme.base),dark=base[0]<.5,[l0,l1,l2]=pageLevels(base[0],dark);
   const [tint]=[theme.frame.secondary,theme.base].map(oklch).sort((a,b)=>b[1]-a[1]);
   const h=tint[1]<.015?oklch(theme.frame.accent)[2]:tint[2],c=tint[1]<.015?.006:Math.min(tint[1]*.5,.036);
   const accent=oklch(theme.frame.accent),ink=oklch(theme.plate);
   if(!dark)return {
-    bg0:hex([.968,c*.55,h]),bg1:hex([.905,c,h]),bg2:hex([.815,c*1.3,h]),glow:theme.frame.secondary,
-    ink:hex([.25,Math.min(ink[1],.03),ink[2]]),muted:hex([.47,Math.min(c*1.2,.04),h]),
-    accent:hex([Math.min(accent[0],.52),Math.max(accent[1],.06),accent[2]]),on:'#ffffff',scheme:'light'};
+    bg0:hex([l0,c*.55,h]),bg1:hex([l1,c,h]),bg2:hex([l2,c*1.3,h]),glow:theme.frame.secondary,
+    ink:hex([.25,Math.min(ink[1],.03),ink[2]]),muted:legible([.47,Math.min(c*1.2,.04),h],hex([l1,c,h]),4.6,-.01),
+    accent:legible([Math.min(accent[0],.52),Math.max(accent[1],.06),accent[2]],hex([l1,c,h]),4,-.01),on:'#ffffff',scheme:'light'};
   return {
-    bg0:hex([.36,c*1.2,base[2]]),bg1:hex([.27,c*1.1,base[2]]),bg2:hex([.2,c,base[2]]),glow:theme.frame.accent,
-    ink:hex([.965,.012,base[2]]),muted:hex([.78,Math.min(c*1.2,.04),base[2]]),
-    accent:hex([Math.max(accent[0],.74),Math.max(accent[1],.08),accent[2]]),on:hex([.22,.02,base[2]]),scheme:'dark'};
+    bg0:hex([l0,c*1.2,base[2]]),bg1:hex([l1,c*1.1,base[2]]),bg2:hex([l2,c,base[2]]),glow:theme.frame.accent,
+    ink:hex([.965,.012,base[2]]),muted:legible([.78,Math.min(c*1.2,.04),base[2]],hex([l1,c*1.1,base[2]]),4.6,.01),
+    accent:legible([Math.max(accent[0],.74),Math.max(accent[1],.08),accent[2]],hex([l1,c*1.1,base[2]]),4,.01),on:hex([.22,.02,base[2]]),scheme:'dark'};
 }

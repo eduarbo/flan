@@ -6,7 +6,7 @@
 
 ![The home page and the explorer on a phone](images/site-phone.webp)
 
-The explorer uses the home page's look. The page takes its colors from the keyboard: the named theme the left half wears, or its own case and frame colors, with a dark page for dark-bodied designs. The model floats on the page with a soft shadow under each half.
+The explorer uses the home page's look. The page takes its colors from the keyboard: the named theme the left half wears, or its own case and frame colors, with a dark page for dark-bodied designs. The page keeps at least 0.10 of OKLCH lightness away from the case, so a pale case sits on a darker page and never blends into it. The model floats on the page with a soft shadow under each half.
 
 Drag to orbit, scroll or pinch to zoom, and right-drag or use two fingers to pan. The camera chip at the bottom left chooses **3D, Top, Front, Left, Right, Back or Bottom**; a narrow scene folds them into one **3D view** menu. Bottom looks up at the boards with the rear edge at the top, so the back silkscreen reads correctly. Beside the chip, **Fit** recenters visible parts without changing the viewing angle and **Reset** resets the camera only, preserving visibility, separation and your design. The vertical slider between the model and the panel separates the layers: up takes them apart, down puts them back together.
 
@@ -87,7 +87,7 @@ Run any check with a local Playwright and Chromium:
 FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright-core FLAN36_BROWSER=/path/to/chromium node viewer/check.cjs
 ```
 
-`fasteners-check.cjs` covers the optional screw profile from the selector to the downloaded files; see [common M2 screws](common-fasteners.md#reproduce-the-optional-kit).
+`fasteners-check.cjs` covers the optional screw profile from the selector to the downloaded files; see [common M2 screws](common-fasteners.md#reproduce-the-optional-kit). `page-colors-check.mjs` needs no browser: it checks that every theme's page keeps its case visible and its text readable.
 
 `capture-readme.cjs` regenerates the README and guide images from the built site, served as GitHub Pages serves it: the renders (`revI-assembled`, the four `revI-case-*` and `revI-pcb-underside`, transparent with the contact shadow), the explorer screenshots (`revI-themes`, `revI-key-colors`, `site-explorer`) and the home page (`site-home`, `site-phone`). It records their hashes in [the image receipt](../validation/revI-readme-images.json):
 
