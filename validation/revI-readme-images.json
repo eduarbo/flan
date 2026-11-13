@@ -1,7 +1,7 @@
 {
   "schema": "flan36-readme-images-2",
-  "viewer_sha256": "90ecd151742327ffc1d5ccde482f2bba220d643261205795d8f1bf3ed811d768",
-  "home_sha256": "ce24028776ad61e1245bd38f5feca8c0ba7b4e85054ba07bd085c6b90b377ae5",
+  "viewer_sha256": "007d768444e0a8d4659cc11282dcc024adbd3bb96009b761deac8149827fdbbd",
+  "home_sha256": "d4dd99b2f9b180c2986a9ac6963d4aa1ed413f1042193f46c964caf744d260bc",
   "capture_sha256": "5f7c8586e5fe2463573da40ee36ddcfee276f17b0ca42443958291b2b6c5b0ad",
   "renderer": "GPU",
   "note": "Rendered from the built site served like GitHub Pages; supersedes the image hashes in earlier delivery receipts.",
@@ -28,27 +28,27 @@
     },
     {
       "path": "docs/images/revI-pcb-underside.png",
-      "sha256": "4faca14411d6586219651dca91c946b43c669a2cc21e28e8af64237cfb1ee70a"
+      "sha256": "295c7ac914932054bea70ee55f059e1e23b6b60571e2276054a41096710e6ac4"
     },
     {
       "path": "docs/images/site-explorer.webp",
-      "sha256": "ffa4b8ee558df470b05f7f9c429cf6130d5e07b749ca0ac014c2786d965a5a8d"
+      "sha256": "25bd7acb4beec84ad713506377f5f9ad11df4cc635851f362502212be288f0ee"
     },
     {
       "path": "docs/images/revI-themes.png",
-      "sha256": "944e612e9c50356ae71552656b62fb9e3bfbc8a1f9814e2b0478a26a5f894ce8"
+      "sha256": "e5c0a5d50c4e72c2f9cf96e8b9ae0c3d43fb863b431b857334af097691f078b1"
     },
     {
       "path": "docs/images/revI-key-colors.png",
-      "sha256": "db8fa7fe5d9ef7eb8ea6e7a0f2ccbc50a2bd87bb429befcc7ce34ee80ff7b5af"
+      "sha256": "5cb8fac79525baa692cb7933fd024169e840bbb7783ea96eef51bc2e1d6da16d"
     },
     {
       "path": "docs/images/site-home.webp",
-      "sha256": "2af5814daba69ae7505ff4e069cf44c1e18294456136a3f54ef2cdc794e08da2"
+      "sha256": "01d897cba797655a372568e5f678cded7749f7f609890a924f8c25acc235c8d6"
     },
     {
       "path": "docs/images/site-phone.webp",
-      "sha256": "05f3e7282e6d0766aec155d19c1625b53652b931e49b7505fa1d8049a6229b0e"
+      "sha256": "14c7a84e06d58f81c6ea661798993828bfaa8e2a06abc5c7de6d66e0af5ab2b4"
     }
   ]
 }
