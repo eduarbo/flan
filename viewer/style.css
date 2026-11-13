@@ -233,10 +233,10 @@ h3 small { margin-left: 6px; text-transform: none; letter-spacing: 0; font-famil
 .frame-grid span { display: none; }
 .pcb-grid img { height: auto; aspect-ratio: 380 / 150; }
 .pcb-grid .preview-card { padding: 8px 6px 6px; }
-.theme-grid { display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); justify-items: center; gap: 10px 0; padding: 4px 0; }
-@container editor (max-width: 340px) { .theme-grid { grid-template-columns: repeat(auto-fill, minmax(25px, 1fr)); } }
-.theme-grid button { width: 22px; height: 22px; transition: transform .15s, box-shadow .2s;
-  background: radial-gradient(circle at 68% 74%, var(--c) 0 3.8px, transparent 4.4px), linear-gradient(var(--a) 0 56%, var(--b) 56%);
+.theme-grid { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); justify-items: center; gap: 14px 6px; padding: 6px 0 4px; }
+@container editor (max-width: 340px) { .theme-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 12px 4px; } }
+.theme-grid button { width: 30px; height: 30px; transition: transform .15s, box-shadow .2s;
+  background: radial-gradient(circle at 68% 74%, var(--c) 0 5.2px, transparent 5.8px), linear-gradient(var(--a) 0 56%, var(--b) 56%);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent); }
 .theme-grid button:hover { transform: scale(1.1); }
 .theme-grid button[aria-pressed=true] { box-shadow: 0 0 0 2px var(--bg0), 0 0 0 4px var(--ink); }
