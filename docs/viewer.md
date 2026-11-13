@@ -65,7 +65,9 @@ The online page is about 1 MB of markup and script. It fetches a short descripti
 - **Right after:** the PCB and the batteries with their leads, which sit inside the closed case, about 3 MB. **Loading parts…** shows while a part is on its way, and GLB and print exports wait for it.
 - **On demand:** another option's meshes arrive when its cards first come into view or a design chooses it. All 43 files together are 12.5 MB; before, every visit fetched one 38 MB file.
 
-Positions and triangles are stored exactly and read back byte for byte when the site is built; normals are stored as 16-bit octahedral vectors, under 0.01° from the scene's own. Print files are fetched only when you request a print kit, and the PCB cards' pictures when the PCB section is first seen. A failed download can be retried without changing the design. Files are matched to the viewer version before use.
+Positions and triangles are stored exactly and read back byte for byte when the site is built; normals are stored as 16-bit octahedral vectors, under 0.01° from the scene's own. Print files are fetched only when you request a print kit, and the PCB cards' pictures when the PCB section is first seen. Files are matched to the viewer version before use.
+
+A mesh file that does not arrive is asked for again after 4, 15 and 60 seconds and when the connection returns; choosing the option again also retries. Meanwhile the part keeps its earlier mesh, a message says so and exports wait. A failed print download can be retried without changing the design.
 
 Use the **Download offline viewer** link for a complete, single-file copy inside a ZIP: unzip it and open `Flan36-revI.html`. It opens without a server or network and includes configuration, GLB and print-kit export. The online `index.html` alone is not the offline download. `node viewer/build.mjs` also writes that file to `docs/explore/offline.html` for the checks; Git ignores it, so the repository holds one compressed binary instead of a 56 MB page of text.
 
@@ -95,7 +97,7 @@ Run any check with a local Playwright and Chromium:
 FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright-core FLAN36_BROWSER=/path/to/chromium node viewer/check.cjs
 ```
 
-`fasteners-check.cjs` covers the optional screw profile from the selector to the downloaded files; see [common M2 screws](common-fasteners.md#reproduce-the-optional-kit). `page-colors-check.mjs` needs no browser: it checks that every theme's page keeps its case visible and its text readable.
+`meshes-check.cjs` serves the built site, checks that a link's design fetches its own mesh files and not the other options', then fails a mesh file and checks the message, the waiting exports and the recovery. `fasteners-check.cjs` covers the optional screw profile from the selector to the downloaded files; see [common M2 screws](common-fasteners.md#reproduce-the-optional-kit). `page-colors-check.mjs` needs no browser: it checks that every theme's page keeps its case visible and its text readable.
 
 `capture-readme.cjs` regenerates the README and guide images from the built site, served as GitHub Pages serves it: the renders (`revI-assembled`, the four `revI-case-*` and `revI-pcb-underside`, transparent with the contact shadow), the explorer screenshots (`revI-themes`, `revI-key-colors`, `site-explorer`) and the home page (`site-home`, `site-phone`). It records their hashes in [the image receipt](../validation/revI-readme-images.json):
 

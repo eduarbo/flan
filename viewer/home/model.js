@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
+import {gunzipSync} from 'three/addons/libs/fflate.module.js';
 import {MeshoptDecoder} from 'meshoptimizer/decoder';
 import finishes from '../../design/frame-finishes.json';
 
@@ -20,8 +21,8 @@ export function framePalette(look,theme,side){
 
 async function fetchPack(url){
   const response=await fetch(url);if(!response.ok)throw Error(`${url}: ${response.status}`);
-  // the browser's own inflate, off the main thread
-  const bytes=new Uint8Array(await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer()),view=new DataView(bytes.buffer,bytes.byteOffset);
+  // the browser's own inflate, off the main thread; an older browser without it (Safari before 16.4) inflates in script
+  const bytes=typeof DecompressionStream==='function'?new Uint8Array(await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer()):gunzipSync(new Uint8Array(await response.arrayBuffer())),view=new DataView(bytes.buffer,bytes.byteOffset);
   const length=view.getUint32(0,true),header=JSON.parse(new TextDecoder().decode(bytes.subarray(4,4+length)));
   const blob=bytes.subarray(4+length),cache=new Map();
   header.mesh=id=>{
@@ -98,7 +99,8 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
   const sizes={},state={onscreen:true,look:null,theme:null,explode:0,target:EXPLODED,standby:!reduced.matches&&!software,interacting:false,idle:0,amp:0,phase:0,ready:false};
   let common,objects=[],tweens=[];
 
-  const load=id=>sizes[id]??=fetchPack(packs[id]);
+  // a pack that failed to arrive is fetched again the next time it is wanted
+  const load=id=>sizes[id]??=fetchPack(packs[id]).catch(error=>{delete sizes[id];throw error;});
   // Meshes are decoded and creased a few at a time, so the page can paint and take input in between.
   const breathe=()=>new Promise(resolve=>setTimeout(resolve));
   async function prepare(pack,ids){let since=performance.now();for(const id of new Set(ids)){pack.mesh(id);if(performance.now()-since>8){await breathe();since=performance.now();}}}

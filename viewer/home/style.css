@@ -194,7 +194,8 @@ footer .support-pill:hover { background: color-mix(in srgb, var(--accent) 20%, t
   .tabs button { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 2px; font-size: 13.5px; font-weight: 500; color: var(--muted); }
   .tabs button small { font-size: 11px; font-weight: 400; } .tabs button::after { content: ""; width: 16px; height: 3px; border-radius: 2px; margin-top: 2px; }
   .tabs button[aria-selected=true] { color: var(--ink); font-weight: 600; } .tabs button[aria-selected=true]::after { background: var(--accent); }
-  .grp { display: none; } .grp.active { display: flex; } .grp .row { display: none; }
+  /* every group takes the tallest one's height (Frame), so the button below stays put from tab to tab */
+  .grp { display: none; } .grp.active { display: flex; min-height: 93px; justify-content: center; } .grp .row { display: none; }
   .grp .opts, .grp .sw { display: flex; gap: 10px; overflow-x: auto; margin: 0 -16px; padding: 7px 16px 8px; scroll-snap-type: x proximity; scrollbar-width: none; }
   .grp .opts::-webkit-scrollbar, .grp .sw::-webkit-scrollbar { display: none; }
   .opt { flex: none; min-width: 76px; scroll-snap-align: start; }

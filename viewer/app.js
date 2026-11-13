@@ -90,9 +90,9 @@ function syncBuildAvailability(){
   const sized=shownVariant(configuration)===configuration.variant,ready=sized&&!awaitedMeshes,hardware=!configuration.fasteners||Boolean(fastenerProfiles[configuration.fasteners]?.loaded);
   $('print-kit').disabled=printBusy||buildBusy||!ready;$('download-build').disabled=buildBusy||printBusy||!ready;$('glb').disabled=glbBusy||!ready||!hardware;
   for(const id of ['variant-status','build-variant-status']){
-    $(id).hidden=ready;$(id).textContent=ready?'':sized?t('meshes.loading'):t('size.resources',{name:family[configuration.variant]?.title||configuration.variant});
+    $(id).hidden=ready;$(id).textContent=ready?'':sized?t(meshFailure?'load.geometry':'meshes.loading'):t('size.resources',{name:family[configuration.variant]?.title||configuration.variant});
   }
-  $('parts-status').hidden=!awaitedMeshes;$('parts-status').textContent=awaitedMeshes?t('meshes.loading'):'';
+  $('parts-status').hidden=!awaitedMeshes;$('parts-status').textContent=awaitedMeshes?t(meshFailure?'load.geometry':'meshes.loading'):'';$('parts-status').dataset.error=String(meshFailure&&awaitedMeshes>0);
 }
 // A variant's render meshes come from its exact STL files: CAD (x, y, z) -> viewer (x, z, -y), creased at 45°
 // like the scene builder's normals.
@@ -644,6 +644,16 @@ const said=new Map();
 function say(id,key,vars){if(key)said.set(id,[key,vars]);else said.delete(id);$(id).textContent=key?t(key,vars):vars||'';}
 const history=createHistory(configuration);
 let meshWork=Promise.resolve();   // settles when no mesh a design asked for is still being fetched
+// A mesh that does not arrive (a dropped connection, a file a newer deploy replaced) is asked for again after
+// 4, 15 and 60 seconds and when the connection returns; choosing the option again also retries. Meanwhile the
+// part keeps its earlier mesh, the status says so and exports wait.
+let meshFailure=false,meshTries=0,meshTimer=0;
+function retryMeshes(){clearTimeout(meshTimer);if(!awaitedMeshes)return;try{applyConfiguration(copy(configuration),{record:false,persist:false});}catch(error){message(error.message,true);}}
+function meshesFailed(error){
+  message(error.message,true);meshFailure=true;syncBuildAvailability();
+  clearTimeout(meshTimer);if(meshTries<3)meshTimer=setTimeout(retryMeshes,[4000,15000,60000][meshTries++]);
+}
+addEventListener('online',()=>{if(awaitedMeshes&&meshFailure){meshTries=0;retryMeshes();}});
 let gesture=null;
 document.addEventListener('pointerdown',e=>{if(e.target.type!=='color'){gesture=null;history.endGesture();}},true);
 document.addEventListener('input',e=>{if(e.target.type==='color'||e.target.classList.contains('hex-input'))gesture=e.target;},true);
@@ -681,7 +691,11 @@ function applyConfiguration(next,{record=true,persist=true,fetch=true}={}){
   catch(error){commit(old);configuration=previous;awaitedMeshes=before;sync();throw error;}
   if(record)history.record(next,gesture);syncHistory();
   if(persist){message(t('msg.saving'));if(!saveWarnings.has('configuration'))saveState('save.saving','saving');store.save(configuration);}
-  if(wanted.size&&fetch)meshWork=Promise.allSettled([meshWork,meshStore.ensure([...wanted]).then(()=>{applyConfiguration(copy(configuration),{record:false,persist:false});drawPictures();},error=>message(error.message,true))]);
+  if(!wanted.size){meshFailure=false;meshTries=0;clearTimeout(meshTimer);}
+  else if(fetch){
+    meshFailure=false;syncBuildAvailability();
+    meshWork=Promise.allSettled([meshWork,meshStore.ensure([...wanted]).then(()=>{retryMeshes();drawPictures();},meshesFailed)]);
+  }
   // A design that names a variant or a screw profile not loaded yet (a loaded file, undo, a link) shows it once it arrives.
   if(next.fasteners&&!hardware)loadFasteners(next.fasteners).then(()=>{fastenerFailure=null;if(configuration.fasteners===next.fasteners)applyConfiguration(copy(configuration),{record:false,persist:false});}).catch(e=>{fastenerFailure=next.fasteners;message(e.message,true);syncConfigurationUI();});
   if(shownVariant(next)!==next.variant&&builtVariant(next.variant))loadVariant(next.variant).then(()=>{if(configuration.variant===next.variant){applyConfiguration(copy(configuration),{record:false,persist:false});fit();}}).catch(e=>message(e.message,true));
@@ -1154,10 +1168,10 @@ portraitLayout.addEventListener('change',()=>{showWorkspace();if(activeMode==='c
 // ground(false) hides the contact shadow so checks and captures measure only the model.
 // resolves once no mesh a design or a card asked for is still being fetched, and what arrived is drawn
 async function settled(){do{await meshWork;await new Promise(requestAnimationFrame);}while(meshStore.busy());}
-// The checks' handle appears once the opening design shows all of its parts, so a check starts from a whole keyboard.
-if(new URLSearchParams(location.search).has('diagnostics'))settled().then(()=>{window.flan36=Object.freeze({snapshot:()=>({configuration:copy(configuration),fasteners:{shown:shownFasteners(configuration)||defaultFasteners,failed:fastenerFailure,meshes:Object.fromEntries(objects.filter(o=>o.userData.mesh_source&&(o.userData.group==='plate'||o.userData.group==='lid')).map(o=>[o.userData.side+'-'+o.userData.group,{source:o.userData.mesh_source,triangles:(o.geometry.index?o.geometry.index.count:o.geometry.attributes.position.count)/3}]))},pcb:Object.fromEntries(objects.filter(o=>o.userData.part_id===o.userData.side+'-pcb').map(o=>[o.userData.side,{mask:o.userData.pcb_mask,color:o.material.color.getHexString()}])),silkscreen:Object.fromEntries(silkOverlays.map(o=>[o.userData.silkscreen,{visible:o.visible,ink:o.material.color.getHexString(),texture:[...silkTextures].find(([,texture])=>texture===o.material.alphaMap)?.[0]}])),view:copy(state),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:controls.target.toArray(),zoom:camera.zoom,halfHeight},hidden:[...hiddenObjects],selected:copy(explorer.selected),visible:objects.filter(o=>o.visible).map(o=>o.userData.objectIndex),undo:history.canUndo,redo:history.canRedo}),idle:()=>Promise.all([store.idle(),keycapColors.idle(),settled()]),
+// The checks' handle: idle() and settled() wait for the parts still on their way.
+if(new URLSearchParams(location.search).has('diagnostics'))window.flan36=Object.freeze({snapshot:()=>({configuration:copy(configuration),fasteners:{shown:shownFasteners(configuration)||defaultFasteners,failed:fastenerFailure,meshes:Object.fromEntries(objects.filter(o=>o.userData.mesh_source&&(o.userData.group==='plate'||o.userData.group==='lid')).map(o=>[o.userData.side+'-'+o.userData.group,{source:o.userData.mesh_source,triangles:(o.geometry.index?o.geometry.index.count:o.geometry.attributes.position.count)/3}]))},pcb:Object.fromEntries(objects.filter(o=>o.userData.part_id===o.userData.side+'-pcb').map(o=>[o.userData.side,{mask:o.userData.pcb_mask,color:o.material.color.getHexString()}])),silkscreen:Object.fromEntries(silkOverlays.map(o=>[o.userData.silkscreen,{visible:o.visible,ink:o.material.color.getHexString(),texture:[...silkTextures].find(([,texture])=>texture===o.material.alphaMap)?.[0]}])),view:copy(state),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:controls.target.toArray(),zoom:camera.zoom,halfHeight},hidden:[...hiddenObjects],selected:copy(explorer.selected),visible:objects.filter(o=>o.visible).map(o=>o.userData.objectIndex),undo:history.canUndo,redo:history.canRedo}),idle:()=>Promise.all([store.idle(),keycapColors.idle(),settled()]),
   still:()=>{renderNow();return canvas.toDataURL('image/webp',.86);},   // the frame now on screen, for viewer/explore-still.cjs
-  settled,meshes:()=>({awaited:awaitedMeshes,busy:meshStore.busy()}),ground:shown=>{ground.enabled=shown;sync();}});});
+  settled,meshes:()=>({awaited:awaitedMeshes,busy:meshStore.busy()}),ground:shown=>{ground.enabled=shown;sync();}});
 
 
 }

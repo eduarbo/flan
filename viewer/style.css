@@ -94,7 +94,7 @@ body[data-panel-open=true] main { grid-template-columns: minmax(0, 1fr) var(--pa
 .stage { container: stage / size; position: relative; min-width: 0; min-height: 0; overflow: hidden; }
 #canvas { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; touch-action: none; outline: none; }
 #canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; border-radius: 18px; }
-#loading { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 14px; margin: 0; color: var(--muted); font: 400 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; pointer-events: none; }
+#loading { position: absolute; inset: 0; isolation: isolate; display: grid; place-content: center; justify-items: center; gap: 14px; margin: 0; color: var(--muted); font: 400 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; pointer-events: none; }
 /* how much of the design's meshes has arrived */
 #loading-bar { display: block; width: min(190px, 42vw); height: 3px; border-radius: 2px; overflow: hidden; background: color-mix(in srgb, var(--muted) 26%, transparent); }
 #loading-bar i { display: block; width: 0; height: 100%; border-radius: 2px; background: var(--accent); transition: width .25s ease-out; }
@@ -104,6 +104,7 @@ body[data-panel-open=true] main { grid-template-columns: minmax(0, 1fr) var(--pa
 #loading[data-still] { place-content: end center; padding-bottom: 96px; right: min(400px, 45%); }
 @media (max-width: 700px), (max-width: 1000px) and (orientation: portrait) { #loading[data-still] { right: 0; bottom: 48%; padding-bottom: 20px; } }
 /* a part chosen a moment ago whose mesh is still arriving */
+#parts-status[data-error=true] { max-width: calc(100% - 32px); width: max-content; border-radius: 14px; background: var(--warn-bg); color: var(--warn); letter-spacing: 0; text-transform: none; font: 400 12.5px/1.45 var(--sans, inherit); text-align: center; }
 #parts-status { position: absolute; z-index: 4; top: 14px; left: 50%; transform: translateX(-50%); margin: 0; padding: 6px 12px; border-radius: 999px; background: color-mix(in srgb, var(--bg1) 86%, transparent); color: var(--muted); font: 400 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; pointer-events: none; }
 #error { position: absolute; z-index: 6; top: 28%; left: 8%; right: 8%; padding: 20px; border-radius: 18px; background: var(--warn-bg); color: var(--warn); font-size: 13px; line-height: 1.6; }
 

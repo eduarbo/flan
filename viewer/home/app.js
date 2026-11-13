@@ -142,7 +142,7 @@ const sizesWanted=()=>sizesNear||$('o-size').getClientRects().length>0;
 function commit(next,{animate=true}={}){
   const themeChanged=next.theme!==look.theme;look=next;store.set('flan.home.look',JSON.stringify(look));
   if(themeChanged)paint();syncRail();
-  model?.apply(look,theme(),{animate}).catch(failed);
+  model?.apply(look,theme(),{animate}).then(()=>{$('note').hidden=true;}).catch(failed);   // a look that arrives clears an earlier failure's note
   clearTimeout(previewTimer);previewTimer=setTimeout(renderPreviews,themeChanged?650:120);
 }
 // previews in the current colours; a size's own pack may still be arriving
