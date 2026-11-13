@@ -10,7 +10,7 @@ const $=id=>document.getElementById(id);
 const themes=new Map(data.themes.map(t=>[t.id,t])),frameIds=data.frames.map(f=>f.id);
 const CASES=[['rim','Color rim'],['solid','Solid'],['terrace','Terrace'],['level','Level']],KEYS=[['original','Original'],['normal','Sculpted'],['saddle','Saddle']];
 const T={
-  en:{'nav.explore':'Explore in 3D','nav.build':'Build guide','hero.eyebrow':'Open-source wireless keyboard','hero.title':'Low. Split. Yours.','hero.sub':'Four sizes, 31 themes and six magnetic frames. Turn it, take it apart, make it yours.',
+  en:{'nav.explore':'Explore in 3D','nav.build':'Build guide','hero.eyebrow':'Open-source wireless keyboard','hero.title':'Homemade, like a good flan.','hero.sub':'Four sizes, 31 themes and six magnetic frames. Turn it, take it apart, make it yours.',
     'stage.label':'3D keyboard','stage.canvas':'Drag to turn the keyboard','stage.poster':'Flan36 in the SNES theme, layers apart','stage.hint':'Drag to turn · pinch to zoom','stage.pause':'Pause the standby motion','stage.play':'Resume the standby motion','stage.reset':'Reset the view',
     'stage.nogl':'The live 3D view needs WebGL. The explorer shows every part.','stage.failed':'The 3D model could not load. Check the connection and reload.',
     'layers.apart':'Apart','layers.together':'Together','layers.label':'Separate the layers','rail.label':'Make it yours','g.size':'Size','g.theme':'Theme','g.case':'Case','g.keys':'Keycaps','g.frame':'Frame','g.frames':'Frames',
@@ -18,7 +18,7 @@ const T={
     'side.both':'Both halves','side.left':'Left','side.right':'Right','cta.open':'Customize this look','cta.resume':'Continue my saved design →','keys':'keys','specs.eyebrow':'Spec sheet','specs.title':'What’s under the frame',
     'f.parts':'Parts','f.pcbs':'Order PCBs','f.support':'Support Flan on Ko-fi','nav.support':'Support','f.status':'Digital prototype · physical tests pending','f.by':'by',
     'role.body':'Body','role.detail':'Detail','role.accent':'Accent','role.secondary':'Secondary'},
-  es:{'nav.explore':'Explorar en 3D','nav.build':'Guía de armado','hero.eyebrow':'Teclado inalámbrico de código abierto','hero.title':'Bajo. Dividido. Tuyo.','hero.sub':'Cuatro tamaños, 31 temas y seis marcos magnéticos. Gíralo, sepáralo y hazlo tuyo.',
+  es:{'nav.explore':'Explorar en 3D','nav.build':'Guía de armado','hero.eyebrow':'Teclado inalámbrico de código abierto','hero.title':'Hecho en casa, como el buen flan.','hero.sub':'Cuatro tamaños, 31 temas y seis marcos magnéticos. Gíralo, sepáralo y hazlo tuyo.',
     'stage.label':'Teclado en 3D','stage.canvas':'Arrastra para girar el teclado','stage.poster':'Flan36 con el tema SNES, capas separadas','stage.hint':'Arrastra para girar · pellizca para acercar','stage.pause':'Pausar el movimiento en reposo','stage.play':'Reanudar el movimiento en reposo','stage.reset':'Restablecer la vista',
     'stage.nogl':'La vista 3D necesita WebGL. El explorador muestra cada pieza.','stage.failed':'No se pudo cargar el modelo 3D. Revisa la conexión y recarga.',
     'layers.apart':'Separado','layers.together':'Unido','layers.label':'Separar las capas','rail.label':'Hazlo tuyo','g.size':'Tamaño','g.theme':'Tema','g.case':'Caja','g.keys':'Keycaps','g.frame':'Marco','g.frames':'Marcos',

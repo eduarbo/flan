@@ -113,7 +113,7 @@ const T={
     'draft.Pending draft':'Pending draft','draft.Unsaved draft':'Unsaved draft','draft.Conflicting draft':'Conflicting draft',
     'draft.Before retired-frame migration':'Before retired-frame migration','draft.Previous saved data':'Previous saved data',
     // About and credits
-    'about.by':'Designed by Eduardo Ruiz','about.claim':'Low. Split. Yours.',
+    'about.by':'Designed by Eduardo Ruiz','about.claim':'Homemade, like a good flan.',
     'about.intro':'Flan is an original open-source wireless split keyboard in four sizes, with interchangeable cases and flush magnetic display frames.',
     'about.kofi':'Support Flan on Ko-fi ↗','about.keys':'keys in Flan36','about.halves':'wireless halves','about.cases':'case styles','about.original':'An original design',
     'about.design':'The keyboard and its CAD are designed by Eduardo Ruiz. It is inspired by Piantor by beekeeb and keeps its 36 key positions and angles; the PCBs, case, frames and firmware are original.',
@@ -258,7 +258,7 @@ const T={
     'recovery.unreadable':'Registro de recuperación ilegible','recovery.unavailable':'El almacenamiento del dispositivo no está disponible. Mejor exporta el diseño actual.',
     'draft.Pending draft':'Borrador pendiente','draft.Unsaved draft':'Borrador sin guardar','draft.Conflicting draft':'Borrador en conflicto',
     'draft.Before retired-frame migration':'Antes de migrar los marcos retirados','draft.Previous saved data':'Datos guardados anteriores',
-    'about.by':'Diseñado por Eduardo Ruiz','about.claim':'Bajo. Dividido. Tuyo.',
+    'about.by':'Diseñado por Eduardo Ruiz','about.claim':'Hecho en casa, como el buen flan.',
     'about.intro':'Flan es un teclado dividido inalámbrico, original y de código abierto, en cuatro tamaños, con cajas intercambiables y marcos magnéticos al ras.',
     'about.kofi':'Apoya Flan en Ko-fi ↗','about.keys':'teclas en Flan36','about.halves':'mitades inalámbricas','about.cases':'estilos de caja','about.original':'Un diseño original',
     'about.design':'Eduardo Ruiz diseñó el teclado y su CAD. Se inspira en Piantor de beekeeb y conserva sus 36 posiciones y ángulos de tecla; las PCB, la caja, los marcos y el firmware son originales.',
