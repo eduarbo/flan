@@ -2,8 +2,8 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "70802ad2c4b24c51878e5e172d8509c5ae642061162d40e7e7680f2583e0e414",
-    "bytes": 671610
+    "sha256": "9bbd08fc28013b8a345d14f6cb8da26f6ac4d3a72758f5cd02ef79fed3dcc8fc",
+    "bytes": 675038
   },
   "packs": {
     "common": {
@@ -1703,7 +1703,7 @@
   "sources": [
     {
       "path": "viewer/home-build.mjs",
-      "sha256": "370cd604087a8395e3b10543566b9fbac08145094e5cc45fce4e78a114bd5bbc"
+      "sha256": "7a0a1972696027fad74e049ccc9f3072c8d4ec885964f7f76f58234fab7e1ff1"
     },
     {
       "path": "viewer/home/app.js",
@@ -1727,7 +1727,7 @@
     },
     {
       "path": "viewer/home/template.html",
-      "sha256": "417a2facfd4df05687cded3004601df7d259e265c715b7e0e7a08e45e2d2406e"
+      "sha256": "e8120a3664a6c25406b7167e8cef00399b5ef42967279bf74e1470655e1b04c2"
     },
     {
       "path": "design/themes.json",
