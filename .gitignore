@@ -12,3 +12,5 @@ node_modules/
 *.step.bak
 *.lck
 *.FCBak
+# Built for the checks; published inside docs/explore/offline.zip
+docs/explore/offline.html

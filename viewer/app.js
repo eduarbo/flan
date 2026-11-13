@@ -45,7 +45,9 @@ for(const b of document.querySelectorAll('[data-lang]'))b.onclick=()=>setLanguag
 
 async function start(){
 const $=id=>document.getElementById(id);
-const data=await unpack(decodeBytes($('scene-data').textContent));
+// Online the page points at the scene's hashed file; the offline copy carries it inline.
+const sceneText=$('scene-data').textContent.trim();
+const data=await (sceneText[0]==='{'?printLoader(JSON.parse(sceneText),{textContent:''},unpack,'scene')():unpack(decodeBytes(sceneText)));
 const loadPrinting=printLoader(data.printing,$('print-data'));
 // Flan family: Flan36's case and PCB are in the scene; a built variant brings its own on demand.
 const family=data.variants||{},baseVariant='flan36',variantLoads=new Map();
@@ -108,7 +110,8 @@ async function loadFasteners(id){
   for(const asset of Object.values(payload.printing))geometries.set(asset.path,asset.material_parts?.length?stlMaterialGeometry(asset.material_parts):stlGeometry(asset.stl));
   profile.printing=payload.printing;profile.loaded=true;
 }
-if($('print-data').textContent.trim())document.querySelector('[download="Flan36-revI.html"]').href=location.href;
+// the offline copy offers itself; online the link is the published ZIP
+if($('print-data').textContent.trim()){const link=document.querySelector('[data-t=offline]');link.href=location.href;link.download='Flan36-revI.html';}
 for(const node of document.querySelectorAll('[data-measurement]'))node.textContent=String(data.measurements[node.dataset.measurement]);
 const catalog=data.catalog;let configuration=normalize(catalog.default_configuration,catalog);
 const store=createStore({key:savedKey,preserveBeforeWrite:value=>retiredFrames(value,catalog).length>0,validate:value=>{const result=check(value,catalog);if(result.errors.length)throw Error(result.errors[0]);return normalize(value,catalog);},notify:(text,error)=>storageNotice(text,error,'configuration')});

@@ -1,6 +1,6 @@
 # Using the explorer
 
-[Open the 3D explorer](https://flankbd.com/explore/) · [Download the complete offline explorer](https://flankbd.com/explore/offline.html)
+[Open the 3D explorer](https://flankbd.com/explore/) · [Download the complete offline explorer (ZIP)](https://flankbd.com/explore/offline.zip)
 
 ![The 3D explorer on a desktop: the top bar, the model with its layers apart, and Design beside it](images/site-explorer.webp)
 
@@ -57,9 +57,9 @@ If browser storage is unavailable, the design remains editable and exportable in
 
 ## Online and offline
 
-The online viewer loads print files only when you request a print kit. A failed download can be retried without changing the design. Files are matched to the viewer version before use.
+The online page is about 1 MB of markup and script. It fetches the model as its own hashed file when it opens, and print files only when you request a print kit. A failed download can be retried without changing the design. Files are matched to the viewer version before use.
 
-Use the **Download offline viewer** link for a complete, single-file copy. It opens without a server or network and includes configuration, GLB and print-kit export. The smaller online `index.html` alone is not the offline download.
+Use the **Download offline viewer** link for a complete, single-file copy inside a ZIP: unzip it and open `Flan36-revI.html`. It opens without a server or network and includes configuration, GLB and print-kit export. The online `index.html` alone is not the offline download. `node viewer/build.mjs` also writes that file to `docs/explore/offline.html` for the checks; Git ignores it, so the repository holds one compressed binary instead of a 90 MB page of text.
 
 GLB exports all installed parts assembled, regardless of hidden layers or exploded offsets. Its units are meters; use FreeCAD/STEP for solid editing.
 

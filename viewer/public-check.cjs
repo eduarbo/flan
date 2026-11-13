@@ -9,7 +9,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/interface-audi
  const browser=await chromium.launch({headless:true,args:['--use-angle=metal','--enable-gpu','--ignore-gpu-blocklist']});
  try{
   const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce',acceptDownloads:true}),p=await context.newPage(),errors=[];p.setDefaultTimeout(60000);p.on('pageerror',e=>errors.push(e.message));
-  for(const file of ['index.html','explore/index.html','explore/offline.html','offline.html','frame-proposals/index.html','branding.html']){
+  for(const file of ['index.html','explore/index.html','explore/offline.zip','offline.html','frame-proposals/index.html','branding.html']){
    const response=await p.request.get(base+file+'?verify='+commit,{timeout:120000});assert.equal(response.status(),200,file);assert.equal(sha(await response.body()),sha(fs.readFileSync(path.join(root,'docs',file))),file+' must be byte-exact');await response.dispose();
   }
   const homeReady=async()=>{await p.waitForSelector('#stage.live',{timeout:120000});await p.waitForFunction(()=>[...document.querySelectorAll('.opt img')].every(i=>i.complete&&i.naturalWidth>0),null,{timeout:120000});};

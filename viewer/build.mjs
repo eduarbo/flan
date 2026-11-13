@@ -6,6 +6,7 @@ import crypto from 'node:crypto';
 import {gzipSync,gunzipSync} from 'node:zlib';
 import {Script} from 'node:vm';
 import {build} from 'esbuild';
+import {zipSync} from 'three/addons/libs/fflate.module.js';
 
 const here=path.dirname(fileURLToPath(import.meta.url));
 const root=path.dirname(here);
@@ -120,7 +121,11 @@ for(const f of fs.readdirSync(path.join(root,'docs/explore/assets')))
  if(/^(printing|silkscreen|variant-[a-z0-9]+|fasteners-[a-z0-9-]+|keycap-[a-z0-9_]+)-[0-9a-f]{64}\.bin$/.test(f)&&!current.has(f))fs.rmSync(path.join(root,'docs/explore/assets',f));
 const packedScene={...scene,geometries:unique,geometryAliases,printing:{url:`./assets/printing-${printHash}.bin`,sha256:printHash},
   silkscreen:{...scene.silkscreen,textures:{url:`./assets/silkscreen-${silkHash}.bin`,sha256:silkHash}},variants,keycapAssets,...(fasteners?{fasteners}:{})};
-const packed=gzipSync(Buffer.from(JSON.stringify(packedScene)),{level:9}).toString('base64');
+// Online, the page fetches the scene as its own hashed file, like the other deferred assets: the page stays
+// small and text-only. The offline copy still carries it inline.
+const sceneBytes=deferred('scene',packedScene),sceneHash=crypto.createHash('sha256').update(sceneBytes).digest('hex');
+const scenePath=`docs/explore/assets/scene-${sceneHash}.bin`;fs.writeFileSync(path.join(root,scenePath),sceneBytes);
+for(const f of fs.readdirSync(path.join(root,'docs/explore/assets')))if(/^scene-[0-9a-f]{64}\.bin$/.test(f)&&f!==path.basename(scenePath))fs.rmSync(path.join(root,'docs/explore/assets',f));
 // the colour mark, inline: the viewer's CSP loads no external images. Its outline follows the page's theme.
 const mark=fs.readFileSync(path.join(root,'docs/branding/flan/flan-mark-color.svg'),'utf8').replace(/<\?xml[^>]*>|<title>[^<]*<\/title>|<style>[^<]*<\/style>/g,'')
   .replace(/<svg[^>]*viewBox="([^"]+)"[^>]*>/,'<svg class="mark" viewBox="$1" aria-hidden="true">').trim();
@@ -131,7 +136,7 @@ const fonts=offline=>[['Fraunces','Fraunces-latin.woff2','300 500'],['Inter','In
 function page(offline){return template.replace('/*__FONTS__*/',()=>fonts(offline)).replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(here,'style.css'),'utf8'))
  .replace('<!--__MARK__-->',()=>mark)
  .replace('<!--__LICENSES__-->',()=>credits+licenses)
- .replace('/*__DATA__*/',()=>packed)
+ .replace('/*__DATA__*/',()=>offline?sceneBytes.toString('base64'):JSON.stringify({url:`./assets/scene-${sceneHash}.bin`,sha256:sceneHash}))
  .replace('/*__PRINT__*/',()=>offline?printBytes.toString('base64'):'')
  .replace('/*__SILK__*/',()=>offline?silkBytes.toString('base64'):'')
  .replace('/*__VARIANTS__*/',()=>JSON.stringify(offline?Object.fromEntries([...Object.entries(variantAssets).map(([id,a])=>[id,a.bytes.toString('base64')]),...Object.entries(fastenerAssets).map(([id,a])=>['fasteners:'+id,a.bytes.toString('base64')])]):{}))
@@ -141,13 +146,18 @@ function page(offline){return template.replace('/*__FONTS__*/',()=>fonts(offline
 const html=page(false),offlineHtml=page(true);
 new Script([...html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g)].at(-1)[1]);
 fs.writeFileSync(path.join(root,'docs/explore/index.html'),html);
+// The single-file offline copy is built here for the checks and published inside a ZIP: Git keeps one
+// compressed binary instead of an 86 MB page of base64 (docs/explore/offline.html is ignored).
 fs.writeFileSync(path.join(root,'docs/explore/offline.html'),offlineHtml);
+const offlineZip=Buffer.from(zipSync({'Flan36-revI.html':[Buffer.from(offlineHtml),{level:6,mtime:new Date(2026,0,1)}]}));
+fs.writeFileSync(path.join(root,'docs/explore/offline.zip'),offlineZip);
 fs.writeFileSync(path.join(root,'docs/.nojekyll'),'');
 const sources=[...scene.sources,...['viewer/app.js','viewer/build-guide.js','viewer/design-url.js','viewer/part-illustrations.js','viewer/build-package.js','design/build-parts.json','viewer/i18n.js','viewer/config.js','viewer/storage.js','viewer/history.js','viewer/assets.js','viewer/keycap-colors.js','viewer/color-input.js','design/keycap-themes.json','viewer/appearance.js','viewer/printing.js','design/themes.json','viewer/explorer.js','viewer/previews.js','viewer/finishes.js','design/frame-finishes.json','viewer/style.css','viewer/template.html','viewer/build.mjs','viewer/home/tokens.js','docs/branding/flan/flan-mark-color.svg',...['Fraunces','Inter','JetBrainsMono'].map(f=>`viewer/home/fonts/${f}-latin.woff2`),...['flan36','flan42','flan46','flan54'].map(id=>`viewer/thumbs/size-${id}.webp`),'viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}))];
 const receipt={revision:scene.revision,units:'mm',objects:scene.parts.length,unique_meshes:Object.keys(scene.geometries).length,
   keycaps:scene.parts.filter(p=>p.group==='keycaps').length,geometry_changed:false,
   sources,viewer_sha256:hash('docs/explore/index.html'),measurements:scene.measurements,
-  offline:'docs/explore/offline.html embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses. docs/explore/index.html fetches the hashed print payload on export and the silkscreen textures when an edition is shown.',
+  offline:'docs/explore/offline.zip holds the single-file offline copy, which embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses; docs/explore/offline.html is that file, built locally and not published. docs/explore/index.html fetches the hashed scene at start, the print payload on export and the silkscreen textures when an edition is shown.',
+  scene:{path:scenePath,sha256:sceneHash,bytes:sceneBytes.length},offline_zip:{path:'docs/explore/offline.zip',sha256:crypto.createHash('sha256').update(offlineZip).digest('hex'),bytes:offlineZip.length},
   build_assets:packageAssets,offline_sha256:hash('docs/explore/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},variants:Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),fasteners:Object.fromEntries(Object.entries(fastenerAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),silkscreen:{path:silkPath,sha256:silkHash,bytes:silkBytes.length,editions:scene.silkscreen.editions.map(e=>e.id)},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
   limitations:scene.limits};
 fs.writeFileSync(path.join(root,`validation/rev${scene.revision}-viewer.json`),JSON.stringify(receipt,null,2)+'\n');
