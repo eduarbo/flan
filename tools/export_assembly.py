@@ -11,6 +11,7 @@ Run with a Python that can import pcbnew (see docs/electronics.md):
 
     "$KICAD_PY" tools/export_assembly.py                    # sockets + diodes + reset (back only)
     "$KICAD_PY" tools/export_assembly.py --profile diodes   # diodes + reset (back only)
+    "$KICAD_PY" tools/export_assembly.py --profile diodes-only
     "$KICAD_PY" tools/export_assembly.py --profile full     # adds power switch and battery jack (front)
 
 Outputs go to ignored build/assembly/<profile>/. Nothing here qualifies a physical assembly;
@@ -57,6 +58,7 @@ PARTS = {
 PROFILES = {
     'back': ('socket', 'diode', 'reset'),
     'diodes': ('diode', 'reset'),
+    'diodes-only': ('diode',),
     'full': ('socket', 'diode', 'reset', 'power', 'jack'),
 }
 EXPECTED = {'socket': 18, 'diode': 18, 'reset': 1, 'power': 1, 'jack': 1}

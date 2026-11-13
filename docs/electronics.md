@@ -70,6 +70,7 @@ The boards are designed for hand assembly, and no assembly service is qualified.
 ```sh
 "$KICAD_PY" tools/export_assembly.py                    # sockets, diodes and reset: back only
 "$KICAD_PY" tools/export_assembly.py --profile diodes   # diodes and reset: back only
+"$KICAD_PY" tools/export_assembly.py --profile diodes-only   # the 18 diodes alone
 "$KICAD_PY" tools/export_assembly.py --profile full     # adds the power switch and battery jack
 ```
 
