@@ -40,6 +40,8 @@ The `docs/branding/outline/flan36-*.svg` artwork is a deterministic vector conve
 
 The GPL covers the logo artwork as files, not the right to use Flan's names and marks. As an additional term under GPL-3.0 section 7(e), the project's license grants no trademark rights to the names Flan, Flan36, Flan42, Flan46 and Flan54, the Flan wordmark or the tecla-flan mark. See [TRADEMARKS.md](TRADEMARKS.md).
 
+Some theme and frame names refer to other products and works by name, such as Game Boy, NES, SNES, Walkman, iPod and the EVA units of Evangelion. They describe a color palette or a look. Those names belong to their owners; Flan is not affiliated with or endorsed by them, and uses none of their logos or artwork.
+
 ## CAD authorship correction · 2026-10-09
 
 Earlier viewer credits, GLB metadata and project descriptions incorrectly described the whole CAD as derived from Piantor. Eduardo Ruiz clarified that the CAD is his original design and Piantor inspired the key count. Current descriptions and exports reflect that correction. Historical coordinate-reference metadata, archived upstream copies and third-party license notices are preserved; no geometry or license terms changed.

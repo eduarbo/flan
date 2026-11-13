@@ -16,7 +16,7 @@
 
 **[Silkscreen editions](docs/electronics.md#editions)** — Asanoha, Kikkō, Sayagata, Seigaiha, Meandro and Vías: six all-over back patterns around the Flan signature, one Gerber package each. Preview them with JLCPCB's seven solder-mask colors under **Design → PCB**, which links the matching ZIPs.
 
-**[Themes and print kits](docs/themes-printing.md)** — Twenty-eight coordinated themes, personal keycap palettes, linked rim/frame colors and selected STL/3MF parts.
+**[Themes and print kits](docs/themes-printing.md)** — Thirty-one coordinated themes, personal keycap palettes, linked rim/frame colors and selected STL/3MF parts.
 
 **[Lower, level stack](docs/level-stack.md)** — The frame and removable switch-covering shell reach 14.50 mm; the glass sits 0.20 mm below them. The display uses its supplied 5 mm socket + 2 mm header; physical assembly remains to be tested.
 

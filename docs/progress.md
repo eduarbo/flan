@@ -63,6 +63,8 @@ The earlier withdrawal changed only the proposal gallery, leaving rejected shape
 
 The user rejected Evangelion and requested its removal. The [current gallery](frame-proposals.md) now contains only Talavera, Game Boy, SNES, Phone, iPod and Hanafuda. The rejected proposal and its public previews were removed from the gallery. There is no pending artwork approval. Hanafuda integration remains pending; the main assembly and explorer are unchanged. [Selection record](../design/frame-selection.json).
 
+That decision was about a display frame. On 2026-11-12 the owner asked for color themes inspired by the EVA units: EVA-00, EVA-01 and EVA-02 are palettes only, with no frame or artwork ([themes](themes-printing.md)).
+
 ## Revision I — historical R8 proposal
 
 [R8](../design/proposals/frame-redesign-r8/) retained the six approved designs and proposed an Evangelion frame using M1's palette. That proposal was subsequently rejected and never installed. Historical source and verification receipts are preserved.
