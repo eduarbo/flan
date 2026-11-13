@@ -1720,7 +1720,7 @@
     },
     {
       "path": "viewer/template.html",
-      "sha256": "094451f2d7fe0dd608e80211e1a0c58b614eba008d673a9b39151af9742640c6"
+      "sha256": "862e57ce9fea4ce6b91f57f7f11f029596a4aa718e87cbc7e2d648c95053edd9"
     },
     {
       "path": "viewer/build.mjs",
@@ -1767,7 +1767,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "00b45610743583ddcc2b698efbf43ff754e1274c98e00e74ce5dc0a9dbef4696",
+  "viewer_sha256": "ea75e0d331108b17d995e62a09e7df6e04956d8a2be8fd52b4f4c526243a53d5",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -1786,8 +1786,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "e074113045970d6ac086567ab750a4a4e7a61c8021ff1713bf761e0f39f5bc06",
-    "bytes": 68146160
+    "sha256": "c08f1929e58569d85db36761aeff2b9299a4dcb43a3c19816fb1612a674f4f03",
+    "bytes": 68146184
   },
   "build_assets": {
     "LICENSE": {
@@ -2346,7 +2346,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "aea4bbfd27a2961532cde5ebf4d2b2e018537b971c76f3b8e6b58c965dbdae51",
+  "offline_sha256": "b0efb644c8677d0476e2025ce2c7af9772424122721352543371612c0c32a5f6",
   "printing": {
     "path": "docs/explore/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
@@ -2391,8 +2391,8 @@
     ]
   },
   "geometry_aliases": 18,
-  "online_bytes": 1071219,
-  "offline_bytes": 90628662,
+  "online_bytes": 1071375,
+  "offline_bytes": 90628818,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

@@ -1,15 +1,15 @@
 # Flan Keyboard
 
-> Flan is an open-source, low-profile wireless split keyboard that you build yourself: you order the PCBs, 3D-print the case and keycaps, solder the parts and flash the firmware. It comes in four sizes (36, 42, 46 or 54 keys) and is free to build, modify and sell under GPL-3.0-or-later. As of November 2026 it is a digital prototype: the design files pass their electrical and geometric checks, but no board has been built and tested yet.
+> Flan is an open-source, low-profile wireless split keyboard that you build yourself: you order the PCBs, 3D-print the case and keycaps, solder the parts and flash the firmware. It comes in four sizes (36, 42, 46 or 54 keys) and its files are free to build, modify and sell under GPL-3.0-or-later; the Flan name and logos are trademarks, and selling anything under them needs permission. As of November 2026 it is a digital prototype: the design files pass their electrical and geometric checks, but no board has been built and tested yet.
 
-Flan is designed by Eduardo Ruiz. The key positions of Flan36 follow Piantor by beekeeb; the wireless PCBs, cases, frames and firmware are original. Nothing is sold: there are no kits or assembled keyboards, only files and a parts list.
+Flan is designed by Eduardo Ruiz. The key positions of Flan36 follow Piantor by beekeeb, and the outer column of Flan42 and Flan54 comes from the Piantor sources; the wireless PCBs, cases, frames and firmware are original. Flan is not affiliated with beekeeb. Nothing is sold: there are no kits or assembled keyboards, only files and a parts list.
 
 Key facts:
 
 - Sizes: Flan36 (3 x 5 + 3 thumb keys per half), Flan42 (adds an outer pinky column), Flan46 (adds a number row), Flan54 (both).
 - Switches: Kailh Choc v1 low-profile, in hot-swap sockets.
 - Electronics: one nice!nano v2 controller per half, ZMK firmware with compiled UF2 files, Bluetooth Low Energy or USB, a nice!view display on each half (the right one is optional).
-- Case: 3D-printed in four styles (Level, Solid, Color rim, Terrace), with six interchangeable magnetic display frames (Talavera, Game Boy, SNES, 2000s Phone, iPod, Hanafuda).
+- Case: 3D-printed in four styles (Level, Solid, Color rim, Terrace), with six interchangeable magnetic display frames (Talavera, Game Boy, SNES, 2000s Phone, iPod, Hanafuda). Frame and theme names that refer to other products only describe a look; Flan is not affiliated with their owners.
 - Looks: 31 colour themes, per-key colours and printable KLP Lame keycaps.
 - Tools: a 3D explorer in the browser where you choose a design and get its shopping list, PCB files, print kit, firmware and build guide. Sources are KiCad and FreeCAD files.
 - Not measured yet: battery life, wireless reliability, printed fit, typing comfort.

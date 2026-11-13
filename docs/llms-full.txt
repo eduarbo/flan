@@ -10,7 +10,7 @@ This page is written for language models and search tools. It states facts from 
 - Low profile: Kailh Choc v1 switches in hot-swap sockets. The frame and the raised Level shell are nominally 14.50 mm tall, not counting feet and keycaps.
 - Wireless: one nice!nano v2 controller per half, running ZMK. It connects over Bluetooth Low Energy (five profiles in the default keymap) or USB.
 - Build it yourself: you order two PCBs, 3D-print the case, frames and keycaps, solder the parts and flash the firmware. There are no kits, no assembled keyboards and no official sellers yet.
-- Designed by Eduardo Ruiz. Flan36 keeps the 36 key positions and angles of Piantor by beekeeb; the wireless PCBs, case outline, cases, frames and firmware are original. Flan is not affiliated with beekeeb.
+- Designed by Eduardo Ruiz. Flan36 keeps the 36 key positions and angles of Piantor by beekeeb, and the outer column of Flan42 and Flan54 comes from the Piantor sources; the wireless PCBs, case outline, cases, frames and firmware are original. Flan is not affiliated with beekeeb.
 
 ## Sizes
 
@@ -78,4 +78,3 @@ GPL-3.0-or-later for the design files, with third-party terms in the attribution
 - Build guide: https://github.com/eduarbo/flan/blob/main/docs/build.md
 - Firmware: https://github.com/eduarbo/flan/blob/main/docs/firmware.md
 - Progress: https://github.com/eduarbo/flan/blob/main/docs/progress.md
-- Support the project: https://ko-fi.com/eduarbo
