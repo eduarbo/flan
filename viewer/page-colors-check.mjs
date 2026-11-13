@@ -1,5 +1,5 @@
-// The page a design paints must not hide its case, and its text must stay readable on it.
-// Every named theme, then a sweep of plain case colours from black to white. No browser needed:
+// The page a design paints must not hide its case, and its text must stay readable on it; a theme's frame
+// artwork must not vanish into the frame. Every named theme, then a sweep of plain case colours. No browser needed:
 // node viewer/page-colors-check.mjs
 // SPDX-License-Identifier: GPL-3.0-or-later
 import assert from 'node:assert/strict';
@@ -17,7 +17,9 @@ function check(theme,least){
  return Math.min(ratio(theme.base,k.bg0),ratio(theme.base,k.bg1));
 }
 const named=Math.min(...themes.map(t=>check(t,1.35)));
+// every inlay colour stands out from the frame body it is set into
+let inlay=Infinity;for(const t of themes)for(const role of ['detail','accent','secondary']){const r=ratio(t.frame[role],t.frame.body);assert(r>=1.5,`${t.id}: the frame's ${role} colour ${t.frame[role]} blends into its body ${t.frame.body} (${r.toFixed(2)}:1)`);inlay=Math.min(inlay,r);}
 let plain=Infinity;
 for(let v=0;v<=255;v+=3){const grey='#'+v.toString(16).padStart(2,'0').repeat(3);
  for(const accent of ['#c8402f','#2f6fc8','#8fd43a','#f2ead8','#20242c'])plain=Math.min(plain,check({base:grey,plate:'#2a2d33',frame:{body:grey,detail:'#2a2d33',accent,secondary:'#8a8f98'}},1.3));}
-console.log(`PASS: ${themes.length} themes keep the case at least ${named.toFixed(2)}:1 from the page, plain case colours at least ${plain.toFixed(2)}:1; text and accent stay readable`);
+console.log(`PASS: ${themes.length} themes keep the case at least ${named.toFixed(2)}:1 from the page, plain case colours at least ${plain.toFixed(2)}:1; text and accent stay readable; frame inlays at least ${inlay.toFixed(2)}:1 from the frame body`);

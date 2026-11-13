@@ -33,7 +33,7 @@
         "body": "#d2cec1",
         "detail": "#303738",
         "accent": "#e27136",
-        "secondary": "#f0e9d6"
+        "secondary": "#a9a391"
       },
       "keycaps": {
         "base": "#d2cec1",
@@ -54,7 +54,7 @@
         "body": "#eee5cd",
         "detail": "#315c4e",
         "accent": "#df7339",
-        "secondary": "#eee5cd"
+        "secondary": "#bfb69f"
       },
       "keycaps": {
         "base": "#eee5cd",
@@ -75,7 +75,7 @@
         "body": "#f0eadb",
         "detail": "#27282e",
         "accent": "#da453d",
-        "secondary": "#f0eadb"
+        "secondary": "#bfb9ab"
       },
       "keycaps": {
         "base": "#f0eadb",
@@ -180,7 +180,7 @@
         "body": "#263c55",
         "detail": "#b8bbb5",
         "accent": "#87ad67",
-        "secondary": "#455469"
+        "secondary": "#4a5a6f"
       },
       "keycaps": {
         "base": "#263c55",
@@ -222,7 +222,7 @@
         "body": "#f0eee5",
         "detail": "#656f79",
         "accent": "#afb4b1",
-        "secondary": "#d8d9d2"
+        "secondary": "#bdbeb7"
       },
       "keycaps": {
         "base": "#f0eee5",
@@ -262,7 +262,7 @@
         "body": "#d93957",
         "detail": "#161c25",
         "accent": "#f3deab",
-        "secondary": "#82918c"
+        "secondary": "#909f9a"
       },
       "keycaps": {
         "base": "#e9dfc6",
@@ -322,7 +322,7 @@
         "body": "#5b3f93",
         "detail": "#8fd43a",
         "accent": "#f28f1f",
-        "secondary": "#3b2f63"
+        "secondary": "#35285c"
       },
       "keycaps": {
         "base": "#5b3f93",
@@ -401,7 +401,7 @@
       "frame": {
         "body": "#d9e7e9",
         "detail": "#4a7d95",
-        "accent": "#f0c977",
+        "accent": "#d7b15f",
         "secondary": "#94b9c2"
       },
       "keycaps": {
@@ -442,7 +442,7 @@
         "body": "#447e90",
         "detail": "#b3d3cb",
         "accent": "#e7b976",
-        "secondary": "#427c7a"
+        "secondary": "#235f5d"
       },
       "keycaps": {
         "base": "#e7b976",
@@ -562,7 +562,7 @@
         "body": "#c9ab86",
         "detail": "#7a8873",
         "accent": "#c37753",
-        "secondary": "#dbc998"
+        "secondary": "#efddab"
       },
       "keycaps": {
         "base": "#c37753",
@@ -581,7 +581,7 @@
       "frame": {
         "body": "#aaa0ce",
         "detail": "#676093",
-        "accent": "#efbaad",
+        "accent": "#fdc7ba",
         "secondary": "#d5cfeb"
       },
       "keycaps": {
@@ -602,7 +602,7 @@
         "body": "#e2e3da",
         "detail": "#454b50",
         "accent": "#939e96",
-        "secondary": "#c4c5b9"
+        "secondary": "#b4b5a9"
       },
       "keycaps": {
         "base": "#939e96",
