@@ -21,7 +21,9 @@ export function createPreviewRenderer(renderer, geometryFor) {
     const right=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,0),up=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,1);
     let size=0;for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){const v=new THREE.Vector3(x,y,z).sub(center);size=Math.max(size,Math.abs(v.dot(right))/aspect,Math.abs(v.dot(up)));}
     size*=1.08;camera.left=-size*aspect;camera.right=size*aspect;camera.top=size;camera.bottom=-size;camera.near=.1;camera.far=1000;camera.updateProjectionMatrix();
-    renderer.render(scene,camera);const src=renderer.domElement.toDataURL('image/png');scene.remove(group);return src;
+    // the main view's tone curve does not apply here: thumbnails keep their plain colours
+    const tone=renderer.toneMapping;renderer.toneMapping=THREE.NoToneMapping;
+    renderer.render(scene,camera);const src=renderer.domElement.toDataURL('image/png');renderer.toneMapping=tone;scene.remove(group);return src;
   }
   return {image,finish(){renderer.setPixelRatio(pixelRatio);mat.dispose();}};
 }

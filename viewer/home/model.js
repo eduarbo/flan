@@ -81,10 +81,11 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
     const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(new RoomEnvironment(),.04).texture;scene.environmentIntensity=.42;pmrem.dispose();
     scene.traverse(o=>{if(o.isLight)o.intensity*=o.isHemisphereLight?.12:.16;});
     const small=matchMedia('(max-width: 760px), (pointer: coarse)').matches;
-    // a key lamp, and a broad one straight above whose very soft shadow darkens the gaps between keys
-    for(const [x,z,power,radius,size,normal] of [[-170,230,3.1,5,small?2048:4096,1.4],[-12,18,1.5,14,small?1024:2048,2]]){
+    // a key lamp, and a second one almost straight above whose shadow darkens the gaps between keys. This page
+    // keeps moving, so both shadow maps are drawn every frame: they are half the explorer's size.
+    for(const [x,z,power,size,normal] of [[-170,230,3.1,small?1024:2048,1.4],[-12,18,1.5,small?512:1024,2]]){
       const lamp=new THREE.DirectionalLight('#ffffff',power);lamp.position.set(x,340,z);lamp.castShadow=true;
-      lamp.shadow.mapSize.set(size,size);lamp.shadow.radius=radius;lamp.shadow.blurSamples=16;lamp.shadow.bias=-.0006;lamp.shadow.normalBias=normal;
+      lamp.shadow.mapSize.set(size,size);lamp.shadow.bias=-.0006;lamp.shadow.normalBias=normal;
       Object.assign(lamp.shadow.camera,{left:-300,right:300,top:300,bottom:-300,near:10,far:1400});lamp.shadow.camera.updateProjectionMatrix();scene.add(lamp);
     }
   }

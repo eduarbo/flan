@@ -1,4 +1,5 @@
-// The explorer's look: image-based light from a procedural room, soft shadows that the parts cast on each
+// The explorer's look: image-based light from a procedural room, soft-edged shadows (percentage-closer
+// filtering; its softness is fixed, so no radius is set) that the parts cast on each
 // other and on the floor, a neutral tone curve that keeps theme colours true, and a surface per kind of
 // part. Shadows are what keep parts of one colour apart. ?render=flat opens the earlier, evenly lit look.
 // Exports are untouched: plain() gives a copy its plain materials back.
@@ -25,17 +26,18 @@ export function createStudio({renderer,scene,objects,ground}){
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   const pmrem=new THREE.PMREMGenerator(renderer);
   scene.environment=pmrem.fromScene(new RoomEnvironment(),.04).texture;scene.environmentIntensity=.42;pmrem.dispose();
-  // the room now gives the ambient light: the existing lamps become fills
-  scene.traverse(o=>{if(o.isLight)o.intensity*=o.isHemisphereLight?.12:.16;});
+  // the room now gives the ambient light: the existing lamps become fills. The one from below stays strong:
+  // the room is dark underneath, and that lamp is what keeps the PCB's mask colour true in the Bottom view.
+  scene.traverse(o=>{if(o.isLight)o.intensity*=o.isHemisphereLight?.12:o.position.y<0?.85:.16;});
   // phones and tablets get smaller shadow maps
   const small=matchMedia('(max-width: 760px), (pointer: coarse)').matches;
   const key=new THREE.DirectionalLight('#ffffff',3.1);key.castShadow=true;
-  key.shadow.mapSize.set(small?2048:4096,small?2048:4096);key.shadow.radius=5;key.shadow.blurSamples=16;key.shadow.bias=-.0006;key.shadow.normalBias=1.4;
+  key.shadow.mapSize.set(small?2048:4096,small?2048:4096);key.shadow.bias=-.0006;key.shadow.normalBias=1.4;
   Object.assign(key.shadow.camera,{left:-330,right:330,top:330,bottom:-330,near:10,far:1400});key.shadow.camera.updateProjectionMatrix();
   scene.add(key,key.target);
-  // a broad lamp straight above: its very soft shadow darkens the gaps between keys, as occlusion would
+  // a second lamp almost straight above: its shadow darkens the gaps between keys, a little like occlusion
   const sky=new THREE.DirectionalLight('#ffffff',1.5);sky.castShadow=true;
-  sky.shadow.mapSize.set(small?1024:2048,small?1024:2048);sky.shadow.radius=14;sky.shadow.blurSamples=24;sky.shadow.bias=-.0008;sky.shadow.normalBias=2;
+  sky.shadow.mapSize.set(small?1024:2048,small?1024:2048);sky.shadow.bias=-.0008;sky.shadow.normalBias=2;
   Object.assign(sky.shadow.camera,{left:-330,right:330,top:330,bottom:-330,near:10,far:1400});sky.shadow.camera.updateProjectionMatrix();
   scene.add(sky,sky.target);
   // the drawn contact shadow gives way to a real one on an invisible floor
