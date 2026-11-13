@@ -244,6 +244,9 @@ export function createModel({canvas,frame:area=canvas,packs,fetched={},onChange=
     state.amp+=(want-state.amp)*Math.min(1,dt*1.2);
     if(state.amp>.001){state.phase+=dt;turntable.rotation.y=state.amp*.12*Math.sin(state.phase*TAU/11);turntable.position.y=state.amp*1.6*Math.sin(state.phase*TAU/7);moving=true;}
     if(tweens.length){const t=Math.min(1,(now-tweenStart)/600),e=1-Math.pow(1-t,3);for(const x of tweens)x.m.color.copy(x.from).lerp(x.to,e);if(t>=1)tweens=[];moving=true;}
+    // The controls ease by a share of what is left per frame: 8 % at 60 frames a second. Scaled by the time each frame
+    // took, the model follows a finger and comes to rest in the same time on a phone that draws fewer frames.
+    controls.dampingFactor=1-Math.pow(.92,dt*60);
     if(controls.update())moving=true;
     // the standby motion alone draws every other frame; the intro, a drag and colour changes draw them all
     const full=needs||state.intro||state.interacting||tweens.length>0||Math.abs(state.target-state.explode)>.0005;
@@ -266,7 +269,28 @@ export function createModel({canvas,frame:area=canvas,packs,fetched={},onChange=
   controls.addEventListener('end',()=>{state.interacting=false;state.idle=0;render();});
   controls.addEventListener('change',render);
   // zoom only on a pinch or ⌘/Ctrl + scroll, so the page still scrolls
-  canvas.addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKey))return;e.preventDefault();zoom=THREE.MathUtils.clamp(zoom*Math.exp(-e.deltaY*.01),.8,3.6);frame();state.idle=0;render();},{passive:false});
+  // on the phone layout the model stops short of the options under it; elsewhere it has the rail beside it
+  const phone=matchMedia('(max-width: 720px)');
+  const zoomTo=value=>{zoom=THREE.MathUtils.clamp(value,.8,phone.matches?2.5:3.6);frame();state.idle=0;render();};
+  canvas.addEventListener('wheel',e=>{if(!(e.ctrlKey||e.metaKey))return;e.preventDefault();zoomTo(zoom*Math.exp(-e.deltaY*.01));},{passive:false});
+  // A touch screen sends no wheel: two fingers on the model pinch its zoom. While two or more are down the gesture is
+  // the model's alone, so the page neither scrolls nor zooms under it; and it does not turn the model, which the
+  // controls would otherwise swing to the fingers' midpoint. The finger that stays down afterwards goes on turning it.
+  controls.touches.TWO=null;
+  let pinch=null;
+  const spread=e=>Math.max(1,Math.hypot(e.targetTouches[0].clientX-e.targetTouches[1].clientX,e.targetTouches[0].clientY-e.targetTouches[1].clientY));
+  // A page already scrolling under the fingers cannot be held still: that gesture stays the page's.
+  function hold(e){
+    if(!e.cancelable){pinch=null;return;}
+    e.preventDefault();if(pinch&&e.targetTouches.length===2)zoomTo(pinch.zoom*spread(e)/pinch.spread);
+  }
+  // Counting fingers never blocks: a swipe that scrolls the page does not wait for this script. The listener that
+  // holds the page is there only while two or more fingers are down, and each change of fingers takes a new measure.
+  function fingers(e){
+    const down=state.ready?e.targetTouches.length:0;pinch=down===2?{spread:spread(e),zoom}:null;
+    if(down>=2)canvas.addEventListener('touchmove',hold,{passive:false});else canvas.removeEventListener('touchmove',hold);
+  }
+  for(const type of ['touchstart','touchend','touchcancel'])canvas.addEventListener(type,fingers,{passive:true});
   const resizer=new ResizeObserver(resize);resizer.observe(canvas);if(area!==canvas)resizer.observe(area);
   // nothing to draw while the hero is scrolled away
   // scrolled away mid-intro: finish it at once, so nothing waits on motion no one sees
@@ -388,7 +412,7 @@ export function createModel({canvas,frame:area=canvas,packs,fetched={},onChange=
       if(busy)setTimeout(()=>check(resolve),120);else if(window.requestIdleCallback)requestIdleCallback(()=>resolve(),{timeout:400});else setTimeout(resolve,30);
     });
   }
-  if(new URLSearchParams(location.search).has('diagnostics'))window.flanHome={info:()=>({...renderer.info.render,ratio:quality.ratio,software,look:state.look})};
+  if(new URLSearchParams(location.search).has('diagnostics'))window.flanHome={info:()=>({...renderer.info.render,ratio:quality.ratio,software,look:state.look,view:{azimuth:controls.getAzimuthalAngle(),polar:controls.getPolarAngle(),zoom}})};
   return {
     init,apply,resize,resetView,preview,load,quiet,
     // true once the first look is on the canvas: previews and pictures can be drawn

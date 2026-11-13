@@ -70,6 +70,8 @@ h1 { margin: 8px 0 0; font-size: clamp(48px, 5.2vw, 78px); line-height: 1; lette
   background: color-mix(in srgb, var(--on) 62%, transparent); }
 .chip svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .chip.icon { width: 34px; padding: 0; justify-content: center; }
+/* the bar's hint is read, not pressed: a drag that starts on it turns the model under it; its buttons still take a press */
+.stagebar { pointer-events: none; } .stagebar button { pointer-events: auto; }
 #standby svg { fill: currentColor; stroke: none; } #standby .play, #standby[aria-pressed=false] .pause { display: none; } #standby[aria-pressed=false] .play { display: block; }
 .preview-tag { z-index: 2; position: absolute; left: 50%; top: 4px; transform: translateX(-50%); background: var(--ink); color: var(--bg0); white-space: nowrap; }
 

@@ -89,7 +89,9 @@ const root=path.resolve(__dirname,'..'),shots=path.join(root,'build/home-check')
   const bare=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});await bare.route('**/home-engine-*.js',r=>r.abort());
   await bare.goto(base,{timeout:120000});await bare.waitForSelector('#note:not([hidden])',{timeout:60000});
   const page0=()=>bare.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--bg1').trim());const bg=await page0();await bare.click('#o-theme [data-value=gameboy]');
-  out.bare={note:await bare.textContent('#note'),live:await bare.evaluate(()=>document.getElementById('stage').classList.contains('live')),poster:await bare.evaluate(()=>getComputedStyle(document.getElementById('poster')).opacity),recoloured:(await page0())!==bg};
+  // the page eases to the theme's colours: wait for them to move rather than read the same instant
+  const recoloured=await bare.waitForFunction(old=>getComputedStyle(document.documentElement).getPropertyValue('--bg1').trim()!==old,bg,{timeout:10000}).then(()=>true,()=>false);
+  out.bare={note:await bare.textContent('#note'),live:await bare.evaluate(()=>document.getElementById('stage').classList.contains('live')),poster:await bare.evaluate(()=>getComputedStyle(document.getElementById('poster')).opacity),recoloured};
   assert.deepEqual(out.bare,{note:'The 3D model could not load. Check the connection and reload.',live:false,poster:'1',recoloured:true});await bare.close();
   // tablet: the rail moves below the model; Spanish; reduced motion skips the intro and the standby
   const tablet=await browser.newPage({viewport:{width:1024,height:900},reducedMotion:'reduce'});watch(tablet,'tablet');

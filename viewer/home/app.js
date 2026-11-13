@@ -272,6 +272,12 @@ function translate(){
   syncRail();if(!$('browser').hidden)focusFrame(browsing.focus);
 }
 function failed(error){console.error(error);const n=$('note');n.hidden=false;n.textContent=t('stage.failed');}
+// A page kept from before a later publication asks for an engine or meshes that are no longer there. Online, it
+// reloads once per tab for the current page, as the explorer does; after that, or offline, it says so.
+function stale(error){
+  try{if(navigator.onLine!==false&&!sessionStorage.getItem('flan.home.retry')){sessionStorage.setItem('flan.home.retry','1');location.reload();return;}}catch{}
+  failed(error);
+}
 
 lang=store.get('flan.lang')==='es'?'es':'en';
 buildRail();buildSpecs();paint();translate();reveal();opened=true;
@@ -316,9 +322,10 @@ async function start(){
   await model.init(look,theme());
   $('stage').classList.add('live');$('hero').classList.add('live');if(!model.intro())showSlider(model.explode);renderPreviews();
   $('standby').setAttribute('aria-pressed',String(model.standby));translate();
+  try{sessionStorage.removeItem('flan.home.retry');}catch{}
 }
 const probe=document.createElement('canvas');
 if(!(probe.getContext('webgl2')||probe.getContext('webgl'))){$('note').hidden=false;$('note').textContent=t('stage.nogl');$('layers').hidden=true;document.querySelector('.stagebar').hidden=true;}
-else start().catch(failed);
+else start().catch(stale);
 $('standby').addEventListener('click',()=>{if(!model)return;model.setStandby(!model.standby);$('standby').setAttribute('aria-pressed',String(model.standby));$('standby').title=model.standby?t('stage.pause'):t('stage.play');});
 $('reset').addEventListener('click',()=>model?.resetView());
