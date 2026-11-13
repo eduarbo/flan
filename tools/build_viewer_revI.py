@@ -310,17 +310,18 @@ for ident,profile in fastener_profiles['profiles'].items():
     if 'meshes' not in profile:continue
     receipt=json.loads((ROOT/profile['receipt']).read_text());folder=profile['meshes']
     assert receipt['spec']['sha256']==digest(profile['spec']),(ident,'specification changed after its receipt')
+    assert receipt['native']['source_sha256']==digest('mechanical/revI/Flan36.FCStd'),(ident,'default CAD changed after the profile was exported; install and adopt it again')
     def native(path):
         """The profile's export of a default file, or that file where the profile leaves it unchanged."""
         candidate=f'{folder}/{Path(path).name}'
         if candidate in receipt['files']:
             assert digest(candidate)==receipt['files'][candidate],(candidate,'stale profile mesh')
             scene['sources'].append({'path':candidate,'sha256':digest(candidate)});return candidate
-        assert Path(path).stem in receipt['unchanged'],(path,'not covered by the profile receipt')
+        assert receipt['unchanged'].get(Path(path).stem)==digest(path),(path,'not covered by the profile receipt')
         return path
     packed=lambda path:{'path':path,'sha256':digest(path),'stl':base64.b64encode((ROOT/path).read_bytes()).decode()}
     entry={'id':ident,'variants':profile['variants'],'spec':json.loads((ROOT/profile['spec']).read_text()),
-           'joining_case':profile['joining_case'],'printing':{}}
+           'joining_case':profile['joining_case'],'long_head_gap_mm':receipt['long_heads']['gap_mm'],'printing':{}}
     for name,asset in printing['assets'].items():
         if not (name.endswith('-plate') or '-frame-' in name):continue
         path=native(asset['path']);assert path!=asset['path'],(name,'the profile does not change this printable')

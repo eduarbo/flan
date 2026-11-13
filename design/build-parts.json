@@ -257,8 +257,8 @@
       "fasteners": "common-m2",
       "url": "https://boltdepot.com/Product-Details?product=6363",
       "note": {
-        "en": "DIN 912 / ISO 4762, pitch 0.4 mm, stainless; head up to Ø4 × 2 mm, 1.5 mm hex key. Any M2 × 6 machine screw within that head size works.",
-        "es": "DIN 912 / ISO 4762, paso 0.4 mm, inoxidable; cabeza de hasta Ø4 × 2 mm, llave Allen de 1.5 mm. Sirve cualquier tornillo de máquina M2 × 6 con esa cabeza."
+        "en": "DIN 912 / ISO 4762, pitch 0.4 mm, stainless; head up to Ø4 × 2 mm, 1.5 mm hex key. The variant is modeled for any M2 × 6 machine screw within that head size; printed fit is untested.",
+        "es": "DIN 912 / ISO 4762, paso 0.4 mm, inoxidable; cabeza de hasta Ø4 × 2 mm, llave Allen de 1.5 mm. La variante está modelada para cualquier tornillo de máquina M2 × 6 con esa cabeza; el ajuste impreso no está probado."
       }
     },
     {

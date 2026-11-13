@@ -1597,7 +1597,7 @@
     },
     {
       "path": "validation/revI-common-fasteners.json",
-      "sha256": "bc1b6c6f415b1b4ab1e14ccd6648c88fb772b3e9385137103a1fde8c1ca9940a"
+      "sha256": "ec8b28074a5805122f79ec9248092e503ab3b21937746b87065cda6c1522f4ca"
     },
     {
       "path": "design/revI.json",
@@ -1613,7 +1613,7 @@
     },
     {
       "path": "tools/build_viewer_revI.py",
-      "sha256": "edf10d913f22fe625f98261fe8f93c6ac99fd68c29f466813d1b6d78c1d37905"
+      "sha256": "3f10e4bce9f7a0047e720c413611a2a3f2086905bd48e473000f0921b38fedd3"
     },
     {
       "path": "tools/viewer_frame_selection.py",

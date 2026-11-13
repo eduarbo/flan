@@ -85,6 +85,7 @@ async function loadVariant(id){
 // Optional screw profiles: the same plates and frames with other head pockets. Their exact STLs load on demand,
 // like a variant's; the design shows and prints them once they arrive.
 const fastenerProfiles=data.fasteners?.profiles||{},fastenerLoads=new Map();
+let fastenerFailure=null;   // a profile whose files did not arrive; its note says so until a retry succeeds
 const shownFasteners=config=>config.fasteners&&fastenerProfiles[config.fasteners]?.loaded?config.fasteners:null;
 // A frame renders from its native material volumes, one group per role, as the scene builder packs them.
 function stlMaterialGeometry(parts){
@@ -523,7 +524,7 @@ $('download-build').onclick=async()=>{
   const result=await completeBuild({configuration:selected,assets:__FLAN_BUILD_ASSETS__,editions:data.silkscreen.editions,catalog,signal:buildController.signal,
    print:(c,options)=>makePrintKit(c,{...options,strict:true}),guide,csv:snapshot.csv,
    progress:(phase,i,n)=>{$('build-export-status').textContent=t('build.progress.'+phase,{i:i||0,n:n||0});}});
-  const url=URL.createObjectURL(new Blob([result.bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=family[selected.variant].title+'-complete-build.zip';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
+  const url=URL.createObjectURL(new Blob([result.bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=family[selected.variant].title+(selected.fasteners?'-'+selected.fasteners:'')+'-complete-build.zip';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
   $('build-export-status').textContent=t('build.ready',{name:family[selected.variant].title});
  }catch(e){const cancelled=buildController.signal.aborted;buildController.abort();$('build-export-status').textContent=t(cancelled?'build.cancelled':'build.failed',{error:e.message});}
  finally{buildBusy=false;buildController=null;button.disabled=false;delete button.dataset.busy;$('build-cancel').hidden=true;syncBuildAvailability();}
@@ -594,7 +595,7 @@ function applyConfiguration(next,{record=true,persist=true}={}){
   if(record)history.record(next,gesture);syncHistory();
   if(persist){message(t('msg.saving'));if(!saveWarnings.has('configuration'))saveState('save.saving','saving');store.save(configuration);}
   // A design that names a variant or a screw profile not loaded yet (a loaded file, undo, a link) shows it once it arrives.
-  if(next.fasteners&&!hardware)loadFasteners(next.fasteners).then(()=>{if(configuration.fasteners===next.fasteners)applyConfiguration(copy(configuration),{record:false,persist:false});}).catch(e=>message(e.message,true));
+  if(next.fasteners&&!hardware)loadFasteners(next.fasteners).then(()=>{fastenerFailure=null;if(configuration.fasteners===next.fasteners)applyConfiguration(copy(configuration),{record:false,persist:false});}).catch(e=>{fastenerFailure=next.fasteners;message(e.message,true);syncConfigurationUI();});
   if(shownVariant(next)!==next.variant&&builtVariant(next.variant))loadVariant(next.variant).then(()=>{if(configuration.variant===next.variant){applyConfiguration(copy(configuration),{record:false,persist:false});fit();}}).catch(e=>message(e.message,true));
 }
 function syncHistory(){$('undo').disabled=!history.canUndo;$('redo').disabled=!history.canRedo;}
@@ -687,7 +688,12 @@ function reversedTiltedRows(){return Object.entries(catalog.layout).flatMap(([si
 rowRepair.onclick=()=>{const cfg=copy(configuration);for(const [side,ref] of reversedTiltedRows())cfg.keycaps[side][ref].rotation_deg=(cfg.keycaps[side][ref].rotation_deg+180)%360;try{applyConfiguration(cfg);message(t('keys.fixed'));}catch(e){message(e.message,true);}};
 for(const [id,spec] of Object.entries(catalog.battery_profiles)){const b=document.createElement('button');b.type='button';b.dataset.battery=id;b.textContent=spec.label;b.title=`${spec.width} × ${spec.length} × ${spec.height} mm`;b.onclick=()=>{const c=copy(configuration);for(const side of batterySide==='both'?['left','right']:[batterySide])c.batteries[side]=id;applyConfiguration(c);};$('battery-options').append(b);}
 for(const b of $('battery-target').children)b.onclick=()=>{batterySide=b.dataset.side;syncConfigurationUI();};
-for(const b of $('fastener-options').children)b.onclick=()=>{const c=copy(configuration);if(b.dataset.value===defaultFasteners)delete c.fasteners;else c.fasteners=b.dataset.value;try{applyConfiguration(c);}catch(e){message(e.message,true);}};
+for(const b of $('fastener-options').children)b.onclick=()=>{
+  const id=b.dataset.value;
+  // choosing again a profile whose files did not arrive retries the download without a new undo step
+  if(id===configuration.fasteners&&!fastenerProfiles[id]?.loaded){fastenerFailure=null;applyConfiguration(copy(configuration),{record:false,persist:false});return;}
+  const c=copy(configuration);if(id===defaultFasteners)delete c.fasteners;else c.fasteners=id;try{applyConfiguration(c);}catch(e){message(e.message,true);}
+};
 // Each half's back silkscreen comes from its matching committed Gerber
 // packages; the online viewer downloads them the first time the underside is shown.
 const silk=data.silkscreen,loadSilk=printLoader(silk.textures,$('silk-data'),undefined,'silk'),silkOverlays=[],silkTextures=new Map();
@@ -805,7 +811,11 @@ function syncConfigurationUI(){
   $('build-pcb-downloads').replaceChildren(...[...$('pcb-downloads').children].map(a=>a.cloneNode(true)));
   const screws=fastenersOf(configuration),screwChoice=fastenersFit('common-m2',variant);
   for(const b of $('fastener-options').children){b.setAttribute('aria-pressed',String(b.dataset.value===screws));b.disabled=!fastenersFit(b.dataset.value,variant);}
-  $('fasteners-note').textContent=t(screwChoice?'fasteners.note.'+screws:'fasteners.note.size',{name:sizeInfo.title});
+  // The profile's receipt records how close a plate wall comes to a long screw's head; say so for the chosen cases.
+  const gaps=['left','right'].flatMap(side=>Object.values(fastenerProfiles[screws]?.long_head_gap_mm?.[configuration.cases[side].style]||{})).filter(g=>g!==null),tight=gaps.length?Math.min(...gaps):Infinity;
+  const failed=Boolean(configuration.fasteners)&&fastenerFailure===configuration.fasteners&&!fastenerProfiles[screws]?.loaded;
+  $('fasteners-note').textContent=failed?t('msg.fasteners')+' '+t('fasteners.note.retry'):t(screwChoice?'fasteners.note.'+screws:'fasteners.note.size',{name:sizeInfo.title})+(tight<.3?' '+t('fasteners.note.tight',{gap:tight.toFixed(2)}):'');
+  $('fasteners-note').dataset.error=String(failed);
   buildGuide.update(configuration);
   showSilk();
   for(const b of $('battery-target').children)b.setAttribute('aria-pressed',String(b.dataset.side===batterySide));
@@ -1032,7 +1042,7 @@ openBuildStep(location.hash.slice(1));
 window.addEventListener('hashchange',()=>openBuildStep(location.hash.slice(1)));
 portraitLayout.addEventListener('change',()=>{showWorkspace();if(activeMode==='customize')revealPanel(activePanel);});
 // ground(false) hides the contact shadow so checks and captures measure only the model.
-if(new URLSearchParams(location.search).has('diagnostics'))window.flan36=Object.freeze({snapshot:()=>({configuration:copy(configuration),fasteners:{shown:shownFasteners(configuration)||defaultFasteners,meshes:Object.fromEntries(objects.filter(o=>o.userData.mesh_source&&(o.userData.group==='plate'||o.userData.group==='lid')).map(o=>[o.userData.side+'-'+o.userData.group,o.userData.mesh_source]))},pcb:Object.fromEntries(objects.filter(o=>o.userData.part_id===o.userData.side+'-pcb').map(o=>[o.userData.side,{mask:o.userData.pcb_mask,color:o.material.color.getHexString()}])),silkscreen:Object.fromEntries(silkOverlays.map(o=>[o.userData.silkscreen,{visible:o.visible,ink:o.material.color.getHexString(),texture:[...silkTextures].find(([,texture])=>texture===o.material.alphaMap)?.[0]}])),view:copy(state),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:controls.target.toArray(),zoom:camera.zoom,halfHeight},hidden:[...hiddenObjects],selected:copy(explorer.selected),visible:objects.filter(o=>o.visible).map(o=>o.userData.objectIndex),undo:history.canUndo,redo:history.canRedo}),idle:()=>Promise.all([store.idle(),keycapColors.idle()]),ground:shown=>{ground.enabled=shown;sync();}});
+if(new URLSearchParams(location.search).has('diagnostics'))window.flan36=Object.freeze({snapshot:()=>({configuration:copy(configuration),fasteners:{shown:shownFasteners(configuration)||defaultFasteners,failed:fastenerFailure,meshes:Object.fromEntries(objects.filter(o=>o.userData.mesh_source&&(o.userData.group==='plate'||o.userData.group==='lid')).map(o=>[o.userData.side+'-'+o.userData.group,{source:o.userData.mesh_source,triangles:(o.geometry.index?o.geometry.index.count:o.geometry.attributes.position.count)/3}]))},pcb:Object.fromEntries(objects.filter(o=>o.userData.part_id===o.userData.side+'-pcb').map(o=>[o.userData.side,{mask:o.userData.pcb_mask,color:o.material.color.getHexString()}])),silkscreen:Object.fromEntries(silkOverlays.map(o=>[o.userData.silkscreen,{visible:o.visible,ink:o.material.color.getHexString(),texture:[...silkTextures].find(([,texture])=>texture===o.material.alphaMap)?.[0]}])),view:copy(state),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:controls.target.toArray(),zoom:camera.zoom,halfHeight},hidden:[...hiddenObjects],selected:copy(explorer.selected),visible:objects.filter(o=>o.visible).map(o=>o.userData.objectIndex),undo:history.canUndo,redo:history.canRedo}),idle:()=>Promise.all([store.idle(),keycapColors.idle()]),ground:shown=>{ground.enabled=shown;sync();}});
 
 
 }

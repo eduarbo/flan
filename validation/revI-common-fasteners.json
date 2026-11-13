@@ -176,6 +176,35 @@
       "mount": "H2"
     }
   },
+  "long_heads": {
+    "scope": "Horizontal gap in mm between the head envelope on its plate seat and the plate, from seat to head top, smaller of both halves; null means no wall within 6 mm. Not enforced: a printed fit can differ.",
+    "head_mm": {
+      "diameter": 4.0,
+      "height": 2.0
+    },
+    "gap_mm": {
+      "solid": {
+        "H1": null,
+        "H2": null,
+        "H3": null
+      },
+      "rim": {
+        "H1": null,
+        "H2": null,
+        "H3": null
+      },
+      "terrace": {
+        "H1": null,
+        "H2": null,
+        "H3": null
+      },
+      "level": {
+        "H1": null,
+        "H2": null,
+        "H3": 0.099
+      }
+    }
+  },
   "driver_access": {
     "solid": {
       "passed": true,
@@ -244,42 +273,42 @@
     "mechanical/revI/common-m2/right-frame-talavera-body.stl": "4be6baaeca227b9dbf722cdcd5d6088d29028a51496dcf4de2222444bc44a27c",
     "mechanical/revI/common-m2/right-frame-talavera.stl": "97b82223adf7bbc04c0be96d9683480585af61ce65cfdc952b2bf589200502a7"
   },
-  "unchanged": [
-    "left-frame-gameboy-accent",
-    "left-frame-gameboy-detail",
-    "left-frame-gameboy-secondary",
-    "left-frame-hanafuda-accent",
-    "left-frame-hanafuda-detail",
-    "left-frame-hanafuda-secondary",
-    "left-frame-ipod-accent",
-    "left-frame-ipod-detail",
-    "left-frame-ipod-secondary",
-    "left-frame-phone-accent",
-    "left-frame-phone-detail",
-    "left-frame-phone-secondary",
-    "left-frame-snes-accent",
-    "left-frame-snes-detail",
-    "left-frame-snes-secondary",
-    "left-frame-talavera-accent",
-    "left-frame-talavera-detail",
-    "left-frame-talavera-secondary",
-    "right-frame-gameboy-accent",
-    "right-frame-gameboy-detail",
-    "right-frame-gameboy-secondary",
-    "right-frame-hanafuda-accent",
-    "right-frame-hanafuda-detail",
-    "right-frame-hanafuda-secondary",
-    "right-frame-ipod-accent",
-    "right-frame-ipod-detail",
-    "right-frame-ipod-secondary",
-    "right-frame-phone-accent",
-    "right-frame-phone-detail",
-    "right-frame-phone-secondary",
-    "right-frame-snes-accent",
-    "right-frame-snes-detail",
-    "right-frame-snes-secondary",
-    "right-frame-talavera-accent",
-    "right-frame-talavera-detail",
-    "right-frame-talavera-secondary"
-  ]
+  "unchanged": {
+    "left-frame-gameboy-accent": "15640570b996a7e673b787c2fc4c131c7401d9221bb76aef407120f4065e776b",
+    "left-frame-gameboy-detail": "2df129d3fead516e42292a5bd79ed9a07e53f8ee6ebf8619f04e48e4368b2757",
+    "left-frame-gameboy-secondary": "babdb9ccff747ab0d77baf4fb0cafca694b0d42423d017a4749a9387ef89d392",
+    "left-frame-hanafuda-accent": "8b0402c97dc83d3e0ce0a311f33f54505d89f71233e66114ece5f6ddcc87a908",
+    "left-frame-hanafuda-detail": "32917da6cf3f196c990e98ccdad6cf7589b16d9534aa198ebb3696b617f199e7",
+    "left-frame-hanafuda-secondary": "863c230f32cc46605eeb528a6a9484c1bbc1263b8feedc82432fdca4c8117b60",
+    "left-frame-ipod-accent": "bea589cba838a16cc85959ef46cc4164f62a0c286445ad2fe3f8a14d43791f48",
+    "left-frame-ipod-detail": "68b106273382d5fed6ddbf90a5bbab4af97130ff6dbc0b22c13ee4800ff7bfc1",
+    "left-frame-ipod-secondary": "aa7408a8f1f24644cae8409dfcfa6d7288462eaf540cc41068874e821f2f9462",
+    "left-frame-phone-accent": "e9ed2f9db22ba16af4f5a0840f0ed077a581990fca82fd17e882ed70d9032685",
+    "left-frame-phone-detail": "cb44a3fc338f8868f692a18f7c0534e9212c31f107397f07e9cdb73e223cb24e",
+    "left-frame-phone-secondary": "98ce730de3a922edd0eb748f38431baa26f0f1ec446b212824abeb581e493af0",
+    "left-frame-snes-accent": "178e333aa823be417b293f6f5390fcc0b620540f73ee20ff28ff2cbe9f2b1135",
+    "left-frame-snes-detail": "234dbdc7a0f6525a20769fbe2d5ed869220c12141d1cf7856d3321a828479124",
+    "left-frame-snes-secondary": "2eea909a3ed31699a4cde7504eebfd204249f5add15b3e7b39d660749600ccb7",
+    "left-frame-talavera-accent": "e7a14662ffc054589844b8afb7d7929e74f77111ab069c556928f0f2a4bafa4a",
+    "left-frame-talavera-detail": "68b106273382d5fed6ddbf90a5bbab4af97130ff6dbc0b22c13ee4800ff7bfc1",
+    "left-frame-talavera-secondary": "a9e6edb2c3c78c11bdd9998bffef876e7c6313395fa628cabe11f50be9c6297b",
+    "right-frame-gameboy-accent": "50f71fd84e2a9233f57e7fe9ffcf3cf5591caac8fe216b345760453dbcd1c0ad",
+    "right-frame-gameboy-detail": "4652731b85874d1551b90da990ffad777512fe2f8b350012c1e5ea69ecbdccfe",
+    "right-frame-gameboy-secondary": "aa53cafe2fe7b371eea4c49a341d34d3b82a507cc32ddd0f3b2b91019346f1c4",
+    "right-frame-hanafuda-accent": "45837c41f523e5bbb1597ff865ff99f873cc3160643e84e69c62f4f49a4ec0f2",
+    "right-frame-hanafuda-detail": "3bf05c44a796458c5cf8c04e87c04d0dcddbf880d403b8d386e0a661e007eceb",
+    "right-frame-hanafuda-secondary": "3b3cb489ff3e742a6e9eb28d1883c302bd5dc861fdfc39d70085582e56f69e33",
+    "right-frame-ipod-accent": "286b6c27494d874a1ca36be927f814e02810978efab1ac4334ba13be6157c91b",
+    "right-frame-ipod-detail": "065d427d848c1efe55826d48b45232e6724f04e0e0b70633122699e1930859ff",
+    "right-frame-ipod-secondary": "9bec3f0e0bdf5098a644a72b8ea2a9ab2ef179b403f8614029cc17dfb5b5abb1",
+    "right-frame-phone-accent": "c2a75cce8f73a0c22f16add540049f060dde425f1a449bb4126f3df88bba6a97",
+    "right-frame-phone-detail": "1e34fea4244a859e3fdc5b50b4b7f3cc667b97856a0792e9092b39541b62c7c6",
+    "right-frame-phone-secondary": "6093e4896f624a9c58e5f7319ef017061350a0675015f3271113af7e3ba979d4",
+    "right-frame-snes-accent": "eb03cb91d21e23e9b6baad0267bf0903355bcd54ddf0d34d42f5eda7568d227e",
+    "right-frame-snes-detail": "ee9561b82b1f948f17f6da0bdf2167da463a1110a5d9b1badc59dbd5660b4317",
+    "right-frame-snes-secondary": "f5724455badad27e17e232231756b7be2dac834dc4bdac60388d46b7a7cf6706",
+    "right-frame-talavera-accent": "2cfebb803a4e59daa20f701038c86ef09ba7c51970e70c27aa133a1c8530a2ae",
+    "right-frame-talavera-detail": "065d427d848c1efe55826d48b45232e6724f04e0e0b70633122699e1930859ff",
+    "right-frame-talavera-secondary": "145119dc1a47685375b1a5ef066a7618e3e53308a5276bdcd36c3c8e5f8aae48"
+  }
 }
