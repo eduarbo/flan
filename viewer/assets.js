@@ -14,15 +14,26 @@ export async function unpackVariant(bytes){
  header.meshes=Object.fromEntries(Object.entries(header.meshes).map(([path,i])=>[path,blob(i)]));
  return header;
 }
-// kind names the payload in its messages: print files or silkscreen textures
+// A hashed file's bytes, checked against its hash. arrived(n) is told of each piece as it lands.
+// kind names the payload in its messages: the scene, its meshes, print files or silkscreen textures
+export async function verifiedBytes(descriptor,embedded,kind,arrived){
+ let bytes;
+ if(embedded)bytes=decodeBytes(embedded);
+ else{
+  const failed=()=>Error(t('load.'+kind));   // a network failure reads like a missing file
+  const response=await fetch(descriptor.url).catch(()=>null);if(!response?.ok)throw failed();
+  if(arrived&&response.body){
+   const reader=response.body.getReader(),pieces=[];let length=0;
+   for(;;){const {done,value}=await reader.read().catch(()=>{throw failed();});if(done)break;pieces.push(value);length+=value.length;arrived(value.length);}
+   bytes=new Uint8Array(length);let at=0;for(const piece of pieces){bytes.set(piece,at);at+=piece.length;}
+  }else bytes=new Uint8Array(await response.arrayBuffer().catch(()=>{throw failed();}));
+ }
+ const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),v=>v.toString(16).padStart(2,'0')).join('');
+ if(digest!==descriptor.sha256)throw Error(t(`load.${kind}.mismatch`));
+ return bytes;
+}
+export async function gunzip(bytes){return new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());}
 export function printLoader(descriptor,embedded,decode=unpack,kind='print'){
  let pending;
- return ()=>pending??=(async()=>{
-  let bytes;
-  if(embedded.textContent.trim())bytes=decodeBytes(embedded.textContent);
-  else{const response=await fetch(descriptor.url).catch(()=>null);if(!response?.ok)throw Error(t('load.'+kind));bytes=new Uint8Array(await response.arrayBuffer());}   // a network failure reads like a missing file
-  const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),v=>v.toString(16).padStart(2,'0')).join('');
-  if(digest!==descriptor.sha256)throw Error(t(`load.${kind}.mismatch`));
-  return decode(bytes);
- })().catch(error=>{pending=null;throw error;});
+ return ()=>pending??=verifiedBytes(descriptor,embedded.textContent.trim(),kind).then(decode).catch(error=>{pending=null;throw error;});
 }

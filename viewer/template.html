@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="theme-color" content="#e2dcee">
 <title>Flan Keyboard · Explore in 3D</title>
 <meta name="description" content="Design a Flan keyboard in 3D: choose the size, theme, case, keycaps and magnetic frame, inspect every part, then get the shopping list, PCB files, print kit and firmware for a prototype build.">
@@ -44,7 +44,8 @@
 </header>
 <main>
 <section class="stage" aria-label="3D keyboard view" data-t-label="stage">
-  <p id="loading" role="status" data-t="loading">Loading model…</p>
+  <div id="loading" role="status"><img id="loading-still" alt="" hidden><span data-t="loading">Loading model…</span><span id="loading-bar" aria-hidden="true" hidden><i></i></span></div>
+  <p id="parts-status" role="status" hidden></p>
   <canvas id="canvas" aria-label="Drag to rotate; pinch or scroll to zoom; tap a part to inspect" data-t-label="canvas"></canvas>
   <!-- layers: up separates them, down puts the keyboard back together -->
   <div class="stage-tools">
@@ -201,7 +202,10 @@
 <dialog id="licenses" aria-labelledby="licenses-title"><div class="dialog-heading"><h2 id="licenses-title" class="title" data-t="about.credits">Credits &amp; licenses</h2><button id="close-credits" aria-label="Close credits" data-t="credits.closeText" data-t-label="credits.close">Close</button></div><div class="dialog-body"><!--__LICENSES__--></div></dialog>
 <script id="print-data" type="application/octet-stream">/*__PRINT__*/</script>
 <script id="silk-data" type="application/octet-stream">/*__SILK__*/</script>
+<script id="silkthumb-data" type="application/octet-stream">/*__SILKTHUMBS__*/</script>
 <script id="variant-data" type="application/json">/*__VARIANTS__*/</script>
+<script id="geometry-data" type="application/json">/*__GEOMETRY__*/</script>
+<script id="still-data" type="application/json">/*__STILL__*/</script>
 <script id="scene-data" type="application/octet-stream">/*__DATA__*/</script>
 <script>/*__APP__*/</script>
 </body>

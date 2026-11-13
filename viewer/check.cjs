@@ -11,7 +11,7 @@ fs.mkdirSync(path.join(root,'build/case-variants'),{recursive:true});
 const hash=buffer=>crypto.createHash('sha256').update(buffer).digest('hex');
 const html=fs.readFileSync(path.join(root,'docs/explore/offline.html'),'utf8');
 const scene=JSON.parse(require('node:zlib').gunzipSync(Buffer.from(html.match(/<script id="scene-data" type="application\/octet-stream">([\s\S]*?)<\/script>/)[1],'base64')));
-for(const [alias,id] of Object.entries(scene.geometryAliases||{}))scene.geometries[alias]=scene.geometries[id];
+scene.geometries=require('./scene-source.cjs')(scene);   // the page carries its meshes packed, one file per option
 const frameStyles=['talavera','gameboy','snes','phone','ipod','hanafuda'];
 assert.deepEqual(Object.keys(scene.catalog.frame_styles),frameStyles);
 const palettes=JSON.parse(fs.readFileSync(path.join(root,'design/frame-finishes.json')));

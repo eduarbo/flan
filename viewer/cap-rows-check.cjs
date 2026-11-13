@@ -9,7 +9,7 @@ const hash=b=>crypto.createHash('sha256').update(b).digest('hex'),clone=x=>JSON.
 const html=fs.readFileSync(path.join(root,'docs/explore/offline.html'));
 const packed=html.toString().match(/<script id="scene-data" type="application\/octet-stream">([\s\S]*?)<\/script>/)[1];
 const scene=JSON.parse(require('node:zlib').gunzipSync(Buffer.from(packed,'base64')));
-for(const [alias,id] of Object.entries(scene.geometryAliases||{}))scene.geometries[alias]=scene.geometries[id];
+scene.geometries=require('./scene-source.cjs')(scene);   // the page carries its meshes packed, one file per option
 const geometry=c=>Object.fromEntries(Object.entries(c.keycaps).map(([s,keys])=>[s,Object.fromEntries(Object.entries(keys).map(([k,v])=>[k,{variant:v.variant,rotation_deg:v.rotation_deg}]))]));
 const colors=c=>Object.fromEntries(Object.entries(c.keycaps).map(([s,keys])=>[s,Object.fromEntries(Object.entries(keys).map(([k,v])=>[k,v.color]))]));
 const rest=c=>{const x=clone(c);delete x.keycaps;return x;};

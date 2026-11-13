@@ -30,7 +30,10 @@ html=urllib.request.urlopen(pageurl+'explore/?rev='+commit,timeout=60).read()
 assert hashlib.sha1(b'blob '+str(len(html)).encode()+b'\0'+html).hexdigest()==expected['docs/explore/index.html'],'Pages is not yet the published source revision'
 extra={}
 viewer_receipt=json.loads(subprocess.check_output(['git','show',commit+':validation/revI-viewer.json'],cwd=ROOT))
-for name in ['docs/explore/offline.zip',viewer_receipt['scene']['path'],viewer_receipt['printing']['path']]:
+# the scene's description, every mesh file a design can ask for, and the pictures shown while they load
+meshes=[chunk['path'] for chunk in viewer_receipt.get('geometry',{}).get('chunks',{}).values()]
+pictures=viewer_receipt.get('still',{}).get('published',[])+([viewer_receipt['silk_thumbnails']['path']] if 'silk_thumbnails' in viewer_receipt else [])
+for name in ['docs/explore/offline.zip',viewer_receipt['scene']['path'],viewer_receipt['printing']['path'],*meshes,*pictures]:
     raw=urllib.request.urlopen(pageurl+name.removeprefix('docs/')+'?rev='+commit,timeout=60).read()
     assert hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==expected[name],name
     extra[name]=hashlib.sha256(raw).hexdigest()

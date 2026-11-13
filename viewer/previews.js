@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import * as THREE from 'three';
 
-// Reuse the main renderer during startup. No extra WebGL contexts or animation loop.
+// Reuse the main renderer. No extra WebGL contexts or animation loop.
 export function createPreviewRenderer(renderer, geometryFor) {
   const scene=new THREE.Scene();   // transparent: thumbnails sit on the page's own colour
   scene.add(new THREE.HemisphereLight('#ffffff','#8d9c88',2));
@@ -10,7 +10,9 @@ export function createPreviewRenderer(renderer, geometryFor) {
   }
   const mat=new THREE.MeshStandardMaterial({color:'#7c927f',roughness:.86});
   const camera=new THREE.OrthographicCamera();
-  const pixelRatio=renderer.getPixelRatio();renderer.setPixelRatio(1);renderer.setSize(220,220,false);
+  // Pictures are drawn on the main canvas at one device pixel per pixel, between begin() and end(); the caller
+  // then gives the canvas its size back and draws the model again.
+  let pixelRatio=1;
   function image(entries,direction=[.2,2,1],options={}){
     const width=options.width||220,height=options.height||220,aspect=width/height;
     renderer.setSize(width,height,false);
@@ -25,5 +27,5 @@ export function createPreviewRenderer(renderer, geometryFor) {
     const tone=renderer.toneMapping;renderer.toneMapping=THREE.NoToneMapping;
     renderer.render(scene,camera);const src=renderer.domElement.toDataURL('image/png');renderer.toneMapping=tone;scene.remove(group);return src;
   }
-  return {image,finish(){renderer.setPixelRatio(pixelRatio);mat.dispose();}};
+  return {image,begin(){pixelRatio=renderer.getPixelRatio();renderer.setPixelRatio(1);},end(){renderer.setPixelRatio(pixelRatio);}};
 }

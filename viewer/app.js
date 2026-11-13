@@ -15,6 +15,7 @@ import themeLibrary from '../design/themes.json';
 import {restoreConfiguration,createStore,recoveryPrefix} from './storage.js';
 import {createHistory} from './history.js';
 import {decodeBytes,unpack,unpackVariant,printLoader} from './assets.js';
+import {createGeometryStore} from './geometry.js';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
 import {enhanceColorInput} from './color-input.js';
 import {createKeycapColors} from './keycap-colors.js';
@@ -45,31 +46,53 @@ for(const b of document.querySelectorAll('[data-lang]'))b.onclick=()=>setLanguag
 
 async function start(){
 const $=id=>document.getElementById(id);
+// the page's colours follow a theme (home/tokens.js)
+function pageColours(theme){
+  const k=pageTokens(theme),root=document.documentElement;
+  for(const name of ['bg0','bg1','bg2','glow','ink','muted','accent','on'])root.style.setProperty('--'+name,k[name]);
+  root.dataset.scheme=k.scheme;document.querySelector('meta[name=theme-color]').content=k.bg1;return k;
+}
+// A link that names a theme wears its colours while the meshes arrive, and a link to the home page's look
+// also shows that look's picture (viewer/explore-still.cjs), where the model will be once the panel opens.
+try{
+  const still=JSON.parse($('still-data').textContent||'null'),query=new URLSearchParams(location.search),theme=!query.has('design')&&themeLibrary.themes.find(t=>t.id===query.get('theme'));
+  if(theme)pageColours(theme);
+  if(still&&!query.has('design')&&!query.has('palette')&&Object.entries(still.look).every(([key,value])=>query.get(key)===value)){
+    const img=$('loading-still');img.src=matchMedia('(max-width:700px),(max-width:1000px) and (orientation:portrait)').matches?still.tall:still.wide;img.hidden=false;$('loading').dataset.still='true';
+  }
+}catch{}
+// how much of the opening design's meshes has arrived, as a thin bar under "Loading model…"
+function loadingProgress(fraction){const bar=$('loading-bar');bar.hidden=false;bar.firstElementChild.style.width=(fraction*100).toFixed(1)+'%';}
 // Online the page points at the scene's hashed file; the offline copy carries it inline.
 const sceneText=$('scene-data').textContent.trim();
-const data=await (async()=>{
- if(sceneText[0]!=='{')return unpack(decodeBytes(sceneText));
+// A page cached from before a deploy points at files that are gone: ask for the current page, once.
+const online=sceneText[0]==='{';
+async function fresh(load){
+ if(!online)return load();
  const retried=()=>{try{return sessionStorage.getItem('flan.scene.retry');}catch{return '1';}};
- try{const scene=await printLoader(JSON.parse(sceneText),{textContent:''},unpack,'scene')();try{sessionStorage.removeItem('flan.scene.retry');}catch{}return scene;}
+ try{return await load();}
  catch(error){
-  // A page cached from before a deploy points at a scene file that is gone: ask for the current page, once.
   if(!retried()){try{sessionStorage.setItem('flan.scene.retry','1');}catch{}location.reload();await new Promise(()=>{});}
   throw error;
  }
-})();
+}
+const data=await fresh(()=>online?printLoader(JSON.parse(sceneText),{textContent:''},unpack,'scene')():unpack(decodeBytes(sceneText)));
 const loadPrinting=printLoader(data.printing,$('print-data'));
+// The meshes come in files, one per option: this design's now, another's when it is chosen (geometry.js).
+const meshStore=createGeometryStore({index:data.geometry.index,chunks:data.geometry.chunks,aliases:data.geometryAliases,embedded:(()=>{try{return JSON.parse($('geometry-data').textContent||'{}');}catch{return {};}})()});
 // Flan family: Flan36's case and PCB are in the scene; a built variant brings its own on demand.
 const family=data.variants||{},baseVariant='flan36',variantLoads=new Map();
 const variantData=(()=>{try{return JSON.parse($('variant-data').textContent||'{}');}catch{return {};}})();
 const variantDir=id=>id===baseVariant?'revI':id,builtVariant=id=>id===baseVariant||Boolean(family[id]?.built&&family[id]?.asset);
 const shownVariant=config=>config.variant===baseVariant||family[config.variant]?.loaded?config.variant:baseVariant;
-let printBusy=false,glbBusy=false,buildBusy=false;
+let printBusy=false,glbBusy=false,buildBusy=false,awaitedMeshes=0;   // awaitedMeshes: meshes the design shows that have not arrived
 function syncBuildAvailability(){
-  const ready=shownVariant(configuration)===configuration.variant,hardware=!configuration.fasteners||Boolean(fastenerProfiles[configuration.fasteners]?.loaded);
+  const sized=shownVariant(configuration)===configuration.variant,ready=sized&&!awaitedMeshes,hardware=!configuration.fasteners||Boolean(fastenerProfiles[configuration.fasteners]?.loaded);
   $('print-kit').disabled=printBusy||buildBusy||!ready;$('download-build').disabled=buildBusy||printBusy||!ready;$('glb').disabled=glbBusy||!ready||!hardware;
   for(const id of ['variant-status','build-variant-status']){
-    $(id).hidden=ready;$(id).textContent=ready?'':t('size.resources',{name:family[configuration.variant]?.title||configuration.variant});
+    $(id).hidden=ready;$(id).textContent=ready?'':sized?t('meshes.loading'):t('size.resources',{name:family[configuration.variant]?.title||configuration.variant});
   }
+  $('parts-status').hidden=!awaitedMeshes;$('parts-status').textContent=awaitedMeshes?t('meshes.loading'):'';
 }
 // A variant's render meshes come from its exact STL files: CAD (x, y, z) -> viewer (x, z, -y), creased at 45°
 // like the scene builder's normals.
@@ -86,8 +109,8 @@ async function loadVariant(id){
   if(!builtVariant(id))throw Error(t('msg.notBuilt',{name:family[id]?.title||id}));
   if(!variantLoads.has(id))variantLoads.set(id,printLoader(family[id].asset,{textContent:variantData[id]||''},unpackVariant));
   let payload;try{payload=await variantLoads.get(id)();}catch{variantLoads.delete(id);throw Error(t('msg.variant',{name:family[id].title}));}
-  for(const asset of Object.values(payload.printing))geometries.set(asset.path,stlGeometry(asset.stl));
-  for(const [path,stl] of Object.entries(payload.meshes))geometries.set(path,stlGeometry(stl));
+  for(const asset of Object.values(payload.printing))meshStore.set(asset.path,stlGeometry(asset.stl));
+  for(const [path,stl] of Object.entries(payload.meshes))meshStore.set(path,stlGeometry(stl));
   family[id].printing=payload.printing;
   if(payload.silkscreen){const s=payload.silkscreen,images={};
     for(const [edition,halves] of Object.entries(s.textures)){images[edition]={};for(const [side,png] of Object.entries(halves))images[edition][side]=await createImageBitmap(new Blob([decodeBytes(png)],{type:'image/png'}));}
@@ -116,7 +139,7 @@ async function loadFasteners(id){
   if(profile.loaded)return;
   if(!fastenerLoads.has(id))fastenerLoads.set(id,printLoader(profile.asset,{textContent:variantData['fasteners:'+id]||''},unpackVariant));
   let payload;try{payload=await fastenerLoads.get(id)();}catch{fastenerLoads.delete(id);throw Error(t('msg.fasteners'));}
-  for(const asset of Object.values(payload.printing))geometries.set(asset.path,asset.material_parts?.length?stlMaterialGeometry(asset.material_parts):stlGeometry(asset.stl));
+  for(const asset of Object.values(payload.printing))meshStore.set(asset.path,asset.material_parts?.length?stlMaterialGeometry(asset.material_parts):stlGeometry(asset.stl));
   profile.printing=payload.printing;profile.loaded=true;
 }
 // the offline copy offers itself; online the link is the published ZIP
@@ -159,20 +182,55 @@ const ground=(()=>{
   return {material,halves,enabled:true};
 })();
 
-function decode(text,Type){const bytes=decodeBytes(text);return new Type(bytes.buffer);}
-const geometries=new Map();
 function geometryFor(id){
   if(!id)return undefined;
-  id=data.geometryAliases?.[id]||id;
-  if(geometries.has(id))return geometries.get(id);
-  const g=data.geometries[id];if(!g)throw Error(t('msg.geometry',{id}));
-  const geometry=new THREE.BufferGeometry();
-  geometry.setAttribute('position',new THREE.BufferAttribute(decode(g.positions,Float32Array),3));
-  geometry.setAttribute('normal',new THREE.BufferAttribute(decode(g.normals,Float32Array),3));
-  geometry.setIndex(new THREE.BufferAttribute(decode(g.indices,Uint32Array),1));
-  if(g.groups)for(const group of g.groups)geometry.addGroup(group.start,group.count,group.materialIndex);
-  geometry.computeBoundingBox();geometries.set(id,geometry);delete g.positions;delete g.normals;delete g.indices;return geometry;
+  const geometry=meshStore.get(id);if(!geometry)throw Error(t('msg.geometry',{id}));
+  return geometry;
 }
+// What a design chooses, and so what may still be on its way: cases, keycaps, frames, batteries with their
+// leads and the PCB. Every other part is in the first file. viewer/build.mjs sorts the meshes by the same rule.
+const chosen=part=>['base','plate','keycaps','battery'].includes(part.group)||Number.isInteger(part.battery_lead_index)||part.name.includes('Electronics cover')||part.part_id===`${part.side}-pcb`;
+const caseMesh=(config,side,group,dir)=>`mechanical/${dir}/${side}-case-${config.cases[side].style}-${group}.stl`;
+const frameMesh=(config,side)=>`mechanical/revI/${side}-frame-${config.frames[side].style}.stl`;
+const batteryMesh=(config,side)=>`mechanical/revI/${side}-battery-${config.batteries[side]}.stl`;
+const leadWires=(config,side)=>data.batteryLeadProfiles[`${side}-${config.batteries[side]}`];
+// The published meshes a design shows from outside: its cases, frames and keycaps. The PCB, the batteries and
+// their leads sit inside the closed case and follow the first frame. A size's or a screw profile's own files
+// come with their package.
+function outsideMeshes(config){
+  const dir=variantDir(shownVariant(config)),ids=[];
+  for(const side of ['left','right']){
+    ids.push(caseMesh(config,side,'base',dir),caseMesh(config,side,'plate',dir),frameMesh(config,side));
+    for(const choice of Object.values(config.keycaps[side]))ids.push(variants.get(choice.variant).path);
+  }
+  return [...new Set(ids)].filter(id=>meshStore.known(id));
+}
+const base64url=bytes=>btoa(String.fromCharCode(...bytes)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const fromBase64url=text=>Uint8Array.from(atob(text.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+const streamBytes=(bytes,transform)=>new Response(new Blob([bytes]).stream().pipeThrough(transform)).arrayBuffer().then(b=>new Uint8Array(b));
+// The design this visit opens: a link's, else the saved one. It is known before any mesh is fetched, so
+// only its files are.
+const LOOK_KEYS=['size','theme','case','keys','frame','palette'],lookQuery=new URLSearchParams(location.search);
+let opening=null,openingError=null;
+if(LOOK_KEYS.some(k=>lookQuery.has(k))||lookQuery.has('design')){
+  try{
+    let design;
+    if(lookQuery.has('design')){
+      const text=lookQuery.get('design');if(text.length>40000)throw Error(t('msg.linkLong'));
+      const bytes=await streamBytes(fromBase64url(text),new DecompressionStream('deflate-raw'));if(bytes.length>400000)throw Error(t('msg.designLarge'));
+      design=JSON.parse(new TextDecoder().decode(bytes));
+    }else design=lookConfiguration(lookQuery);
+    const result=check(design,catalog);if(result.errors.length)throw Error(result.errors[0]);
+    opening={configuration:normalize(design,catalog),shared:lookQuery.has('design')};
+  }catch(error){openingError=error;}
+}
+{
+  const first=outsideMeshes(opening?.configuration||configuration),total=meshStore.coreBytes+meshStore.bytes(first);let loaded=0;
+  const arrived=n=>{loaded+=n;loadingProgress(Math.min(1,loaded/total));};
+  await fresh(()=>Promise.all([meshStore.core(arrived),meshStore.ensure(first,arrived)]));
+  try{sessionStorage.removeItem('flan.scene.retry');}catch{}
+}
+const EMPTY=new THREE.BufferGeometry();EMPTY.setAttribute('position',new THREE.BufferAttribute(new Float32Array(0),3));
 const materials=new Map();
 function material(color){
   if(!materials.has(color))materials.set(color,new THREE.MeshStandardMaterial({color,roughness:.78,metalness:0}));
@@ -181,7 +239,9 @@ function material(color){
 const frameFinish=createFrameFinishes(geometryFor,material);
 const objects=[];const hiddenObjects=new Set();
 for(const part of data.parts){
-  let geometry=geometryFor(part.geometry),mat=part.materials?part.materials.map(material):material(part.color);
+  // a chosen part whose mesh is not here stays out of the scene until a design brings it
+  const unloaded=chosen(part)&&Boolean(part.geometry)&&!meshStore.has(part.geometry);
+  let geometry=unloaded?EMPTY:geometryFor(part.geometry),mat=part.materials?part.materials.map(material):material(part.color);
   if(part.primitive){
     const p=part.primitive;
     if(p.kind==='cylinder')geometry=new THREE.CylinderGeometry(p.radius,p.radius,p.height,32);
@@ -201,6 +261,7 @@ for(const part of data.parts){
   // A variant's added key follows its template key (same cap, rotation and colour); it is shown only on that variant.
   mesh.userData={objectIndex:objects.length,group:part.group,side:part.side,base:[...part.position],explode:part.explode_mm,key:part.template_ref||part.key_ref,ref:part.key_ref};
   if(part.variants){mesh.userData.variants=part.variants;mesh.userData.installed=false;}
+  if(unloaded){mesh.userData.unloaded=true;mesh.userData.installed=false;}
   if(part.part_id)mesh.userData.part_id=part.part_id;
   if(Number.isInteger(part.battery_lead_index))mesh.userData.battery_lead_index=part.battery_lead_index;
   if(part.name.includes('Electronics cover'))mesh.userData.frame_style=configuration.frames[part.side].style;
@@ -212,7 +273,10 @@ let explorer,appearance,keycapColors,renderFrame=0,silkHook=null;   // silkHook:
 // without hardware acceleration, where shadow maps on the CPU would be too slow.
 const software=(()=>{try{const gl=renderer.getContext(),info=gl.getExtension('WEBGL_debug_renderer_info');return /swiftshader|llvmpipe|software|basic render/i.test(info?gl.getParameter(info.UNMASKED_RENDERER_WEBGL):'');}catch{return false;}})();
 const studio=software||new URLSearchParams(location.search).get('render')==='flat'?null:createStudio({renderer,scene,objects,ground});
-function render(){if(renderFrame)return;renderFrame=requestAnimationFrame(()=>{renderFrame=0;explorer?.update();studio?.dress();renderer.render(scene,camera);$('loading').hidden=true;});}
+function draw(){renderFrame=0;explorer?.update();studio?.dress();renderer.render(scene,camera);$('loading').hidden=true;}
+function render(){if(!renderFrame)renderFrame=requestAnimationFrame(draw);}
+// right away: after a card's picture was drawn on this canvas, so no frame shows it
+function renderNow(){cancelAnimationFrame(renderFrame);draw();}
 let orbiting=false;
 controls.addEventListener('start',()=>{orbiting=true;explorer?.motion(true);});controls.addEventListener('end',()=>{orbiting=false;explorer?.motion(false);});
 controls.addEventListener('change',()=>{
@@ -551,6 +615,7 @@ $('glb').onclick=async()=>{
   const button=$('glb');glbBusy=true;button.disabled=true;setText(button,t('glb.preparing'));
   try{
     if(shownVariant(configuration)!==configuration.variant)throw Error(t('size.resources',{name:family[configuration.variant]?.title}));
+    if(awaitedMeshes)throw Error(t('meshes.loading'));
     const title=family[configuration.variant]?.title||'Flan36';
     const assembly=new THREE.Group();assembly.name=`${title} rev${data.revision} · nominal`;assembly.scale.setScalar(.001);
     for(const object of objects){if(object.userData.installed===false)continue;const clone=object.clone();studio?.plain(clone);for(const child of [...clone.children])if(child.userData.silkscreen)clone.remove(child);clone.visible=true;clone.position.fromArray(object.userData.base);assembly.add(clone);}
@@ -578,39 +643,45 @@ const message=(text,error=false)=>{$('config-status').textContent=text;$('config
 const said=new Map();
 function say(id,key,vars){if(key)said.set(id,[key,vars]);else said.delete(id);$(id).textContent=key?t(key,vars):vars||'';}
 const history=createHistory(configuration);
+let meshWork=Promise.resolve();   // settles when no mesh a design asked for is still being fetched
 let gesture=null;
 document.addEventListener('pointerdown',e=>{if(e.target.type!=='color'){gesture=null;history.endGesture();}},true);
 document.addEventListener('input',e=>{if(e.target.type==='color'||e.target.classList.contains('hex-input'))gesture=e.target;},true);
 document.addEventListener('change',()=>queueMicrotask(()=>{gesture=null;history.endGesture();}),true);
-function applyConfiguration(next,{record=true,persist=true}={}){
+function applyConfiguration(next,{record=true,persist=true,fetch=true}={}){
   const result=check(next,catalog);if(result.errors.length)throw Error(result.errors[0]);
   next=normalize(next,catalog);
   // Resolve every resource before touching any live object, including both wires.
   const hardware=shownFasteners(next),swapped=name=>hardware?fastenerProfiles[hardware].printing[name]?.path:undefined;
+  // A part whose mesh is still on its way stays as it is; the design is applied again when the mesh arrives.
+  const wanted=new Set(),here=id=>meshStore.has(id)||!meshStore.known(id)||(wanted.add(id),false);
   const prepared=objects.map(o=>{
+    const waiting={o,geometry:o.geometry,mat:o.material,rotation:o.rotation.y,userData:o.userData};
     const userData=copy(o.userData),{side,key,group}=userData;
     let geometry=o.geometry,mat=o.material,rotation=o.rotation.y;
     const dir=variantDir(shownVariant(next));
+    if(userData.unloaded){delete userData.unloaded;delete userData.installed;}
     if(userData.variants)userData.installed=userData.variants.includes(shownVariant(next));
-    if(group==='base'||group==='plate'){const style=next.cases[side].style,path=swapped(`${side}-case-${style}-${group}`)||`mechanical/${dir}/${side}-case-${style}-${group}.stl`;geometry=geometryFor(path);mat=material(next.cases[side][group+'_color']);userData.case_style=style;userData.mesh_source=path;}
+    if(group==='base'||group==='plate'){const style=next.cases[side].style,path=swapped(`${side}-case-${style}-${group}`)||caseMesh(next,side,group,dir);if(!here(path))return waiting;geometry=geometryFor(path);mat=material(next.cases[side][group+'_color']);userData.case_style=style;userData.mesh_source=path;}
     if(group==='lid')userData.installed=next.cases[side].cover;
     if(group==='keycaps'){
-      const choice=next.keycaps[side][key],v=variants.get(choice.variant),k=catalog.layout[side].find(k=>k.ref===key);
+      const choice=next.keycaps[side][key],v=variants.get(choice.variant),k=catalog.layout[side].find(k=>k.ref===key);if(!here(v.path))return waiting;
       mat=material(choice.color);userData.color=choice.color;geometry=geometryFor(v.path);rotation=THREE.MathUtils.degToRad(k.angle+choice.rotation_deg);userData.base[1]=v.seating_z_mm;
       userData.variant=v.id;userData.cap_rotation_deg=choice.rotation_deg;
     }
-    if(group==='lid'&&userData.frame_style!==undefined){const f=next.frames[side],path=swapped(`${side}-frame-${f.style}`),finish=frameFinish(f.style,side,f.color,f.accents,path);geometry=finish.geometry;mat=finish.material;userData.frame_style=f.style;userData.frame_palette=finish.palette;userData.mesh_source=path||`mechanical/revI/${side}-frame-${f.style}.stl`;}
-    if(group==='battery'){const id=next.batteries[side];geometry=geometryFor(`mechanical/revI/${side}-battery-${id}.stl`);userData.battery_profile=id;}
-    if(userData.part_id===`${side}-pcb`){const mask=pcbMask(next,side);geometry=geometryFor(`mechanical/${dir}/${side}-pcb.stl`);mat=material(data.silkscreen.masks.find(m=>m.id===mask).mask);userData.pcb_mask=mask;}
-    if(Number.isInteger(userData.battery_lead_index)){const id=next.batteries[side],wire=data.batteryLeadProfiles[`${side}-${id}`].find(p=>p.index===userData.battery_lead_index);geometry=geometryFor(wire.geometry);mat=material(wire.color);userData.battery_profile=id;}
+    if(group==='lid'&&userData.frame_style!==undefined){const f=next.frames[side],path=swapped(`${side}-frame-${f.style}`);if(!here(path||frameMesh(next,side)))return waiting;const finish=frameFinish(f.style,side,f.color,f.accents,path);geometry=finish.geometry;mat=finish.material;userData.frame_style=f.style;userData.frame_palette=finish.palette;userData.mesh_source=path||frameMesh(next,side);}
+    if(group==='battery'){const path=batteryMesh(next,side);if(!here(path))return waiting;geometry=geometryFor(path);userData.battery_profile=next.batteries[side];}
+    if(userData.part_id===`${side}-pcb`){const mask=pcbMask(next,side),path=`mechanical/${dir}/${side}-pcb.stl`;if(!here(path))return waiting;geometry=geometryFor(path);mat=material(data.silkscreen.masks.find(m=>m.id===mask).mask);userData.pcb_mask=mask;}
+    if(Number.isInteger(userData.battery_lead_index)){const wire=leadWires(next,side).find(p=>p.index===userData.battery_lead_index);if(!here(wire.geometry))return waiting;geometry=geometryFor(wire.geometry);mat=material(wire.color);userData.battery_profile=next.batteries[side];}
     return {o,geometry,mat,rotation,userData};
   });
-  const previous=configuration,old=objects.map(o=>({o,geometry:o.geometry,mat:o.material,rotation:o.rotation.y,userData:o.userData}));
+  const previous=configuration,before=awaitedMeshes,old=objects.map(o=>({o,geometry:o.geometry,mat:o.material,rotation:o.rotation.y,userData:o.userData}));
   const commit=items=>{for(const {o,geometry,mat,rotation,userData} of items){o.geometry=geometry;o.material=mat;o.rotation.y=rotation;o.userData=userData;}};
-  try{commit(prepared);configuration=copy(next);sync();syncConfigurationUI();}
-  catch(error){commit(old);configuration=previous;sync();throw error;}
+  try{commit(prepared);configuration=copy(next);awaitedMeshes=wanted.size;sync();syncConfigurationUI();}
+  catch(error){commit(old);configuration=previous;awaitedMeshes=before;sync();throw error;}
   if(record)history.record(next,gesture);syncHistory();
   if(persist){message(t('msg.saving'));if(!saveWarnings.has('configuration'))saveState('save.saving','saving');store.save(configuration);}
+  if(wanted.size&&fetch)meshWork=Promise.allSettled([meshWork,meshStore.ensure([...wanted]).then(()=>{applyConfiguration(copy(configuration),{record:false,persist:false});drawPictures();},error=>message(error.message,true))]);
   // A design that names a variant or a screw profile not loaded yet (a loaded file, undo, a link) shows it once it arrives.
   if(next.fasteners&&!hardware)loadFasteners(next.fasteners).then(()=>{fastenerFailure=null;if(configuration.fasteners===next.fasteners)applyConfiguration(copy(configuration),{record:false,persist:false});}).catch(e=>{fastenerFailure=next.fasteners;message(e.message,true);syncConfigurationUI();});
   if(shownVariant(next)!==next.variant&&builtVariant(next.variant))loadVariant(next.variant).then(()=>{if(configuration.variant===next.variant){applyConfiguration(copy(configuration),{record:false,persist:false});fit();}}).catch(e=>message(e.message,true));
@@ -621,7 +692,24 @@ $('undo').onclick=()=>travelHistory('undo');$('redo').onclick=()=>travelHistory(
 document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea,select,[contenteditable=true]')||!(e.ctrlKey||e.metaKey)||e.altKey)return;if(e.key.toLowerCase()==='z'){e.preventDefault();travelHistory(e.shiftKey?'redo':'undo');}});
 let frameSide='both',caseSide='both',batterySide='both';
 const preview=createPreviewRenderer(renderer,geometryFor);
-function card(id,label,src){
+// A card's picture is drawn from the parts themselves, so it waits for their meshes: a grid asks for them
+// when it first comes into view, and the cards keep their names meanwhile.
+const BLANK='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',pictures=[];
+let live=false;   // the first frame is on screen
+function picture(button,ids,image){pictures.push({button,ids,image,grid:null});}
+function drawPictures(){
+  const due=pictures.filter(p=>!p.drawn&&p.ids.every(id=>meshStore.has(id)));if(!due.length)return;
+  preview.begin();for(const p of due){p.button.querySelector('img').src=p.image();p.drawn=true;}preview.end();
+  if(live){resize();renderNow();}
+}
+const picturesSeen=new IntersectionObserver(entries=>{
+  for(const entry of entries)if(entry.isIntersecting){
+    picturesSeen.unobserve(entry.target);
+    // a failed fetch is tried again a little later, while the grid is still in view
+    meshStore.ensure(pictures.filter(p=>p.button.parentElement===entry.target).flatMap(p=>p.ids)).then(drawPictures,error=>{message(error.message,true);setTimeout(()=>picturesSeen.observe(entry.target),8000);});
+  }
+});
+function card(id,label,src=BLANK){
   const button=document.createElement('button');button.type='button';button.className='preview-card';button.dataset.choice=id;button.setAttribute('aria-pressed','false');
   const img=document.createElement('img');img.src=src;img.alt='';img.width=220;img.height=220;const text=document.createElement('span');text.textContent=label;button.append(img,text);button.setAttribute('aria-label',label);return button;
 }
@@ -659,7 +747,7 @@ function caseTargets(){return caseSide==='both'?['left','right']:[caseSide];}
 for(const [id,spec] of Object.entries(catalog.case_styles)){
   const entries=['base','plate'].map(group=>({path:`mechanical/revI/left-case-${id}-${group}.stl`,material:material(spec[group+'_color'])}));
   // Every thumbnail uses that style's exported parts, with the same camera.
-  const button=card(id,spec.label,preview.image(entries,[.15,.8,1],{width:360,height:250}));button.dataset.case=id;
+  const button=card(id,spec.label);button.dataset.case=id;picture(button,entries.map(e=>e.path),()=>preview.image(entries,[.15,.8,1],{width:360,height:250}));
   const img=button.querySelector('img');img.width=360;img.height=250;
   button.onclick=()=>{const cfg=copy(configuration);for(const side of caseTargets()){const cs=cfg.cases[side],old=catalog.case_styles[cs.style];if(!cs.match_frame&&cs.base_color===old.base_color&&cs.plate_color===old.plate_color){cs.base_color=spec.base_color;cs.plate_color=spec.plate_color;}cs.style=id;if(cs.match_frame&&id==='level')cs.plate_color=cfg.frames[side].color;}applyConfiguration(cfg);};
   $('case-grid').append(button);
@@ -669,7 +757,7 @@ function labelCases(){for(const button of $('case-grid').children)button.title=b
 labelCases();onLanguage(labelCases);
 for(const button of $('case-target').children)button.onclick=()=>{caseSide=button.dataset.side;syncConfigurationUI();};
 for(const id of Object.keys(catalog.frame_styles)){
-  const finish=frameFinish(id,'left'),button=card(id,catalog.frame_styles[id],preview.image([finish],[0,1,.16],{width:220,height:360,up:[0,0,-1]}));button.dataset.style=id;
+  const button=card(id,catalog.frame_styles[id]);button.dataset.style=id;picture(button,[`mechanical/revI/left-frame-${id}.stl`],()=>preview.image([frameFinish(id,'left')],[0,1,.16],{width:220,height:360,up:[0,0,-1]}));
   const img=button.querySelector('img');img.width=220;img.height=360;
   button.onclick=()=>applyFrame({style:id});$('frame-grid').append(button);
 }
@@ -689,11 +777,19 @@ $('theme-colors').onclick=()=>{const cfg=copy(configuration);for(const side of f
 for(const [id,label] of [['default','Original'],['normal-sculpted','Sculpted'],['saddle-sculpted','Saddle']]){
   // Show an actual front-to-back column at the shared stem seating datum.
   const entries=['K01','K11','K21'].map((key,i)=>{const choice=data.presets[id].keycaps.left[key],v=variants.get(choice.variant);return {path:v.path,rotation:choice.rotation_deg,position:[0,v.seating_z_mm,(i-1)*17],material:material('#d9d2c4')};});
-  const button=card(id,label,preview.image(entries,[-1,.35,.1],{width:300,height:150}));button.dataset.preset=id;{const img=button.querySelector('img');img.width=300;img.height=150;}
+  const button=card(id,label);button.dataset.preset=id;{const img=button.querySelector('img');img.width=300;img.height=150;}picture(button,entries.map(e=>e.path),()=>preview.image(entries,[-1,.35,.1],{width:300,height:150}));
   button.onclick=()=>{const cfg=copy(configuration);for(const [side,keys] of Object.entries(cfg.keycaps))for(const ref of Object.keys(keys))cfg.keycaps[side][ref]={...data.presets[id].keycaps[side][ref],color:keys[ref].color};try{applyConfiguration(cfg);}catch(e){message(e.message,true);}};$('key-presets').append(button);
 }
-const partIllustrations=createPartIllustrations({preview,parts:data.parts,material});
-preview.finish();
+for(const id of ['case-grid','frame-grid','key-presets'])picturesSeen.observe($(id));
+// The build guide's part pictures are drawn when its list is first seen, not at start.
+let partArt=null;const artWaiting=new Map();
+const artSeen=new IntersectionObserver(entries=>{
+  if(!entries.some(entry=>entry.isIntersecting))return;artSeen.disconnect();
+  preview.begin();partArt=createPartIllustrations({preview,parts:data.parts,material});preview.end();if(live){resize();renderNow();}
+  for(const [id,img] of artWaiting)img.src=partArt[id];artWaiting.clear();
+});
+const partIllustrations={show(img,id){if(partArt)img.src=partArt[id];else{img.src=BLANK;artWaiting.set(id,img);}}};
+artSeen.observe($('build-shopping'));
 // Legacy files contain literal per-key choices, without preset provenance.
 // Repair only on an explicit click, preserving custom variants and colors.
 const rowRepair=document.createElement('button');rowRepair.id='fix-cap-rows';rowRepair.type='button';
@@ -725,7 +821,7 @@ for(const o of objects){
   o.add(overlay);silkOverlays.push(overlay);
 }
 // The board a texture belongs to: Flan36's from the scene, a variant's from its own payload.
-const silkSource=()=>{const v=shownVariant(configuration);return v===baseVariant?{id:v,bounds:silk.bounds,images:silkImages,thumbnails:silk.thumbnails}:{id:v,...(family[v].silk||{})};};
+const silkSource=()=>{const v=shownVariant(configuration);return v===baseVariant?{id:v,bounds:silk.bounds,images:silkImages}:{id:v,...(family[v].silk||{})};};
 const overlayPlanes=new Map();
 function fitOverlay(overlay,id,bounds){
   const key=id+'/'+overlay.userData.silkscreen,[x0,y0,x1,y1]=bounds[overlay.userData.silkscreen];
@@ -750,15 +846,19 @@ function showSilk(){
 }
 // Thumbnails are two-channel masks (red = board, green = ink), painted with the chosen colours.
 const thumbImages=new Map();let paintedMask=null;
-function thumbImage(id){const src=silkSource(),key=src.id+'/'+id;if(!thumbImages.has(key)){const img=new Image();img.src=(src.thumbnails||silk.thumbnails)[id];thumbImages.set(key,img.decode().then(()=>img));}return thumbImages.get(key);}
+// Flan36's come in their own file, fetched when the PCB panel is first seen; a size's come with its package.
+const loadThumbs=printLoader(silk.thumbnails,$('silkthumb-data'),undefined,'silk');let pcbSeen=false;
+function thumbImage(id){const src=silkSource(),key=src.id+'/'+id;if(!thumbImages.has(key))thumbImages.set(key,(async()=>{const img=new Image();img.src=(src.thumbnails||await loadThumbs())[id];await img.decode();return img;})().catch(error=>{thumbImages.delete(key);throw error;}));return thumbImages.get(key);}
 const rgb=hex=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
 async function paintThumbs(){
+  if(!pcbSeen)return;
   const source=silkSource(),specs=['right','left'].map(maskSpec),painted=source.id+'/'+specs.map(s=>s.id).join('/');if(paintedMask===painted)return;paintedMask=painted;
   const colors=specs.map(s=>[...rgb(s.mask),...rgb(s.silk)]),bounds=source.bounds||silk.bounds;
   // The generated thumbnails place right then left, with 3 mm margins and a 12 mm gap.
   const width=side=>bounds[side][2]-bounds[side][0],split=(3+width('right')+6)/(6+width('right')+12+width('left'));
   for(const button of $('pcb-grid').children){
-    const src=await thumbImage(button.dataset.edition);if(paintedMask!==painted)return;
+    let src;try{src=await thumbImage(button.dataset.edition);}catch(error){if(paintedMask===painted){paintedMask=null;$('pcb-status').textContent=error.message;}return;}
+    if(paintedMask!==painted)return;
     const c=document.createElement('canvas');c.width=src.naturalWidth;c.height=src.naturalHeight;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(src,0,0);
     const d=x.getImageData(0,0,c.width,c.height),p=d.data;
     for(let i=0;i<p.length;i+=4){const [mr,mg,mb,sr,sg,sb]=colors[(i/4)%c.width<c.width*split?0:1],board=p[i]/255,ink=p[i+1]/255;p[i]=mr+(sr-mr)*ink;p[i+1]=mg+(sg-mg)*ink;p[i+2]=mb+(sb-mb)*ink;p[i+3]=255*board;}
@@ -783,7 +883,7 @@ $('pcb-order').onclick=()=>{openPanel('files',$('pcb-order'));refreshRecovery();
 const raw=path=>'https://raw.githubusercontent.com/eduarbo/flan/main/'+path;
 for(const edition of silk.editions){
   // the image is painted by paintThumbs() with the chosen mask colour
-  const button=card(edition.id,edition.title,'data:image/gif;base64,R0lGODlhAQABAAAAACw=');button.dataset.edition=edition.id;
+  const button=card(edition.id,edition.title);button.dataset.edition=edition.id;
   const img=button.querySelector('img');img.width=380;img.height=150;
   button.onclick=()=>{try{applyConfiguration(setPcbEdition(configuration,pcbTargets(),edition.id));}catch(e){message(e.message,true);return;}showUnderside();};
   $('pcb-grid').append(button);
@@ -803,6 +903,8 @@ function labelPcb(){
   $('pcb-mask-note').textContent=t('pcb.maskNote',{fab:silk.masks_source.fab,date:silk.masks_source.checked});
 }
 labelPcb();onLanguage(labelPcb);
+// the edition cards are painted once the PCB panel is first seen
+new IntersectionObserver((entries,observer)=>{if(entries.some(entry=>entry.isIntersecting)){observer.disconnect();pcbSeen=true;paintThumbs();}}).observe($('pcb-grid'));
 function syncConfigurationUI(){
   syncBuildAvailability();
   const size=configuration.variant;$('size-current').textContent=family[size]?.title||'Flan36';
@@ -869,9 +971,7 @@ function paintPage(){
   const cs=configuration.cases.left,f=configuration.frames.left,lower=v=>v.toLowerCase(),accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,lower(f.accents[k])]));
   const theme=themeLibrary.themes.find(t=>t.base===lower(cs.base_color)&&t.frame.body===lower(f.color)&&['detail','accent','secondary'].every(k=>t.frame[k]===accents[k]))
     ||{base:lower(cs.base_color),plate:lower(cs.plate_color),frame:{body:lower(f.color),...accents}};
-  const k=pageTokens(theme),root=document.documentElement;
-  for(const name of ['bg0','bg1','bg2','glow','ink','muted','accent','on'])root.style.setProperty('--'+name,k[name]);
-  root.dataset.scheme=k.scheme;document.querySelector('meta[name=theme-color]').content=k.bg1;
+  const k=pageColours(theme);
   ground.material.color.set(k.scheme==='dark'?'#000000':k.ink);ground.material.opacity=k.scheme==='dark'?1:.85;explorer?.tint(k.accent);render();
 }
 function isSolo(ref){const installed=objects.filter(o=>o.userData.installed!==false);return installed.some(o=>matchesPart(o,ref))&&installed.every(o=>o.visible===Boolean(matchesPart(o,ref)));}
@@ -971,9 +1071,6 @@ function refreshRecovery(){
 }
 window.addEventListener('storage',e=>{if(e.key===savedKey)message(t('msg.otherTab'),true);});
 // Share: the short look when it says everything about this keyboard, otherwise the whole design, deflated.
-const base64url=bytes=>btoa(String.fromCharCode(...bytes)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-const fromBase64url=text=>Uint8Array.from(atob(text.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
-const streamBytes=(bytes,transform)=>new Response(new Blob([bytes]).stream().pipeThrough(transform)).arrayBuffer().then(b=>new Uint8Array(b));
 function lookParams(c){
   const same=JSON.stringify(c),preset=Object.entries({original:'default',normal:'normal-sculpted',saddle:'saddle-sculpted'}).find(([,id])=>Object.entries(c.keycaps).every(([side,keys])=>Object.entries(keys).every(([ref,k])=>k.variant===data.presets[id].keycaps[side][ref].variant&&k.rotation_deg===data.presets[id].keycaps[side][ref].rotation_deg)));
   if(!preset||c.cases.left.style!==c.cases.right.style)return null;
@@ -999,12 +1096,11 @@ async function copyLink(button){
 }
 appearance=createAppearance({$,get:()=>configuration,apply:applyConfiguration,targets:kind=>kind==='case'?caseTargets():frameTargets(),preview,frameFinish,material,resize,catalog,geometryFor});
 keycapColors=createKeycapColors({$,catalog,get:()=>configuration,apply:applyConfiguration,message,storageNotice:(text,error)=>storageNotice(text,error,'palettes')});
-applyConfiguration(configuration,{record:false,persist:false});
+applyConfiguration(configuration,{record:false,persist:false,fetch:!opening});
 if(storageMessage)storageNotice(storageMessage,true,'configuration');else if(restored){message(t('msg.restored'));saveState('save.done','saved');}else{message(t('msg.local'));saveState('','');}
 if(keycapColors.initialWarning)storageNotice(keycapColors.initialWarning,true,'palettes');
 // A look from the home page opens as a new design: ?size=&theme=&case=&keys=&frame=left[,right]&palette=frame|theme[,…].
 // Undo returns to the saved design; subsequent edits keep the address current.
-const LOOK_KEYS=['size','theme','case','keys','frame','palette'],lookQuery=new URLSearchParams(location.search);
 function lookConfiguration(q){
   let c=normalize(catalog.default_configuration,catalog);const sides=['left','right'];
   const size=q.get('size')||c.variant;if(!variantIds.includes(size))throw Error(t('msg.size',{v:size}));c.variant=size;
@@ -1028,16 +1124,12 @@ function lookConfiguration(q){
 $('share').onclick=async()=>{if(await copyLink($('share'))){const b=$('share'),label=b.querySelector('span');b.dataset.copied='true';label.textContent=t('share.copied');$('view-feedback').textContent=t('feedback.copied');setTimeout(()=>{b.dataset.copied='false';label.textContent=t('share');},2200);}};
 $('share-copy').onclick=()=>copyLink($('share-copy'));
 $('share-link').addEventListener('focus',e=>e.target.select());
-if(LOOK_KEYS.some(k=>lookQuery.has(k))||lookQuery.has('design')){
-  try{
-    if(lookQuery.has('design')){
-      const text=lookQuery.get('design');if(text.length>40000)throw Error(t('msg.linkLong'));
-      const bytes=await streamBytes(fromBase64url(text),new DecompressionStream('deflate-raw'));if(bytes.length>400000)throw Error(t('msg.designLarge'));
-      applyConfiguration(JSON.parse(new TextDecoder().decode(bytes)));message(t(restored?'msg.sharedSaved':'msg.shared'));
-    }else{applyConfiguration(lookConfiguration(lookQuery));message(t(restored?'msg.lookSaved':'msg.look'));}
-  }
-  catch(e){message(t('msg.badLink',{error:e.message}),true);}
+if(opening){
+  try{applyConfiguration(opening.configuration);message(t(opening.shared?(restored?'msg.sharedSaved':'msg.shared'):(restored?'msg.lookSaved':'msg.look')));}
+  // the saved design was drawn without fetching: bring its meshes now
+  catch(error){openingError=error;applyConfiguration(copy(configuration),{record:false,persist:false});}
 }
+if(openingError)message(t('msg.badLink',{error:openingError.message}),true);
 liveURL=createDesignURL({encode:shareLink,onLink:link=>{$('share-link').value=link;},onError:()=>message(t('files.linkError'),true)});
 refreshShare();
 
@@ -1055,11 +1147,17 @@ onLanguage(()=>{
 
 // The design opens beside the model, as the home page's rail does.
 showWorkspace();setPanelOpen(true);resize();reset();
+drawPictures();live=true;
 openBuildStep(location.hash.slice(1));
 window.addEventListener('hashchange',()=>openBuildStep(location.hash.slice(1)));
 portraitLayout.addEventListener('change',()=>{showWorkspace();if(activeMode==='customize')revealPanel(activePanel);});
 // ground(false) hides the contact shadow so checks and captures measure only the model.
-if(new URLSearchParams(location.search).has('diagnostics'))window.flan36=Object.freeze({snapshot:()=>({configuration:copy(configuration),fasteners:{shown:shownFasteners(configuration)||defaultFasteners,failed:fastenerFailure,meshes:Object.fromEntries(objects.filter(o=>o.userData.mesh_source&&(o.userData.group==='plate'||o.userData.group==='lid')).map(o=>[o.userData.side+'-'+o.userData.group,{source:o.userData.mesh_source,triangles:(o.geometry.index?o.geometry.index.count:o.geometry.attributes.position.count)/3}]))},pcb:Object.fromEntries(objects.filter(o=>o.userData.part_id===o.userData.side+'-pcb').map(o=>[o.userData.side,{mask:o.userData.pcb_mask,color:o.material.color.getHexString()}])),silkscreen:Object.fromEntries(silkOverlays.map(o=>[o.userData.silkscreen,{visible:o.visible,ink:o.material.color.getHexString(),texture:[...silkTextures].find(([,texture])=>texture===o.material.alphaMap)?.[0]}])),view:copy(state),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:controls.target.toArray(),zoom:camera.zoom,halfHeight},hidden:[...hiddenObjects],selected:copy(explorer.selected),visible:objects.filter(o=>o.visible).map(o=>o.userData.objectIndex),undo:history.canUndo,redo:history.canRedo}),idle:()=>Promise.all([store.idle(),keycapColors.idle()]),ground:shown=>{ground.enabled=shown;sync();}});
+// resolves once no mesh a design or a card asked for is still being fetched, and what arrived is drawn
+async function settled(){do{await meshWork;await new Promise(requestAnimationFrame);}while(meshStore.busy());}
+// The checks' handle appears once the opening design shows all of its parts, so a check starts from a whole keyboard.
+if(new URLSearchParams(location.search).has('diagnostics'))settled().then(()=>{window.flan36=Object.freeze({snapshot:()=>({configuration:copy(configuration),fasteners:{shown:shownFasteners(configuration)||defaultFasteners,failed:fastenerFailure,meshes:Object.fromEntries(objects.filter(o=>o.userData.mesh_source&&(o.userData.group==='plate'||o.userData.group==='lid')).map(o=>[o.userData.side+'-'+o.userData.group,{source:o.userData.mesh_source,triangles:(o.geometry.index?o.geometry.index.count:o.geometry.attributes.position.count)/3}]))},pcb:Object.fromEntries(objects.filter(o=>o.userData.part_id===o.userData.side+'-pcb').map(o=>[o.userData.side,{mask:o.userData.pcb_mask,color:o.material.color.getHexString()}])),silkscreen:Object.fromEntries(silkOverlays.map(o=>[o.userData.silkscreen,{visible:o.visible,ink:o.material.color.getHexString(),texture:[...silkTextures].find(([,texture])=>texture===o.material.alphaMap)?.[0]}])),view:copy(state),camera:{position:camera.position.toArray(),quaternion:camera.quaternion.toArray(),target:controls.target.toArray(),zoom:camera.zoom,halfHeight},hidden:[...hiddenObjects],selected:copy(explorer.selected),visible:objects.filter(o=>o.visible).map(o=>o.userData.objectIndex),undo:history.canUndo,redo:history.canRedo}),idle:()=>Promise.all([store.idle(),keycapColors.idle(),settled()]),
+  still:()=>{renderNow();return canvas.toDataURL('image/webp',.86);},   // the frame now on screen, for viewer/explore-still.cjs
+  settled,meshes:()=>({awaited:awaitedMeshes,busy:meshStore.busy()}),ground:shown=>{ground.enabled=shown;sync();}});});
 
 
 }

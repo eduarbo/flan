@@ -5,7 +5,7 @@ const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
 const tune=async(page,name)=>{const t=page.locator(`#panel-${name} .tune[aria-expanded=false]`);if(await t.count()&&await t.isVisible())await t.click();};
 const root=path.resolve(__dirname,'..'),out=path.join(root,'build/themes-print');fs.mkdirSync(out,{recursive:true});
 const html=fs.readFileSync(path.join(root,'docs/explore/offline.html'));const scene=JSON.parse(zlib.gunzipSync(Buffer.from(html.toString().match(/<script id="scene-data" type="application\/octet-stream">([\s\S]*?)<\/script>/)[1],'base64')));
-for(const [alias,id] of Object.entries(scene.geometryAliases||{}))scene.geometries[alias]=scene.geometries[id];
+scene.geometries=require('./scene-source.cjs')(scene);   // the page carries its meshes packed, one file per option
 const styles=['talavera','gameboy','snes','phone','ipod','hanafuda'];
 const themes=JSON.parse(fs.readFileSync(path.join(root,'design/themes.json'))).themes;
 assert.deepEqual(Object.keys(scene.catalog.frame_styles),styles);assert.ok(themes.length>=16);

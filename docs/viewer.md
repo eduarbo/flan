@@ -36,7 +36,7 @@ In **Build → Keep your design**, give your design a name and save its JSON. Lo
 
 [flankbd.com](https://flankbd.com/) opens on a live, simplified configurator; the full explorer is at [`/explore/`](https://flankbd.com/explore/). On load the layers ease apart, then the keyboard turns and floats slowly until you drag it. The vertical slider separates or reassembles the layers, ⏸ stops the standby motion and the cube resets the view. Pinch or ⌘/Ctrl-scroll zooms, so ordinary scrolling still moves the page.
 
-- **Size, Theme, Case, Keycaps and Frame** change the model at once. Theme colors the case, frames and keycaps exactly as the explorer's theme presets do, and the page eases to colors derived from it in about 600 ms; dark-bodied themes give a dark page. Every option's thumbnail is rendered live in the current colors.
+- **Size, Theme, Case, Keycaps and Frame** change the model at once. Theme colors the case, frames and keycaps exactly as the explorer's theme presets do, and the page eases to colors derived from it in about 600 ms; dark-bodied themes give a dark page. Every option's thumbnail is rendered live in the current colors. Another size's pack is fetched when its picture is first wanted: beside the model at once, on a phone when **Size** is opened or the spec sheet's size card nears the screen.
 - **Browse 6** lists the six magnetic frames. Hovering one previews it on the model; nothing changes until **Apply**, for both halves or one. A frame keeps the theme's colors unless you choose its own palette.
 - **The spec sheet** draws each card from the same model in the current colors: the 14.5 mm profile and the 18 × 17 mm pitch with dimensions measured from the meshes, the nice!nano, the nice!view, the four sizes, the separated electronics stack, the six frames and the PCB. They render when the sheet nears the screen.
 - **Open this build in 3D** opens the explorer on the same design. English by default; **ES** switches to Spanish. The last look and language stay on the device.
@@ -45,7 +45,9 @@ The explorer accepts the same look as a link: `explore/?size=flan54&theme=gamebo
 
 `node viewer/build.mjs` writes the explorer and then the home. `viewer/home-build.mjs` (also runnable alone) welds, simplifies and meshopt-encodes the scene's own meshes: one common pack of keycaps, switches, frames and electronics, and one pack per size with its four cases and PCB. Its receipt, [`validation/revI-home.json`](../validation/revI-home.json), records each family's error bound, source and result triangle counts and pack sizes. Fasteners, magnets and the underside diodes are left out. The model draws one instanced call per repeated mesh (switch housings, stems, sockets), about 130 calls in all. Resolution follows the frame rate, the standby motion draws every other frame, and thumbnails render one at a time while the model is still, read back from the GPU without stalling it. A browser without hardware acceleration gets no antialiasing, a lower resolution and no standby motion. `viewer/home-performance.cjs` measures load, intro, standby, a drag and a theme change on the real GPU (`FLAN_GL=software` for the worst case). On 2026-10-18 on an Apple M5 at 1920 × 1080 and 1440 × 900, both at 2×, every phase held 60 fps with one 70 ms task at load; with software rendering a drag held about 50 fps.
 
-`viewer/home-poster.cjs` renders the poster shown until WebGL is ready and the social image from the built page; `viewer/home-check.cjs` serves `docs/` and checks the page end to end, including the explorer opening on the chosen look.
+The build also writes the rail's buttons into the page itself, from `viewer/home/options.js`, so the page's layout is final before the script runs and nothing moves when it starts.
+
+`viewer/home-poster.cjs` renders the poster shown until WebGL is ready and the social image from the built page; `viewer/explore-still.cjs` captures the picture the explorer shows while the home page's look loads, and the build leaves that picture out when the meshes, colors or lighting it was made from have changed; `viewer/home-check.cjs` serves `docs/` and checks the page end to end, including the explorer opening on the chosen look.
 
 ## Saved data and recovery
 
@@ -57,9 +59,15 @@ If browser storage is unavailable, the design remains editable and exportable in
 
 ## Online and offline
 
-The online page is about 1 MB of markup and script. It fetches the model as its own hashed file when it opens, and print files only when you request a print kit. A failed download can be retried without changing the design. Files are matched to the viewer version before use.
+The online page is about 1 MB of markup and script. It fetches a short description of the scene, then only the meshes its design shows, each option in its own hashed file:
 
-Use the **Download offline viewer** link for a complete, single-file copy inside a ZIP: unzip it and open `Flan36-revI.html`. It opens without a server or network and includes configuration, GLB and print-kit export. The online `index.html` alone is not the offline download. `node viewer/build.mjs` also writes that file to `docs/explore/offline.html` for the checks; Git ignores it, so the repository holds one compressed binary instead of a 90 MB page of text.
+- **First frame:** the outside of the keyboard (cases, frames and keycaps) and the fixed parts, about 2 MB for a typical design. A bar under **Loading model…** follows this download. A link to the home page's look also shows a picture of that look until the model is drawn.
+- **Right after:** the PCB and the batteries with their leads, which sit inside the closed case, about 3 MB. **Loading parts…** shows while a part is on its way, and GLB and print exports wait for it.
+- **On demand:** another option's meshes arrive when its cards first come into view or a design chooses it. All 43 files together are 12.5 MB; before, every visit fetched one 38 MB file.
+
+Positions and triangles are stored exactly and read back byte for byte when the site is built; normals are stored as 16-bit octahedral vectors, under 0.01° from the scene's own. Print files are fetched only when you request a print kit, and the PCB cards' pictures when the PCB section is first seen. A failed download can be retried without changing the design. Files are matched to the viewer version before use.
+
+Use the **Download offline viewer** link for a complete, single-file copy inside a ZIP: unzip it and open `Flan36-revI.html`. It opens without a server or network and includes configuration, GLB and print-kit export. The online `index.html` alone is not the offline download. `node viewer/build.mjs` also writes that file to `docs/explore/offline.html` for the checks; Git ignores it, so the repository holds one compressed binary instead of a 56 MB page of text.
 
 GLB exports all installed parts assembled, regardless of hidden layers or exploded offsets. Its units are meters; use FreeCAD/STEP for solid editing.
 

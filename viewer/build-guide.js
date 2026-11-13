@@ -44,7 +44,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
     label.append(input,node('span','',say('Ready','Listo')));
     input.onchange=()=>{if(input.checked)checked[row.id]=row.token;else delete checked[row.id];try{localStorage.setItem(storageKey,JSON.stringify(checked));}catch{$('build-shopping-status').textContent=say('Checklist stays in this tab. Download the list to keep it.','La lista marcada queda en esta pestaña. Descárgala para conservarla.');}progress();};
     const body=node('div','shopping-body'),name=node('strong','',local(row.name)),art=node('img','shopping-art');
-    art.src=illustrations[row.id];art.alt='';art.width=240;art.height=180;
+    illustrations.show(art,row.id);art.alt='';art.width=240;art.height=180;
     const quantity=node('p','shopping-quantity',say('Need ','Necesitas ')+row.required+(row.halves.length?' · '+row.halves.map(s=>t('side.'+s)).join(' + '):''));
     body.append(name,quantity);
     const info=details('part-'+row.id,say('Details','Detalles'),[node('p','micro',local(row.note))]);info.className='shopping-info';
