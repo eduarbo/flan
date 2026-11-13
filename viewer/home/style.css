@@ -2,16 +2,17 @@
 @font-face { font-family: Fraunces; src: url(assets/fonts/Fraunces-latin.woff2) format("woff2"); font-weight: 300 500; font-display: swap; }
 @font-face { font-family: Inter; src: url(assets/fonts/Inter-latin.woff2) format("woff2"); font-weight: 400 600; font-display: swap; }
 @font-face { font-family: "JetBrains Mono"; src: url(assets/fonts/JetBrainsMono-latin.woff2) format("woff2"); font-weight: 400 500; font-display: swap; }
-/* Page colours follow the theme; registered so they ease between themes. */
-@property --bg0 { syntax: "<color>"; inherits: true; initial-value: #f6f2fd; }
-@property --bg1 { syntax: "<color>"; inherits: true; initial-value: #e2dcee; }
-@property --bg2 { syntax: "<color>"; inherits: true; initial-value: #c6bed5; }
-@property --glow { syntax: "<color>"; inherits: true; initial-value: #aca0c2; }
-@property --ink { syntax: "<color>"; inherits: true; initial-value: #20212a; }
-@property --muted { syntax: "<color>"; inherits: true; initial-value: #5e5769; }
-@property --accent { syntax: "<color>"; inherits: true; initial-value: #705d94; }
-@property --on { syntax: "<color>"; inherits: true; initial-value: #ffffff; }
-:root { --bg0: #f6f2fd; --bg1: #e2dcee; --bg2: #c6bed5; --glow: #aca0c2; --ink: #20212a; --muted: #5e5769; --accent: #705d94; --on: #ffffff;
+/* Page colours follow the theme; registered so they ease between themes. The values here are the opening
+   look's (EVA-01), so the first paint already matches it. */
+@property --bg0 { syntax: "<color>"; inherits: true; initial-value: #3a344d; }
+@property --bg1 { syntax: "<color>"; inherits: true; initial-value: #2b253b; }
+@property --bg2 { syntax: "<color>"; inherits: true; initial-value: #1f1a2c; }
+@property --glow { syntax: "<color>"; inherits: true; initial-value: #f28f1f; }
+@property --ink { syntax: "<color>"; inherits: true; initial-value: #f4f2fb; }
+@property --muted { syntax: "<color>"; inherits: true; initial-value: #b9b3cf; }
+@property --accent { syntax: "<color>"; inherits: true; initial-value: #f28f1f; }
+@property --on { syntax: "<color>"; inherits: true; initial-value: #1b1923; }
+:root { --bg0: #3a344d; --bg1: #2b253b; --bg2: #1f1a2c; --glow: #f28f1f; --ink: #f4f2fb; --muted: #b9b3cf; --accent: #f28f1f; --on: #1b1923;
   --line: color-mix(in srgb, var(--ink) 13%, transparent); --sel: color-mix(in srgb, var(--accent) 15%, transparent);
   --serif: Fraunces, Georgia, "Times New Roman", serif; --sans: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
   transition: --bg0 .6s ease-out, --bg1 .6s ease-out, --bg2 .6s ease-out, --glow .6s ease-out, --ink .6s ease-out, --muted .6s ease-out, --accent .6s ease-out, --on .6s ease-out;

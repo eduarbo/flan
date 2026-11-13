@@ -6,7 +6,7 @@
 
 **[flankbd.com →](https://flankbd.com/)** · **[Explore and customize in 3D →](https://flankbd.com/explore/)** · **[Parts and buying links →](docs/parts.md)** · **[Order PCBs →](docs/electronics.md#order-the-two-pcbs)** · **[Build guide →](docs/build.md)** · **[Edit in FreeCAD →](docs/freecad.md)**
 
-![Flan36 in the SNES theme with its layers apart: keycaps, switches, PCB, controller, display and frame](docs/images/revI-assembled.png)
+![Flan36 in the EVA-01 theme with its layers apart: keycaps, switches, PCB, controller, display and frame](docs/images/revI-assembled.png)
 
 | [Home page](https://flankbd.com/) | [3D explorer](https://flankbd.com/explore/) |
 |---|---|

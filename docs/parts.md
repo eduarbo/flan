@@ -171,7 +171,7 @@ Put the male header's **short solder tails into the display PCB** and its long m
 
 ## Printed parts
 
-![Flan36 in the SNES theme with its layers apart, rendered in the explorer](images/revI-assembled.png)
+![Flan36 in the EVA-01 theme with its layers apart, rendered in the explorer](images/revI-assembled.png)
 
 | Part | Quantity | Files / options |
 |---|---:|---|

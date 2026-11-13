@@ -20,7 +20,7 @@ const root=path.resolve(__dirname,'..'),shots=path.join(root,'build/home-check')
   const state=()=>page.evaluate(()=>({href:document.getElementById('open').getAttribute('href'),bg:getComputedStyle(document.documentElement).getPropertyValue('--bg1').trim(),
     pressed:[...document.querySelectorAll('#rail [aria-pressed=true]')].map(b=>b.dataset.value),explode:+document.getElementById('explode').getAttribute('aria-valuenow')}));
   out.initial=await state();
-  assert.equal(out.initial.href,'explore/?size=flan36&theme=snes&case=rim&keys=original&frame=snes');
+  assert.equal(out.initial.href,'explore/?size=flan36&theme=eva-01&case=rim&keys=original&frame=snes%2Cphone');
   assert(out.initial.explode>=70,'the intro separates the layers');
   // every control
   await page.click('#o-theme [data-value=gameboy]');await page.click('#o-case [data-value=terrace]');await page.click('#o-keys [data-value=saddle]');await page.click('#o-size [data-value=flan54]');

@@ -13,7 +13,7 @@ const GL=process.env.FLAN_GL==='software'?['--use-angle=swiftshader','--enable-u
 // renders: the canvas alone, on a transparent page
 const bare='.bar,.stage > :not(canvas),#workspace{visibility:hidden!important}html,body{background:transparent!important}';
 const settle=(page,ms=500)=>page.evaluate(ms=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(r,ms)))),ms);
-const LOOK='size=flan36&theme=snes&keys=original&frame=snes';
+const LOOK='size=flan36&theme=eva-01&keys=original&frame=snes%2Cphone';   // the home page's opening look
 const catalog=JSON.parse(fs.readFileSync(path.join(root,'keycaps/catalog.json'),'utf8'));
 // Each case in its own suggested finish, as its thumbnail in the explorer shows it, loaded like a saved design.
 function caseDesign(style){

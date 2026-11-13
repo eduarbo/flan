@@ -11,7 +11,7 @@ const themes=new Map(data.themes.map(t=>[t.id,t])),frameIds=data.frames.map(f=>f
 const CASES=[['rim','Color rim'],['solid','Solid'],['terrace','Terrace'],['level','Level']],KEYS=[['original','Original'],['normal','Sculpted'],['saddle','Saddle']];
 const T={
   en:{'nav.explore':'Explore in 3D','nav.build':'Build guide','hero.eyebrow':'Open-source wireless keyboard','hero.title':'Homemade, like a good flan.','hero.sub':'Four sizes, 31 themes and six magnetic frames. Turn it, take it apart, make it yours.',
-    'stage.label':'3D keyboard','stage.canvas':'Drag to turn the keyboard','stage.poster':'Flan36 in the SNES theme, layers apart','stage.hint':'Drag to turn · pinch to zoom','stage.pause':'Pause the standby motion','stage.play':'Resume the standby motion','stage.reset':'Reset the view',
+    'stage.label':'3D keyboard','stage.canvas':'Drag to turn the keyboard','stage.poster':'Flan36 in the EVA-01 theme, layers apart','stage.hint':'Drag to turn · pinch to zoom','stage.pause':'Pause the standby motion','stage.play':'Resume the standby motion','stage.reset':'Reset the view',
     'stage.nogl':'The live 3D view needs WebGL. The explorer shows every part.','stage.failed':'The 3D model could not load. Check the connection and reload.',
     'layers.apart':'Apart','layers.together':'Together','layers.label':'Separate the layers','rail.label':'Make it yours','g.size':'Size','g.theme':'Theme','g.case':'Case','g.keys':'Keycaps','g.frame':'Frame','g.frames':'Frames',
     'frame.browse':'Browse 6','frame.count':'· 6 magnetic designs','frame.cancel':'Cancel','frame.hover':'Hover a frame to preview it on the model','frame.apply':'Apply {name}','frame.from':'Colors from {theme}','frame.own':'Use {name}’s own palette','frame.ownOn':'Use the {theme} colors','frame.current':'Current','frame.previewing':'Previewing {name} · not applied yet',
@@ -19,7 +19,7 @@ const T={
     'f.parts':'Parts','f.pcbs':'Order PCBs','f.support':'Support Flan on Ko-fi','nav.support':'Support','f.status':'Digital prototype · physical tests pending','f.by':'by',
     'role.body':'Body','role.detail':'Detail','role.accent':'Accent','role.secondary':'Secondary'},
   es:{'nav.explore':'Explorar en 3D','nav.build':'Guía de armado','hero.eyebrow':'Teclado inalámbrico de código abierto','hero.title':'Hecho en casa, como el buen flan.','hero.sub':'Cuatro tamaños, 31 temas y seis marcos magnéticos. Gíralo, sepáralo y hazlo tuyo.',
-    'stage.label':'Teclado en 3D','stage.canvas':'Arrastra para girar el teclado','stage.poster':'Flan36 con el tema SNES, capas separadas','stage.hint':'Arrastra para girar · pellizca para acercar','stage.pause':'Pausar el movimiento en reposo','stage.play':'Reanudar el movimiento en reposo','stage.reset':'Restablecer la vista',
+    'stage.label':'Teclado en 3D','stage.canvas':'Arrastra para girar el teclado','stage.poster':'Flan36 con el tema EVA-01, capas separadas','stage.hint':'Arrastra para girar · pellizca para acercar','stage.pause':'Pausar el movimiento en reposo','stage.play':'Reanudar el movimiento en reposo','stage.reset':'Restablecer la vista',
     'stage.nogl':'La vista 3D necesita WebGL. El explorador muestra cada pieza.','stage.failed':'No se pudo cargar el modelo 3D. Revisa la conexión y recarga.',
     'layers.apart':'Separado','layers.together':'Unido','layers.label':'Separar las capas','rail.label':'Hazlo tuyo','g.size':'Tamaño','g.theme':'Tema','g.case':'Caja','g.keys':'Keycaps','g.frame':'Marco','g.frames':'Marcos',
     'frame.browse':'Ver los 6','frame.count':'· 6 diseños magnéticos','frame.cancel':'Cancelar','frame.hover':'Pasa el cursor por un marco para verlo en el modelo','frame.apply':'Aplicar {name}','frame.from':'Colores de {theme}','frame.own':'Usar la paleta propia de {name}','frame.ownOn':'Usar los colores de {theme}','frame.current':'Actual','frame.previewing':'Vista previa: {name} · sin aplicar',
@@ -52,7 +52,8 @@ const t=(key,vars={})=>(T[lang][key]??T.en[key]??key).replace(/\{(\w+)\}/g,(_,k)
 const store={get(k){try{return localStorage.getItem(k);}catch{return null;}},set(k,v){try{localStorage.setItem(k,v);}catch{}}};
 
 // the look: what the rail shows and what the explorer opens
-const DEFAULT={size:'flan36',theme:'snes',case:'rim',keys:'original',frame:{left:'snes',right:'snes'},own:{left:false,right:false}};
+// The look the page opens with, and the one its poster and share image show.
+const DEFAULT={size:'flan36',theme:'eva-01',case:'rim',keys:'original',frame:{left:'snes',right:'phone'},own:{left:false,right:false}};
 function valid(l){
   return l&&data.sizes.some(s=>s.id===l.size)&&themes.has(l.theme)&&CASES.some(c=>c[0]===l.case)&&KEYS.some(k=>k[0]===l.keys)
     &&['left','right'].every(s=>frameIds.includes(l.frame?.[s])&&typeof l.own?.[s]==='boolean');
