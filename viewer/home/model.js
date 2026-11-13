@@ -5,7 +5,6 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
-import {gunzipSync} from 'three/addons/libs/fflate.module.js';
 import {MeshoptDecoder} from 'meshoptimizer/decoder';
 import finishes from '../../design/frame-finishes.json';
 
@@ -21,7 +20,8 @@ export function framePalette(look,theme,side){
 
 async function fetchPack(url){
   const response=await fetch(url);if(!response.ok)throw Error(`${url}: ${response.status}`);
-  const bytes=gunzipSync(new Uint8Array(await response.arrayBuffer())),view=new DataView(bytes.buffer,bytes.byteOffset);
+  // the browser's own inflate, off the main thread
+  const bytes=new Uint8Array(await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer()),view=new DataView(bytes.buffer,bytes.byteOffset);
   const length=view.getUint32(0,true),header=JSON.parse(new TextDecoder().decode(bytes.subarray(4,4+length)));
   const blob=bytes.subarray(4+length),cache=new Map();
   header.mesh=id=>{
@@ -99,9 +99,15 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
   let common,objects=[],tweens=[];
 
   const load=id=>sizes[id]??=fetchPack(packs[id]);
+  // Meshes are decoded and creased a few at a time, so the page can paint and take input in between.
+  const breathe=()=>new Promise(resolve=>setTimeout(resolve));
+  async function prepare(pack,ids){let since=performance.now();for(const id of new Set(ids)){pack.mesh(id);if(performance.now()-since>8){await breathe();since=performance.now();}}}
   async function init(look,theme){
     await MeshoptDecoder.ready;
-    [common]=await Promise.all([fetchPack(packs.common),load(look.size)]);
+    const [first,sized]=await Promise.all([fetchPack(packs.common),load(look.size)]);common=first;
+    await prepare(common,[...common.parts.filter(p=>p.kind==='fixed').map(p=>p.mesh),...SIDES.flatMap(side=>[`${side}-battery`,`${side}-frame-${look.frame[side]}`,
+      ...Object.values(common.presets[look.keys][side]).map(([variant])=>common.caps[variant].mesh)])]);
+    await prepare(sized,SIDES.flatMap(side=>[`${side}-case-${look.case}-base`,`${side}-case-${look.case}-plate`,`${side}-pcb`]));
     for(const p of common.parts){
       const mesh=p.kind==='screen'?screenMesh(p.screen):new THREE.Mesh(undefined,p.kind==='fixed'&&p.c.length>1?p.c.map(paint):paint(p.c?.[0]||'#888'));
       mesh.position.fromArray(p.p);mesh.rotation.y=THREE.MathUtils.degToRad(p.a);mesh.userData={...p,base:[...p.p]};
@@ -115,8 +121,7 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
     measure();resetView();
     await renderer.compileAsync(scene,camera).catch(()=>{});
     state.ready=true;state.explode=reduced.matches||software?EXPLODED:0;state.target=EXPLODED;place();
-    // the other sizes in the background, so a size change is instant
-    for(const id of Object.keys(packs))if(id!=='common')load(id).catch(()=>{});
+    // another size's pack is fetched when its picture or the size itself is asked for
     loop();
   }
   // Size, case style, keycap shape and frames swap geometry at once; colours ease when animate is set.
@@ -271,7 +276,7 @@ export function createModel({canvas,frame:area=canvas,packs,onChange=()=>{}}){
     const spec=KINDS[kind],dpr=Math.min(devicePixelRatio,spec.annotate?3:2),W=Math.round(width*dpr),H=Math.round(height*dpr);
     const look={...state.look,frame:{...state.look.frame}},theme=state.theme,s=new THREE.Scene();lights(s);
     if(kind==='size')look.size=value;else if(kind==='case')look.case=value;else if(kind==='keys')look.keys=value;else if(kind==='frame')look.frame.left=value;
-    const pack=await sizes[look.size],picked=[],made=[],mat=c=>{const m=surface(c);made.push(m);return m;};
+    const pack=await load(look.size),picked=[],made=[],mat=c=>{const m=surface(c);made.push(m);return m;};
     for(const o of objects){
       const p=o.userData;if(p.side!=='left'||(p.v&&!p.v.includes(look.size))||!o.geometry&&p.kind!=='case'||!spec.keep(p))continue;
       let g=o.geometry,material=o.material,rot=o.rotation.y,y=p.base[1]+(spec.explode?p.e*spec.explode:0);

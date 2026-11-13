@@ -10,6 +10,7 @@ import {gzipSync,gunzipSync} from 'node:zlib';
 import {fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 import {MeshoptSimplifier,MeshoptEncoder} from 'meshoptimizer';
+import {CASES,KEYS,GROUPS,DEFAULT,TAB} from './home/options.js';
 
 const here=path.dirname(fileURLToPath(import.meta.url)),root=path.dirname(here);
 const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
@@ -144,7 +145,7 @@ export async function buildHome({scene=read('build/viewer-scene.json')}={}){
   const bytes=Object.fromEntries(Object.entries(files).map(([k,f])=>[k,fs.statSync(path.join(assets,f)).size]));
   const page=await homePage({scene,files});
   const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
-  const sources=['viewer/home-build.mjs','viewer/home/app.js','viewer/design-url.js','viewer/home/model.js','viewer/home/tokens.js','viewer/home/style.css','viewer/home/template.html',
+  const sources=['viewer/home-build.mjs','viewer/home/app.js','viewer/home/options.js','viewer/design-url.js','viewer/home/model.js','viewer/home/tokens.js','viewer/home/style.css','viewer/home/template.html',
     'design/themes.json','design/frame-finishes.json','design/variants.json','docs/branding/flan/flan-mark-color.svg','viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}));
   const receipt={revision:scene.revision,page:{path:'docs/index.html',sha256:hash('docs/index.html'),bytes:page.bytes},
     packs:Object.fromEntries(Object.entries(files).map(([k,f])=>[k,{path:'docs/assets/'+f,sha256:hash('docs/assets/'+f),bytes:bytes[k]}])),
@@ -169,7 +170,25 @@ async function homePage({scene,files}){
   // the colour mark; its outline follows the page's theme here (style.css), not the system's
   const mark=fs.readFileSync(path.join(root,'docs/branding/flan/flan-mark-color.svg'),'utf8').replace(/<\?xml[^>]*>|<title>[^<]*<\/title>|<style>[^<]*<\/style>/g,'')
     .replace(/<svg[^>]*viewBox="([^"]+)"[^>]*>/,'<svg class="mark" viewBox="$1" aria-hidden="true">');
-  const html=fs.readFileSync(path.join(dir,'template.html'),'utf8')
+  // The rail as it opens, written into the page: its height is final at the first paint, so nothing below it
+  // moves when the script starts (home/app.js gives these buttons their pictures and actions).
+  const text=value=>String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+  const option=(kind,id,inner,pressed,label)=>`<button type="button" class="opt ${kind}" data-value="${text(id)}" aria-pressed="${pressed}"${label?` title="${text(label)}" aria-label="${text(label)}"`:''}><img alt="" width="1" height="1" decoding="async">${inner}</button>`;
+  const frameName=id=>data.frames.find(f=>f.id===id).label,framesNow=DEFAULT.frame.left===DEFAULT.frame.right?frameName(DEFAULT.frame.left):`${frameName(DEFAULT.frame.left)} / ${frameName(DEFAULT.frame.right)}`;
+  const small={size:data.sizes.find(z=>z.id===DEFAULT.size).keys,theme:themes.find(th=>th.id===DEFAULT.theme).name,case:CASES.find(c=>c[0]===DEFAULT.case)[1].replace('Color r','R'),keys:KEYS.find(k=>k[0]===DEFAULT.keys)[1],frame:framesNow};
+  const tabNames={size:'Size',theme:'Theme',case:'Case',keys:'Keycaps',frame:'Frame'};
+  const rail={
+    TABS:GROUPS.map(g=>`<button type="button" role="tab" data-tab="${g}" aria-selected="${g===TAB}">${tabNames[g]}<small>${text(small[g])}</small></button>`).join(''),
+    O_SIZE:data.sizes.map(z=>option('size',z.id,`<b>${text(z.keys)}</b>`,z.id===DEFAULT.size)).join(''),
+    O_THEME:themes.map(th=>`<button type="button" title="${text(th.name)}" data-value="${text(th.id)}" aria-label="${text(th.name)}" aria-pressed="${th.id===DEFAULT.theme}" style="--a:${th.base};--b:${th.plate};--c:${th.frame.accent}"><span>${text(th.name)}</span></button>`).join(''),
+    O_CASE:CASES.map(([id,name])=>option('case',id,`<span>${text(name)}</span>`,id===DEFAULT.case)).join(''),
+    O_KEYS:KEYS.map(([id,name])=>option('keys',id,`<span>${text(name)}</span>`,id===DEFAULT.keys)).join(''),
+    O_FRAME:data.frames.map(f=>option('frame',f.id,'',f.id===DEFAULT.frame.left||f.id===DEFAULT.frame.right,f.label)).join(''),
+  };
+  let template=fs.readFileSync(path.join(dir,'template.html'),'utf8');
+  if(!template.includes(`<div class="grp active" data-group="${TAB}">`))throw Error('The template must open on the '+TAB+' group.');
+  for(const [slot,markup] of Object.entries(rail)){if(!template.includes(`<!--__${slot}__-->`))throw Error('Rail slot missing: '+slot);template=template.replace(`<!--__${slot}__-->`,()=>markup);}
+  const html=template
     .replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(dir,'style.css'),'utf8'))
     .replaceAll('__OG_VERSION__',()=>crypto.createHash('sha256').update(fs.readFileSync(path.join(dir,'home-og.png'))).digest('hex').slice(0,12))   // sharing services cache by address
     .replace('<!--__MARK__-->',()=>mark.trim())

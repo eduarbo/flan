@@ -4,11 +4,11 @@ import finishes from '../../design/frame-finishes.json';
 import {createModel} from './model.js';
 import {pageTokens} from './tokens.js';
 import {createDesignURL,designKeys} from '../design-url.js';
+import {CASES,KEYS,DEFAULT,TAB} from './options.js';
 
 const data=JSON.parse(document.getElementById('home-data').textContent);
 const $=id=>document.getElementById(id);
 const themes=new Map(data.themes.map(t=>[t.id,t])),frameIds=data.frames.map(f=>f.id);
-const CASES=[['rim','Color rim'],['solid','Solid'],['terrace','Terrace'],['level','Level']],KEYS=[['original','Original'],['normal','Sculpted'],['saddle','Saddle']];
 const T={
   en:{'nav.explore':'Explore in 3D','nav.build':'Build guide','hero.eyebrow':'Open-source wireless keyboard','hero.title':'Homemade, like a good flan.','hero.sub':'Four sizes, 31 themes and six magnetic frames. Turn it, take it apart, make it yours.',
     'stage.label':'3D keyboard','stage.canvas':'Drag to turn the keyboard','stage.poster':'Flan36 in the EVA-01 theme, layers apart','stage.hint':'Drag to turn · pinch to zoom','stage.pause':'Pause the standby motion','stage.play':'Resume the standby motion','stage.reset':'Reset the view',
@@ -52,8 +52,6 @@ const t=(key,vars={})=>(T[lang][key]??T.en[key]??key).replace(/\{(\w+)\}/g,(_,k)
 const store={get(k){try{return localStorage.getItem(k);}catch{return null;}},set(k,v){try{localStorage.setItem(k,v);}catch{}}};
 
 // the look: what the rail shows and what the explorer opens
-// The look the page opens with, and the one its poster and share image show.
-const DEFAULT={size:'flan36',theme:'eva-01',case:'rim',keys:'original',frame:{left:'snes',right:'phone'},own:{left:false,right:false}};
 function valid(l){
   return l&&data.sizes.some(s=>s.id===l.size)&&themes.has(l.theme)&&CASES.some(c=>c[0]===l.case)&&KEYS.some(k=>k[0]===l.keys)
     &&['left','right'].every(s=>frameIds.includes(l.frame?.[s])&&typeof l.own?.[s]==='boolean');
@@ -91,28 +89,21 @@ function paint(){
 // rail
 const el=(tag,props={},...kids)=>{const e=Object.assign(document.createElement(tag),props);for(const [k,v] of Object.entries(props.dataset||{}))e.dataset[k]=v;e.append(...kids);return e;};
 const previews=new Map();
-function option(group,value,inner,cls){
-  const b=el('button',{type:'button',className:`opt ${cls}`});b.dataset.value=value;b.setAttribute('aria-pressed','false');
-  const img=el('img',{alt:'',width:1,height:1});img.decoding='async';b.append(img,...inner);previews.set(`${group}:${value}`,img);
-  b.addEventListener('click',()=>choose(group,value));return b;
-}
+// The rail's buttons are already in the page (viewer/home-build.mjs writes them), so its height is final
+// before this script runs; here they get their pictures' slots and their actions.
 function buildRail(){
-  $('o-size').replaceChildren(...data.sizes.map(s=>option('size',s.id,[el('b',{textContent:String(s.keys)})],'size')));
-  $('o-case').replaceChildren(...CASES.map(([id,name])=>option('case',id,[el('span',{textContent:name})],'case')));
-  $('o-keys').replaceChildren(...KEYS.map(([id,name])=>option('keys',id,[el('span',{textContent:name})],'keys')));
-  $('o-frame').replaceChildren(...data.frames.map(f=>{const b=option('frame',f.id,[],'frame');b.title=f.label;b.setAttribute('aria-label',f.label);return b;}));
-  $('o-theme').replaceChildren(...data.themes.map(th=>{
-    const b=el('button',{type:'button',title:th.name},el('span',{textContent:th.name}));b.dataset.value=th.id;b.setAttribute('aria-label',th.name);b.setAttribute('aria-pressed','false');
-    b.style.cssText=`--a:${th.base};--b:${th.plate};--c:${th.frame.accent}`;b.addEventListener('click',()=>choose('theme',th.id));return b;}));
-  // phone tabs
-  $('tabs').replaceChildren(...['size','theme','case','keys','frame'].map(g=>{
-    const b=el('button',{type:'button',role:'tab'});b.dataset.tab=g;b.addEventListener('click',()=>tab(g));return b;}));
-  tab(store.get('flan.home.tab')||'theme');
+  for(const group of ['size','case','keys','frame'])for(const b of $('o-'+group).children){
+    previews.set(`${group}:${b.dataset.value}`,b.querySelector('img'));b.addEventListener('click',()=>choose(group,b.dataset.value));}
+  for(const b of $('o-theme').children)b.addEventListener('click',()=>choose('theme',b.dataset.value));
+  for(const b of $('tabs').children)b.addEventListener('click',()=>tab(b.dataset.tab));
+  tab(store.get('flan.home.tab')||TAB);
 }
 function tab(g){
   for(const b of $('tabs').children)b.setAttribute('aria-selected',String(b.dataset.tab===g));
   for(const grp of document.querySelectorAll('.grp'))grp.classList.toggle('active',grp.dataset.group===g);
   store.set('flan.home.tab',g);reveal();
+  // the size pictures are drawn from each size's own pack, fetched when they are first wanted
+  if(g==='size'&&model&&!sizesDrawn){clearTimeout(previewTimer);previewTimer=setTimeout(renderPreviews,60);}
 }
 const caseName=id=>CASES.find(c=>c[0]===id)[1],keysName=id=>KEYS.find(k=>k[0]===id)[1],frameName=id=>data.frames.find(f=>f.id===id).label;
 function syncRail(){
@@ -144,7 +135,10 @@ function choose(group,value){
   else next[group]=value;
   commit(next);
 }
-let model=null,previewTimer=0;
+let model=null,previewTimer=0,sizesDrawn=false,sizesNear=false;
+// a size's picture is wanted where its strip shows (always beside the model; on a phone, under the Size tab)
+// or once the spec sheet's card that repeats them is near
+const sizesWanted=()=>sizesNear||$('o-size').getClientRects().length>0;
 function commit(next,{animate=true}={}){
   const themeChanged=next.theme!==look.theme;look=next;store.set('flan.home.look',JSON.stringify(look));
   if(themeChanged)paint();syncRail();
@@ -154,8 +148,8 @@ function commit(next,{animate=true}={}){
 // previews in the current colours; a size's own pack may still be arriving
 let previewSeq=0;
 async function renderPreviews(){
-  if(!model)return;const seq=++previewSeq;
-  const jobs=[...data.sizes.map(s=>['size',s.id,{width:128,height:88}]),...CASES.map(c=>['case',c[0],{width:140,height:92}]),
+  if(!model)return;const seq=++previewSeq,sized=sizesWanted();
+  const jobs=[...(sized?data.sizes.map(s=>['size',s.id,{width:128,height:88}]):[]),...CASES.map(c=>['case',c[0],{width:140,height:92}]),
     ...KEYS.map(k=>['keys',k[0],{width:184,height:88}]),...frameIds.map(f=>['frame',f,{width:68,height:168}])];
   // the spec sheet's own renders wait until it is about to be read
   if(specsNear){
@@ -173,6 +167,7 @@ async function renderPreviews(){
     }catch(e){console.warn(kind,value,e);}
     if(kind==='frame'||kind==='size')for(const [img,key] of mirror)setSrc(img,previews.get(key).getAttribute('src'));
   }
+  sizesDrawn=sized;   // a pass that left the sizes out leaves their pictures in the earlier colours
   if(!$('browser').hidden)focusFrame(browsing.focus);
 }
 
@@ -271,6 +266,7 @@ function failed(error){console.error(error);const n=$('note');n.hidden=false;n.t
 
 lang=store.get('flan.lang')==='es'?'es':'en';
 buildRail();buildSpecs();paint();translate();reveal();
+new IntersectionObserver(([e],o)=>{if(e.isIntersecting){sizesNear=true;o.disconnect();if(model&&!sizesDrawn)renderPreviews();}},{rootMargin:'500px 0px'}).observe(document.querySelector('.art.sizes'));
 for(const b of document.querySelectorAll('[data-lang]'))b.addEventListener('click',()=>{lang=b.dataset.lang;store.set('flan.lang',lang);translate();});
 $('browse').addEventListener('click',openBrowser);$('back').addEventListener('click',()=>closeBrowser(false));$('f-cancel').addEventListener('click',()=>closeBrowser(false));
 $('f-apply').addEventListener('click',()=>closeBrowser(true));
