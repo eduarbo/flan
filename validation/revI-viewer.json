@@ -1632,11 +1632,11 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "0882ce362b6d674d001831e7e2e7d46bf5b35e1d569f0c9184e797aa863958bc"
+      "sha256": "440e25c94651912746c0be6dc5bb1f900e7566b463803ea3c39842eef011dca5"
     },
     {
       "path": "viewer/build-guide.js",
-      "sha256": "8278d310435ae43022a65ade4bc9858cc2967d2d7b4c3b1ba19a299e181f5a2b"
+      "sha256": "860ec02d992817a19697112d00607f2d97eba5c87e6d9a8089a13d38332aa73e"
     },
     {
       "path": "viewer/design-url.js",
@@ -1656,7 +1656,7 @@
     },
     {
       "path": "viewer/i18n.js",
-      "sha256": "b62b7bbaf1dfe4fc1aad714d6835ef1513a6d923781c3bcb0400dc8177a42831"
+      "sha256": "1f3f47daa63c2b7eea036ea6abd323059eb4c16d5c81a7cbf99ee10256f36937"
     },
     {
       "path": "viewer/config.js",
@@ -1672,7 +1672,19 @@
     },
     {
       "path": "viewer/assets.js",
-      "sha256": "e2a5711abb61a63df22feafb45024a1ac387923f6c49d3c6bd12faeca8c1f97b"
+      "sha256": "40660c910a14b54a84e49afd2c9d9245406c22c489871115d0991cc7161df90e"
+    },
+    {
+      "path": "viewer/geometry.js",
+      "sha256": "55bd980fb67bf7fc14f7ee186b73663c966ef099156eb7eb016dde7453bc2bea"
+    },
+    {
+      "path": "viewer/studio.js",
+      "sha256": "16ac735f815baa1080a43fd1c4bb6a7b2197a6769c8e4173720a90bb552a3f8e"
+    },
+    {
+      "path": "viewer/home/options.js",
+      "sha256": "86fcac37a98ac39e92f924a2296000887278701a698e02603df043704b294e65"
     },
     {
       "path": "viewer/keycap-colors.js",
@@ -1704,7 +1716,7 @@
     },
     {
       "path": "viewer/previews.js",
-      "sha256": "79c1bfb7a9bfc1bceba5c0fb13e4ba9e0b3d8c0130a4e0dbc11abaa51c4496ac"
+      "sha256": "10c1cdb8b8803948068ae3ac3d0d35a97c382cbf2dc16f6e0e3841f7becedc7d"
     },
     {
       "path": "viewer/finishes.js",
@@ -1716,15 +1728,15 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "3c7627c0cd24cad41643a05984553b9b9ddf7f639b1d456bbcd0cf97cdfafe7f"
+      "sha256": "05eae775cd6347d3fc3cd57e2051f1cf6132630172a7997ac3b99f81705420ec"
     },
     {
       "path": "viewer/template.html",
-      "sha256": "862e57ce9fea4ce6b91f57f7f11f029596a4aa718e87cbc7e2d648c95053edd9"
+      "sha256": "70a370737a68d2ae8b16293c659e10a8db2ac4c628e39b8ba675be9429160995"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "940e586579f80f7c513f5bf64a94ee18bbffcd64a01dc664f988d6d43fdb406f"
+      "sha256": "6e41d8ad5c7c9c72bde5f2c9ae9f065ce7c0718a1322c4a916a8b507b37a0689"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -1767,7 +1779,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "ea75e0d331108b17d995e62a09e7df6e04956d8a2be8fd52b4f4c526243a53d5",
+  "viewer_sha256": "8ce4177a73037cc9de1f30179c8827dbb3a725e3716ed3e6050251673d92de26",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -1778,16 +1790,297 @@
     "cover_ahead_of_top_cap_mm": 0,
     "cover_ahead_of_adjacent_cap_mm": 0
   },
-  "offline": "docs/explore/offline.zip holds the single-file offline copy, which embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses; docs/explore/offline.html is that file, built locally and not published. docs/explore/index.html fetches the hashed scene at start, the print payload on export and the silkscreen textures when an edition is shown.",
+  "offline": "docs/explore/offline.zip holds the single-file offline copy, which embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses; docs/explore/offline.html is that file, built locally and not published. docs/explore/index.html fetches the hashed scene description and the meshes its design shows at start, other meshes when an option needs them, the print payload on export and the silkscreen textures when an edition is shown.",
   "scene": {
-    "path": "docs/explore/assets/scene-5357dd62e8cc6c9b3970d7dd7c4b92d50c8afe9f7cb900199005aa9ace150af1.bin",
-    "sha256": "5357dd62e8cc6c9b3970d7dd7c4b92d50c8afe9f7cb900199005aa9ace150af1",
-    "bytes": 39420679
+    "path": "docs/explore/assets/scene-4cc45275418dbcef41d0c68182af17812feb88e08c349ecc9434d01ad062c96d.bin",
+    "sha256": "4cc45275418dbcef41d0c68182af17812feb88e08c349ecc9434d01ad062c96d",
+    "bytes": 92261
+  },
+  "geometry": {
+    "method": "One file per option. Positions and triangle indices are stored exactly (meshopt vertex and index-sequence codecs, read back byte for byte at build time); normals as 16-bit octahedral vectors.",
+    "normal_error_deg": 0.00467,
+    "published_meshes": 119,
+    "unpublished_meshes": 123,
+    "bytes": 13153897,
+    "chunks": {
+      "battery-301230": {
+        "path": "docs/explore/assets/geometry-battery-301230-2a7cc292f919b5e5ca5daa00778160dcf1dafab21d848429f711bff177d90778.bin",
+        "sha256": "2a7cc292f919b5e5ca5daa00778160dcf1dafab21d848429f711bff177d90778",
+        "bytes": 1771623,
+        "meshes": 6
+      },
+      "battery-adafruit-1570": {
+        "path": "docs/explore/assets/geometry-battery-adafruit-1570-348ed15ca2c4cfcb14b24cf5768df496593ec8ba58728419f87b8f6c3c58e748.bin",
+        "sha256": "348ed15ca2c4cfcb14b24cf5768df496593ec8ba58728419f87b8f6c3c58e748",
+        "bytes": 1771445,
+        "meshes": 6
+      },
+      "cap-choc_stem_choc_size_normal": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_normal-33fc7ab9eba522504f1c35b07872f6ef2b5d5e2e7cc452e001b8cb6dc85907af.bin",
+        "sha256": "33fc7ab9eba522504f1c35b07872f6ef2b5d5e2e7cc452e001b8cb6dc85907af",
+        "bytes": 211840,
+        "meshes": 1
+      },
+      "cap-choc_stem_choc_size_normal_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_normal_90deg-b5d973cb2a74149510f4333ff7ffe6a778a7a1e6a0d1036ef80b58b1bcb5e4af.bin",
+        "sha256": "b5d973cb2a74149510f4333ff7ffe6a778a7a1e6a0d1036ef80b58b1bcb5e4af",
+        "bytes": 211996,
+        "meshes": 1
+      },
+      "cap-choc_stem_choc_size_normal_homing": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_normal_homing-3361e8c110f513ab99d8e16b5d856ee2f3d8db683bcc3ad0879dd6cb816afaf1.bin",
+        "sha256": "3361e8c110f513ab99d8e16b5d856ee2f3d8db683bcc3ad0879dd6cb816afaf1",
+        "bytes": 214674,
+        "meshes": 1
+      },
+      "cap-choc_stem_choc_size_normal_homing_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_normal_homing_90deg-767f6ce423e11245ad7d409b1a2356d90b93db3ae979508558633a8430752ea4.bin",
+        "sha256": "767f6ce423e11245ad7d409b1a2356d90b93db3ae979508558633a8430752ea4",
+        "bytes": 213577,
+        "meshes": 1
+      },
+      "cap-choc_stem_choc_size_normal_tilted": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_normal_tilted-37f3a8db40113bf845bea936b75b4bc9d12c04a43b7f5d6dd2aa774bda6ea3c1.bin",
+        "sha256": "37f3a8db40113bf845bea936b75b4bc9d12c04a43b7f5d6dd2aa774bda6ea3c1",
+        "bytes": 235658,
+        "meshes": 1
+      },
+      "cap-choc_stem_choc_size_normal_tilted_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_normal_tilted_90deg-4abf806132ba3f8b7ac54e520417414077fcee466cfcc3cb6db74025c4b16393.bin",
+        "sha256": "4abf806132ba3f8b7ac54e520417414077fcee466cfcc3cb6db74025c4b16393",
+        "bytes": 234423,
+        "meshes": 1
+      },
+      "cap-choc_stem_choc_size_saddle": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_saddle-a60579d4789c595fe36fffff78be136df19a5bce5dc9143293b3447f7151f8f5.bin",
+        "sha256": "a60579d4789c595fe36fffff78be136df19a5bce5dc9143293b3447f7151f8f5",
+        "bytes": 193554,
+        "meshes": 1
+      },
+      "cap-choc_stem_choc_size_saddle_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_saddle_90deg-456e81f1e94104cd8176a03334b9083f6a58746a3947a680afc01e6f7d081d8a.bin",
+        "sha256": "456e81f1e94104cd8176a03334b9083f6a58746a3947a680afc01e6f7d081d8a",
+        "bytes": 193409,
+        "meshes": 1
+      },
+      "cap-choc_stem_choc_size_saddle_homing": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_saddle_homing-a1acc9784828b838e86d498c2da67e83e6e23f8e9ae84865b7e00e9fcc7821ed.bin",
+        "sha256": "a1acc9784828b838e86d498c2da67e83e6e23f8e9ae84865b7e00e9fcc7821ed",
+        "bytes": 199236,
+        "meshes": 1
+      },
+      "cap-choc_stem_choc_size_saddle_homing_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_saddle_homing_90deg-c0c27d3f99051fb1a28236bb681b631482434455744957800a9b1890789169f3.bin",
+        "sha256": "c0c27d3f99051fb1a28236bb681b631482434455744957800a9b1890789169f3",
+        "bytes": 199116,
+        "meshes": 1
+      },
+      "cap-choc_stem_choc_size_saddle_tilted": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_saddle_tilted-90db23dcc5328afbda81ecceb4d1146a840c3db5873074111067fd99fee8e611.bin",
+        "sha256": "90db23dcc5328afbda81ecceb4d1146a840c3db5873074111067fd99fee8e611",
+        "bytes": 223596,
+        "meshes": 1
+      },
+      "cap-choc_stem_choc_size_saddle_tilted_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_saddle_tilted_90deg-9e625e9eeb95e49ff55c655236c3e0fc3aff46730a63c70fbec4042a3f21aeae.bin",
+        "sha256": "9e625e9eeb95e49ff55c655236c3e0fc3aff46730a63c70fbec4042a3f21aeae",
+        "bytes": 223429,
+        "meshes": 1
+      },
+      "cap-choc_stem_choc_size_thumb": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_thumb-b1f1de6da5304d0cf95092653fb30e0f152746841c9f5c5370014a4a9094b396.bin",
+        "sha256": "b1f1de6da5304d0cf95092653fb30e0f152746841c9f5c5370014a4a9094b396",
+        "bytes": 203522,
+        "meshes": 1
+      },
+      "cap-choc_stem_choc_size_thumb_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_choc_size_thumb_90deg-14e243882a540877bbc8f9e9a805a10906a37e461831799be418e924d1b4c63d.bin",
+        "sha256": "14e243882a540877bbc8f9e9a805a10906a37e461831799be418e924d1b4c63d",
+        "bytes": 203395,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_normal": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_normal-07c6adf03395606cf0755fb6d151b7aa9dc5685ca90af3045ead5474901ba412.bin",
+        "sha256": "07c6adf03395606cf0755fb6d151b7aa9dc5685ca90af3045ead5474901ba412",
+        "bytes": 206776,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_normal_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_normal_90deg-73e3d994dbddedffbd36ead1486cb16f4f53688dca3bd8990f33b48415dc0afc.bin",
+        "sha256": "73e3d994dbddedffbd36ead1486cb16f4f53688dca3bd8990f33b48415dc0afc",
+        "bytes": 208015,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_normal_homing": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_normal_homing-e2ca62bbb011f27a0e0ab19d96965e149136c0772e6c0fc67e3798e22922b8e7.bin",
+        "sha256": "e2ca62bbb011f27a0e0ab19d96965e149136c0772e6c0fc67e3798e22922b8e7",
+        "bytes": 217917,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_normal_homing_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_normal_homing_90deg-4a52449a66e0fd44f68e1d594ff8ffcb38453524c9840374a83fb27f94588181.bin",
+        "sha256": "4a52449a66e0fd44f68e1d594ff8ffcb38453524c9840374a83fb27f94588181",
+        "bytes": 219142,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_normal_tilted": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_normal_tilted-665378c5fba6f3d0d8f05ae5eb74f1d96e20fc8231200f01428c310b59bb992b.bin",
+        "sha256": "665378c5fba6f3d0d8f05ae5eb74f1d96e20fc8231200f01428c310b59bb992b",
+        "bytes": 236476,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_normal_tilted_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_normal_tilted_90deg-36d846c88dcb7b4cc0aa6b5962a45a24f7ccce5811a1f68b303d5e8c91100b96.bin",
+        "sha256": "36d846c88dcb7b4cc0aa6b5962a45a24f7ccce5811a1f68b303d5e8c91100b96",
+        "bytes": 237694,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_saddle": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_saddle-f31361a086f367473f650eb5132555cd4a0ca682f1c4e9c16f3fa8b5b3488c21.bin",
+        "sha256": "f31361a086f367473f650eb5132555cd4a0ca682f1c4e9c16f3fa8b5b3488c21",
+        "bytes": 204170,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_saddle_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_saddle_90deg-d232a2ced84b19319e279a275c21e8a4d107eac865be58d6f65b94a076f328d5.bin",
+        "sha256": "d232a2ced84b19319e279a275c21e8a4d107eac865be58d6f65b94a076f328d5",
+        "bytes": 206988,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_saddle_homing": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_saddle_homing-4184a8398a739841752352a3ebb5bd13f1b64f40f4ab99dd025dc0419c52b30a.bin",
+        "sha256": "4184a8398a739841752352a3ebb5bd13f1b64f40f4ab99dd025dc0419c52b30a",
+        "bytes": 209120,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_saddle_homing_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_saddle_homing_90deg-e176757e8f9bb29349d4e26071b0292f4235c76b1b4bdf92d547957329846141.bin",
+        "sha256": "e176757e8f9bb29349d4e26071b0292f4235c76b1b4bdf92d547957329846141",
+        "bytes": 211816,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_saddle_tilted": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_saddle_tilted-930586411bc3c878e5fa8420b376661d5affa921fbe926e83dc84b18cd82be31.bin",
+        "sha256": "930586411bc3c878e5fa8420b376661d5affa921fbe926e83dc84b18cd82be31",
+        "bytes": 270403,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_saddle_tilted_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_saddle_tilted_90deg-dca5f4d8372073f648dcdcdcdc70f15853c8d64a83b9132473178d298b254fba.bin",
+        "sha256": "dca5f4d8372073f648dcdcdcdc70f15853c8d64a83b9132473178d298b254fba",
+        "bytes": 273280,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_thumb": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_thumb-7d6233612c1bbc766205a01711fbef7a20fb8d64bdb445659d47d2906495289d.bin",
+        "sha256": "7d6233612c1bbc766205a01711fbef7a20fb8d64bdb445659d47d2906495289d",
+        "bytes": 214641,
+        "meshes": 1
+      },
+      "cap-choc_stem_mx_size_thumb_90deg": {
+        "path": "docs/explore/assets/geometry-cap-choc_stem_mx_size_thumb_90deg-65e57752b254c79e74d07a900b835df6a604a8bee9778259d20060945a46a1cd.bin",
+        "sha256": "65e57752b254c79e74d07a900b835df6a604a8bee9778259d20060945a46a1cd",
+        "bytes": 215936,
+        "meshes": 1
+      },
+      "case-level": {
+        "path": "docs/explore/assets/geometry-case-level-e05981068ba33edc1755a0b711bb8d6962a55effe62b3d4b5acaf9a7723b43ab.bin",
+        "sha256": "e05981068ba33edc1755a0b711bb8d6962a55effe62b3d4b5acaf9a7723b43ab",
+        "bytes": 108502,
+        "meshes": 2
+      },
+      "case-level--case-solid": {
+        "path": "docs/explore/assets/geometry-case-level--case-solid-578337aaa2ac926c0475b65ef15d0d27a02b4525c5bad3b34b4e67f3ef9d6bf4.bin",
+        "sha256": "578337aaa2ac926c0475b65ef15d0d27a02b4525c5bad3b34b4e67f3ef9d6bf4",
+        "bytes": 124579,
+        "meshes": 2
+      },
+      "case-rim": {
+        "path": "docs/explore/assets/geometry-case-rim-d02aa39a1f8d1fbf9921e9cb1a68a3351b5d5c938374dbf0bba7133e41881601.bin",
+        "sha256": "d02aa39a1f8d1fbf9921e9cb1a68a3351b5d5c938374dbf0bba7133e41881601",
+        "bytes": 208643,
+        "meshes": 4
+      },
+      "case-solid--case-terrace": {
+        "path": "docs/explore/assets/geometry-case-solid--case-terrace-c8b576dccce06166edd071b134f4ee3f08bbd0e4894649f544d8eda24189aa8c.bin",
+        "sha256": "c8b576dccce06166edd071b134f4ee3f08bbd0e4894649f544d8eda24189aa8c",
+        "bytes": 47325,
+        "meshes": 2
+      },
+      "case-terrace": {
+        "path": "docs/explore/assets/geometry-case-terrace-85feba6cc03172192570bedd253132a2ebd44638b38063253c495898cf3d3f9c.bin",
+        "sha256": "85feba6cc03172192570bedd253132a2ebd44638b38063253c495898cf3d3f9c",
+        "bytes": 201989,
+        "meshes": 2
+      },
+      "core": {
+        "path": "docs/explore/assets/geometry-core-f37c08452d29be5a4dfe154e9caa433060ddc41cd3162d98d6454f4ccea8b9f0.bin",
+        "sha256": "f37c08452d29be5a4dfe154e9caa433060ddc41cd3162d98d6454f4ccea8b9f0",
+        "bytes": 945462,
+        "meshes": 53
+      },
+      "frame-gameboy": {
+        "path": "docs/explore/assets/geometry-frame-gameboy-83dceb75bdbc58b48bf4e9e37c3f3db2c2887eb5879edeb58aa629ffbc19b0f9.bin",
+        "sha256": "83dceb75bdbc58b48bf4e9e37c3f3db2c2887eb5879edeb58aa629ffbc19b0f9",
+        "bytes": 86864,
+        "meshes": 2
+      },
+      "frame-hanafuda": {
+        "path": "docs/explore/assets/geometry-frame-hanafuda-88147bdd0ef61ad9b951441c62653fa92c8431a5bc26d93f1d6653a61c4befda.bin",
+        "sha256": "88147bdd0ef61ad9b951441c62653fa92c8431a5bc26d93f1d6653a61c4befda",
+        "bytes": 96020,
+        "meshes": 2
+      },
+      "frame-ipod": {
+        "path": "docs/explore/assets/geometry-frame-ipod-e6751c7bcb417d9bda4d56ef894867109ead7c871c25ad677004fbbe7304a6e1.bin",
+        "sha256": "e6751c7bcb417d9bda4d56ef894867109ead7c871c25ad677004fbbe7304a6e1",
+        "bytes": 88934,
+        "meshes": 2
+      },
+      "frame-phone": {
+        "path": "docs/explore/assets/geometry-frame-phone-a24a65a0cd21d35ff9de9e40a9066a69e5bc1e47091bb268fe8ed061b9a93015.bin",
+        "sha256": "a24a65a0cd21d35ff9de9e40a9066a69e5bc1e47091bb268fe8ed061b9a93015",
+        "bytes": 164396,
+        "meshes": 2
+      },
+      "frame-snes": {
+        "path": "docs/explore/assets/geometry-frame-snes-e1f305ee62069bb60ec3f310377d29e159d23d064804ebb12e95d3a1b052e25f.bin",
+        "sha256": "e1f305ee62069bb60ec3f310377d29e159d23d064804ebb12e95d3a1b052e25f",
+        "bytes": 115832,
+        "meshes": 2
+      },
+      "frame-talavera": {
+        "path": "docs/explore/assets/geometry-frame-talavera-13b455287de97567be0ed697260ca7e91317ead77e4b3589cf089b9edcf6fe80.bin",
+        "sha256": "13b455287de97567be0ed697260ca7e91317ead77e4b3589cf089b9edcf6fe80",
+        "bytes": 99728,
+        "meshes": 2
+      },
+      "pcb": {
+        "path": "docs/explore/assets/geometry-pcb-daac60070128d0f3af5ad95c7150831b72e63a549f214a852e8f28819576ebf7.bin",
+        "sha256": "daac60070128d0f3af5ad95c7150831b72e63a549f214a852e8f28819576ebf7",
+        "bytes": 1228756,
+        "meshes": 2
+      }
+    }
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "c08f1929e58569d85db36761aeff2b9299a4dcb43a3c19816fb1612a674f4f03",
-    "bytes": 68146184
+    "sha256": "3dc5c4b00de1797a9b2f13ebad22b9a6c3ec736902b865032d74dfd5ae0dece2",
+    "bytes": 42328615
+  },
+  "still": {
+    "look": {
+      "size": "flan36",
+      "theme": "eva-01",
+      "case": "rim",
+      "keys": "original",
+      "frame": "snes,phone"
+    },
+    "fingerprint": "f050798ace8f22dbc38c14ddc3333077d11c2db2291565f4f7804b3890ac7d4e",
+    "published": [
+      "docs/explore/assets/still-wide-d503a5cd08ed7c94.webp",
+      "docs/explore/assets/still-tall-def1265f11bb8dae.webp"
+    ]
   },
   "build_assets": {
     "LICENSE": {
@@ -2346,7 +2639,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "b0efb644c8677d0476e2025ce2c7af9772424122721352543371612c0c32a5f6",
+  "offline_sha256": "8d25fd768f31a0f2348cb3791181edcd727cf61e64ab3cd4b7b2f079ab27b8ad",
   "printing": {
     "path": "docs/explore/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
@@ -2390,9 +2683,14 @@
       "vias"
     ]
   },
+  "silk_thumbnails": {
+    "path": "docs/explore/assets/silkthumbs-0c2b5a1760876ee221bde8d411dfe51f61480c8b6bca9c1a1e565d8d5bbd249c.bin",
+    "sha256": "0c2b5a1760876ee221bde8d411dfe51f61480c8b6bca9c1a1e565d8d5bbd249c",
+    "bytes": 335912
+  },
   "geometry_aliases": 18,
-  "online_bytes": 1071375,
-  "offline_bytes": 90628818,
+  "online_bytes": 1107747,
+  "offline_bytes": 56215032,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",
