@@ -8,7 +8,7 @@
 - Galería integrada y ZIP específico de variantes; también incluidas en el kit completo.
 - Comprobados 46 enlaces, EN/ES, móvil/escritorio, copia, videos de 30 s, hashes y contenido de ambos ZIP. Recibos actuales: `marketing-assets.json`, `marketing-variants.json` y `marketing-check.json` en `validation/`.
 
-La entrega pública se valida con `node viewer/marketing/public-check.mjs`; el recibo indica su fecha. La lectura histórica de SocialSharePreview no acredita una recarga posterior de sus cachés.
+Publicación verificada en `ed3a48c`: 54 archivos públicos coinciden con los locales, incluidos los 17 PNG nuevos y ambos ZIP. `validation/marketing-public.json` registra fecha, hashes y agentes sociales. La lectura histórica de SocialSharePreview no acredita una recarga posterior de sus cachés.
 
 Corrección: la insignia anterior seguía una recomendación de revisión, pero no la preferencia gráfica actual de Eduardo. Se corrigió el generador nativo y su contenido, además de la imagen adjunta, para que una regeneración no vuelva a añadirla. No se ha creado una nueva política global ni automatización.
 
@@ -76,3 +76,7 @@ node viewer/marketing/public-check.mjs
 ## Dependencias reales
 
 Las cuentas y los grupos privados no están verificados; los borradores no están publicados. Las fotos del armado, la voz opcional y el video largo requieren grabación de Eduardo. Las pruebas físicas siguen en [first-build.md](../first-build.md). La causa del fallo de la captura inicial sigue sin demostrarse; el comprobador ahora muestra la tarjeta nueva y el sitio se verifica por HTTP.
+
+## Preservación de trabajo local ajeno
+
+La sincronización de esta revisión publica el SHA exclusivo de marketing, no HEAD. Se conservó el cambio local del emulador sin publicarlo, con igualdad del árbol completo y de su diff binario antes/después de reordenar los commits inéditos. El original recuperable es `f4a0e95cb570a1842d03003b6efbb693bbdaa897`; su parche en `build/marketing/variants-sync/emulator-original.patch` se regenera con `git diff --binary f4a0e95^ f4a0e95`. SHA-256 del parche: `ecc2ce069a35a7c8518139adca6d919ec57cbc879e33a05cfb308a28be8fd3fa`. Es recuperación local, fuera del kit y de Git; el nuevo SHA local se devuelve a su chat dueño.
