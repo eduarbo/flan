@@ -2,8 +2,8 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "3b58024df0e6bca13b34a91bb5a332a413804c5d9e8666b506c547d460b1f888",
-    "bytes": 115652
+    "sha256": "4318d506b9f2b938ec956bfbfc3e198b1d44f19249c9cd20e00b9cc51d08ebf9",
+    "bytes": 115686
   },
   "engine": {
     "path": "docs/assets/home-engine-c4e17726087f69a6.js",
@@ -1752,7 +1752,7 @@
     },
     {
       "path": "viewer/home/template.html",
-      "sha256": "38031fff8fb3339e0735590b7124c4223c9da55f4c354e66dc1d0a07dc3405fb"
+      "sha256": "1cfc09c712f01fbe6b521c8ace5861126fbcfcaedec57921425dd7182739aa6b"
     },
     {
       "path": "design/themes.json",

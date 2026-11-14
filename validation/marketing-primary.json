@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "selection": "eva-01",
+  "request": "Use EVA as primary and keep all other variants for later uses.",
+  "date": "2026-11-13",
+  "review_basis": "Mechanical selection of the unchanged EVA artwork already approved in validation/marketing-variants-review.json; same publication destination and preservation controls.",
+  "checks": {
+    "default_share_en_equals_eva": true,
+    "default_share_es_equals_eva": true,
+    "all_variant_pngs_preserved": true,
+    "variant_png_count": 17,
+    "both_archives_preserve_variants": true,
+    "desktop_and_mobile_visually_inspected": true,
+    "functional_receipt": "validation/marketing-check.json"
+  },
+  "preserved_variants": {
+    "docs/marketing/variants/card-eva-01-en.png": "648da50ff5f405dcc8fb58865b81a04e2e774f8256c8bdecdb695a1eae79c538",
+    "docs/marketing/variants/card-eva-01-es.png": "8fa58dcb55a31eb6ae6df814bdc715bd2bf81768306abbbf4c397453aefde0f3",
+    "docs/marketing/variants/card-flan-en.png": "7f7e5bfd6f66f1acb235a80748db2b37379ad1995c02b2a8c5c89e21f90647cd",
+    "docs/marketing/variants/card-flan-es.png": "553d49bb9dfd202a1b57a834987013c1a72b99a3558ce2a90ee95a1c30812657",
+    "docs/marketing/variants/card-hanafuda-en.png": "ba1aab2cea6aef0afdec92599dc46076d0eaf9cbd9753b8c2da66d3d287a8c28",
+    "docs/marketing/variants/card-hanafuda-es.png": "02c81a6ded894260150e7d336a7b352dcb96f3e32b2df44bc74a3d858e4cdc7c",
+    "docs/marketing/variants/card-matcha-en.png": "e1b2b1c1e50b6145e3573f5859bc5486218908d79b074948cac489780940920a",
+    "docs/marketing/variants/card-matcha-es.png": "a92eba51c72da066c05a1ba97c3c29b1606006baa35dff80dae1f21bb6b5531a",
+    "docs/marketing/variants/cover-eva-01-en.png": "31d1917cacd849f6cd48d78a14dce8425264460b0fc3375e893095411ca3390f",
+    "docs/marketing/variants/cover-eva-01-es.png": "ada9d8f36a16b97585363a3b0fa5c35863f18c5536b3b529f07ec1c982ed3a74",
+    "docs/marketing/variants/cover-flan-en.png": "95b835236cda83cfa6ecbecab79a60c2abf2028c0ce783c0ff203232ddf0a9f0",
+    "docs/marketing/variants/cover-flan-es.png": "d62e349a2c8618e0ae3267d67a0e5c971bb74c46fb838da8ddd55f831dfac2c8",
+    "docs/marketing/variants/cover-hanafuda-en.png": "f91de367118123fc60ca381e73b9d05e8fe803724505eed108e00b83f4a656e7",
+    "docs/marketing/variants/cover-hanafuda-es.png": "7eaa3a53047ce15d61093bea86594e1db450e32d5e12e9b0c395ad9e3b3a1c94",
+    "docs/marketing/variants/cover-matcha-en.png": "dd012d39b992d9105c9b6872dae70a1d4c3f2d6c0c86db34ea4d56dba22b8ebb",
+    "docs/marketing/variants/cover-matcha-es.png": "600154bae7ab14d15a42bf1a947a781974837c1437e43a38be688668cd49e909",
+    "docs/marketing/variants/kofi-eva-01-clean.png": "40be89ce0d06def435498f76b736d4153b794e6281399335a7bc100af97c9e01"
+  },
+  "primary_files": {
+    "viewer/marketing/primary.json": "6bf6300eb666d97d9d1a76e6727875cf2b13780df3e3ade58c329145f1f26a5b",
+    "docs/marketing/assets/share-en.png": "648da50ff5f405dcc8fb58865b81a04e2e774f8256c8bdecdb695a1eae79c538",
+    "docs/marketing/assets/share-es.png": "8fa58dcb55a31eb6ae6df814bdc715bd2bf81768306abbbf4c397453aefde0f3",
+    "docs/assets/home-og.png": "648da50ff5f405dcc8fb58865b81a04e2e774f8256c8bdecdb695a1eae79c538"
+  }
+}

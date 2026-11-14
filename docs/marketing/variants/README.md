@@ -1,5 +1,7 @@
 # Portadas Flan · variantes
 
+**Principal: EVA-01**, elegida por Eduardo el 13 de noviembre de 2026. Matcha, Hanafuda y Flan se conservan para futuras publicaciones y otros usos. La selección está en `viewer/marketing/primary.json`; `node viewer/marketing/page.mjs` aplica sus tarjetas EN/ES al kit y a la imagen social del sitio. Ejecutar después `node viewer/build.mjs` para renovar las URLs de Open Graph.
+
 Petición del 13 de noviembre de 2026: quitar «prototipo» de las imágenes y crear variantes con otros temas y estilos a partir de la portada Ko-fi. Esta revisión reemplaza la decisión gráfica anterior de añadir una insignia. El estado físico sigue explícito en el texto del proyecto.
 
 | Tema | Caja | Marcos | Fondo |

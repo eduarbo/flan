@@ -9,7 +9,9 @@
 - `carousel-es-5.png`: De los píxeles a las piezas. Las piezas del primer Flan36 ya están encargadas. Siguen el armado y las pruebas físicas. PROTOTIPO · RENDER CAD.
 - `carousel-es-6.png`: ¿Cómo sería el tuyo? 31 temas, colores por tecla y un explorador 3D. Empieza en flankbd.com. PROTOTIPO · RENDER CAD.
 
-`share-es.png`, `square-es.png`, `story-es.png`, `youtube-es.png`, `render-hero.png`: Render CAD de Flan36, teclado dividido de 36 teclas, en crema y caramelo con marcos de pantalla Talavera. Prototipo; pruebas físicas pendientes.
+`share-es.png`: Render CAD de Flan36 con tema EVA-01, caja Color rim y marcos SNES / 2000s Phone. Pruebas físicas pendientes.
+
+`square-es.png`, `story-es.png`, `youtube-es.png`, `render-hero.png`: Render CAD de Flan36, teclado dividido de 36 teclas, en crema y caramelo con marcos de pantalla Talavera. Prototipo; pruebas físicas pendientes.
 
 ## EN
 
@@ -20,4 +22,6 @@
 - `carousel-en-5.png`: From pixels to parts. The first Flan36 parts are ordered. Assembly, fit and wireless tests come next. PROTOTYPE · CAD RENDER.
 - `carousel-en-6.png`: What would yours look like? 31 themes, per-key colors and a 3D explorer. Start at flankbd.com. PROTOTYPE · CAD RENDER.
 
-`share-en.png`, `square-en.png`, `story-en.png`, `youtube-en.png`, `render-hero.png`: CAD render of Flan36, a 36-key split keyboard in cream and caramel with Talavera display frames. Prototype; physical tests pending.
+`share-en.png`: CAD render of Flan36 with the EVA-01 theme, Color rim case and SNES / 2000s Phone frames. Physical tests pending.
+
+`square-en.png`, `story-en.png`, `youtube-en.png`, `render-hero.png`: CAD render of Flan36, a 36-key split keyboard in cream and caramel with Talavera display frames. Prototype; physical tests pending.

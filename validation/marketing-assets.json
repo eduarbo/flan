@@ -134,8 +134,8 @@
     },
     {
       "file": "docs/marketing/assets/share-en.png",
-      "sha256": "9e6d4b1c13f52a98659c35192c46458d95f75630d8ca8b38d5e25ad1cf350dcc",
-      "bytes": 286609
+      "sha256": "648da50ff5f405dcc8fb58865b81a04e2e774f8256c8bdecdb695a1eae79c538",
+      "bytes": 334466
     },
     {
       "file": "docs/marketing/assets/square-en.png",
@@ -194,8 +194,8 @@
     },
     {
       "file": "docs/marketing/assets/share-es.png",
-      "sha256": "aca8d257accd5f246bb8378653cd8ea82504f73b7f01408df813b0b3bfd5d2bb",
-      "bytes": 282946
+      "sha256": "8fa58dcb55a31eb6ae6df814bdc715bd2bf81768306abbbf4c397453aefde0f3",
+      "bytes": 336908
     },
     {
       "file": "docs/marketing/assets/square-es.png",
@@ -262,5 +262,11 @@
       "sha256": "5df8acae54d83cfea254350e665d4546a45a72a005842c421dff476d7bf132bc",
       "bytes": 278338
     }
-  ]
+  ],
+  "primary_artwork": {
+    "variant": "eva-01",
+    "selected_on": "2026-11-13",
+    "source": "viewer/marketing/primary.json",
+    "applied_by": "node viewer/marketing/page.mjs"
+  }
 }

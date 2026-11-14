@@ -14,7 +14,7 @@
 
 | Entrega | Archivos |
 |---|---|
-| Vista al compartir | `assets/share-en.png`, `assets/share-es.png` · 1200×630 |
+| Vista al compartir · EVA-01 | `assets/share-en.png`, `assets/share-es.png` · 1200×630 |
 | Carrusel | `assets/carousel-{en,es}-{1…6}.png` · 1080×1350 |
 | Feed cuadrado | `assets/square-{en,es}.png` · 1080×1080 |
 | Story / portada vertical | `assets/story-{en,es}.png` · 1080×1920 |
