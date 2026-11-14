@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-11-14T02:23:29.659Z",
+  "checker": "https://socialsharepreview.com/?url=https://flankbd.com/",
+  "image_found": true,
+  "new_description": true,
+  "cards": [
+    {
+      "tag": "DIV",
+      "background": "url(\"https://socialsharepreview.com/api/image-proxy?url=https%3A%2F%2Fflankbd.com%2Fassets%2Fhome-og-7000e304e239.png\")"
+    },
+    {
+      "tag": "DIV",
+      "background": "url(\"https://socialsharepreview.com/api/image-proxy?url=https%3A%2F%2Fflankbd.com%2Fassets%2Fhome-og-7000e304e239.png\")"
+    },
+    {
+      "tag": "DIV",
+      "background": "url(\"https://socialsharepreview.com/api/image-proxy?url=https%3A%2F%2Fflankbd.com%2Fassets%2Fhome-og-7000e304e239.png\")"
+    }
+  ],
+  "limit": "SocialSharePreview is observed; no actual Facebook, X or LinkedIn app cache is claimed."
+}

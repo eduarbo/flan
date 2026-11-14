@@ -1,6 +1,6 @@
 # Marketing listo para el primer armado · 2026-11-13
 
-**Resultado preparado:** nueva tarjeta social, kit EN/ES, 32 archivos visuales y de video, textos por canal, FAQ, guion, canales y secuencia de publicación. Verificación pública registrada por separado en `validation/marketing-public.json` después del despliegue.
+**Publicado y verificado:** nueva tarjeta social, kit EN/ES, 32 archivos visuales y de video, textos por canal, FAQ, guion, canales y secuencia de publicación. GitHub Pages publicó `eee10e8`; los 36 archivos públicos coinciden byte por byte con los locales. Recibo: `validation/marketing-public.json`.
 
 ## Alcance y aceptación
 
@@ -36,7 +36,8 @@ Recibos:
 - `validation/marketing-assets.json`: renders, teclas, fuentes y hashes de los 32 archivos.
 - `validation/marketing-check.json`: uso local y hashes de portada, explorador, kit y ZIP.
 - `validation/marketing-review.json`: revisión y disposición de hallazgos.
-- `validation/marketing-public.json`: bytes servidos públicamente y respuestas a agentes sociales; no acredita la tarjeta cacheada de un tercero.
+- `validation/marketing-public.json`: 36 archivos públicos y seis lecturas de portada/explorador con agentes sociales.
+- `validation/marketing-checker.json`: SocialSharePreview reconoce la descripción nueva y muestra la tarjeta `home-og-7000e304e239.png`; comprobado visualmente. No implica que la caché propia de Facebook, X o LinkedIn se haya actualizado.
 
 ## Reproducir
 
@@ -60,4 +61,4 @@ node viewer/marketing/public-check.mjs
 
 ## Dependencias reales
 
-Las cuentas y los grupos privados no están verificados; los borradores no están publicados. Las fotos del armado, la voz opcional y el video largo requieren grabación de Eduardo. Las pruebas físicas siguen en [first-build.md](../first-build.md). El diagnóstico de la caché del comprobador externo no está demostrado; el sitio y las imágenes se verifican por HTTP.
+Las cuentas y los grupos privados no están verificados; los borradores no están publicados. Las fotos del armado, la voz opcional y el video largo requieren grabación de Eduardo. Las pruebas físicas siguen en [first-build.md](../first-build.md). La causa del fallo de la captura inicial sigue sin demostrarse; el comprobador ahora muestra la tarjeta nueva y el sitio se verifica por HTTP.
