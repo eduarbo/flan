@@ -1,0 +1,54 @@
+[
+  {
+    "id": "eva-01",
+    "name": "EVA-01",
+    "case": "rim",
+    "caseName": "Color rim",
+    "frames": "snes,phone",
+    "frameName": "SNES / 2000s Phone",
+    "background": "#211e2e",
+    "ink": "#f2eafa",
+    "muted": "#b9adc8",
+    "glow": "#9e663c",
+    "explode": 90
+  },
+  {
+    "id": "matcha",
+    "name": "Matcha",
+    "case": "terrace",
+    "caseName": "Terrace",
+    "frames": "ipod,gameboy",
+    "frameName": "iPod / Game Boy",
+    "background": "#182d25",
+    "ink": "#f1f0d5",
+    "muted": "#b2c1a4",
+    "glow": "#6f8950",
+    "explode": 90
+  },
+  {
+    "id": "hanafuda",
+    "name": "Hanafuda",
+    "case": "level",
+    "caseName": "Level",
+    "frames": "hanafuda",
+    "frameName": "Hanafuda",
+    "background": "#f3e9d7",
+    "ink": "#30292a",
+    "muted": "#766665",
+    "glow": "#c56c49",
+    "explode": 90
+  },
+  {
+    "id": "flan",
+    "name": "Flan",
+    "case": "solid",
+    "caseName": "Solid",
+    "frames": "talavera",
+    "frameName": "Talavera",
+    "background": "#f6e9cf",
+    "ink": "#50392d",
+    "muted": "#8a6a4b",
+    "glow": "#d49d51",
+    "explode": 90
+  }
+]

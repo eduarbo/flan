@@ -13,26 +13,26 @@
     }
   ],
   "clipboard_fallback": "selected full draft",
-  "downloads": 28,
+  "downloads": 46,
   "videos": "both decode as 1080x1920, 30 s",
   "home": "desktop and phone, no overflow, order status in EN/ES; existing 3D loads",
   "page_errors": [],
   "files": [
     {
       "file": "docs/index.html",
-      "sha256": "7ce91595e952530711b52e81779549555138dcff6b1794dc327fb98602b206fd"
+      "sha256": "3b58024df0e6bca13b34a91bb5a332a413804c5d9e8666b506c547d460b1f888"
     },
     {
       "file": "docs/explore/index.html",
-      "sha256": "1510ab2e2e693330f1ad9d238dd5f947a7bbefbd9707a1a748e1786256b276bc"
+      "sha256": "febbbe587374d2534473b2df195bbb1d01995a3c8c4734334febbd233d3630a6"
     },
     {
       "file": "docs/marketing/index.html",
-      "sha256": "16d0f223dd87869490c79e6591350e5769815c861b6a8f55f02bca59e9912f2b"
+      "sha256": "bd24865324ad60454d4993c9682dd52c7765a2194f20c7a4c8507e78acc5929d"
     },
     {
       "file": "docs/marketing/flan-launch-kit.zip",
-      "sha256": "a8188887ef599f5097f7bd2f7cf5618f94cf1fdc6f783356907ad91ef536bd46"
+      "sha256": "fa0b022c65846efd3e45b47327592ece938815a8065fe22dab6b24fafc9c27ac"
     }
   ]
 }

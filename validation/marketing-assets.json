@@ -70,7 +70,7 @@
   "sources": [
     {
       "file": "viewer/marketing/content.json",
-      "sha256": "6f129a1c64476a9eb5ffae1ab924ae558061ca65ed5705f07d72501a41da10ad"
+      "sha256": "b7ddda7821200624647527ae663821a089310b7101e8ddede59f7a45f8edd782"
     },
     {
       "file": "viewer/marketing/capture.cjs",
@@ -78,7 +78,7 @@
     },
     {
       "file": "viewer/marketing/build.cjs",
-      "sha256": "bb566e5078aed989e711456b685738cfc70674ed743413c125c5a811c8a1fdbd"
+      "sha256": "3628a70019825378de89ff4e438bf43b556fea85cb273a67a243714c265f6591"
     },
     {
       "file": "viewer/app.js",
@@ -104,53 +104,53 @@
   "assets": [
     {
       "file": "docs/marketing/assets/carousel-en-1.png",
-      "sha256": "bb072ab5ea72ef61f4de112972c2dba9d376eed0ad60573c01a86f957929593a",
-      "bytes": 490099
+      "sha256": "8457eb2bf0c96d3ca3e7cc968c0816c7a9fbe8a0d01b5850dc8b075ef26d91fe",
+      "bytes": 486870
     },
     {
       "file": "docs/marketing/assets/carousel-en-2.png",
-      "sha256": "42a518c9e2da7e4ae17af56a49ec0742e194f50d271c8f46539a960a8b445841",
-      "bytes": 553423
+      "sha256": "e0dea651c116a20b7efe7f5134315adc28ebb8c5b7738d5552f267509b335362",
+      "bytes": 550339
     },
     {
       "file": "docs/marketing/assets/carousel-en-3.png",
-      "sha256": "55d4b14d7c1189d9baa156a853d5714b9e65f1ecd7614183772131437bd2a74a",
-      "bytes": 506121
+      "sha256": "41fcad3d0f163db57df2a7e31ce6ae5f543c194dd8e79a917a5f8046c1625ac2",
+      "bytes": 503063
     },
     {
       "file": "docs/marketing/assets/carousel-en-4.png",
-      "sha256": "64b6b3c6a055cd226fdd9fd1201743a16ae5baba409bccf3a9229eac2c457196",
-      "bytes": 585779
+      "sha256": "0ea102eda1366107eb62ff32ec393556ef3a055684a9f0c2bc35937b1724bb3d",
+      "bytes": 582579
     },
     {
       "file": "docs/marketing/assets/carousel-en-5.png",
-      "sha256": "56276c9725979bea8f8374414ea64c0b1f4c6488a5f09a96ee3e4a2fdbcd326a",
-      "bytes": 497939
+      "sha256": "639b04ebfb69c991e1e54b616098ebd7c1b4d4ee862b632b71769a31cc37f264",
+      "bytes": 494945
     },
     {
       "file": "docs/marketing/assets/carousel-en-6.png",
-      "sha256": "615ece027c65f0c6274ae47daff9f275140941be50b3aeddf7e84169e133e27b",
-      "bytes": 527669
+      "sha256": "e6c8b4f9f5ec7964631d75c15df916a8f88d67fa0002efe7c519d19112760dc4",
+      "bytes": 524470
     },
     {
       "file": "docs/marketing/assets/share-en.png",
-      "sha256": "7000e304e239052e4490c929c20254f23346101d3fc6b12fe30e882e4416c4ea",
-      "bytes": 293188
+      "sha256": "9e6d4b1c13f52a98659c35192c46458d95f75630d8ca8b38d5e25ad1cf350dcc",
+      "bytes": 286609
     },
     {
       "file": "docs/marketing/assets/square-en.png",
-      "sha256": "9f66a8740b7e27fe3773559d5c539523a3e51ce3018c719673e1fca8ab6c49e4",
-      "bytes": 419309
+      "sha256": "7de12e3e94bd79401eae56741d8572a45bbd3821800d22baa70068763895167b",
+      "bytes": 416176
     },
     {
       "file": "docs/marketing/assets/story-en.png",
-      "sha256": "8d2a5fce892c571bc4a2af211f9df08a5e37bec5f1b3d694a6286d144d8c0d04",
-      "bytes": 634545
+      "sha256": "fdc6c24288b68f2b571a837e6299d220cad0b05f536e22c573feb88d40e1da9a",
+      "bytes": 631224
     },
     {
       "file": "docs/marketing/assets/youtube-en.png",
-      "sha256": "f555707a7384076cd1947d4455d259d13c912b0ce7015b19f576369739e9a855",
-      "bytes": 321681
+      "sha256": "b78f9a0125288cfb039f23283a717bcc865fde3f629b989911eaa295b14bdece",
+      "bytes": 315071
     },
     {
       "file": "docs/marketing/assets/teaser-en.srt",
@@ -159,58 +159,58 @@
     },
     {
       "file": "docs/marketing/assets/teaser-en.mp4",
-      "sha256": "014c5bd86d7a6afbef4d8b3ea3cbdd8abb5cda1b7932a1df1efe4d7b3480cce1",
-      "bytes": 840705
+      "sha256": "1e302773d209c561548c9aeffc56ed2d65ebca87e7cd1d1aa629e35700130f9e",
+      "bytes": 831096
     },
     {
       "file": "docs/marketing/assets/carousel-es-1.png",
-      "sha256": "8faddc77f9a8e3031da99cb52ec3447aee8f3cf5bda8f9173badc3dc3391d73c",
-      "bytes": 489904
+      "sha256": "fb4cc7b99067ebdc80df192f6769638fd9c5092531cea8f2776eeba7c264ef0a",
+      "bytes": 486635
     },
     {
       "file": "docs/marketing/assets/carousel-es-2.png",
-      "sha256": "1a1bd90cd814aa9e7281edb55cdf53008e681f5688a2b13aea652fa66fa95692",
-      "bytes": 555535
+      "sha256": "a8d701ce24016fa2e9062adaaa108dd8ca265f6b09e8cfca63007598a9c8370a",
+      "bytes": 552364
     },
     {
       "file": "docs/marketing/assets/carousel-es-3.png",
-      "sha256": "80b24e9d2a6233c5230ed2044ca45e59cf3093accb101c0a45a54192537d377c",
-      "bytes": 500436
+      "sha256": "3f1a95cbab9175cd66e025cbf018b8b7c1fe1e76cf0f18248dec604e1f4f02c7",
+      "bytes": 497316
     },
     {
       "file": "docs/marketing/assets/carousel-es-4.png",
-      "sha256": "d7230fd1b003e31d5462ee0217228cc42e99d0b01cd4ba031357d8ae31533aa6",
-      "bytes": 585533
+      "sha256": "438ff7aa0bc44bb110b69766696ca0670eafde00265cd2cc1ce7a8a7318a624d",
+      "bytes": 582260
     },
     {
       "file": "docs/marketing/assets/carousel-es-5.png",
-      "sha256": "64e49ecd51c7d118f9276dcc0eba6b44cd6cb1cc7dba257f07f641108f4c3c97",
-      "bytes": 508345
+      "sha256": "44233579add7dc6a343b4884d1f620e5a8ae1b39bdd4b8f7ca84b6eb60d29e59",
+      "bytes": 505169
     },
     {
       "file": "docs/marketing/assets/carousel-es-6.png",
-      "sha256": "91e693b0e3d6482efd8c2b2fdce92185c75d6bfaf7afd9f99c3ab2076026b743",
-      "bytes": 522872
+      "sha256": "5937a6c26175776789965cfc8624c869b8e36f31578c4a222fe9503ad781ccc5",
+      "bytes": 519603
     },
     {
       "file": "docs/marketing/assets/share-es.png",
-      "sha256": "cc09197f103b366b2ad75fc8fcfbcaa6acc9817811fa85a093452a45aac3d8bc",
-      "bytes": 289517
+      "sha256": "aca8d257accd5f246bb8378653cd8ea82504f73b7f01408df813b0b3bfd5d2bb",
+      "bytes": 282946
     },
     {
       "file": "docs/marketing/assets/square-es.png",
-      "sha256": "73b308224323f63cc175a5a786d9afac6d3823234e8079281b12dc0f29c1b5dd",
-      "bytes": 415260
+      "sha256": "ec291933c0a762983abd66f89ac61e0370eceb74ec8be2a346e622c03893ba39",
+      "bytes": 412016
     },
     {
       "file": "docs/marketing/assets/story-es.png",
-      "sha256": "bfd61dea7c8b8ba66b085452db8f5cc0f7ffd05e8507389ca01a3dbe2660329c",
-      "bytes": 635285
+      "sha256": "67cf93eec6b2be63af91bce837818fde492dfaa6a2dfc8f21eaa310972f14144",
+      "bytes": 631898
     },
     {
       "file": "docs/marketing/assets/youtube-es.png",
-      "sha256": "d358fa4a1a2efa8f1863db02dbdad33d3c9a9bd310fa88909445690154643861",
-      "bytes": 324647
+      "sha256": "c5b94e57b4a34f046fe0905cf52634e8c3719482996d285ab29d4a42c475e581",
+      "bytes": 318153
     },
     {
       "file": "docs/marketing/assets/teaser-es.srt",
@@ -219,8 +219,8 @@
     },
     {
       "file": "docs/marketing/assets/teaser-es.mp4",
-      "sha256": "3ba8fa9eeb0a8aaa7ce4d8e0d2b29d20b3f9f2fe198070db861100142f5eeef9",
-      "bytes": 846690
+      "sha256": "9137be427da62947185222e5c9e4a0a8d20730eafd0ed913a8c76a2ad5dccc21",
+      "bytes": 835032
     },
     {
       "file": "docs/marketing/assets/avatar.png",

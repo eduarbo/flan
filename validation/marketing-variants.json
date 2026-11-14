@@ -1,0 +1,1057 @@
+{
+  "schema_version": 1,
+  "request": "Remove prototype wording from artwork; provide themes and styles inspired by the Ko-fi cover.",
+  "method": "Exact project CAD capture and native browser typography",
+  "captures": [
+    {
+      "id": "eva-01",
+      "configuration": {
+        "schema": "flan36-config-1",
+        "revision": "I",
+        "keycaps": {
+          "left": {
+            "K01": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K02": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K03": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K04": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K05": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K11": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K12": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K13": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K14": {
+              "variant": "choc_stem_choc_size_normal_homing",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K15": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K21": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K22": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K23": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K24": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K25": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K30": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#8fd43a"
+            },
+            "K31": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#f28f1f"
+            },
+            "K32": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#8fd43a"
+            }
+          },
+          "right": {
+            "K01": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K02": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K03": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K04": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K05": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K11": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K12": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K13": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K14": {
+              "variant": "choc_stem_choc_size_normal_homing",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K15": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K21": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K22": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K23": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K24": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K25": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#5b3f93"
+            },
+            "K30": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#8fd43a"
+            },
+            "K31": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#f28f1f"
+            },
+            "K32": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#8fd43a"
+            }
+          }
+        },
+        "frames": {
+          "left": {
+            "style": "snes",
+            "color": "#5b3f93",
+            "accents": {
+              "detail": "#8fd43a",
+              "accent": "#f28f1f",
+              "secondary": "#35285c"
+            }
+          },
+          "right": {
+            "style": "phone",
+            "color": "#5b3f93",
+            "accents": {
+              "detail": "#8fd43a",
+              "accent": "#f28f1f",
+              "secondary": "#35285c"
+            }
+          }
+        },
+        "batteries": {
+          "left": "adafruit-1570",
+          "right": "adafruit-1570"
+        },
+        "cases": {
+          "left": {
+            "style": "rim",
+            "cover": true,
+            "base_color": "#5b3f93",
+            "plate_color": "#1d1a2a",
+            "match_frame": true
+          },
+          "right": {
+            "style": "rim",
+            "cover": true,
+            "base_color": "#5b3f93",
+            "plate_color": "#1d1a2a",
+            "match_frame": true
+          }
+        },
+        "variant": "flan36",
+        "pcb_edition": "base",
+        "pcb_mask": "green"
+      },
+      "keys_per_half": 18,
+      "sha256": "4f09f48d6a34111add1faed704435124a46384660605774f8809da1013196ebd"
+    },
+    {
+      "id": "matcha",
+      "configuration": {
+        "schema": "flan36-config-1",
+        "revision": "I",
+        "keycaps": {
+          "left": {
+            "K01": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K02": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K03": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K04": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K05": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K11": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K12": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K13": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K14": {
+              "variant": "choc_stem_choc_size_normal_homing",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K15": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K21": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K22": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K23": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K24": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K25": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K30": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#7a9567"
+            },
+            "K31": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#ead5a2"
+            },
+            "K32": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#385444"
+            }
+          },
+          "right": {
+            "K01": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K02": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K03": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K04": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K05": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K11": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K12": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K13": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K14": {
+              "variant": "choc_stem_choc_size_normal_homing",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K15": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K21": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K22": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K23": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K24": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K25": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#e5e8cf"
+            },
+            "K30": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#7a9567"
+            },
+            "K31": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#ead5a2"
+            },
+            "K32": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#385444"
+            }
+          }
+        },
+        "frames": {
+          "left": {
+            "style": "ipod",
+            "color": "#9baa83",
+            "accents": {
+              "detail": "#365c44",
+              "accent": "#ead5a2",
+              "secondary": "#70876c"
+            }
+          },
+          "right": {
+            "style": "gameboy",
+            "color": "#9baa83",
+            "accents": {
+              "detail": "#365c44",
+              "accent": "#ead5a2",
+              "secondary": "#70876c"
+            }
+          }
+        },
+        "batteries": {
+          "left": "adafruit-1570",
+          "right": "adafruit-1570"
+        },
+        "cases": {
+          "left": {
+            "style": "terrace",
+            "cover": true,
+            "base_color": "#9baa83",
+            "plate_color": "#344b40",
+            "match_frame": true
+          },
+          "right": {
+            "style": "terrace",
+            "cover": true,
+            "base_color": "#9baa83",
+            "plate_color": "#344b40",
+            "match_frame": true
+          }
+        },
+        "variant": "flan36",
+        "pcb_edition": "base",
+        "pcb_mask": "green"
+      },
+      "keys_per_half": 18,
+      "sha256": "55c252c8728aef9d4c315af3bc467250ef46d8fe78ba6879bed2cf87bbb35d71"
+    },
+    {
+      "id": "hanafuda",
+      "configuration": {
+        "schema": "flan36-config-1",
+        "revision": "I",
+        "keycaps": {
+          "left": {
+            "K01": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K02": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K03": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K04": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K05": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K11": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K12": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K13": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K14": {
+              "variant": "choc_stem_choc_size_normal_homing",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K15": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K21": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K22": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K23": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K24": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K25": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K30": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#252b2e"
+            },
+            "K31": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#d84932"
+            },
+            "K32": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#456348"
+            }
+          },
+          "right": {
+            "K01": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K02": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K03": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K04": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K05": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K11": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K12": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K13": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K14": {
+              "variant": "choc_stem_choc_size_normal_homing",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K15": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K21": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K22": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K23": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K24": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K25": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f1e7d2"
+            },
+            "K30": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#252b2e"
+            },
+            "K31": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#d84932"
+            },
+            "K32": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#456348"
+            }
+          }
+        },
+        "frames": {
+          "left": {
+            "style": "hanafuda",
+            "color": "#f1e7d2",
+            "accents": {
+              "detail": "#252b2e",
+              "accent": "#d84932",
+              "secondary": "#456348"
+            }
+          },
+          "right": {
+            "style": "hanafuda",
+            "color": "#f1e7d2",
+            "accents": {
+              "detail": "#252b2e",
+              "accent": "#d84932",
+              "secondary": "#456348"
+            }
+          }
+        },
+        "batteries": {
+          "left": "adafruit-1570",
+          "right": "adafruit-1570"
+        },
+        "cases": {
+          "left": {
+            "style": "level",
+            "cover": true,
+            "base_color": "#f1e7d2",
+            "plate_color": "#f1e7d2",
+            "match_frame": true
+          },
+          "right": {
+            "style": "level",
+            "cover": true,
+            "base_color": "#f1e7d2",
+            "plate_color": "#f1e7d2",
+            "match_frame": true
+          }
+        },
+        "variant": "flan36",
+        "pcb_edition": "base",
+        "pcb_mask": "green"
+      },
+      "keys_per_half": 18,
+      "sha256": "26643ac65e85593209b3006d9d386ef1d238111275eb9ebc838271d2e361649b"
+    },
+    {
+      "id": "flan",
+      "configuration": {
+        "schema": "flan36-config-1",
+        "revision": "I",
+        "keycaps": {
+          "left": {
+            "K01": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K02": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K03": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K04": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K05": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K11": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K12": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K13": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K14": {
+              "variant": "choc_stem_choc_size_normal_homing",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K15": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K21": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K22": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K23": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K24": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K25": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K30": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#68422f"
+            },
+            "K31": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#b96732"
+            },
+            "K32": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#dfab50"
+            }
+          },
+          "right": {
+            "K01": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K02": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K03": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K04": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K05": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K11": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K12": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K13": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K14": {
+              "variant": "choc_stem_choc_size_normal_homing",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K15": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K21": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K22": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K23": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K24": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K25": {
+              "variant": "choc_stem_choc_size_normal",
+              "rotation_deg": 0,
+              "color": "#f2dfaf"
+            },
+            "K30": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#68422f"
+            },
+            "K31": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#b96732"
+            },
+            "K32": {
+              "variant": "choc_stem_choc_size_thumb",
+              "rotation_deg": 0,
+              "color": "#dfab50"
+            }
+          }
+        },
+        "frames": {
+          "left": {
+            "style": "talavera",
+            "color": "#f2dfaf",
+            "accents": {
+              "detail": "#68422f",
+              "accent": "#b96732",
+              "secondary": "#dfab50"
+            }
+          },
+          "right": {
+            "style": "talavera",
+            "color": "#f2dfaf",
+            "accents": {
+              "detail": "#68422f",
+              "accent": "#b96732",
+              "secondary": "#dfab50"
+            }
+          }
+        },
+        "batteries": {
+          "left": "adafruit-1570",
+          "right": "adafruit-1570"
+        },
+        "cases": {
+          "left": {
+            "style": "solid",
+            "cover": true,
+            "base_color": "#f2dfaf",
+            "plate_color": "#68422f",
+            "match_frame": true
+          },
+          "right": {
+            "style": "solid",
+            "cover": true,
+            "base_color": "#f2dfaf",
+            "plate_color": "#68422f",
+            "match_frame": true
+          }
+        },
+        "variant": "flan36",
+        "pcb_edition": "base",
+        "pcb_mask": "green"
+      },
+      "keys_per_half": 18,
+      "sha256": "bbbca626b6e8c047f6ccac6d801824f9d1dd3fddbf736c7a29ca260b7f239b25"
+    }
+  ],
+  "files": [
+    {
+      "file": "docs/marketing/variants/cover-eva-01-en.png",
+      "width": 1400,
+      "height": 466,
+      "sha256": "31d1917cacd849f6cd48d78a14dce8425264460b0fc3375e893095411ca3390f"
+    },
+    {
+      "file": "docs/marketing/variants/card-eva-01-en.png",
+      "width": 1200,
+      "height": 630,
+      "sha256": "648da50ff5f405dcc8fb58865b81a04e2e774f8256c8bdecdb695a1eae79c538"
+    },
+    {
+      "file": "docs/marketing/variants/cover-eva-01-es.png",
+      "width": 1400,
+      "height": 466,
+      "sha256": "ada9d8f36a16b97585363a3b0fa5c35863f18c5536b3b529f07ec1c982ed3a74"
+    },
+    {
+      "file": "docs/marketing/variants/card-eva-01-es.png",
+      "width": 1200,
+      "height": 630,
+      "sha256": "8fa58dcb55a31eb6ae6df814bdc715bd2bf81768306abbbf4c397453aefde0f3"
+    },
+    {
+      "file": "docs/marketing/variants/cover-matcha-en.png",
+      "width": 1400,
+      "height": 466,
+      "sha256": "dd012d39b992d9105c9b6872dae70a1d4c3f2d6c0c86db34ea4d56dba22b8ebb"
+    },
+    {
+      "file": "docs/marketing/variants/card-matcha-en.png",
+      "width": 1200,
+      "height": 630,
+      "sha256": "e1b2b1c1e50b6145e3573f5859bc5486218908d79b074948cac489780940920a"
+    },
+    {
+      "file": "docs/marketing/variants/cover-matcha-es.png",
+      "width": 1400,
+      "height": 466,
+      "sha256": "600154bae7ab14d15a42bf1a947a781974837c1437e43a38be688668cd49e909"
+    },
+    {
+      "file": "docs/marketing/variants/card-matcha-es.png",
+      "width": 1200,
+      "height": 630,
+      "sha256": "a92eba51c72da066c05a1ba97c3c29b1606006baa35dff80dae1f21bb6b5531a"
+    },
+    {
+      "file": "docs/marketing/variants/cover-hanafuda-en.png",
+      "width": 1400,
+      "height": 466,
+      "sha256": "f91de367118123fc60ca381e73b9d05e8fe803724505eed108e00b83f4a656e7"
+    },
+    {
+      "file": "docs/marketing/variants/card-hanafuda-en.png",
+      "width": 1200,
+      "height": 630,
+      "sha256": "ba1aab2cea6aef0afdec92599dc46076d0eaf9cbd9753b8c2da66d3d287a8c28"
+    },
+    {
+      "file": "docs/marketing/variants/cover-hanafuda-es.png",
+      "width": 1400,
+      "height": 466,
+      "sha256": "7eaa3a53047ce15d61093bea86594e1db450e32d5e12e9b0c395ad9e3b3a1c94"
+    },
+    {
+      "file": "docs/marketing/variants/card-hanafuda-es.png",
+      "width": 1200,
+      "height": 630,
+      "sha256": "02c81a6ded894260150e7d336a7b352dcb96f3e32b2df44bc74a3d858e4cdc7c"
+    },
+    {
+      "file": "docs/marketing/variants/cover-flan-en.png",
+      "width": 1400,
+      "height": 466,
+      "sha256": "95b835236cda83cfa6ecbecab79a60c2abf2028c0ce783c0ff203232ddf0a9f0"
+    },
+    {
+      "file": "docs/marketing/variants/card-flan-en.png",
+      "width": 1200,
+      "height": 630,
+      "sha256": "7f7e5bfd6f66f1acb235a80748db2b37379ad1995c02b2a8c5c89e21f90647cd"
+    },
+    {
+      "file": "docs/marketing/variants/cover-flan-es.png",
+      "width": 1400,
+      "height": 466,
+      "sha256": "d62e349a2c8618e0ae3267d67a0e5c971bb74c46fb838da8ddd55f831dfac2c8"
+    },
+    {
+      "file": "docs/marketing/variants/card-flan-es.png",
+      "width": 1200,
+      "height": 630,
+      "sha256": "553d49bb9dfd202a1b57a834987013c1a72b99a3558ce2a90ee95a1c30812657"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "f4a0e95cb570a1842d03003b6efbb693bbdaa897",
+  "roles": [
+    "domain_constructive",
+    "adversarial_risk"
+  ],
+  "recommendation": "Both independent reviewers approve the requested artwork correction and scoped marketing publication, conditional on root verification. No observed HIGH/CRITICAL defects.",
+  "frozen_files_verified": 16,
+  "unexplained_mutations": [],
+  "findings": [
+    {
+      "severity": "HIGH",
+      "kind": "conditional risk, not observed defect",
+      "risk": "Pushing HEAD would publish the local-only emulator.",
+      "disposition": "Publish only the exact marketing ancestor after preserving and comparing the reordered local commits; verify remote emulator paths against prior origin/main."
+    },
+    {
+      "severity": "HIGH",
+      "kind": "conditional risk, not observed defect",
+      "risk": "Commit reorder could change or lose emulator content.",
+      "disposition": "Preserve original SHA and binary diff; compare complete final tree and emulator diff before publishing."
+    },
+    {
+      "severity": "MEDIUM",
+      "kind": "conditional risk, not observed defect",
+      "risk": "Broad staging or archive globs could include unrelated files.",
+      "disposition": "Explicit path allowlist, inspect ZIP manifests and source bytes; only explorer HTML metadata changed inside offline.zip."
+    }
+  ],
+  "root_checks": "All four covers and representative EN/ES cards inspected; Ko-fi edit compared with supplied image; variant/source hashes and both ZIPs checked; functional check passes 46 downloads, EN/ES, 1440/390 widths, both 30 s teasers.",
+  "source_refinement": "Keep prototype status in accessible text; generator omits it only from artwork. This changes no image bytes and follows the requested image-only removal.",
+  "limits": "Review is read-only. Physical operation and social-network cache refresh are not claimed."
+}

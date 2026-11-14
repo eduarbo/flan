@@ -1,4 +1,18 @@
-# Marketing listo para el primer armado · 2026-11-13
+# Revisión de portadas · 2026-11-13
+
+**Cambio solicitado por Eduardo:** eliminar «prototipo» de las imágenes y dar variantes de temas/estilos siguiendo la portada Ko-fi. Esta petición sustituye el criterio anterior de mostrar una insignia; el registro inicial se conserva debajo como historia, no como requisito vigente.
+
+- Portada adjunta editada con imagegen integrado, sin la frase; archivo y prompt en `variants/README.md`.
+- Dieciséis piezas nativas: cuatro temas/cajas/marcos × dos formatos × EN/ES. Son capturas del CAD y composición con la tipografía del proyecto; no se alteró la geometría.
+- Insignia y pie de prototipo retirados de las imágenes y teasers existentes. El texto del sitio conserva piezas encargadas y pruebas físicas pendientes.
+- Galería integrada y ZIP específico de variantes; también incluidas en el kit completo.
+- Comprobados 46 enlaces, EN/ES, móvil/escritorio, copia, videos de 30 s, hashes y contenido de ambos ZIP. Recibos actuales: `marketing-assets.json`, `marketing-variants.json` y `marketing-check.json` en `validation/`.
+
+La entrega pública se valida con `node viewer/marketing/public-check.mjs`; el recibo indica su fecha. La lectura histórica de SocialSharePreview no acredita una recarga posterior de sus cachés.
+
+Corrección: la insignia anterior seguía una recomendación de revisión, pero no la preferencia gráfica actual de Eduardo. Se corrigió el generador nativo y su contenido, además de la imagen adjunta, para que una regeneración no vuelva a añadirla. No se ha creado una nueva política global ni automatización.
+
+## Registro de la entrega inicial
 
 **Publicado y verificado:** nueva tarjeta social, kit EN/ES, 32 archivos visuales y de video, textos por canal, FAQ, guion, canales y secuencia de publicación. GitHub Pages publicó `eee10e8`; los 36 archivos públicos coinciden byte por byte con los locales. Recibo: `validation/marketing-public.json`.
 

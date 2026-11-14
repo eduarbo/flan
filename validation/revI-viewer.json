@@ -1779,7 +1779,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "1510ab2e2e693330f1ad9d238dd5f947a7bbefbd9707a1a748e1786256b276bc",
+  "viewer_sha256": "febbbe587374d2534473b2df195bbb1d01995a3c8c4734334febbd233d3630a6",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2065,7 +2065,7 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "5d6d5bb82a0034e0aab2ae24773bc6c2b6337a5e77282aff0a73039c2af9cb02",
+    "sha256": "668b49f2f9fdff46e23413ad5a45f883f762faf0408ed099fb1922432a2e70c7",
     "bytes": 42328644
   },
   "still": {
@@ -2639,7 +2639,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "efd6f9fb49a8faef35b1ed11e8f04d736c225a2cb43269a150a51f9018772179",
+  "offline_sha256": "6137928deca5265913f247ee90c8cc91f53f6c10e4b81cac99bf9aeb895e4005",
   "printing": {
     "path": "docs/explore/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",

@@ -24,7 +24,7 @@
 | Renders sin texto | `assets/render-*.png` · capturas del explorador, fondo transparente |
 | Copy y operación | [Textos](marketing/copy.md), [FAQ](marketing/faq.md), [guion y tomas](marketing/video.md), [canales](marketing/channels.md), [plan y registro](marketing/plan.md) |
 
-Los nombres de la tabla se resuelven dentro de `docs/marketing/`. Cada pieza de producto lleva el rótulo render/prototipo. Los renders proceden de la geometría real del explorador; sus gráficos de pantalla son ilustrativos. El video entregado es un teaser con renders, no una grabación de hardware funcionando. No se usó música ni sonido de tipeo ajeno.
+Los nombres de la tabla se resuelven dentro de `docs/marketing/`. Por petición de Eduardo, las imágenes no llevan rótulo de prototipo; el texto que las acompaña conserva el estado del primer armado. Los renders proceden de la geometría real del explorador; sus gráficos de pantalla son ilustrativos. El video entregado es un teaser con renders, no una grabación de hardware funcionando. No se usó música ni sonido de tipeo ajeno.
 
 ## Posicionamiento y límites
 
@@ -37,3 +37,5 @@ Las fuentes, licencias y créditos están en [ATTRIBUTION.md](../ATTRIBUTION.md)
 Entrada principal: [flankbd.com](https://flankbd.com/). Acción: explorar una combinación. Progreso real: [primer armado](first-build.md). Feedback reproducible: [GitHub Issues](https://github.com/eduarbo/flan/issues). No se agregó una lista de correo, píxel ni servicio de analítica. Los resultados se anotan manualmente con las métricas que sí expone cada plataforma.
 
 El sitio contiene metadatos Open Graph/X, dirección canónica, datos estructurados sin oferta de venta, robots y sitemap. La tarjeta se publica con un nombre derivado de sus bytes; se conserva la dirección anterior para consumidores que ya la tengan en caché. [Verificación técnica y reproducción](marketing/verification.md). La vista exacta en apps de terceros sólo se considera verificada cuando se observe allí; el HTTP correcto no demuestra que una caché ajena se haya actualizado.
+
+**Variantes de portada:** EVA-01/Color rim, Matcha/Terrace, Hanafuda/Level y Flan/Solid, con marcos distintos. [Ver combinaciones](marketing/variants/README.md) · [Descargar variantes](https://flankbd.com/marketing/flan-cover-variants.zip).

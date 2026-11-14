@@ -26,7 +26,7 @@ const css=`${font('Fraunces','Fraunces-latin.woff2')}${font('Inter','Inter-latin
 `;
 function artwork(lang,slide,{shape='',count='',light=false}={}){
  const l=data[lang];const visual=slide.image==='family'?`<div class="family">${['hero','flan42','flan46','flan54'].map((k,i)=>`<figure><img src="${renders[k]}"><figcaption>${[36,42,46,54][i]} ${lang==='en'?'keys':'teclas'}</figcaption></figure>`).join('')}</div>`:`<img class="product" src="${renders[slide.image]}">`;
- return `<html lang="${lang}"><style>${css}.badge{display:none}.wide .badge{display:block;position:absolute;right:48px;top:35px;font:36px Mono;color:#ebbb71;border:1px solid #ebbb7170;border-radius:8px;padding:4px 12px}.wide .foot .status{font-size:20px}</style><div class="art ${shape} ${light?'light':''}"><div class="brand"><img src="${mark}"><span>flan <small>keyboard</small></span></div><div class="badge">${lang==='en'?'PROTOTYPE':'PROTOTIPO'}</div><div class="count">${count}</div><div class="label">${esc(slide.label)}</div><h1>${esc(slide.title)}</h1>${visual}<p class="body">${esc(slide.body)}</p><div class="foot"><span>flankbd.com ↗</span><span class="status">${l.status}</span></div></div></html>`;
+ return `<html lang="${lang}"><style>${css}</style><div class="art ${shape} ${light?'light':''}"><div class="brand"><img src="${mark}"><span>flan <small>keyboard</small></span></div><div class="count">${count}</div><div class="label">${esc(slide.label)}</div><h1>${esc(slide.title)}</h1>${visual}<p class="body">${esc(slide.body)}</p><div class="foot"><span>flankbd.com ↗</span><span class="status"></span></div></div></html>`;
 }
 (async()=>{
  fs.mkdirSync(out,{recursive:true});fs.mkdirSync(work,{recursive:true});
@@ -44,7 +44,7 @@ function artwork(lang,slide,{shape='',count='',light=false}={}){
    await shot(path.join(out,`square-${lang}.png`),artwork(lang,hero,{shape:'square'}),1080,1080);
    await shot(path.join(out,`story-${lang}.png`),artwork(lang,{...l.slides[0],body:l.ordered+' '+l.cta+'.'},{shape:'story'}),1080,1920);
    await shot(path.join(out,`youtube-${lang}.png`),artwork(lang,{...hero,title:lang==='en'?'My first Flan.':'Mi primer Flan.',body:l.ordered},{shape:'wide'}),1280,720);
-   // A 30-second silent teaser from the labeled CAD renders. It is not a live typing demo.
+   // A 30-second silent teaser from the CAD renders. It is not a live typing demo.
    const srt=l.slides.map((s,i)=>`${i+1}\n00:00:${String(i*5).padStart(2,'0')},000 --> 00:00:${String((i+1)*5).padStart(2,'0')},000\n${s.title.replaceAll('\n',' ')} ${s.body}\n`).join('\n');
    fs.writeFileSync(path.join(out,`teaser-${lang}.srt`),srt);written.push(`docs/marketing/assets/teaser-${lang}.srt`);
    execFileSync('ffmpeg',['-y','-loglevel','error','-framerate','1/5','-start_number','1','-i',path.join(work,`video-${lang}-%d.png`),'-vf','fps=30,format=yuv420p','-c:v','libx264','-preset','medium','-crf','20','-movflags','+faststart','-t','30',path.join(out,`teaser-${lang}.mp4`)]);
