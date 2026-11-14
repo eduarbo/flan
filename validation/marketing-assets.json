@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "stage": "Parts ordered; first physical build pending",
+  "method": "Real explorer CAD renders, browser typography and FFmpeg. No generated product photos or claimed hardware test.",
+  "captures": [
+    {
+      "name": "hero",
+      "size": "flan36",
+      "keys": {
+        "left": 18,
+        "right": 18
+      },
+      "sha256": "9a0eb63141dcfe01638a2beac275e466c97534f43f588bcc1273fa2579fde601"
+    },
+    {
+      "name": "layers",
+      "size": "flan36",
+      "keys": {
+        "left": 18,
+        "right": 18
+      },
+      "sha256": "1e309803d1e4cc1a48c2432157e6813567bc386c2fb1b2f2384d4bbb45ca15b1"
+    },
+    {
+      "name": "talavera",
+      "size": "flan36",
+      "keys": {
+        "left": 18,
+        "right": 18
+      },
+      "sha256": "6721dd6b0d7f06f4f7acb7c48ebc9eab70dc6e3211667074f1e492804663260e"
+    },
+    {
+      "name": "hanafuda",
+      "size": "flan36",
+      "keys": {
+        "left": 18,
+        "right": 18
+      },
+      "sha256": "67fc42c7cfcdbb540ec696df30d8fc7f2990fdd85a12d54fd9e9d68e54405abf"
+    },
+    {
+      "name": "flan42",
+      "size": "flan42",
+      "keys": {
+        "left": 21,
+        "right": 21
+      },
+      "sha256": "9f24ecb1b81694b7dc4b463a077e804e3b3bb2eaf5f95d7c599af6ee57b46762"
+    },
+    {
+      "name": "flan46",
+      "size": "flan46",
+      "keys": {
+        "left": 23,
+        "right": 23
+      },
+      "sha256": "7a23d5b9043c27f9c6c74827c57f171a43c95f898a8f14b3fd0806b7c5c6fb1c"
+    },
+    {
+      "name": "flan54",
+      "size": "flan54",
+      "keys": {
+        "left": 27,
+        "right": 27
+      },
+      "sha256": "5df8acae54d83cfea254350e665d4546a45a72a005842c421dff476d7bf132bc"
+    }
+  ],
+  "sources": [
+    {
+      "file": "viewer/marketing/content.json",
+      "sha256": "6f129a1c64476a9eb5ffae1ab924ae558061ca65ed5705f07d72501a41da10ad"
+    },
+    {
+      "file": "viewer/marketing/capture.cjs",
+      "sha256": "e10a452968bb839cc6c75cfe3d444e12d4335029629fb775b9a7358a4af2ad2b"
+    },
+    {
+      "file": "viewer/marketing/build.cjs",
+      "sha256": "bb566e5078aed989e711456b685738cfc70674ed743413c125c5a811c8a1fdbd"
+    },
+    {
+      "file": "viewer/app.js",
+      "sha256": "440e25c94651912746c0be6dc5bb1f900e7566b463803ea3c39842eef011dca5"
+    },
+    {
+      "file": "viewer/appearance.js",
+      "sha256": "9f82c2da5981a2cdf0ffa56e5d61c683152067200194e67492d7fbf666a12eb3"
+    },
+    {
+      "file": "viewer/explorer.js",
+      "sha256": "ff35d8f141b3d3e3b70c36d5e14849ff55580ec3519f5ccfc65fe6ea41219c8a"
+    },
+    {
+      "file": "design/themes.json",
+      "sha256": "21a324a9153df68bac77700ec4d8f43b01e3411a70f321bf2f74aa26cbba1a7b"
+    },
+    {
+      "file": "build/viewer-scene.json",
+      "sha256": "65f41afc51294b33a054627584aa814afc8d08728afe686542f1f4121fceef2d"
+    }
+  ],
+  "assets": [
+    {
+      "file": "docs/marketing/assets/carousel-en-1.png",
+      "sha256": "bb072ab5ea72ef61f4de112972c2dba9d376eed0ad60573c01a86f957929593a",
+      "bytes": 490099
+    },
+    {
+      "file": "docs/marketing/assets/carousel-en-2.png",
+      "sha256": "42a518c9e2da7e4ae17af56a49ec0742e194f50d271c8f46539a960a8b445841",
+      "bytes": 553423
+    },
+    {
+      "file": "docs/marketing/assets/carousel-en-3.png",
+      "sha256": "55d4b14d7c1189d9baa156a853d5714b9e65f1ecd7614183772131437bd2a74a",
+      "bytes": 506121
+    },
+    {
+      "file": "docs/marketing/assets/carousel-en-4.png",
+      "sha256": "64b6b3c6a055cd226fdd9fd1201743a16ae5baba409bccf3a9229eac2c457196",
+      "bytes": 585779
+    },
+    {
+      "file": "docs/marketing/assets/carousel-en-5.png",
+      "sha256": "56276c9725979bea8f8374414ea64c0b1f4c6488a5f09a96ee3e4a2fdbcd326a",
+      "bytes": 497939
+    },
+    {
+      "file": "docs/marketing/assets/carousel-en-6.png",
+      "sha256": "615ece027c65f0c6274ae47daff9f275140941be50b3aeddf7e84169e133e27b",
+      "bytes": 527669
+    },
+    {
+      "file": "docs/marketing/assets/share-en.png",
+      "sha256": "7000e304e239052e4490c929c20254f23346101d3fc6b12fe30e882e4416c4ea",
+      "bytes": 293188
+    },
+    {
+      "file": "docs/marketing/assets/square-en.png",
+      "sha256": "9f66a8740b7e27fe3773559d5c539523a3e51ce3018c719673e1fca8ab6c49e4",
+      "bytes": 419309
+    },
+    {
+      "file": "docs/marketing/assets/story-en.png",
+      "sha256": "8d2a5fce892c571bc4a2af211f9df08a5e37bec5f1b3d694a6286d144d8c0d04",
+      "bytes": 634545
+    },
+    {
+      "file": "docs/marketing/assets/youtube-en.png",
+      "sha256": "f555707a7384076cd1947d4455d259d13c912b0ce7015b19f576369739e9a855",
+      "bytes": 321681
+    },
+    {
+      "file": "docs/marketing/assets/teaser-en.srt",
+      "sha256": "1fe9efe3c40883eadf82636e3a055c4249872d5ad67330712b6a0f3d1e082e7a",
+      "bytes": 771
+    },
+    {
+      "file": "docs/marketing/assets/teaser-en.mp4",
+      "sha256": "014c5bd86d7a6afbef4d8b3ea3cbdd8abb5cda1b7932a1df1efe4d7b3480cce1",
+      "bytes": 840705
+    },
+    {
+      "file": "docs/marketing/assets/carousel-es-1.png",
+      "sha256": "8faddc77f9a8e3031da99cb52ec3447aee8f3cf5bda8f9173badc3dc3391d73c",
+      "bytes": 489904
+    },
+    {
+      "file": "docs/marketing/assets/carousel-es-2.png",
+      "sha256": "1a1bd90cd814aa9e7281edb55cdf53008e681f5688a2b13aea652fa66fa95692",
+      "bytes": 555535
+    },
+    {
+      "file": "docs/marketing/assets/carousel-es-3.png",
+      "sha256": "80b24e9d2a6233c5230ed2044ca45e59cf3093accb101c0a45a54192537d377c",
+      "bytes": 500436
+    },
+    {
+      "file": "docs/marketing/assets/carousel-es-4.png",
+      "sha256": "d7230fd1b003e31d5462ee0217228cc42e99d0b01cd4ba031357d8ae31533aa6",
+      "bytes": 585533
+    },
+    {
+      "file": "docs/marketing/assets/carousel-es-5.png",
+      "sha256": "64e49ecd51c7d118f9276dcc0eba6b44cd6cb1cc7dba257f07f641108f4c3c97",
+      "bytes": 508345
+    },
+    {
+      "file": "docs/marketing/assets/carousel-es-6.png",
+      "sha256": "91e693b0e3d6482efd8c2b2fdce92185c75d6bfaf7afd9f99c3ab2076026b743",
+      "bytes": 522872
+    },
+    {
+      "file": "docs/marketing/assets/share-es.png",
+      "sha256": "cc09197f103b366b2ad75fc8fcfbcaa6acc9817811fa85a093452a45aac3d8bc",
+      "bytes": 289517
+    },
+    {
+      "file": "docs/marketing/assets/square-es.png",
+      "sha256": "73b308224323f63cc175a5a786d9afac6d3823234e8079281b12dc0f29c1b5dd",
+      "bytes": 415260
+    },
+    {
+      "file": "docs/marketing/assets/story-es.png",
+      "sha256": "bfd61dea7c8b8ba66b085452db8f5cc0f7ffd05e8507389ca01a3dbe2660329c",
+      "bytes": 635285
+    },
+    {
+      "file": "docs/marketing/assets/youtube-es.png",
+      "sha256": "d358fa4a1a2efa8f1863db02dbdad33d3c9a9bd310fa88909445690154643861",
+      "bytes": 324647
+    },
+    {
+      "file": "docs/marketing/assets/teaser-es.srt",
+      "sha256": "c4a84c8fdbe6ea74fdf777c542882805a8ec2ce574ba22194dc056cc189a645a",
+      "bytes": 804
+    },
+    {
+      "file": "docs/marketing/assets/teaser-es.mp4",
+      "sha256": "3ba8fa9eeb0a8aaa7ce4d8e0d2b29d20b3f9f2fe198070db861100142f5eeef9",
+      "bytes": 846690
+    },
+    {
+      "file": "docs/marketing/assets/avatar.png",
+      "sha256": "5825516df20ef9b06869238e9a3f58644a67ac5ed222218cfe3af1a0eabbb902",
+      "bytes": 27542
+    },
+    {
+      "file": "docs/marketing/assets/render-hero.png",
+      "sha256": "9a0eb63141dcfe01638a2beac275e466c97534f43f588bcc1273fa2579fde601",
+      "bytes": 247181
+    },
+    {
+      "file": "docs/marketing/assets/render-layers.png",
+      "sha256": "1e309803d1e4cc1a48c2432157e6813567bc386c2fb1b2f2384d4bbb45ca15b1",
+      "bytes": 354025
+    },
+    {
+      "file": "docs/marketing/assets/render-talavera.png",
+      "sha256": "6721dd6b0d7f06f4f7acb7c48ebc9eab70dc6e3211667074f1e492804663260e",
+      "bytes": 242855
+    },
+    {
+      "file": "docs/marketing/assets/render-hanafuda.png",
+      "sha256": "67fc42c7cfcdbb540ec696df30d8fc7f2990fdd85a12d54fd9e9d68e54405abf",
+      "bytes": 238364
+    },
+    {
+      "file": "docs/marketing/assets/render-flan42.png",
+      "sha256": "9f24ecb1b81694b7dc4b463a077e804e3b3bb2eaf5f95d7c599af6ee57b46762",
+      "bytes": 240543
+    },
+    {
+      "file": "docs/marketing/assets/render-flan46.png",
+      "sha256": "7a23d5b9043c27f9c6c74827c57f171a43c95f898a8f14b3fd0806b7c5c6fb1c",
+      "bytes": 285497
+    },
+    {
+      "file": "docs/marketing/assets/render-flan54.png",
+      "sha256": "5df8acae54d83cfea254350e665d4546a45a72a005842c421dff476d7bf132bc",
+      "bytes": 278338
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Flan Keyboard: full summary
 
-> Flan is an open-source, low-profile wireless split keyboard that you build yourself, in four sizes from 36 to 54 keys. The files are free under GPL-3.0-or-later. As of November 2026 it is a digital prototype: the design passes its electrical and geometric checks, but no board has been built and tested yet. Nothing is sold.
+> Flan is an open-source, low-profile wireless split keyboard that you build yourself, in four sizes from 36 to 54 keys. The files are free under GPL-3.0-or-later. As of November 13, 2026 the first Flan36 parts are ordered; it remains a prototype: the design passes its electrical and geometric checks, but no board has been built and tested yet. Nothing is sold.
 
 This page is written for language models and search tools. It states facts from the project's own documentation and says plainly what has not been tested. Site: https://flankbd.com/ . Source: https://github.com/eduarbo/flan .
 

@@ -1,43 +1,39 @@
-# Flan introduction kit
+# Flan · kit de lanzamiento
 
-**Ready-to-edit material for introducing the prototype.** Physical qualification is pending. These drafts have not been posted, sent or used in a paid campaign.
+**Listo para preparar la primera presentación del proyecto.** Piezas del primer Flan36 encargadas; armado y pruebas físicas pendientes. Este kit no constituye una preventa ni una campaña publicada.
 
-## Positioning
+**[Abrir el kit visual y copiar textos →](https://flankbd.com/marketing/)** · **[Descargar todos los archivos →](https://flankbd.com/marketing/flan-launch-kit.zip)** · **[Textos EN/ES](marketing/copy.md)**
 
-Flan is an open-source, low-profile split keyboard design in four sizes. Its explorer lets people choose a case, magnetic display frame, theme and keycap colors before downloading prototype files. The first manual build is Flan36.
+## Usar ahora
 
-Use **“digital prototype”**, **“first build”** and **“help test”** where the stage matters. Describe the 14.50 mm dimension as the nominal frame/Level roof height, excluding feet and keycaps. Battery life, physical fit, comfort and wireless reliability remain unmeasured. Do not offer a finished kit, a shipping date or a runtime promise from this evidence.
+1. Abrir el kit y elegir EN o ES. El render principal muestra Flan36 en crema/caramelo y marco Talavera; [abre esa combinación](https://flankbd.com/explore/?size=flan36&theme=flan&case=rim&keys=original&frame=talavera).
+2. Elegir el canal. Instagram: seis imágenes de carrusel en orden, caption y enlace del perfil. Reddit: post técnico con autoría, estado y reglas al lado. Reel/Short: MP4 vertical de 30 segundos, sin sonido. YouTube largo: portada, descripción y guion para grabar.
+3. Usar la [secuencia por hitos](marketing/plan.md), registrar el enlace y atender las preguntas. Ver [canales y reglas](marketing/channels.md) antes de publicar. No hay publicaciones, envíos, cuentas nuevas ni anuncios pagados realizados por esta preparación.
 
-## Short post · English
+## Material
 
-> Meet Flan: an open-source split keyboard design in four sizes, with 31 themes and six magnetic display frames. Choose your look in the 3D explorer. PCB, firmware and print files are available for prototypes; the first physical build still needs testing. Explore the design at flankbd.com.
-
-## Short post · Español
-
-> Este es Flan: un diseño de teclado dividido y de código abierto, con cuatro tamaños, 31 temas y seis marcos magnéticos. Prueba combinaciones en el explorador 3D. Ya hay archivos de PCB, firmware e impresión para prototipos; falta validar el primer armado físico. Conócelo en flankbd.com.
-
-## Search, sharing and assistants
-
-The home page and the explorer carry a description, canonical address, Open Graph and X card tags and the [share image](assets/home-og.png), which shows the opening look and the four sizes; its address changes with its bytes so link previews refresh. The home page also carries structured data that describes Flan as a free design, with no offer for sale.
-
-[`robots.txt`](robots.txt) welcomes search engines and AI assistants and points to [`sitemap.xml`](sitemap.xml). [`llms.txt`](llms.txt) and [`llms-full.txt`](llms-full.txt) summarize Flan for language models: what it is, the sizes and choices, who it suits, and that it is an untested prototype. They state facts from this documentation and nothing else; they contain no instructions to recommend it. `node viewer/site-meta-check.mjs` checks all of this against the theme, size and frame data. Update the two summaries when the status changes.
-
-## Images and demonstration
-
-| Asset | Use / label |
+| Entrega | Archivos |
 |---|---|
-| [Flan lockup](branding/flan/flan-lockup.svg) · [logo kit](branding/flan/flan-logo-svg-kit.zip) | Brand asset; observe the [trademark policy](../TRADEMARKS.md). |
-| [Social preview](assets/home-og.png) | Existing render; caption “Flan36 digital prototype — render”. |
-| [Home](images/site-home.webp) · [explorer](images/site-explorer.webp) · [phone](images/site-phone.webp) | Product-interface screenshots; capture again if the visible controls change. |
-| [Assembly render](images/revI-assembled.png) | Render showing construction; not evidence of assembly or fit. |
-| [Family diagram](images/variants/family.svg) | Compare 36/42/46/54 layouts; all physical tests remain pending. |
+| Vista al compartir | `assets/share-en.png`, `assets/share-es.png` · 1200×630 |
+| Carrusel | `assets/carousel-{en,es}-{1…6}.png` · 1080×1350 |
+| Feed cuadrado | `assets/square-{en,es}.png` · 1080×1080 |
+| Story / portada vertical | `assets/story-{en,es}.png` · 1080×1920 |
+| Teaser | `assets/teaser-{en,es}.mp4` · 1080×1920, 30 s; SRT separado |
+| Portada YouTube | `assets/youtube-{en,es}.png` · 1280×720 |
+| Avatar | `assets/avatar.png` · 800×800 |
+| Renders sin texto | `assets/render-*.png` · capturas del explorador, fondo transparente |
+| Copy y operación | [Textos](marketing/copy.md), [FAQ](marketing/faq.md), [guion y tomas](marketing/video.md), [canales](marketing/channels.md), [plan y registro](marketing/plan.md) |
 
-A 20–30 second demonstration can show: the complete design, a theme/frame change, the exploded layers, the four sizes, then the Build panel. Close with “Explore the prototype / Explora el prototipo”. Capture from the actual site and retain the prototype label.
+Los nombres de la tabla se resuelven dentro de `docs/marketing/`. Cada pieza de producto lleva el rótulo render/prototipo. Los renders proceden de la geometría real del explorador; sus gráficos de pantalla son ilustrativos. El video entregado es un teaser con renders, no una grabación de hardware funcionando. No se usó música ni sonido de tipeo ajeno.
 
-## Destination and response
+## Posicionamiento y límites
 
-- Primary link: [flankbd.com](https://flankbd.com/).
-- Builders: [first build and test record](first-build.md), [parts](parts.md), [assembly](build.md).
-- Technical feedback: [existing GitHub Issues](https://github.com/eduarbo/flan/issues), with size, revision, configuration and observed result. No new collection service or mailing list is required.
+Flan es un diseño abierto de teclado dividido y de perfil bajo, con cuatro tamaños y personalización de carcasas, marcos y colores. El primer armado será Flan36. Invitar a explorar, seguir el proceso y dar feedback técnico. No afirmar duración de batería, ajuste impreso, comodidad, carga o fiabilidad BLE antes de medirlos; tampoco ofrecer kits ni una fecha de envío. La altura nominal de 14.50 mm describe el techo de Level/marco y excluye patas y keycaps; no es la altura total del teclado.
 
-After the first accepted unit, replace renders with real photos where possible and add only the measurements actually recorded. Keep technical limitations beside the corresponding claim.
+Las fuentes, licencias y créditos están en [ATTRIBUTION.md](../ATTRIBUTION.md). El nombre/logo se rige por [TRADEMARKS.md](../TRADEMARKS.md). Las referencias visuales a otros productos no implican afiliación. Conservar atribución a Piantor y KLP Lamé cuando corresponda.
+
+## Destino y seguimiento
+
+Entrada principal: [flankbd.com](https://flankbd.com/). Acción: explorar una combinación. Progreso real: [primer armado](first-build.md). Feedback reproducible: [GitHub Issues](https://github.com/eduarbo/flan/issues). No se agregó una lista de correo, píxel ni servicio de analítica. Los resultados se anotan manualmente con las métricas que sí expone cada plataforma.
+
+El sitio contiene metadatos Open Graph/X, dirección canónica, datos estructurados sin oferta de venta, robots y sitemap. La tarjeta se publica con un nombre derivado de sus bytes; se conserva la dirección anterior para consumidores que ya la tengan en caché. [Verificación técnica y reproducción](marketing/verification.md). La vista exacta en apps de terceros sólo se considera verificada cuando se observe allí; el HTTP correcto no demuestra que una caché ajena se haya actualizado.

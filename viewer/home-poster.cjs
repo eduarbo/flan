@@ -1,4 +1,4 @@
-// The home page's poster (shown until the live model is ready) and its social image, rendered from the
+// The home page's poster (shown until the live model is ready) rendered from the
 // built home itself so the swap to the live canvas is seamless. Then rebuild: node viewer/home-build.mjs
 // FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright-core FLAN36_BROWSER=/path/to/chromium node viewer/home-poster.cjs
 // FLAN36_BROWSER_ANGLE=metal renders with the GPU, which the lit, shadowed look needs; software rendering shows the flat one.
@@ -19,12 +19,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(__dirname,'home'),work=pat
   execFileSync('magick',[raw,'-resize','1600x>','-quality','84','-define','webp:alpha-quality=90',path.join(out,'home-poster.webp')]);
   // a phone's stage is at most 506 px wide and its live model is drawn at 1.5 to 1.75 device pixels per px: 800 is as sharp
   execFileSync('magick',[raw,'-resize','800x>','-quality','84','-define','webp:alpha-quality=90',path.join(out,'home-poster-800.webp')]);
-  // the desktop layout at 1200 × 630
-  const og=await browser.newPage({viewport:{width:1440,height:756},deviceScaleFactor:1200/1440});await ready(og);
-  // title on the left with the four sizes under it, the keyboard filling the right
-  await og.addStyleTag({content:'.rail,.layers,.stagebar,nav{visibility:hidden!important}.hero{min-height:756px!important;height:756px}.stage{grid-row:2/4!important;grid-column:1/-1!important;margin:20px -40px 0 34%!important}'
-    +'.rail{grid-column:1!important;grid-row:3!important;align-self:end!important;padding:0 0 64px!important;max-width:440px}.rail .grp[data-group=size]{visibility:visible!important}.rail .grp:not([data-group=size]),.rail>:not(.grp){display:none!important}'});await og.waitForTimeout(1500);
-  await og.screenshot({path:path.join(out,'home-og.png')});
+  // Social artwork is generated separately by viewer/marketing/build.cjs.
   console.log(execFileSync('magick',['identify',path.join(out,'home-poster.webp'),path.join(out,'home-poster-800.webp'),path.join(out,'home-og.png')]).toString());
   await browser.close();server.close();
 })().catch(e=>{console.error(e);process.exit(1);});

@@ -1,0 +1,23 @@
+1
+00:00:00,000 --> 00:00:05,000
+Make it yours. An open-source split keyboard. Homemade, like a good flan.
+
+2
+00:00:05,000 --> 00:00:10,000
+Small. Your kind of small. 36, 42, 46 or 54 keys. Find the layout you want to build.
+
+3
+00:00:10,000 --> 00:00:15,000
+A different frame of mind. Six magnetic display-frame designs. Four case styles. Choose your combination.
+
+4
+00:00:15,000 --> 00:00:20,000
+Every layer. Out in the open. Explore the parts. Get the PCB, firmware and print files. Build from open source.
+
+5
+00:00:20,000 --> 00:00:25,000
+From pixels to parts. The first Flan36 parts are ordered. Assembly, fit and wireless tests come next.
+
+6
+00:00:25,000 --> 00:00:30,000
+What would yours look like? 31 themes, per-key colors and a 3D explorer. Start at flankbd.com.

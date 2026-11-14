@@ -1,0 +1,23 @@
+1
+00:00:00,000 --> 00:00:05,000
+Hazlo tuyo. Un teclado dividido y de código abierto. Casero, como un buen flan.
+
+2
+00:00:05,000 --> 00:00:10,000
+Pequeño. A tu manera. 36, 42, 46 o 54 teclas. Encuentra la distribución que quieres armar.
+
+3
+00:00:10,000 --> 00:00:15,000
+Un marco para tu estilo. Seis diseños de marco magnético. Cuatro carcasas. Elige tu combinación.
+
+4
+00:00:15,000 --> 00:00:20,000
+Cada capa. A la vista. Explora las piezas. Descarga PCB, firmware y archivos de impresión. El diseño es abierto.
+
+5
+00:00:20,000 --> 00:00:25,000
+De los píxeles a las piezas. Las piezas del primer Flan36 ya están encargadas. Siguen el armado y las pruebas físicas.
+
+6
+00:00:25,000 --> 00:00:30,000
+¿Cómo sería el tuyo? 31 temas, colores por tecla y un explorador 3D. Empieza en flankbd.com.

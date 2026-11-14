@@ -1684,7 +1684,7 @@
     },
     {
       "path": "viewer/home/options.js",
-      "sha256": "86fcac37a98ac39e92f924a2296000887278701a698e02603df043704b294e65"
+      "sha256": "fdbaeb63a1353037147056df8b3d15b3f00f897cd44598448f4724ca49e7cf05"
     },
     {
       "path": "viewer/keycap-colors.js",
@@ -1732,7 +1732,7 @@
     },
     {
       "path": "viewer/template.html",
-      "sha256": "70a370737a68d2ae8b16293c659e10a8db2ac4c628e39b8ba675be9429160995"
+      "sha256": "7b7a217ed1577081c4e9d36b453d264e7e4514b2d76312e156515953a6add6d0"
     },
     {
       "path": "viewer/build.mjs",
@@ -1779,7 +1779,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "8ce4177a73037cc9de1f30179c8827dbb3a725e3716ed3e6050251673d92de26",
+  "viewer_sha256": "1510ab2e2e693330f1ad9d238dd5f947a7bbefbd9707a1a748e1786256b276bc",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2065,8 +2065,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "3dc5c4b00de1797a9b2f13ebad22b9a6c3ec736902b865032d74dfd5ae0dece2",
-    "bytes": 42328615
+    "sha256": "5d6d5bb82a0034e0aab2ae24773bc6c2b6337a5e77282aff0a73039c2af9cb02",
+    "bytes": 42328644
   },
   "still": {
     "look": {
@@ -2639,7 +2639,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "8d25fd768f31a0f2348cb3791181edcd727cf61e64ab3cd4b7b2f079ab27b8ad",
+  "offline_sha256": "efd6f9fb49a8faef35b1ed11e8f04d736c225a2cb43269a150a51f9018772179",
   "printing": {
     "path": "docs/explore/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
@@ -2689,8 +2689,8 @@
     "bytes": 335912
   },
   "geometry_aliases": 18,
-  "online_bytes": 1107747,
-  "offline_bytes": 56215032,
+  "online_bytes": 1107947,
+  "offline_bytes": 56215232,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

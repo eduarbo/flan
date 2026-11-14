@@ -1,5 +1,7 @@
 # First Flan36 build
 
+**2026-11-13 · Parts ordered.** Eduardo confirmed ordering the parts for the first Flan36. Delivery, assembly and the physical gates below remain pending; this records the builder’s report, not a provider receipt.
+
 **Build one Flan36 prototype first.** The digital candidate is for manual qualification; a working keyboard and a sale-ready kit still require the results below. [Parts and supplier links](parts.md) · [Assembly](build.md) · [Firmware](firmware.md) · [Marketing material](launch.md).
 
 ## Order in two stages

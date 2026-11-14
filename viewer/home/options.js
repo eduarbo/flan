@@ -4,7 +4,7 @@
 export const CASES=[['rim','Color rim'],['solid','Solid'],['terrace','Terrace'],['level','Level']];
 export const KEYS=[['original','Original'],['normal','Sculpted'],['saddle','Saddle']];
 export const GROUPS=['size','theme','case','keys','frame'];
-// The look the page opens with, and the one its poster and share image show.
+// The look the page opens with and the one its loading poster shows.
 export const DEFAULT={size:'flan36',theme:'eva-01',case:'rim',keys:'original',frame:{left:'snes',right:'phone'},own:{left:false,right:false}};
 // a phone shows one group at a time
 export const TAB='theme';

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "baseline_commit": "f05cd33c24108cf59c03ead42545839eb8941178",
+  "method": "Two separate read-only reviewers: product/constructive and adversarial/reliability; one round, same frozen brief and enumerated sources. No model-diversity claim. Root verified source preservation and disposition.",
+  "frozen_files_verified": 20,
+  "unexplained_review_mutations": [],
+  "recommendations": [
+    "Both reviewers recommended bounded publication after root verification and disposition of their findings.",
+    "No CRITICAL objection or additional owner decision was identified."
+  ],
+  "disposition": [
+    {
+      "severity": "HIGH",
+      "finding": "Four-size sheet appeared to repeat Flan36 in both reviews.",
+      "result": "Not substantiated. Enlarged direct inspection shows 3x5+3, 3x6+3, 4x5+3 and 4x6+3 per half. Frozen and final carousel-es-2 hashes are identical. Root corrected its premature error claim. Capture now asserts actual visible keycaps: 18/21/23/27 per half; composition validates capture hashes before reuse.",
+      "sheet_sha256": "1a1bd90cd814aa9e7281edb55cdf53008e681f5688a2b13aea652fa66fa95692"
+    },
+    {
+      "severity": "MEDIUM",
+      "finding": "Prototype label too small at social thumbnail size.",
+      "result": "Added a 36 px badge; inspected output at 600 and 360 px widths."
+    },
+    {
+      "severity": "LOW",
+      "finding": "Old 28-theme count and 25-second acceptance text.",
+      "result": "Home derives counts from current data (31/6/4); acceptance and guides use actual 30-second duration."
+    }
+  ],
+  "limits": "Review does not establish physical hardware function or third-party cache refresh; final publication is verified separately."
+}

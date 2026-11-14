@@ -2,8 +2,8 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "0eb0eb152467f83ed385132a42a72f0e509498619040c2243fe9a60020de7598",
-    "bytes": 114652
+    "sha256": "7ce91595e952530711b52e81779549555138dcff6b1794dc327fb98602b206fd",
+    "bytes": 115652
   },
   "engine": {
     "path": "docs/assets/home-engine-c4e17726087f69a6.js",
@@ -1720,15 +1720,15 @@
   "sources": [
     {
       "path": "viewer/home-build.mjs",
-      "sha256": "25b8a4bbf496806afb2d8fb933ecc5a7a4b2ff141a9a21075f9f1c26460cffa3"
+      "sha256": "2c14343f3a959925cb39d7d319f93acf16dccddbbafb27ee996d5cdbca9c8851"
     },
     {
       "path": "viewer/home/app.js",
-      "sha256": "a3affdbadf791b33c431ea095ced123c4ba76b927b3640337735064855b04b88"
+      "sha256": "ab69d102f5dc51b53a97189c47b1c7dc42d7c0913d237dde220c52964b4945b2"
     },
     {
       "path": "viewer/home/options.js",
-      "sha256": "86fcac37a98ac39e92f924a2296000887278701a698e02603df043704b294e65"
+      "sha256": "fdbaeb63a1353037147056df8b3d15b3f00f897cd44598448f4724ca49e7cf05"
     },
     {
       "path": "viewer/design-url.js",
@@ -1748,11 +1748,11 @@
     },
     {
       "path": "viewer/home/style.css",
-      "sha256": "dc788f48493ada2b50b7b2a437a4d858070b7953111c543f98e0d6f7fc6da80e"
+      "sha256": "4530e9c507eb13897c55b67d1703e57aac86e1e9dcd14ef2bd168e24d4c941f7"
     },
     {
       "path": "viewer/home/template.html",
-      "sha256": "4a1c2df41d595b121d8b96288587f20fa4a3024b5afd51fbdc154c824be7d5eb"
+      "sha256": "38031fff8fb3339e0735590b7124c4223c9da55f4c354e66dc1d0a07dc3405fb"
     },
     {
       "path": "design/themes.json",

@@ -19,7 +19,9 @@ function page(file,url){
  for(const name of ['twitter:title','twitter:description'])assert(tag(head,'name',name).length>5,file+': '+name);
  const image=tag(head,'property','og:image');assert.equal(tag(head,'name','twitter:image'),image);assert(tag(head,'name','twitter:image:alt').length>5,file+': twitter:image:alt');
  // the address carries the image's own hash, so a new image gets a new address
- assert.equal(image,'https://flankbd.com/assets/home-og.png?v='+crypto.createHash('sha256').update(fs.readFileSync(new URL('docs/assets/home-og.png',root))).digest('hex').slice(0,12),file+': share image address');
+ assert.equal(image,'https://flankbd.com/assets/home-og-'+crypto.createHash('sha256').update(fs.readFileSync(new URL('docs/assets/home-og.png',root))).digest('hex').slice(0,12)+'.png',file+': share image address');
+ assert.equal(tag(head,'property','og:image:secure_url'),image);assert.equal(tag(head,'property','og:image:type'),'image/png');
+ assert(fs.readFileSync(new URL('docs/'+new URL(image).pathname.slice(1),root)).equals(fs.readFileSync(new URL('docs/assets/home-og.png',root))));
  for(const m of head.matchAll(/content="([^"]*)"/g))assert(!/\b\d+ (themes|temas)\b/.test(m[1])||m[1].includes(`${themes.length} themes`),file+': stale theme count in '+m[1]);
  return {head,description};
 }

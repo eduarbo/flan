@@ -164,6 +164,9 @@ async function homePage({scene,files}){
   for(const f of fs.readdirSync(path.join(dir,'fonts')))fs.copyFileSync(path.join(dir,'fonts',f),path.join(assets,'fonts',f));
   const posters=['home-poster.webp','home-poster-800.webp'];
   for(const f of [...posters,'home-og.png'])fs.copyFileSync(path.join(dir,f),path.join(assets,f));
+  const ogBytes=fs.readFileSync(path.join(dir,'home-og.png')),ogName='home-og-'+crypto.createHash('sha256').update(ogBytes).digest('hex').slice(0,12)+'.png';
+  fs.writeFileSync(path.join(assets,ogName),ogBytes);
+  // Keep prior versioned cards available to already-cached social previews.
   // Two classic scripts. The page's own (rail, language, colours) is written into the page and runs before the first
   // paint. The 3D engine (three.js and home/model.js) is a file the page asks for once its poster is up, so the
   // browser compiles it off the main thread and the poster never shares the line with it.

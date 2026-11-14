@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-13",
+  "campaign": "first-build",
+  "en": {
+    "eyebrow": "OPEN-SOURCE SPLIT KEYBOARD",
+    "headline": "Make it yours.",
+    "sub": "36 / 42 / 46 / 54 keys. One very personal build.",
+    "status": "PROTOTYPE · CAD RENDER",
+    "ordered": "Parts ordered. First build next.",
+    "cta": "Explore your Flan in 3D",
+    "slides": [
+      {"title": "Make it\nyours.", "body": "An open-source split keyboard. Homemade, like a good flan.", "image": "hero", "label": "MEET FLAN"},
+      {"title": "Small.\nYour kind of small.", "body": "36, 42, 46 or 54 keys. Find the layout you want to build.", "image": "family", "label": "FOUR SIZES"},
+      {"title": "A different\nframe of mind.", "body": "Six magnetic display-frame designs. Four case styles. Choose your combination.", "image": "talavera", "label": "MAKE IT PERSONAL"},
+      {"title": "Every layer.\nOut in the open.", "body": "Explore the parts. Get the PCB, firmware and print files. Build from open source.", "image": "layers", "label": "LOOK INSIDE"},
+      {"title": "From pixels\nto parts.", "body": "The first Flan36 parts are ordered. Assembly, fit and wireless tests come next.", "image": "hanafuda", "label": "FOLLOW THE FIRST BUILD"},
+      {"title": "What would\nyours look like?", "body": "31 themes, per-key colors and a 3D explorer. Start at flankbd.com.", "image": "hero", "label": "TRY YOUR COMBINATION"}
+    ]
+  },
+  "es": {
+    "eyebrow": "TECLADO DIVIDIDO · CÓDIGO ABIERTO",
+    "headline": "Hazlo tuyo.",
+    "sub": "36 / 42 / 46 / 54 teclas. Un armado muy tuyo.",
+    "status": "PROTOTIPO · RENDER CAD",
+    "ordered": "Piezas encargadas. Sigue el primer armado.",
+    "cta": "Explora tu Flan en 3D",
+    "slides": [
+      {"title": "Hazlo\ntuyo.", "body": "Un teclado dividido y de código abierto. Casero, como un buen flan.", "image": "hero", "label": "ESTE ES FLAN"},
+      {"title": "Pequeño.\nA tu manera.", "body": "36, 42, 46 o 54 teclas. Encuentra la distribución que quieres armar.", "image": "family", "label": "CUATRO TAMAÑOS"},
+      {"title": "Un marco\npara tu estilo.", "body": "Seis diseños de marco magnético. Cuatro carcasas. Elige tu combinación.", "image": "talavera", "label": "DALE TU TOQUE"},
+      {"title": "Cada capa.\nA la vista.", "body": "Explora las piezas. Descarga PCB, firmware y archivos de impresión. El diseño es abierto.", "image": "layers", "label": "MIRA POR DENTRO"},
+      {"title": "De los píxeles\na las piezas.", "body": "Las piezas del primer Flan36 ya están encargadas. Siguen el armado y las pruebas físicas.", "image": "hanafuda", "label": "SIGUE EL PRIMER ARMADO"},
+      {"title": "¿Cómo sería\nel tuyo?", "body": "31 temas, colores por tecla y un explorador 3D. Empieza en flankbd.com.", "image": "hero", "label": "PRUEBA TU COMBINACIÓN"}
+    ]
+  }
+}

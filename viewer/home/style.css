@@ -219,3 +219,7 @@ footer .support-pill:hover { background: color-mix(in srgb, var(--accent) 20%, t
 .resume-design { display: inline-flex; align-items: center; align-self: flex-start; min-height: 44px; color: var(--accent); font-size: 13px; text-decoration: none; }
 .resume-design:hover { text-decoration: underline; }
 .resume-design[hidden] { display: none; }
+
+/* First-build status stays with the introduction and remains visible without JavaScript. */
+.build-status { margin: 10px 0 0; font: 400 12px/1.5 var(--mono); color: var(--muted); }
+.build-status a { text-underline-offset: 3px; }

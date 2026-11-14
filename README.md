@@ -32,7 +32,7 @@ Flan is a low-profile wireless split keyboard in development by [Eduardo Ruiz](h
 - **Free tools:** KiCad for electronics, FreeCAD for the case, StepUp for exchange. Editable source, STEP/STL, offline explorer and GLB included.
 - **Intended hardware:** Choc v1 hot-swap, two nice!nano controllers and two nice!view displays. One display remains the fallback.
 
-**Status: routed prototype; physical qualification pending.** Both Flan36 PCBs pass DRC, schematic parity and ERC with no unconnected items. Three [ZMK firmware builds](docs/firmware.md) cover two displays or a left-only display. [Prototype fabrication files and verification](docs/electronics.md) are included. Exact connectors, printed retention, BLE, charging and measured power still need hardware tests.
+**Status: first Flan36 parts ordered; physical qualification pending.** Both Flan36 PCBs pass DRC, schematic parity and ERC with no unconnected items. Three [ZMK firmware builds](docs/firmware.md) cover two displays or a left-only display. [Prototype fabrication files and verification](docs/electronics.md) are included. Exact connectors, printed retention, BLE, charging and measured power still need hardware tests.
 
 **First build:** [Flan36 purchase sequence and test record](docs/first-build.md). **Introducing Flan:** [copy, images and verified claim boundaries](docs/launch.md).
 
