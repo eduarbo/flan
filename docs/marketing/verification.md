@@ -1,5 +1,7 @@
 # Selección principal · 2026-11-13
 
+Publicación verificada: `131d176` desplegado por GitHub Pages; los 54 archivos públicos coinciden con los locales. Home y explorador sirven la tarjeta EVA 1200 × 630 a Facebook, X y LinkedIn. Recibo: `validation/marketing-public.json`.
+
 Eduardo eligió EVA-01 como imagen principal y pidió conservar las demás. Se aplica la tarjeta EVA existente, sin modificar sus píxeles, a Open Graph, al kit EN/ES y a su cabecera. Matcha, Hanafuda, Flan y la portada Ko-fi se conservan íntegros en la galería y en ambos ZIP.
 
 Selección reproducible: `viewer/marketing/primary.json`; ejecutar `node viewer/marketing/page.mjs` y después `node viewer/build.mjs`. La activación mecánica reutiliza la revisión de las mismas piezas en `validation/marketing-variants-review.json` y sus controles de publicación. `validation/marketing-primary.json` prueba la conservación de los 17 PNG; `validation/marketing-check.json` verifica escritorio/móvil, EN/ES y 46 descargas. Las capturas regenerables están en `build/marketing/`.
