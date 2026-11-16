@@ -12,7 +12,7 @@ Choose **Design → Frame** in the [3D explorer](https://flankbd.com/explore/) a
 | **2000s Phone** | Navy faceplate, silver keypad and call key. |
 | **iPod** | White face, silver click wheel and continuous screen border. |
 
-**The selected collection is Talavera, Game Boy, SNES, Phone, iPod and Hanafuda.** Hanafuda retains its approved R6/R8 artwork and is installed. [The current gallery](frame-proposals.md) contains only these six approved designs; no new proposals await approval. The main explorer and print kit include all six installed approved designs. Flan, Tape, Orbit, Manga, NES and Walkman are retired; saved files substitute Talavera while preserving colors and other choices.
+**The selected collection is Talavera, Game Boy, SNES, Phone, iPod and Hanafuda.** Hanafuda retains its approved R6/R8 artwork and is installed. The main explorer and print kit include all six installed approved designs. Flan, Tape, Orbit, Manga, NES and Walkman are retired; saved files substitute Talavera while preserving colors and other choices.
 
 All designs use solid colors, without gradients or raised details. **Restore design colors** applies the exact palette. HEX editing and coordinated case/key themes remain available.
 

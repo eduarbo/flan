@@ -17,7 +17,7 @@
 
 Flan36 is the reference for the first physical build; all four sizes remain in the digital audit. The explorer now blocks geometry exports until the requested size has loaded, keeps PCB/firmware links on that size even after a network failure, and preserves the latest selection during overlapping loads. Configuration validation checks the added keys in Flan42/46/54. The home page now describes physical tests as pending and distinguishes nominal frame height and battery envelopes from measured fit.
 
-The [first-build guide](first-build.md) provides the order sequence, frozen file package and blank acceptance record. The [introduction kit](launch.md) provides English/Spanish copy and existing visual assets. Current evidence, reproduction and remaining limits are in the [stability audit](reviews/2026-10-20-stability.md). No parts have been ordered and no campaign has been sent.
+The [first-build guide](first-build.md) provides the order sequence, frozen file package and blank acceptance record. The [introduction kit](launch.md) provides English/Spanish copy and existing visual assets. Current evidence, reproduction and remaining limits are in the [stability audit](../design/reviews/2026-10-20-stability.md). No parts have been ordered and no campaign has been sent.
 
 ## Explorer redesign and a consolidated repository
 
@@ -45,9 +45,9 @@ On 2026-10-17 the repository moved from `eduarbo/flan36` to **[eduarbo/flan](htt
 
 ## Revision I — October audit corrections
 
-The current assembly adds the approved Hanafuda frame, repairs display/frame parameter dependencies and case USB access, and includes all 36 diodes and hot-swap sockets. Current delivery evidence and remaining prototype limits are recorded in the [audit correction report](reviews/2026-10-07-corrections.md).
+The current assembly adds the approved Hanafuda frame, repairs display/frame parameter dependencies and case USB access, and includes all 36 diodes and hot-swap sockets. Current delivery evidence and remaining prototype limits are recorded in the [audit correction report](../design/reviews/2026-10-07-corrections.md).
 
-Publication verified: **1,875 source files**, the online/offline viewer, print resources and thirteen rendered images match the tested source. The public viewer preserves the camera through case/frame changes and exports the selected configuration and exact STL kit. [Publication evidence](../validation/revI-audit-publication.json). This is a historical publication snapshot. Current routing and firmware evidence is in the [build continuation](reviews/2026-10-08-build-continuation.md); physical acceptance remains open.
+Publication verified: **1,875 source files**, the online/offline viewer, print resources and thirteen rendered images match the tested source. The public viewer preserves the camera through case/frame changes and exports the selected configuration and exact STL kit. [Publication evidence](../validation/revI-audit-publication.json). This is a historical publication snapshot. Current routing and firmware evidence is in the [build continuation](../design/reviews/2026-10-08-build-continuation.md); physical acceptance remains open.
 
 The entries below retain their original historical snapshots.
 
@@ -61,7 +61,7 @@ The earlier withdrawal changed only the proposal gallery, leaving rejected shape
 
 ## Revision I — approved gallery selection (earlier snapshot)
 
-The user rejected Evangelion and requested its removal. The [current gallery](frame-proposals.md) now contains only Talavera, Game Boy, SNES, Phone, iPod and Hanafuda. The rejected proposal and its public previews were removed from the gallery. There is no pending artwork approval. Hanafuda integration remains pending; the main assembly and explorer are unchanged. [Selection record](../design/frame-selection.json).
+The user rejected Evangelion and requested its removal. The collection now contains only Talavera, Game Boy, SNES, Phone, iPod and Hanafuda. The rejected proposal and its public previews were removed from the gallery. There is no pending artwork approval. Hanafuda integration remains pending; the main assembly and explorer are unchanged. [Selection record](../design/frame-selection.json).
 
 That decision was about a display frame. On 2026-11-12 the owner asked for color themes inspired by the EVA units: EVA-00, EVA-01 and EVA-02 are palettes only, with no frame or artwork ([themes](themes-printing.md)).
 
@@ -91,7 +91,7 @@ The entries below describe their historical snapshots. Their receipts retain ori
 
 ## Revision I — frame fidelity correction
 
-The first collection passed structural checks but did not preserve the selected compositions, and its support mask silently severed several decorations. The correction restores the reference motifs and adds per-feature rejection for unsupported artwork. [Reference comparison](frame-comparison.md) · [Digital checks](../validation/revI-frame-fidelity.json). Earlier verification receipts describe their original snapshots. Public source, images, viewer and downloaded print files match the corrected implementation. [Publication receipt](../validation/revI-frame-fidelity-public.json).
+The first collection passed structural checks but did not preserve the selected compositions, and its support mask silently severed several decorations. The correction restores the reference motifs and adds per-feature rejection for unsupported artwork. [Reference comparison](../design/frame-comparison.md) · [Digital checks](../validation/revI-frame-fidelity.json). Earlier verification receipts describe their original snapshots. Public source, images, viewer and downloaded print files match the corrected implementation. [Publication receipt](../validation/revI-frame-fidelity-public.json).
 
 ## Revision I — solid-color frame collection
 

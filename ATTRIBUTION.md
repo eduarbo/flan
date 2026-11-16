@@ -22,7 +22,7 @@ Flan36 is inspired by Piantor by beekeeb and keeps Piantor's 36 key centres and 
 
 The viewer retains source notices; exported GLB includes attribution and source/license links. Viewer code is under GPL-3.0-or-later; esbuild is a pinned build dependency. Gzip packaging does not alter the underlying geometry, and the explorer's mesh files keep every position and triangle byte for byte.
 
-The three `docs/images/branding/flan36-*-concept.png` boards were generated with OpenAI's built-in image generation tool for Eduardo's Flan36 identity exploration. They are concept art, not renders of the measured CAD. Four additional Caramel refinements (`flan36-caramel-soft.png`, `flan36-caramel-drop.png`, `flan36-caramel-bold.png`, `flan36-caramel-outline.png`) use the selected Caramel board as their reference. Prompts and provenance are retained in `design/branding-prompts.json`, `design/branding-caramel-prompts.json` and `design/branding.json`; their reuse follows the repository's GPL-3.0-or-later terms to the extent applicable.
+The three `design/references/branding/flan36-*-concept.png` boards were generated with OpenAI's built-in image generation tool for Eduardo's Flan36 identity exploration. They are concept art, not renders of the measured CAD. Four additional Caramel refinements (`flan36-caramel-soft.png`, `flan36-caramel-drop.png`, `flan36-caramel-bold.png`, `flan36-caramel-outline.png`) use the selected Caramel board as their reference. Prompts and provenance are retained in `design/branding-prompts.json`, `design/branding-caramel-prompts.json` and `design/branding.json`; their reuse follows the repository's GPL-3.0-or-later terms to the extent applicable.
 
 Full texts: [GPL](LICENSE), [CC-BY-SA-4.0](LICENSES/CC-BY-SA-4.0.txt). Original upstream hashes: [sources/manifest.json](sources/manifest.json).
 
@@ -36,7 +36,7 @@ KiSwitch Choc v1 source CAD is used under its MIT option (copyright 2019–2022 
 
 The Flan wordmark in `docs/branding/flan/` and on the revI back silkscreen is the word “flan” set in [Fraunces](https://github.com/undercasetype/Fraunces) by Undercase Type (Phaedra Charles and Flavia Zimbardi), © 2018 The Fraunces Project Authors, under the SIL Open Font License 1.1. It was converted to outlines; the font software is not redistributed. The tecla-flan mark is original work under the project's GPL-3.0-or-later.
 
-The `docs/branding/outline/flan36-*.svg` artwork is a deterministic vector conversion of the selected Outline board’s monochrome reference. Letterforms are traced paths, not a bundled or substituted font. Source, reference hash and contour checks are recorded in `tools/build_outline_logo.py`, `validation/branding-outline-trace.json` and `design/branding-outline-vectors.json`. The preview and SVG kit follow GPL-3.0-or-later to the extent applicable.
+The `design/branding/outline/flan36-*.svg` artwork is a deterministic vector conversion of the selected Outline board’s monochrome reference. Letterforms are traced paths, not a bundled or substituted font. Source, reference hash and contour checks are recorded in `tools/build_outline_logo.py`, `validation/branding-outline-trace.json` and `design/branding-outline-vectors.json`. The preview and SVG kit follow GPL-3.0-or-later to the extent applicable.
 
 ## Trademarks
 

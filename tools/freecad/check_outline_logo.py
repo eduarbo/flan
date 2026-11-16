@@ -12,7 +12,7 @@ import importSVG
 ROOT=Path(__file__).resolve().parents[2]
 entries=[]
 for suffix,width,faces,holes in [('black',30,7,4),('symbol-black',12,1,2),('wordmark-black',30,6,2)]:
-    source=ROOT/f'docs/branding/outline/flan36-outline-{suffix}.svg'
+    source=ROOT/f'design/branding/outline/flan36-outline-{suffix}.svg'
     doc=A.newDocument('OutlineProbe')
     importSVG.insert(str(source),doc.Name);doc.recompute()
     shapes=[o.Shape for o in doc.Objects if hasattr(o,'Shape') and not o.Shape.isNull()]

@@ -4,7 +4,7 @@ from shapely import affinity
 from shapely.geometry import LineString
 from .prims import load_logo, place, stroke
 
-KIT = Path(__file__).resolve().parents[2] / "docs/branding/outline"
+KIT = Path(__file__).resolve().parents[2] / "design/branding/outline"
 LOGO = load_logo(KIT / "flan36-outline-black.svg")
 
 # largest free back-side rectangles on the routed revI boards (space.rects)

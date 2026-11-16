@@ -75,7 +75,7 @@ const T={
     'frame':'Frame','frame.grid':'Frame styles','frame.target':'Apply frame changes to','frame.body':'Body','frame.swatches':'Frame body colors','frame.color':'Frame body color',
     'frame.custom':'Custom frame color','frame.customMixed':'Custom frame color; mixed colors, changing this applies to both halves','frame.accents':'Frame accent colors',
     'frame.restore':'Restore design colors','frame.note':'Previews show original palettes. Custom colors are saved with your parts. All frame details sit flush with the top.',
-    'frame.designs':'Six selected designs ↗','frame.approved':'Approved design','frame.alt':'{name} frame in its original palette','frame.mixed':'Mixed styles','frame.mixedColors':'Mixed colors',
+    'frame.alt':'{name} frame in its original palette','frame.mixed':'Mixed styles','frame.mixedColors':'Mixed colors',
     'swatch.teal':'Deep teal','swatch.linen':'Linen','swatch.clay':'Clay','swatch.graphite':'Graphite',
     // build: battery and PCB
     'electronics':'Electronics','battery':'Battery','battery.target':'Apply battery changes to','battery.options':'Battery profiles',
@@ -224,7 +224,7 @@ const T={
     'frame':'Marco','frame.grid':'Estilos de marco','frame.target':'Aplicar los cambios del marco a','frame.body':'Cuerpo','frame.swatches':'Colores del cuerpo del marco','frame.color':'Color del cuerpo del marco',
     'frame.custom':'Color personalizado del marco','frame.customMixed':'Color personalizado del marco; colores mixtos, cambiarlo aplica a ambas mitades','frame.accents':'Colores de acento del marco',
     'frame.restore':'Restaurar los colores del diseño','frame.note':'Las vistas previas muestran las paletas originales. Los colores personalizados se guardan con tus piezas. Todos los detalles del marco quedan al ras.',
-    'frame.designs':'Seis diseños seleccionados ↗','frame.approved':'Diseño aprobado','frame.alt':'Marco {name} con su paleta original','frame.mixed':'Estilos mixtos','frame.mixedColors':'Colores mixtos',
+    'frame.alt':'Marco {name} con su paleta original','frame.mixed':'Estilos mixtos','frame.mixedColors':'Colores mixtos',
     'swatch.teal':'Verde azulado','swatch.linen':'Lino','swatch.clay':'Arcilla','swatch.graphite':'Grafito',
     'electronics':'Electrónica','battery':'Batería','battery.target':'Aplicar los cambios de batería a','battery.options':'Perfiles de batería',
     'battery.hint':'Ambos tamaños nominales van sobre el piso aislado de la caja, dentro de la misma jaula de retención.','battery.check':'Revisa la batería terminada, el aislamiento y los cables antes de armar.',

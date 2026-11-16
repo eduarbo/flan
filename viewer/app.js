@@ -781,7 +781,7 @@ for(const color of Object.keys(swatchNames)){
   const button=document.createElement('button');button.type='button';button.dataset.color=color;button.setAttribute('aria-pressed','false');button.style.setProperty('--swatch',color);button.onclick=()=>applyFrame({color});$('swatches').append(button);
 }
 function labelFrames(){
-  for(const button of $('frame-grid').children){const name=catalog.frame_styles[button.dataset.style];button.title=t('frame.approved');button.querySelector('img').alt=t('frame.alt',{name});}
+  for(const button of $('frame-grid').children){const name=catalog.frame_styles[button.dataset.style];button.title=name;button.querySelector('img').alt=t('frame.alt',{name});}
   for(const button of $('swatches').children){const label=t('swatch.'+swatchNames[button.dataset.color]);button.title=label;button.setAttribute('aria-label',label);}
 }
 labelFrames();onLanguage(labelFrames);

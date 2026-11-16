@@ -15,7 +15,7 @@ def transform(commands,scale=1,dx=0,dy=0):
         result.append([op,*[round(n*scale+(dx if i%2==0 else dy),8) for i,n in enumerate(v)]])
     return result
 def logo(x,y,width):
-    svg=ET.parse(ROOT/'docs/branding/outline/flan36-outline-symbol-black.svg').getroot()
+    svg=ET.parse(ROOT/'design/branding/outline/flan36-outline-symbol-black.svg').getroot()
     tokens=re.findall(r'[MLCZ]|-?\d+(?:\.\d+)?',svg.find('{http://www.w3.org/2000/svg}path').attrib['d'])
     commands=[];i=0
     while i<len(tokens):
@@ -35,7 +35,7 @@ def author():
     m.update(schema='flan36-frame-redesign-1',revision='R6',status='PROPOSED_NOT_APPROVED',
       request_ref='user:20260929:reinvent-rejected-r5-frames',
       scope=['flan','tape','orbit','manga','nes','walkman'],styles={},physical_acceptance=False,
-      source_sha256={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in ['mechanical/revI/Flan36.FCStd','design/proposals/display-seam-r1/master.json','docs/branding/outline/flan36-outline-symbol-black.svg']},
+      source_sha256={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in ['mechanical/revI/Flan36.FCStd','design/proposals/display-seam-r1/master.json','design/branding/outline/flan36-outline-symbol-black.svg']},
       display_context={'pcb_bounds_mm':[5,5.1,19,41.1],'glass_bounds_mm':[5.15,7.65,18.85,37.95],'lcd_bounds_mm':[6.628,10.26,17.372,35.54],
         'render_rule':'Actual modeled component footprints; LCD content illustrative. No fictitious aperture fill.'},
       manufacturing={'nozzle_mm':.4,'layer_mm':.2,'decorations':'flush complementary material volumes','gradients':False,'status':'Exact review geometry; slicing and physical fit unqualified.'},

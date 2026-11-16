@@ -108,8 +108,8 @@ report={'schema':'flan36-port-interaction-delivery-1','baseline_commit':'b86574a
                   'magnetic_closure':'All twelve magnet shapes retained; six base 2x3 and six frame 2x4 cylinders',
                   'printing':'Six complete Level kits; exact source STL bytes and all registered color 3MF triangles',
                   'browser':'Task-integrated browser CUA checks recorded separately; no claim of unexecuted Playwright suites'},
-        'print_kits':printing,'review':'docs/reviews/interaction-refinement.md',
-        'reproduction':'Follow docs/reviews/interaction-refinement.md; build/ artifacts are ignored and reproducible',
+        'print_kits':printing,'review':'design/reviews/interaction-refinement.md',
+        'reproduction':'Follow design/reviews/interaction-refinement.md; build/ artifacts are ignored and reproducible',
         'limits':['Actual cable insertion and switch operation in an assembled print','Magnet polarity, temperature/capture and frame retention require physical acceptance']}
 (ROOT/'validation/revI-interaction-delivery.json').write_text(json.dumps(report,indent=2)+'\n')
 print('PASS: native ports, retained magnets, UI sources, online/offline viewer, renders and six print kits agree')

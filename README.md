@@ -22,7 +22,7 @@
 
 **[Case styles](docs/cases.md)** — Level, Solid, Color rim and Terrace; actual meshes in the explorer.
 
-**[Using the explorer](docs/viewer.md)** — Design, Parts and Build beside the model (Build lists every part, PCB, print file and firmware for your design), a phone sheet with the home page's tabs, share links that open your exact keyboard, English and Spanish. [Port refinement and verification](docs/reviews/interaction-refinement.md) documents the restored frame wall around USB and power access, including the retained cable and switch clearances.
+**[Using the explorer](docs/viewer.md)** — Design, Parts and Build beside the model (Build lists every part, PCB, print file and firmware for your design), a phone sheet with the home page's tabs, share links that open your exact keyboard, English and Spanish. [Port refinement and verification](design/reviews/interaction-refinement.md) documents the restored frame wall around USB and power access, including the retained cable and switch clearances.
 
 Flan is a low-profile wireless split keyboard in development by [Eduardo Ruiz](https://github.com/eduarbo). Its original CAD is designed by Eduardo; Flan36 has five columns and three thumb keys per half.
 

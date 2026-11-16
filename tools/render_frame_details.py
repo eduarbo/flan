@@ -7,7 +7,7 @@ from pathlib import Path
 import vtk
 from frame_finishes import FINISHES,rgb
 ROOT=Path(__file__).resolve().parents[1]
-p=argparse.ArgumentParser();p.add_argument('--native-dir',type=Path,default=ROOT/'mechanical/revI');p.add_argument('--out-dir',type=Path,default=ROOT/'docs/images/frames');a=p.parse_args();a.out_dir.mkdir(parents=True,exist_ok=True)
+p=argparse.ArgumentParser();p.add_argument('--native-dir',type=Path,default=ROOT/'mechanical/revI');p.add_argument('--out-dir',type=Path,default=ROOT/'design/references/frame-renders');a=p.parse_args();a.out_dir.mkdir(parents=True,exist_ok=True)
 a.native_dir=a.native_dir.resolve()
 model=json.loads((ROOT/'design/revI.json').read_text());sources={}
 def actor(r,path,color):

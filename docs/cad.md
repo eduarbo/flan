@@ -52,7 +52,7 @@ To reproduce this bounded migration from that commit (or verify the already migr
 
 For the isolated migration from the preserved source, use the [floor/level reproduction commands](level-stack.md#reproduce). This keeps manual edits and the published source intact.
 
-For the current parametric repairs, component registration, local H3 socket relief and approved Hanafuda integration, use the [October correction recipe](reviews/2026-10-07-corrections.md#reproduce). Its staged installer chain preserves the baseline and validates the final `clearance/` candidate before adoption. All six current designs are selected; historical proposals remain provenance.
+For the current parametric repairs, component registration, local H3 socket relief and approved Hanafuda integration, use the [October correction recipe](../design/reviews/2026-10-07-corrections.md#reproduce). Its staged installer chain preserves the baseline and validates the final `clearance/` candidate before adoption. All six current designs are selected; historical proposals remain provenance.
 
 To refresh exports from the saved reference without rebuilding or overwriting its FCStd, run `python3 tools/freecad/run_macos.py tools/freecad/export_revI.py`, then rebuild the renders and viewer below. The exporter records current provenance separately from the preserved historical export record.
 
@@ -101,7 +101,7 @@ The catalog build verifies SHA-256 and Git blob hashes of every pinned upstream 
 
 ## PCB exchange
 
-The relative STEP references in `hardware/revI/models/` use the current nominal nano, display, connector, power/reset switch, Choc switch, diode and hot-swap socket geometry. The original 11 models retain their export/reimport check; the added 36 diodes and 36 sockets have separate actual KiCad STEP registration checks in the [audit evidence](reviews/2026-10-07-corrections.md#evidence). The bottom reset uses an explicitly flipped component transform, verified against actual KiCad CLI assembly exports. [Bottom-side registration](../validation/revI-bottom-reset-step.json) · [Model readback](../validation/revI-pcb-component-models.json).
+The relative STEP references in `hardware/revI/models/` use the current nominal nano, display, connector, power/reset switch, Choc switch, diode and hot-swap socket geometry. The original 11 models retain their export/reimport check; the added 36 diodes and 36 sockets have separate actual KiCad STEP registration checks in the [audit evidence](../design/reviews/2026-10-07-corrections.md#evidence). The bottom reset uses an explicitly flipped component transform, verified against actual KiCad CLI assembly exports. [Bottom-side registration](../validation/revI-bottom-reset-step.json) · [Model readback](../validation/revI-pcb-component-models.json).
 
 RevI updates the board contour, battery opening and magnetic-station cutouts. `tools/build_revI_pcb.py` copies the historical unrouted source and refuses to overwrite existing work. Readback permits the specified H1/H3/H4/H5, J1, SW1 and SW2 changes, including the explicit PH pad geometry and bottom reset flip. It checks preserved nets, UUIDs, relative model references and all 36 locked keys. The verified StepUp procedure and coordinate alignment are described in [the editing guide](freecad.md#3-inspect-the-pcb-with-stepup). To rerun the historical exchange test on temporary copies:
 

@@ -10,7 +10,7 @@ The kit has the lockup and the mark, each in a display construction and a heavie
 
 The name family is **Flan + key count**: Flan 36 today; 42 adds an outer pinky column, 46 a number row, 54 both. The design study is in [naming R1–R4](../design/proposals/naming-r4/README.md).
 
-The previous logo, Flan36 Outline, stays in [`docs/branding/outline/`](branding/outline/README.md) as history.
+The previous logo, Flan36 Outline, stays in [`design/branding/outline/`](../design/branding/outline/README.md) as history.
 
 The project's canonical repository is **[eduarbo/flan](https://github.com/eduarbo/flan)**.
 

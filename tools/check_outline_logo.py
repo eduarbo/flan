@@ -8,7 +8,7 @@ import numpy as np
 from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'docs/branding/outline'
+OUT=ROOT/'design/branding/outline'
 NS='{http://www.w3.org/2000/svg}'
 def sha(data): return hashlib.sha256(data).hexdigest()
 def read(name): return ET.parse(OUT/name).getroot()
@@ -42,7 +42,7 @@ assert np.array_equal(alpha(black),alpha(master))
 # Same original pixel coordinate frame; independent raster comparison at 1:1.
 black.set('viewBox','0 0 435 345');black.set('width','435');black.set('height','345')
 render=np.array(Image.open(io.BytesIO(cairosvg.svg2png(bytestring=ET.tostring(black)))).convert('RGBA'))[:,:,3]>128
-reference=np.array(Image.open(ROOT/'docs/images/branding/flan36-caramel-outline.png').convert('RGB'))[800:1145,175:610].mean(axis=2)<100
+reference=np.array(Image.open(ROOT/'design/references/branding/flan36-caramel-outline.png').convert('RGB'))[800:1145,175:610].mean(axis=2)<100
 iou=float((render&reference).sum()/(render|reference).sum());assert iou>.97,iou
 with zipfile.ZipFile(OUT/'flan36-outline-svg-kit.zip') as z:
     assert z.testzip() is None

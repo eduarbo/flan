@@ -15,9 +15,9 @@ from shapely.geometry import Polygon
 from fontTools.misc.bezierTools import calcCubicBounds
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'docs/branding/outline'
+OUT = ROOT / 'design/branding/outline'
 MASTER = OUT / 'flan36-outline-master.svg'
-REFERENCE = ROOT / 'docs/images/branding/flan36-caramel-outline.png'
+REFERENCE = ROOT / 'design/references/branding/flan36-caramel-outline.png'
 REFERENCE_SHA = '5f128bcd8a3cd5054c11abf70743a63fd32c7d7cc3a3d417e3cb923cce280395'
 SVG = 'http://www.w3.org/2000/svg'
 ET.register_namespace('', SVG)
@@ -127,7 +127,7 @@ def trace():
         ET.SubElement(root,f'{{{SVG}}}path',{'id':name,'fill':'#171717','fill-rule':'evenodd',
             'd':' '.join(rings[i]['d'] for i in [index,*holes])})
     write_svg(MASTER,root)
-    receipt={'reference':'docs/images/branding/flan36-caramel-outline.png','reference_sha256':REFERENCE_SHA,
+    receipt={'reference':'design/references/branding/flan36-caramel-outline.png','reference_sha256':REFERENCE_SHA,
         'reference_region_xyxy':[175,800,610,1145],'threshold_mean_rgb':100,
         'method':'Pixel boundaries, weighted subpixel smoothing and adaptive least-squares cubic fitting',
         'components':7,'holes':4,'closed_rings':len(rings),'cubic_nodes':sum(r['nodes'] for r in rings),
@@ -169,7 +169,7 @@ def derive():
     exports.append(export(paths,'black',30))
     exports.append(export(paths[:1],'symbol-black',12))
     exports.append(export(paths[1:],'wordmark-black',30))
-    report={'master':'docs/branding/outline/flan36-outline-master.svg','master_sha256':sha(MASTER),
+    report={'master':'design/branding/outline/flan36-outline-master.svg','master_sha256':sha(MASTER),
         'exports':exports,'units':'mm','shared_contours':True,'font_dependency':False,
         'raster_embedded':False,'manufacturing_qualified':False,
         'scope':'Editable vector artwork only. No placement or relief cut in the keyboard CAD or PCB.'}
@@ -203,6 +203,6 @@ if __name__=='__main__':
     preview()
     if args.png:
         import cairosvg
-        cairosvg.svg2png(url=str(OUT/'preview.svg'),write_to=str(ROOT/'docs/images/branding/flan36-outline-vector-preview.png'),output_width=2400)
+        cairosvg.svg2png(url=str(OUT/'preview.svg'),write_to=str(ROOT/'design/references/branding/flan36-outline-vector-preview.png'),output_width=2400)
     if args.package:package()
     print('Wrote one editable master and three same-logo SVG exports; PCB and case geometry unchanged.')

@@ -85,7 +85,7 @@ Both use the same full-resolution geometry. Print kits preserve the exact native
 
 ## Verification and reproduction
 
-The current redesign's browser evidence is recorded in [the interaction receipt](../validation/revI-interaction.json), including its CUA method, exercised viewports and limitations. Earlier [canvas workspace](reviews/canvas-workspace.md) and [reliability](../validation/revI-reliability.json) receipts describe their stated revisions; they are historical evidence, not acceptance of this interface.
+The current redesign's browser evidence is recorded in [the interaction receipt](../validation/revI-interaction.json), including its CUA method, exercised viewports and limitations. Earlier [canvas workspace](../design/reviews/canvas-workspace.md) and [reliability](../validation/revI-reliability.json) receipts describe their stated revisions; they are historical evidence, not acceptance of this interface.
 
 With the locked viewer dependencies installed, rebuild and run the non-browser configuration checks:
 
@@ -115,7 +115,7 @@ FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright FLAN36_BROWSER=/path/to/chromium no
 
 The silkscreen textures come from the fabrication ZIPs themselves: `tools/build_silkscreen_textures.py` (with `tools/requirements-silkscreen.txt`) rasterizes each package's `B_Silkscreen`, then `tools/build_viewer_revI.py` and `viewer/build.mjs` embed them.
 
-Browser checks write only ignored artifacts under `build/`; `check.cjs` keeps its case captures in `build/case-variants/`, since `capture-readme.cjs` owns the README images. A passing run must identify the current built viewer and contain no runtime errors. Browser emulation does not constitute a physical iPhone test. The [reliability plan](reviews/reliability-plan.md) and its original receipts retain their historical scope and hashes; `python3 tools/restore_reliability_review.py` restores their ignored advisory artifacts.
+Browser checks write only ignored artifacts under `build/`; `check.cjs` keeps its case captures in `build/case-variants/`, since `capture-readme.cjs` owns the README images. A passing run must identify the current built viewer and contain no runtime errors. Browser emulation does not constitute a physical iPhone test. The [reliability plan](../design/reviews/reliability-plan.md) and its original receipts retain their historical scope and hashes; `python3 tools/restore_reliability_review.py` restores their ignored advisory artifacts.
 
 After publication, compare the anonymous source archive and served viewer assets with the exact published commit:
 

@@ -28,7 +28,7 @@ def author():
     master={k:copy.deepcopy(old[k]) for k in ['units','origin','left_xy','right_transform','envelope_mm','outer_commands','aperture_commands','aperture_bounds_mm','common','construction','transfer']}
     master.update(schema='flan36-frame-redesign-1',revision='R5',status='PROPOSED_NOT_APPROVED',
         scope=['flan','tape','orbit','manga','nes','walkman'],
-        source_sha256={p:hashlib.sha256((Path(os.environ.get('FLAN36_REVIEW_SOURCE',ROOT/p)) if p.endswith('Flan36.FCStd') else ROOT/p).read_bytes()).hexdigest() for p in ['mechanical/revI/Flan36.FCStd','design/proposals/frame-master-r4/master.json','docs/branding/outline/flan36-outline-symbol-black.svg']},
+        source_sha256={p:hashlib.sha256((Path(os.environ.get('FLAN36_REVIEW_SOURCE',ROOT/p)) if p.endswith('Flan36.FCStd') else ROOT/p).read_bytes()).hexdigest() for p in ['mechanical/revI/Flan36.FCStd','design/proposals/frame-master-r4/master.json','design/branding/outline/flan36-outline-symbol-black.svg']},
         physical_acceptance=False,styles={},
         display_context={'pcb_bounds_mm':[5,5.1,19,41.1],'glass_bounds_mm':[5.15,7.65,18.85,37.95],
           'render_rule':'Render only actual PCB and glass footprints. Never fill an opening with fictitious dark material.'},
@@ -50,7 +50,7 @@ def author():
         'The chosen outline symbol, without a badge or a replacement dessert icon. Caramel bezel and a flush glaze crown.')
     field(s,'accent')
     f(s,'GlazeCrown','detail',[['M',3.2,1.35],['L',20.8,1.35],['L',20.8,2.3],['C',18,2.3,17.8,3.5,16.5,3.5],['C',15.2,3.5,15.8,2.3,14.4,2.3],['L',3.2,2.3],['Z']])
-    svg=ET.parse(ROOT/'docs/branding/outline/flan36-outline-symbol-black.svg').getroot()
+    svg=ET.parse(ROOT/'design/branding/outline/flan36-outline-symbol-black.svg').getroot()
     tokens=re.findall(r'[MLCZ]|-?\d+(?:\.\d+)?',svg.find('{http://www.w3.org/2000/svg}path').attrib['d'])
     logo=[];i=0;scale=17.4/326.8183
     while i<len(tokens):

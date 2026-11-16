@@ -16,7 +16,7 @@ fs.mkdirSync(out,{recursive:true});
   await page.waitForFunction(()=>window.flan36,null,{timeout:120000});
   await page.click('#nav-customize');await page.click('#editor-tabs [data-panel=frames]');await tune(page,'frames');await page.click('#frame-target [data-side=left]');
   await page.click('[data-style=talavera]');await page.click('#theme-colors');
-  assert.equal(await page.locator('#panel-frames a.case-guide').getAttribute('href'),'https://flankbd.com/frame-proposals/');
+  assert.equal(await page.locator('a[href*="frame-proposals"]').count(),0,'Design review pages are not part of the explorer');
   // Frames alone, then the displays and their support ledges; each piece's eye leaves only the left half.
   await page.click('#nav-inspect');await page.click('[data-solo-group=lid]');
   await page.check('#layer-display');await page.check('#layer-supports');
