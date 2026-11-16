@@ -15,18 +15,18 @@ The power-switch reference still projects 1.5 mm past the case; it is the existi
 
 | Check | Artifact |
 |---|---|
-| Continuous flank, corner count, switch margins, board/cavity fit | [Outline acceptance](../validation/revH-outline.json) |
-| Exact Piantor layout, reference cap choices and complete selected configurations | [KLP qualification](../validation/revH-keycaps.json), `tools/check_layout.py` |
-| Closed parts, six covers per half, component and USB intersections | [Native geometry](../validation/revH-mechanical.json) |
-| Real FreeCAD configuration, height edit, save/reopen | [Editable source check](../validation/revH-freecad.json) |
-| KiCad outline, preserved footprint/net state, unresolved DRC | [Electrical readback](../validation/revH-electrical.json) |
-| Exact current geometry in the viewer | [Viewer provenance](../validation/revH-viewer.json) |
+| Continuous flank, corner count, switch margins, board/cavity fit | [Outline acceptance](../../validation/revH-outline.json) |
+| Exact Piantor layout, reference cap choices and complete selected configurations | [KLP qualification](../../validation/revH-keycaps.json), `tools/check_layout.py` |
+| Closed parts, six covers per half, component and USB intersections | [Native geometry](../../validation/revH-mechanical.json) |
+| Real FreeCAD configuration, height edit, save/reopen | [Editable source check](../../validation/revH-freecad.json) |
+| KiCad outline, preserved footprint/net state, unresolved DRC | [Electrical readback](../../validation/revH-electrical.json) |
+| Exact current geometry in the viewer | [Viewer provenance](../../validation/revH-viewer.json) |
 
 Screenshots and renders come from exported geometry. The theme comparison colors the raised faces to illustrate optional paint; each supplied frame is one printable solid. Actual printing, fasteners, cables, retention, firmware, BLE, charging and power measurements remain unfinished.
 
 ## Bounded correction review
 
-Two independent read-only reviews agreed on the straight-flank correction and identified the stale PCB wing, possible thumb/frame collisions, service-opening access and the power-switch exception. Their dispositions are recorded in the [design review](../validation/revH-design-review.json).
+Two independent read-only reviews agreed on the straight-flank correction and identified the stale PCB wing, possible thumb/frame collisions, service-opening access and the power-switch exception. Their dispositions are recorded in the [design review](../../validation/revH-design-review.json).
 
 The prior outline was inherited from revF and was not checked against a continuous-flank requirement. RevH adds a direct geometric acceptance check for the marked side, plus synchronized board-outline readback and renewed cap qualification. Historical revisions remain available.
 

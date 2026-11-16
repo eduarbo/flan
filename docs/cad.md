@@ -117,7 +117,7 @@ Then run `tools/check_stepup_readback.py` with KiCad’s Python. The StepUp harn
 
 The routed boards pass the configured 0.5 mm copper-to-edge rule. Both have **zero DRC/ERC/parity violations and zero unconnected items**. The [prototype fabrication guide](electronics.md) explains the per-half GPIO map and remaining hardware acceptance.
 
-Exact cable terminals, sockets/contact lengths, magnetic retention, printed fits, keycap insertion, screw access with real tools, RF, charging and consumption still need verification. [Revision review](revI-review.md).
+Exact cable terminals, sockets/contact lengths, magnetic retention, printed fits, keycap insertion, screw access with real tools, RF, charging and consumption still need verification. [Revision review](../design/reviews/revI-review.md).
 
 The historical `tools/check_rebrand.py` command applies only to its identity-only snapshot. The September 23 identity migration preserves the original geometry. Native metadata and current filenames use Flan36; previous generation receipts keep their original source hashes. [Rename checks](../validation/rebrand-file-map.json) bind the previous snapshot to the current files.
 

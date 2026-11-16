@@ -23,6 +23,6 @@ FLAN36_PLAYWRIGHT_MODULE="$PWD/build/responsive-review/runtime-restore/node_modu
 node viewer/marketing/page.mjs
 ```
 
-Los PNG finales están versionados. Las capturas y configuraciones intermedias de `build/marketing/variants/` están ignoradas y se regeneran con los comandos anteriores. `validation/marketing-variants.json` conserva configuraciones y hashes. Para regenerar todo el kit sin las etiquetas, ejecutar además `viewer/marketing/build.cjs`, `viewer/build.mjs` y los controles descritos en `../verification.md`.
+Los PNG finales están versionados. Las capturas y configuraciones intermedias de `build/marketing/variants/` están ignoradas y se regeneran con los comandos anteriores. `validation/marketing-variants.json` conserva configuraciones y hashes. Para regenerar todo el kit sin las etiquetas, ejecutar además `viewer/marketing/build.cjs`, `viewer/build.mjs` y los controles descritos en `design/reviews/marketing-verification.md`.
 
 Créditos y licencia: [ASSET-LICENSE.md](../ASSET-LICENSE.md). Mantener la atribución del proyecto y de KLP Lamé. Las imágenes sin rótulo no constituyen evidencia de pruebas físicas.

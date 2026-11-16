@@ -63,7 +63,7 @@ Recibos:
 
 ## Reproducir
 
-Usar Node, Python 3, FFmpeg, las dependencias bloqueadas de `viewer/package-lock.json` y Playwright 1.61.1 con Chromium 149.0.7827.55. En esta máquina se reutilizó el runtime existente; no se instalaron dependencias nuevas. Si falta la escena, regenerarla con `tools/build_viewer_revI.py` y el Python de FreeCAD según [la guía CAD](../cad.md).
+Usar Node, Python 3, FFmpeg, las dependencias bloqueadas de `viewer/package-lock.json` y Playwright 1.61.1 con Chromium 149.0.7827.55. En esta máquina se reutilizó el runtime existente; no se instalaron dependencias nuevas. Si falta la escena, regenerarla con `tools/build_viewer_revI.py` y el Python de FreeCAD según [la guía CAD](../../docs/cad.md).
 
 Desde la raíz, en este orden:
 
@@ -83,7 +83,7 @@ node viewer/marketing/public-check.mjs
 
 ## Dependencias reales
 
-Las cuentas y los grupos privados no están verificados; los borradores no están publicados. Las fotos del armado, la voz opcional y el video largo requieren grabación de Eduardo. Las pruebas físicas siguen en [first-build.md](../first-build.md). La causa del fallo de la captura inicial sigue sin demostrarse; el comprobador ahora muestra la tarjeta nueva y el sitio se verifica por HTTP.
+Las cuentas y los grupos privados no están verificados; los borradores no están publicados. Las fotos del armado, la voz opcional y el video largo requieren grabación de Eduardo. Las pruebas físicas siguen en [first-build.md](../../docs/first-build.md). La causa del fallo de la captura inicial sigue sin demostrarse; el comprobador ahora muestra la tarjeta nueva y el sitio se verifica por HTTP.
 
 ## Preservación de trabajo local ajeno
 

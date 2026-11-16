@@ -16,7 +16,7 @@ STL/STEP exports, the online/offline viewer and its downloaded print kit. Asymme
 Game Boy and SNES features must match by translation and reject the former mirrored
 arrangement. Hanafuda uses the same reading direction; retired shapes stay excluded.
 
-![Both Game Boy frames read in the same direction](../docs/images/revI-frame-orientation.png)
+![Both Game Boy frames read in the same direction](references/revI-frame-orientation.png)
 
 [Digital acceptance](../validation/revI-frame-orientation.json) includes the
 reopened native comparison, unchanged parts, exact material exports and a real

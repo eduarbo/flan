@@ -161,7 +161,7 @@ Native solids, all six case pairs, mixed configuration save/reopen and exact sel
 
 ## Previous revision I — uniform exposed rim
 
-That revision made the case, switch plate and PCB follow a **curved lower thumb edge and LCD-aligned flank**. The 2.55 mm thumb-side protrusion is removed without moving keys or widening the bay. Finger margins stay 4.75 mm; the pinky foot retains 90° backbone corners with R0.8 blends. View tools remain below the model, with clearer Part links/Fit view feedback and full-row explorer hover. [Measured view](images/revI-rim.png) · [Correction review](revI-review.md#key-aligned-local-curves-and-case-variants).
+That revision made the case, switch plate and PCB follow a **curved lower thumb edge and LCD-aligned flank**. The 2.55 mm thumb-side protrusion is removed without moving keys or widening the bay. Finger margins stay 4.75 mm; the pinky foot retains 90° backbone corners with R0.8 blends. View tools remain below the model, with clearer Part links/Fit view feedback and full-row explorer hover. [Measured view](images/revI-rim.png) · [Correction review](../design/reviews/revI-review.md#key-aligned-local-curves-and-case-variants).
 
 Publication verified: **785 source files** match the anonymous download. The public viewer passes desktop/touch emulation, layers, frame/battery selection, JSON and exact GLB checks; the dimensioned image matches its source. [Public readback](../validation/revI-rim-publication.json).
 
@@ -179,7 +179,7 @@ The earlier slot/copper conflict and displaced mount were corrected without rela
 
 Publication verified: all **775 source files** matched the anonymous archive; public viewer bytes and actual browser-loaded geometry matched the tested source. Desktop/touch emulation, batteries, frames, JSON and exact selected GLB geometry passed. [Public readback](../validation/revI-publication.json).
 
-[Review and limits](revI-review.md) · [Mechanical checks](../validation/revI-mechanical.json) · [PCB readback](../validation/revI-electrical.json) · [Service/coupons](../validation/revI-service.json).
+[Review and limits](../design/reviews/revI-review.md) · [Mechanical checks](../validation/revI-mechanical.json) · [PCB readback](../validation/revI-electrical.json) · [Service/coupons](../validation/revI-service.json).
 
 ## Multicolor frame previews
 
@@ -209,7 +209,7 @@ Handheld, Retro TV and Cyberpunk add actual roof relief within the same bay. Pla
 
 Publication verified: all **561 source files** matched the anonymous archive. Public HTML and the browser-loaded scene matched the tested source; layers, orbit, all three themes, JSON, selected GLB geometry and narrow-screen emulation passed. Actual phone and hardware tests remain pending. [Publication receipt](../validation/revH-publication.json).
 
-[Revision review](revH-review.md) · [Keycap checks](../validation/revH-keycaps.json) · [Mechanical checks](../validation/revH-mechanical.json).
+[Revision review](../design/reviews/revH-review.md) · [Keycap checks](../validation/revH-keycaps.json) · [Mechanical checks](../validation/revH-mechanical.json).
 
 ## Revision G — keycaps and frames
 
@@ -221,7 +221,7 @@ Documentation, current CAD labels, viewer and new render captions are in English
 
 Publication verified: an anonymous archive matched all **404 files** of the design commit; public viewer bytes matched the tested source. Keycap/frame selection, JSON round trip, exact selected GLB vertices, layers, rotation and narrow-screen behavior passed on the public URL. [Publication receipt](../validation/revG-publication.json).
 
-[Review and limits](revG-review.md) · [Keycap checks](../validation/revG-keycaps.json) · [Mechanical checks](../validation/revG-mechanical.json).
+[Review and limits](../design/reviews/revG-review.md) · [Keycap checks](../validation/revG-keycaps.json) · [Mechanical checks](../validation/revG-mechanical.json).
 
 ## Earlier revisions
 
@@ -229,7 +229,7 @@ Publication verified: an anonymous archive matched all **404 files** of the desi
 - **RevE:** 24 mm stacked bay, two displays and a 19 mm cover. CAD-derived images replaced the stale revD render.
 - **RevF:** recessed battery opening, moved controller/display and 16.6 mm open rails. Native FreeCAD source added. Approximate case depth became 94.5 mm; width remained 126.2 mm because the thumb layout stayed unchanged.
 
-RevF’s CAD/StepUp exchange, anonymous source download and public viewer were checked; physical acceptance was not. [Historical review](revF-review.md) · [publication receipt](../validation/revF-publication.json).
+RevF’s CAD/StepUp exchange, anonymous source download and public viewer were checked; physical acceptance was not. [Historical review](../design/reviews/revF-review.md) · [publication receipt](../validation/revF-publication.json).
 
 On September 22, 2026, Eduardo selected **Flan36** and the **Outline** logo. The current presentation shows only that selection. On September 23, the rename was extended to the repository, Pages site, current native filenames and new configuration exports. Legacy configuration imports remain supported. Geometry and unfinished electrical/physical requirements are unchanged.
 
