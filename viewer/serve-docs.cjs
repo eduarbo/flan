@@ -1,7 +1,8 @@
 // Serves docs/ at /flan/, as GitHub Pages does, for the home and explorer checks.
+// FLAN_SITE_ROOT serves a folder staged by tools/stage_site.py instead: what Pages publishes.
 // SPDX-License-Identifier: GPL-3.0-or-later
 const fs=require('fs'),path=require('path'),http=require('http');
-const docs=path.resolve(__dirname,'../docs');
+const docs=path.resolve(process.env.FLAN_SITE_ROOT||path.join(__dirname,'../docs'));
 const types={'.html':'text/html','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml','.webp':'image/webp','.png':'image/png','.woff2':'font/woff2','.bin':'application/octet-stream','.json':'application/json'};
 module.exports=async function serve(){
   const server=http.createServer((req,res)=>{

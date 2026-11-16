@@ -30,6 +30,15 @@ If Playwright is installed outside the project or needs a particular Chromium ex
 
 `build/` is ignored and reproducible: the scene generator creates its geometry bundle; the UI checker writes screenshots, configuration JSON, GLB and its receipt. Frame palettes live in `design/frame-finishes.json`; accent colors are assigned only to existing relief. `python3 tools/render_frames.py` rebuilds the comparison image. `FILO_QT_PLATFORM=cocoa python3 tools/freecad/run_macos.py tools/freecad/check_finishes.py` checks all three themes on both native halves, height changes and save/reopen using the installed macOS FreeCAD runtime; its temporary FCStd, image and receipt stay under ignored `build/viewer-multicolor/`. The geometry check creates a reproducible JS bundle and receipt there. The source of the standalone HTML is under `viewer/`; do not hand-edit `docs/explore/index.html`.
 
+## Publishing the site
+
+flankbd.com publishes only the site pages in `docs/` (home, explorer, marketing, branding, their assets and the files at the root), not the documentation next to them. `.github/workflows/pages.yml` deploys on every push to `main` that touches `docs/`. The allowlist is in `tools/stage_site.py`, which also fails if a page refers to a local file it left out. A new public file must be added there; design proposals, reviews and concept material go in `design/`, never in `docs/`. To check what will be published:
+
+```sh
+python3 tools/stage_site.py build/site
+FLAN_SITE_ROOT=build/site node viewer/public-check.cjs --local "$(git rev-parse HEAD)"
+```
+
 For a viewer performance change, compare the same browser and machine with a declared CPU throttle:
 
 ```sh
