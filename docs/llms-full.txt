@@ -1,6 +1,6 @@
 # Flan Keyboard: full summary
 
-> Flan is an open-source, low-profile wireless split keyboard that you build yourself, in four sizes from 36 to 54 keys. The files are free under GPL-3.0-or-later. As of November 13, 2026 the first Flan36 parts are ordered; it remains a prototype: the design passes its electrical and geometric checks, but no board has been built and tested yet. Nothing is sold.
+> Flan is an open-source, low-profile wireless split keyboard that you build yourself, in four sizes from 36 to 54 keys. The files are free under GPL-3.0-or-later. Flan is a digital prototype: the design passes its electrical and geometric checks, but no board has been built and tested yet. Nothing is sold.
 
 This page is written for language models and search tools. It states facts from the project's own documentation and says plainly what has not been tested. Site: https://flankbd.com/ . Source: https://github.com/eduarbo/flan .
 
@@ -54,8 +54,7 @@ ZMK, pinned to a specific release, compiled for each size: a left (central) file
 ## Status and limits
 
 - Checked digitally: both PCBs of each size pass design-rule, electrical-rule and schematic-parity checks with no unconnected items; firmware compiles; case and keycap geometry is checked for clearances.
-- Not done yet: no PCB has been fabricated, no case printed, no keyboard assembled. Battery life, charging, wireless range and reliability, printed fit, magnet retention and typing comfort are unmeasured.
-- The project describes itself as a routed prototype with physical qualification pending. Anyone building it now is building a first prototype.
+- Hardware limits: battery life, charging, wireless range and reliability, printed fit, magnet retention and typing comfort are unmeasured.
 
 ## Who it suits
 
@@ -77,4 +76,4 @@ GPL-3.0-or-later for the design files, with third-party terms in the attribution
 - PCBs: https://github.com/eduarbo/flan/blob/main/docs/electronics.md
 - Build guide: https://github.com/eduarbo/flan/blob/main/docs/build.md
 - Firmware: https://github.com/eduarbo/flan/blob/main/docs/firmware.md
-- Progress: https://github.com/eduarbo/flan/blob/main/docs/progress.md
+- [More experiments at @eduarbo.lab ↗](https://www.instagram.com/eduarbo.lab/)

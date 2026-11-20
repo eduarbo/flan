@@ -47,7 +47,7 @@ for(const file of ['docs/llms.txt','docs/llms-full.txt']){
  assert(new RegExp(sizes.map(s=>s.keys).join('\\D+')).test(text),file+': the four key counts in order');
  assert.match(text,/prototype/i,file+': says it is a prototype');assert.match(text,/no board has been built and tested/i,file+': says it is untested');assert.match(text,/GPL-3\.0-or-later/);
  assert(!/\b(best|ideal|perfect|recommended?)\b/i.test(text.replace(/reference/gi,'')),file+': describes, does not sell');
- for(const m of text.matchAll(/\]\(([^)]+)\)|(https?:\/\/\S+)/g)){const url=(m[1]||m[2]).replace(/[.,;]$/,'');assert.match(url,/^https:\/\/(flankbd\.com|github\.com\/eduarbo\/flan|ko-fi\.com\/eduarbo)(\/|$)/,file+': unexpected link '+url);
+ for(const m of text.matchAll(/\]\(([^)]+)\)|(https?:\/\/\S+)/g)){const url=(m[1]||m[2]).replace(/[.,;]$/,'');assert.match(url,/^https:\/\/(flankbd\.com|github\.com\/eduarbo\/flan|ko-fi\.com\/eduarbo|www\.instagram\.com\/eduarbo\.lab)(\/|$)/,file+': unexpected link '+url);
   const own=url.match(/^https:\/\/flankbd\.com\/(.*)$/);if(own)assert(fs.existsSync(new URL('docs/'+(own[1]===''||own[1].endsWith('/')?own[1]+'index.html':own[1]),root)),file+': link to a missing page '+url);
   const doc=url.match(/^https:\/\/github\.com\/eduarbo\/flan\/blob\/main\/(.+)$/);if(doc)assert(fs.existsSync(new URL(doc[1],root)),file+': link to a missing file '+doc[1]);}
 }

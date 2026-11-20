@@ -1,6 +1,6 @@
 # Flan Keyboard
 
-> Flan is an open-source, low-profile wireless split keyboard that you build yourself: you order the PCBs, 3D-print the case and keycaps, solder the parts and flash the firmware. It comes in four sizes (36, 42, 46 or 54 keys) and its files are free to build, modify and sell under GPL-3.0-or-later; the Flan name and logos are trademarks, and selling anything under them needs permission. As of November 13, 2026 the first Flan36 parts are ordered; it remains a prototype: the design files pass their electrical and geometric checks, but no board has been built and tested yet.
+> Flan is an open-source, low-profile wireless split keyboard that you build yourself: you order the PCBs, 3D-print the case and keycaps, solder the parts and flash the firmware. It comes in four sizes (36, 42, 46 or 54 keys) and its files are free to build, modify and sell under GPL-3.0-or-later; the Flan name and logos are trademarks, and selling anything under them needs permission. Flan is a digital prototype: the design files pass their electrical and geometric checks, but no board has been built and tested yet.
 
 Flan is designed by Eduardo Ruiz. The key positions of Flan36 follow Piantor by beekeeb, and the outer column of Flan42 and Flan54 comes from the Piantor sources; the wireless PCBs, cases, frames and firmware are original. Flan is not affiliated with beekeeb. Nothing is sold: there are no kits or assembled keyboards, only files and a parts list.
 
@@ -24,7 +24,7 @@ Good fit: someone who wants a small split keyboard, enjoys building (soldering, 
 
 ## Documentation
 
-- [README](https://github.com/eduarbo/flan/blob/main/README.md): overview and current status
+- [README](https://github.com/eduarbo/flan/blob/main/README.md): keyboard design and files
 - [Sizes](https://github.com/eduarbo/flan/blob/main/docs/variants.md): the four layouts and their PCBs
 - [Parts and buying links](https://github.com/eduarbo/flan/blob/main/docs/parts.md): what one keyboard needs
 - [Ordering PCBs](https://github.com/eduarbo/flan/blob/main/docs/electronics.md): Gerber packages, silkscreen editions, checks
@@ -34,6 +34,6 @@ Good fit: someone who wants a small split keyboard, enjoys building (soldering, 
 
 ## Optional
 
-- [Progress log](https://github.com/eduarbo/flan/blob/main/docs/progress.md): what is checked and what is pending
+- [More experiments at @eduarbo.lab ↗](https://www.instagram.com/eduarbo.lab/)
 - [License](https://github.com/eduarbo/flan/blob/main/LICENSE), [attribution](https://github.com/eduarbo/flan/blob/main/ATTRIBUTION.md) and [trademark policy](https://github.com/eduarbo/flan/blob/main/TRADEMARKS.md)
 - [Source repository](https://github.com/eduarbo/flan)

@@ -2,8 +2,8 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "4318d506b9f2b938ec956bfbfc3e198b1d44f19249c9cd20e00b9cc51d08ebf9",
-    "bytes": 115686
+    "sha256": "2bdb086bab4e687922e4d6393e6cfd4a4d9b066fcfb32561c1731147b6f39214",
+    "bytes": 114984
   },
   "engine": {
     "path": "docs/assets/home-engine-c4e17726087f69a6.js",
@@ -1724,7 +1724,7 @@
     },
     {
       "path": "viewer/home/app.js",
-      "sha256": "ab69d102f5dc51b53a97189c47b1c7dc42d7c0913d237dde220c52964b4945b2"
+      "sha256": "917306652ecf66c8146fb2507f66632c40ab22bad7221fffe78efd94dc5ab39d"
     },
     {
       "path": "viewer/home/options.js",
@@ -1748,11 +1748,11 @@
     },
     {
       "path": "viewer/home/style.css",
-      "sha256": "4530e9c507eb13897c55b67d1703e57aac86e1e9dcd14ef2bd168e24d4c941f7"
+      "sha256": "dc788f48493ada2b50b7b2a437a4d858070b7953111c543f98e0d6f7fc6da80e"
     },
     {
       "path": "viewer/home/template.html",
-      "sha256": "1cfc09c712f01fbe6b521c8ace5861126fbcfcaedec57921425dd7182739aa6b"
+      "sha256": "5e64a4f16330d42aa428e8bb40dd3469f0ef0a1322982b319252de6d9c365605"
     },
     {
       "path": "design/themes.json",

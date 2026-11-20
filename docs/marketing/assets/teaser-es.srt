@@ -16,7 +16,7 @@ Cada capa. A la vista. Explora las piezas. Descarga PCB, firmware y archivos de 
 
 5
 00:00:20,000 --> 00:00:25,000
-De los píxeles a las piezas. Las piezas del primer Flan36 ya están encargadas. Siguen el armado y las pruebas físicas.
+Hanafuda de cerca. El marco Hanafuda rodea la pantalla con un sol, una montaña y colinas.
 
 6
 00:00:25,000 --> 00:00:30,000

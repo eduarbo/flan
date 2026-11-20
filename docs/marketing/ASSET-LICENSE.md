@@ -12,6 +12,6 @@ Suggested credit / crédito sugerido:
 
 > Flan by Eduardo Ruiz · CAD render with KLP Lamé keycaps by braindefender · CC BY-SA 4.0 · flankbd.com
 
-Retain attribution and the applicable license, and explain edits. The artwork omits prototype labels at the designer’s request; accompanying project copy describes the first-build stage. Screen graphics are illustrative, not a firmware capture. The teaser has no music or borrowed typing sound.
+Retain attribution and the applicable license, and explain edits. The artwork omits prototype labels at the designer’s request; accompanying descriptions identify the renders as CAD artwork. Screen graphics are illustrative, not a firmware capture. The teaser has no music or borrowed typing sound.
 
 `avatar.png` and the logo SVG kit reproduce the existing Flan mark: GPL-3.0-or-later artwork, with separate trademark terms in `TRADEMARKS.md`; no new trademark permission is granted. Typography uses Fraunces, Inter and JetBrains Mono; notices are in `LICENSES/`. Full component attribution is in the repository's `ATTRIBUTION.md` (included in the archive). That file also links source material which is available in the repository and is not all copied into this media archive.

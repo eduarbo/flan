@@ -42,8 +42,8 @@ function artwork(lang,slide,{shape='',count='',light=false}={}){
    const hero={title:l.headline,body:l.sub,image:'hero',label:l.eyebrow};
    await shot(path.join(out,`share-${lang}.png`),artwork(lang,hero,{shape:'wide'}),1200,630);
    await shot(path.join(out,`square-${lang}.png`),artwork(lang,hero,{shape:'square'}),1080,1080);
-   await shot(path.join(out,`story-${lang}.png`),artwork(lang,{...l.slides[0],body:l.ordered+' '+l.cta+'.'},{shape:'story'}),1080,1920);
-   await shot(path.join(out,`youtube-${lang}.png`),artwork(lang,{...hero,title:lang==='en'?'My first Flan.':'Mi primer Flan.',body:l.ordered},{shape:'wide'}),1280,720);
+   await shot(path.join(out,`story-${lang}.png`),artwork(lang,{...l.slides[0],body:l.cta+'.'},{shape:'story'}),1080,1920);
+   await shot(path.join(out,`youtube-${lang}.png`),artwork(lang,{...hero,title:lang==='en'?'Meet Flan.':'Este es Flan.',body:l.cta},{shape:'wide'}),1280,720);
    // A 30-second silent teaser from the CAD renders. It is not a live typing demo.
    const srt=l.slides.map((s,i)=>`${i+1}\n00:00:${String(i*5).padStart(2,'0')},000 --> 00:00:${String((i+1)*5).padStart(2,'0')},000\n${s.title.replaceAll('\n',' ')} ${s.body}\n`).join('\n');
    fs.writeFileSync(path.join(out,`teaser-${lang}.srt`),srt);written.push(`docs/marketing/assets/teaser-${lang}.srt`);
@@ -56,6 +56,6 @@ function artwork(lang,slide,{shape='',count='',light=false}={}){
  fs.copyFileSync(path.join(out,'share-en.png'),path.join(root,'viewer/home/home-og.png'));
  const hash=f=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex');
  const sourceFiles=['viewer/marketing/content.json','viewer/marketing/capture.cjs','viewer/marketing/build.cjs','viewer/app.js','viewer/appearance.js','viewer/explorer.js','design/themes.json','build/viewer-scene.json'];
- fs.writeFileSync(path.join(root,'validation/marketing-assets.json'),JSON.stringify({schema_version:1,stage:'Parts ordered; first physical build pending',method:'Real explorer CAD renders, browser typography and FFmpeg. No generated product photos or claimed hardware test.',captures,sources:sourceFiles.map(file=>({file,sha256:hash(file)})),assets:written.map(file=>({file,sha256:hash(file),bytes:fs.statSync(path.join(root,file)).size}))},null,2)+'\n');
+ fs.writeFileSync(path.join(root,'validation/marketing-assets.json'),JSON.stringify({schema_version:1,stage:'Digital prototype',method:'Real explorer CAD renders, browser typography and FFmpeg. No generated product photos or claimed hardware test.',captures,sources:sourceFiles.map(file=>({file,sha256:hash(file)})),assets:written.map(file=>({file,sha256:hash(file),bytes:fs.statSync(path.join(root,file)).size}))},null,2)+'\n');
  console.log(`Built ${written.length} marketing assets and the social card.`);
 })().catch(e=>{console.error(e);process.exitCode=1});

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "stage": "Parts ordered; first physical build pending",
+  "stage": "Digital prototype",
   "method": "Real explorer CAD renders, browser typography and FFmpeg. No generated product photos or claimed hardware test.",
   "captures": [
     {
@@ -70,7 +70,7 @@
   "sources": [
     {
       "file": "viewer/marketing/content.json",
-      "sha256": "b7ddda7821200624647527ae663821a089310b7101e8ddede59f7a45f8edd782"
+      "sha256": "7d94a4729ee196d84e75e9c20deced7fc88a8cc379792dea36ecf7462852ef3b"
     },
     {
       "file": "viewer/marketing/capture.cjs",
@@ -78,11 +78,11 @@
     },
     {
       "file": "viewer/marketing/build.cjs",
-      "sha256": "3628a70019825378de89ff4e438bf43b556fea85cb273a67a243714c265f6591"
+      "sha256": "2ea2b64c64f302c5bc71517164f237470940d0d57f77c95e4f896da7529713d0"
     },
     {
       "file": "viewer/app.js",
-      "sha256": "440e25c94651912746c0be6dc5bb1f900e7566b463803ea3c39842eef011dca5"
+      "sha256": "063a6fdfcc4e5e45cdb80e9dd275801699523af77ae9decb11c77f954f563ae7"
     },
     {
       "file": "viewer/appearance.js",
@@ -124,8 +124,8 @@
     },
     {
       "file": "docs/marketing/assets/carousel-en-5.png",
-      "sha256": "639b04ebfb69c991e1e54b616098ebd7c1b4d4ee862b632b71769a31cc37f264",
-      "bytes": 494945
+      "sha256": "e0decc408303de6c45ff31b6db7f9ac96d0447f4ae181c1616a955e1ea83e91a",
+      "bytes": 496309
     },
     {
       "file": "docs/marketing/assets/carousel-en-6.png",
@@ -144,23 +144,23 @@
     },
     {
       "file": "docs/marketing/assets/story-en.png",
-      "sha256": "fdc6c24288b68f2b571a837e6299d220cad0b05f536e22c573feb88d40e1da9a",
-      "bytes": 631224
+      "sha256": "09dbee82ec997afffced65755ea3761403f6402627d756d4f113529a4583dbd6",
+      "bytes": 621779
     },
     {
       "file": "docs/marketing/assets/youtube-en.png",
-      "sha256": "b78f9a0125288cfb039f23283a717bcc865fde3f629b989911eaa295b14bdece",
-      "bytes": 315071
+      "sha256": "bda9d1ed43b7dee583103c49980b7e2d24b57fb564a07c9be0eb5d4e97869298",
+      "bytes": 311121
     },
     {
       "file": "docs/marketing/assets/teaser-en.srt",
-      "sha256": "1fe9efe3c40883eadf82636e3a055c4249872d5ad67330712b6a0f3d1e082e7a",
-      "bytes": 771
+      "sha256": "8a58bb440397d9f1436f6921407c441495915fd37572834e8702423957a30c22",
+      "bytes": 779
     },
     {
       "file": "docs/marketing/assets/teaser-en.mp4",
-      "sha256": "1e302773d209c561548c9aeffc56ed2d65ebca87e7cd1d1aa629e35700130f9e",
-      "bytes": 831096
+      "sha256": "f2af5d5601ab3e281a1c3f0d8452b43e4c853798a32b1c92ddd594588262b9ca",
+      "bytes": 833289
     },
     {
       "file": "docs/marketing/assets/carousel-es-1.png",
@@ -184,8 +184,8 @@
     },
     {
       "file": "docs/marketing/assets/carousel-es-5.png",
-      "sha256": "44233579add7dc6a343b4884d1f620e5a8ae1b39bdd4b8f7ca84b6eb60d29e59",
-      "bytes": 505169
+      "sha256": "4164741c35045e1abbcb044741f4f5d8b6662f563282c5f589306089a7a7be92",
+      "bytes": 489448
     },
     {
       "file": "docs/marketing/assets/carousel-es-6.png",
@@ -204,23 +204,23 @@
     },
     {
       "file": "docs/marketing/assets/story-es.png",
-      "sha256": "67cf93eec6b2be63af91bce837818fde492dfaa6a2dfc8f21eaa310972f14144",
-      "bytes": 631898
+      "sha256": "dd94639a8a616e38a3bc17131f11a4d0e72a9e0a99fed93c5d9cf6c01a13fa2b",
+      "bytes": 617933
     },
     {
       "file": "docs/marketing/assets/youtube-es.png",
-      "sha256": "c5b94e57b4a34f046fe0905cf52634e8c3719482996d285ab29d4a42c475e581",
-      "bytes": 318153
+      "sha256": "355eb00143c2cda9259d01d385a50b0fa5cc63ba8abd26ced3c491589dd2955c",
+      "bytes": 311366
     },
     {
       "file": "docs/marketing/assets/teaser-es.srt",
-      "sha256": "c4a84c8fdbe6ea74fdf777c542882805a8ec2ce574ba22194dc056cc189a645a",
-      "bytes": 804
+      "sha256": "6bfbe398513f8ca346e1b6f2d256164b75d4e53dd59c3e8f2fade5bc1c695510",
+      "bytes": 773
     },
     {
       "file": "docs/marketing/assets/teaser-es.mp4",
-      "sha256": "9137be427da62947185222e5c9e4a0a8d20730eafd0ed913a8c76a2ad5dccc21",
-      "bytes": 835032
+      "sha256": "bca3fc607139401c253ecb18c10d224756ee7cc9b0e4242c61406776215f28b0",
+      "bytes": 825620
     },
     {
       "file": "docs/marketing/assets/avatar.png",

@@ -13,6 +13,10 @@ const root=path.resolve(__dirname,'../..'),work=path.join(root,'build/marketing'
    assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'marketing overflow at '+width);
    for(const lang of ['es','en']){
     await p.click(`[data-lang="${lang}"]`);assert.equal(await p.locator('html').getAttribute('lang'),lang);
+    const footerLink=p.locator('footer a[href="https://www.instagram.com/eduarbo.lab/"]');
+    assert.equal(await footerLink.innerText(),lang==='es'?'Más experimentos en @eduarbo.lab ↗':'More experiments at @eduarbo.lab ↗');
+    const drafts=await p.locator('textarea').evaluateAll(inputs=>inputs.map(input=>input.value).join('\n'));
+    assert.doesNotMatch(await p.locator('body').innerText()+'\n'+drafts,/first[- ]build|primer armado|parts ordered|piezas encargadas|bitácora/i);
     const target=`${lang}-reddit`;await p.locator(`[data-target="${target}"]`).click();
     assert.equal(await p.evaluate(()=>navigator.clipboard.readText()),await p.locator('#'+target).inputValue(),'copy differs from the draft');
     await p.evaluate(()=>scrollTo({top:0,behavior:"instant"}));await p.screenshot({path:path.join(work,`kit-${width}-${lang}.png`)});
@@ -34,13 +38,18 @@ const root=path.resolve(__dirname,'../..'),work=path.join(root,'build/marketing'
   for(const width of [1440,390]){
    await p.setViewportSize({width,height:900});await p.goto(site.base);await p.waitForSelector('#stage.live',{timeout:120000});
    assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'home overflow at '+width);
-   await p.click('[data-lang="en"]');assert.match(await p.locator('.build-status').textContent(),/parts ordered/);assert.equal(await p.locator('a[href="marketing/"]').count(),1);
-   await p.click('[data-lang="es"]');assert.match(await p.locator('.build-status').textContent(),/piezas encargadas/);
+   const link=p.locator('footer a[href="https://www.instagram.com/eduarbo.lab/"]');
+   for(const [lang,label] of [['en','More experiments at @eduarbo.lab ↗'],['es','Más experimentos en @eduarbo.lab ↗']]){
+    await p.click(`[data-lang="${lang}"]`);
+    assert.equal(await link.innerText(),label);
+    assert.doesNotMatch(await p.locator('body').innerText(),/parts ordered|piezas encargadas/i);
+   }
+   assert.equal(await p.locator('a[href="marketing/"]').count(),1);
    await p.screenshot({path:path.join(work,`home-${width}.png`)});
   }
   assert.deepEqual(errors,[],'page errors');
   const hash=f=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,f))).digest('hex');
-  const receipt={schema_version:1,results,clipboard_fallback:'selected full draft',downloads:links.length,videos:'both decode as 1080x1920, 30 s',home:'desktop and phone, no overflow, order status in EN/ES; existing 3D loads',page_errors:errors,files:['docs/index.html','docs/explore/index.html','docs/marketing/index.html','docs/marketing/flan-launch-kit.zip'].map(file=>({file,sha256:hash(file)}))};
+  const receipt={schema_version:1,results,clipboard_fallback:'selected full draft',downloads:links.length,videos:'both decode as 1080x1920, 30 s',home:'desktop and phone, no overflow, experiments link in EN/ES; existing 3D loads',page_errors:errors,files:['docs/index.html','docs/explore/index.html','docs/marketing/index.html','docs/marketing/flan-launch-kit.zip'].map(file=>({file,sha256:hash(file)}))};
   fs.writeFileSync(path.join(root,'validation/marketing-check.json'),JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt,null,2));
  }finally{if(browser)await browser.close();site.close();}
 })().catch(e=>{console.error(e);process.exitCode=1});

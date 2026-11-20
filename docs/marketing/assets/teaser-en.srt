@@ -16,7 +16,7 @@ Every layer. Out in the open. Explore the parts. Get the PCB, firmware and print
 
 5
 00:00:20,000 --> 00:00:25,000
-From pixels to parts. The first Flan36 parts are ordered. Assembly, fit and wireless tests come next.
+A closer look at Hanafuda. The Hanafuda frame surrounds the display with a sun, a mountain and rolling hills.
 
 6
 00:00:25,000 --> 00:00:30,000

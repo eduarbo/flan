@@ -1,12 +1,10 @@
 {
   "date": "2026-11-13",
-  "campaign": "first-build",
   "en": {
     "eyebrow": "OPEN-SOURCE SPLIT KEYBOARD",
     "headline": "Make it yours.",
     "sub": "36 / 42 / 46 / 54 keys. One very personal build.",
     "status": "PROTOTYPE · CAD RENDER",
-    "ordered": "Parts ordered. First build next.",
     "cta": "Explore your Flan in 3D",
     "slides": [
       {
@@ -34,10 +32,10 @@
         "label": "LOOK INSIDE"
       },
       {
-        "title": "From pixels\nto parts.",
-        "body": "The first Flan36 parts are ordered. Assembly, fit and wireless tests come next.",
+        "title": "A closer look\nat Hanafuda.",
+        "body": "The Hanafuda frame surrounds the display with a sun, a mountain and rolling hills.",
         "image": "hanafuda",
-        "label": "FOLLOW THE FIRST BUILD"
+        "label": "DISPLAY FRAMES"
       },
       {
         "title": "What would\nyours look like?",
@@ -52,7 +50,6 @@
     "headline": "Hazlo tuyo.",
     "sub": "36 / 42 / 46 / 54 teclas. Un armado muy tuyo.",
     "status": "PROTOTIPO · RENDER CAD",
-    "ordered": "Piezas encargadas. Sigue el primer armado.",
     "cta": "Explora tu Flan en 3D",
     "slides": [
       {
@@ -80,10 +77,10 @@
         "label": "MIRA POR DENTRO"
       },
       {
-        "title": "De los píxeles\na las piezas.",
-        "body": "Las piezas del primer Flan36 ya están encargadas. Siguen el armado y las pruebas físicas.",
+        "title": "Hanafuda\nde cerca.",
+        "body": "El marco Hanafuda rodea la pantalla con un sol, una montaña y colinas.",
         "image": "hanafuda",
-        "label": "SIGUE EL PRIMER ARMADO"
+        "label": "MARCOS DE PANTALLA"
       },
       {
         "title": "¿Cómo sería\nel tuyo?",
