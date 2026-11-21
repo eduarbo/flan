@@ -14,19 +14,33 @@ For keycap/frame contributions, include the complete configuration, source hashe
 
 Keep the viewer self-contained and preserve geometry, configuration checks and export metadata. Native-mesh thumbnails reuse the main renderer at startup; sidebar links and highlight meshes are viewing aids outside the exported assembly.
 
-With Python dependencies from `tools/requirements-render.txt`, the pinned npm dependencies and Playwright available:
+From a fresh checkout, use Python 3.12, Node.js with npm, KiCad with its Python bindings, librsvg (`rsvg-convert`) and ImageMagick 7 (`magick`). Run the following from the repository root. KiCad supplies its own Python on macOS. On Linux, set `KICAD_PYTHON=/usr/bin/python3` (or the interpreter that can `import pcbnew`) and export it.
 
 ```sh
-python3 tools/build_viewer_revI.py
+python3.12 -m venv .venv
+. .venv/bin/activate
+python -m pip install -r tools/requirements-viewer.txt
 npm ci --prefix viewer
+python tools/build_silkscreen_textures.py
+python tools/build_viewer_revI.py
 node viewer/build.mjs
-node viewer/check.cjs
-node viewer/finishes-check.cjs
-node viewer/rebrand-check.cjs
-python3 tools/check_rebrand.py
+python -m http.server 8000 --bind 127.0.0.1 --directory docs
 ```
 
-If Playwright is installed outside the project or needs a particular Chromium executable, set `FLAN36_PLAYWRIGHT_MODULE` and `FLAN36_BROWSER`. To repeat functional acceptance against a published revision, also set `FLAN36_VIEWER_URL` to its URL. The same checks exercise local HTML with HTTP(S) blocked and the public page with scene integrity verification.
+Open <http://127.0.0.1:8000/explore/>. Select a size, open Build and download its complete kit. The build also produces `docs/explore/offline.zip`. Stop the server with Ctrl-C. For a byte-matching rebuild of the published shading and opening previews on macOS, use the VTK shipped with FreeCAD (tested with VTK 9.3.1). Create the environment with `uv venv --seed --system-site-packages --python /Applications/FreeCAD.app/Contents/Resources/bin/python .venv` in place of the first command. The PyPI VTK wheel can round surface normals differently; the viewer still renders the model. The [firmware guide](docs/firmware.md#build-personal-firmware) covers personal UF2 builds.
+
+To check the browser workflows from the same checkout, stop the preview server and install the test browser in a project-local folder:
+
+```sh
+npm install --prefix build/browser-tools --no-package-lock playwright@1.64.1
+export FLAN36_PLAYWRIGHT_MODULE="$PWD/build/browser-tools/node_modules/playwright"
+export PLAYWRIGHT_BROWSERS_PATH="$PWD/build/browser-tools/browsers"
+node "$FLAN36_PLAYWRIGHT_MODULE/cli.js" install chromium
+node viewer/build-focus-check.cjs
+node viewer/marketing/check.cjs
+```
+
+If Playwright and Chromium are already installed, reuse their module path and browser cache. Both checks start and stop their own local server. The first opens the complete build ZIP and checks the packaged files against their sources. The second checks the bilingual media downloads and clipboard.
 
 `build/` is ignored and reproducible: the scene generator creates its geometry bundle; the UI checker writes screenshots, configuration JSON, GLB and its receipt. Frame palettes live in `design/frame-finishes.json`; accent colors are assigned only to existing relief. `python3 tools/render_frames.py` rebuilds the comparison image. `FILO_QT_PLATFORM=cocoa python3 tools/freecad/run_macos.py tools/freecad/check_finishes.py` checks all three themes on both native halves, height changes and save/reopen using the installed macOS FreeCAD runtime; its temporary FCStd, image and receipt stay under ignored `build/viewer-multicolor/`. The geometry check creates a reproducible JS bundle and receipt there. The source of the standalone HTML is under `viewer/`; do not hand-edit `docs/explore/index.html`.
 

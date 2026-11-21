@@ -10,10 +10,21 @@ const read=f=>fs.readFileSync(path.join(root,f),'utf8'),copy=JSON.parse(read('vi
 const selection=JSON.parse(read('viewer/marketing/primary.json')),primary=variants.find(v=>v.id===selection.variant);
 if(!primary)throw Error('Unknown primary artwork: '+selection.variant);
 const primaryAlt={es:`Render CAD de Flan36 con tema ${primary.name}, caja ${primary.caseName} y marcos ${primary.frameName}.`,en:`CAD render of Flan36 with the ${primary.name} theme, ${primary.caseName} case and ${primary.frameName} frames.`};
+execFileSync('python3',[path.join(root,'viewer/marketing/embed_credits.py')]);
 for(const lang of ['en','es'])fs.copyFileSync(path.join(root,`docs/marketing/variants/card-${primary.id}-${lang}.png`),path.join(root,`docs/marketing/assets/share-${lang}.png`));
 fs.copyFileSync(path.join(root,'docs/marketing/assets/share-en.png'),path.join(root,'viewer/home/home-og.png'));
 const assetReceipt=JSON.parse(read('validation/marketing-assets.json'));
-for(const entry of assetReceipt.assets.filter(a=>/\/share-(en|es)\.png$/.test(a.file))){const bytes=fs.readFileSync(path.join(root,entry.file));entry.sha256=crypto.createHash('sha256').update(bytes).digest('hex');entry.bytes=bytes.length;}
+function recordMediaBytes(entries){
+  for(const entry of entries){
+    const bytes=fs.readFileSync(path.join(root,entry.file));
+    entry.sha256=crypto.createHash('sha256').update(bytes).digest('hex');
+    if('bytes' in entry)entry.bytes=bytes.length;
+  }
+}
+recordMediaBytes(assetReceipt.assets);
+const variantReceipt=JSON.parse(read('validation/marketing-variants.json'));
+recordMediaBytes(variantReceipt.files);
+fs.writeFileSync(path.join(root,'validation/marketing-variants.json'),JSON.stringify(variantReceipt,null,2)+'\n');
 assetReceipt.primary_artwork={...selection,source:'viewer/marketing/primary.json',applied_by:'node viewer/marketing/page.mjs'};
 fs.writeFileSync(path.join(root,'validation/marketing-assets.json'),JSON.stringify(assetReceipt,null,2)+'\n');
 const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
@@ -62,7 +73,7 @@ execFileSync('python3',['-c',`from pathlib import Path
 from zipfile import ZipFile,ZipInfo,ZIP_DEFLATED
 root=Path(${JSON.stringify(root)})
 base=root/'docs/marketing'
-files=list((base/'variants').glob('*'))+[base/'ASSET-LICENSE.md',root/'ATTRIBUTION.md',root/'TRADEMARKS.md']+list((root/'LICENSES').glob('*'))
+files=list((base/'variants').glob('*'))+[base/'ASSET-LICENSE.md',root/'ATTRIBUTION.md',root/'TRADEMARKS.md',root/'LICENSE']+list((root/'LICENSES').glob('*'))
 with ZipFile(base/'flan-cover-variants.zip','w',ZIP_DEFLATED,compresslevel=6) as z:
  for p in sorted(files):
   if not p.is_file(): continue

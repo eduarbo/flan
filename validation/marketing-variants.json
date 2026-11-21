@@ -961,97 +961,97 @@
       "file": "docs/marketing/variants/cover-eva-01-en.png",
       "width": 1400,
       "height": 466,
-      "sha256": "31d1917cacd849f6cd48d78a14dce8425264460b0fc3375e893095411ca3390f"
+      "sha256": "b1b2b989a390726f927ac214721ccdf246d3e51e5980ba2cb321ba2d66ebc71c"
     },
     {
       "file": "docs/marketing/variants/card-eva-01-en.png",
       "width": 1200,
       "height": 630,
-      "sha256": "648da50ff5f405dcc8fb58865b81a04e2e774f8256c8bdecdb695a1eae79c538"
+      "sha256": "62b925428c94e2cdc6b71806baae5d3646e1c997f8f17a3637e2ba3a3a6e757e"
     },
     {
       "file": "docs/marketing/variants/cover-eva-01-es.png",
       "width": 1400,
       "height": 466,
-      "sha256": "ada9d8f36a16b97585363a3b0fa5c35863f18c5536b3b529f07ec1c982ed3a74"
+      "sha256": "5f6c5c4ef572fa620c922030d3533a6f27abb406aab9430d18c9901d5a4d4f38"
     },
     {
       "file": "docs/marketing/variants/card-eva-01-es.png",
       "width": 1200,
       "height": 630,
-      "sha256": "8fa58dcb55a31eb6ae6df814bdc715bd2bf81768306abbbf4c397453aefde0f3"
+      "sha256": "c69065077d19dcea5206e94db0f7e0738546592d0131d2e1bbedfbca189e2b40"
     },
     {
       "file": "docs/marketing/variants/cover-matcha-en.png",
       "width": 1400,
       "height": 466,
-      "sha256": "dd012d39b992d9105c9b6872dae70a1d4c3f2d6c0c86db34ea4d56dba22b8ebb"
+      "sha256": "52d5ba4ac152f5d361a3e95e0e3fd844d35614262774cce7827ca4779c622905"
     },
     {
       "file": "docs/marketing/variants/card-matcha-en.png",
       "width": 1200,
       "height": 630,
-      "sha256": "e1b2b1c1e50b6145e3573f5859bc5486218908d79b074948cac489780940920a"
+      "sha256": "dacdf2d69d467dfd73edf28a89e160e3d6a7dabb4a74eca4972adc7c31c526fa"
     },
     {
       "file": "docs/marketing/variants/cover-matcha-es.png",
       "width": 1400,
       "height": 466,
-      "sha256": "600154bae7ab14d15a42bf1a947a781974837c1437e43a38be688668cd49e909"
+      "sha256": "d1c65d4cf06a3477b1e74ed5b51fa2673218642cab844e363051aae7bf3463d6"
     },
     {
       "file": "docs/marketing/variants/card-matcha-es.png",
       "width": 1200,
       "height": 630,
-      "sha256": "a92eba51c72da066c05a1ba97c3c29b1606006baa35dff80dae1f21bb6b5531a"
+      "sha256": "1c06a370dcac13bcb0a6dc06a0ac14d4aa7db1e6f56aff82dd1a77b68722f1f6"
     },
     {
       "file": "docs/marketing/variants/cover-hanafuda-en.png",
       "width": 1400,
       "height": 466,
-      "sha256": "f91de367118123fc60ca381e73b9d05e8fe803724505eed108e00b83f4a656e7"
+      "sha256": "fcca7a5189583830627b627c3c084104f60c3a2a0afaae58785049c701f39b78"
     },
     {
       "file": "docs/marketing/variants/card-hanafuda-en.png",
       "width": 1200,
       "height": 630,
-      "sha256": "ba1aab2cea6aef0afdec92599dc46076d0eaf9cbd9753b8c2da66d3d287a8c28"
+      "sha256": "817849b333fbc22f048270ad40b2421cdbc2d5a23ce8e7058a482b7af91abe9d"
     },
     {
       "file": "docs/marketing/variants/cover-hanafuda-es.png",
       "width": 1400,
       "height": 466,
-      "sha256": "7eaa3a53047ce15d61093bea86594e1db450e32d5e12e9b0c395ad9e3b3a1c94"
+      "sha256": "cf504782c528f6a901a46e0cd78b40a703be4d2b1236183746154fab3ac95cfe"
     },
     {
       "file": "docs/marketing/variants/card-hanafuda-es.png",
       "width": 1200,
       "height": 630,
-      "sha256": "02c81a6ded894260150e7d336a7b352dcb96f3e32b2df44bc74a3d858e4cdc7c"
+      "sha256": "ecc19beaac054804e60b1702ede5327af2892a9b5e6e238374d3ba95e4b7c62a"
     },
     {
       "file": "docs/marketing/variants/cover-flan-en.png",
       "width": 1400,
       "height": 466,
-      "sha256": "95b835236cda83cfa6ecbecab79a60c2abf2028c0ce783c0ff203232ddf0a9f0"
+      "sha256": "06e2cd3d3bcafccbf172c3d83e4131bbc5c910b6b9d5e7d2534b2df826e4f053"
     },
     {
       "file": "docs/marketing/variants/card-flan-en.png",
       "width": 1200,
       "height": 630,
-      "sha256": "7f7e5bfd6f66f1acb235a80748db2b37379ad1995c02b2a8c5c89e21f90647cd"
+      "sha256": "ac836491d3666e23dae8f88e4fa7542588fd60c91ba0ad0d2c5335034006e4a3"
     },
     {
       "file": "docs/marketing/variants/cover-flan-es.png",
       "width": 1400,
       "height": 466,
-      "sha256": "d62e349a2c8618e0ae3267d67a0e5c971bb74c46fb838da8ddd55f831dfac2c8"
+      "sha256": "be0277a21bf3f2b3efeabcdcb99dd539e52cdefaf7b8a40cd0bf1d731f52bb2a"
     },
     {
       "file": "docs/marketing/variants/card-flan-es.png",
       "width": 1200,
       "height": 630,
-      "sha256": "553d49bb9dfd202a1b57a834987013c1a72b99a3558ce2a90ee95a1c30812657"
+      "sha256": "7494d520d114ade4a3158b535c77eada5621c89ee7088c1cd31b2b3d67533029"
     }
   ]
 }

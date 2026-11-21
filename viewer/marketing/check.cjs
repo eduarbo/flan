@@ -17,8 +17,17 @@ const root=path.resolve(__dirname,'../..'),work=path.join(root,'build/marketing'
     assert.equal(await footerLink.innerText(),lang==='es'?'Más experimentos en @eduarbo.lab ↗':'More experiments at @eduarbo.lab ↗');
     const drafts=await p.locator('textarea').evaluateAll(inputs=>inputs.map(input=>input.value).join('\n'));
     assert.doesNotMatch(await p.locator('body').innerText()+'\n'+drafts,/first[- ]build|primer armado|parts ordered|piezas encargadas|bitácora/i);
-    const target=`${lang}-reddit`;await p.locator(`[data-target="${target}"]`).click();
-    assert.equal(await p.evaluate(()=>navigator.clipboard.readText()),await p.locator('#'+target).inputValue(),'copy differs from the draft');
+    for(const id of ['instagram','reel','reddit','youtube','community','editorial','reply']){
+      const caption=await p.locator(`#${lang}-${id}`).inputValue();
+      assert.match(caption,/KLP Lamé/);assert.match(caption,/braindefender/);
+      assert.match(caption,/https:\/\/creativecommons\.org\/licenses\/by-sa\/4\.0\//);
+    }
+    for(const id of ['reddit','instagram','reel']){
+      const target=`${lang}-${id}`,input=p.locator('#'+target);
+      await input.evaluate(el=>el.closest('details').open=true);
+      await p.locator(`[data-target="${target}"]`).click();
+      assert.equal(await p.evaluate(()=>navigator.clipboard.readText()),await input.inputValue(),'copy differs from '+target);
+    }
     await p.evaluate(()=>scrollTo({top:0,behavior:"instant"}));await p.screenshot({path:path.join(work,`kit-${width}-${lang}.png`)});
    }
    results.push({width,overflow:false,copy:'both languages'});

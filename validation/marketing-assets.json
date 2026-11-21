@@ -104,53 +104,53 @@
   "assets": [
     {
       "file": "docs/marketing/assets/carousel-en-1.png",
-      "sha256": "8457eb2bf0c96d3ca3e7cc968c0816c7a9fbe8a0d01b5850dc8b075ef26d91fe",
-      "bytes": 486870
+      "sha256": "1c42725f7c2108d0fcf7851c275d261f7eeb314c21dec01d56a1e36a56d69d0f",
+      "bytes": 487168
     },
     {
       "file": "docs/marketing/assets/carousel-en-2.png",
-      "sha256": "e0dea651c116a20b7efe7f5134315adc28ebb8c5b7738d5552f267509b335362",
-      "bytes": 550339
+      "sha256": "01333edeca6834b56edecf91030a71d32b279bbec33b7a156ba265b8e74b4c9f",
+      "bytes": 550637
     },
     {
       "file": "docs/marketing/assets/carousel-en-3.png",
-      "sha256": "41fcad3d0f163db57df2a7e31ce6ae5f543c194dd8e79a917a5f8046c1625ac2",
-      "bytes": 503063
+      "sha256": "94c2d0336176eac9de9da8d6e97bfa57695b9763f979c0d61efb35e69e5e498c",
+      "bytes": 503361
     },
     {
       "file": "docs/marketing/assets/carousel-en-4.png",
-      "sha256": "0ea102eda1366107eb62ff32ec393556ef3a055684a9f0c2bc35937b1724bb3d",
-      "bytes": 582579
+      "sha256": "6d9ba988d261975892079e8a2020a5349ff397cb305abf464671e80808e25c8c",
+      "bytes": 582877
     },
     {
       "file": "docs/marketing/assets/carousel-en-5.png",
-      "sha256": "e0decc408303de6c45ff31b6db7f9ac96d0447f4ae181c1616a955e1ea83e91a",
-      "bytes": 496309
+      "sha256": "e99af48a6d8ef493e2f4d36c957030864f42b955423110ab5a2ebc7d97db713e",
+      "bytes": 496607
     },
     {
       "file": "docs/marketing/assets/carousel-en-6.png",
-      "sha256": "e6c8b4f9f5ec7964631d75c15df916a8f88d67fa0002efe7c519d19112760dc4",
-      "bytes": 524470
+      "sha256": "9f99503313d9fdf892edf691407795d136bec02481c3cfe3c7941740648a9e82",
+      "bytes": 524768
     },
     {
       "file": "docs/marketing/assets/share-en.png",
-      "sha256": "648da50ff5f405dcc8fb58865b81a04e2e774f8256c8bdecdb695a1eae79c538",
-      "bytes": 334466
+      "sha256": "62b925428c94e2cdc6b71806baae5d3646e1c997f8f17a3637e2ba3a3a6e757e",
+      "bytes": 334764
     },
     {
       "file": "docs/marketing/assets/square-en.png",
-      "sha256": "7de12e3e94bd79401eae56741d8572a45bbd3821800d22baa70068763895167b",
-      "bytes": 416176
+      "sha256": "1487370e5a86de5bd761018ed6b8208008fdf3cb6ce05b71b4cb7b69f50010a6",
+      "bytes": 416474
     },
     {
       "file": "docs/marketing/assets/story-en.png",
-      "sha256": "09dbee82ec997afffced65755ea3761403f6402627d756d4f113529a4583dbd6",
-      "bytes": 621779
+      "sha256": "adedd70ea1296b5aad68c862d861c9d73c1c2696ad1669338d3b983343c9b934",
+      "bytes": 622077
     },
     {
       "file": "docs/marketing/assets/youtube-en.png",
-      "sha256": "bda9d1ed43b7dee583103c49980b7e2d24b57fb564a07c9be0eb5d4e97869298",
-      "bytes": 311121
+      "sha256": "407be75090b67dd874a36631f2584bf12922ce529d7542006982c0322b0cb843",
+      "bytes": 311419
     },
     {
       "file": "docs/marketing/assets/teaser-en.srt",
@@ -159,58 +159,58 @@
     },
     {
       "file": "docs/marketing/assets/teaser-en.mp4",
-      "sha256": "f2af5d5601ab3e281a1c3f0d8452b43e4c853798a32b1c92ddd594588262b9ca",
-      "bytes": 833289
+      "sha256": "e7342e68ef5fb5abc0ee3fb1af5c8de09db16622a6f6d396c6882f6b5368835a",
+      "bytes": 833585
     },
     {
       "file": "docs/marketing/assets/carousel-es-1.png",
-      "sha256": "fb4cc7b99067ebdc80df192f6769638fd9c5092531cea8f2776eeba7c264ef0a",
-      "bytes": 486635
+      "sha256": "8f9846cbd0d8f7b630e71e382a0e011ffaece3e55805ac10d79342c0d7cba7b6",
+      "bytes": 486933
     },
     {
       "file": "docs/marketing/assets/carousel-es-2.png",
-      "sha256": "a8d701ce24016fa2e9062adaaa108dd8ca265f6b09e8cfca63007598a9c8370a",
-      "bytes": 552364
+      "sha256": "5f72867855262e3b23cb4f3d01beb07de0b08967defd2f22d0c039cdf35fbcc4",
+      "bytes": 552662
     },
     {
       "file": "docs/marketing/assets/carousel-es-3.png",
-      "sha256": "3f1a95cbab9175cd66e025cbf018b8b7c1fe1e76cf0f18248dec604e1f4f02c7",
-      "bytes": 497316
+      "sha256": "18d318fd09b84a3d8c9d6dfb294d49beeaeb2ed54f2737b6cc8a07e3e6b1cd0d",
+      "bytes": 497614
     },
     {
       "file": "docs/marketing/assets/carousel-es-4.png",
-      "sha256": "438ff7aa0bc44bb110b69766696ca0670eafde00265cd2cc1ce7a8a7318a624d",
-      "bytes": 582260
+      "sha256": "5a9bcbfb2f504a73e65e7dc981a1d4e133129b44ff1397163adfa3dbbed01284",
+      "bytes": 582558
     },
     {
       "file": "docs/marketing/assets/carousel-es-5.png",
-      "sha256": "4164741c35045e1abbcb044741f4f5d8b6662f563282c5f589306089a7a7be92",
-      "bytes": 489448
+      "sha256": "a2fd7e8bc19295e63067824034f14c644b58398c2d2d4060538666f0bf476d59",
+      "bytes": 489746
     },
     {
       "file": "docs/marketing/assets/carousel-es-6.png",
-      "sha256": "5937a6c26175776789965cfc8624c869b8e36f31578c4a222fe9503ad781ccc5",
-      "bytes": 519603
+      "sha256": "d6cb1e5da4909f10ff029e83fe20af7cb86c31a071efd3f4ed3d6a122fb39a70",
+      "bytes": 519901
     },
     {
       "file": "docs/marketing/assets/share-es.png",
-      "sha256": "8fa58dcb55a31eb6ae6df814bdc715bd2bf81768306abbbf4c397453aefde0f3",
-      "bytes": 336908
+      "sha256": "c69065077d19dcea5206e94db0f7e0738546592d0131d2e1bbedfbca189e2b40",
+      "bytes": 337206
     },
     {
       "file": "docs/marketing/assets/square-es.png",
-      "sha256": "ec291933c0a762983abd66f89ac61e0370eceb74ec8be2a346e622c03893ba39",
-      "bytes": 412016
+      "sha256": "b32fd84bf258513c8cc3a3b557feeaa4d00c4a5363b006dc942754d37b27beb2",
+      "bytes": 412314
     },
     {
       "file": "docs/marketing/assets/story-es.png",
-      "sha256": "dd94639a8a616e38a3bc17131f11a4d0e72a9e0a99fed93c5d9cf6c01a13fa2b",
-      "bytes": 617933
+      "sha256": "402bd631344e0f42d1ce0284b72cb2bf748d8d6f49a610e2411fe9f6a08b3e39",
+      "bytes": 618231
     },
     {
       "file": "docs/marketing/assets/youtube-es.png",
-      "sha256": "355eb00143c2cda9259d01d385a50b0fa5cc63ba8abd26ced3c491589dd2955c",
-      "bytes": 311366
+      "sha256": "70c49415d87cd65996a65c2b130b996b58c48739abee9090876a497e714f728d",
+      "bytes": 311664
     },
     {
       "file": "docs/marketing/assets/teaser-es.srt",
@@ -219,48 +219,48 @@
     },
     {
       "file": "docs/marketing/assets/teaser-es.mp4",
-      "sha256": "bca3fc607139401c253ecb18c10d224756ee7cc9b0e4242c61406776215f28b0",
-      "bytes": 825620
+      "sha256": "8f4f386d7eedcf57a9a0afabc354974dab93ba5af4452b2319b4d99da34df90b",
+      "bytes": 825916
     },
     {
       "file": "docs/marketing/assets/avatar.png",
-      "sha256": "5825516df20ef9b06869238e9a3f58644a67ac5ed222218cfe3af1a0eabbb902",
-      "bytes": 27542
+      "sha256": "405ad965d0989e02ea383fb582f68f1822b537a83adf7409c9c01ce690a37ab9",
+      "bytes": 27740
     },
     {
       "file": "docs/marketing/assets/render-hero.png",
-      "sha256": "9a0eb63141dcfe01638a2beac275e466c97534f43f588bcc1273fa2579fde601",
-      "bytes": 247181
+      "sha256": "1a46510930189447c7e5614cff32df863a464da029386ba9f4b3769120842894",
+      "bytes": 247479
     },
     {
       "file": "docs/marketing/assets/render-layers.png",
-      "sha256": "1e309803d1e4cc1a48c2432157e6813567bc386c2fb1b2f2384d4bbb45ca15b1",
-      "bytes": 354025
+      "sha256": "db0c08c48799787322fa15a7d1c66c1e037323fadedd22eb2be22a23fe14136c",
+      "bytes": 354323
     },
     {
       "file": "docs/marketing/assets/render-talavera.png",
-      "sha256": "6721dd6b0d7f06f4f7acb7c48ebc9eab70dc6e3211667074f1e492804663260e",
-      "bytes": 242855
+      "sha256": "64f08d51eda1242ff7fb3eab0b683f543071af69be8d3498577f7aff837afeda",
+      "bytes": 243153
     },
     {
       "file": "docs/marketing/assets/render-hanafuda.png",
-      "sha256": "67fc42c7cfcdbb540ec696df30d8fc7f2990fdd85a12d54fd9e9d68e54405abf",
-      "bytes": 238364
+      "sha256": "0c9593a0bae0958931ca8c31eb3997dd1586adb1eb0d6aa3225629af3a9cb2c6",
+      "bytes": 238662
     },
     {
       "file": "docs/marketing/assets/render-flan42.png",
-      "sha256": "9f24ecb1b81694b7dc4b463a077e804e3b3bb2eaf5f95d7c599af6ee57b46762",
-      "bytes": 240543
+      "sha256": "91f2c826fa8f5f488b53cf6241638124f49b3b679e140ba6dce2382bb9beba65",
+      "bytes": 240841
     },
     {
       "file": "docs/marketing/assets/render-flan46.png",
-      "sha256": "7a23d5b9043c27f9c6c74827c57f171a43c95f898a8f14b3fd0806b7c5c6fb1c",
-      "bytes": 285497
+      "sha256": "a4bbcbbc771d4f1cea9eecc33404ffe97c0bfa262ca24325394e44ac0a1e3f47",
+      "bytes": 285795
     },
     {
       "file": "docs/marketing/assets/render-flan54.png",
-      "sha256": "5df8acae54d83cfea254350e665d4546a45a72a005842c421dff476d7bf132bc",
-      "bytes": 278338
+      "sha256": "8028a9aa085eb4c11bb419320bb3e201b93dc7cbae895f765b3e2829e8b5581a",
+      "bytes": 278636
     }
   ],
   "primary_artwork": {

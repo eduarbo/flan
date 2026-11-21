@@ -14,14 +14,15 @@ Reproduced byte for byte with gerbonara 1.5.0, rsvg-convert 2.62.3 and ImageMagi
 SPDX-License-Identifier: GPL-3.0-or-later
 """
 from pathlib import Path
-import base64, hashlib, json, subprocess, sys, tempfile, zipfile
+import base64, hashlib, json, os, subprocess, sys, tempfile, zipfile
 
 from gerbonara import GerberFile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 OUT = ROOT / "build/silkscreen-textures"
-KICAD_PY = "/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3"
+mac_kicad_python = Path("/Applications/KiCad/KiCad.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python3")
+KICAD_PY = os.environ.get("KICAD_PYTHON") or (str(mac_kicad_python) if mac_kicad_python.is_file() else sys.executable)
 THUMB_H = 150                 # px; both halves side by side
 PX_PER_MM = 10
 EDGE_HALF_STROKE = 0.025      # KiCad Edge.Cuts are drawn 0.05 mm wide

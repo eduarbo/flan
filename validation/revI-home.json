@@ -2,13 +2,13 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "2bdb086bab4e687922e4d6393e6cfd4a4d9b066fcfb32561c1731147b6f39214",
-    "bytes": 114984
+    "sha256": "de5c2595e70e123114d4c07ff257028c7f7299352bfb4231ac5c982d989c6d8e",
+    "bytes": 115167
   },
   "engine": {
-    "path": "docs/assets/home-engine-c4e17726087f69a6.js",
-    "sha256": "c4e17726087f69a6cef935f1b244d84c31359a40e84f2a88c942b6c923700f8c",
-    "bytes": 585257
+    "path": "docs/assets/home-engine-ed15491be7465e38.js",
+    "sha256": "ed15491be7465e387a0d28c3a076ef07af9e2b1c8bd7c3d6d8511d30302a6ab6",
+    "bytes": 588498
   },
   "posters": [
     {
@@ -1720,11 +1720,11 @@
   "sources": [
     {
       "path": "viewer/home-build.mjs",
-      "sha256": "2c14343f3a959925cb39d7d319f93acf16dccddbbafb27ee996d5cdbca9c8851"
+      "sha256": "5b8ce034cd8aa78306460406883e9c9f24c4d412692b11514f46b0fe10883b7e"
     },
     {
       "path": "viewer/home/app.js",
-      "sha256": "917306652ecf66c8146fb2507f66632c40ab22bad7221fffe78efd94dc5ab39d"
+      "sha256": "d66b9cf8f554acb12b75d3d4d8fad48d3e88130598ef5ef01a8691407ce6fe58"
     },
     {
       "path": "viewer/home/options.js",
@@ -1752,7 +1752,7 @@
     },
     {
       "path": "viewer/home/template.html",
-      "sha256": "5e64a4f16330d42aa428e8bb40dd3469f0ef0a1322982b319252de6d9c365605"
+      "sha256": "c06e2818eb64708e5e06d0367cf6f59fb3ead7cd92901380ad327d1f576f813b"
     },
     {
       "path": "design/themes.json",

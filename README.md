@@ -44,7 +44,7 @@ Flan is a low-profile wireless split keyboard in development by [Eduardo Ruiz](h
 
 **[Keycaps and frames](docs/customize.md) · [Design](docs/design.md) · [Build](docs/build.md) · [CAD files](docs/cad.md) · [Explorer](docs/viewer.md) · [Progress](docs/progress.md)**
 
-Flan36 is inspired by [Piantor by beekeeb](https://github.com/beekeeb/piantor) and keeps its 36 key positions and angles; the wireless PCBs, case outline, cases, frames and firmware are original. The viewer uses [KLP Lamé by braindefender](https://github.com/braindefender/KLP-Lame-Keycaps). [Credits and licenses](ATTRIBUTION.md). [Contributing](CONTRIBUTING.md).
+Flan36 is inspired by [Piantor by beekeeb](https://github.com/beekeeb/piantor) and keeps its 36 key positions and angles; Eduardo designed the wireless PCBs, cases and frames and wrote their ZMK shield configurations and keymaps. The viewer uses [KLP Lamé by braindefender](https://github.com/braindefender/KLP-Lame-Keycaps). [Credits and licenses](ATTRIBUTION.md). [Contributing](CONTRIBUTING.md).
 
 ## Support Flan
 

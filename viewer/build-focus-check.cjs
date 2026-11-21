@@ -49,11 +49,20 @@ const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
   const config=await page.evaluate(()=>window.flan36.snapshot().configuration);config.batteries.right='301230';config.cases.right.cover=false;config.cases.right.style='solid';config.pcb_editions={left:'asanoha',right:'seigaiha'};config.pcb_masks={left:'white',right:'purple'};await importConfig(config);
   const selected=await page.evaluate(()=>window.flan36.snapshot().configuration);await page.click('#print-half [data-value=right]');await page.click('#print-scope [data-value=shells]');
   let allow;const hold=new Promise(r=>allow=r);await page.route('**/assets/build/*',async r=>{await hold;await r.continue().catch(()=>{});});
-  const pending=page.waitForEvent('download',{timeout:180000});await Promise.all([page.waitForRequest(r=>r.url().includes('/assets/build/')),page.click('#download-build')]);
-  const changed=structuredClone(selected);changed.pcb_masks.right='red';await importConfig(changed);allow();
-  const d=await pending,zip=path.join(out,d.suggestedFilename());await d.saveAs(zip);await page.unroute('**/assets/build/*');assert.equal(d.suggestedFilename(),'Flan54-complete-build.zip');
+  const [d]=await Promise.all([
+    page.waitForEvent('download',{timeout:180000}),
+    (async()=>{
+      try{
+        await Promise.all([page.waitForRequest(r=>r.url().includes('/assets/build/')),page.click('#download-build')]);
+        const changed=structuredClone(selected);changed.pcb_masks.right='red';await importConfig(changed);
+      }finally{allow();}
+    })()
+  ]);
+  const zip=path.join(out,d.suggestedFilename());await d.saveAs(zip);await page.unroute('**/assets/build/*');assert.equal(d.suggestedFilename(),'Flan54-complete-build.zip');
   const manifest=JSON.parse(unzip(zip,'manifest.json'));assert.deepEqual(manifest.configuration,selected);assert.deepEqual(JSON.parse(unzip(zip,'Configuration.json')),selected);
   for(const entry of manifest.files){const bytes=unzip(zip,entry.path);assert.equal(bytes.length,entry.bytes,entry.path);assert.equal(sha(bytes),entry.sha256,entry.path);if(entry.source)assert.equal(sha(fs.readFileSync(path.join(root,entry.source))),entry.sha256,entry.source);}
+  const noticeFiles=['NOTICE.md','west-frozen.yml','dependencies.json',...fs.readdirSync(path.join(root,'firmware/licenses')).map(name=>'licenses/'+name)];
+  for(const file of noticeFiles)assert.deepEqual(unzip(zip,'Firmware/'+file),fs.readFileSync(path.join(root,'firmware',file)),file);
   assert.deepEqual(manifest.pcbs.map(p=>[p.side,p.edition,p.mask]),[['left','asanoha','white'],['right','seigaiha','purple']]);assert.match(unzip(zip,'Shopping.csv').toString(),/"54","60","6"/);
   fs.writeFileSync(path.join(out,'Print-kit.zip'),unzip(zip,'Print-kit.zip'));const kit=JSON.parse(unzip(path.join(out,'Print-kit.zip'),'manifest.json'));
   assert.equal(kit.half,'both');assert.equal(kit.scope,'complete');assert.deepEqual(kit.configuration,selected);assert.deepEqual(kit.keycaps.missing,[]);assert.equal(kit.keycaps.groups.reduce((n,g)=>n+g.count,0),54);assert(kit.parts.some(p=>p.side==='left')&&kit.parts.some(p=>p.side==='right'));assert(!kit.parts.some(p=>p.id.startsWith('right-frame-')));

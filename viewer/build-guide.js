@@ -74,6 +74,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
      else if(path.startsWith('firmware/uf2/'))relative='Firmware/'+(name.includes('no-display')?'optional/':'')+name;
      else if(name.endsWith('.stl'))relative='Fit-samples/'+name;
     }
+    if(source==='https://github.com/eduarbo/flan/blob/main/firmware/NOTICE.md')relative='Firmware/NOTICE.md';
     if(relative){a.href=relative;a.removeAttribute('target');}
    }
    const a=link(say('Open the complete print kit · ZIP','Abrir el kit completo de impresión · ZIP'),'Print-kit.zip');a.removeAttribute('target');copy.querySelector('#build-print-list').before(a);
@@ -187,6 +188,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
  function renderFirmware(){
   const target=$('build-firmware');target.replaceChildren();
   for(const side of sides){const a=link(t('build.firmware.'+side)+' · UF2 ↓',raw('firmware/uf2/'+current.variant+'-'+side+'.uf2'));a.append(node('span','',say(side==='left'?'Central · USB / Bluetooth to your computer':'Peripheral · connects to the left half',side==='left'?'Central · USB / Bluetooth a tu computadora':'Periférica · se conecta a la mitad izquierda')));target.append(a);}
+  target.append(link(say('Firmware sources & licenses','Fuentes y licencias del firmware'),'https://github.com/eduarbo/flan/blob/main/firmware/NOTICE.md'));
   const alternative=link(t('build.firmware.rightNoDisplay')+' · UF2 ↓',raw('firmware/uf2/'+current.variant+'-right-no-display.uf2'));
   $('build-firmware-alt').replaceChildren(details('build-single-display',say('Alternative: omit the right display','Alternativa: omitir la pantalla derecha'),[node('p','micro',say('The design above includes two displays. Use this file instead of the normal right UF2 only if you intentionally leave the right display out; reduce the shopping list to one display. Hiding a frame alone does not select this option.','El diseño de arriba incluye dos pantallas. Usa este archivo en lugar del UF2 derecho normal solo si decides omitir su pantalla; reduce entonces la compra a una pantalla. Quitar un marco no selecciona esta opción.')),alternative]));
   $('build-flash').replaceChildren(list([

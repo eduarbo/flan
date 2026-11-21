@@ -47,7 +47,7 @@ Each [Flan variant](variants.md) has its own ZMK shield, generated from `design/
 
 Each keymap is Flan36's with the added keys filled in: [Flan42](../firmware/config/flan42.keymap), [Flan46](../firmware/config/flan46.keymap), [Flan54](../firmware/config/flan54.keymap). On Numbers the number row carries F1–F10, with F11 and F12 on Flan54's outer keys; the outer column is transparent on Numbers and Symbols, and every added key is unused on Settings. The number row is matrix row 4 on D15 (left) and D6 (right), the pins its PCBs route. Receipts: [Flan42](../validation/flan42-firmware.json), [Flan46](../validation/flan46-firmware.json), [Flan54](../validation/flan54-firmware.json). Flash a variant's files only onto that variant's PCBs.
 
-Rebuild a variant with the same environment as below:
+For a personal variant, follow [Build personal firmware](#build-personal-firmware). Maintainers can regenerate and qualify a variant using the official environment below:
 
 ```sh
 python3 tools/build_variant_firmware.py
@@ -55,36 +55,68 @@ sh tools/build_firmware.sh flan42-left flan42-right flan42-right-no-display     
 python3 tools/check_firmware.py --zephyr "$FLAN36_ZMK_WORKSPACE/zephyr" --keyboard flan42 --publish
 ```
 
-## Build locally
+## Build personal firmware
 
-The verified environment uses west 1.5, CMake, Ninja, Python build dependencies and the existing macOS GCC ARM 15.2.0 toolchain. The builder requires the compiler SHA-256 `7528680ad6078c1d2dd67a414fca656e5d78e56e7bc31f422a849bb15a7db04a`; another platform/compiler needs separate qualification. [west-frozen.yml](../firmware/west-frozen.yml) fixes all dependency revisions. Binary identity across different paths or machines is not promised.
+To change a keymap or compile for your own boards, use ZMK's normal `west build` with an Arm bare-metal toolchain. This path writes your UF2 files under `build/personal/`. The published binaries, their build records and the qualification check remain separate.
 
-The build expects the ZMK checkout **at the workspace root**, with its `app/` and the dependency `zephyr/` beside it. For a new, empty workspace, use this layout:
+### Prepare a new workspace
+
+Start at the root of a Flan checkout. Install Git, Python 3.12, CMake, and the [Arm GNU Toolchain for your host](https://developer.arm.com/tools-and-software/gnu-toolchain) targeting `arm-none-eabi`. Add its `bin` directory to `PATH`. Arm GNU Toolchain 15.3.Rel2 was tested on Apple Silicon. Use an empty destination for the ZMK workspace. The commands use a POSIX shell.
 
 ```sh
-export FLAN36_REPO=/absolute/path/to/flan36
-export FLAN36_ZMK_WORKSPACE=/absolute/path/to/new-zmk-workspace
-git clone --no-checkout https://github.com/zmkfirmware/zmk.git "$FLAN36_ZMK_WORKSPACE"
-git -C "$FLAN36_ZMK_WORKSPACE" checkout --detach edf5c0814fd3ea202e43aad2d68fd32e882a518c
+export FLAN36_REPO="$PWD"
+export FLAN36_ZMK_WORKSPACE="$(dirname "$PWD")/flan-zmk-workspace"
+python3.12 -m venv "$FLAN36_REPO/build/west-env"
+. "$FLAN36_REPO/build/west-env/bin/activate"
+python -m pip install west==1.5.0 ninja
+git init "$FLAN36_ZMK_WORKSPACE"
+git -C "$FLAN36_ZMK_WORKSPACE" remote add origin https://github.com/zmkfirmware/zmk.git
+git -C "$FLAN36_ZMK_WORKSPACE" fetch --depth=1 origin edf5c0814fd3ea202e43aad2d68fd32e882a518c
+git -C "$FLAN36_ZMK_WORKSPACE" checkout --detach FETCH_HEAD
 west init -l "$FLAN36_ZMK_WORKSPACE/app"
 cd "$FLAN36_ZMK_WORKSPACE"
-west config manifest.file "$FLAN36_REPO/firmware/west-frozen.yml"
+west config --local manifest.file "$FLAN36_REPO/firmware/west-frozen.yml"
 west manifest --validate
-west update
-west zephyr-export
-cd "$FLAN36_REPO"
+west update --narrow
+python -m pip install -r zephyr/scripts/requirements-base.txt
 ```
 
-The external frozen-manifest selection and resolved paths were checked with west 1.5; builds reused an existing clean pinned workspace. The three binaries were rebuilt there with all 39 active dependency repositories checked. The conventional config-repository manifest in `firmware/config/west.yml` uses a different directory layout; it is not the initialization recipe for this builder.
+If you already have a local cache of these same repositories, `west update --narrow --path-cache /absolute/path/to/cache` reuses Git objects during initialization. West checks out the revisions in the frozen manifest.
+
+### Compile both halves
+
+From the ZMK workspace, with the environment above active, set `size` to `flan36`, `flan42`, `flan46` or `flan54`. Each board uses its own shield. For a right half without a display, build the third file.
 
 ```sh
-export FLAN36_ZMK_WORKSPACE=/absolute/path/to/west-workspace
-export CROSS_COMPILE=/absolute/path/to/arm-none-eabi-
-# Activate the Python environment with west and Ninja on PATH.
-# Optional: FLAN36_WEST=/absolute/path/to/venv/bin/west
-sh tools/build_firmware.sh
-python3 tools/check_firmware.py --zephyr "$FLAN36_ZMK_WORKSPACE/zephyr" --publish
+size=flan36
+export ZEPHYR_TOOLCHAIN_VARIANT=cross-compile
+export CROSS_COMPILE="$(dirname "$(command -v arm-none-eabi-gcc)")/arm-none-eabi-"
+export ZEPHYR_BASE="$FLAN36_ZMK_WORKSPACE/zephyr"
+out="$FLAN36_REPO/build/personal"
+config="$FLAN36_REPO/firmware/config"
+west build -p always -s app -b nice_nano_v2 -d "$out/$size-left" -- \
+  "-DSHIELD=${size}_left nice_view" "-DZMK_CONFIG=$config"
+west build -p always -s app -b nice_nano_v2 -d "$out/$size-right" -- \
+  "-DSHIELD=${size}_right nice_view" "-DZMK_CONFIG=$config"
+west build -p always -s app -b nice_nano_v2 -d "$out/$size-right-no-display" -- \
+  "-DSHIELD=${size}_right" "-DZMK_CONFIG=$config" "-DEXTRA_CONF_FILE=$config/no-display.conf"
+ls "$out"/"$size"-*/zephyr/zmk.uf2
 ```
+
+Each UF2 belongs to the board size and half in its directory name. The [notices for redistribution](../firmware/NOTICE.md) identify ZMK, Zephyr and the other included software.
+
+## Reproduce an official candidate
+
+The checked-in UF2 files use GCC ARM 15.2.0 on macOS with compiler SHA-256 `7528680ad6078c1d2dd67a414fca656e5d78e56e7bc31f422a849bb15a7db04a`. To run the maintainer checks with that compiler, use the pinned workspace above and put the qualified toolchain on PATH:
+
+```sh
+cd "$FLAN36_REPO"
+export CROSS_COMPILE="$(dirname "$(command -v arm-none-eabi-gcc)")/arm-none-eabi-"
+sh tools/build_firmware.sh
+python3 tools/check_firmware.py --zephyr "$FLAN36_ZMK_WORKSPACE/zephyr"
+```
+
+The maintainer checker writes a new candidate record under `validation/` even when run without `--publish`. Run it in a clean release checkout and review the record. Add `--publish` only when replacing the official binaries. The personal workflow above writes only to `build/personal/`.
 
 The script expects the pinned ZMK checkout at `app/` and Zephyr at `zephyr/`, both clean. All active dependencies must match the pinned list and be clean. This version uses target `nice_nano_v2`; newer ZMK targets differ. The checker reads the actual compiled devicetrees, all 36 mappings, GPIO assignments, roles, sleep settings and every UF2 block. Before and after each build, the script records and compares sources, dependencies and compiler inputs. The checker requires that build-time attestation and verifies every output hash before copying any file. It records [source and binary hashes](../validation/revI-firmware.json).
 

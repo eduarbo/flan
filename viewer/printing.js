@@ -71,6 +71,7 @@ export function mesh3MF(part){
 }
 export async function printKit(config,registry,{half='both',scope='shells',keycaps=null,title='Flan36',progress=()=>{}}={}){
  const selected=selectedParts(config,registry,half,scope),files={},records=[];
+ for(const [name,text] of Object.entries(__FLAN_PRINT_LICENSES__))files[name]=utf8(text);
  for(const [i,p] of selected.entries()){progress(i+1,selected.length);await new Promise(requestAnimationFrame);const colored=mesh3MF(p);files[`STL/${p.id}.stl`]=decode(p.stl);files[`3MF/${p.id}.3mf`]=colored.bytes;for(const m of p.material_parts||[])files[`Materials/${p.id}/${m.role}.stl`]=decode(m.stl);records.push({id:p.id,side:p.side,quantity:1,source:p.path,source_sha256:p.sha256,colors:p.colors,translation_3mf_mm:colored.translation_mm,triangles:colored.triangles,role_triangles:colored.role_triangles,material_parts:colored.material_parts});}
  // keycaps: one exact upstream STL per file the design uses, and the plan of which key gets which file and color
  let caps=null;

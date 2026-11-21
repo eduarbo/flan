@@ -74,9 +74,12 @@ def main():
         (OUT / name).write_text(text)
     kit = OUT / "flan-logo-svg-kit.zip"
     with zipfile.ZipFile(kit, "w", zipfile.ZIP_DEFLATED) as z:
-        for name in sorted(files):
+        entries = {name: text.encode() for name, text in files.items()}
+        for name in ("LICENSE", "TRADEMARKS.md", "ATTRIBUTION.md", "LICENSES/Fraunces-OFL.txt"):
+            entries[name] = (ROOT / name).read_bytes()
+        for name in sorted(entries):
             info = zipfile.ZipInfo(name, (2026, 10, 17, 0, 0, 0))        # fixed date: reproducible bytes
-            z.writestr(info, files[name], zipfile.ZIP_DEFLATED)
+            z.writestr(info, entries[name], zipfile.ZIP_DEFLATED)
     favicons(svg_classes(colour, "Flan Keyboard", dark))           # favicons stay square
     PNG.parent.mkdir(parents=True, exist_ok=True)
     preview = OUT / "flan-lockup.svg"

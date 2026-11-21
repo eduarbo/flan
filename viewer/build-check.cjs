@@ -43,7 +43,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/build-workflow
    assert(await page.locator('[data-part="nano"] input').isChecked(),'unchanged lines retain progress');
    const pcb=await page.locator('#build-pcb-downloads a').evaluateAll(es=>es.map(e=>({url:e.href,text:e.textContent})));
    assert(pcb[0].url.includes(variant+'-left-'));assert.match(pcb[0].text,/Asanoha.*white mask/);assert.match(pcb[1].text,/Seigaiha.*purple mask/);
-   assert.deepEqual(await page.locator('#build-firmware a').evaluateAll(es=>es.map(e=>e.href.split('/').pop())),[variant+'-left.uf2',variant+'-right.uf2']);
+   assert.deepEqual(await page.locator('#build-firmware a[href$=".uf2"]').evaluateAll(es=>es.map(e=>e.href.split('/').pop())),[variant+'-left.uf2',variant+'-right.uf2']);
    assert.match(await page.locator('#build-final').textContent(),new RegExp('all '+keys+' keys'));
    assert.equal(await page.locator('[data-cap-count]').evaluateAll(es=>es.reduce((n,e)=>n+Number(e.dataset.capCount),0)),keys);
   }

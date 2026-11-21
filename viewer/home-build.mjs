@@ -171,7 +171,11 @@ async function homePage({scene,files}){
   // paint. The 3D engine (three.js and home/model.js) is a file the page asks for once its poster is up, so the
   // browser compiles it off the main thread and the poster never shares the line with it.
   const script=(entry,more={})=>build({entryPoints:[path.join(dir,entry)],bundle:true,write:false,minify:true,format:'iife',target:['es2020'],legalComments:'inline',...more}).then(b=>b.outputFiles[0].text);
-  const bundle=await script('app.js'),engine=await script('model.js',{globalName:'flanHomeEngine'});
+  const engineNotices=['Three-MIT.txt','fflate-MIT.txt','meshoptimizer-MIT.txt'].map(file=>
+    fs.readFileSync(path.join(root,'LICENSES',file),'utf8')).join('\n\n');
+  const bundle=await script('app.js'),engine=await script('model.js',{
+    globalName:'flanHomeEngine',banner:{js:'/*!\n'+engineNotices+'\n*/'}
+  });
   const engineFile=`home-engine-${crypto.createHash('sha256').update(engine).digest('hex').slice(0,16)}.js`;
   fs.writeFileSync(path.join(assets,engineFile),engine);
   for(const f of fs.readdirSync(assets))if(/^home-engine-[0-9a-f]{16}\.js$/.test(f)&&f!==engineFile)fs.rmSync(path.join(assets,f));

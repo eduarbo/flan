@@ -1,6 +1,6 @@
 # Credits and licenses
 
-Flan36 is inspired by Piantor by beekeeb and keeps Piantor's 36 key centres and angles, translated per half without change. Flan42 and Flan54 add Piantor's outer pinky column (K00/K10/K20). That key layout is the part of Flan derived from Piantor, under GPL-3.0. The wireless PCBs and their routing, the case outline rule, the cases, frames, firmware and branding are original work by Eduardo Ruiz. Imported reference files and third-party component meshes are credited individually below. There is no implied affiliation or certification by beekeeb or component manufacturers.
+Flan36 is inspired by Piantor by beekeeb and keeps Piantor's 36 key centres and angles, translated per half without change. Flan42 and Flan54 add Piantor's outer pinky column (K00/K10/K20). That key layout is the part of Flan derived from Piantor, under GPL-3.0. The wireless PCBs and their routing, the case outline rule, the cases, frames and branding are original work by Eduardo Ruiz. Eduardo adapted his earlier Piantor Slim configuration into the Flan shields and keymaps for ZMK on Zephyr. See the [firmware notices](firmware/NOTICE.md). Imported reference files and third-party component meshes are credited individually below. There is no implied affiliation or certification by beekeeb or component manufacturers.
 
 | Material | Author / source | License and changes |
 |---|---|---|
@@ -51,3 +51,7 @@ Earlier viewer credits, GLB metadata and project descriptions incorrectly descri
 ## Key layout provenance · 2026-10-18
 
 The 2026-10-09 wording said Piantor only inspired the key count. That understated it: all 36 centres and angles in `design/layout.json` match Piantor's switch footprints in `sources/piantor/` after a constant per-half translation, and Flan42/54 reuse Piantor's outer column. Descriptions now say that the key layout comes from Piantor. The PCBs and routing, the revI case outline rule (`tools/outline.py`), cases, frames and firmware remain Eduardo's original work; only the early RevE case study (`tools/build_case.py`) traced Piantor's board exterior. No geometry or license terms changed.
+
+## Firmware authorship clarification · 2026-11-20
+
+The earlier references to original firmware describe Eduardo’s Flan-specific ZMK shields, pin assignments and keymaps. The firmware also contains upstream ZMK, Zephyr and libraries under their respective licenses.

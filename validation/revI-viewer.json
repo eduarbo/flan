@@ -1636,7 +1636,7 @@
     },
     {
       "path": "viewer/build-guide.js",
-      "sha256": "860ec02d992817a19697112d00607f2d97eba5c87e6d9a8089a13d38332aa73e"
+      "sha256": "8858812ddf3202805a10c41c11ae73943bda4850b066ac7c281b0e9d51020f49"
     },
     {
       "path": "viewer/design-url.js",
@@ -1648,7 +1648,7 @@
     },
     {
       "path": "viewer/build-package.js",
-      "sha256": "f4bde2b781ea7abccfb63a86ee316d3bfaa6851ea6888e420deb4335242820c0"
+      "sha256": "f8f5f0124f035153b9277d7dfedb45d7bbbd00bd2fb1a4f7fd8de14f000550ac"
     },
     {
       "path": "design/build-parts.json",
@@ -1656,7 +1656,7 @@
     },
     {
       "path": "viewer/i18n.js",
-      "sha256": "6b1dd19be90a78a2f71f9f81a5d336660753a3671dae8a005085a24a3ef60cc7"
+      "sha256": "45b6a5c64cdca6a9ac8bb9b9f4da5e4dbe0a0b7d01dd80e8f65c58b0d4a8ef75"
     },
     {
       "path": "viewer/config.js",
@@ -1704,7 +1704,7 @@
     },
     {
       "path": "viewer/printing.js",
-      "sha256": "1cfe55e87675491bda2f7f72a3371116e640a8e39f92bf95ad763c48a999a1da"
+      "sha256": "be4a428be1d4c259205555311c4ec890c2b2b8eb96798d7037483c06fbd68cc3"
     },
     {
       "path": "design/themes.json",
@@ -1732,11 +1732,11 @@
     },
     {
       "path": "viewer/template.html",
-      "sha256": "dac18594a0f86e7001a76d57b91293b0ab37325fc34abe328bc6c8cfa503ae8c"
+      "sha256": "d6c69ccf30c17bf05b4ebf6708f13f996d5c20f5c86a88143ea64373a9029589"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "6e41d8ad5c7c9c72bde5f2c9ae9f065ce7c0718a1322c4a916a8b507b37a0689"
+      "sha256": "af763ec0cec9c0ad43b38268188c77378982517eb956bf33f1c4facea46c33ba"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -1779,7 +1779,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "048c6ae6ca933131019ecbd1ceccde01843edbf63c198fa21c8480de74be729e",
+  "viewer_sha256": "fd366f780b15eb1901fc7d41713c7c9f634b9ad3b5ae9acf3938ac9d096415ba",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2065,8 +2065,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "5836a55fc07395bfd85e2b46021f18420f47c59c8bbc09e44d911ecfa1ebd75e",
-    "bytes": 42328542
+    "sha256": "519927ba3a3a88b99919390d6e29a9ddf0b6174a9f7998b812071b41808691c0",
+    "bytes": 42350443
   },
   "still": {
     "look": {
@@ -2297,6 +2297,81 @@
       "url": "./assets/build/ccd732a7fb45d346d82a944c30918c84b2ca5eb4f17398a64a77de1ae7f62d0e.stl",
       "sha256": "ccd732a7fb45d346d82a944c30918c84b2ca5eb4f17398a64a77de1ae7f62d0e",
       "bytes": 53384
+    },
+    "firmware/NOTICE.md": {
+      "url": "./assets/build/3253b8da59dc2f052c7a299fc0bbe0423832d2c814aba05f855188071f02ec5f.txt",
+      "sha256": "3253b8da59dc2f052c7a299fc0bbe0423832d2c814aba05f855188071f02ec5f",
+      "bytes": 1897
+    },
+    "firmware/dependencies.json": {
+      "url": "./assets/build/3bab6456bf13ce77ab5593528619b48065110f51fa74aa859e50a324d66969c1.json",
+      "sha256": "3bab6456bf13ce77ab5593528619b48065110f51fa74aa859e50a324d66969c1",
+      "bytes": 5069
+    },
+    "firmware/west-frozen.yml": {
+      "url": "./assets/build/0e34b160459e8f8338470c682853e6d5d4a62017ff8ecd6ccb77715568e7759f.yml",
+      "sha256": "0e34b160459e8f8338470c682853e6d5d4a62017ff8ecd6ccb77715568e7759f",
+      "bytes": 7013
+    },
+    "ATTRIBUTION.md": {
+      "url": "./assets/build/9da8bdbd33861a28006fefd2636cf1011b66d603c6b9bbd712618b2c38690b28.txt",
+      "sha256": "9da8bdbd33861a28006fefd2636cf1011b66d603c6b9bbd712618b2c38690b28",
+      "bytes": 10261
+    },
+    "TRADEMARKS.md": {
+      "url": "./assets/build/e8df434131071b0de117cf446e3089ddcf82ccf6ae18d3551262f5485b187c7b.txt",
+      "sha256": "e8df434131071b0de117cf446e3089ddcf82ccf6ae18d3551262f5485b187c7b",
+      "bytes": 1837
+    },
+    "firmware/licenses/CMSIS-Apache-2.0.txt": {
+      "url": "./assets/build/b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1.txt",
+      "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1",
+      "bytes": 11357
+    },
+    "firmware/licenses/GCC-GPL-3.0.txt": {
+      "url": "./assets/build/8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903.txt",
+      "sha256": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+      "bytes": 35147
+    },
+    "firmware/licenses/GCC-runtime-exception.txt": {
+      "url": "./assets/build/9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74.txt",
+      "sha256": "9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74",
+      "bytes": 3324
+    },
+    "firmware/licenses/LVGL-MIT.txt": {
+      "url": "./assets/build/6a916130a36e83a79bb0dca6c6a7bfe60a67af7d118605e2b7b23bd5ad5c4eb0.txt",
+      "sha256": "6a916130a36e83a79bb0dca6c6a7bfe60a67af7d118605e2b7b23bd5ad5c4eb0",
+      "bytes": 1072
+    },
+    "firmware/licenses/Nanopb-zlib.txt": {
+      "url": "./assets/build/e2f2fc8fe3faa7dcb09dbe995db48c6ec5c1f72705db915101e4a83fed44f66d.txt",
+      "sha256": "e2f2fc8fe3faa7dcb09dbe995db48c6ec5c1f72705db915101e4a83fed44f66d",
+      "bytes": 898
+    },
+    "firmware/licenses/Newlib-notices.txt": {
+      "url": "./assets/build/9a59b4ee3af067045fe0ea78786201c42d54756fe48cbccf44f3dfc398474717.txt",
+      "sha256": "9a59b4ee3af067045fe0ea78786201c42d54756fe48cbccf44f3dfc398474717",
+      "bytes": 76870
+    },
+    "firmware/licenses/Nordic-nrfx.txt": {
+      "url": "./assets/build/78c6c7e49c66d4337be3b38a2665724a60dcf110a94311a20cc7bc7e0faea6f4.txt",
+      "sha256": "78c6c7e49c66d4337be3b38a2665724a60dcf110a94311a20cc7bc7e0faea6f4",
+      "bytes": 1647
+    },
+    "firmware/licenses/TinyCrypt-BSD.txt": {
+      "url": "./assets/build/5e7341e9688463dbcda2be2e812881d92507483849d2f3a8a217de04e942a3ac.txt",
+      "sha256": "5e7341e9688463dbcda2be2e812881d92507483849d2f3a8a217de04e942a3ac",
+      "bytes": 1606
+    },
+    "firmware/licenses/ZMK-MIT.txt": {
+      "url": "./assets/build/05e785a4c222b9213b452f1a2cd8b3f8ce95a56c1b77a7ca8525d0f7eb7f77b1.txt",
+      "sha256": "05e785a4c222b9213b452f1a2cd8b3f8ce95a56c1b77a7ca8525d0f7eb7f77b1",
+      "bytes": 1077
+    },
+    "firmware/licenses/Zephyr-Apache-2.0.txt": {
+      "url": "./assets/build/c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08.txt",
+      "sha256": "c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08",
+      "bytes": 11358
     },
     "hardware/revI/fabrication/flan36-left-revI-prototype.zip": {
       "url": "./assets/build/0ba54a0407d0167207cefe4745c5be4c4283ea79dee2081787d89b5b1199234b.zip",
@@ -2639,7 +2714,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "8ab234f0e7af823ed3c57ba3afd950b76a635dd82c1ac76cd2bc7728f9d30159",
+  "offline_sha256": "31c0027c24bf9168fd59b7603957085947183cf702b4e58dcf721593c660f53b",
   "printing": {
     "path": "docs/explore/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
@@ -2689,8 +2764,8 @@
     "bytes": 335912
   },
   "geometry_aliases": 18,
-  "online_bytes": 1107636,
-  "offline_bytes": 56214921,
+  "online_bytes": 1182373,
+  "offline_bytes": 56289658,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

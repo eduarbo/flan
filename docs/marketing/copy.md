@@ -19,6 +19,8 @@ Las imágenes son renders CAD del prototipo digital.
 Explorador: https://flankbd.com/explore/?size=flan36&theme=flan&case=rim&keys=original&frame=talavera
 Fuentes y guía: https://github.com/eduarbo/flan
 
+Render CAD de Flan por Eduardo Ruiz con keycaps KLP Lamé de braindefender, colocadas y coloreadas. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
+
 Uso: Usa esta versión en comunidades de habla hispana que permitan proyectos. Para r/ErgoMechKeyboards está preparada la versión EN, con prefijo [ad] y flair de vendor; no más de una promoción cada 14 días.
 
 ### Instagram · texto del carrusel
@@ -30,6 +32,8 @@ Este es Flan, un teclado dividido y de código abierto que estoy construyendo: c
 Explora el modelo CAD y descarga los archivos de código abierto en flankbd.com.
 
 ¿Cuántas teclas tendría el tuyo: 36, 42, 46 o 54?
+
+Render CAD de Flan por Eduardo Ruiz con keycaps KLP Lamé de braindefender, colocadas y coloreadas. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
 
 #TecladosMecanicos #SplitKeyboard #DIYKeyboard #OpenSourceHardware #FlanKeyboard
 
@@ -44,6 +48,8 @@ Un teclado dividido para hacerlo tuyo. Este es Flan: archivos abiertos, cuatro t
 El modelo CAD muestra cómo encajan la carcasa, las teclas y los marcos de pantalla.
 
 Explora el diseño en flankbd.com.
+
+Render CAD de Flan por Eduardo Ruiz con keycaps KLP Lamé de braindefender, colocadas y coloreadas. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
 
 #TecladosMecanicos #DIYKeyboard #FlanKeyboard
 
@@ -60,7 +66,9 @@ Fuentes, créditos y guía: https://github.com/eduarbo/flan
 
 Todas las imágenes del teclado en esta presentación son renders CAD.
 
-Diseño: Eduardo Ruiz. Las posiciones de Flan36 siguen Piantor de beekeeb. Keycaps KLP Lamé de braindefender. Créditos y licencias completos en el repositorio.
+Diseño: Eduardo Ruiz. Las posiciones de Flan36 siguen Piantor de beekeeb. Créditos y licencias completos en el repositorio.
+
+Render CAD de Flan por Eduardo Ruiz con keycaps KLP Lamé de braindefender, colocadas y coloreadas. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
 
 #TecladosMecanicos #DIYKeyboard #OpenSourceHardware
 
@@ -73,6 +81,8 @@ Uso: Portada: youtube-es.png. El guion para grabar el video largo está en video
 Hola, soy Eduardo. Estoy diseñando Flan, un teclado dividido de código abierto con carcasas personalizables y marcos magnéticos para las pantallas.
 
 Puedes explorar el modelo CAD y descargar los archivos en https://flankbd.com/. ¿Qué distribución elegirías?
+
+Render CAD de Flan por Eduardo Ruiz con keycaps KLP Lamé de braindefender, colocadas y coloreadas. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
 
 Uso: Borrador para el espacio de proyectos autorizado por cada grupo. No se ha verificado membresía ni permiso de administradores y no se ha enviado ningún mensaje.
 
@@ -87,6 +97,8 @@ El kit de medios incluye renders CAD de los cuatro tamaños, las carcasas imprim
 Proyecto: https://flankbd.com/
 Fuentes: https://github.com/eduarbo/flan
 Material visual: https://flankbd.com/marketing/
+
+Render CAD de Flan por Eduardo Ruiz con keycaps KLP Lamé de braindefender, colocadas y coloreadas. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
 
 Eduardo
 
@@ -108,6 +120,8 @@ Uso: Enlace del perfil: https://flankbd.com/. No se han creado cuentas ni se ha 
 
 El explorador en https://flankbd.com/explore/ incluye la lista de piezas, los archivos de PCB, el kit de impresión y el firmware para tu distribución. Las imágenes son renders CAD del prototipo. Puedes reportar un problema del diseño o la configuración en https://github.com/eduarbo/flan/issues.
 
+Render CAD de Flan por Eduardo Ruiz con keycaps KLP Lamé de braindefender, colocadas y coloreadas. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
+
 Uso: Úsala cuando alguien interprete la presentación como un producto terminado o una venta.
 
 ## EN
@@ -127,6 +141,8 @@ These images are CAD renders of the digital prototype.
 Explorer: https://flankbd.com/explore/?size=flan36&theme=flan&case=rim&keys=original&frame=talavera
 Source and build guide: https://github.com/eduarbo/flan
 
+Flan CAD render by Eduardo Ruiz with KLP Lamé keycaps by braindefender, placed and colored. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
+
 Uso: Prepared draft. Apply the vendor flair for this promotional post. The verified rule allows at most one promotional post per rolling 14 days and four promotional comments per rolling seven days. No cross-post blast. Check the rules and account eligibility again when posting.
 
 ### Instagram · carousel caption
@@ -138,6 +154,8 @@ This is Flan, an open-source split keyboard I’m building: four sizes, magnetic
 Explore the CAD model and download the open-source files at flankbd.com.
 
 Which layout would you try: 36, 42, 46 or 54 keys?
+
+Flan CAD render by Eduardo Ruiz with KLP Lamé keycaps by braindefender, placed and colored. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
 
 #SplitKeyboard #MechanicalKeyboard #DIYKeyboard #OpenSourceHardware #FlanKeyboard
 
@@ -152,6 +170,8 @@ A split keyboard you can make your own. This is Flan: open-source files, four si
 The CAD model shows how the case, keys and display frames fit together.
 
 Explore the design at flankbd.com.
+
+Flan CAD render by Eduardo Ruiz with KLP Lamé keycaps by braindefender, placed and colored. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
 
 #SplitKeyboard #DIYKeyboard #FlanKeyboard
 
@@ -168,7 +188,9 @@ Source, credits and build guide: https://github.com/eduarbo/flan
 
 All keyboard visuals in this design preview are CAD renders.
 
-Design: Eduardo Ruiz. Flan36 key positions follow Piantor by beekeeb. KLP Lamé keycaps by braindefender. Full third-party attribution and licensing are in the repository.
+Design: Eduardo Ruiz. Flan36 key positions follow Piantor by beekeeb. Full third-party attribution and licensing are in the repository.
+
+Flan CAD render by Eduardo Ruiz with KLP Lamé keycaps by braindefender, placed and colored. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
 
 #SplitKeyboard #DIYKeyboard #OpenSourceHardware
 
@@ -181,6 +203,8 @@ Uso: Use youtube-en.png for the design-video thumbnail. The longer video is a re
 Hi, I’m Eduardo and I’m sharing a keyboard I designed: Flan, an open-source split with customizable cases and magnetic display frames.
 
 Explore the CAD model and download the files at https://flankbd.com/. Which layout would you choose?
+
+Flan CAD render by Eduardo Ruiz with KLP Lamé keycaps by braindefender, placed and colored. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
 
 Uso: Use only in a group whose rules permit project promotion. Group access and admin permission are not verified; no message has been sent. Do not send unsolicited individual DMs.
 
@@ -201,6 +225,8 @@ Images and project summary: https://flankbd.com/marketing/
 Thanks,
 Eduardo
 
+Flan CAD render by Eduardo Ruiz with KLP Lamé keycaps by braindefender, placed and colored. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
+
 Uso: Draft only. The publisher’s contact page invites keyboard-project submissions; direct page access was blocked during this review, so verify the current contact method before sending. No sample, sponsorship, launch date or coverage commitment is offered.
 
 ### Profile bio · Instagram
@@ -218,5 +244,7 @@ Uso: Profile link: https://flankbd.com/. Existing account names, handles and acc
 **Where to get the files**
 
 The explorer at https://flankbd.com/explore/ includes the parts list, PCB files, print kit and firmware for your layout. The images are CAD renders of the prototype. Report a design or configuration issue at https://github.com/eduarbo/flan/issues.
+
+Flan CAD render by Eduardo Ruiz with KLP Lamé keycaps by braindefender, placed and colored. CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0/
 
 Uso: Use as the first clarification when a post is mistaken for a finished product or sale.

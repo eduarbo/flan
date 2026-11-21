@@ -1,0 +1,4 @@
+gerbonara==1.5.0
+numpy==1.26.4
+shapely==2.1.2
+vtk==9.3.1
