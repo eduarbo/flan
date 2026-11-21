@@ -23,6 +23,7 @@ const read=(file,entry)=>cp.execFileSync('unzip',['-p',file,entry],{encoding:'ut
   assert(await dlg.locator('button[data-spool]').count()>=2);await dlg.getByRole('searchbox').fill('Lavender');
   await dlg.locator('[data-spool="Polymaker Panchroma Matte/Lavender Purple"]').click();
   assert.equal((await snap()).cases.left.base_color,'#9572bf');
+  assert.equal(await p.locator(':focus').getAttribute('data-theme-color'),'#9572bf');
   await p.click('#editor-tabs [data-panel=cases]');const tune=p.locator('#panel-cases .tune[aria-expanded=false]');if(await tune.count())await tune.click();
   for(const [side,range,name] of [['left','Bambu PLA Matte','Ivory White'],['right','Bambu PLA Basic','Jade White']]){
    await p.click('#case-target [data-side='+side+']');await p.locator('.color-editor').filter({has:p.locator('#case-base_color')}).locator('.choose-spool').click();
@@ -45,6 +46,14 @@ const read=(file,entry)=>cp.execFileSync('unzip',['-p',file,entry],{encoding:'ut
    const slots=new Map();for(const row of spools.trim().split('\n').slice(1)){const [plate,,slot]=row.split(',');if(!slots.has(plate))slots.set(plate,new Set());slots.get(plate).add(slot);}
    assert([...slots.values()].every(s=>s.size<=(mode==='manual'?1:4)));
    assert(settings.includes('key="print_sequence" value="'+(mode==='object'?'by object':'by layer')+'"'));
+   if(mode==='object'){
+    for(const [,plate] of settings.matchAll(/<plate>([\s\S]*?)<\/plate>/g)){
+     if(/value="(Bases|Display frames)"/.test(plate)){
+      assert.equal((plate.match(/<model_instance>/g)||[]).length,1);
+      assert(plate.includes('key="print_sequence" value="by layer"'));
+     }
+    }
+   }
    const frames=[...settings.matchAll(/<object id="\d+"><metadata key="name" value="[^"]*-frame-[^"]*"\/>.*?<\/object>/g)];
    assert.equal(frames.length,2);assert(frames.every(m=>(m[0].match(/<part /g)||[]).length===(mode==='ams'?4:1)));
    await p.waitForFunction(()=>!document.querySelector('#print-plate-plan').hidden);

@@ -13,6 +13,9 @@ const body=box(100,-40,6.3,20,30,8.1),inlay=box(101,-39,14.4,2,3,.4);
 const part={id:'left-frame-gameboy',side:'left',style:'gameboy',path:'whole.stl',stl:body,colors:{body:'#abcdef',detail:'#123456',accent:'#ff0000',secondary:'#00ff00'},material_parts:[{role:'body',path:'body.stl',stl:body},{role:'detail',path:'detail.stl',stl:inlay}]};
 const result=mesh3MF(part),zip=unzipSync(result.bytes),xml=strFromU8(zip['3D/3dmodel.model']);
 assert.equal(result.material_parts.length,2);assert.deepEqual(result.translation_mm.map(v=>Math.round(v*1e5)/1e5),[-90,50,-6.3]);
+const turn=result.build_transform;
+assert.deepEqual(turn.slice(0,9),[1,0,0,0,-1,0,0,0,-1]);
+assert.match(xml,new RegExp('transform="'+turn.join(' ')+'"'));
 assert.match(strFromU8(zip['[Content_Types].xml']),/<Default Extension="config" ContentType="application\/xml"\/>/);
 assert.match(xml,/<basematerials id="1">/);assert.doesNotMatch(xml,/paint_color|colorgroup/);
 const objects=[...xml.matchAll(/<object\b([^>]*)>([\s\S]*?)<\/object>/g)];assert.equal(objects.length,3);
@@ -20,7 +23,7 @@ assert.match(objects[0][1],/pindex="0"/);assert.match(objects[1][1],/pindex="1"/
 const points=objects.slice(0,2).map(m=>[...m[2].matchAll(/<vertex x="([^"]+)" y="([^"]+)" z="([^"]+)"\/>/g)].map(v=>v.slice(1).map(Number)));
 assert.ok(Math.abs(Math.min(...points[0].map(v=>v[2])))<1e-6);
 assert.ok(Math.abs(Math.min(...points[1].map(v=>v[2]))-8.1)<1e-6,'Inlay must retain its height, not fall independently onto the bed');
-assert.match(objects[2][2],/<component objectid="2"\/><component objectid="3"\/>/);assert.match(xml,/<build><item objectid="4"\/><\/build>/);
+assert.match(objects[2][2],/<component objectid="2"\/><component objectid="3"\/>/);assert.match(xml,/<build><item objectid="4" transform="[^"]+"\/><\/build>/);
 assert.equal(result.triangles,24);assert.equal(result.role_triangles.find(r=>r.role==='detail').color,'#123456');
 assert.throws(()=>mesh3MF({...part,material_parts:undefined}),/Native flush materials unavailable/);
 assert.throws(()=>mesh3MF({...part,material_parts:[part.material_parts[0],part.material_parts[0]]}),/Invalid native material role/);

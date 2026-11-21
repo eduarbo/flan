@@ -656,3 +656,15 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
 
 .theme-files { display: flex; flex-wrap: wrap; gap: 8px; }
 .theme-files button { min-height: 44px; color: var(--ink); text-decoration: underline; }
+
+.filament-picker .target-swatch { display: flex; align-items: center; gap: 9px; margin: 0 0 16px; color: var(--ink); }
+.target-swatch i, .filament-picker .spool-grid i { display: block; flex: none; width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 50%; }
+.target-swatch code { margin-inline-start: auto; color: var(--muted); font: 12px var(--mono); }
+.filament-picker .spool-filters { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 8px; }
+.filament-picker .spool-filters input { grid-column: 1 / -1; width: 100%; }
+.filament-picker .spool-filters select { width: 100%; min-width: 0; }
+.filament-picker .spool-grid button { padding: 7px 8px; }
+@media (max-width: 480px) {
+ .filament-picker .spool-filters { grid-template-columns: minmax(0, 1fr); }
+ .filament-picker .target-swatch { margin-bottom: 10px; }
+}

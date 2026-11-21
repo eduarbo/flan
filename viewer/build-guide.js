@@ -188,7 +188,12 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
    node('p','micro',say('Your design colors and the nearest Bambu and Polymaker PLA swatches. Compare a printed sample in your light before buying a spool.','Colores de tu diseño y tonos cercanos del catálogo PLA de Bambu y Polymaker. Compara una muestra impresa con tu luz antes de comprar una bobina.')),
    palette,edit,...Object.entries(swatchSources).map(([label,url])=>link(label+' ↗',url))
   ]);
-  fitHost.replaceChildren(filaments,details('build-fit-details',say('Start with fit samples','Empieza con las muestras de ajuste'),[
+  const orientation=details('print-orientation',say('Part orientation and magnet pauses','Orientación de las piezas y pausas para imanes'),[
+   node('p','micro',say('Bases sit floor down and switch plates lie flat. Their broad faces and the material around the switch cutouts run along the layers.','Las bases apoyan el piso y las placas quedan planas. El material alrededor de los huecos de los switches queda en el plano de las capas.')),
+   node('p','micro',say('Display frames sit face down. On decorated frames, the bed finish transfers to the artwork. Add a pause just before each magnet pocket closes. Check polarity with the frame in its assembled position.','Los marcos apoyan la cara visible. La textura de la cama se transfiere al dibujo. Añade una pausa justo antes de que cierre cada hueco de imán y comprueba la polaridad con el marco en posición de armado.')),
+   node('p','micro',say('The battery cage rests on its top, the display sled on a long side, and the washers lie flat. Keycaps print finger side up with supports under the body. Try one stem on your switch before printing the set.','La jaula de batería apoya el techo, el soporte de pantalla descansa sobre su costado largo y las arandelas quedan planas. Las teclas se imprimen con la cara táctil arriba y soportes debajo. Prueba un vástago en tu switch antes de imprimir el juego.'))
+  ]);
+  fitHost.replaceChildren(orientation,filaments,details('build-fit-details',say('Start with fit samples','Empieza con las muestras de ajuste'),[
    node('p','micro',say('Print one of each selected keycap shape, plus the magnet and M2 coupons. Check stem fit, full key travel, magnet capture and tapped screw engagement before printing everything.','Imprime una de cada forma de keycap elegida, más las muestras de imán y M2. Revisa el encaje del vástago, recorrido, captura de imanes y rosca antes de imprimir todo.')),samples,
    ...printInstructions()
   ]));

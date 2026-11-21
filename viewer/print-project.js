@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {zipSync,strToU8} from 'three/addons/libs/fflate.module.js';
 import {setupOf,spoolFor,spoolById} from './filament-swatches.js';
-import {readMaterials,meshObject,xml} from './print-geometry.js';
+import {readMaterials,meshObject,xml,printPlacement} from './print-geometry.js';
 
 const margin=8,frontMargin=32; // Leave the front-left calibration/exclusion area clear.
 const meta=(key,value)=>`<metadata key="${key}" value="${xml(String(value))}"/>`;
@@ -31,14 +31,17 @@ function placeOnPlates(objects,{mode,bed}){
   nextPlate();
   if(mode==='object')group.sort((a,b)=>a.slots[0]-b.slots[0]);
   for(const object of group){
-   const [w,h]=object.size;
+   // Allow the slicer to generate supports and brims around the side-lying sled.
+   const clearance=mode!=='object'&&object.name.endsWith('-display-sled')?8:0;
+   const w=object.size[0]+2*clearance,h=object.size[1]+2*clearance;
    if(w>bed-2*margin||h>bed-frontMargin-margin)throw Error('Part exceeds the layout area: '+object.name);
    for(let copy=0;copy<object.count;copy++){
+    if(mode==='object'&&object.magnet&&plate.items.length)nextPlate();
     if(mode!=='manual'&&new Set([...plate.slots,...object.slots]).size>4)nextPlate();
     if(x+w>bed-margin){x=margin;y+=rowHeight+gap;rowHeight=0;}
     if(y+h>bed-margin)nextPlate();
     for(const slot of object.slots)plate.slots.add(slot);
-    plate.items.push({object,copy,x,y});x+=w+gap;rowHeight=Math.max(rowHeight,h);
+    plate.items.push({object,copy,x:x+clearance,y:y+clearance});x+=w+gap;rowHeight=Math.max(rowHeight,h);
    }
   }
  }
@@ -58,10 +61,7 @@ export async function combinedProject(parts,keycaps,title,config,progress){
  for(const [index,{part,count,family}] of entries.entries()){
   progress(index+1,entries.length);await new Promise(requestAnimationFrame);
   const materials=readMaterials(part);
-  const min=[0,1,2].map(a=>Math.min(...materials.map(m=>m.minimum[a])));
-  const size=min.map((v,a)=>Math.max(...materials.map(m=>m.maximum[a]))-v);
-  // All volumes in one physical object use the same local origin, including recessed artwork.
-  const shift=min.map(v=>-v),volumes=[];
+  const placement=printPlacement(part.id,materials),{size,shift}=placement,volumes=[];
   for(const m of materials){
    const color=(part.colors[m.role]||part.colors.body).toUpperCase();
    const spool=spoolById(part.spool)||spoolFor(config,part.side,color);
@@ -77,8 +77,9 @@ export async function combinedProject(parts,keycaps,title,config,progress){
   const support=family==='Keycaps'||part.id.endsWith('-display-sled')?meta('enable_support','1'):'';
   settings.push(`<object id="${id}">${meta('name',part.id)}${meta('extruder',volumes[0].slot+1)}${support}${volumes.map(v=>`<part id="${v.id}" subtype="normal_part">${meta('name',v.name)}${meta('extruder',v.slot+1)}</part>`).join('')}</object>`);
   const slots=[...new Set(volumes.map(v=>v.slot))];
-  const plateName=mode==='manual'?spools[slots[0]].label:family;
-  objects.push({id,name:part.id,count,size,slots,family:plateName});
+  const magnet=family==='Bases'||family==='Display frames';
+  const plateName=mode==='manual'?(magnet?family+' · ':'')+spools[slots[0]].label:family;
+  objects.push({id,name:part.id,count,size,slots,magnet,placement,family:plateName});
  }
  const colors=spools.map(s=>s.color),plates=placeOnPlates(objects,setup);
  if(plates.length>36)throw Error('Bambu Studio: 36 plates maximum. Export one half or use fewer colors. / Máximo 36 camas. Exporta una mitad o usa menos colores.');
@@ -88,10 +89,10 @@ export async function combinedProject(parts,keycaps,title,config,progress){
   for(const {object,copy,x,y} of plate.items){
    // Bambu Studio spaces plate origins by 120% of the nominal bed dimensions.
    const dx=x+i%cols*bed*1.2,dy=y-Math.floor(i/cols)*bed*1.2;
-   items.push(`<item objectid="${object.id}" transform="1 0 0 0 1 0 0 0 1 ${dx} ${dy} 0" printable="1"/>`);
+   items.push(`<item objectid="${object.id}" transform="${object.placement.transform(dx,dy).join(' ')}" printable="1"/>`);
    members.push(`<model_instance>${meta('object_id',object.id)}${meta('instance_id',copy)}${meta('identify_id',items.length)}</model_instance>`);
   }
-  settings.push(`<plate>${meta('plater_id',i+1)}${meta('plater_name',plate.family)}${meta('locked','false')}${meta('print_sequence',mode==='object'?'by object':'by layer')}${members.join('')}</plate>`);
+  settings.push(`<plate>${meta('plater_id',i+1)}${meta('plater_name',plate.family)}${meta('locked','false')}${meta('print_sequence',mode==='object'&&!plate.items[0].object.magnet?'by object':'by layer')}${members.join('')}</plate>`);
  }
  const bases=spools.map(s=>`<base name="${xml(s.label)}" displaycolor="${s.color}FF"/>`).join('');
  const model=`<?xml version="1.0" encoding="UTF-8"?><model unit="millimeter" xml:lang="en-US" xmlns="${modelNS}" xmlns:BambuStudio="http://schemas.bambulab.com/package/2021"><metadata name="Application">BambuStudio-02.00.00.00</metadata><metadata name="BambuStudio:3mfVersion">1</metadata><metadata name="Designer">Eduardo Ruiz · Flan; KLP Lamé keycaps by braindefender</metadata><metadata name="Title">${xml(title)}</metadata><metadata name="Description">Generated by the Flan configurator. Select your printer and spools, check orientation and add magnet pauses before slicing.</metadata><metadata name="License">Flan GPL-3.0-or-later; KLP Lamé CC-BY-SA-4.0. See Metadata/Flan/.</metadata><resources><basematerials id="1">${bases}</basematerials>${resources.join('')}</resources><build>${items.join('')}</build></model>`;
@@ -115,6 +116,11 @@ export async function combinedProject(parts,keycaps,title,config,progress){
  for(const [index,plate] of plates.entries())for(const slot of plate.slots){
   const spool=spools[slot];spoolRows.push([index+1,plate.family,slot+1,spool.label,spool.color].join(','));
  }
+ files['Metadata/Flan/Print-notes.txt']=strToU8(
+  'Bases: floor down. Switch plates: flat. Frames: decorated face on the bed, all colors registered. Battery cage: top down. Display sled: long side down. Keycaps: finger surface up, supports under the body. Check a single stem.\n'+
+  'Bases: piso abajo. Placas: horizontales. Marcos: dibujo contra la cama. Jaula: techo abajo. Soporte de pantalla: costado largo abajo. Teclas: cara de los dedos arriba, con soporte bajo el cuerpo. Prueba un vástago.\n'+
+  'Add magnet pauses in the sliced preview before the pockets close. Check polarity in the assembled orientation. Magnetic parts get separate jobs in sequential mode.\n'+
+  'Añade las pausas de imanes en la vista de capas antes de que cierre cada hueco. Comprueba la polaridad en la posición de armado. En modo secuencial, cada pieza con imanes lleva su propia cama.\n');
  files['Metadata/Flan/Filaments.csv']=strToU8(spoolRows.join('\n')+'\n');
  if(keycaps){
   const header='side,key,file,color,rotation_deg';

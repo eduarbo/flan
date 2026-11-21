@@ -28,6 +28,7 @@ code = r"""
 const fs=require('fs'),path=require('path');
 const root=process.argv[2],out=process.argv[3],viewer=path.join(root,'viewer');
 require(path.join(viewer,'node_modules/esbuild')).buildSync({stdin:{contents:"export {printKit} from './printing.js'; export {normalize} from './config.js';",resolveDir:viewer},bundle:true,platform:'node',format:'cjs',outfile:path.join(out,'printing.cjs')});
+global.__FLAN_PRINT_LICENSES__=Object.fromEntries(['LICENSE','LICENSES/CC-BY-SA-4.0.txt','ATTRIBUTION.md','TRADEMARKS.md'].map(f=>[f,fs.readFileSync(path.join(root,f),'utf8')]));
 const {printKit,normalize}=require(path.join(out,'printing.cjs'));
 const scene=JSON.parse(fs.readFileSync(path.join(root,'build/viewer-scene.json')));
 global.requestAnimationFrame=fn=>setImmediate(fn);
@@ -66,7 +67,16 @@ for style in scene['catalog']['frame_styles']:
             assert model.attrib['unit'] == 'millimeter'
             objects = {o.attrib['id']: o for o in model.findall('m:resources/m:object', ns)}
             build = model.findall('m:build/m:item', ns)
-            assert len(build) == 1 and 'transform' not in build[0].attrib
+            assert len(build) == 1
+            matrix = list(map(float, build[0].attrib['transform'].split()))
+            assert matrix == part['build_transform']
+            expected_rotation = [1, 0, 0, 0, 1, 0, 0, 0, 1]
+            if '-frame-' in part['id'] or part['id'].endswith('-battery-retainer'):
+                expected_rotation = [1, 0, 0, 0, -1, 0, 0, 0, -1]
+            elif part['id'].endswith('-display-sled'):
+                expected_rotation = [0, 0, -1, 0, 1, 0, 1, 0, 0]
+            assert matrix[:9] == expected_rotation, part['id']
+            bed_z = float('inf')
             members = objects[build[0].attrib['objectid']].findall('m:components/m:component', ns)
             assert {x.attrib['objectid'] for x in members} == {str(m['object_id']) for m in part['material_parts']}
             assert all('transform' not in x.attrib for x in members)
@@ -80,6 +90,10 @@ for style in scene['catalog']['frame_styles']:
                 points = [tuple(float(v.attrib[a]) - part['translation_3mf_mm'][i]
                                 for i, a in enumerate('xyz'))
                           for v in obj.findall('m:mesh/m:vertices/m:vertex', ns)]
+                z_after_rotation = (sum((coord + shift) * axis for coord, shift, axis in
+                                       zip(point, part['translation_3mf_mm'], matrix[2:9:3])) + matrix[11]
+                                    for point in points)
+                bed_z = min(bed_z, min(z_after_rotation))
                 faces = obj.findall('m:mesh/m:triangles/m:triangle', ns)
                 count = struct.unpack_from('<I', raw, 80)[0]
                 assert len(raw) == 84 + count * 50 and len(faces) == count == material['triangles']
@@ -89,6 +103,7 @@ for style in scene['catalog']['frame_styles']:
                     assert all(abs(a-b) < 1e-6 for a, b in zip(actual, expected)), part['id']
                 maximum_z = max(maximum_z, max(p[2] for p in points))
                 materials += 1
+            assert abs(bed_z) < 1e-5, part['id']
             if '-frame-' in part['id'] or '-case-level-plate' in part['id']:
                 assert abs(maximum_z - metadata['parameter_values_mm']['FrameTop']) < 1e-5
         results.append({'style': style, 'parts': len(manifest['parts']),

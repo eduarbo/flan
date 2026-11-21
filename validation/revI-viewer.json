@@ -1632,11 +1632,11 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "5d77fac9a0f1f7c4e622a82ea2dad7ec3a59de063bffa348e77beccfb215be47"
+      "sha256": "edda8ada892dfafb27be4e55877da24a14a98c73ab04a7737f5bb078ede66aa3"
     },
     {
       "path": "viewer/build-guide.js",
-      "sha256": "57e8181e778dc9596ac27af002bfebc627148e67d8b87dcaf41b054ac332a79b"
+      "sha256": "16e08597fe92bf36cd883cb3c7e7662da32dd314e8e82838216ee8d9f344f651"
     },
     {
       "path": "viewer/design-url.js",
@@ -1656,7 +1656,7 @@
     },
     {
       "path": "viewer/i18n.js",
-      "sha256": "43bccea029275a0e5d4a611ce59d2bb03b0645e773085154e59c349a74266efa"
+      "sha256": "2f2e719f2ec9a2f1b2be64f9527b01a5828c664ad962c667880b697439b0df60"
     },
     {
       "path": "viewer/config.js",
@@ -1700,19 +1700,19 @@
     },
     {
       "path": "viewer/appearance.js",
-      "sha256": "3b67ec9e65bd2d3ed4e9b0b8159e517e200bab23b258ddf033508894511e23d9"
+      "sha256": "78f3c9a514b5992b9b01e417121e1ae214750f47db8bf14c1f529b7f4073789d"
     },
     {
       "path": "viewer/printing.js",
-      "sha256": "e09111d9ed1bb4f62c5477c9f54891b800bf7d13ddb20f618b00bedf0950daa1"
+      "sha256": "cb06c34a7cd5d55c17c82feb9b314e25b4bd54f2613ef92299f7b251401c43c6"
     },
     {
       "path": "viewer/print-geometry.js",
-      "sha256": "d381b144ad4de3b3e93e4835ba8df30e1a5a6aea9a130bbd53e0d25401572974"
+      "sha256": "f43ff3535aca141dcf9e87a26512980438d571e8b7a3a6e5490952cba2369781"
     },
     {
       "path": "viewer/print-project.js",
-      "sha256": "90039b7bb302a756260d86fd1a92a11af912b675e469dbb5b0bfef5ff6c35a30"
+      "sha256": "26974c6124e2764fb43b282407663c8cba7c3f9d7d9e5065bcfe6e9a1385510f"
     },
     {
       "path": "viewer/filament-swatches.js",
@@ -1720,7 +1720,7 @@
     },
     {
       "path": "viewer/filament-picker.js",
-      "sha256": "139feade79cae0dc33ec3fd1edcbd570c0bd953e869da6f91875ecd1967a110d"
+      "sha256": "29047991963bdf425e86530abfdfe99787609e4f6a215a954fa95050d37acfa7"
     },
     {
       "path": "design/themes.json",
@@ -1744,7 +1744,7 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "00870950ee7cb77869e670868d563f1b1870efce9c85e98038eecfdf0eec22f9"
+      "sha256": "ef0d51e70ef589710620934a43cf65c1fc70fbaf0d628b239255d254159f20a8"
     },
     {
       "path": "viewer/template.html",
@@ -1795,7 +1795,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "bef1b3279c4df92709d8de4983bc63095ffce3ad2c77ca2c493e68de45a59207",
+  "viewer_sha256": "dff19bd41bce10b5754574258d6655cf54bb050b44abdf4b52a47fc7efe0b82d",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2081,8 +2081,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "453e3be80087a05166c6042f1a2f006631266327d4b9f6dd340e4782ddf52aba",
-    "bytes": 73470614
+    "sha256": "a24409d2a834cfb3b8b3afcdcc72a6d1e90543dd2355191e33df67ecb6aea563",
+    "bytes": 73472286
   },
   "still": {
     "look": {
@@ -2730,7 +2730,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "87f938b30982b75fa26114c2d2ab65dd7979d8d476d67a9c6eb0fbaa15baea55",
+  "offline_sha256": "9828cbae8e5d10317db87a26a06bd39bb384e6c8ca90169962d59c0839fe6c52",
   "printing": {
     "path": "docs/explore/assets/printing-3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7.bin",
     "sha256": "3c399cd53166597a7e7a647cc8793071d8b4ff8c2f152ec8e3d697a58a2e78d7",
@@ -2780,8 +2780,8 @@
     "bytes": 335912
   },
   "geometry_aliases": 18,
-  "online_bytes": 1222143,
-  "offline_bytes": 97382834,
+  "online_bytes": 1226923,
+  "offline_bytes": 97387614,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

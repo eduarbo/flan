@@ -612,7 +612,9 @@ async function downloadPrint(projectOnly){
   const plan=$('print-plate-plan');
   if(JSON.stringify(selected)===JSON.stringify(configuration)&&half===$('print-half').querySelector('[aria-pressed=true]').dataset.value&&scope===$('print-scope').querySelector('[aria-pressed=true]').dataset.value){
    plan.querySelector('ol').replaceChildren(...(result.plates||result.manifest.plates).map(plate=>{
-    const li=document.createElement('li');li.textContent=plate.name+' · '+t('print.objects',{n:plate.objects});
+    const family=plate.name.split(' · ')[0],key={'Bases':'bases','Switch plates':'switch','Display frames':'frames','Internal parts':'internals','Keycaps':'caps'}[family];
+    const label=key?t('print.family.'+key)+plate.name.slice(family.length):plate.name;
+    const li=document.createElement('li');li.textContent=label+' · '+t('print.objects',{n:plate.objects});
     const colors=document.createElement('small');colors.textContent=plate.filaments.map(f=>'#'+f.slot+' '+f.name).join(' / ');li.append(colors);return li;
    }));lastPlateConfig=JSON.stringify(selected);plan.hidden=false;
   }
