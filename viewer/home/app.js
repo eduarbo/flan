@@ -34,18 +34,8 @@ const SHAPES={
   ipod:['A complete click wheel and a continuous screen border.','Click wheel completa y un marco continuo de pantalla.'],
   hanafuda:['Lacquer-card landscape: sun, mountain, snowcap and foothills.','Paisaje de carta lacada: sol, montaña, nieve y faldas.'],
 };
-// label (en, es), value (one, or en and es), note (en, es); ART names each card's illustration, in order
+// Illustrations follow the order of the spec sheet in the initial HTML.
 const ART=[['profile',300,128],['layout',250,128],['controller',230,128],['display',210,128],['sizes'],['stack',250,128],['frames'],['pcb',250,128]];
-const SPECS=[
-  ['Frame height','Altura del marco','14.5 mm','Nominal frame/Level roof from the case base; excludes feet and keycaps.','Techo nominal del marco/Level desde la base; no incluye patas ni keycaps.'],
-  ['Layout','Distribución','18 × 17 mm','Choc spacing, column stagger and three splayed thumb keys per half.','Espaciado Choc, columnas escalonadas y tres teclas de pulgar abiertas por mitad.'],
-  ['Wireless','Inalámbrico','nice!nano v2','nRF52840 running ZMK: Bluetooth LE, five host profiles, USB-C.','nRF52840 con ZMK: Bluetooth LE, cinco perfiles de equipo, USB-C.'],
-  ['Displays','Pantallas','2 × nice!view','Low-power memory LCD on each half, framed by the display cover.','LCD de memoria de bajo consumo en cada mitad, enmarcada por la cubierta.'],
-  ['Sizes','Tamaños',['36–54 keys','36–54 teclas'],'Four sizes: add the outer column, the number row or both. Same thumbs.','Cuatro tamaños: suma la columna exterior, la fila de números o ambas. Mismos pulgares.'],
-  ['Battery','Batería','100 mAh','1S LiPo per half, under the controller. A 110 mAh alternative is modeled; actual pack fit is untested.','LiPo 1S por mitad, bajo el controlador. Hay una alternativa de 110 mAh modelada; falta probar el ajuste real.'],
-  ['Looks','Estilos',`${data.themes.length} · ${data.frames.length} · ${CASES.length}`,'Themes, magnetic display frames and case styles. Three KLP Lamé key shapes.','Temas, marcos magnéticos y estilos de caja. Tres formas de keycap KLP Lamé.'],
-  ['Open hardware','Hardware abierto','GPL-3.0','KiCad, FreeCAD, Gerbers, STEP, STL and 3MF. Print it, order it, change it.','KiCad, FreeCAD, Gerbers, STEP, STL y 3MF. Imprímelo, pídelo, cámbialo.'],
-];
 let lang='en';
 const t=(key,vars={})=>(T[lang][key]??T.en[key]??key).replace(/\{(\w+)\}/g,(_,k)=>vars[k]??'');
 const store={get(k){try{return localStorage.getItem(k);}catch{return null;}},set(k,v){try{localStorage.setItem(k,v);}catch{}}};
@@ -241,13 +231,13 @@ function slider(){
 }
 
 function buildSpecs(){
-  $('specs').replaceChildren(...ART.map(([kind])=>{
+  ART.forEach(([kind],index)=>{
     const art=el('div',{className:'art '+kind});
     if(kind==='sizes')art.append(...data.sizes.map(z=>{const img=el('img',{alt:''});mirror.push([img,'size:'+z.id]);return img;}));
     else if(kind==='frames')art.append(...frameIds.map(f=>{const img=el('img',{alt:''});mirror.push([img,'frame:'+f]);return img;}));
     else{const img=el('img',{alt:''});previews.set('spec:'+kind,img);art.append(img);}
-    return el('div',{className:'spec'},art,el('span',{className:'lab'}),el('b'),el('p'));
-  }));
+    $('specs').children[index].prepend(art);
+  });
 }
 // spec art that shows option thumbnails again
 const mirror=[];
@@ -267,7 +257,7 @@ function translate(){
   for(const n of document.querySelectorAll('[data-t-title]'))n.title=t(n.dataset.tTitle);
   for(const n of document.querySelectorAll('[data-t-alt]'))n.alt=t(n.dataset.tAlt);
   const i=lang==='es'?1:0;
-  for(const [n,card] of [...$('specs').children].entries()){const sp=SPECS[n];card.querySelector('.lab').textContent=sp[i];card.querySelector('b').textContent=Array.isArray(sp[2])?sp[2][i]:sp[2];card.querySelector('p').textContent=sp[3+i];}
+  for(const [n,card] of [...$('specs').children].entries()){const sp=data.specs[n];card.querySelector('.lab').textContent=sp[i];card.querySelector('b').textContent=Array.isArray(sp[2])?sp[2][i]:sp[2];card.querySelector('p').textContent=sp[3+i];}
   $('standby').title=model&&!model.standby?t('stage.play'):t('stage.pause');
   syncRail();if(!$('browser').hidden)focusFrame(browsing.focus);
 }

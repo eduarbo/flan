@@ -184,6 +184,17 @@ async function homePage({scene,files}){
   const data={packs:Object.fromEntries(Object.entries(files).map(([k,f])=>[k,'assets/'+f])),engine:'assets/'+engineFile,themes,
     sizes:SIZES.map(id=>({id,title:family[id].title,grid:family[id].grid_per_half,keys:family[id].keys_total})),
     frames:Object.entries(scene.catalog.frame_styles).map(([id,label])=>({id,label}))};
+  // Labels, values and notes in English and Spanish, shared with the language switcher.
+  data.specs=[
+    ['Frame height','Altura del marco','14.5 mm','Nominal frame/Level roof from the case base; excludes feet and keycaps.','Techo nominal del marco/Level desde la base; no incluye patas ni keycaps.'],
+    ['Layout','Distribución','18 × 17 mm','Choc v1 hot-swap switches, column stagger and three splayed thumb keys per half.','Interruptores Choc v1 intercambiables, columnas escalonadas y tres teclas de pulgar abiertas por mitad.'],
+    ['Wireless','Inalámbrico','nice!nano v2','nRF52840 running ZMK: Bluetooth LE, five host profiles, USB-C.','nRF52840 con ZMK: Bluetooth LE, cinco perfiles de equipo, USB-C.'],
+    ['Displays','Pantallas','2 × nice!view','Low-power memory LCD on each half, framed by the display cover.','LCD de memoria de bajo consumo en cada mitad, enmarcada por la cubierta.'],
+    ['Sizes','Tamaños',['36–54 keys','36–54 teclas'],'36, 42, 46 or 54 keys: add the outer column, the number row or both. Same thumbs.','36, 42, 46 o 54 teclas: suma la columna exterior, la fila de números o ambas. Mismos pulgares.'],
+    ['Battery','Batería','100 mAh','1S LiPo per half, under the controller. A 110 mAh alternative is modeled; actual pack fit is untested.','LiPo 1S por mitad, bajo el controlador. Hay una alternativa de 110 mAh modelada; falta probar el ajuste real.'],
+    ['Looks','Estilos',`${data.themes.length} · ${data.frames.length} · ${CASES.length}`,'Themes, magnetic display frames and case styles. Three KLP Lamé key shapes.','Temas, marcos magnéticos y estilos de caja. Tres formas de keycap KLP Lamé.'],
+    ['Open hardware','Hardware abierto','GPLv3+','Editable KiCad and FreeCAD sources, Gerbers, STEP, STL and 3MF. Digital prototype awaiting a physical build.','Fuentes editables de KiCad y FreeCAD, Gerbers, STEP, STL y 3MF. Prototipo digital pendiente de montaje físico.'],
+  ];
   // the colour mark; its outline follows the page's theme here (style.css), not the system's
   const mark=fs.readFileSync(path.join(root,'docs/branding/flan/flan-mark-color.svg'),'utf8').replace(/<\?xml[^>]*>|<title>[^<]*<\/title>|<style>[^<]*<\/style>/g,'')
     .replace(/<svg[^>]*viewBox="([^"]+)"[^>]*>/,'<svg class="mark" viewBox="$1" aria-hidden="true">');
@@ -208,6 +219,8 @@ async function homePage({scene,files}){
   const html=template
     .replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(dir,'style.css'),'utf8'))
     .replaceAll('__OG_VERSION__',()=>crypto.createHash('sha256').update(fs.readFileSync(path.join(dir,'home-og.png'))).digest('hex').slice(0,12))   // sharing services cache by address
+    .replace('<!--__SPECS__-->',()=>data.specs.map(([label,,value,note])=>
+      `<div class="spec"><span class="lab">${text(label)}</span><b>${text(Array.isArray(value)?value[0]:value)}</b><p>${text(note)}</p></div>`).join(''))
     .replace('<!--__MARK__-->',()=>mark.trim())
     .replace('/*__DATA__*/',()=>JSON.stringify(data).replaceAll('<','\\u003c'))
     .replace('/*__APP__*/',()=>bundle.replaceAll('</script','<\\/script'));

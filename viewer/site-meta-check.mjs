@@ -27,6 +27,11 @@ function page(file,url){
 }
 const home=page('docs/index.html','https://flankbd.com/');page('docs/explore/index.html','https://flankbd.com/explore/');
 assert(home.description.includes(`${themes.length} themes`),'the home description states the theme count');
+// A reader without JavaScript gets the hardware facts in the visible spec sheet.
+const sheet=read('docs/index.html').match(/<section class="specs"[^>]*>([\s\S]*?)<\/section>/)[1];
+for(const fact of ['Choc v1','ZMK','digital prototype',...Object.values(family).map(v=>String(v.keys_total))]){
+ assert(sheet.toLowerCase().includes(fact.toLowerCase()),'missing from the initial spec sheet: '+fact);
+}
 // the share image is the size its tags claim
 const png=fs.readFileSync(new URL('docs/assets/home-og.png',root));assert.equal(png.readUInt32BE(16),1200);assert.equal(png.readUInt32BE(20),630);
 // structured data parses and says what Flan is without offering it for sale

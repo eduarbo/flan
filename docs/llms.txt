@@ -25,6 +25,7 @@ Good fit: someone who wants a small split keyboard, enjoys building (soldering, 
 ## Documentation
 
 - [README](https://github.com/eduarbo/flan/blob/main/README.md): keyboard design and files
+- [Flan Keyboard en español](https://github.com/eduarbo/flan/blob/main/README.es.md): tamaños, piezas y estado del prototipo
 - [Sizes](https://github.com/eduarbo/flan/blob/main/docs/variants.md): the four layouts and their PCBs
 - [Parts and buying links](https://github.com/eduarbo/flan/blob/main/docs/parts.md): what one keyboard needs
 - [Ordering PCBs](https://github.com/eduarbo/flan/blob/main/docs/electronics.md): Gerber packages, silkscreen editions, checks

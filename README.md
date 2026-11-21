@@ -1,8 +1,10 @@
 <img src="docs/images/branding/flan-lockup.png" alt="Flan" width="300">
 
-# Flan
+# Flan Keyboard
 
-**Homemade, like a good flan.** An open-source wireless split keyboard in four sizes, with interchangeable cases, magnetic display frames, 31 themes and your own keycap colors.
+**Homemade, like a good flan.** Flan is an open-source, low-profile wireless split keyboard for DIY builders. All four sizes (36, 42, 46 and 54 keys) use Choc v1 hot-swap switches and ZMK firmware. The digital prototype has interchangeable cases, magnetic display frames, 31 themes and per-key colors. Physical testing is pending.
+
+[Leer en español](README.es.md)
 
 **[flankbd.com →](https://flankbd.com/)** · **[Explore and customize in 3D →](https://flankbd.com/explore/)** · **[Parts and buying links →](docs/parts.md)** · **[Order PCBs →](docs/electronics.md#order-the-two-pcbs)** · **[Build guide →](docs/build.md)** · **[Edit in FreeCAD →](docs/freecad.md)**
 
