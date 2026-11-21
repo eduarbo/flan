@@ -63,7 +63,8 @@ export function createAppearance({$,get,apply,targets,preview,frameFinish,materi
    const spool=row.chosen||closestSwatch(row.hex),button=document.createElement('button');button.type='button';button.className='theme-spool';button.dataset.themeColor=row.hex;button.dataset.spool=row.chosen?.id||'';
    const chip=document.createElement('i');chip.style.background=row.hex;const label=document.createElement('span');
    label.textContent=[...row.roles].map(r=>t('spool.role.'+r)).join(' / ');
-   const sub=document.createElement('small');sub.textContent=(row.chosen?'':'≈ ')+spool.series+' · '+spool.name;label.append(sub);
+   const sub=document.createElement('small'),name=document.createElement('span');
+   name.textContent=spool.name;sub.append((row.chosen?'':'≈ ')+spool.series+' · ',name);label.append(sub);
    const arrow=document.createElement('span');arrow.textContent='›';button.append(chip,label,arrow);
    button.onclick=()=>chooseFilament(row.hex,s=>{
     apply(mapThemeToSpools(get(),[...row.sides],hex=>hex===row.hex?s:null));

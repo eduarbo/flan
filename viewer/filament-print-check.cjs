@@ -15,6 +15,12 @@ const read=(file,entry)=>cp.execFileSync('unzip',['-p',file,entry],{encoding:'ut
   await p.click('#nav-files');await p.click('#filament-guide summary');
   await p.getByRole('button',{name:'Choose spools and substitutes'}).click();
   assert(await p.locator('#theme-filaments').evaluate(el=>el.open));
+  const spacing=await p.locator('#theme-spool-list').evaluate(list=>{
+    const [first,second]=list.children;
+    const row=first.getBoundingClientRect(),label=first.querySelector('span').getBoundingClientRect();
+    return {gap:second.getBoundingClientRect().top-row.bottom,above:label.top-row.top,below:row.bottom-label.bottom};
+  });
+  assert(spacing.gap>=6 && spacing.above>=8 && spacing.below>=8,'Filament rows and their labels need visible space');
   await p.click('#match-theme-spools');const matched=await snap();assert(Object.keys(matched.filaments.left).length>=3);
   await p.click('#theme-spool-list button:first-child');const dlg=p.locator('dialog.filament-picker');
   assert(await dlg.locator('button[data-spool]').count()>100);

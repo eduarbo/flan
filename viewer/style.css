@@ -641,10 +641,15 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
 }
 .choose-spool { grid-column: 1 / -1; justify-self: start; min-height: 38px; padding: 4px 10px; color: var(--ink); background: var(--field); border-radius: 8px; }
 .theme-spool, .spool-grid button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; text-align: left; }
-.theme-spool { border-bottom: 1px solid var(--line); }
-.theme-spool > span:first-of-type { flex: 1; }
+#theme-spool-list { display: grid; gap: 8px; margin-block: 14px 16px; }
+.build-detail .theme-spool { min-height: 56px; padding: 10px 14px; gap: 12px; border-radius: 10px; line-height: 1.4; }
+.theme-spool > span:first-of-type { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.theme-spool > span:last-child { color: var(--muted); }
 .theme-spool i, .spool-grid i { width: 22px; height: 22px; flex: none; border-radius: 50%; border: 1px solid var(--line); }
 .theme-spool small, .spool-grid small { display: block; color: var(--muted); font-size: 11px; }
+.theme-spool small { margin-top: 3px; font-size: 12px; font-weight: 400; color: color-mix(in srgb, var(--ink) 75%, var(--muted)); }
+.theme-spool small span { display: inline-block; max-width: 100%; }
+#match-theme-spools { margin-top: 0; min-height: 44px; }
 .spool-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,215px),1fr)); gap: 4px; }
 .spool-grid button { padding: 6px; border-radius: 6px; }
 .spool-grid button:hover { background: var(--field); }
