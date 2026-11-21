@@ -29,7 +29,7 @@ for(const variant of Object.keys(scene.variants))for(const side of ['left','righ
 const packageAssets={},packageDirectory=path.join(root,'docs/explore/assets/build');fs.mkdirSync(packageDirectory,{recursive:true});
 for(const source of packagePaths){const bytes=fs.readFileSync(path.join(root,source)),digest=hash(source),filename=digest+(source.endsWith('.md')?'.txt':path.extname(source));fs.writeFileSync(path.join(packageDirectory,filename),bytes);packageAssets[source]={url:'./assets/build/'+filename,sha256:digest,bytes:bytes.length};}
 const bundle=await build({entryPoints:[path.join(here,'app.js')],bundle:true,write:false,minify:true,
-  define:{__FLAN_PRINT_LICENSES__:JSON.stringify(Object.fromEntries(['LICENSE','LICENSES/CC-BY-SA-4.0.txt','TRADEMARKS.md'].map(file=>[file,fs.readFileSync(path.join(root,file),'utf8')]))),__FLAN_PRINT_INVENTORY__:JSON.stringify(printInventory),__FLAN_BUILD_ASSETS__:JSON.stringify(packageAssets)},format:'iife',target:['es2020'],legalComments:'inline'});
+  define:{__FLAN_PRINT_LICENSES__:JSON.stringify(Object.fromEntries(['LICENSE','LICENSES/CC-BY-SA-4.0.txt','ATTRIBUTION.md','TRADEMARKS.md'].map(file=>[file,fs.readFileSync(path.join(root,file),'utf8')]))),__FLAN_PRINT_INVENTORY__:JSON.stringify(printInventory),__FLAN_BUILD_ASSETS__:JSON.stringify(packageAssets)},format:'iife',target:['es2020'],legalComments:'inline'});
 const license=fs.readFileSync(path.join(here,'node_modules/three/LICENSE'),'utf8');
 fs.writeFileSync(path.join(root,'LICENSES/Three-MIT.txt'),license);
 const escape=s=>s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');

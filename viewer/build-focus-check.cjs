@@ -66,6 +66,9 @@ const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
   assert.deepEqual(manifest.pcbs.map(p=>[p.side,p.edition,p.mask]),[['left','asanoha','white'],['right','seigaiha','purple']]);assert.match(unzip(zip,'Shopping.csv').toString(),/"54","60","6"/);
   fs.writeFileSync(path.join(out,'Print-kit.zip'),unzip(zip,'Print-kit.zip'));const kit=JSON.parse(unzip(path.join(out,'Print-kit.zip'),'manifest.json'));
   assert.equal(kit.half,'both');assert.equal(kit.scope,'complete');assert.deepEqual(kit.configuration,selected);assert.deepEqual(kit.keycaps.missing,[]);assert.equal(kit.keycaps.groups.reduce((n,g)=>n+g.count,0),54);assert(kit.parts.some(p=>p.side==='left')&&kit.parts.some(p=>p.side==='right'));assert(!kit.parts.some(p=>p.id.startsWith('right-frame-')));
+  for(const file of ['LICENSE','LICENSES/CC-BY-SA-4.0.txt','ATTRIBUTION.md','TRADEMARKS.md']){
+   assert.deepEqual(unzip(path.join(out,'Print-kit.zip'),file),fs.readFileSync(path.join(root,file)),file);
+  }
   for(const file of kit.keycaps.bundled)assert(unzip(path.join(out,'Print-kit.zip'),'Keycaps/'+file).length>84);
   const guide=unzip(zip,'Guide.html').toString();assert.match(guide,/Both halves.*Complete kit/);assert.match(guide,/54 keycaps/);assert.match(guide,/purple mask/);assert.doesNotMatch(guide,/red mask/);assert.match(guide,/href="Print-kit.zip"/);assert.match(guide,/href="PCB\/flan54-left-asanoha.zip"/);assert.match(guide,/href="Firmware\/flan54-right.uf2"/);
   const entries=new Set(manifest.files.map(e=>e.path));for(const [,href] of guide.matchAll(/href="([^"#]+)"/g))if(!/^(https?:|mailto:)/.test(href))assert(entries.has(href),'Guide local link exists: '+href);
