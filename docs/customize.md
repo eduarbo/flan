@@ -72,11 +72,11 @@ Use the viewer’s JSON for the six installed shapes. To share a new shape, save
 
 ### First print
 
-Start with **one frame in PLA Basic** as a fit sample. Keep all material volumes aligned in the slicer and check how its layers resolve the 0.4 mm inlay band. Choose orientation and supports after inspecting the roof and captive insert pockets. PETG HF and ABS remain alternatives to qualify with an actual print.
+Start with **one frame in PLA Basic** as a fit sample. Keep all material volumes aligned in the slicer and check how its layers resolve the 0.4 mm inlay band. Choose orientation and supports after inspecting the roof and the open glue-in sockets. PETG HF and ABS remain alternatives to qualify with an actual print.
 
 Use the multipart 3MF for multicolor printing, assigning its body, detail, accent and secondary parts to your filaments. The aligned material STLs offer the same geometry. These volumes are for co-printing; they do not include the clearance or retention needed for separately printed press-fit inserts. GLB and the FreeCAD configuration macro preserve the visual palette. Printer profiles and finished toolpaths are not included.
 
-Use magnets from existing stock; each additional pair of frames needs six Ø2 × 4 mm magnets while the six Ø2 × 3 mm base magnets stay installed. Check attraction for every pair in its final assembled orientation before closing its pocket, including when the frame prints upside down. Print capture, actual magnet grade and temperature limit, holding force and extraction still require a physical trial. Use the [small coupons and assembly sequence](build.md#magnetic-frame-and-service) first. The reset opening takes a tool. A nominal 12 × 5 mm USB plug and straight insertion corridor clear each theme; cable housings vary.
+Use magnets from existing stock; each additional pair of frames needs six Ø2 × 4 mm magnets while the six Ø2 × 3 mm base magnets stay installed. Dry-fit an attracting pair before applying adhesive. The explorer's printable variant accepts the magnets after printing; follow the [glue-in samples and assembly sequence](build.md#magnetic-frame-and-service). Confirm physical retention on a sample. The reset opening takes a tool. A nominal 12 × 5 mm USB plug and straight insertion corridor clear each theme; cable housings vary.
 
 The [new frame recipes](frames-extra.md) are editable native features. The [slim support study](slim-mount-study.md) separates fewer loose parts from lower stack height.
 

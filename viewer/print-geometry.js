@@ -21,11 +21,11 @@ function stlMesh(encoded){
 }
 export function readMaterials(part){
  if(part.style&&finishes.styles[part.style]&&!part.material_parts?.length)throw Error('Native flush materials unavailable: '+part.id);
- const inputs=part.material_parts?.length?part.material_parts:[{role:'body',path:part.path,sha256:part.sha256,stl:part.stl}];
+ const inputs=part.material_parts?.length?part.material_parts:[{role:'body',path:part.print_path||part.path,sha256:part.sha256,stl:part.stl}];
  const seen=new Set(),materials=inputs.map((source,i)=>{
   const roleIndex=finishes.roles.indexOf(source.role);
   if(roleIndex<0||seen.has(source.role))throw Error('Invalid native material role: '+source.role);
-  seen.add(source.role);return {...source,object_id:i+2,roleIndex,...stlMesh(source.stl)};
+  seen.add(source.role);return {...source,path:source.print_path||source.path,object_id:i+2,roleIndex,...stlMesh(source.stl)};
  });
  if(!seen.has('body'))throw Error('Frame body material unavailable.');
  return materials;

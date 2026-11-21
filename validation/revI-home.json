@@ -2,7 +2,7 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "fa1abed9640c1c09f13760ca7c8c96829e60f0b19cf746336201f51c460145c6",
+    "sha256": "9cc596dcb15e21e1561758cc611594e1b5b7dd39f88f8e1060d01a77e85bcc3b",
     "bytes": 116098
   },
   "engine": {
@@ -24,29 +24,29 @@
   ],
   "packs": {
     "common": {
-      "path": "docs/assets/home-common-d2634b68d0dbb54e.bin",
-      "sha256": "d2634b68d0dbb54e0d1259e8a5a0a7030ddeee26a8933c5c2df65c10ef4a246f",
-      "bytes": 203643
+      "path": "docs/assets/home-common-713653038184bbea.bin",
+      "sha256": "713653038184bbead521e63b67d733ed16f97e9def868b51296955f761542a09",
+      "bytes": 206235
     },
     "flan36": {
-      "path": "docs/assets/home-flan36-eb7d217c019bf710.bin",
-      "sha256": "eb7d217c019bf7102d036cd2020807e80419426c84e9dc6fc5eb3004ee8356b5",
-      "bytes": 150173
+      "path": "docs/assets/home-flan36-03456d769e96a2af.bin",
+      "sha256": "03456d769e96a2aff25dd70aea40d0d34ec524b6fc9b4834a2f5d9c0f000cec6",
+      "bytes": 155022
     },
     "flan42": {
-      "path": "docs/assets/home-flan42-8cea88359b3c06b7.bin",
-      "sha256": "8cea88359b3c06b73890d42caaa5aeb1be9137a2e7530dde4e9119a6e7bfcece",
-      "bytes": 164497
+      "path": "docs/assets/home-flan42-4addfdb9d587ad76.bin",
+      "sha256": "4addfdb9d587ad76b332a1225d3cac4a2a7739894a3b0a42a7d4d51dfac790b5",
+      "bytes": 166283
     },
     "flan46": {
-      "path": "docs/assets/home-flan46-67e0a45fb1dca82f.bin",
-      "sha256": "67e0a45fb1dca82f5b7c777866df655a91102bd1c1c0c3c11e933190f649f0ae",
-      "bytes": 171286
+      "path": "docs/assets/home-flan46-fe6c3baad71725e6.bin",
+      "sha256": "fe6c3baad71725e65fedddfe73df292f88346abe68ea93134dca7f55dd8e73f2",
+      "bytes": 175730
     },
     "flan54": {
-      "path": "docs/assets/home-flan54-2098039f3015c2e9.bin",
-      "sha256": "2098039f3015c2e92cf41cafe27f69036112581687c6a8e1ed4d57149cec6f84",
-      "bytes": 192507
+      "path": "docs/assets/home-flan54-2d8c15ac3ba727e8.bin",
+      "sha256": "2d8c15ac3ba727e8f3c000e525b7cbf2b7145431aebc533d31968bb6b605af2f",
+      "bytes": 196627
     }
   },
   "error_mm": {
@@ -65,8 +65,8 @@
       "triangles": 14338
     },
     "frames": {
-      "source": 123502,
-      "triangles": 32186
+      "source": 131206,
+      "triangles": 32554
     },
     "electronics": {
       "source": 441344,
@@ -81,8 +81,8 @@
       "triangles": 1998
     },
     "cases": {
-      "source": 658952,
-      "triangles": 154502
+      "source": 679496,
+      "triangles": 157502
     },
     "pcbs": {
       "source": 686272,
@@ -1630,7 +1630,7 @@
     },
     {
       "path": "tools/build_viewer_revI.py",
-      "sha256": "3f10e4bce9f7a0047e720c413611a2a3f2086905bd48e473000f0921b38fedd3"
+      "sha256": "0007c12565dff98fa3e95b27039b85f4fc3bb347fd51006bc8fb85e2d2f1c560"
     },
     {
       "path": "tools/viewer_frame_selection.py",
@@ -1715,6 +1715,338 @@
     {
       "path": "design/pcb-options.json",
       "sha256": "11ece185de58d70836dd030e228d08f1036648b0c384491c943467d55b00d616"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-case-level-base.stl",
+      "sha256": "4d3875a694f36b2e1325f8ac86e6e5f82eaf381d060d8dbdac619c8d27758c1b"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-case-rim-base.stl",
+      "sha256": "49d396e1235ca408ed0f45adf11a79cba5a0d9932ac371924762699d8057f82e"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-case-solid-base.stl",
+      "sha256": "4d3875a694f36b2e1325f8ac86e6e5f82eaf381d060d8dbdac619c8d27758c1b"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-case-terrace-base.stl",
+      "sha256": "1839eb27ed15b2628db237c8b5c99b8fff1e6ec6cfbf710e25b31c3ae2f2fd02"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-case-level-base.stl",
+      "sha256": "e0aae30bca08f5bee9210f618f445523e2ef68e3cae7f0d00c3be2f42a5ea18d"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-case-rim-base.stl",
+      "sha256": "136e835aa94e0a872e400a096aa41805b051ff42cd536392913c800d56592f25"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-case-solid-base.stl",
+      "sha256": "e0aae30bca08f5bee9210f618f445523e2ef68e3cae7f0d00c3be2f42a5ea18d"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-case-terrace-base.stl",
+      "sha256": "e94baae2e95db0c09866b470362f05424eb32e6a3522c2b3208b9692b8401093"
+    },
+    {
+      "path": "mechanical/glue-in/flan42/left-case-level-base.stl",
+      "sha256": "18916b1c084db72fa39dbc605ae3bf1f6560a7e0055bf8d277c35abfb54d103b"
+    },
+    {
+      "path": "mechanical/glue-in/flan42/left-case-rim-base.stl",
+      "sha256": "33dccf39f266dc50b764c32bf4a84fbf37fa85230f5521b1e38ebaef26183934"
+    },
+    {
+      "path": "mechanical/glue-in/flan42/left-case-solid-base.stl",
+      "sha256": "18916b1c084db72fa39dbc605ae3bf1f6560a7e0055bf8d277c35abfb54d103b"
+    },
+    {
+      "path": "mechanical/glue-in/flan42/left-case-terrace-base.stl",
+      "sha256": "4751c926ac22970e62f9c63fb4ff73e6fd1eeae66b615bc4d30befd2b65451a9"
+    },
+    {
+      "path": "mechanical/glue-in/flan42/right-case-level-base.stl",
+      "sha256": "72e99334db10e32ad193a4787db70267e55ad56dafa5efdde80faf15361eb015"
+    },
+    {
+      "path": "mechanical/glue-in/flan42/right-case-rim-base.stl",
+      "sha256": "624bf16ce1c730bdea4d01873702a8a8d2bd9b25531010914062901572272377"
+    },
+    {
+      "path": "mechanical/glue-in/flan42/right-case-solid-base.stl",
+      "sha256": "72e99334db10e32ad193a4787db70267e55ad56dafa5efdde80faf15361eb015"
+    },
+    {
+      "path": "mechanical/glue-in/flan42/right-case-terrace-base.stl",
+      "sha256": "0fb1d8006e8c235aa7f156f9c73ad025e136c4980d37cdd1d25e9f5e53f6c985"
+    },
+    {
+      "path": "mechanical/glue-in/flan46/left-case-level-base.stl",
+      "sha256": "7775a34d153b601a6df760802ebf9a4f59776d320d967654303f13b1c6af2083"
+    },
+    {
+      "path": "mechanical/glue-in/flan46/left-case-rim-base.stl",
+      "sha256": "34b3aaa2b1e0fb7e856b187f840ed9c681f9f4f937977db14c8ad37fc6ae1395"
+    },
+    {
+      "path": "mechanical/glue-in/flan46/left-case-solid-base.stl",
+      "sha256": "7775a34d153b601a6df760802ebf9a4f59776d320d967654303f13b1c6af2083"
+    },
+    {
+      "path": "mechanical/glue-in/flan46/left-case-terrace-base.stl",
+      "sha256": "25a13f389e52c994d2388a51c17d2a65488eb9d546a3ea6c7fd01c5167f48f0d"
+    },
+    {
+      "path": "mechanical/glue-in/flan46/right-case-level-base.stl",
+      "sha256": "bb5bc464a810519fc93680233891a06f9934bbcc9f33282a4f92fba22cc9fc46"
+    },
+    {
+      "path": "mechanical/glue-in/flan46/right-case-rim-base.stl",
+      "sha256": "06cabb04cae080dd1deeab752d022ceae4cdf42a4287493286d22e78ac79ccc8"
+    },
+    {
+      "path": "mechanical/glue-in/flan46/right-case-solid-base.stl",
+      "sha256": "bb5bc464a810519fc93680233891a06f9934bbcc9f33282a4f92fba22cc9fc46"
+    },
+    {
+      "path": "mechanical/glue-in/flan46/right-case-terrace-base.stl",
+      "sha256": "b2603e0d59091b0c15bc351f089ba0867c3c6e8bd7c67aa2114943c12060ba8a"
+    },
+    {
+      "path": "mechanical/glue-in/flan54/left-case-level-base.stl",
+      "sha256": "5c35a00386fd96787ad0c82dbd071ec781a9aebe20340610ff0542cf28934108"
+    },
+    {
+      "path": "mechanical/glue-in/flan54/left-case-rim-base.stl",
+      "sha256": "37fd15aed401a27a61611a5d11f54fae4a79af58e1a848c27d7ffa9d0f1dca68"
+    },
+    {
+      "path": "mechanical/glue-in/flan54/left-case-solid-base.stl",
+      "sha256": "5c35a00386fd96787ad0c82dbd071ec781a9aebe20340610ff0542cf28934108"
+    },
+    {
+      "path": "mechanical/glue-in/flan54/left-case-terrace-base.stl",
+      "sha256": "18b356596ab373924d3e446ddf44b46e496ca8a544cf7af836f201e1b863aaeb"
+    },
+    {
+      "path": "mechanical/glue-in/flan54/right-case-level-base.stl",
+      "sha256": "0fa9807f76560b1e69467f0696fabeba165d5e224cd3426d0738bc3b5a3ffdcc"
+    },
+    {
+      "path": "mechanical/glue-in/flan54/right-case-rim-base.stl",
+      "sha256": "dcbf9f8b97410787d73546ccbc0ca88c5591afd0b26ea8a26ae92fcd5c1f0ad1"
+    },
+    {
+      "path": "mechanical/glue-in/flan54/right-case-solid-base.stl",
+      "sha256": "0fa9807f76560b1e69467f0696fabeba165d5e224cd3426d0738bc3b5a3ffdcc"
+    },
+    {
+      "path": "mechanical/glue-in/flan54/right-case-terrace-base.stl",
+      "sha256": "d563ebdb1e30264b574e9f51a504d743e1d1f5a9ab3bf235a1703bca207474c3"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-frame-talavera.stl",
+      "sha256": "f3e77d4d13a43f772581e13b67c1c15d699d00dd562e735706c75173f2ffea5a"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-frame-talavera-body.stl",
+      "sha256": "5a0c49353018ee5220c045f0f7d00ee3911ac12c258c5f4bbad3fe1079bb5974"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-frame-gameboy.stl",
+      "sha256": "9d25a218b1080a0324b9657121614b46f9895b31ba7df748edcd5901713469ff"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-frame-gameboy-body.stl",
+      "sha256": "f20d6524f0b3641bdb8115c02044eee6afd10c8b86a504ef857209b9ff3dafc7"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-frame-snes.stl",
+      "sha256": "823cc0bafb33bd6f2e2925531ab7185694ae5be570d8e2d7b5553cc32441a03f"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-frame-snes-body.stl",
+      "sha256": "d281a2bbd79fb8cef2f421d65ae6619d9ad2819bde60665dfda0a3bd0cf10ea7"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-frame-phone.stl",
+      "sha256": "87cbde20b624b413624739a2750f58a5ee821febf3a6a290f559c85a2576ddf8"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-frame-phone-body.stl",
+      "sha256": "fffa84ab2114e52d522ea927a7ad05cb7b9101258e006f3115bcee3b19bae6ce"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-frame-ipod.stl",
+      "sha256": "86bd0c272716089a23626da93fdcb53a6e228619fe0e2c40b319e986f92f9b82"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-frame-ipod-body.stl",
+      "sha256": "e9e005b2a89b459367bff6292ecbad51caf9540835097fcbe30a78c8788e0793"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-frame-hanafuda.stl",
+      "sha256": "ecc7be4a2062b92a1f2d767cd0bee4d279ed8218145dd4e7862f430d97be1a2e"
+    },
+    {
+      "path": "mechanical/glue-in/revI/left-frame-hanafuda-body.stl",
+      "sha256": "6609d037554f1b599ca5002fa709e35395471ca6dc200acb19ac0d870c7fa861"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-frame-talavera.stl",
+      "sha256": "0a9c8637170f8261a146bcd50578c65aafecd290ffd561e9818afff8ca672d5c"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-frame-talavera-body.stl",
+      "sha256": "c70c2d232387c12f12692e2720acef86da97b275e4d5498c5038771837191204"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-frame-gameboy.stl",
+      "sha256": "2a5170877723b2d19753012d3bbfa98c7dae1aa7103b7433b792fc2091aa70eb"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-frame-gameboy-body.stl",
+      "sha256": "313404dea092e9f9841b4277e9ed40de6edac00e21a2ee45e7d798bc19861cff"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-frame-snes.stl",
+      "sha256": "b39be329090e49eb7ac1e9ba7abf45ee7829be6f6f61b5bab3cc5b2a21bd1516"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-frame-snes-body.stl",
+      "sha256": "02dfc63168c5e4723a25501aad561e5b8303dc88af3d039dd973add497b07667"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-frame-phone.stl",
+      "sha256": "a2fe08d38b97c8a2ce74df7343fecc757d15cd5cade1707624ccf7d1bf35fb00"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-frame-phone-body.stl",
+      "sha256": "e984c74cdaf36fcb20484dc9b8505841393d7924efaaf19bef6f34ee1b1e07f4"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-frame-ipod.stl",
+      "sha256": "1973cdd94cffb18c114a2372a389f9a44414b57b8031ef0aacf3c9a4f4f3323f"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-frame-ipod-body.stl",
+      "sha256": "9852a9c895e40cb377bfb5930a5a2760cf440ddd09cac532db7a2cf580c36611"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-frame-hanafuda.stl",
+      "sha256": "5a61a3290cad4aadefd06a9d492920097df6d343882711fe8278b2c20d00f65d"
+    },
+    {
+      "path": "mechanical/glue-in/revI/right-frame-hanafuda-body.stl",
+      "sha256": "5ce9dac1c43cad8d583ac3d49f6b1da82eacd77fd4aed73c3d2b7fd086328dda"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/left-frame-talavera.stl",
+      "sha256": "b063cb3080866fc3dd98718ecd218c768da7dbaa04e91815333bcba4fe96108f"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/left-frame-talavera-body.stl",
+      "sha256": "09dfe816f232b5ad47a62cdd4cb75010ad8b002e48569873c9891837bc277f38"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/left-frame-gameboy.stl",
+      "sha256": "2ddc774a2163c6451663553d210d455d2719422bb7a9be1733056b36ece9984e"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/left-frame-gameboy-body.stl",
+      "sha256": "c3e4865afd59eb6f4b131cf0ffba2c8f65045c6a195c997304b31f6c6223a764"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/left-frame-snes.stl",
+      "sha256": "145ddee23ff3a7e738c1521b0866e709525985897498f0a792748b2cc910d7c2"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/left-frame-snes-body.stl",
+      "sha256": "5a27e10fff0f72ceff1695a0bada71608bad55d0c81e621c3c35e71327e9c330"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/left-frame-phone.stl",
+      "sha256": "c6465c4708b0130bb54cc09c982be92d2a9edb9fde8a669da619e04cf2556ac1"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/left-frame-phone-body.stl",
+      "sha256": "b4c1f8897161c00f7a4bdfda3146c2d57fb2edda00fa66a688ab122ddd64e71b"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/left-frame-ipod.stl",
+      "sha256": "9da9a70230363d7d58eee7b1033b919c06d9b67c18a5f2c0d27705bfc1b48090"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/left-frame-ipod-body.stl",
+      "sha256": "50434cc118980154f9861a4ac6c4ac19cb6dfaa82032f5a9a41f809d3cc30376"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/left-frame-hanafuda.stl",
+      "sha256": "c27d8631f3eb81150540ce5f883c4bf95c56191676c904330e823f961dda2c06"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/left-frame-hanafuda-body.stl",
+      "sha256": "ebbde5516ac6d363632bd710b4b813c2f87799831af79f52de9ac9fcf7c43be5"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/right-frame-talavera.stl",
+      "sha256": "ee975443dbf9649a4b16771a6c9fccef962dbda9dab33e01af8888027a59849e"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/right-frame-talavera-body.stl",
+      "sha256": "0b0030fdbd410c9fa4246fc260f52f90cba6b3fb7ef9cf751ae966101cbd925a"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/right-frame-gameboy.stl",
+      "sha256": "19c198e31d90a619da77d98e8cc6367f015f4b61d7a1a9a0ad189163b3a18704"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/right-frame-gameboy-body.stl",
+      "sha256": "94f3a7c5bac7d4f508c1320bddf7a5731d5b74ff76a070a71dde6d2965b3a8fa"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/right-frame-snes.stl",
+      "sha256": "56e72fba9450b66e7c979ef00f4ab630840117477582a9f4cbb96db5fc652374"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/right-frame-snes-body.stl",
+      "sha256": "3008abeed180fba88e01f59edde8c521dd413bfcd429199b700007675ce05550"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/right-frame-phone.stl",
+      "sha256": "ea0652fbafbbb883943c8285148ceb2b4aac3b0e236c71c7d3b51f8fcc5ac2ff"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/right-frame-phone-body.stl",
+      "sha256": "80e0e6d5064b3078722d4ccf2926c935d46e3df475f109d3e111f0c898787ac0"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/right-frame-ipod.stl",
+      "sha256": "00b15b682e149369c3cc7a8da690826bac83534aa6e5384099bc6480826b0b33"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/right-frame-ipod-body.stl",
+      "sha256": "dc1161931b44fa651a95770319c6108197da46115dab6ad7ff875098a3e07170"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/right-frame-hanafuda.stl",
+      "sha256": "85096ce89888d3f5704421ba1c24d64800e3ce49f014771546eaa10d2b40ad10"
+    },
+    {
+      "path": "mechanical/glue-in/revI/common-m2/right-frame-hanafuda-body.stl",
+      "sha256": "1488ff98d5a5157afd42b5b523b5e81459cdb43f960f7c3f71fe2335fbeea09f"
+    },
+    {
+      "path": "mechanical/glue-in/revI/coupon-magnet-base.stl",
+      "sha256": "b45611efc4550751e12b9e25801c1786d7999b53c7f992875a9af8006da186c0"
+    },
+    {
+      "path": "mechanical/glue-in/revI/coupon-magnet-frame.stl",
+      "sha256": "97490eb5ebf56bf9a9dccdaff64724fbe38aed4f0e7dd4d7e236798e2e038957"
+    },
+    {
+      "path": "tools/glue_pockets.py",
+      "sha256": "7e273e9042798f86ef7b48ff11c1136fa1924d530b6d71ba8e75d11846539198"
     }
   ],
   "sources": [

@@ -9,9 +9,12 @@ from pathlib import Path
 import numpy as np
 import vtk
 from vtk.util.numpy_support import vtk_to_numpy
+from glue_pockets import OUT as GLUE_DIR, source_files as glue_source_files
 from viewer_frame_selection import selected_catalog, selected_preset
 
 ROOT = Path(__file__).resolve().parents[1]
+glue_paths = {p.relative_to(ROOT).as_posix(): (GLUE_DIR/p.relative_to(ROOT/'mechanical')).relative_to(ROOT).as_posix()
+              for p in glue_source_files()}
 model = json.loads((ROOT/'design/revI.json').read_text())
 magnetic = json.loads((ROOT/'design/revI-magnets.json').read_text())
 base_magnet_size = f'Ø{magnetic["magnet_diameter"]:g} × {magnetic["magnet_height"]:g} mm'
@@ -65,7 +68,7 @@ CAD_MESHES=('mechanical/revI/','mechanical/flan')   # FreeCAD exports: y up beco
 def mesh(path,store=None):
     store=scene['geometries'] if store is None else store
     if path in store:return path
-    reader=vtk.vtkSTLReader();reader.SetFileName(str(ROOT/path));reader.Update()
+    reader=vtk.vtkSTLReader();reader.SetFileName(str(ROOT/glue_paths.get(path,path)));reader.Update()
     normals=vtk.vtkPolyDataNormals();normals.SetInputData(reader.GetOutput())
     normals.SetFeatureAngle(45);normals.ConsistencyOn();normals.AutoOrientNormalsOn();normals.Update()
     data=normals.GetOutput()
@@ -170,8 +173,8 @@ for side,keys in layout['halves'].items():
             scene['parts'][-1]['materials']=colors
     for i in range(1,6):add(f'Structural screw {i}',side,'fasteners','#56615b',[offset,0,0],9,mesh(f'mechanical/revI/{side}-screw-{i}.stl'))
     for i in range(3):
-        add(f'Captive base magnet {i+1} · {base_magnet_size}',side,'fasteners','#8c9597',[offset,0,0],0,mesh(f'mechanical/revI/{side}-magnet-{i}.stl'))
-        add(f'Captive frame magnet {i+1} · {frame_magnet_size}',side,'lid','#899193',[offset,0,0],72,mesh(f'mechanical/revI/{side}-frame-target-{i}.stl'))
+        add(f'Glue-in base magnet {i+1} · {base_magnet_size}',side,'fasteners','#8c9597',[offset,-0.1,0],0,mesh(f'mechanical/revI/{side}-magnet-{i}.stl'))
+        add(f'Glue-in frame magnet {i+1} · {frame_magnet_size}',side,'lid','#899193',[offset,0.1,0],72,mesh(f'mechanical/revI/{side}-frame-target-{i}.stl'))
     for i in range(2):
         profile=model['batteryLeadProfiles'][f'{side}-{cfg["batteries"][side]}']
         lead=next(part for part in profile if part['index']==i)
@@ -278,10 +281,10 @@ for (side,ref),a in sorted(added_parts.items()):
 # Exact native bytes; never derive printable parts from the presentation scene.
 printing={'assets':{},'supports':['cradle','battery-retainer','mcu-riser','display-sled','washer-1','washer-2','washer-3'],
  'joining':{'case':'3 M2x6 + 2 M2x4 per half; tap the 1.7 mm pilots to M2',
- 'installed_frame':f'Per half: 3 captive base magnets {base_magnet_size} and 3 captive frame magnets {frame_magnet_size}; all axially magnetized',
- 'polarity':'Opposite poles must face each other in the final assembly. Mark the mating faces and check attraction at every station before embedding. Keep the same base orientation and matching frame orientation across interchangeable frames. When printing a frame upside down, use its final mating face, not the face pointing upward on the printer.',
- 'capture':'For both base and frame magnets, inspect the sliced cavities and pause before closure. Confirm every insert remains below the next nozzle path. Qualify capture, actual thermal exposure and removal cycles with the actual magnets and filament; use the temperature limit for those magnets, not an assumed grade.',
- 'clips':False,'acceptance':'Physical fit, thread strength, retention force and insertion process untested'}}
+ 'installed_frame':f'After printing, glue 3 axial {base_magnet_size} magnets into each base from above and 3 axial {frame_magnet_size} magnets into each installed frame from the underside.',
+ 'polarity':'Mark a reference pair that attracts in its installed position. Use the same exposed pole in every base and the opposite exposed pole in every frame.',
+ 'capture':'Dry-fit first, then use a small amount of adhesive compatible with the printed plastic and magnet coating. Seat magnets below the mating surfaces. Cure base and frame apart before assembly.',
+ 'clips':False,'magnet_mount':'glue-in','acceptance':'Test bonding and frame removal on samples; physical retention and fit remain unqualified.'}}
 for side in ['left','right']:
     names=[f'{side}-case-{style}-{group}' for style in catalog['case_styles'] for group in ['base','plate']]
     names += [f'{side}-frame-{style}' for style in catalog['frame_styles']]
@@ -341,7 +344,7 @@ scene['measurements']={'bay_width_mm':24,'plate_top_mm':7.6,'cover_top_mm':frame
 for path in ['design/revI.json','design/revI-magnets.json','design/layout.json','tools/build_viewer_revI.py','tools/viewer_frame_selection.py','design/frame-selection.json','design/frame-finishes.json','components/switches.json','components/sources.json','keycaps/catalog.json']:
     scene['sources'].append({'path':path,'sha256':digest(path)})
 scene['limits']=['Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md', 'Routed PCB candidate; physical electrical, connector and RF qualification pending',
-                 'Nominal lead-storage paths; actual terminations, insulation and finished-pack tolerances unverified', 'PCB aperture 12.5 mm; both nominal cells fit. Magnetic force, print-in capture/temperature and physical fit need coupons',
+                 'Nominal lead-storage paths; actual terminations, insulation and finished-pack tolerances unverified', 'PCB aperture 12.5 mm; both nominal cells fit. Magnetic force, adhesive retention and physical fit need coupons',
                  'Generic Choc v1 source model; purchased switch fit, keycap seating and travel unmeasured. Hot-swap sockets are registered to nominal PCB datums; purchased-part fit remains unqualified. Feet illustrative; nominal screws do not prove thread strength',
                  'Exploded positions are a viewing aid, not a validated extraction path']
 # Back-silkscreen editions: textures rasterized from the committed Gerber packages
@@ -360,6 +363,17 @@ for e in editions['editions']:
         scene['sources'].append({'path':package,'sha256':t['source']['sha256']})
 scene['silkscreen']['thumbnails']={e['id']:'data:image/webp;base64,'+base64.b64encode((ROOT/textures['thumbnails'][e['id']]['path']).read_bytes()).decode() for e in editions['editions']}
 scene['sources'].append({'path':'design/pcb-options.json','sha256':digest('design/pcb-options.json')})
+# Keep stable viewer geometry IDs. The manufacturing manifest points to the actual printable STL.
+registries=[printing['assets'], *(v.get('printing',{}) for v in scene['variants'].values()),
+            *(v['printing'] for v in scene['fasteners']['profiles'].values())]
+for registry in registries:
+    for asset in registry.values():
+        for part in (asset,*asset.get('material_parts',[])):
+            if part['path'] in glue_paths:
+                target=glue_paths[part['path']]
+                part.update(print_path=target,sha256=digest(target),stl=base64.b64encode((ROOT/target).read_bytes()).decode())
+for path in [*glue_paths.values(),'tools/glue_pockets.py']:
+    scene['sources'].append({'path':path,'sha256':digest(path)})
 (ROOT/'build').mkdir(exist_ok=True)
 (ROOT/'build/viewer-scene.json').write_text(json.dumps(scene,separators=(',',':'))+'\n')
 print(f'Packed {len(scene["parts"])} objects, {len(scene["geometries"])} unchanged meshes; 36 keycaps.')

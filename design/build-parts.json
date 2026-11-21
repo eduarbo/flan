@@ -286,8 +286,8 @@
       "quantity": 6,
       "url": "",
       "note": {
-        "en": "Three captive magnets in each base. Measure your actual magnets.",
-        "es": "Tres imanes cautivos en cada base. Mide los imanes reales."
+        "en": "Glue three into each base from above after printing.",
+        "es": "Pega tres en cada base desde arriba después de imprimir."
       }
     },
     {
@@ -300,8 +300,8 @@
       "quantity": "frame-magnets",
       "url": "",
       "note": {
-        "en": "Three per installed frame. Check mating polarity before enclosing.",
-        "es": "Tres por marco instalado. Comprueba la polaridad de cada pareja antes de cerrar."
+        "en": "Glue three into the underside of each installed frame. Check attraction against the base first.",
+        "es": "Pega tres en la cara inferior de cada marco. Comprueba antes que se atraigan con los de la base."
       }
     },
     {

@@ -52,8 +52,8 @@ for style in scene['catalog']['frame_styles']:
         assert manifest['joining'] == scene['printing']['joining']
         for field in ('installed_frame', 'polarity', 'capture', 'acceptance'):
             assert manifest['joining'][field] in readme, field
-        assert '3 captive base magnets Ø2 × 3 mm' in readme
-        assert '3 captive frame magnets Ø2 × 4 mm' in readme
+        assert '3 axial Ø2 × 3 mm magnets into each base' in readme
+        assert '3 axial Ø2 × 4 mm magnets into each installed frame' in readme
         assert 'ferromagnetic' not in readme.lower() and 'steel' not in readme.lower()
         assert manifest['configuration'] == json.loads(archive.read('Flan36-config.json'))
         assert len(manifest['parts']) == 2 * (3 + len(scene['printing']['supports']))

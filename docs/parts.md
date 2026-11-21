@@ -75,7 +75,7 @@ The two NBK packs are **US$43.45** before shipping/tax. An ordinary M2 socket-he
 
 Use **12 axially magnetized neodymium magnets from existing stock: 6 × Ø2 × 3 mm in the bases and 6 × Ø2 × 4 mm in the frames**, three of each per half. No magnetic hardware purchase is required. Each additional pair of frames needs six more Ø2 × 4 mm magnets; the base magnets stay in place. Measure the actual magnets before printing; the existing pocket geometry is unchanged.
 
-Before closing any captive pocket, verify that every matching pair attracts in its final assembled orientation. Keep the same mating-face polarity across the bases and the opposite mating-face polarity across all interchangeable frames. Use the [polarity, capture and heat checks](build.md#magnetic-frame-and-service); the stock's grade, temperature limit and holding force have not been qualified.
+Before gluing the magnets into their open sockets, verify that every matching pair attracts in its final assembled orientation. Keep the same mating-face polarity across the bases and the opposite mating-face polarity across all interchangeable frames. Use the [polarity, adhesive and retention checks](build.md#magnetic-frame-and-service); the stock's grade, temperature limit and holding force have not been qualified.
 
 ## Controllers
 

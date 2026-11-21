@@ -36,12 +36,14 @@ The checker compares all 36 positions/rotations with the original boards. `build
 
 The frame is cosmetic and removable. The five internal structural screws per half keep the PCB and battery cage secured when the frame is lifted. Its three small locator lips resist sliding; magnets provide attraction. Do not use the frame as a carrying handle before retention is measured.
 
-1. **Print the coupons first:** [base magnet](../mechanical/revI/coupon-magnet-base.stl), [frame magnet](../mechanical/revI/coupon-magnet-frame.stl), and [M2 thread](../mechanical/revI/coupon-m2-thread.stl). These are cropped production interfaces, at assembly coordinates. Orient the broad face on the bed and inspect every layer in the slicer.
-2. **Measure and pair the magnets:** use axial magnets from existing stock, Ø2 × 3 mm for the bases and Ø2 × 4 mm for the frames. Before closing any pocket, check that every matching pair attracts in its final assembled orientation. Mark a reference pair; keep one mating-face polarity across all bases and the opposite mating-face polarity across all interchangeable frames. The frame or its coupon may print upside down, with its broad top face on the bed: track the final mating face, not the upward direction during printing.
-3. **Pause and insert:** the unchanged base pocket is Ø2.3 × 3.2 mm; the frame pocket is Ø2.2 × 4.2 mm. Insert each magnet before its pocket closes and confirm it stays below the next nozzle path. Choose pauses from the actual sliced layer, not an assumed layer number.
-4. **Qualify capture and heat:** enclosed magnets must stay captive after flexing and repeated removal. Establish the actual stock's grade and temperature limit, and verify its thermal exposure during printing. The original Ø2 × 3 mm reference's 80°C rating does not qualify other magnets, and a low bed setting alone does not establish magnet temperature. PLA Basic is the first coupon material to investigate; PETG HF and ABS remain alternatives to qualify.
-5. **Check attraction and sliding:** reproduce the nominal 0.9 mm magnetic gap (pocket float allows roughly 0.7–1.1 mm before print tolerances). Check north-edge peel, sliding and repeated removal on a complete frame; a single-station coupon cannot establish whole-frame retention. Holding force and capture remain physically untested.
-6. **Tap and test the M2 pilot:** use an M2 tap in the Ø1.7 mm printed hole, then test the specified screw without bottoming or stripping. Do not assume the screws are self-tapping.
+1. **Try the glue-in samples first.** Print the [base socket](../mechanical/glue-in/revI/coupon-magnet-base.stl) floor down with thin-wall detection enabled for its centering lip, and the [frame socket](../mechanical/glue-in/revI/coupon-magnet-frame.stl) top face down. Their openings face the nozzle and remain accessible after printing. The [M2 thread coupon](../mechanical/revI/coupon-m2-thread.stl) checks the screw fit.
+2. **Dry-fit and mark one attracting pair.** Each base takes three axial Ø2 × 3 mm magnets from above. Each installed frame takes three axial Ø2 × 4 mm magnets from underneath. Use the same exposed pole in every base and the opposite exposed pole in every frame. Check attraction in the assembled position.
+3. **Glue after printing, before installing electronics.** Use a small amount of adhesive compatible with your printed plastic and magnet coating. Seat each magnet against the blind end. Wipe the mating surfaces and let the parts cure separately for the time on the adhesive label. Supermagnete advises against conventional superglue for its coated neodymium magnets. [Manufacturer guidance](https://www.supermagnete.de/eng/Magnet-applications/Create-your-own-glass-magnets)
+4. **Check seating and retention.** The base bore is Ø2.30 mm and the frame bore is Ø2.20 mm. The dry, fully seated magnet faces have a nominal 1.10 mm gap. Try the coupons, then check a full frame for peel, sliding and repeated removal. The physical bond and holding force still need testing.
+
+The [configurator](https://flankbd.com/explore/#build-print) exports glue-in sockets. The original revision I STEP and FreeCAD files retain their enclosed magnet pockets.
+
+5. **Tap and test the M2 pilot:** use an M2 tap in the Ø1.7 mm printed hole, then test the specified screw without bottoming or stripping. Do not assume the screws are self-tapping.
 
 For the nominal assembly, seat the open-bottom locator, cell directly on the **1.4 mm case floor**, and cage before lowering the PCB over the cell. The cage’s wider feet remain below the board. Install the three plate spacers and structural screws, then the removable modules and frame. Do not compress the pouch. Actual lead exit and strain relief remain to be qualified.
 
@@ -60,7 +62,7 @@ No item below has been physically accepted. Record the supplied part number, mea
 | Test | Acceptance evidence |
 |---|---|
 | Actual parts | Selected Adafruit 1570 envelope, protection wrapping, lead exit and polarity; specified controller/display connector seating and installed heights |
-| Printed interfaces | Choc stem/return, screw engagement, captive base/frame magnet retention and paired polarity, frame peel/sliding and battery service without pouch or glass loading |
+| Printed interfaces | Choc stem/return, screw engagement, glued base/frame magnet retention and paired polarity, frame peel/sliding and battery service without pouch or glass loading |
 | Bare assembly | Continuity, no power short, diode orientation and all switches of the selected size without stuck/reversed keys |
 | Firmware and displays | Correct half images, four layers, simultaneous keys, both screens or selected single-screen option, reset and wake recovery |
 | Wireless operation | Pairing, reconnect after power cycle, sleep/wake and usable range in the complete case |

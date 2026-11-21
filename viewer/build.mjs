@@ -21,7 +21,7 @@ const printInventory=Object.fromEntries(Object.entries(scene.variants).map(([id,
  assets:printMeta({...scene.printing.assets,...v.printing}),supports:scene.printing.supports,fasteners:v.fasteners
 }]));
 // Package assets stay on this origin and are pinned to this viewer's bytes.
-const packagePaths=new Set(['LICENSE','LICENSES/CC-BY-SA-4.0.txt',...scene.catalog.variants.map(v=>v.path),...['coupon-magnet-base','coupon-magnet-frame','coupon-m2-thread'].map(n=>'mechanical/revI/'+n+'.stl')]);
+const packagePaths=new Set(['LICENSE','LICENSES/CC-BY-SA-4.0.txt',...scene.catalog.variants.map(v=>v.path),...['coupon-magnet-base','coupon-magnet-frame','coupon-m2-thread'].map(n=>(n.startsWith('coupon-magnet')?'mechanical/glue-in/revI/':'mechanical/revI/')+n+'.stl')]);
 for(const file of ['firmware/NOTICE.md','firmware/dependencies.json','firmware/west-frozen.yml','ATTRIBUTION.md','TRADEMARKS.md'])packagePaths.add(file);
 for(const file of fs.readdirSync(path.join(root,'firmware/licenses')).sort())packagePaths.add('firmware/licenses/'+file);
 for(const edition of scene.silkscreen.editions){for(const file of Object.values(edition.packages))packagePaths.add(file);for(const pair of Object.values(edition.variants||{}))for(const file of Object.values(pair))packagePaths.add(file);}

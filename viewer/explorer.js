@@ -4,7 +4,7 @@ import {t,language} from './i18n.js';
 
 // Each group's name, short name and note, in the page's language.
 const parts={en:{
-  lid:{name:'Display frame',short:'Frame',info:'Removable frame with three captive Ø2 × 4 mm magnets per half. Opposite poles face the base magnets; check attraction before embedding. PCB and battery remain mechanically secured.'},
+  lid:{name:'Display frame',short:'Frame',info:'Removable frame with three glued-in Ø2 × 4 mm magnets per half. Opposite poles face the base magnets; check attraction before gluing. PCB and battery remain mechanically secured.'},
   keycaps:{name:'KLP Lamé keycaps',short:'Caps',info:'Original Choc-stem meshes. Choose a shape preset; color all keys, rows, columns or individual keys.'},
   display:{name:'nice!view display',short:'Display',info:'14 × 36 × 2.9 mm nominal nice!view. Illustrative screen content; flush frame details. Uses the supplied 7.00 mm connector pair. Glass sits 0.20 mm below the frame; physical fit remains untested.'},
   base:{name:'Printed base',short:'Base',info:'Key-aligned local curves and a shared contour. Use Customize this part to choose a case. Native parts are editable in FreeCAD.'},
@@ -15,9 +15,9 @@ const parts={en:{
   mcu:{name:'nice!nano v2 controller',short:'MCU',info:'Nominal v2 reconstruction with separate PCB, ENIG pads, mid-mount USB-C, ICs and passives. Community outline dimensions; package detail inferred from official photos.'},
   supports:{name:'Insulating supports',short:'Mounts',info:'Cradle, display sled and controller supports. Retention is a nominal CAD proposal.'},
   connectors:{name:'Connectors & controls',short:'Ports',info:'Supplied nice!view connectors, specified Mill-Max controller sockets, battery connector, reset and power switch. Exact purchasing references are in the build guide; verify delivered dimensions and solder clearances during assembly.'},
-  fasteners:{name:'Fasteners & feet',short:'Feet',info:'Per half: five internal M2 screws, three captive Ø2 × 3 mm base magnets and three Ø2 × 4 mm frame magnets. All magnets are axial. Printed threads, magnetic holding force and capture need physical tests.'}
+  fasteners:{name:'Fasteners & feet',short:'Feet',info:'Per half: five internal M2 screws, three glued-in Ø2 × 3 mm base magnets and three Ø2 × 4 mm frame magnets. All magnets are axial. Printed threads, magnetic holding force and capture need physical tests.'}
 },es:{
-  lid:{name:'Marco de pantalla',short:'Marco',info:'Marco removible con tres imanes cautivos de Ø2 × 4 mm por mitad. Los polos opuestos miran hacia los imanes de la base; revisa que se atraigan antes de fijarlos. La PCB y la batería siguen sujetas mecánicamente.'},
+  lid:{name:'Marco de pantalla',short:'Marco',info:'Marco removible con tres imanes pegados de Ø2 × 4 mm por mitad. Los polos opuestos miran hacia los imanes de la base; revisa que se atraigan antes de fijarlos. La PCB y la batería siguen sujetas mecánicamente.'},
   keycaps:{name:'Keycaps KLP Lamé',short:'Keycaps',info:'Mallas originales con vástago Choc. Elige una forma; pinta todas las teclas, filas, columnas o teclas sueltas.'},
   display:{name:'Pantalla nice!view',short:'Pantalla',info:'nice!view nominal de 14 × 36 × 2.9 mm. Contenido de pantalla ilustrativo; detalles del marco al ras. Usa el par de conectores de 7.00 mm incluido. El vidrio queda 0.20 mm bajo el marco; el ajuste físico aún no se prueba.'},
   base:{name:'Base impresa',short:'Base',info:'Curvas locales alineadas a las teclas y un contorno común. Usa Personalizar esta pieza para elegir una caja. Las piezas nativas se editan en FreeCAD.'},
@@ -28,7 +28,7 @@ const parts={en:{
   mcu:{name:'Controlador nice!nano v2',short:'MCU',info:'Reconstrucción nominal de la v2 con PCB aparte, pads ENIG, USB-C de montaje medio, circuitos integrados y pasivos. Medidas del contorno de la comunidad; detalle de los encapsulados deducido de fotos oficiales.'},
   supports:{name:'Soportes aislantes',short:'Soportes',info:'Cuna, trineo de la pantalla y soportes del controlador. La sujeción es una propuesta nominal de CAD.'},
   connectors:{name:'Conectores y controles',short:'Puertos',info:'Conectores incluidos del nice!view, zócalos Mill-Max especificados para el controlador, conector de batería, botón de reset e interruptor de encendido. Las referencias exactas de compra están en la guía de armado; verifica las medidas recibidas y los espacios para soldar durante el armado.'},
-  fasteners:{name:'Sujetadores y patas',short:'Patas',info:'Por mitad: cinco tornillos M2 internos, tres imanes cautivos de base de Ø2 × 3 mm y tres imanes de marco de Ø2 × 4 mm. Todos los imanes son axiales. Las roscas impresas, la fuerza magnética y la captura necesitan pruebas físicas.'}
+  fasteners:{name:'Sujetadores y patas',short:'Patas',info:'Por mitad: cinco tornillos M2 internos, tres imanes pegados de base de Ø2 × 3 mm y tres imanes de marco de Ø2 × 4 mm. Todos los imanes son axiales. Las roscas impresas, la fuerza magnética y la captura necesitan pruebas físicas.'}
 }};
 export const partInfo=id=>parts[language()][id]??parts.en[id];
 

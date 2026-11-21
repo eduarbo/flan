@@ -46,14 +46,8 @@ const read=(file,entry)=>cp.execFileSync('unzip',['-p',file,entry],{encoding:'ut
    const slots=new Map();for(const row of spools.trim().split('\n').slice(1)){const [plate,,slot]=row.split(',');if(!slots.has(plate))slots.set(plate,new Set());slots.get(plate).add(slot);}
    assert([...slots.values()].every(s=>s.size<=(mode==='manual'?1:4)));
    assert(settings.includes('key="print_sequence" value="'+(mode==='object'?'by object':'by layer')+'"'));
-   if(mode==='object'){
-    for(const [,plate] of settings.matchAll(/<plate>([\s\S]*?)<\/plate>/g)){
-     if(/value="(Bases|Display frames)"/.test(plate)){
-      assert.equal((plate.match(/<model_instance>/g)||[]).length,1);
-      assert(plate.includes('key="print_sequence" value="by layer"'));
-     }
-    }
-   }
+   assert(!settings.includes('key="print_sequence" value="'+(mode==='object'?'by layer':'by object')+'"'));
+   assert(read(file,'Metadata/Flan/Print-notes.txt').includes('Ø2 × 3 mm magnets per base from above'));
    const frames=[...settings.matchAll(/<object id="\d+"><metadata key="name" value="[^"]*-frame-[^"]*"\/>.*?<\/object>/g)];
    assert.equal(frames.length,2);assert(frames.every(m=>(m[0].match(/<part /g)||[]).length===(mode==='ams'?4:1)));
    await p.waitForFunction(()=>!document.querySelector('#print-plate-plan').hidden);
