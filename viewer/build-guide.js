@@ -2,6 +2,7 @@
 import parts from '../design/build-parts.json';
 import {language,t} from './i18n.js';
 import {selectedParts,keycapPlan} from './printing.js';
+import {filamentReel,filamentLabel} from './filament-identity.js';
 import {closestSwatch,swatchSources,spoolFor,setupOf} from './filament-swatches.js';
 import {finishes} from './finishes.js';
 import {fastenersOf} from './config.js';
@@ -89,7 +90,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   const designLabel=say('Reopen this exact design','Volver a abrir este diseño exacto');const a=link(designLabel,await exactLink);a.id='build-design-link';copy.prepend(a);
   const css='body{font:15px/1.6 system-ui,sans-serif;color:#172b35;max-width:920px;margin:32px auto;padding:0 24px}h2,h3{line-height:1.2}h3{margin-top:32px}h4{margin-bottom:8px}a{color:#715719}li{margin-bottom:8px}summary{font-weight:600;margin:16px 0 8px}.steps{padding-left:24px}.step{break-inside:auto;margin-bottom:28px}.shopping-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;align-items:start}.shopping-row{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px 12px;border:1px solid #ddd;border-radius:10px;padding:12px;break-inside:avoid}.shopping-art{width:80px;height:72px;object-fit:contain;align-self:center}.shopping-body{min-width:0;align-self:center;overflow-wrap:anywhere}.shopping-body p{margin:4px 0}.shopping-info,.shopping-footer{grid-column:1/-1}.shopping-info summary{margin:0}.shopping-footer{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;border-top:1px solid #ddd;padding-top:8px}.shopping-check{display:flex;gap:6px;align-items:center}.micro{font-size:13px;color:#485b63}.shopping-quantity{font-weight:600;font-size:12px}.downloads a{display:block;margin:12px 0}.downloads span{display:block;font-size:13px}dl>div{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #ddd;padding:6px 0}dd{margin:0;text-align:right}.config-actions,.sr-only,.segments,.field-label,#print-status{display:none}.build-summary{padding:12px 0;border-bottom:1px solid #ddd}.print-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #ddd}.print-row small{display:block}.color-dot{display:inline-block;width:10px;height:10px;border:1px solid #888;border-radius:50%;margin-right:5px;background:var(--sample)}@media print{body{margin:0;font-size:11pt}a{color:inherit;text-decoration:none}details{break-inside:auto}h3,h4,summary{break-after:avoid}}';
   const credits=say('Part illustrations: original Flan nominal models and drawings; Choc switch/socket © 2019–2022 keyswitch-kicad-library contributors (MIT); power/reset models by KiCad library contributors (CC-BY-SA-4.0, library exception). Rendered for this guide.','Ilustraciones: modelos nominales y dibujos originales de Flan; switch/socket Choc © 2019–2022 keyswitch-kicad-library contributors (MIT); modelos de interruptor/reset por KiCad library contributors (CC-BY-SA-4.0, excepción de biblioteca). Renderizados para esta guía.');
-  return '<!doctype html><html lang="'+locale+'"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>'+css+'</style><body>'+copy.outerHTML+'<p>'+footer+'</p><p class="micro">'+credits+' <a href="https://github.com/eduarbo/flan/blob/main/components/README.md">'+say('Sources & licenses','Fuentes y licencias')+'</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA-4.0</a> · <a href="https://github.com/eduarbo/flan/blob/main/components/sources/KiSwitch-MIT.txt">MIT</a></p></body></html>';
+  return '<!doctype html><html lang="'+locale+'"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>'+css+$('filament-reel-style').textContent+'</style><body>'+copy.outerHTML+'<p>'+footer+'</p><p class="micro">'+credits+' <a href="https://github.com/eduarbo/flan/blob/main/components/README.md">'+say('Sources & licenses','Fuentes y licencias')+'</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA-4.0</a> · <a href="https://github.com/eduarbo/flan/blob/main/components/sources/KiSwitch-MIT.txt">MIT</a></p></body></html>';
  }
  async function exportPlan(){
   const filename=family[current.variant].title+'-build-plan.html';
@@ -175,12 +176,12 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
    }else addColor(p.colors.body,p.id.endsWith('-base')?say('Base','Base'):p.id.endsWith('-plate')?say('Switch plate','Placa de switches'):say('Internal parts','Piezas internas'),spoolFor(current,p.side,p.colors.body));
   }
   if(scope==='complete')for(const k of caps.keys)addColor(k.color,'Keycaps',spoolFor(current,k.side,k.color));
-  const palette=node('div','print-inventory');
+  const palette=node('div','print-inventory filament-inventory');
   const chip=color=>{const dot=node('i','color-dot');dot.style.setProperty('--sample',color);return dot;};
   for(const {hex,chosen,labels} of uses.values()){
    const spool=chosen||closestSwatch(hex),row=node('div','print-row'),design=node('span','',hex);
    design.prepend(chip(hex));design.append(node('small','',[...labels].join(', ')));
-   const match=node('span','',(chosen?'':'≈ ')+spool.name);match.prepend(chip(spool.hex));match.append(node('small','',spool.series));row.append(design,match);palette.append(row);
+   const match=node('span','filament-pair');match.append(filamentReel(spool),filamentLabel(spool,chosen?'selected':'suggested'));row.append(design,match);palette.append(row);
   }
   const edit=node('button','',say('Choose spools and substitutes','Elegir bobinas y sustitutos'));
   edit.type='button';edit.onclick=()=>editFilaments(edit);

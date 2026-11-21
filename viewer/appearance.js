@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+import {filamentReel,filamentLabel,flatSwatch} from './filament-identity.js';
 import {chooseFilament} from './filament-picker.js';
-import {bindSpool,closestSwatch,colorFields,mapThemeToSpools,spoolFor} from './filament-swatches.js';
+import {bindSpool,commonSpool,closestSwatch,colorFields,mapThemeToSpools,spoolFor} from './filament-swatches.js';
 import {enhanceColorInput} from './color-input.js';
 import themes from '../design/themes.json';
 import {copy} from './config.js';
@@ -17,7 +18,18 @@ export function createAppearance({$,get,apply,targets,preview,frameFinish,materi
  for(const b of $('theme-target').children)b.onclick=()=>{themeSide=b.dataset.side;sync();};
  const inputs=[];
  // label: a dictionary key; a frame's own palette names its roles in sync()
- function colorInput(container,label,part,role,target){const row=document.createElement('div');row.className='color-field';const text=document.createElement('span');text.textContent=t(label);const value=document.createElement('small'),input=document.createElement('input');input.type='color';input.id=`${part}-${role}`;input.setAttribute('aria-label',t(label));input.oninput=()=>apply(setColor(get(),targets(target),part,role,input.value));row.append(text,value,input);$(container).append(row);inputs.push({input,value,part,role,target,text,label,hex:enhanceColorInput(input,()=>t(label),spool=>apply(bindSpool(setColor(get(),targets(target),part,role,spool.hex.toLowerCase()),targets(target),spool)))});value.hidden=true;}
+ function colorInput(container,label,part,role,target){
+  const row=document.createElement('div'),text=document.createElement('span'),value=document.createElement('small'),input=document.createElement('input');
+  row.className='color-field';text.textContent=t(label);value.hidden=true;
+  input.type='color';input.id=`${part}-${role}`;input.setAttribute('aria-label',t(label));
+  input.oninput=()=>apply(setColor(get(),targets(target),part,role,input.value));
+  row.append(text,value,input);$(container).append(row);
+  const hex=enhanceColorInput(input,()=>t(label),spool=>{
+   const sides=targets(target),next=setColor(get(),sides,part,role,spool.hex.toLowerCase());
+   apply(bindSpool(next,sides,spool));
+  },color=>commonSpool(get(),targets(target),color));
+  inputs.push({input,value,part,role,target,text,label,hex});
+ }
  colorInput('case-colors','color.base','case','base_color','case');colorInput('case-colors','color.plate','case','plate_color','case');
  for(const role of ['detail','accent','secondary'])colorInput('theme-palette','role.'+role,'frame',role,'frame');
  for(const kind of ['case','frame'])$(`${kind}-link-colors`).onchange=e=>{const c=copy(get());for(const side of targets(kind)){c.cases[side].match_frame=e.target.checked;if(e.target.checked){c.frames[side].color=c.cases[side].base_color;if(c.cases[side].style==='level')c.cases[side].plate_color=c.cases[side].base_color;}}apply(c);};
@@ -61,16 +73,16 @@ export function createAppearance({$,get,apply,targets,preview,frameFinish,materi
   }
   $('theme-spool-list').replaceChildren(...[...rows.values()].map(row=>{
    const spool=row.chosen||closestSwatch(row.hex),button=document.createElement('button');button.type='button';button.className='theme-spool';button.dataset.themeColor=row.hex;button.dataset.spool=row.chosen?.id||'';
-   const chip=document.createElement('i');chip.style.background=row.hex;const label=document.createElement('span');
-   label.textContent=[...row.roles].map(r=>t('spool.role.'+r)).join(' / ');
-   const sub=document.createElement('small'),name=document.createElement('span');
-   name.textContent=spool.name;sub.append((row.chosen?'':'≈ ')+spool.series+' · ',name);label.append(sub);
-   const arrow=document.createElement('span');arrow.textContent='›';button.append(chip,label,arrow);
+   const label=filamentLabel(spool,row.chosen?'selected':'suggested'),roles=document.createElement('small');
+   roles.className='filament-reference';
+   roles.append(flatSwatch(row.hex),[...row.roles].map(r=>t('spool.role.'+r)).join(' / '));label.append(roles);
+   const arrow=document.createElement('span');arrow.className='spool-arrow';arrow.setAttribute('aria-hidden','true');arrow.textContent='›';
+   button.append(filamentReel(spool),label,arrow);
    button.onclick=()=>chooseFilament(row.hex,s=>{
     apply(mapThemeToSpools(get(),[...row.sides],hex=>hex===row.hex?s:null));
     const replacement=[...$('theme-spool-list').children].find(b=>b.dataset.themeColor===s.hex.toLowerCase()&&b.dataset.spool===s.id);
     replacement?.focus({preventScroll:true});
-   });
+   },row.chosen);
    return button;
   }));
  }

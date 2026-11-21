@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+import {filamentReel,filamentLabel,flatSwatch} from './filament-identity.js';
 import {language} from './i18n.js';
 import {rankedSwatches,swatchSources,hueFamily} from './filament-swatches.js';
 const say=(en,es)=>language()==='es'?es:en;
 const el=(tag,text)=>{const n=document.createElement(tag);if(text)n.textContent=text;return n;};
-export function chooseFilament(color,onSelect){
+export function chooseFilament(color,onSelect,selected){
  const dialog=document.createElement('dialog');dialog.className='filament-picker';dialog.setAttribute('aria-labelledby','spool-picker-title');
  const heading=el('div');heading.className='dialog-heading';
  const title=el('h2',say('Choose a filament','Elegir filamento'));title.className='title';title.id='spool-picker-title';title.tabIndex=-1;
@@ -20,18 +21,27 @@ export function chooseFilament(color,onSelect){
  filters.append(search,series,family);
  const target=el('p');target.className='target-swatch';const sample=el('i');sample.style.backgroundColor=color;
  target.append(sample,el('span',say('Design color','Color del diseño')),el('code',color.toUpperCase()));const results=el('div');const sorted=rankedSwatches(color);
- const sources=el('p');sources.className='micro';sources.textContent=say('Manufacturer swatches · ','Muestras del fabricante · ');
- for(const [i,[label,url]] of Object.entries(swatchSources).entries()){
-  if(i)sources.append(' · ');const a=el('a',label);a.href=url;a.target='_blank';a.rel='noopener';sources.append(a);
+ const sources=el('div');sources.className='filament-sources';
+ sources.append(el('span',say('Manufacturer swatches','Muestras del fabricante')));
+ for(const [label,url] of Object.entries(swatchSources)){
+  const a=el('a',label);a.href=url;a.target='_blank';a.rel='noopener';sources.append(a);
  }
  function render(){
   results.replaceChildren();
-  const list=sorted.filter(s=>(!series.value||s.series===series.value)&&(!family.value||hueFamily(s)===family.value)&&(s.id+' '+s.hex).toLowerCase().includes(search.value.trim().toLowerCase()));
+  const words=search.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  const list=sorted.filter(s=>{
+   const keywords=(s.id+' '+s.brand+' '+s.line+' '+s.hex).toLowerCase();
+   return (!series.value||s.series===series.value)&&(!family.value||hueFamily(s)===family.value)&&words.every(word=>keywords.includes(word));
+  });
   for(const [label,rows] of [[say('Closest colors','Tonos más cercanos'),list.slice(0,5)],[say('More colors','Más colores'),list.slice(5)]]){
    if(!rows.length)continue;results.append(el('h3',label));const grid=el('div');grid.className='spool-grid';
    for(const spool of rows){
-    const b=el('button');b.type='button';b.dataset.spool=spool.id;const chip=el('i');chip.style.background=spool.hex;
-    const text=el('span',spool.name);text.append(el('small',spool.series+' · '+spool.hex));b.append(chip,text);
+    const b=el('button');b.type='button';b.dataset.spool=spool.id;
+    const active=selected?.id===spool.id,label=filamentLabel(spool,active?'selected':undefined);
+    if(selected)b.setAttribute('aria-pressed',String(active));
+    const reference=el('small');reference.className='filament-reference';
+    reference.append(flatSwatch(spool.hex),el('code',spool.hex));label.append(reference);
+    b.append(filamentReel(spool),label);
     b.onclick=()=>{dialog.close();onSelect(spool);};grid.append(b);
    }
    results.append(grid);

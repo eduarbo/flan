@@ -17,7 +17,7 @@ import {createHistory} from './history.js';
 import {decodeBytes,unpack,unpackVariant,printLoader,gunzip} from './assets.js';
 import {createGeometryStore} from './geometry.js';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
-import {bindSpool,setupOf} from './filament-swatches.js';
+import {bindSpool,commonSpool,setupOf} from './filament-swatches.js';
 import {enhanceColorInput} from './color-input.js';
 import {createKeycapColors} from './keycap-colors.js';
 import {createExplorer,partInfo,matchesPart,isMagnet} from './explorer.js';
@@ -822,7 +822,10 @@ function labelFrames(){
   for(const button of $('swatches').children){const label=t('swatch.'+swatchNames[button.dataset.color]);button.title=label;button.setAttribute('aria-label',label);}
 }
 labelFrames();onLanguage(labelFrames);
-const frameHex=enhanceColorInput($('frame-color'),()=>t('frame.color'),spool=>applyConfiguration(bindSpool(setColor(configuration,frameTargets(),'frame','body',spool.hex.toLowerCase()),frameTargets(),spool)));
+const frameHex=enhanceColorInput($('frame-color'),()=>t('frame.color'),spool=>{
+  const sides=frameTargets(),next=setColor(configuration,sides,'frame','body',spool.hex.toLowerCase());
+  applyConfiguration(bindSpool(next,sides,spool));
+},hex=>commonSpool(configuration,frameTargets(),hex));
 $('frame-color').oninput=e=>applyConfiguration(setColor(configuration,frameTargets(),'frame','body',e.target.value));
 $('theme-colors').onclick=()=>{const cfg=copy(configuration);for(const side of frameTargets()){const p=framePalette(cfg.frames[side].style);cfg.frames[side].color=p.body;cfg.frames[side].accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,p[k]]));if(cfg.cases[side].match_frame){cfg.cases[side].base_color=p.body;if(cfg.cases[side].style==='level')cfg.cases[side].plate_color=p.body;}}applyConfiguration(cfg);};
 for(const [id,label] of [['default','Original'],['normal-sculpted','Sculpted'],['saddle-sculpted','Saddle']]){

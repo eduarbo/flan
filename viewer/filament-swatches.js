@@ -63,11 +63,18 @@ export function hueFamily(spool){
  return 'pink';
 }
 const ranges={'Bambu PLA Matte':matte,'Bambu PLA Basic':basic,'Polymaker Panchroma Matte':panchromaMatte,'Polymaker Panchroma Basic':panchromaBasic};
-export const catalogSpools=Object.entries(ranges).flatMap(([series,colors])=>
- Object.entries(colors).map(([name,hex])=>({id:series+'/'+name,name,series,hex,lab:oklab(hex)})));
+export const catalogSpools=Object.entries(ranges).flatMap(([series,colors])=>{
+ const brand=series.startsWith('Bambu ')?'Bambu Lab':'Polymaker';
+ const line=series.slice(series.indexOf(' ')+1),finish=series.endsWith(' Matte')?'matte':'basic';
+ return Object.entries(colors).map(([name,hex])=>({id:series+'/'+name,name,series,brand,line,finish,hex,lab:oklab(hex)}));
+});
 const byId=new Map(catalogSpools.map(s=>[s.id,s]));
 export const spoolById=id=>byId.get(id);
 export const spoolFor=(config,side,hex)=>spoolById(config.filaments?.[side]?.[hex.toLowerCase()]);
+export function commonSpool(config,sides,hex){
+ const first=spoolFor(config,sides[0],hex);
+ return first&&sides.every(side=>spoolFor(config,side,hex)===first)?first:undefined;
+}
 export function rankedSwatches(hex){
  const target=oklab(hex);
  const distance=s=>s.lab.reduce((sum,v,i)=>sum+(v-target[i])**2,0);

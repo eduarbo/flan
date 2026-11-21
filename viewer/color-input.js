@@ -8,14 +8,14 @@ export function normalizeHex(value){
  return /^[0-9a-f]{6}$/i.test(hex)?'#'+hex.toLowerCase():null;
 }
 // name: what the swatch colours, in the page's language
-export function enhanceColorInput(swatch,name=()=>swatch.getAttribute('aria-label'),selectSpool){
+export function enhanceColorInput(swatch,name=()=>swatch.getAttribute('aria-label'),selectSpool,currentSpool){
  const editor=document.createElement('div');editor.className='color-editor';
  swatch.before(editor);editor.append(swatch);
  const hex=document.createElement('input');hex.id=swatch.id+'-hex';hex.type='text';hex.className='hex-input';hex.spellcheck=false;hex.autocomplete='off';hex.setAttribute('autocapitalize','off');
  const copy=document.createElement('button');copy.type='button';copy.className='copy-color';
  const notice=document.createElement('small');notice.id=hex.id+'-notice';notice.className='color-notice';notice.setAttribute('role','status');hex.setAttribute('aria-describedby',notice.id);
  const spoolButton=document.createElement('button');spoolButton.type='button';spoolButton.className='choose-spool';
- spoolButton.onclick=()=>chooseFilament(swatch.value,selectSpool);
+ spoolButton.onclick=()=>chooseFilament(swatch.value,selectSpool,mixed?undefined:currentSpool?.(swatch.value));
  editor.append(hex,copy);if(selectSpool)editor.append(spoolButton);editor.append(notice);
  let mixed=false,committing=false,last='';
  function label(){spoolButton.textContent=t('spool.pick');spoolButton.setAttribute('aria-label',name()+' · '+t('spool.pick'));hex.setAttribute('aria-label',t('hex.label',{name:name()}));copy.textContent=t('hex.copyText');copy.setAttribute('aria-label',t('hex.copy',{name:name()}));hex.placeholder=mixed?t('hex.mixed'):'#RRGGBB';}

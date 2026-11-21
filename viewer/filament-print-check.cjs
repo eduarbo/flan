@@ -15,15 +15,19 @@ const read=(file,entry)=>cp.execFileSync('unzip',['-p',file,entry],{encoding:'ut
   await p.click('#nav-files');await p.click('#filament-guide summary');
   await p.getByRole('button',{name:'Choose spools and substitutes'}).click();
   assert(await p.locator('#theme-filaments').evaluate(el=>el.open));
+  await p.locator('#theme-spool-list .theme-spool').nth(1).waitFor();
   const spacing=await p.locator('#theme-spool-list').evaluate(list=>{
     const [first,second]=list.children;
-    const row=first.getBoundingClientRect(),label=first.querySelector('span').getBoundingClientRect();
+    const row=first.getBoundingClientRect(),label=first.querySelector('.filament-label').getBoundingClientRect();
     return {gap:second.getBoundingClientRect().top-row.bottom,above:label.top-row.top,below:row.bottom-label.bottom};
   });
   assert(spacing.gap>=6 && spacing.above>=8 && spacing.below>=8,'Filament rows and their labels need visible space');
   await p.click('#match-theme-spools');const matched=await snap();assert(Object.keys(matched.filaments.left).length>=3);
   await p.click('#theme-spool-list button:first-child');const dlg=p.locator('dialog.filament-picker');
-  assert(await dlg.locator('button[data-spool]').count()>100);
+  const choices=dlg.locator('button[data-spool]');
+  assert(await choices.count()>100);
+  assert.equal(await choices.locator('.filament-reel').count(),await choices.count());
+  assert.equal(await dlg.locator('[aria-pressed=true]').count(),1);
   await dlg.getByRole('combobox',{name:'Color family',exact:true}).selectOption('purple');
   await dlg.getByRole('combobox',{name:'Filament range',exact:true}).selectOption('Polymaker Panchroma Matte');
   assert(await dlg.locator('button[data-spool]').count()>=2);await dlg.getByRole('searchbox').fill('Lavender');
@@ -33,7 +37,14 @@ const read=(file,entry)=>cp.execFileSync('unzip',['-p',file,entry],{encoding:'ut
   await p.click('#editor-tabs [data-panel=cases]');const tune=p.locator('#panel-cases .tune[aria-expanded=false]');if(await tune.count())await tune.click();
   for(const [side,range,name] of [['left','Bambu PLA Matte','Ivory White'],['right','Bambu PLA Basic','Jade White']]){
    await p.click('#case-target [data-side='+side+']');await p.locator('.color-editor').filter({has:p.locator('#case-base_color')}).locator('.choose-spool').click();
-   await dlg.getByRole('searchbox').fill(name);await dlg.locator('[data-spool="'+range+'/'+name+'"]').click();
+   await dlg.getByRole('searchbox').fill('white Bambu Lab');
+   for(const [finish,white] of [['matte','Ivory White'],['basic','Jade White']]){
+    const option=choices.filter({hasText:white});assert.equal(await option.count(),1);
+    assert.equal(await option.locator('.filament-reel').getAttribute('data-finish'),finish);
+    assert.equal(await option.locator('code').textContent(),'#FFFFFF');
+   }
+   await dlg.getByRole('searchbox').fill(range+'/'+name);assert.equal(await choices.count(),1);
+   await dlg.locator('[data-spool="'+range+'/'+name+'"]').click();
   }
   const custom=await snap();assert.equal(custom.cases.left.base_color,custom.cases.right.base_color);
   assert.notEqual(custom.filaments.left['#ffffff'],custom.filaments.right['#ffffff']);

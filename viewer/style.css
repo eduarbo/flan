@@ -643,15 +643,12 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
 .theme-spool, .spool-grid button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; text-align: left; }
 #theme-spool-list { display: grid; gap: 8px; margin-block: 14px 16px; }
 .build-detail .theme-spool { min-height: 56px; padding: 10px 14px; gap: 12px; border-radius: 10px; line-height: 1.4; }
-.theme-spool > span:first-of-type { flex: 1; min-width: 0; overflow-wrap: anywhere; }
-.theme-spool > span:last-child { color: var(--muted); }
-.theme-spool i, .spool-grid i { width: 22px; height: 22px; flex: none; border-radius: 50%; border: 1px solid var(--line); }
-.theme-spool small, .spool-grid small { display: block; color: var(--muted); font-size: 11px; }
-.theme-spool small { margin-top: 3px; font-size: 12px; font-weight: 400; color: color-mix(in srgb, var(--ink) 75%, var(--muted)); }
-.theme-spool small span { display: inline-block; max-width: 100%; }
+.theme-spool .filament-label { flex: 1; }
+.spool-arrow { color: var(--muted); }
+.filament-label > small { color: color-mix(in srgb, var(--ink) 82%, var(--muted)); }
 #match-theme-spools { margin-top: 0; min-height: 44px; }
-.spool-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,215px),1fr)); gap: 4px; }
-.spool-grid button { padding: 6px; border-radius: 6px; }
+.spool-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,215px),1fr)); gap: 8px; }
+.spool-grid button { background: var(--soft); border-radius: 10px; }
 .spool-grid button:hover { background: var(--field); }
 .spool-filters, .print-settings { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: end; }
 .spool-filters input, .spool-filters select, .print-settings select { min-height: 44px; max-width: 100%; padding: 6px 10px; background: var(--field); color: var(--ink); border: 1px solid var(--line); border-radius: 7px; font: inherit; }
@@ -662,13 +659,18 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
 .theme-files { display: flex; flex-wrap: wrap; gap: 8px; }
 .theme-files button { min-height: 44px; color: var(--ink); text-decoration: underline; }
 
+.filament-sources { display: flex; flex-wrap: wrap; gap: 2px 14px; margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; }
+.filament-sources > span { flex-basis: 100%; color: var(--muted); }
+.filament-sources a { display: inline-flex; align-items: center; min-height: 32px; }
 .filament-picker .target-swatch { display: flex; align-items: center; gap: 9px; margin: 0 0 16px; color: var(--ink); }
-.target-swatch i, .filament-picker .spool-grid i { display: block; flex: none; width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 50%; }
+.target-swatch i { display: block; flex: none; width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 50%; }
 .target-swatch code { margin-inline-start: auto; color: var(--muted); font: 12px var(--mono); }
 .filament-picker .spool-filters { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 8px; }
 .filament-picker .spool-filters input { grid-column: 1 / -1; width: 100%; }
 .filament-picker .spool-filters select { width: 100%; min-width: 0; }
-.filament-picker .spool-grid button { padding: 7px 8px; }
+.filament-picker .spool-grid button { padding: 10px 12px; }
+.filament-picker .spool-grid button:hover { background: var(--field); }
+.filament-picker .spool-grid button[aria-pressed=true] { box-shadow: inset 0 0 0 1px currentColor; }
 @media (max-width: 480px) {
  .filament-picker .spool-filters { grid-template-columns: minmax(0, 1fr); }
  .filament-picker .target-swatch { margin-bottom: 10px; }

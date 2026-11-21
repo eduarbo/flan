@@ -1964,11 +1964,11 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "edda8ada892dfafb27be4e55877da24a14a98c73ab04a7737f5bb078ede66aa3"
+      "sha256": "7d61e786c323062578307a083030bc433f986ac6ff71963ce80d5ae44bdcb67b"
     },
     {
       "path": "viewer/build-guide.js",
-      "sha256": "62be5a14c40f4cfea8c98927a457069b21269fcc418c08fdd74324b73174432e"
+      "sha256": "4e628cb94b6f42c5522fdc13612b961a7fa28a8a2a201aac3257dd28b4a90a1a"
     },
     {
       "path": "viewer/design-url.js",
@@ -1988,7 +1988,7 @@
     },
     {
       "path": "viewer/i18n.js",
-      "sha256": "5622dd8618deac5c58239e8943cdf00d1a58f1b57b29e7bf8e89b91b372c92ac"
+      "sha256": "a22f8f2a090c052ec764e7419055a11ab760db9489d78d32fec4bac851d976d0"
     },
     {
       "path": "viewer/config.js",
@@ -2020,11 +2020,11 @@
     },
     {
       "path": "viewer/keycap-colors.js",
-      "sha256": "45bf5e680e8ccbb364f2b649ead2c72827e29d1a2fd1a480dee8c0e1f881346c"
+      "sha256": "4203b2d1f360498bbbd3404c33f710c67e58a9d6ced20e48ac0c8002f42aae66"
     },
     {
       "path": "viewer/color-input.js",
-      "sha256": "1382870a8f76cba166ab02738410821b9db9e92c7b1488a08766ddb8ee1b5683"
+      "sha256": "58cc9777814d5079abeeb57488ffe02aa70a46dedb65870dbbd320066e3e74a1"
     },
     {
       "path": "design/keycap-themes.json",
@@ -2032,7 +2032,7 @@
     },
     {
       "path": "viewer/appearance.js",
-      "sha256": "7a6dfffef2b7bd4592234b5589cd63e3aada2e1714087746ef635d5f3f22811d"
+      "sha256": "c260f0e7ddce7d1cd84826086f4b359f9d1ce80913c6cffe26295f1da520338a"
     },
     {
       "path": "viewer/printing.js",
@@ -2048,11 +2048,27 @@
     },
     {
       "path": "viewer/filament-swatches.js",
-      "sha256": "77aa1cfec878dbcd4598f6aa72d69408e7b44b9a3dbe3afbb263b7b5af2582ac"
+      "sha256": "d32263ade9f4ee9b8e5e1aa26006d4c18ebe5340a456b005e7ba50cb53555761"
     },
     {
       "path": "viewer/filament-picker.js",
-      "sha256": "29047991963bdf425e86530abfdfe99787609e4f6a215a954fa95050d37acfa7"
+      "sha256": "35f3af880519cf61907bc780eb8b7658920050215d35500798cb7aa6a7d2d4ea"
+    },
+    {
+      "path": "viewer/filament-identity.js",
+      "sha256": "1c1a8bc355c2c8948ec37ab73c56b8f5b3ea14a72f69b101d9da68169e96bcb4"
+    },
+    {
+      "path": "viewer/filament-reel.css",
+      "sha256": "875d5dd9e5b87f9e7bba9d15d6854a43b346e0d23dfcddb7c5b5c7a9d1dacf05"
+    },
+    {
+      "path": "viewer/thumbs/filament-reel-mask.webp",
+      "sha256": "4f7016a19f1fb7bc46640bbf786c441a31163568a4861e2502ee4e9696c56139"
+    },
+    {
+      "path": "viewer/thumbs/filament-reel-light.webp",
+      "sha256": "db311afdb358cf58b64f6b72fce51498f63b3e68e36d737b15e32927119c17e0"
     },
     {
       "path": "design/themes.json",
@@ -2076,15 +2092,15 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "c9d778107153b1e0040d85bb6049c545ddd597f595e41a5d8d505e61d09e11ed"
+      "sha256": "bc56a45cb29d4ad9c840ae2d836b2a0df6630a9ee37b0f8706ee1ccd660ea962"
     },
     {
       "path": "viewer/template.html",
-      "sha256": "b420114270e729eb8c64d55d90e27e1b37d32e47f162e34a6736630065a69868"
+      "sha256": "f2e8535dd871bdc6b55ac0fe1638911c6b7f7439a7c0c6aeb1641bad0db0433a"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "fb9211a28f887142de391b772487239367162be988c9572c8cec558f5bdbdd94"
+      "sha256": "a88e39e672d8b8fcfd0fa855aec63c803810d6ee9568aeb311c331b7515faa7f"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -2127,7 +2143,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "dd7be6f7b7e771e41fb49ad518cb2cd221ab00eea1efb83d54374a927744c2bb",
+  "viewer_sha256": "c36119ffba908cdbad99d5af6c1a3afeaf07c1a059561bf79cab027bc7d82f65",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2413,8 +2429,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "03ed18f8f2d14cb46847c68e0040c6601fc7953b427620c7ec780e34d327eea0",
-    "bytes": 74233740
+    "sha256": "292885b636a66b85f0425d6d578207c553ac8a8e6c531e86f3e5efc586830993",
+    "bytes": 74263649
   },
   "still": {
     "look": {
@@ -3062,7 +3078,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "71278ee36a3a1e6fe08e18e2c846b1be67e65ed29d240eadae6032330fb464cf",
+  "offline_sha256": "b27a4aca0b8ef4840ba4f85c5196486923fe166dbf3ae8d9d6a82da88850d956",
   "printing": {
     "path": "docs/explore/assets/printing-56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475.bin",
     "sha256": "56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475",
@@ -3112,8 +3128,8 @@
     "bytes": 335912
   },
   "geometry_aliases": 16,
-  "online_bytes": 1229040,
-  "offline_bytes": 98495511,
+  "online_bytes": 1268864,
+  "offline_bytes": 98535335,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",
