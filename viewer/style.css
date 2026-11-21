@@ -641,6 +641,26 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
 }
 .choose-spool { grid-column: 1 / -1; justify-self: start; min-height: 38px; padding: 4px 10px; color: var(--ink); background: var(--field); border-radius: 8px; }
 .theme-spool, .spool-grid button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; text-align: left; }
+.build-detail.filament-disclosure { border-top: 0; padding-top: 0; }
+.filament-disclosure > summary {
+ display: flex; gap: 10px; align-items: center; min-height: 58px; padding: 8px 10px 8px 12px;
+ border: 1px solid color-mix(in srgb, var(--ink) 28%, transparent); border-radius: 12px;
+ background: var(--soft); color: var(--ink); font-size: 14px; font-weight: 600; line-height: 1.35;
+}
+.build-detail.filament-disclosure > summary::after { content: none; }
+.filament-disclosure > summary .filament-reel { --filament: var(--accent); width: 36px; height: 36px; }
+.filament-disclosure-action {
+ display: inline-flex; flex: none; align-items: center; justify-content: center; gap: 7px;
+ margin-inline-start: auto; padding: 6px 10px; border-radius: 7px;
+ background: var(--ink); color: var(--bg0); font-size: 12px; line-height: 1.25;
+}
+.filament-disclosure-action b { font-weight: 550; }
+.filament-disclosure-action::after { content: ''; width: 6px; height: 6px; border: solid currentColor; border-width: 0 1.5px 1.5px 0; transform: translateY(-1.5px) rotate(45deg); }
+.filament-disclosure:not([open]) > summary .filament-disclosure-action > b:last-child, .filament-disclosure[open] > summary .filament-disclosure-action > b:first-child { display: none; }
+.filament-disclosure[open] > summary .filament-disclosure-action::after { transform: translateY(1.5px) rotate(225deg); }
+@media (hover: hover) { .filament-disclosure > summary:hover { background: var(--sel); border-color: var(--ink); } }
+.filament-disclosure > summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+#theme-filaments > summary + .micro { margin-top: 10px; }
 #theme-spool-list { display: grid; gap: 8px; margin-block: 14px 16px; }
 .build-detail .theme-spool { min-height: 56px; padding: 10px 14px; gap: 12px; border-radius: 10px; line-height: 1.4; }
 .theme-spool .filament-label { flex: 1; }

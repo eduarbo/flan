@@ -8,6 +8,7 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
 import {gunzipSync} from 'three/addons/libs/fflate.module.js';
 import {MeshoptDecoder} from 'meshoptimizer/decoder';
+import {printFrameColors} from '../preset-filaments.js';
 import finishes from '../../design/frame-finishes.json';
 import {creasedNormals} from './creased.js';
 
@@ -17,7 +18,7 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 export const capColor=(palette,key)=>key.row===3?palette.thumbs[key.col]:palette.pattern==='rows'?palette.colors[key.row]:palette.base;
 export function framePalette(look,theme,side){
   const own=look.own?.[side]&&finishes.styles[look.frame[side]]?.colors;
-  const p=own?Object.fromEntries(Object.entries(own).map(([k,v])=>[k,v.toLowerCase()])):{...theme.frame};
+  const p=own?printFrameColors(own):{...theme.frame};
   return finishes.roles.map(role=>p[role]||p.body);
 }
 

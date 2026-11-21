@@ -4,6 +4,7 @@
 // size (its cases and PCB). Also writes the home page itself to docs/index.html and its 3D engine beside the packs.
 // Run from viewer/build.mjs, or alone: node viewer/home-build.mjs
 import fs from 'node:fs';
+import {printThemes} from './preset-filaments.js';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import {gzipSync,gunzipSync} from 'node:zlib';
@@ -146,7 +147,7 @@ export async function buildHome({scene=read('build/viewer-scene.json')}={}){
   const page=await homePage({scene,files});
   const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
   const sources=['viewer/home-build.mjs','viewer/home/app.js','viewer/home/options.js','viewer/design-url.js','viewer/home/model.js','viewer/home/creased.js','viewer/home/tokens.js','viewer/home/style.css','viewer/home/template.html',
-    'design/themes.json','design/frame-finishes.json','design/variants.json','docs/branding/flan/flan-mark-color.svg','viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}));
+    'design/themes.json','viewer/preset-filaments.js','viewer/filament-swatches.js','design/preset-filaments.json','design/frame-finishes.json','design/variants.json','docs/branding/flan/flan-mark-color.svg','viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}));
   const published=p=>({path:p,sha256:hash(p),bytes:fs.statSync(path.join(root,p)).size});
   const receipt={revision:scene.revision,page:{path:'docs/index.html',sha256:hash('docs/index.html'),bytes:page.bytes},
     engine:published(page.engine),posters:page.posters.map(published),
@@ -177,7 +178,7 @@ async function homePage({scene,files}){
   const engineFile=`home-engine-${crypto.createHash('sha256').update(engine).digest('hex').slice(0,16)}.js`;
   fs.writeFileSync(path.join(assets,engineFile),engine);
   for(const f of fs.readdirSync(assets))if(/^home-engine-[0-9a-f]{16}\.js$/.test(f)&&f!==engineFile)fs.rmSync(path.join(assets,f));
-  const themes=read('design/themes.json').themes.map(({id,name,base,plate,frame,keycaps,recommended_frame})=>({id,name,base,plate,frame,keycaps,recommended_frame}));
+  const themes=printThemes.map(({id,name,base,plate,frame,keycaps,recommended_frame})=>({id,name,base,plate,frame,keycaps,recommended_frame}));
   const family=read('design/variants.json').variants;
   const data={packs:Object.fromEntries(Object.entries(files).map(([k,f])=>[k,'assets/'+f])),engine:'assets/'+engineFile,themes,
     sizes:SIZES.map(id=>({id,title:family[id].title,grid:family[id].grid_per_half,keys:family[id].keys_total})),

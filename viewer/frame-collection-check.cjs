@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 const fs=require('fs'),path=require('path'),assert=require('assert/strict'),crypto=require('crypto');
 const root=path.resolve(__dirname,'..'),out=path.join(root,'build/frame-collection/acceptance');fs.mkdirSync(out,{recursive:true});
-const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),read=p=>JSON.parse(fs.readFileSync(path.join(root,p))),spec=read('design/frame-finishes.json'),pcb=read('design/pcb-options.json'),withPcb=c=>({variant:read('design/variants.json').base,pcb_edition:pcb.default_edition,pcb_mask:pcb.default_mask,...c}),scene=read('build/viewer-scene.json'),catalog=scene.catalog,selection=read('design/frame-selection.json'),themes=read('design/themes.json').themes,styles=Object.keys(catalog.frame_styles),fallback=catalog.default_frame_style;
+const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),read=p=>JSON.parse(fs.readFileSync(path.join(root,p))),spec=read('design/frame-finishes.json'),pcb=read('design/pcb-options.json'),withPcb=c=>({variant:read('design/variants.json').base,pcb_edition:pcb.default_edition,pcb_mask:pcb.default_mask,...c}),scene=read('build/viewer-scene.json'),catalog=scene.catalog,selection=read('design/frame-selection.json'),styles=Object.keys(catalog.frame_styles),fallback=catalog.default_frame_style;
 assert.deepEqual(styles,selection.viewer.installed_styles);assert.equal(fallback,'talavera');assert.deepEqual(catalog.pending_frame_styles,[]);
-require('esbuild').buildSync({stdin:{contents:"export * from './printing.js';export * from './config.js';export * from './storage.js';export {unzipSync,strFromU8} from 'three/addons/libs/fflate.module.js';",resolveDir:__dirname},bundle:true,platform:'node',format:'cjs',outfile:path.join(out,'printing.cjs')});
-const {mesh3MF,unzipSync,strFromU8,normalize,check,restoreConfiguration}=require(path.join(out,'printing.cjs')),materials=[];
+require('esbuild').buildSync({stdin:{contents:"export {presetSpool,printThemes} from './preset-filaments.js';export {mapThemeToSpools} from './filament-swatches.js';export * from './printing.js';export * from './config.js';export * from './storage.js';export {unzipSync,strFromU8} from 'three/addons/libs/fflate.module.js';",resolveDir:__dirname},bundle:true,platform:'node',format:'cjs',outfile:path.join(out,'printing.cjs')});
+const {presetSpool,printThemes:themes,mapThemeToSpools,mesh3MF,unzipSync,strFromU8,normalize,check,restoreConfiguration}=require(path.join(out,'printing.cjs')),materials=[];
 for(const side of ['left','right'])for(const style of styles){
  const id=`${side}-frame-${style}`,part=scene.printing.assets[id];assert(part,id);assert.equal(part.material_parts.length,4);
- for(const m of part.material_parts)assert.equal(sha(Buffer.from(m.stl,'base64')),sha(fs.readFileSync(path.join(root,m.path))),id+' '+m.role);
+ for(const m of part.material_parts)assert.equal(sha(Buffer.from(m.stl,'base64')),sha(fs.readFileSync(path.join(root,m.print_path||m.path))),id+' '+m.role);
  const p={...part,id,style,colors:spec.styles[style].colors},result=mesh3MF(p),xml=strFromU8(unzipSync(result.bytes)['3D/3dmodel.model']);
  assert.equal((xml.match(/<object /g)||[]).length,5);assert.equal((xml.match(/<component /g)||[]).length,4);assert.equal((xml.match(/<item /g)||[]).length,1);assert.doesNotMatch(xml,/paint_color|colorgroup/);
  for(const [i,role] of spec.roles.entries())assert.match(xml,new RegExp(`name="${role}" displaycolor="${p.colors[role].toUpperCase()}FF"`));
@@ -49,10 +49,10 @@ const tune=async(page,name)=>{const t=page.locator(`#panel-${name} .tune[aria-ex
   const url=process.env.FLAN36_VIEWER_URL||'file://'+path.join(root,'docs/explore/offline.html');
   const open=async(page)=>{if(page!==p)page.on('pageerror',e=>report.runtime_errors.push(e.message));await page.goto(url+(url.includes('?')?'&':'?')+'diagnostics');await page.waitForFunction(()=>window.flan36,null,{timeout:120000});};
   const snap=()=>p.evaluate(()=>window.flan36.snapshot()),idle=()=>p.evaluate(()=>window.flan36.idle());
-  const panel=async(page,mode)=>{if(await page.locator('body').getAttribute('data-panel-open')!=='true'||await page.locator('body').getAttribute('data-mode')!==mode||await page.locator('body').getAttribute('data-detail')==='true')await page.click('#nav-'+mode);};
+  const panel=async(page,mode)=>{if(await page.locator('body').getAttribute('data-panel-open')!=='true'||await page.locator('body').getAttribute('data-mode')!==mode||await page.locator('body').getAttribute('data-detail')==='true')await page.locator('#nav-'+mode).press('Enter');};
   const category=async(name,page=p)=>{await panel(page,'customize');await page.click(`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);await tune(page,name);};
   const recovery=async()=>{await panel(p,'files');if(await p.locator('#recovery').getAttribute('open')===null)await p.click('#recovery summary');};
-  await open(p);const initial=await snap();assert.deepEqual(initial.configuration,withPcb(catalog.default_configuration));
+  await open(p);const initial=await snap();assert.deepEqual(initial.configuration,mapThemeToSpools(withPcb(catalog.default_configuration),['left','right'],presetSpool));
   await category('frames');assert.deepEqual(await p.locator('[data-style]').evaluateAll(es=>es.map(e=>e.dataset.style)),styles);
   const images=await p.locator('[data-style] img').evaluateAll(es=>es.map(e=>e.src));assert.equal(new Set(images).size,styles.length,'Each frame has a distinct rendered preview');
   assert(images.every(s=>s.startsWith('data:image/')));report.checks.distinct_actual_previews=styles.length;
@@ -62,7 +62,7 @@ const tune=async(page,name)=>{const t=page.locator(`#panel-${name} .tune[aria-ex
   await category('themes');await p.click('#theme-target [data-side=both]');
   for(const theme of themes){const before=await snap();await p.click(`[data-theme="${theme.id}"]`);await idle();const after=await snap();assert.deepEqual(after.camera,before.camera);assert.deepEqual(after.configuration.frames.left.style,before.configuration.frames.left.style);for(const side of ['left','right'])for(const k of catalog.layout[side]){const expected=k.row===3?theme.keycaps.thumbs[k.col]:theme.keycaps.pattern==='rows'?theme.keycaps.colors[k.row]:theme.keycaps.base;assert.equal(after.configuration.keycaps[side][k.ref].color,expected);}}
   report.checks.themes_without_pinky_accents=themes.length;
-  await recovery();await p.click('#default-config');await idle();assert.deepEqual((await snap()).configuration,withPcb(catalog.default_configuration));report.checks.approved_reset_default=true;
+  await recovery();await p.click('#default-config');await idle();assert.deepEqual((await snap()).configuration,mapThemeToSpools(withPcb(catalog.default_configuration),['left','right'],presetSpool));report.checks.approved_reset_default=true;
   // Exercise the real file-import route for every withdrawn ID, with implicit accents.
   for(const fixture of fixtures.filter((_,i)=>i%3===0)){
    const before=await snap();await p.setInputFiles('#load-config',{name:'old.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(fixture.input))});

@@ -2,24 +2,24 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "9cc596dcb15e21e1561758cc611594e1b5b7dd39f88f8e1060d01a77e85bcc3b",
+    "sha256": "e00abb092235d534466c336f643076e946bd9f43bc9abdbe4cd4085972cb5ac0",
     "bytes": 116098
   },
   "engine": {
-    "path": "docs/assets/home-engine-ed15491be7465e38.js",
-    "sha256": "ed15491be7465e387a0d28c3a076ef07af9e2b1c8bd7c3d6d8511d30302a6ab6",
-    "bytes": 588498
+    "path": "docs/assets/home-engine-1ff039d322d4801b.js",
+    "sha256": "1ff039d322d4801bc20e2b4206ebfdf44d6cb46997a5907a267b018b1c852706",
+    "bytes": 603852
   },
   "posters": [
     {
       "path": "docs/assets/home-poster.webp",
-      "sha256": "99b101435a690b6c605650185f1d5812efb599454cd4806274a928976936954a",
-      "bytes": 88912
+      "sha256": "a13ab7f0cfbbc5c7d40edb5c40c6050038437e04dcbef967082baebf1abe2e0b",
+      "bytes": 87956
     },
     {
       "path": "docs/assets/home-poster-800.webp",
-      "sha256": "980efe1d071b678a7e8632f5c05d8900ec511f71de716a6b6ca60c33b8ac9b76",
-      "bytes": 36572
+      "sha256": "838320c0f912ab18e7ab74379f51058436ad6ad3a8530a1158604fc84c09de94",
+      "bytes": 36860
     }
   ],
   "packs": {
@@ -2052,7 +2052,7 @@
   "sources": [
     {
       "path": "viewer/home-build.mjs",
-      "sha256": "66304ea8ad7afd2c7ad9a70bab49947316c3f454c07c06af507023e42483e044"
+      "sha256": "6627fb1afb0b839cd8fd326431fc30f3947625949681de19cd32b343f7b05aa9"
     },
     {
       "path": "viewer/home/app.js",
@@ -2068,7 +2068,7 @@
     },
     {
       "path": "viewer/home/model.js",
-      "sha256": "1981160bc6a5e067ec0efe86163a71e12176e053a7d73b843dd3b5131e6e0460"
+      "sha256": "4b4a302ba86b56c7091a46b49d62bc623cba068c2506495273ef6a6a4613cd80"
     },
     {
       "path": "viewer/home/creased.js",
@@ -2076,7 +2076,7 @@
     },
     {
       "path": "viewer/home/tokens.js",
-      "sha256": "e589859d0a397fb7f873b3c018fde1d13ace1d5a01bf1dffb7aca9b6a7372018"
+      "sha256": "051c436f45cc193b8ca6d096a5d04dfd3a264e363587d34263be948823c8db59"
     },
     {
       "path": "viewer/home/style.css",
@@ -2089,6 +2089,18 @@
     {
       "path": "design/themes.json",
       "sha256": "21a324a9153df68bac77700ec4d8f43b01e3411a70f321bf2f74aa26cbba1a7b"
+    },
+    {
+      "path": "viewer/preset-filaments.js",
+      "sha256": "a8cb7b73bff2d606eca48cdef937a9da99abdaccc1e7274511e433e33e862231"
+    },
+    {
+      "path": "viewer/filament-swatches.js",
+      "sha256": "f992d36f1fe3139cdc208a1a39b7af65b80ea886046b2f2b8e8268c6ab395240"
+    },
+    {
+      "path": "design/preset-filaments.json",
+      "sha256": "0954a0b56ebb14b48582aa965b206f79f62f8c068aeb13f89e676e43e5246a7e"
     },
     {
       "path": "design/frame-finishes.json",

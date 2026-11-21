@@ -3,9 +3,8 @@
 // node viewer/page-colors-check.mjs
 // SPDX-License-Identifier: GPL-3.0-or-later
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
+import {printThemes as themes} from './preset-filaments.js';
 import {pageTokens} from './home/tokens.js';
-const themes=JSON.parse(fs.readFileSync(new URL('../design/themes.json',import.meta.url))).themes;
 const lin=c=>c<=.04045?c/12.92:((c+.055)/1.055)**2.4;
 const lum=h=>{const [r,g,b]=[1,3,5].map(i=>lin(parseInt(h.slice(i,i+2),16)/255));return .2126*r+.7152*g+.0722*b;};
 const ratio=(a,b)=>{const [x,y]=[lum(a),lum(b)].sort((p,q)=>q-p);return (x+.05)/(y+.05);};

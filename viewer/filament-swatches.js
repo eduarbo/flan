@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Published 1.75 mm PLA color tables. Catalog inclusion does not imply local stock.
-export const matteSource='https://bambulab-us.myshopify.com/products/pla-matte';
-export const basicSource='https://bambulab-us.myshopify.com/products/pla-basic-filament';
+export const matteSource='https://us.store.bambulab.com/products/pla-matte';
+export const basicSource='https://us.store.bambulab.com/products/pla-basic-filament';
 const matte={
  'Ivory White':'#FFFFFF','Bone White':'#CBC6B8','Latte Brown':'#D3B7A7',
  Caramel:'#AE835B',Terracotta:'#B15533','Desert Tan':'#E8DBB7','Ash Gray':'#9B9EA0',
@@ -75,11 +75,12 @@ export function commonSpool(config,sides,hex){
  const first=spoolFor(config,sides[0],hex);
  return first&&sides.every(side=>spoolFor(config,side,hex)===first)?first:undefined;
 }
-export function rankedSwatches(hex){
+export function rankedSwatchDistances(hex){
  const target=oklab(hex);
  const distance=s=>s.lab.reduce((sum,v,i)=>sum+(v-target[i])**2,0);
- return catalogSpools.map(spool=>({spool,d:distance(spool)})).sort((a,b)=>a.d-b.d).map(x=>x.spool);
+ return catalogSpools.map(spool=>({spool,d:distance(spool)})).sort((a,b)=>a.d-b.d);
 }
+export const rankedSwatches=hex=>rankedSwatchDistances(hex).map(x=>x.spool);
 export const closestSwatch=hex=>rankedSwatches(hex)[0];
 export function bindSpool(config,sides,spool){
  config.filaments??={};

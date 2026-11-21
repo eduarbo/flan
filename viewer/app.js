@@ -11,18 +11,18 @@ import {deflateSync} from 'three/addons/libs/fflate.module.js';
 import {createPartIllustrations} from './part-illustrations.js';
 import {buildFile,buildWait,completeBuild,sha256} from './build-package.js';
 import {createAppearance,setColor,savedKey,applyTheme} from './appearance.js';
-import themeLibrary from '../design/themes.json';
+import {printThemes,printFrameColors,presetSpool} from './preset-filaments.js';
 import {restoreConfiguration,createStore,recoveryPrefix} from './storage.js';
 import {createHistory} from './history.js';
 import {decodeBytes,unpack,unpackVariant,printLoader,gunzip} from './assets.js';
 import {createGeometryStore} from './geometry.js';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
-import {bindSpool,commonSpool,setupOf} from './filament-swatches.js';
+import {bindSpool,commonSpool,setupOf,mapThemeToSpools} from './filament-swatches.js';
 import {enhanceColorInput} from './color-input.js';
 import {createKeycapColors} from './keycap-colors.js';
 import {createExplorer,partInfo,matchesPart,isMagnet} from './explorer.js';
 import {createPreviewRenderer} from './previews.js';
-import {createFrameFinishes,framePalette,finishes} from './finishes.js';
+import {applyFramePreset,createFrameFinishes,framePalette,finishes} from './finishes.js';
 import {pageTokens} from './home/tokens.js';
 import {createStudio} from './studio.js';
 import {t,tOr,translate,setLanguage,onLanguage,setText,partName} from './i18n.js';
@@ -56,7 +56,7 @@ function pageColours(theme){
 // A link that names a theme wears its colours while the meshes arrive, and a link to the home page's look
 // also shows that look's picture (viewer/explore-still.cjs), where the model will be once the panel opens.
 try{
-  const still=JSON.parse($('still-data').textContent||'null'),query=new URLSearchParams(location.search),theme=!query.has('design')&&themeLibrary.themes.find(t=>t.id===query.get('theme'));
+  const still=JSON.parse($('still-data').textContent||'null'),query=new URLSearchParams(location.search),theme=!query.has('design')&&printThemes.find(t=>t.id===query.get('theme'));
   if(theme)pageColours(theme);
   if(still&&!query.has('design')&&!query.has('palette')&&Object.entries(still.look).every(([key,value])=>query.get(key)===value)){
     const img=$('loading-still');img.src=matchMedia('(max-width:700px),(max-width:1000px) and (orientation:portrait)').matches?still.tall:still.wide;img.hidden=false;$('loading').dataset.still='true';
@@ -146,7 +146,9 @@ async function loadFasteners(id){
 // the offline copy offers itself; online the link is the published ZIP
 if($('print-data').textContent.trim()){const link=document.querySelector('[data-t=offline]');link.href=location.href;link.download='Flan36-revI.html';}
 for(const node of document.querySelectorAll('[data-measurement]'))node.textContent=String(data.measurements[node.dataset.measurement]);
-const catalog=data.catalog;let configuration=normalize(catalog.default_configuration,catalog);
+const catalog=data.catalog;
+const defaultDesign=()=>mapThemeToSpools(normalize(catalog.default_configuration,catalog),['left','right'],presetSpool);
+let configuration=defaultDesign();
 const store=createStore({key:savedKey,preserveBeforeWrite:value=>retiredFrames(value,catalog).length>0,validate:value=>{const result=check(value,catalog);if(result.errors.length)throw Error(result.errors[0]);return normalize(value,catalog);},notify:(text,error)=>storageNotice(text,error,'configuration')});
 let restored=false,storageMessage='';try{const saved=restoreConfiguration({getItem:key=>key===savedKey?store.initialRaw:localStorage.getItem(key)},catalog);if(saved.configuration){configuration=saved.configuration;restored=true;}storageMessage=saved.message;}catch(e){storageMessage=t('msg.storage');}
 const variants=new Map(catalog.variants.map(v=>[v.id,v]));
@@ -789,7 +791,18 @@ labelSizes();onLanguage(labelSizes);
 function frameTargets(){return frameSide==='both'?['left','right']:[frameSide];}
 function setFrameSide(side){frameSide=side;syncConfigurationUI();}
 function applyFrame(change){
-  const cfg=copy(configuration);for(const side of frameTargets()){if(change.style&&!cfg.cases[side].match_frame){const f=cfg.frames[side],p=framePalette(f.style);if(f.color.toLowerCase()===p.body.toLowerCase()&&Object.entries(f.accents).every(([k,v])=>v.toLowerCase()===p[k].toLowerCase())){const np=framePalette(change.style);f.color=np.body;f.accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,np[k]]));}}Object.assign(cfg.frames[side],change);if(cfg.cases[side].match_frame){cfg.cases[side].base_color=cfg.frames[side].color;if(cfg.cases[side].style==='level')cfg.cases[side].plate_color=cfg.frames[side].color;}if(change.style)cfg.cases[side].cover=true;}
+  const cfg=copy(configuration);
+  for(const side of frameTargets()){
+    const frame=cfg.frames[side],base=cfg.cases[side];
+    if(change.style&&!base.match_frame){
+      const original=framePalette(frame.style),printed=printFrameColors(original);
+      const matches=p=>frame.color.toLowerCase()===p.body.toLowerCase()&&Object.entries(frame.accents).every(([k,v])=>v.toLowerCase()===p[k].toLowerCase());
+      if(matches(original)||matches(printed))applyFramePreset(cfg,side,change.style);
+    }
+    Object.assign(frame,change);
+    if(base.match_frame){base.base_color=frame.color;if(base.style==='level')base.plate_color=frame.color;}
+    if(change.style)base.cover=true;
+  }
   try{
     applyConfiguration(cfg);
   }catch(e){message(e.message,true);}
@@ -827,7 +840,14 @@ const frameHex=enhanceColorInput($('frame-color'),()=>t('frame.color'),spool=>{
   applyConfiguration(bindSpool(next,sides,spool));
 },hex=>commonSpool(configuration,frameTargets(),hex));
 $('frame-color').oninput=e=>applyConfiguration(setColor(configuration,frameTargets(),'frame','body',e.target.value));
-$('theme-colors').onclick=()=>{const cfg=copy(configuration);for(const side of frameTargets()){const p=framePalette(cfg.frames[side].style);cfg.frames[side].color=p.body;cfg.frames[side].accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,p[k]]));if(cfg.cases[side].match_frame){cfg.cases[side].base_color=p.body;if(cfg.cases[side].style==='level')cfg.cases[side].plate_color=p.body;}}applyConfiguration(cfg);};
+$('theme-colors').onclick=()=>{
+ const cfg=copy(configuration);
+ for(const side of frameTargets()){
+  applyFramePreset(cfg,side,cfg.frames[side].style);
+  const base=cfg.cases[side];if(base.match_frame){base.base_color=cfg.frames[side].color;if(base.style==='level')base.plate_color=base.base_color;}
+ }
+ applyConfiguration(cfg);
+};
 for(const [id,label] of [['default','Original'],['normal-sculpted','Sculpted'],['saddle-sculpted','Saddle']]){
   // Show an actual front-to-back column at the shared stem seating datum.
   const entries=['K01','K11','K21'].map((key,i)=>{const choice=data.presets[id].keycaps.left[key],v=variants.get(choice.variant);return {path:v.path,rotation:choice.rotation_deg,position:[0,v.seating_z_mm,(i-1)*17],material:material('#d9d2c4')};});
@@ -1031,7 +1051,7 @@ function syncConfigurationUI(){
 // wears one, otherwise its own case and frame colours.
 function paintPage(){
   const cs=configuration.cases.left,f=configuration.frames.left,lower=v=>v.toLowerCase(),accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,lower(f.accents[k])]));
-  const theme=themeLibrary.themes.find(t=>t.base===lower(cs.base_color)&&t.frame.body===lower(f.color)&&['detail','accent','secondary'].every(k=>t.frame[k]===accents[k]))
+  const theme=printThemes.find(t=>t.base===lower(cs.base_color)&&t.frame.body===lower(f.color)&&['detail','accent','secondary'].every(k=>t.frame[k]===accents[k]))
     ||{base:lower(cs.base_color),plate:lower(cs.plate_color),frame:{body:lower(f.color),...accents}};
   const k=pageColours(theme);
   ground.material.color.set(k.scheme==='dark'?'#000000':k.ink);ground.material.opacity=k.scheme==='dark'?1:.85;explorer?.tint(k.accent);render();
@@ -1118,7 +1138,7 @@ $('load-trigger').onclick=()=>$('load-config').click();
 function downloadJSON(){const url=URL.createObjectURL(new Blob([JSON.stringify(configuration,null,2)+'\n'],{type:'application/json'})),link=document.createElement('a');link.href=url;link.download=($('design-name').value.trim().replace(/[^a-z0-9_-]+/gi,'-').slice(0,60)||'Flan36-config')+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
 $('save-config').onclick=downloadJSON;
 $('load-config').onchange=async e=>{try{const f=e.target.files[0];if(f){if(f.size>100000)throw Error(t('msg.fileTooLarge'));const value=JSON.parse(await f.text()),migrated=retiredFrames(value,catalog).length,replacement=retiredReplacementNames(value,catalog);applyConfiguration(value);if(migrated){await store.idle();message(t('msg.retired',{names:replacement}));}}}catch(error){message(error.message,true);}finally{e.target.value='';}};
-$('default-config').onclick=()=>applyConfiguration(catalog.default_configuration);
+$('default-config').onclick=()=>applyConfiguration(defaultDesign());
 $('load-saved').onclick=async()=>{try{keycapColors?.cancelPending();applyConfiguration(await store.load(),{persist:false});message(t('msg.loadedSaved'));}catch(e){message(e.message,true);}};
 $('replace-saved').onclick=async()=>{try{await store.replace(configuration);refreshRecovery();}catch(e){message(e.message,true);}};
 function refreshRecovery(){
@@ -1137,7 +1157,7 @@ function lookParams(c){
   const same=JSON.stringify(c),preset=Object.entries({original:'default',normal:'normal-sculpted',saddle:'saddle-sculpted'}).find(([,id])=>Object.entries(c.keycaps).every(([side,keys])=>Object.entries(keys).every(([ref,k])=>k.variant===data.presets[id].keycaps[side][ref].variant&&k.rotation_deg===data.presets[id].keycaps[side][ref].rotation_deg)));
   if(!preset||c.cases.left.style!==c.cases.right.style)return null;
   const frame=c.frames.left.style===c.frames.right.style?c.frames.left.style:c.frames.left.style+','+c.frames.right.style;
-  for(const theme of themeLibrary.themes)for(const palette of ['','frame']){
+  for(const theme of printThemes.filter(t=>t.base===c.cases.left.base_color.toLowerCase()))for(const palette of ['','frame']){
     const q=new URLSearchParams({size:c.variant,theme:theme.id,case:c.cases.left.style,keys:preset[0],frame});if(palette)q.set('palette',palette);
     try{if(JSON.stringify(lookConfiguration(q))===same)return q;}catch{}
   }
@@ -1168,7 +1188,7 @@ function lookConfiguration(q){
   const size=q.get('size')||c.variant;if(!variantIds.includes(size))throw Error(t('msg.size',{v:size}));c.variant=size;
   const preset={original:'default',normal:'normal-sculpted',saddle:'saddle-sculpted'}[q.get('keys')||'original'];if(!preset)throw Error(t('msg.keys',{v:q.get('keys')}));
   const style=q.get('case')||'rim';if(!catalog.case_styles[style])throw Error(t('msg.case',{v:style}));
-  const theme=themeLibrary.themes.find(t=>t.id===(q.get('theme')||'snes'));if(!theme)throw Error(t('msg.theme',{v:q.get('theme')}));
+  const theme=printThemes.find(t=>t.id===(q.get('theme')||'snes'));if(!theme)throw Error(t('msg.theme',{v:q.get('theme')}));
   const frames=(q.get('frame')||(catalog.frame_styles[theme.recommended_frame]?theme.recommended_frame:c.frames.left.style)).split(',');
   for(const [i,side] of sides.entries()){
     const frame=frames[i]||frames[0];if(!catalog.frame_styles[frame])throw Error(t('msg.frame',{v:frame}));
@@ -1178,8 +1198,8 @@ function lookConfiguration(q){
   c=applyTheme(c,theme,sides);
   const palette=(q.get('palette')||'').split(',');
   for(const [i,side] of sides.entries())if((palette[i]||palette[0])==='frame'){
-    const p=framePalette(c.frames[side].style);c.cases[side].match_frame=false;c.frames[side].color=p.body.toLowerCase();
-    c.frames[side].accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,p[k].toLowerCase()]));
+    c.cases[side].match_frame=false;
+    applyFramePreset(c,side,c.frames[side].style);
   }
   return c;
 }

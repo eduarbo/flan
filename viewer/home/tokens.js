@@ -19,8 +19,8 @@ function hex([L,C,H]){
 }
 // WCAG contrast of two hex colours, and a colour moved along lightness until it reads on a page tone.
 const lum=h=>{const [r,g,b]=[1,3,5].map(i=>lin(parseInt(h.slice(i,i+2),16)/255));return .2126*r+.7152*g+.0722*b;};
-const ratio=(a,b)=>{const [x,y]=[lum(a),lum(b)].sort((p,q)=>q-p);return (x+.05)/(y+.05);};
-function legible([L,C,H],page,least,step){let out=hex([L,C,H]);for(let l=L+step;ratio(out,page)<least&&l>.02&&l<.99;l+=step)out=hex([l,C,H]);return out;}
+export const contrastRatio=(a,b)=>{const [x,y]=[lum(a),lum(b)].sort((p,q)=>q-p);return (x+.05)/(y+.05);};
+function legible([L,C,H],page,least,step){let out=hex([L,C,H]);for(let l=L+step;contrastRatio(out,page)<least&&l>.02&&l<.99;l+=step)out=hex([l,C,H]);return out;}
 // The case must stand out from the page behind it: at least GAP of OKLCH lightness from the two inner page tones.
 const GAP=.1;
 function pageLevels(body,dark){

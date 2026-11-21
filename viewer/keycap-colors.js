@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {bindSpool,commonSpool} from './filament-swatches.js';
 import {enhanceColorInput} from './color-input.js';
-import library from '../design/keycap-themes.json';
+import {printCapPalettes,printableCaps,bindPresetColors} from './preset-filaments.js';
 import {copy} from './config.js';
 import {createStore} from './storage.js';
 import {t,onLanguage} from './i18n.js';
@@ -17,7 +17,14 @@ export function colorTargets(catalog,selection){
  return selected.flatMap(side=>catalog.layout[side].filter(k=>selection.mode==='all'||selection.mode==='row'&&k.row===selection.row||selection.mode==='column'&&k.row!==3&&k.col===selection.column||selection.mode==='key'&&side===selection.keySide&&k.ref===selection.key).map(k=>[side,k]));
 }
 export function paintKeys(config,targets,color){const c=copy(config);for(const [side,key] of targets)c.keycaps[side][key.ref].color=color;return c;}
-export function applyCapPalette(config,catalog,palette,targets=sides){const c=copy(config);for(const side of targets)for(const key of catalog.layout[side])c.keycaps[side][key.ref].color=paletteColor(palette,key);return c;}
+export function applyCapPalette(config,catalog,palette,targets=sides){
+ const c=copy(config),printed=printableCaps(palette);
+ for(const side of targets){
+  for(const key of catalog.layout[side])c.keycaps[side][key.ref].color=paletteColor(printed,key);
+  bindPresetColors(c,side,Object.values(c.keycaps[side]).map(key=>key.color));
+ }
+ return c;
+}
 export function validatePaletteFile(value,catalog){
  if(value?.schema!=='flan36-keycap-palettes-1'||!Array.isArray(value.palettes)||value.palettes.length>24)throw Error(t('keys.badFile'));
  for(const p of value.palettes){
@@ -51,7 +58,7 @@ export function createKeycapColors({$,catalog,get,apply,message,storageNotice=me
  }
  labelMaps();
  function chip(name,colors,click){const b=document.createElement('button');b.type='button';b.className='cap-palette';b.onclick=click;const sw=document.createElement('span');sw.className='cap-palette-colors';for(const color of colors){const dot=document.createElement('i');dot.style.background=color;sw.append(dot);}const text=document.createElement('span');text.textContent=name;b.append(sw,text);return b;}
- for(const palette of library.palettes){const colors=[...new Set(catalog.layout.left.map(k=>paletteColor(palette,k)))];const b=chip(palette.name,colors,()=>apply(applyCapPalette(get(),catalog,palette,activeSides())));b.dataset.capPalette=palette.id;$('cap-palettes').append(b);}
+ for(const palette of printCapPalettes){const colors=[...new Set(catalog.layout.left.map(k=>paletteColor(palette,k)))];const b=chip(palette.name,colors,()=>apply(applyCapPalette(get(),catalog,palette,activeSides())));b.dataset.capPalette=palette.id;$('cap-palettes').append(b);}
  function renderCustom(){
   $('custom-cap-palettes').replaceChildren();
   for(const [index,palette] of custom.entries()){

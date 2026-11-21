@@ -1,11 +1,18 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import finishes from '../design/frame-finishes.json';
+import {printFrameColors,bindPresetColors} from './preset-filaments.js';
 export {finishes};
 
 export function framePalette(style,body,accents){
   const theme=finishes.styles[style];
   const p=theme?{...theme.colors,body:body||theme.colors.body}:{body:body||'#304d4e'};
   for(const role of ['detail','accent','secondary'])p[role]=accents?.[role]||p[role]||p.body;return p;
+}
+export function applyFramePreset(config,side,style){
+ const palette=printFrameColors(framePalette(style)),frame=config.frames[side];
+ frame.color=palette.body;
+ frame.accents=Object.fromEntries(['detail','accent','secondary'].map(role=>[role,palette[role]]));
+ bindPresetColors(config,side,Object.values(palette));
 }
 export function createFrameFinishes(geometryFor,material){
   const cache=new Map();

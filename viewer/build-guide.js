@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import parts from '../design/build-parts.json';
+import {presetStock} from './preset-filaments.js';
 import {language,t} from './i18n.js';
 import {selectedParts,keycapPlan} from './printing.js';
-import {filamentReel,filamentLabel} from './filament-identity.js';
+import {decorateFilamentDisclosure,filamentReel,filamentLabel} from './filament-identity.js';
 import {closestSwatch,swatchSources,spoolFor,setupOf} from './filament-swatches.js';
 import {finishes} from './finishes.js';
 import {fastenersOf} from './config.js';
@@ -84,7 +85,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
    const a=link(say('Open the complete print kit · ZIP','Abrir el kit completo de impresión · ZIP'),'Print-kit.zip');a.removeAttribute('target');copy.querySelector('#build-print-list').before(a);
   }
   const setup=setupOf(current);copy.querySelector('.print-settings')?.replaceWith(node('p','micro',t('print.'+setup.mode)+' · '+setup.bed+' × '+setup.bed+' mm'));
-  copy.querySelectorAll('button,.build-jumps,.print-options,.build-options,[role=status]').forEach(n=>n.remove());
+  copy.querySelectorAll('.filament-disclosure > summary [aria-hidden=true],button,.build-jumps,.print-options,.build-options,[role=status]').forEach(n=>n.remove());
   copy.querySelectorAll('details').forEach(n=>n.open=true);
   copy.querySelectorAll('input').forEach(n=>{if(n.type==='checkbox'){if(n.checked)n.setAttribute('checked','');n.disabled=true;}else n.remove();});
   const designLabel=say('Reopen this exact design','Volver a abrir este diseño exacto');const a=link(designLabel,await exactLink);a.id='build-design-link';copy.prepend(a);
@@ -185,10 +186,12 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   }
   const edit=node('button','',say('Choose spools and substitutes','Elegir bobinas y sustitutos'));
   edit.type='button';edit.onclick=()=>editFilaments(edit);
+  const checkedDate=new Intl.DateTimeFormat(language(),{dateStyle:'medium',timeZone:'UTC'}).format(new Date(presetStock.checked+'T00:00:00Z'));
   const filaments=details('filament-guide',say('Match your filaments','Elige tus filamentos'),[
-   node('p','micro',say('Your design colors and the nearest Bambu and Polymaker PLA swatches. Compare a printed sample in your light before buying a spool.','Colores de tu diseño y tonos cercanos del catálogo PLA de Bambu y Polymaker. Compara una muestra impresa con tu luz antes de comprar una bobina.')),
+   node('p','micro',say('Preset spools were listed in stock in the US on '+checkedDate+'. Compare a printed sample in your light before buying.','Las bobinas de los temas figuraban disponibles en EE. UU. el '+checkedDate+'. Compara una muestra impresa con tu luz antes de comprar.')),
    palette,edit,...Object.entries(swatchSources).map(([label,url])=>link(label+' ↗',url))
   ]);
+  decorateFilamentDisclosure(filaments);
   const mount=details('print-glue-magnets',say('Glue the magnets after printing','Pega los imanes después de imprimir'),[
    node('p','micro',say('Base · 3 axial Ø2 × 3 mm magnets, inserted from above.','Base · 3 imanes axiales Ø2 × 3 mm, desde arriba.')),
    node('p','micro',say('Display frame · 3 axial Ø2 × 4 mm magnets, inserted from underneath.','Marco · 3 imanes axiales Ø2 × 4 mm, desde abajo.')),
