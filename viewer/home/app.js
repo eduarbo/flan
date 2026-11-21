@@ -11,7 +11,7 @@ const themes=new Map(data.themes.map(t=>[t.id,t])),frameIds=data.frames.map(f=>f
 const T={
   en:{'f.credits':'Credits & licenses','nav.explore':'Explore in 3D','nav.build':'Build guide','hero.eyebrow':'Open-source wireless keyboard','hero.title':'Homemade, like a good flan.','hero.sub':'Four sizes, 31 themes and six magnetic frames. Turn it, take it apart, make it yours.',
     'stage.label':'3D keyboard','stage.canvas':'Drag to turn the keyboard','stage.poster':'Flan36 in the EVA-01 theme, layers apart','stage.hint':'Drag to turn · pinch to zoom','stage.pause':'Pause the standby motion','stage.play':'Resume the standby motion','stage.reset':'Reset the view',
-    'stage.nogl':'The live 3D view needs WebGL. The explorer shows every part.','stage.failed':'The 3D model could not load. Check the connection and reload.',
+    'stage.loading':'Loading 3D keyboard…','stage.nogl':'The live 3D view needs WebGL. The explorer shows every part.','stage.failed':'The 3D model could not load. Check the connection and reload.',
     'layers.apart':'Apart','layers.together':'Together','layers.label':'Separate the layers','rail.label':'Make it yours','g.size':'Size','g.theme':'Theme','g.case':'Case','g.keys':'Keycaps','g.frame':'Frame','g.frames':'Frames',
     'frame.browse':'Browse 6','frame.count':'· 6 magnetic designs','frame.cancel':'Cancel','frame.hover':'Hover a frame to preview it on the model','frame.apply':'Apply {name}','frame.from':'Colors from {theme}','frame.own':'Use {name}’s own palette','frame.ownOn':'Use the {theme} colors','frame.current':'Current','frame.previewing':'Previewing {name} · not applied yet',
     'side.both':'Both halves','side.left':'Left','side.right':'Right','cta.open':'Customize this look','cta.resume':'Continue my saved design →','keys':'keys','specs.eyebrow':'Spec sheet','specs.title':'What’s under the frame',
@@ -19,7 +19,7 @@ const T={
     'role.body':'Body','role.detail':'Detail','role.accent':'Accent','role.secondary':'Secondary'},
   es:{'f.credits':'Créditos y licencias','nav.explore':'Explorar en 3D','nav.build':'Guía de armado','hero.eyebrow':'Teclado inalámbrico de código abierto','hero.title':'Hecho en casa, como el buen flan.','hero.sub':'Cuatro tamaños, 31 temas y seis marcos magnéticos. Gíralo, sepáralo y hazlo tuyo.',
     'stage.label':'Teclado en 3D','stage.canvas':'Arrastra para girar el teclado','stage.poster':'Flan36 con el tema EVA-01, capas separadas','stage.hint':'Arrastra para girar · pellizca para acercar','stage.pause':'Pausar el movimiento en reposo','stage.play':'Reanudar el movimiento en reposo','stage.reset':'Restablecer la vista',
-    'stage.nogl':'La vista 3D necesita WebGL. El explorador muestra cada pieza.','stage.failed':'No se pudo cargar el modelo 3D. Revisa la conexión y recarga.',
+    'stage.loading':'Cargando el teclado 3D…','stage.nogl':'La vista 3D necesita WebGL. El explorador muestra cada pieza.','stage.failed':'No se pudo cargar el modelo 3D. Revisa la conexión y recarga.',
     'layers.apart':'Separado','layers.together':'Unido','layers.label':'Separar las capas','rail.label':'Hazlo tuyo','g.size':'Tamaño','g.theme':'Tema','g.case':'Caja','g.keys':'Keycaps','g.frame':'Marco','g.frames':'Marcos',
     'frame.browse':'Ver los 6','frame.count':'· 6 diseños magnéticos','frame.cancel':'Cancelar','frame.hover':'Pasa el cursor por un marco para verlo en el modelo','frame.apply':'Aplicar {name}','frame.from':'Colores de {theme}','frame.own':'Usar la paleta propia de {name}','frame.ownOn':'Usar los colores de {theme}','frame.current':'Actual','frame.previewing':'Vista previa: {name} · sin aplicar',
     'side.both':'Ambas mitades','side.left':'Izquierda','side.right':'Derecha','cta.open':'Personalizar esta selección','cta.resume':'Continuar mi diseño guardado →','keys':'teclas','specs.eyebrow':'Ficha técnica','specs.title':'Lo que hay bajo el marco',
@@ -261,12 +261,20 @@ function translate(){
   $('standby').title=model&&!model.standby?t('stage.play'):t('stage.pause');
   syncRail();if(!$('browser').hidden)focusFrame(browsing.focus);
 }
-function failed(error){console.error(error);const n=$('note');n.hidden=false;n.textContent=t('stage.failed');}
+function showNote(key){
+  const note=$('note');note.dataset.t=key;note.textContent=t(key);note.hidden=false;
+}
+function showFallback(key){
+  $('stage').classList.add('fallback');
+  $('layers').hidden=true;document.querySelector('.stagebar').hidden=true;
+  showNote(key);
+}
+function failed(error){console.error(error);showNote('stage.failed');}
 // A page kept from before a later publication asks for an engine or meshes that are no longer there. Online, it
 // reloads once per tab for the current page, as the explorer does; after that, or offline, it says so.
 function stale(error){
   try{if(navigator.onLine!==false&&!sessionStorage.getItem('flan.home.retry')){sessionStorage.setItem('flan.home.retry','1');location.reload();return;}}catch{}
-  failed(error);
+  console.error(error);showFallback('stage.failed');
 }
 
 lang=store.get('flan.lang')==='es'?'es':'en';
@@ -283,26 +291,13 @@ $('f-grid').addEventListener('pointerleave',()=>{if(!$('browser').hidden)focusFr
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeBrowser(false);});
 const showSlider=slider();
 
-// The live model. Its engine (three.js and viewer/home/model.js) is a file of its own, and so are its meshes: the
-// page is read, painted and usable first. Both wait for the poster, the page's largest picture, to arrive (or fail,
-// or 3 s) and to be on screen, so on a slow line they never share it with the poster and on a fast one setting up
-// WebGL never holds its first frame back. Without WebGL neither is asked for: the poster and the rail still work.
-const posterUp=new Promise(resolve=>{
-  // "On screen" is the browser's own report where it gives one: its largest-contentful-paint entry for the poster.
-  // Elsewhere it is the second frame after the poster loaded. Half a second after loading is enough either way: the
-  // report does not come once the reader has scrolled or tapped, and a hidden tab draws no frame.
-  const poster=$('poster'),reports=window.PerformanceObserver?.supportedEntryTypes?.includes('largest-contentful-paint');
-  if(reports)new PerformanceObserver((list,observer)=>{if(list.getEntries().some(entry=>entry.element===poster)){observer.disconnect();resolve();}}).observe({type:'largest-contentful-paint',buffered:true});
-  const loaded=()=>{if(!reports)requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(resolve)));setTimeout(resolve,500);};
-  if(poster.complete)loaded();else{poster.addEventListener('load',loaded,{once:true});poster.addEventListener('error',loaded,{once:true});setTimeout(resolve,3000);}
-});
 const engine=()=>new Promise((resolve,reject)=>{
   const script=el('script',{src:data.engine,fetchPriority:'high'});   // ahead of the meshes: it has work to do while they arrive
   script.onload=()=>window.flanHomeEngine?resolve(window.flanHomeEngine):reject(Error('The 3D engine did not start.'));
   script.onerror=()=>reject(Error('The 3D engine did not arrive.'));document.head.append(script);
 });
 async function start(){
-  await posterUp;
+  showNote('stage.loading');
   // the meshes travel while the engine does; the model reads these same responses
   const fetched=Object.fromEntries([data.packs.common,data.packs[look.size]].map(url=>[url,fetch(url,{priority:'low'})]));
   for(const response of Object.values(fetched))response.catch(()=>{});   // a failure is reported when the model reads it
@@ -310,12 +305,13 @@ async function start(){
   await new Promise(resolve=>setTimeout(resolve));   // the engine has just been evaluated: the renderer gets its own turn
   model=createModel({canvas:$('canvas'),frame:$('stage'),packs:data.packs,fetched,onChange:({explode})=>showSlider(explode)});
   await model.init(look,theme());
+  $('note').hidden=true;
   $('stage').classList.add('live');$('hero').classList.add('live');if(!model.intro())showSlider(model.explode);renderPreviews();
   $('standby').setAttribute('aria-pressed',String(model.standby));translate();
   try{sessionStorage.removeItem('flan.home.retry');}catch{}
 }
 const probe=document.createElement('canvas');
-if(!(probe.getContext('webgl2')||probe.getContext('webgl'))){$('note').hidden=false;$('note').textContent=t('stage.nogl');$('layers').hidden=true;document.querySelector('.stagebar').hidden=true;}
+if(!probe.getContext('webgl2'))showFallback('stage.nogl');
 else start().catch(stale);
 $('standby').addEventListener('click',()=>{if(!model)return;model.setStandby(!model.standby);$('standby').setAttribute('aria-pressed',String(model.standby));$('standby').title=model.standby?t('stage.pause'):t('stage.play');});
 $('reset').addEventListener('click',()=>model?.resetView());

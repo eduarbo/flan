@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // The home page's live keyboard: packs from viewer/home-build.mjs, coloured by theme exactly as the
 // explorer's applyTheme() does, with an intro that separates the layers and a gentle standby motion.
-// Built as the page's 3D engine, a script of its own (viewer/home-build.mjs): home/app.js asks for it once the poster is up.
+// Built as the page's 3D engine, a script of its own (viewer/home-build.mjs): home/app.js loads it alongside the mesh packs.
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';

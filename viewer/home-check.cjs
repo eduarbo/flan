@@ -1,7 +1,6 @@
 // Home page: the live model loads, every control changes the look and its previews, the frame browser
 // previews without applying, the explorer opens on the same look, and phones get the tabbed rail. Also how the page
-// starts: the poster first, then the 3D engine and each mesh pack once; on a phone its own poster as the largest picture
-// and pictures only for the open tab; and what remains when the engine does not arrive.
+// starts with a single keyboard, loads each mesh pack once and retains a static fallback if 3D is unavailable.
 // FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright-core FLAN36_BROWSER=/path/to/chromium node viewer/home-check.cjs
 const fs=require('fs'),path=require('path'),assert=require('assert'),serve=require('./serve-docs.cjs');
 const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
@@ -19,10 +18,9 @@ const root=path.resolve(__dirname,'..'),shots=path.join(root,'build/home-check')
   await page.waitForFunction(()=>[...document.querySelectorAll('.art img')].every(i=>i.src),null,{timeout:180000});
   await page.evaluate(()=>scrollTo(0,0));
   await page.waitForTimeout(2200);await page.screenshot({path:path.join(shots,'desktop-snes.png'),fullPage:true});
-  // the engine is a file of its own, asked for after the poster has arrived; the meshes the page asked for ahead are the ones the model reads
-  out.start=await page.evaluate(()=>{const of=part=>performance.getEntriesByType('resource').filter(r=>r.name.includes('/assets/'+part)),poster=of('home-poster')[0],engine=of('home-engine-')[0];
-    return {poster:poster?.name.split('/').pop(),engine:of('home-engine-').length,afterPoster:engine?.startTime>=poster?.responseEnd,common:of('home-common-').length,size:of('home-flan36-').length};});
-  assert.deepEqual(out.start,{poster:'home-poster.webp',engine:1,afterPoster:true,common:1,size:1});
+  out.start=await page.evaluate(()=>{const count=part=>performance.getEntriesByType('resource').filter(r=>r.name.includes('/assets/'+part)).length;
+    return {poster:count('home-poster'),engine:count('home-engine-'),common:count('home-common-'),size:count('home-flan36-')};});
+  assert.deepEqual(out.start,{poster:0,engine:1,common:1,size:1});
   const state=()=>page.evaluate(()=>({href:document.getElementById('open').getAttribute('href'),bg:getComputedStyle(document.documentElement).getPropertyValue('--bg1').trim(),
     pressed:[...document.querySelectorAll('#rail [aria-pressed=true]')].map(b=>b.dataset.value),explode:+document.getElementById('explode').getAttribute('aria-valuenow')}));
   out.initial=await state();
@@ -61,14 +59,12 @@ const root=path.resolve(__dirname,'..'),shots=path.join(root,'build/home-check')
   await page.close();await viewer.close();
   // phone
   const phone=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});watch(phone,'phone');
-  await phone.addInitScript(()=>{window.__largest=[];new PerformanceObserver(list=>{for(const e of list.getEntries())window.__largest.push(e.element?.id||e.element?.tagName);}).observe({type:'largest-contentful-paint',buffered:true});});
   await phone.goto(base,{timeout:120000});await phone.waitForSelector('#stage.live',{timeout:120000});await phone.waitForTimeout(2200);
   const drawn=()=>phone.evaluate(()=>Object.fromEntries(['case','keys'].map(g=>[g,[...document.querySelectorAll(`#o-${g} img`)].filter(i=>i.src).length])));
   out.phone=await phone.evaluate(()=>({tabs:[...document.querySelectorAll('#tabs button')].length,scroll:document.documentElement.scrollWidth,visible:[...document.querySelectorAll('.grp')].filter(g=>getComputedStyle(g).display!=='none').length,
-    poster:document.getElementById('poster').currentSrc.split('/').pop(),largest:window.__largest.at(-1)}));
+    posterVisible:document.getElementById('poster').getClientRects().length>0}));
   assert.equal(out.phone.tabs,5);assert.equal(out.phone.visible,1);assert(out.phone.scroll<=390,'no sideways scroll');
-  // the phone's own poster, and the browser times it as the largest picture: nothing scrolls with animation as the page opens
-  assert.equal(out.phone.poster,'home-poster-800.webp');assert.equal(out.phone.largest,'poster');
+  assert.equal(out.phone.posterVisible,false);
   await phone.screenshot({path:path.join(shots,'phone.png'),fullPage:true});
   // pictures are drawn for the strip that shows: none for Case or Keycaps until its tab opens
   out.phone.drawn=await drawn();assert.deepEqual(out.phone.drawn,{case:0,keys:0});
@@ -79,10 +75,15 @@ const root=path.resolve(__dirname,'..'),shots=path.join(root,'build/home-check')
   await phone.waitForFunction(old=>{const i=document.querySelector('#o-case [data-value=rim] img');return i.src&&document.querySelector('#o-case [data-value=terrace] img').src!==old;},before,{timeout:180000});
   // a look chosen while the meshes are still on their way is the one the model opens on
   const early=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFactor:1});watch(early,'early');
-  await early.route('**/home-common-*.bin',r=>setTimeout(()=>r.continue(),2500));
+  let release;
+  const meshesHeld=new Promise(resolve=>{release=resolve;});
+  await early.route('**/home-common-*.bin',async r=>{await meshesHeld;await r.continue();});
   await early.goto(base+'?diagnostics',{timeout:120000});await early.waitForFunction(()=>window.flanHome,null,{timeout:120000});
+  assert.equal(await early.locator('#poster').isVisible(),false,'no placeholder keyboard during loading');
+  assert.equal(await early.locator('#canvas').isVisible(),false,'the 3D scene is still being prepared');
   await early.click('#o-theme [data-value=gameboy]');await early.click('#o-case [data-value=terrace]');
   out.early={waiting:await early.evaluate(()=>!document.getElementById('stage').classList.contains('live'))};assert(out.early.waiting,'chosen before the model was live');
+  release();
   await early.waitForSelector('#stage.live',{timeout:120000});
   out.early.look=await early.evaluate(()=>{const l=window.flanHome.info().look;return [l.theme,l.case];});assert.deepEqual(out.early.look,['gameboy','terrace']);await early.close();
   // without the engine: the poster, the note and a rail that still changes the page
@@ -91,8 +92,9 @@ const root=path.resolve(__dirname,'..'),shots=path.join(root,'build/home-check')
   const page0=()=>bare.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue('--bg1').trim());const bg=await page0();await bare.click('#o-theme [data-value=gameboy]');
   // the page eases to the theme's colours: wait for them to move rather than read the same instant
   const recoloured=await bare.waitForFunction(old=>getComputedStyle(document.documentElement).getPropertyValue('--bg1').trim()!==old,bg,{timeout:10000}).then(()=>true,()=>false);
-  out.bare={note:await bare.textContent('#note'),live:await bare.evaluate(()=>document.getElementById('stage').classList.contains('live')),poster:await bare.evaluate(()=>getComputedStyle(document.getElementById('poster')).opacity),recoloured};
-  assert.deepEqual(out.bare,{note:'The 3D model could not load. Check the connection and reload.',live:false,poster:'1',recoloured:true});await bare.close();
+  await bare.waitForFunction(()=>{const img=document.getElementById('poster');return img.complete&&img.naturalWidth>0;});
+  out.bare={note:await bare.textContent('#note'),live:await bare.evaluate(()=>document.getElementById('stage').classList.contains('live')),poster:await bare.locator('#poster').isVisible(),image:await bare.locator('#poster').evaluate(img=>img.currentSrc.split('/').pop()),recoloured};
+  assert.deepEqual(out.bare,{note:'The 3D model could not load. Check the connection and reload.',live:false,poster:true,image:'home-poster-800.webp',recoloured:true});await bare.close();
   // tablet: the rail moves below the model; Spanish; reduced motion skips the intro and the standby
   const tablet=await browser.newPage({viewport:{width:1024,height:900},reducedMotion:'reduce'});watch(tablet,'tablet');
   await tablet.addInitScript(()=>{try{localStorage.setItem('flan.lang','es');}catch{}});

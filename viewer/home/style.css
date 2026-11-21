@@ -56,11 +56,11 @@ h1 { margin: 8px 0 0; font-size: clamp(48px, 5.2vw, 78px); line-height: 1; lette
 
 .stage { grid-column: 1; grid-row: 3; position: relative; min-height: 400px; margin: -10px -20px 0 -40px; }
 /* the model's canvas fills the hero: text and controls float over it, nothing is cut off */
-.scene { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; opacity: 0; transition: opacity .6s ease-out; cursor: grab; outline: none; }
+.scene { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; visibility: hidden; cursor: grab; outline: none; }
 .scene:active { cursor: grabbing; }
-.hero.live .scene { opacity: 1; }
-.poster { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; object-fit: contain; transition: opacity .6s ease-out; }
-.stage.live .poster { opacity: 0; pointer-events: none; }
+.hero.live .scene { visibility: visible; }
+.poster { display: none; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; object-fit: contain; }
+.stage.fallback .poster { display: block; }
 /* a still ground shadow: cheaper than filtering every frame */
 .stage::before { content: ""; z-index: 0; position: absolute; left: 12%; right: 12%; top: 64%; height: 26%; background: radial-gradient(closest-side, color-mix(in srgb, var(--ink) 20%, transparent), transparent 92%); opacity: 0; transition: opacity .6s; }
 .stage.live::before { opacity: 1; }
@@ -213,7 +213,7 @@ footer .support-pill:hover { background: color-mix(in srgb, var(--accent) 20%, t
   .art { height: 84px; margin-bottom: 12px; } .art.sizes img { height: 52px; } .art.frames { gap: 4px; } .art.frames img { width: 20px; height: 64px; }
   footer { flex-direction: column; align-items: flex-start; gap: 10px; padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right)); }
 }
-@media (prefers-reduced-motion: reduce) { :root { transition: none; } .scene, .poster { transition: none; } }
+@media (prefers-reduced-motion: reduce) { :root { transition: none; } }
 
 /* Returning visitors can keep every advanced choice from the explorer. */
 .resume-design { display: inline-flex; align-items: center; align-self: flex-start; min-height: 44px; color: var(--accent); font-size: 13px; text-decoration: none; }

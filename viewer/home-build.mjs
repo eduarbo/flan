@@ -167,9 +167,7 @@ async function homePage({scene,files}){
   const ogBytes=fs.readFileSync(path.join(dir,'home-og.png')),ogName='home-og-'+crypto.createHash('sha256').update(ogBytes).digest('hex').slice(0,12)+'.png';
   fs.writeFileSync(path.join(assets,ogName),ogBytes);
   // Keep prior versioned cards available to already-cached social previews.
-  // Two classic scripts. The page's own (rail, language, colours) is written into the page and runs before the first
-  // paint. The 3D engine (three.js and home/model.js) is a file the page asks for once its poster is up, so the
-  // browser compiles it off the main thread and the poster never shares the line with it.
+  // Inline the page controls. Load the separate 3D engine alongside the selected keyboard's meshes.
   const script=(entry,more={})=>build({entryPoints:[path.join(dir,entry)],bundle:true,write:false,minify:true,format:'iife',target:['es2020'],legalComments:'inline',...more}).then(b=>b.outputFiles[0].text);
   const engineNotices=['Three-MIT.txt','fflate-MIT.txt','meshoptimizer-MIT.txt'].map(file=>
     fs.readFileSync(path.join(root,'LICENSES',file),'utf8')).join('\n\n');

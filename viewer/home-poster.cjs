@@ -1,5 +1,4 @@
-// The home page's poster (shown until the live model is ready) rendered from the
-// built home itself so the swap to the live canvas is seamless. Then rebuild: node viewer/home-build.mjs
+// Render the static fallback from the built home page. Then rebuild with node viewer/home-build.mjs.
 // FLAN36_PLAYWRIGHT_MODULE=/path/to/playwright-core FLAN36_BROWSER=/path/to/chromium node viewer/home-poster.cjs
 // FLAN36_BROWSER_ANGLE=metal renders with the GPU, which the lit, shadowed look needs; software rendering shows the flat one.
 // SPDX-License-Identifier: GPL-3.0-or-later
