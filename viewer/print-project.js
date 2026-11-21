@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {zipSync,strToU8} from 'three/addons/libs/fflate.module.js';
+import {printerFor,printSettings} from './printer-presets.js';
 import {setupOf,spoolFor,spoolById} from './filament-swatches.js';
 import {readMaterials,meshObject,xml,printPlacement} from './print-geometry.js';
 
@@ -15,7 +16,8 @@ function plateFamily(id){
  if(id.includes('-frame-'))return 'Display frames';
  return 'Internal parts';
 }
-function placeOnPlates(objects,{mode,bed}){
+function placeOnPlates(objects,{mode,bed,printer}){
+ const left=margin+(printerFor(printer)?.leftInset||0);
  const gap=mode==='object'?82:6;
  const groups=new Map();
  for(const object of objects){
@@ -26,7 +28,7 @@ function placeOnPlates(objects,{mode,bed}){
  for(const [family,group] of groups){
   let plate,x,y,rowHeight;
   function nextPlate(){
-   plate={family,items:[],slots:new Set()};plates.push(plate);x=margin;y=frontMargin;rowHeight=0;
+   plate={family,items:[],slots:new Set()};plates.push(plate);x=left;y=frontMargin;rowHeight=0;
   }
   nextPlate();
   if(mode==='object')group.sort((a,b)=>a.slots[0]-b.slots[0]);
@@ -34,10 +36,10 @@ function placeOnPlates(objects,{mode,bed}){
    // Allow the slicer to generate supports and brims around the side-lying sled.
    const clearance=mode!=='object'&&object.name.endsWith('-display-sled')?8:0;
    const w=object.size[0]+2*clearance,h=object.size[1]+2*clearance;
-   if(w>bed-2*margin||h>bed-frontMargin-margin)throw Error('Part exceeds the layout area: '+object.name);
+   if(w>bed-left-margin||h>bed-frontMargin-margin)throw Error('Part exceeds the layout area: '+object.name);
    for(let copy=0;copy<object.count;copy++){
     if(mode!=='manual'&&new Set([...plate.slots,...object.slots]).size>4)nextPlate();
-    if(x+w>bed-margin){x=margin;y+=rowHeight+gap;rowHeight=0;}
+    if(x+w>bed-margin){x=left;y+=rowHeight+gap;rowHeight=0;}
     if(y+h>bed-margin)nextPlate();
     for(const slot of object.slots)plate.slots.add(slot);
     plate.items.push({object,copy,x:x+clearance,y:y+clearance});x+=w+gap;rowHeight=Math.max(rowHeight,h);
@@ -66,7 +68,7 @@ export async function combinedProject(parts,keycaps,title,config,progress){
    const spool=spoolById(part.spool)||spoolFor(config,part.side,color);
    const key=spool?.id||color;
    let slot=spools.findIndex(s=>s.key===key);
-   if(slot<0){slot=spools.length;spools.push({key,color,label:spool?spool.series+' · '+spool.name:color});}
+   if(slot<0){slot=spools.length;spools.push({key,color,series:spool?.series,label:spool?spool.series+' · '+spool.name:color});}
    const id=nextId++;
    resources.push(meshObject(m,shift,id,part.id+' '+m.role,slot));
    volumes.push({id,slot,name:m.role+' '+color+(spool?' · '+spool.series+' '+spool.name:'')});
@@ -80,7 +82,7 @@ export async function combinedProject(parts,keycaps,title,config,progress){
   const plateName=mode==='manual'?spools[slots[0]].label:family;
   objects.push({id,name:part.id,count,size,slots,placement,family:plateName});
  }
- const colors=spools.map(s=>s.color),plates=placeOnPlates(objects,setup);
+ const plates=placeOnPlates(objects,setup);
  if(plates.length>36)throw Error('Bambu Studio: 36 plates maximum. Export one half or use fewer colors. / Máximo 36 camas. Exporta una mitad o usa menos colores.');
  const cols=Math.ceil(Math.sqrt(plates.length)),items=[];
  for(const [i,plate] of plates.entries()){
@@ -97,12 +99,7 @@ export async function combinedProject(parts,keycaps,title,config,progress){
  const model=`<?xml version="1.0" encoding="UTF-8"?><model unit="millimeter" xml:lang="en-US" xmlns="${modelNS}" xmlns:BambuStudio="http://schemas.bambulab.com/package/2021"><metadata name="Application">BambuStudio-02.00.00.00</metadata><metadata name="BambuStudio:3mfVersion">1</metadata><metadata name="Designer">Eduardo Ruiz · Flan; KLP Lamé keycaps by braindefender</metadata><metadata name="Title">${xml(title)}</metadata><metadata name="Description">Glue magnets after printing. Each base takes three axial Ø2 × 3 mm magnets from above; each frame takes three Ø2 × 4 mm from below. The same pole faces out in all bases, the opposite in all frames. Pega los imanes después de imprimir: tres Ø2 × 3 mm por base desde arriba y tres Ø2 × 4 mm por marco desde abajo. Mismo polo visible en todas las bases, opuesto en todos los marcos.</metadata><metadata name="License">Flan GPL-3.0-or-later; KLP Lamé CC-BY-SA-4.0. See Metadata/Flan/.</metadata><resources><basematerials id="1">${bases}</basematerials>${resources.join('')}</resources><build>${items.join('')}</build></model>`;
  // Studio reads the Application signature to select its project importer. Designer and
  // Description identify Flan as the generator. These are layout defaults, not toolpaths.
- const projectSettings={
-  version:'02.00.00.00',printer_technology:'FFF',printer_model:'',printer_settings_id:'',print_settings_id:'',
-  printable_area:['0x0',bed+'x0',bed+'x'+bed,'0x'+bed],printable_height:String(Math.min(250,bed)),nozzle_diameter:['0.4'],
-  filament_colour:colors,filament_settings_id:colors.map(()=>'Generic PLA'),filament_type:colors.map(()=>'PLA'),
-  filament_diameter:colors.map(()=>'1.75'),filament_is_support:colors.map(()=>'0')
- };
+ const projectSettings=printSettings(setup,spools);
  const files={
   '[Content_Types].xml':strToU8('<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="model" ContentType="application/vnd.ms-package.3dmanufacturing-3dmodel+xml"/><Default Extension="config" ContentType="application/octet-stream"/><Default Extension="txt" ContentType="text/plain"/><Default Extension="csv" ContentType="text/csv"/></Types>'),
   '_rels/.rels':strToU8(`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Target="/3D/3dmodel.model" Id="model" Type="${relType}"/></Relationships>`),

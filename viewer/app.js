@@ -17,6 +17,7 @@ import {createHistory} from './history.js';
 import {decodeBytes,unpack,unpackVariant,printLoader,gunzip} from './assets.js';
 import {createGeometryStore} from './geometry.js';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
+import {printerModels,printerFor} from './printer-presets.js';
 import {bindSpool,commonSpool,setupOf,mapThemeToSpools} from './filament-swatches.js';
 import {enhanceColorInput} from './color-input.js';
 import {createKeycapColors} from './keycap-colors.js';
@@ -564,9 +565,15 @@ $('credits').onclick=()=>{$('licenses').showModal();$('licenses').querySelector(
 $('close-credits').onclick=()=>$('licenses').close();$('licenses').addEventListener('close',()=>$('credits').focus({preventScroll:true}));
 canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();$('error').hidden=false;$('error').textContent=t('msg.contextLost');});
 for(const id of ['print-half','print-scope'])for(const button of $(id).children)button.onclick=()=>{$('print-plate-plan').hidden=true;for(const option of $(id).children)option.setAttribute('aria-pressed',String(option===button));buildGuide.update(configuration);};
-for(const id of ['print-method','print-bed'])$(id).onchange=()=>{
- const next=copy(configuration);next.print_setup={mode:$('print-method').value,bed:Number($('print-bed').value)};
- applyConfiguration(next);
+for(const model of Object.keys(printerModels))$('print-printer').add(new Option('Bambu Lab '+model,model));
+for(const id of ['print-method','print-printer','print-nozzle','print-bed'])$(id).onchange=()=>{
+ const next=copy(configuration),printer=$('print-printer').value,machine=printerFor(printer);
+ const setup={mode:$('print-method').value,bed:machine?.bed??Number($('print-bed').value)};
+ if(machine){
+  const nozzle=$('print-nozzle').value;
+  Object.assign(setup,{printer,nozzle:Object.hasOwn(machine.nozzles,nozzle)?nozzle:'0.4'});
+ }
+ next.print_setup=setup;applyConfiguration(next);
 };
 const capLoads=new Map();
 let offlineCaps;
@@ -1015,7 +1022,15 @@ function syncConfigurationUI(){
   $('fasteners-note').textContent=failed?t('msg.fasteners')+' '+t('fasteners.note.retry'):t(screwChoice?'fasteners.note.'+screws:'fasteners.note.size',{name:sizeInfo.title})+(tight<.3?' '+t('fasteners.note.tight',{gap:tight.toFixed(2)}):'');
   $('fasteners-note').dataset.error=String(failed);
   if(lastPlateConfig!==JSON.stringify(configuration))$('print-plate-plan').hidden=true;
-  const setup=setupOf(configuration);$('print-method').value=setup.mode;$('print-bed').value=String(setup.bed);
+  const setup=setupOf(configuration),machine=printerFor(setup.printer),nozzle=$('print-nozzle');
+  $('print-method').value=setup.mode;$('print-bed').value=String(setup.bed);$('print-printer').value=setup.printer||'';
+  $('print-bed-field').hidden=Boolean(machine);$('print-nozzle-field').hidden=!machine;
+  if(nozzle.dataset.model!==(setup.printer||'')){
+   nozzle.replaceChildren(...Object.keys(machine?.nozzles||{}).map(mm=>new Option(mm+' mm',mm)));
+   nozzle.dataset.model=setup.printer||'';
+  }
+  if(machine)nozzle.value=setup.nozzle;
+  $('print-profile-note').textContent=machine?t('print.profileNote',{process:machine.nozzles[setup.nozzle].process.split(' @')[0],bed:setup.bed+' × '+setup.bed}):t('print.genericNote');
   $('print-method-note').textContent=t('print.method.'+setup.mode);
   buildGuide.update(configuration);
   showSilk();

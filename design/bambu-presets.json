@@ -1,0 +1,406 @@
+{
+  "vendorVersion": "02.09.00.74",
+  "filamentIds": {
+    "Bambu PLA Basic": "GFA00",
+    "Bambu PLA Matte": "GFA01",
+    "Generic PLA": "GFL99"
+  },
+  "models": {
+    "A1 mini": {
+      "bed": 180,
+      "height": 180,
+      "extruders": 1,
+      "leftInset": 0,
+      "nozzles": {
+        "0.2": {
+          "machine": "Bambu Lab A1 mini 0.2 nozzle",
+          "process": "0.10mm Standard @BBL A1M 0.2 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL A1M 0.2 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL A1M 0.2 nozzle",
+            "Generic PLA": "Generic PLA @BBL A1M 0.2 nozzle"
+          }
+        },
+        "0.4": {
+          "machine": "Bambu Lab A1 mini 0.4 nozzle",
+          "process": "0.20mm Standard @BBL A1M",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL A1M",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL A1M",
+            "Generic PLA": "Generic PLA @BBL A1M"
+          }
+        },
+        "0.6": {
+          "machine": "Bambu Lab A1 mini 0.6 nozzle",
+          "process": "0.30mm Standard @BBL A1M 0.6 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL A1M",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL A1M",
+            "Generic PLA": "Generic PLA @BBL A1M"
+          }
+        },
+        "0.8": {
+          "machine": "Bambu Lab A1 mini 0.8 nozzle",
+          "process": "0.40mm Standard @BBL A1M 0.8 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL A1M",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL A1M",
+            "Generic PLA": "Generic PLA @BBL A1M"
+          }
+        }
+      }
+    },
+    "A1": {
+      "bed": 256,
+      "height": 256,
+      "extruders": 1,
+      "leftInset": 0,
+      "nozzles": {
+        "0.2": {
+          "machine": "Bambu Lab A1 0.2 nozzle",
+          "process": "0.10mm Standard @BBL A1 0.2 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL A1 0.2 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL A1 0.2 nozzle",
+            "Generic PLA": "Generic PLA @BBL A1 0.2 nozzle"
+          }
+        },
+        "0.4": {
+          "machine": "Bambu Lab A1 0.4 nozzle",
+          "process": "0.20mm Standard @BBL A1",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL A1",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL A1",
+            "Generic PLA": "Generic PLA @BBL A1"
+          }
+        },
+        "0.6": {
+          "machine": "Bambu Lab A1 0.6 nozzle",
+          "process": "0.30mm Strength @BBL A1 0.6 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL A1",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL A1",
+            "Generic PLA": "Generic PLA @BBL A1"
+          }
+        },
+        "0.8": {
+          "machine": "Bambu Lab A1 0.8 nozzle",
+          "process": "0.40mm Standard @BBL A1 0.8 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL A1",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL A1",
+            "Generic PLA": "Generic PLA @BBL A1"
+          }
+        }
+      }
+    },
+    "P1P": {
+      "bed": 256,
+      "height": 250,
+      "extruders": 1,
+      "leftInset": 0,
+      "nozzles": {
+        "0.2": {
+          "machine": "Bambu Lab P1P 0.2 nozzle",
+          "process": "0.10mm Standard @BBL P1P 0.2 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL P1P 0.2 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL P1P 0.2 nozzle",
+            "Generic PLA": "Generic PLA @BBL P1P 0.2 nozzle"
+          }
+        },
+        "0.4": {
+          "machine": "Bambu Lab P1P 0.4 nozzle",
+          "process": "0.20mm Standard @BBL P1P",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL P1P",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL P1P",
+            "Generic PLA": "Generic PLA @BBL P1P"
+          }
+        },
+        "0.6": {
+          "machine": "Bambu Lab P1P 0.6 nozzle",
+          "process": "0.30mm Standard @BBL P1P 0.6 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL P1P 0.6 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL P1P 0.6 nozzle",
+            "Generic PLA": "Generic PLA @BBL P1P"
+          }
+        },
+        "0.8": {
+          "machine": "Bambu Lab P1P 0.8 nozzle",
+          "process": "0.40mm Standard @BBL P1P 0.8 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL P1P",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL P1P",
+            "Generic PLA": "Generic PLA @BBL P1P"
+          }
+        }
+      }
+    },
+    "P1S": {
+      "bed": 256,
+      "height": 250,
+      "extruders": 1,
+      "leftInset": 0,
+      "nozzles": {
+        "0.2": {
+          "machine": "Bambu Lab P1S 0.2 nozzle",
+          "process": "0.10mm Standard @BBL X1C 0.2 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.2 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.2 nozzle",
+            "Generic PLA": "Generic PLA @0.2 nozzle"
+          }
+        },
+        "0.4": {
+          "machine": "Bambu Lab P1S 0.4 nozzle",
+          "process": "0.20mm Standard @BBL X1C",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL P1S 0.4 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL P1S 0.4 nozzle",
+            "Generic PLA": "Generic PLA"
+          }
+        },
+        "0.6": {
+          "machine": "Bambu Lab P1S 0.6 nozzle",
+          "process": "0.30mm Standard @BBL X1C 0.6 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL P1S 0.6 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL P1S 0.6 nozzle",
+            "Generic PLA": "Generic PLA"
+          }
+        },
+        "0.8": {
+          "machine": "Bambu Lab P1S 0.8 nozzle",
+          "process": "0.40mm Standard @BBL X1C 0.8 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.8 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.8 nozzle",
+            "Generic PLA": "Generic PLA"
+          }
+        }
+      }
+    },
+    "P2S": {
+      "bed": 256,
+      "height": 256,
+      "extruders": 1,
+      "leftInset": 0,
+      "nozzles": {
+        "0.2": {
+          "machine": "Bambu Lab P2S 0.2 nozzle",
+          "process": "0.10mm Standard @BBL P2S 0.2 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL P2S 0.2 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL P2S 0.2 nozzle",
+            "Generic PLA": "Generic PLA @BBL P2S 0.2 nozzle"
+          }
+        },
+        "0.4": {
+          "machine": "Bambu Lab P2S 0.4 nozzle",
+          "process": "0.20mm Standard @BBL P2S",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL P2S",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL P2S",
+            "Generic PLA": "Generic PLA @BBL P2S"
+          }
+        },
+        "0.6": {
+          "machine": "Bambu Lab P2S 0.6 nozzle",
+          "process": "0.30mm Standard @BBL P2S 0.6 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL P2S 0.6 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL P2S 0.6 nozzle",
+            "Generic PLA": "Generic PLA @BBL P2S"
+          }
+        },
+        "0.8": {
+          "machine": "Bambu Lab P2S 0.8 nozzle",
+          "process": "0.40mm Standard @BBL P2S 0.8 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL P2S 0.8 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL P2S 0.8 nozzle",
+            "Generic PLA": "Generic PLA @BBL P2S"
+          }
+        }
+      }
+    },
+    "X1": {
+      "bed": 256,
+      "height": 250,
+      "extruders": 1,
+      "leftInset": 0,
+      "nozzles": {
+        "0.2": {
+          "machine": "Bambu Lab X1 0.2 nozzle",
+          "process": "0.10mm Standard @BBL X1C 0.2 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.2 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.2 nozzle",
+            "Generic PLA": "Generic PLA @0.2 nozzle"
+          }
+        },
+        "0.4": {
+          "machine": "Bambu Lab X1 0.4 nozzle",
+          "process": "0.20mm Standard @BBL X1C",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1",
+            "Generic PLA": "Generic PLA"
+          }
+        },
+        "0.6": {
+          "machine": "Bambu Lab X1 0.6 nozzle",
+          "process": "0.30mm Standard @BBL X1 0.6 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1",
+            "Generic PLA": "Generic PLA"
+          }
+        },
+        "0.8": {
+          "machine": "Bambu Lab X1 0.8 nozzle",
+          "process": "0.40mm Standard @BBL X1 0.8 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1",
+            "Generic PLA": "Generic PLA"
+          }
+        }
+      }
+    },
+    "X1 Carbon": {
+      "bed": 256,
+      "height": 250,
+      "extruders": 1,
+      "leftInset": 0,
+      "nozzles": {
+        "0.2": {
+          "machine": "Bambu Lab X1 Carbon 0.2 nozzle",
+          "process": "0.10mm Standard @BBL X1C 0.2 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.2 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.2 nozzle",
+            "Generic PLA": "Generic PLA @0.2 nozzle"
+          }
+        },
+        "0.4": {
+          "machine": "Bambu Lab X1 Carbon 0.4 nozzle",
+          "process": "0.20mm Standard @BBL X1C",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C",
+            "Generic PLA": "Generic PLA"
+          }
+        },
+        "0.6": {
+          "machine": "Bambu Lab X1 Carbon 0.6 nozzle",
+          "process": "0.30mm Standard @BBL X1C 0.6 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.6 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.6 nozzle",
+            "Generic PLA": "Generic PLA"
+          }
+        },
+        "0.8": {
+          "machine": "Bambu Lab X1 Carbon 0.8 nozzle",
+          "process": "0.40mm Standard @BBL X1C 0.8 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.8 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.8 nozzle",
+            "Generic PLA": "Generic PLA"
+          }
+        }
+      }
+    },
+    "X1E": {
+      "bed": 256,
+      "height": 250,
+      "extruders": 1,
+      "leftInset": 0,
+      "nozzles": {
+        "0.2": {
+          "machine": "Bambu Lab X1E 0.2 nozzle",
+          "process": "0.10mm Standard @BBL X1C 0.2 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.2 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.2 nozzle",
+            "Generic PLA": "Generic PLA @0.2 nozzle"
+          }
+        },
+        "0.4": {
+          "machine": "Bambu Lab X1E 0.4 nozzle",
+          "process": "0.20mm Standard @BBL X1C",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C",
+            "Generic PLA": "Generic PLA"
+          }
+        },
+        "0.6": {
+          "machine": "Bambu Lab X1E 0.6 nozzle",
+          "process": "0.30mm Standard @BBL X1C 0.6 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C",
+            "Generic PLA": "Generic PLA"
+          }
+        },
+        "0.8": {
+          "machine": "Bambu Lab X1E 0.8 nozzle",
+          "process": "0.40mm Standard @BBL X1C 0.8 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.8 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.8 nozzle",
+            "Generic PLA": "Generic PLA"
+          }
+        }
+      }
+    },
+    "X2D": {
+      "bed": 256,
+      "height": 261,
+      "extruders": 2,
+      "leftInset": 20.5,
+      "nozzles": {
+        "0.2": {
+          "machine": "Bambu Lab X2D 0.2 nozzle",
+          "process": "0.10mm Standard @BBL X2D 0.2 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X2D 0.2 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X2D 0.2 nozzle",
+            "Generic PLA": "Generic PLA @BBL X2D 0.2 nozzle"
+          }
+        },
+        "0.4": {
+          "machine": "Bambu Lab X2D 0.4 nozzle",
+          "process": "0.20mm Standard @BBL X2D",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X2D 0.4 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X2D 0.4 nozzle",
+            "Generic PLA": "Generic PLA @BBL X2D 0.4 nozzle"
+          }
+        },
+        "0.6": {
+          "machine": "Bambu Lab X2D 0.6 nozzle",
+          "process": "0.30mm Standard @BBL X2D 0.6 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X2D 0.6 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X2D",
+            "Generic PLA": "Generic PLA @BBL X2D"
+          }
+        },
+        "0.8": {
+          "machine": "Bambu Lab X2D 0.8 nozzle",
+          "process": "0.40mm Standard @BBL X2D 0.8 nozzle",
+          "materials": {
+            "Bambu PLA Basic": "Bambu PLA Basic @BBL X2D 0.8 nozzle",
+            "Bambu PLA Matte": "Bambu PLA Matte @BBL X2D 0.8 nozzle",
+            "Generic PLA": "Generic PLA @BBL X2D"
+          }
+        }
+      }
+    }
+  }
+}

@@ -672,6 +672,7 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
 .spool-grid button:hover { background: var(--field); }
 .spool-filters, .print-settings { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: end; }
 .spool-filters input, .spool-filters select, .print-settings select { min-height: 44px; max-width: 100%; padding: 6px 10px; background: var(--field); color: var(--ink); border: 1px solid var(--line); border-radius: 7px; font: inherit; }
+.print-settings label[hidden] { display: none; }
 .print-settings label { display: grid; gap: 4px; color: var(--muted); font-size: 12px; }
 
 #print-plate-plan small { display: block; color: var(--muted); margin-bottom: 6px; }

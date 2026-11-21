@@ -102,4 +102,7 @@ export function mapThemeToSpools(config,sides,choose){
  return next;
 }
 export const modes=['ams','object','manual'];
-export const setupOf=config=>({mode:config.print_setup?.mode||'ams',bed:config.print_setup?.bed||256});
+export function setupOf(config){
+ const setup=config.print_setup||{};
+ return {mode:setup.mode||'ams',bed:setup.bed||256,...(setup.printer?{printer:setup.printer,nozzle:setup.nozzle}:{})};
+}

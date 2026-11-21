@@ -69,7 +69,18 @@ const read=(file,entry)=>cp.execFileSync('unzip',['-p',file,entry],{encoding:'ut
   }
   await p.click('#editor-tabs [data-panel=themes]');await p.click('[data-theme="flan"]');
   const preset=await snap();await p.click('#nav-files');await p.selectOption('#print-method','ams');
+  await p.selectOption('#print-printer','X2D');
+  assert.equal(await p.inputValue('#print-nozzle'),'0.4');
+  assert(await p.locator('#print-bed-field').isHidden());
   const presetFile=path.join(out,'Flan-complete.3mf');await save('#print-project',presetFile);
+  const machine=JSON.parse(read(presetFile,'Metadata/project_settings.config'));
+  assert.equal(machine.printer_settings_id,'Bambu Lab X2D 0.4 nozzle');assert.equal(machine.print_settings_id,'0.20mm Standard @BBL X2D');
+  assert.deepEqual(machine.nozzle_diameter,['0.4','0.4']);assert.equal(machine.printable_height,'261');
+  const official=['Bambu PLA Matte','Bambu PLA Basic','Generic PLA','Generic PLA'];
+  assert.deepEqual(machine.filament_settings_id,official.map(name=>name+' @BBL X2D 0.4 nozzle'));
+  await p.selectOption('#print-nozzle','0.6');await p.selectOption('#print-printer','A1 mini');
+  assert.deepEqual((await snap()).print_setup,{mode:'ams',bed:180,printer:'A1 mini',nozzle:'0.6'});
+  await p.selectOption('#print-printer','');assert(await p.locator('#print-bed-field').isVisible());
   const presetRows=read(presetFile,'Metadata/Flan/Filaments.csv').trim().split('\n').slice(1);
   const actual=new Set(presetRows.map(row=>row.split(',').slice(-2).join(',')));
   const expected=new Set(Object.entries(preset.filaments.left).map(([hex,id])=>id.replace('/',' · ')+','+hex.toUpperCase()));

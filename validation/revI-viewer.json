@@ -1964,11 +1964,11 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "2f0029c3797d22976f473ca8d478c8bff049009341763962a305d3981eedd532"
+      "sha256": "fb3e4df9404a2c73e962d558b84300c0b2bc65c2f92d53a57939440159ef9dbf"
     },
     {
       "path": "viewer/build-guide.js",
-      "sha256": "32289cc4680fd0f3241cc66095019f0aa93b516d7b131c7fd79c2ba50a807917"
+      "sha256": "e6ca0f4dd8f56316b5de318d7945be82020b964d7a73b6491fdf8a64b813c649"
     },
     {
       "path": "viewer/design-url.js",
@@ -1980,7 +1980,7 @@
     },
     {
       "path": "viewer/build-package.js",
-      "sha256": "29346601be3189906ad3e6b5f614171662a59aea44fc2805fd65d8852f4b348b"
+      "sha256": "fe86fde91fbd3ff4aba2812bf9b055dfe4902e774655d17da31b3813699d5a90"
     },
     {
       "path": "design/build-parts.json",
@@ -1988,11 +1988,11 @@
     },
     {
       "path": "viewer/i18n.js",
-      "sha256": "bc2c6e900a5248120b775abb26ffc9a37d3af45367fff07395f6b362cc86492b"
+      "sha256": "33ed7b71e478c2504e1b877a246ac39122d85cd03983231ac82bd2288e800464"
     },
     {
       "path": "viewer/config.js",
-      "sha256": "fb6c6c9a36387db77122973974dc442801997137a759bd73d673bf74805adc53"
+      "sha256": "136d3d29a22a7c08d213bbbeedf4b1f82b1fd54424b9d217c1575da8a1676bb4"
     },
     {
       "path": "viewer/storage.js",
@@ -2036,7 +2036,7 @@
     },
     {
       "path": "viewer/printing.js",
-      "sha256": "37d47d816b1706e39cd53f26e43a72ad0187284d3b24a464e9d7c1156a883ac0"
+      "sha256": "ee825be3b8ce612e1e7f20237c62ea1776607f9508d0fd356d6a9638a903b2f1"
     },
     {
       "path": "viewer/print-geometry.js",
@@ -2044,11 +2044,19 @@
     },
     {
       "path": "viewer/print-project.js",
-      "sha256": "3bd6f6539b4f63a97a70675bd507406c400c0c3d9f7093f81e11ecad95cc2266"
+      "sha256": "830ba7734bf425f91b855d07c98673afb95b010698d494edc80c683f6f2faec8"
+    },
+    {
+      "path": "viewer/printer-presets.js",
+      "sha256": "a78594c6e1e476b4edef0ae2df9d295699fabe4ff50bf109ae43f91f8cec19d2"
+    },
+    {
+      "path": "design/bambu-presets.json",
+      "sha256": "a0252adb58c828276c5b28e1f7aa1501578f3029a6bc9e7578b423b645e7b558"
     },
     {
       "path": "viewer/filament-swatches.js",
-      "sha256": "f992d36f1fe3139cdc208a1a39b7af65b80ea886046b2f2b8e8268c6ab395240"
+      "sha256": "3cce8667c3ec9b850f06c71032f3cd66e16f2a6a665d594688e0f499a7a31799"
     },
     {
       "path": "viewer/preset-filaments.js",
@@ -2100,15 +2108,15 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "47c8068c9b415791d8d3dc38a6c4d29632531993519c1bcf25679d6d7cc82875"
+      "sha256": "2522f2117a2bcfd7b7c0d814dac8593aa6cc537fe5f6088dd21be6ce7860882e"
     },
     {
       "path": "viewer/template.html",
-      "sha256": "f2e8535dd871bdc6b55ac0fe1638911c6b7f7439a7c0c6aeb1641bad0db0433a"
+      "sha256": "b31e8c8c4f6b3538b0c615be2c4c2cb907c82f3ee980b61a7e31fb338e289a84"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "3aae0aefe380762d9819f1cb37967ef3c2d3843317f0f1afd2a8bc57bb22506e"
+      "sha256": "e0ce6d0a1363e4fcb70f92f6153c28cfc3bee0e96321776781c8e5f497a479a3"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -2151,7 +2159,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "7d0ac547f5f045dee5ec14182d7c5dfdeae8c6e425083f74591aa9a17631950f",
+  "viewer_sha256": "f98fc1b25cf8a5894cf1f791bb2820c272be45a2910bfaf5301ac7e965d84721",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2437,8 +2445,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "7db1c6389fb424262c0dc0bc5471e17393804fc93b3744a2c38952b025f72864",
-    "bytes": 74265217
+    "sha256": "82a0f4bbcc18b03da9e90547dc923816ea41fbfb3616378a5cf6a24154849209",
+    "bytes": 74267082
   },
   "still": {
     "look": {
@@ -2448,7 +2456,7 @@
       "keys": "original",
       "frame": "snes,phone"
     },
-    "fingerprint": "83e1a5b759e99d9a29c83f9edcbe728892d263d4bb8364153202156c8569c216",
+    "fingerprint": "9e90a362761e0d305f005087a069d93a35a08e0bf6e84f2bb15ca34ad2049317",
     "published": [
       "docs/explore/assets/still-wide-80e3320eed6b08f5.webp",
       "docs/explore/assets/still-tall-a408247baee85a05.webp"
@@ -3086,7 +3094,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "0e85dfafd61dccc83904e5deb7162a3eefefa70f00ae79c62800877b8cba2ba8",
+  "offline_sha256": "01ffd2344540397600fe80e65dcd84a36f2c234f3875437c3a676341e7043530",
   "printing": {
     "path": "docs/explore/assets/printing-56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475.bin",
     "sha256": "56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475",
@@ -3136,8 +3144,8 @@
     "bytes": 335912
   },
   "geometry_aliases": 16,
-  "online_bytes": 1275308,
-  "offline_bytes": 98541779,
+  "online_bytes": 1287122,
+  "offline_bytes": 98553593,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",
