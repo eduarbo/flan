@@ -4,12 +4,8 @@ import {language} from './i18n.js';
 import {rankedSwatches,swatchSources,hueFamily} from './filament-swatches.js';
 const say=(en,es)=>language()==='es'?es:en;
 const el=(tag,text)=>{const n=document.createElement(tag);if(text)n.textContent=text;return n;};
-export function chooseFilament(color,onSelect,selected){
- const dialog=document.createElement('dialog');dialog.className='filament-picker';dialog.setAttribute('aria-labelledby','spool-picker-title');
- const heading=el('div');heading.className='dialog-heading';
- const title=el('h2',say('Choose a filament','Elegir filamento'));title.className='title';title.id='spool-picker-title';title.tabIndex=-1;
- const close=el('button',say('Close','Cerrar'));close.onclick=()=>dialog.close();heading.append(title,close);
- const body=el('div');body.className='dialog-body';const filters=el('div');filters.className='spool-filters';
+export function filamentFilters(onChange){
+ const filters=el('div');filters.className='spool-filters';
  const search=el('input');search.type='search';search.placeholder=say('Search color or brand','Buscar color o marca');search.setAttribute('aria-label',search.placeholder);
  const series=el('select');series.setAttribute('aria-label',say('Filament range','Línea de filamento'));
  series.add(new Option(say('All brands and finishes','Todas las marcas y acabados'),''));
@@ -19,6 +15,21 @@ export function chooseFilament(color,onSelect,selected){
  const names={neutral:['Neutrals','Neutros'],brown:['Browns','Cafés'],red:['Reds','Rojos'],orange:['Oranges','Naranjas'],yellow:['Yellows','Amarillos'],green:['Greens','Verdes'],teal:['Teals','Turquesas'],blue:['Blues','Azules'],purple:['Purples','Morados'],pink:['Pinks','Rosas']};
  for(const [id,labels] of Object.entries(names))family.add(new Option(say(...labels),id));
  filters.append(search,series,family);
+ let words=[];
+ search.oninput=()=>{words=search.value.trim().toLowerCase().split(/\s+/).filter(Boolean);onChange();};
+ series.onchange=family.onchange=onChange;
+ function matches(s){
+  const keywords=(s.id+' '+s.brand+' '+s.line+' '+s.hex).toLowerCase();
+  return (!series.value||s.series===series.value)&&(!family.value||hueFamily(s)===family.value)&&words.every(word=>keywords.includes(word));
+ }
+ return {filters,matches,search};
+}
+export function chooseFilament(color,onSelect,selected){
+ const dialog=document.createElement('dialog');dialog.className='filament-picker';dialog.setAttribute('aria-labelledby','spool-picker-title');
+ const heading=el('div');heading.className='dialog-heading';
+ const title=el('h2',say('Choose a filament','Elegir filamento'));title.className='title';title.id='spool-picker-title';title.tabIndex=-1;
+ const close=el('button',say('Close','Cerrar'));close.onclick=()=>dialog.close();heading.append(title,close);
+ const body=el('div');body.className='dialog-body';const {filters,matches,search}=filamentFilters(render);
  const target=el('p');target.className='target-swatch';const sample=el('i');sample.style.backgroundColor=color;
  target.append(sample,el('span',say('Design color','Color del diseño')),el('code',color.toUpperCase()));const results=el('div');const sorted=rankedSwatches(color);
  const sources=el('div');sources.className='filament-sources';
@@ -28,11 +39,7 @@ export function chooseFilament(color,onSelect,selected){
  }
  function render(){
   results.replaceChildren();
-  const words=search.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
-  const list=sorted.filter(s=>{
-   const keywords=(s.id+' '+s.brand+' '+s.line+' '+s.hex).toLowerCase();
-   return (!series.value||s.series===series.value)&&(!family.value||hueFamily(s)===family.value)&&words.every(word=>keywords.includes(word));
-  });
+  const list=sorted.filter(matches);
   for(const [label,rows] of [[say('Closest colors','Tonos más cercanos'),list.slice(0,5)],[say('More colors','Más colores'),list.slice(5)]]){
    if(!rows.length)continue;results.append(el('h3',label));const grid=el('div');grid.className='spool-grid';
    for(const spool of rows){
@@ -48,6 +55,6 @@ export function chooseFilament(color,onSelect,selected){
   }
   if(!list.length)results.append(el('p',say('No matching color. Try another name or range.','Sin resultados. Prueba otro nombre o línea.')));
  }
- search.oninput=series.onchange=family.onchange=render;body.append(target,filters,results,sources);dialog.append(heading,body);document.body.append(dialog);
+ body.append(target,filters,results,sources);dialog.append(heading,body);document.body.append(dialog);
  dialog.addEventListener('close',()=>dialog.remove(),{once:true});render();dialog.showModal();(matchMedia('(pointer: coarse)').matches?title:search).focus({preventScroll:true});
 }

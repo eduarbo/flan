@@ -4,7 +4,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 
 import {retiredFrames,retiredReplacementNames,copy,check,normalize,variantIds,pcbEdition,setPcbEdition,pcbMask,setPcbMask,fastenersOf,fastenersFit,defaultFasteners} from './config.js';
-import {printKit,keycapPlan} from './printing.js';
+import {printSpoolUses,selectedParts,printKit,keycapPlan} from './printing.js';
 import {createBuildGuide} from './build-guide.js';
 import {createDesignURL} from './design-url.js';
 import {deflateSync} from 'three/addons/libs/fflate.module.js';
@@ -17,6 +17,7 @@ import {createHistory} from './history.js';
 import {decodeBytes,unpack,unpackVariant,printLoader,gunzip} from './assets.js';
 import {createGeometryStore} from './geometry.js';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
+import {createQuickPrint} from './quick-print.js';
 import {printerModels,printerFor} from './printer-presets.js';
 import {bindSpool,commonSpool,setupOf,mapThemeToSpools} from './filament-swatches.js';
 import {enhanceColorInput} from './color-input.js';
@@ -564,7 +565,18 @@ $('locate-magnets').onclick=()=>{
 $('credits').onclick=()=>{$('licenses').showModal();$('licenses').querySelector('.dialog-body').scrollTop=0;};
 $('close-credits').onclick=()=>$('licenses').close();$('licenses').addEventListener('close',()=>$('credits').focus({preventScroll:true}));
 canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();$('error').hidden=false;$('error').textContent=t('msg.contextLost');});
-for(const id of ['print-half','print-scope'])for(const button of $(id).children)button.onclick=()=>{$('print-plate-plan').hidden=true;for(const option of $(id).children)option.setAttribute('aria-pressed',String(option===button));buildGuide.update(configuration);};
+function printSelection(){
+ const active=id=>$(id).querySelector('[aria-pressed=true]').dataset.value;
+ return {half:active('print-half'),scope:active('print-scope')};
+}
+const printInventory=__FLAN_PRINT_INVENTORY__;
+function printUses(config){
+ const {half,scope}=printSelection(),parts=selectedParts(config,printInventory[config.variant],half,scope);
+ const keys=scope==='complete'?keycapPlan(config,catalog,family[config.variant].added||[],half).keys:[];
+ return printSpoolUses(config,parts,keys);
+}
+const quickPrint=createQuickPrint({$,getUses:()=>printUses(configuration)});
+for(const id of ['print-half','print-scope'])for(const button of $(id).children)button.onclick=()=>{$('print-plate-plan').hidden=true;for(const option of $(id).children)option.setAttribute('aria-pressed',String(option===button));buildGuide.update(configuration);appearance?.sync();quickPrint.sync();};
 for(const model of Object.keys(printerModels))$('print-printer').add(new Option('Bambu Lab '+model,model));
 for(const id of ['print-method','print-printer','print-nozzle','print-bed'])$(id).onchange=()=>{
  const next=copy(configuration),printer=$('print-printer').value,machine=printerFor(printer);
@@ -612,7 +624,7 @@ async function downloadPrint(projectOnly){
  const button=$(projectOnly?'print-project':'print-kit');
  printBusy=true;syncBuildAvailability();
  try{
-  const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;
+  const selected=copy(configuration),{half,scope}=printSelection();
   button.textContent=t('kit.loading');
   const result=await makePrintKit(selected,{half,scope,projectOnly,progress:(i,n)=>button.textContent=t('kit.preparing',{i,n})});
   const filename=projectOnly?result.filename:result.manifest.project.replace(/\.3mf$/,'.zip');
@@ -959,7 +971,7 @@ function showUnderside(){
 }
 $('build-focus-toggle').onclick=()=>{buildFocus=!buildFocus;layoutPanel();};
 $('build-edit').onclick=()=>openPanel(activePanel,$('build-edit'));
-const buildGuide=createBuildGuide({catalog,family,inventory:__FLAN_PRINT_INVENTORY__,getDesignLink:shareLink,illustrations:partIllustrations,
+const buildGuide=createBuildGuide({catalog,family,inventory:printInventory,getDesignLink:shareLink,illustrations:partIllustrations,
   editFilaments:opener=>{
     openPanel('themes',opener);
     const section=$('theme-filaments');section.open=true;
@@ -1032,7 +1044,7 @@ function syncConfigurationUI(){
   if(machine)nozzle.value=setup.nozzle;
   $('print-profile-note').textContent=machine?t('print.profileNote',{process:machine.nozzles[setup.nozzle].process.split(' @')[0],bed:setup.bed+' × '+setup.bed}):t('print.genericNote');
   $('print-method-note').textContent=t('print.method.'+setup.mode);
-  buildGuide.update(configuration);
+  buildGuide.update(configuration);quickPrint.sync();
   showSilk();
   for(const b of $('battery-target').children)b.setAttribute('aria-pressed',String(b.dataset.side===batterySide));
   const batteries=(batterySide==='both'?['left','right']:[batterySide]).map(side=>configuration.batteries[side]);
@@ -1191,7 +1203,7 @@ async function copyLink(button){
   try{await navigator.clipboard.writeText(link);say('share-status','files.copied');return true;}
   catch{if(activeMode!=='files'||!panelOpen)openPanel('files',button);$('share-link').focus();$('share-link').select();say('share-status','files.copyManual');return false;}
 }
-appearance=createAppearance({$,get:()=>configuration,apply:applyConfiguration,targets:kind=>kind==='case'?caseTargets():frameTargets(),preview,frameFinish,material,resize,catalog,geometryFor});
+appearance=createAppearance({$,get:()=>configuration,apply:applyConfiguration,targets:kind=>kind==='case'?caseTargets():frameTargets(),preview,frameFinish,material,resize,catalog,geometryFor,printUses,printSelection,catalogLabel:id=>family[id].title});
 keycapColors=createKeycapColors({$,catalog,get:()=>configuration,apply:applyConfiguration,message,storageNotice:(text,error)=>storageNotice(text,error,'palettes')});
 applyConfiguration(configuration,{record:false,persist:false,fetch:!opening});
 if(storageMessage)storageNotice(storageMessage,true,'configuration');else if(restored){message(t('msg.restored'));saveState('save.done','saved');}else{message(t('msg.local'));saveState('','');}

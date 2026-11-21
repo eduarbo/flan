@@ -1964,11 +1964,11 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "fb3e4df9404a2c73e962d558b84300c0b2bc65c2f92d53a57939440159ef9dbf"
+      "sha256": "2d10df5eda2de4cef9c52d1888b8c2e7fbdb293591ba9cf9a4c97dbe0623b654"
     },
     {
       "path": "viewer/build-guide.js",
-      "sha256": "e6ca0f4dd8f56316b5de318d7945be82020b964d7a73b6491fdf8a64b813c649"
+      "sha256": "b28477cd9fb80a72e9c2647eaf2417d2cd22b71f3878357a0213c2d61cd67090"
     },
     {
       "path": "viewer/design-url.js",
@@ -1988,7 +1988,7 @@
     },
     {
       "path": "viewer/i18n.js",
-      "sha256": "33ed7b71e478c2504e1b877a246ac39122d85cd03983231ac82bd2288e800464"
+      "sha256": "93bbc346f7244d925c67dd3da49828607d45c44eda3a571ccdac3aa146a070f1"
     },
     {
       "path": "viewer/config.js",
@@ -2032,11 +2032,11 @@
     },
     {
       "path": "viewer/appearance.js",
-      "sha256": "9e89937f8dfe9db2423b5cf2d162f3840e72e959645138fbedf5716c223cbc33"
+      "sha256": "c93101cabd737712893946c07409eb9c09ea4b5fef018f4b48e23f1091e254ea"
     },
     {
       "path": "viewer/printing.js",
-      "sha256": "ee825be3b8ce612e1e7f20237c62ea1776607f9508d0fd356d6a9638a903b2f1"
+      "sha256": "39c74b9f305ee14e11d2f10e3439a605171866cb03c3df8095cd119e36ac10f4"
     },
     {
       "path": "viewer/print-geometry.js",
@@ -2068,7 +2068,15 @@
     },
     {
       "path": "viewer/filament-picker.js",
-      "sha256": "35f3af880519cf61907bc780eb8b7658920050215d35500798cb7aa6a7d2d4ea"
+      "sha256": "f1c4c2dbe036f3d844987879d50f82179463ba055b051960600d6a415c0c3d08"
+    },
+    {
+      "path": "viewer/spool-library.js",
+      "sha256": "e6db08a9722f3952f50ae64e10f892913dbe79d8ff5a2ab2d0fc6410cfa42050"
+    },
+    {
+      "path": "viewer/quick-print.js",
+      "sha256": "3936a377d7a69ef4f52b4e38499db49a840a8132e9383bf2a15c95ac2507e284"
     },
     {
       "path": "viewer/filament-identity.js",
@@ -2108,15 +2116,15 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "2522f2117a2bcfd7b7c0d814dac8593aa6cc537fe5f6088dd21be6ce7860882e"
+      "sha256": "b7325d4dbff991ea86d3568ae97b357ffbd6b8bd00907d8c9c670e745ebd30f8"
     },
     {
       "path": "viewer/template.html",
-      "sha256": "b31e8c8c4f6b3538b0c615be2c4c2cb907c82f3ee980b61a7e31fb338e289a84"
+      "sha256": "6b00dbd2980bb769b9477b31ea6830006be04714d597e0112e189fb22e77e72c"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "e0ce6d0a1363e4fcb70f92f6153c28cfc3bee0e96321776781c8e5f497a479a3"
+      "sha256": "d526392e36d4fc04cdc0bf9e960e06e181dd3abcc91ae1822f211220f4cce0fd"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -2159,7 +2167,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "f98fc1b25cf8a5894cf1f791bb2820c272be45a2910bfaf5301ac7e965d84721",
+  "viewer_sha256": "6443429ccabd1a3d5833dd2c3628eac94a0d31f389e10f286eb448761f76d5a0",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2445,8 +2453,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "82a0f4bbcc18b03da9e90547dc923816ea41fbfb3616378a5cf6a24154849209",
-    "bytes": 74267082
+    "sha256": "e250880fde92a9f6033f09d96cba80d3960e09f2f6804ed31278763c1da3c6dc",
+    "bytes": 74270719
   },
   "still": {
     "look": {
@@ -3094,7 +3102,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "01ffd2344540397600fe80e65dcd84a36f2c234f3875437c3a676341e7043530",
+  "offline_sha256": "a3187a17e4923b8be8b476a577b8da5257e04b69c8a91abe9b7869cd3bb64250",
   "printing": {
     "path": "docs/explore/assets/printing-56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475.bin",
     "sha256": "56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475",
@@ -3144,8 +3152,8 @@
     "bytes": 335912
   },
   "geometry_aliases": 16,
-  "online_bytes": 1287122,
-  "offline_bytes": 98553593,
+  "online_bytes": 1303110,
+  "offline_bytes": 98569581,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

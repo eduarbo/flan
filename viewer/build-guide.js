@@ -2,10 +2,9 @@
 import parts from '../design/build-parts.json';
 import {presetStock} from './preset-filaments.js';
 import {language,t} from './i18n.js';
-import {selectedParts,keycapPlan} from './printing.js';
+import {selectedParts,keycapPlan,printSpoolUses} from './printing.js';
 import {decorateFilamentDisclosure,filamentReel,filamentLabel} from './filament-identity.js';
-import {closestSwatch,swatchSources,spoolFor,setupOf} from './filament-swatches.js';
-import {finishes} from './finishes.js';
+import {closestSwatch,swatchSources,setupOf} from './filament-swatches.js';
 import {fastenersOf} from './config.js';
 
 const sides=['left','right'],raw=p=>'https://raw.githubusercontent.com/eduarbo/flan/main/'+p;
@@ -163,25 +162,19 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   for(const [name,file] of [[say('Base magnet sample','Muestra de imán de base'),'coupon-magnet-base'],[say('Frame magnet sample','Muestra de imán de marco'),'coupon-magnet-frame'],[say('M2 thread sample','Muestra de rosca M2'),'coupon-m2-thread']])samples.append(link(name+' · STL ↓',raw((file.startsWith('coupon-magnet')?'mechanical/glue-in/revI/':'mechanical/revI/')+file+'.stl')));
   const seen=new Set();
   for(const g of caps.groups){if(seen.has(g.file))continue;seen.add(g.file);samples.append(link(say('Keycap sample · ','Muestra de keycap · ')+g.label+' ↓',raw(catalog.variants.find(v=>v.id===g.variant).path)));}
-  const uses=new Map();
-  function addColor(color,label,spool){
-   const hex=color.toUpperCase(),key=spool?.id||hex;
-   if(!uses.has(key))uses.set(key,{hex,chosen:spool,labels:new Set()});
-   uses.get(key).labels.add(label);
+  const uses=printSpoolUses(current,selected,scope==='complete'?caps.keys:[]);
+  function roleLabel(role){
+   if(role==='base')return t('spool.role.base');
+   if(role==='plate')return say('Switch plate','Placa de switches');
+   if(role==='internals')return t('print.family.internals');
+   if(role==='keycaps')return 'Keycaps';
+   return say('Frame','Marco')+' · '+(role==='body'?say('Body','Cuerpo'):t('role.'+role));
   }
-  for(const p of selected){
-   if(p.id.includes('-frame-')){
-    for(const [role,color] of Object.entries(p.colors)){
-     if(role==='body'||finishes.styles[p.style])addColor(color,say('Frame','Marco')+' · '+(role==='body'?say('Body','Cuerpo'):t('role.'+role)),spoolFor(current,p.side,color));
-    }
-   }else addColor(p.colors.body,p.id.endsWith('-base')?say('Base','Base'):p.id.endsWith('-plate')?say('Switch plate','Placa de switches'):say('Internal parts','Piezas internas'),spoolFor(current,p.side,p.colors.body));
-  }
-  if(scope==='complete')for(const k of caps.keys)addColor(k.color,'Keycaps',spoolFor(current,k.side,k.color));
   const palette=node('div','print-inventory filament-inventory');
   const chip=color=>{const dot=node('i','color-dot');dot.style.setProperty('--sample',color);return dot;};
-  for(const {hex,chosen,labels} of uses.values()){
+  for(const {hex,chosen,roles} of uses){
    const spool=chosen||closestSwatch(hex),row=node('div','print-row'),design=node('span','',hex);
-   design.prepend(chip(hex));design.append(node('small','',[...labels].join(', ')));
+   design.prepend(chip(hex));design.append(node('small','',[...roles].map(roleLabel).join(', ')));
    const match=node('span','filament-pair');match.append(filamentReel(spool),filamentLabel(spool,chosen?'selected':'suggested'));row.append(design,match);palette.append(row);
   }
   const edit=node('button','',say('Choose spools and substitutes','Elegir bobinas y sustitutos'));

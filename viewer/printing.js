@@ -36,6 +36,26 @@ export function keycapPlan(config,catalog,added=[],half='both'){
  }
  return {keys,groups:[...groups.values()].sort((a,b)=>b.count-a.count||a.file.localeCompare(b.file))};
 }
+// Count exactly the materials used by the selection. Unassigned design colors keep their own identity.
+export function printSpoolUses(config,parts,keys=[]){
+ const uses=new Map();
+ function add(side,color,role){
+  const hex=color.toUpperCase(),chosen=spoolFor(config,side,hex),id=chosen?.id||hex;
+  if(!uses.has(id))uses.set(id,{hex,chosen,roles:new Set()});
+  uses.get(id).roles.add(role);
+ }
+ for(const part of parts){
+  if(part.id.includes('-frame-')){
+   const materials=part.material_parts?.length?part.material_parts:[{role:'body'}];
+   for(const {role} of materials)add(part.side,part.colors[role]||part.colors.body,role);
+  }else{
+   const role=part.id.endsWith('-base')?'base':part.id.endsWith('-plate')?'plate':'internals';
+   add(part.side,part.colors.body,role);
+  }
+ }
+ for(const key of keys)add(key.side,key.color,'keycaps');
+ return [...uses.values()];
+}
 export function mesh3MF(part){
  const materials=readMaterials(part);
  const placement=printPlacement(part.id,materials,10),shift=placement.shift;
