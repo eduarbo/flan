@@ -3,6 +3,7 @@ import {framePalette} from './finishes.js';
 import pcbOptions from '../design/pcb-options.json';
 import family from '../design/variants.json';
 import fastenerProfiles from '../design/fastener-profiles.json';
+import {spoolById,modes} from './filament-swatches.js';
 import {t} from './i18n.js';
 export const pcbEditionIds=pcbOptions.editions.map(e=>e.id),pcbMaskIds=pcbOptions.masks.map(m=>m.id);
 export const variantIds=Object.keys(family.variants),defaultVariant=family.base;
@@ -49,6 +50,8 @@ export function check(config,c){
  if(Object.keys(record(config.keycaps)?config.keycaps:{}).sort().join()!=='left,right'||Object.keys(record(config.frames)?config.frames:{}).sort().join()!=='left,right')return {errors:[t('cfg.halves')]};
  if(Object.keys(record(config.batteries)?config.batteries:{}).sort().join()!=='left,right')return {errors:[t('cfg.batteries')]};
  if('variant' in config&&!variantIds.includes(config.variant))return {errors:[t('cfg.variant')]};
+ if('print_setup' in config&&(!record(config.print_setup)||!modes.includes(config.print_setup.mode)||![180,220,256].includes(config.print_setup.bed)))return {errors:[t('spool.invalid')]};
+ if('filaments' in config&&(!record(config.filaments)||Object.entries(config.filaments).some(([side,slots])=>!['left','right'].includes(side)||!record(slots)||Object.entries(slots).some(([hex,id])=>spoolById(id)?.hex.toLowerCase()!==hex))))return {errors:[t('spool.invalid')]};
  if('fasteners' in config){if(typeof config.fasteners!=='string'||!fastenerIds.includes(config.fasteners))return {errors:[t('cfg.fasteners')]};if(!fastenersFit(config.fasteners,config.variant))return {errors:[t('cfg.fastenersSize')]};}
  if('pcb_edition' in config&&!pcbEditionIds.includes(config.pcb_edition))return {errors:[t('cfg.edition')]};
  if('pcb_editions' in config&&(!record(config.pcb_editions)||Object.keys(config.pcb_editions).sort().join()!=='left,right'||Object.values(config.pcb_editions).some(id=>!pcbEditionIds.includes(id))))return {errors:[t('cfg.edition')]};

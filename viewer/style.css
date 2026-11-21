@@ -594,7 +594,8 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
 .print-choice .segments, .build-choice .segments { width: max-content; max-width: 100%; flex-wrap: wrap; gap: 6px; padding: 0; border-radius: 0; background: none; }
 .print-choice .segments button, .build-choice .segments button { flex: 0 0 auto; max-width: 100%; min-height: 44px; padding: 8px 12px; border: 1px solid transparent; border-radius: 8px; background: var(--soft); white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.4; }
 .print-choice .segments button[aria-pressed=true], .build-choice .segments button[aria-pressed=true] { border-color: var(--ink); background: var(--bg0); color: var(--ink); box-shadow: none; }
-#print-kit { align-self: flex-start; width: fit-content; max-width: 100%; margin-top: 4px; border-radius: 8px; padding: 10px 16px; white-space: normal; }
+.print-downloads { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+#print-project, #print-kit { min-height: 44px; align-self: flex-start; width: fit-content; max-width: 100%; margin-top: 4px; border-radius: 8px; padding: 10px 16px; white-space: normal; }
 #project-menu .config-actions button { flex: 0 1 auto; max-width: 100%; border-radius: 8px; padding: 10px 16px; }
 .print-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
 .print-row > span { min-width: 0; overflow-wrap: anywhere; }
@@ -638,3 +639,20 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
  .pcb-grid { grid-template-columns: repeat(2,minmax(0,240px)); }
  .color-fields, .cap-maps { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px 24px; max-width: 900px; }
 }
+.choose-spool { grid-column: 1 / -1; justify-self: start; min-height: 38px; padding: 4px 10px; color: var(--ink); background: var(--field); border-radius: 8px; }
+.theme-spool, .spool-grid button { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; text-align: left; }
+.theme-spool { border-bottom: 1px solid var(--line); }
+.theme-spool > span:first-of-type { flex: 1; }
+.theme-spool i, .spool-grid i { width: 22px; height: 22px; flex: none; border-radius: 50%; border: 1px solid var(--line); }
+.theme-spool small, .spool-grid small { display: block; color: var(--muted); font-size: 11px; }
+.spool-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,215px),1fr)); gap: 4px; }
+.spool-grid button { padding: 6px; border-radius: 6px; }
+.spool-grid button:hover { background: var(--field); }
+.spool-filters, .print-settings { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: end; }
+.spool-filters input, .spool-filters select, .print-settings select { min-height: 44px; max-width: 100%; padding: 6px 10px; background: var(--field); color: var(--ink); border: 1px solid var(--line); border-radius: 7px; font: inherit; }
+.print-settings label { display: grid; gap: 4px; color: var(--muted); font-size: 12px; }
+
+#print-plate-plan small { display: block; color: var(--muted); margin-bottom: 6px; }
+
+.theme-files { display: flex; flex-wrap: wrap; gap: 8px; }
+.theme-files button { min-height: 44px; color: var(--ink); text-decoration: underline; }

@@ -114,7 +114,7 @@ const thumb=id=>{const f=path.join(here,'thumbs',`size-${id}.webp`);return fs.ex
 const variants=Object.fromEntries(Object.entries(scene.variants||{}).map(([id,{printing,meshes,silkscreen,drawing,...rest}])=>
  [id,{...(variantAssets[id]?{...rest,asset:{url:`./assets/variant-${id}-${variantAssets[id].hash}.bin`,sha256:variantAssets[id].hash}}:rest),...(thumb(id)?{thumb:thumb(id)}:{drawing})}]));   // a size card shows its render; the outline drawing is its fallback
 // The KLP Lamé keycaps the complete print kit carries: every variant the three presets use, unchanged upstream
-// STLs, one deferred file each so a kit fetches only its own. The offline copy lists them instead (size limit).
+// STLs, one deferred file each so a kit fetches only its own. The offline project embeds all catalog shapes below.
 const keycapIds=[...new Set(Object.values(scene.presets).flatMap(p=>Object.values(p.keycaps).flatMap(keys=>Object.values(keys).map(k=>k.variant))))].sort();
 const keycapAssets={},keycapFiles=[];
 for(const id of keycapIds){
@@ -122,6 +122,12 @@ for(const id of keycapIds){
  const bytes=deferredBinary('keycap-'+id,raw),digest=crypto.createHash('sha256').update(bytes).digest('hex'),file=`docs/explore/assets/keycap-${id}-${digest}.bin`;
  fs.writeFileSync(path.join(root,file),bytes);keycapFiles.push(file);keycapAssets[id]={url:`./assets/keycap-${id}-${digest}.bin`,sha256:digest,path:v.path,source_sha256:v.sha256};
 }
+// The portable viewer must generate a whole project without fetching missing cap shapes.
+const offlineCaps=Object.fromEntries(scene.catalog.variants.map(v=>{
+ const raw=fs.readFileSync(path.join(root,v.path));
+ if(hash(v.path)!==v.sha256)throw Error('Stale keycap: '+v.path);
+ return [v.id,gzipSync(raw,{level:6}).toString('base64')];
+}));
 // Only this build's deferred assets are published; earlier ones stay in Git history.
 const current=new Set([assetPath,silkPath,thumbPath,...Object.values(variantAssets).map(a=>a.file),...Object.values(fastenerAssets).map(a=>a.file),...keycapFiles].map(p=>path.basename(p)));
 for(const f of fs.readdirSync(path.join(root,'docs/explore/assets')))
@@ -215,6 +221,7 @@ function page(offline,offlineVersion=''){return template.replace('/*__FONTS__*/'
  .replaceAll('__OG_VERSION__',()=>hash('viewer/home/home-og.png').slice(0,12))   // sharing services cache the image by address
  .replace('<!--__LICENSES__-->',()=>credits+licenses)
  .replace('/*__DATA__*/',()=>offline?sceneBytes.toString('base64'):JSON.stringify({url:`./assets/scene-${sceneHash}.bin`,sha256:sceneHash}))
+ .replace('/*__OFFLINE_CAPS__*/',()=>offline?JSON.stringify(offlineCaps):'')
  .replace('/*__PRINT__*/',()=>offline?printBytes.toString('base64'):'')
  .replace('/*__SILK__*/',()=>offline?silkBytes.toString('base64'):'')
  .replace('/*__SILKTHUMBS__*/',()=>offline?thumbBytes.toString('base64'):'')
@@ -235,7 +242,7 @@ const html=page(false,'?v='+offlineHash.slice(0,12));
 new Script([...html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g)].at(-1)[1]);
 fs.writeFileSync(path.join(root,'docs/explore/index.html'),html);
 fs.writeFileSync(path.join(root,'docs/.nojekyll'),'');
-const sources=[...scene.sources,...['viewer/app.js','viewer/build-guide.js','viewer/design-url.js','viewer/part-illustrations.js','viewer/build-package.js','design/build-parts.json','viewer/i18n.js','viewer/config.js','viewer/storage.js','viewer/history.js','viewer/assets.js','viewer/geometry.js','viewer/studio.js','viewer/home/options.js','viewer/keycap-colors.js','viewer/color-input.js','design/keycap-themes.json','viewer/appearance.js','viewer/printing.js','design/themes.json','viewer/explorer.js','viewer/previews.js','viewer/finishes.js','design/frame-finishes.json','viewer/style.css','viewer/template.html','viewer/build.mjs','viewer/home/tokens.js','docs/branding/flan/flan-mark-color.svg',...['Fraunces','Inter','JetBrainsMono'].map(f=>`viewer/home/fonts/${f}-latin.woff2`),...['flan36','flan42','flan46','flan54'].map(id=>`viewer/thumbs/size-${id}.webp`),'viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}))];
+const sources=[...scene.sources,...['viewer/app.js','viewer/build-guide.js','viewer/design-url.js','viewer/part-illustrations.js','viewer/build-package.js','design/build-parts.json','viewer/i18n.js','viewer/config.js','viewer/storage.js','viewer/history.js','viewer/assets.js','viewer/geometry.js','viewer/studio.js','viewer/home/options.js','viewer/keycap-colors.js','viewer/color-input.js','design/keycap-themes.json','viewer/appearance.js','viewer/printing.js','viewer/print-geometry.js','viewer/print-project.js','viewer/filament-swatches.js','viewer/filament-picker.js','design/themes.json','viewer/explorer.js','viewer/previews.js','viewer/finishes.js','design/frame-finishes.json','viewer/style.css','viewer/template.html','viewer/build.mjs','viewer/home/tokens.js','docs/branding/flan/flan-mark-color.svg',...['Fraunces','Inter','JetBrainsMono'].map(f=>`viewer/home/fonts/${f}-latin.woff2`),...['flan36','flan42','flan46','flan54'].map(id=>`viewer/thumbs/size-${id}.webp`),'viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}))];
 const receipt={revision:scene.revision,units:'mm',objects:scene.parts.length,unique_meshes:Object.keys(scene.geometries).length,
   keycaps:scene.parts.filter(p=>p.group==='keycaps').length,geometry_changed:false,
   sources,viewer_sha256:hash('docs/explore/index.html'),measurements:scene.measurements,

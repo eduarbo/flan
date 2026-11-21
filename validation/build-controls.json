@@ -3,145 +3,157 @@
     {
       "name": "en-1440",
       "card_width": 1024,
-      "download_width": 144.875,
+      "download_width": 152.203125,
       "labels": [
         "Both",
         "Left",
         "Right",
         "Complete kit",
-        "Shells + frame"
+        "Shells + frame",
+        "Individual files · ZIP"
       ]
     },
     {
       "name": "en-1024",
       "card_width": 942.09375,
-      "download_width": 144.875,
+      "download_width": 152.203125,
       "labels": [
         "Both",
         "Left",
         "Right",
         "Complete kit",
-        "Shells + frame"
+        "Shells + frame",
+        "Individual files · ZIP"
       ]
     },
     {
       "name": "en-768",
       "card_width": 706.5625,
-      "download_width": 144.875,
+      "download_width": 152.203125,
       "labels": [
         "Both",
         "Left",
         "Right",
         "Complete kit",
-        "Shells + frame"
+        "Shells + frame",
+        "Individual files · ZIP"
       ]
     },
     {
       "name": "en-390",
       "card_width": 358,
-      "download_width": 144.875,
+      "download_width": 152.203125,
       "labels": [
         "Both",
         "Left",
         "Right",
         "Complete kit",
-        "Shells + frame"
+        "Shells + frame",
+        "Individual files · ZIP"
       ]
     },
     {
       "name": "en-320",
       "card_width": 288,
-      "download_width": 144.875,
+      "download_width": 152.203125,
       "labels": [
         "Both",
         "Left",
         "Right",
         "Complete kit",
-        "Shells + frame"
+        "Shells + frame",
+        "Individual files · ZIP"
       ]
     },
     {
       "name": "en-shared-280",
       "card_width": 230,
-      "download_width": 144.875,
+      "download_width": 152.203125,
       "labels": [
         "Both",
         "Left",
         "Right",
         "Complete kit",
-        "Shells + frame"
+        "Shells + frame",
+        "Individual files · ZIP"
       ]
     },
     {
       "name": "es-1440",
       "card_width": 1024,
-      "download_width": 212.890625,
+      "download_width": 175.96875,
       "labels": [
         "Ambas",
         "Izquierda",
         "Derecha",
         "Kit completo",
-        "Carcasas + marco"
+        "Carcasas + marco",
+        "Archivos por pieza · ZIP"
       ]
     },
     {
       "name": "es-1024",
       "card_width": 942.09375,
-      "download_width": 212.890625,
+      "download_width": 175.96875,
       "labels": [
         "Ambas",
         "Izquierda",
         "Derecha",
         "Kit completo",
-        "Carcasas + marco"
+        "Carcasas + marco",
+        "Archivos por pieza · ZIP"
       ]
     },
     {
       "name": "es-768",
       "card_width": 706.5625,
-      "download_width": 212.890625,
+      "download_width": 175.96875,
       "labels": [
         "Ambas",
         "Izquierda",
         "Derecha",
         "Kit completo",
-        "Carcasas + marco"
+        "Carcasas + marco",
+        "Archivos por pieza · ZIP"
       ]
     },
     {
       "name": "es-390",
       "card_width": 358,
-      "download_width": 212.890625,
+      "download_width": 175.96875,
       "labels": [
         "Ambas",
         "Izquierda",
         "Derecha",
         "Kit completo",
-        "Carcasas + marco"
+        "Carcasas + marco",
+        "Archivos por pieza · ZIP"
       ]
     },
     {
       "name": "es-320",
       "card_width": 288,
-      "download_width": 212.890625,
+      "download_width": 175.96875,
       "labels": [
         "Ambas",
         "Izquierda",
         "Derecha",
         "Kit completo",
-        "Carcasas + marco"
+        "Carcasas + marco",
+        "Archivos por pieza · ZIP"
       ]
     },
     {
       "name": "es-shared-280",
       "card_width": 230,
-      "download_width": 198,
+      "download_width": 175.96875,
       "labels": [
         "Ambas",
         "Izquierda",
         "Derecha",
         "Kit completo",
-        "Carcasas + marco"
+        "Carcasas + marco",
+        "Archivos por pieza · ZIP"
       ]
     }
   ],
@@ -150,8 +162,9 @@
   "wrapped_fields": true,
   "shared_panel_minimum": 280,
   "keyboard_selection_and_download": true,
+  "single_3mf_matches_selection": true,
   "individual_zip_matches_selection": true,
   "portable_guide_preserved": true,
-  "browser": "149.0.7827.55",
+  "browser": "156.0.8078.4",
   "errors": []
 }

@@ -2,6 +2,8 @@
 import parts from '../design/build-parts.json';
 import {language,t} from './i18n.js';
 import {selectedParts,keycapPlan} from './printing.js';
+import {closestSwatch,swatchSources,spoolFor,setupOf} from './filament-swatches.js';
+import {finishes} from './finishes.js';
 import {fastenersOf} from './config.js';
 
 const sides=['left','right'],raw=p=>'https://raw.githubusercontent.com/eduarbo/flan/main/'+p;
@@ -28,7 +30,7 @@ const list=(items,ordered=true)=>{const n=node(ordered?'ol':'ul','build-instruct
 function details(id,title,contents){const d=node('details','build-detail');d.id=id;d.append(node('summary','',title),...contents);return d;}
 const orderText=row=>row.packs?say('Buy '+row.packs+' pack'+(row.packs===1?'':'s')+' × '+row.pack+' = '+row.buy,'Compra '+row.packs+' paquete'+(row.packs===1?'':'s')+' × '+row.pack+' = '+row.buy):say('Order '+row.buy,'Pide '+row.buy);
 
-export function createBuildGuide({catalog,family,inventory,getDesignLink,illustrations}){
+export function createBuildGuide({catalog,family,inventory,getDesignLink,illustrations,editFilaments}){
  const $=id=>document.getElementById(id),storageKey='flan.build-parts.v1';
  let current,rows=[],checked={},savedDetails=new Set();
  try{const value=JSON.parse(localStorage.getItem(storageKey)||'{}');if(value&&typeof value==='object'&&!Array.isArray(value))checked=value;}catch{}
@@ -65,6 +67,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   const exactLink=getDesignLink(),locale=language(),footer=say('Generated from your design. Use your browser’s Print command to save as PDF.','Generado con tu diseño. Usa Imprimir en el navegador para guardarlo como PDF.');
   if(complete)renderPrint({half:'both',scope:'complete',host:copy.querySelector('#build-print-list'),fitHost:copy.querySelector('#build-fit')});
   copy.querySelector('.build-export')?.remove();
+  copy.querySelector('#print-plate-plan')?.remove();
   if(bundled){
    for(const a of copy.querySelectorAll('a[href]')){
     const source=a.getAttribute('href');let relative;
@@ -79,6 +82,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
    }
    const a=link(say('Open the complete print kit · ZIP','Abrir el kit completo de impresión · ZIP'),'Print-kit.zip');a.removeAttribute('target');copy.querySelector('#build-print-list').before(a);
   }
+  const setup=setupOf(current);copy.querySelector('.print-settings')?.replaceWith(node('p','micro',t('print.'+setup.mode)+' · '+setup.bed+' × '+setup.bed+' mm'));
   copy.querySelectorAll('button,.build-jumps,.print-options,.build-options,[role=status]').forEach(n=>n.remove());
   copy.querySelectorAll('details').forEach(n=>n.open=true);
   copy.querySelectorAll('input').forEach(n=>{if(n.type==='checkbox'){if(n.checked)n.setAttribute('checked','');n.disabled=true;}else n.remove();});
@@ -157,14 +161,41 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   for(const [name,file] of [[say('Base magnet sample','Muestra de imán de base'),'coupon-magnet-base'],[say('Frame magnet sample','Muestra de imán de marco'),'coupon-magnet-frame'],[say('M2 thread sample','Muestra de rosca M2'),'coupon-m2-thread']])samples.append(link(name+' · STL ↓',raw('mechanical/revI/'+file+'.stl')));
   const seen=new Set();
   for(const g of caps.groups){if(seen.has(g.file))continue;seen.add(g.file);samples.append(link(say('Keycap sample · ','Muestra de keycap · ')+g.label+' ↓',raw(catalog.variants.find(v=>v.id===g.variant).path)));}
-  fitHost.replaceChildren(details('build-fit-details',say('Start with fit samples','Empieza con las muestras de ajuste'),[
+  const uses=new Map();
+  function addColor(color,label,spool){
+   const hex=color.toUpperCase(),key=spool?.id||hex;
+   if(!uses.has(key))uses.set(key,{hex,chosen:spool,labels:new Set()});
+   uses.get(key).labels.add(label);
+  }
+  for(const p of selected){
+   if(p.id.includes('-frame-')){
+    for(const [role,color] of Object.entries(p.colors)){
+     if(role==='body'||finishes.styles[p.style])addColor(color,say('Frame','Marco')+' · '+(role==='body'?say('Body','Cuerpo'):t('role.'+role)),spoolFor(current,p.side,color));
+    }
+   }else addColor(p.colors.body,p.id.endsWith('-base')?say('Base','Base'):p.id.endsWith('-plate')?say('Switch plate','Placa de switches'):say('Internal parts','Piezas internas'),spoolFor(current,p.side,p.colors.body));
+  }
+  if(scope==='complete')for(const k of caps.keys)addColor(k.color,'Keycaps',spoolFor(current,k.side,k.color));
+  const palette=node('div','print-inventory');
+  const chip=color=>{const dot=node('i','color-dot');dot.style.setProperty('--sample',color);return dot;};
+  for(const {hex,chosen,labels} of uses.values()){
+   const spool=chosen||closestSwatch(hex),row=node('div','print-row'),design=node('span','',hex);
+   design.prepend(chip(hex));design.append(node('small','',[...labels].join(', ')));
+   const match=node('span','',(chosen?'':'≈ ')+spool.name);match.prepend(chip(spool.hex));match.append(node('small','',spool.series));row.append(design,match);palette.append(row);
+  }
+  const edit=node('button','',say('Choose spools and substitutes','Elegir bobinas y sustitutos'));
+  edit.type='button';edit.onclick=()=>editFilaments(edit);
+  const filaments=details('filament-guide',say('Match your filaments','Elige tus filamentos'),[
+   node('p','micro',say('Your design colors and the nearest Bambu and Polymaker PLA swatches. Compare a printed sample in your light before buying a spool.','Colores de tu diseño y tonos cercanos del catálogo PLA de Bambu y Polymaker. Compara una muestra impresa con tu luz antes de comprar una bobina.')),
+   palette,edit,...Object.entries(swatchSources).map(([label,url])=>link(label+' ↗',url))
+  ]);
+  fitHost.replaceChildren(filaments,details('build-fit-details',say('Start with fit samples','Empieza con las muestras de ajuste'),[
    node('p','micro',say('Print one of each selected keycap shape, plus the magnet and M2 coupons. Check stem fit, full key travel, magnet capture and tapped screw engagement before printing everything.','Imprime una de cada forma de keycap elegida, más las muestras de imán y M2. Revisa el encaje del vástago, recorrido, captura de imanes y rosca antes de imprimir todo.')),samples,
    ...printInstructions()
   ]));
  }
  function printInstructions(){return [list([
-  say('Open each 3MF as one multipart assembly. Assign the HEX colors in its manifest to your actual filaments; keep body, detail, accent and secondary volumes registered. STL is the single-color fallback.','Abre cada 3MF como un ensamblaje multiparte. Asigna los HEX del manifiesto a tus filamentos; conserva alineados cuerpo, detalle, acento y secundario. El STL es la alternativa de un color.'),
-  say('Choose orientation and supports in the slicer, then inspect every layer. The kit includes no printer profile or G-code. Print the plates first and test switch retention.','Elige orientación y soportes en el slicer y revisa cada capa. El kit no incluye perfil de impresora ni G-code. Imprime primero las placas y prueba la retención de switches.'),
+  say('Open the combined 3MF as a project. Bases and switch plates each take one filament. AMS multicolor preserves the four frame regions. The by-object and one-spool modes use the fused frame in its body color. Match the project colors to your spools, or use the fused frame STL in the ZIP for a single-color print.','Abre el 3MF conjunto como proyecto. Cada base y cada placa usa un filamento. AMS multicolor conserva las cuatro zonas del marco. Por objeto y una bobina por cama usan el marco liso del color del cuerpo. Asigna tus bobinas o usa el STL del marco en el ZIP para imprimirlo en un solo color.'),
+  say('The 3MF enables supports for keycaps and display sleds. Inspect supports and magnet pockets in the sliced preview. The kit includes no printer profile or G-code. Print the plates first and test switch retention.','El 3MF activa soportes para las teclas y los soportes de pantalla. Revisa los soportes y los huecos de los imanes al laminar. El kit no incluye perfil de impresora ni G-code. Imprime primero las placas y prueba la retención de switches.'),
   say('For captive magnets, measure the actual magnet and mark attracting pairs in their final orientation. Pause at the sliced layer before the pocket closes; keep the magnet below the nozzle path. Qualify heat exposure and retention using the coupons.','Para los imanes cautivos, mide el imán real y marca las parejas que se atraen en su posición final. Pausa en la capa del slicer antes de cerrar el bolsillo; el imán debe quedar por debajo de la boquilla. Verifica exposición al calor y retención con las muestras.'),
   say('Tap the Ø1.7 mm printed pilots with an M2 tap. Test that the selected screw grips without bottoming or splitting the part.','Rosca los pilotos impresos de Ø1.7 mm con un macho M2. Comprueba que el tornillo sujete sin tocar fondo ni partir la pieza.')
  ])];}

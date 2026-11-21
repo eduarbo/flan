@@ -9,14 +9,15 @@ import {createBuildGuide} from './build-guide.js';
 import {createDesignURL} from './design-url.js';
 import {deflateSync} from 'three/addons/libs/fflate.module.js';
 import {createPartIllustrations} from './part-illustrations.js';
-import {buildFile,buildWait,completeBuild} from './build-package.js';
+import {buildFile,buildWait,completeBuild,sha256} from './build-package.js';
 import {createAppearance,setColor,savedKey,applyTheme} from './appearance.js';
 import themeLibrary from '../design/themes.json';
 import {restoreConfiguration,createStore,recoveryPrefix} from './storage.js';
 import {createHistory} from './history.js';
-import {decodeBytes,unpack,unpackVariant,printLoader} from './assets.js';
+import {decodeBytes,unpack,unpackVariant,printLoader,gunzip} from './assets.js';
 import {createGeometryStore} from './geometry.js';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
+import {bindSpool,setupOf} from './filament-swatches.js';
 import {enhanceColorInput} from './color-input.js';
 import {createKeycapColors} from './keycap-colors.js';
 import {createExplorer,partInfo,matchesPart,isMagnet} from './explorer.js';
@@ -88,7 +89,7 @@ const shownVariant=config=>config.variant===baseVariant||family[config.variant]?
 let printBusy=false,glbBusy=false,buildBusy=false,awaitedMeshes=0;   // awaitedMeshes: meshes the design shows that have not arrived
 function syncBuildAvailability(){
   const sized=shownVariant(configuration)===configuration.variant,ready=sized&&!awaitedMeshes,hardware=!configuration.fasteners||Boolean(fastenerProfiles[configuration.fasteners]?.loaded);
-  $('print-kit').disabled=printBusy||buildBusy||!ready;$('download-build').disabled=buildBusy||printBusy||!ready;$('glb').disabled=glbBusy||!ready||!hardware;
+  $('print-project').disabled=$('print-kit').disabled=printBusy||buildBusy||!ready;$('download-build').disabled=buildBusy||printBusy||!ready;$('glb').disabled=glbBusy||!ready||!hardware;
   for(const id of ['variant-status','build-variant-status']){
     $(id).hidden=ready;$(id).textContent=ready?'':sized?t(meshFailure?'load.geometry':'meshes.loading'):t('size.resources',{name:family[configuration.variant]?.title||configuration.variant});
   }
@@ -560,12 +561,28 @@ $('locate-magnets').onclick=()=>{
 $('credits').onclick=()=>{$('licenses').showModal();$('licenses').querySelector('.dialog-body').scrollTop=0;};
 $('close-credits').onclick=()=>$('licenses').close();$('licenses').addEventListener('close',()=>$('credits').focus({preventScroll:true}));
 canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();$('error').hidden=false;$('error').textContent=t('msg.contextLost');});
-for(const id of ['print-half','print-scope'])for(const button of $(id).children)button.onclick=()=>{for(const option of $(id).children)option.setAttribute('aria-pressed',String(option===button));buildGuide.update(configuration);};
-// The complete kit's keycaps: each KLP Lamé file the design uses, fetched once and checked against its hash.
-// The offline copy can't reach them; its kit lists them instead.
-const keycapLoads=new Map(),gunzip=bytes=>new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer().then(b=>new Uint8Array(b));
-const keycapStl=id=>{const asset=data.keycapAssets?.[id];if(!asset||$('print-data').textContent.trim())return Promise.resolve(null);if(!keycapLoads.has(id))keycapLoads.set(id,printLoader(asset,{textContent:''},gunzip));return keycapLoads.get(id)().catch(()=>null);};
-async function makePrintKit(selected,{half='both',scope='complete',strict=false,signal,progress=()=>{}}={}){
+for(const id of ['print-half','print-scope'])for(const button of $(id).children)button.onclick=()=>{$('print-plate-plan').hidden=true;for(const option of $(id).children)option.setAttribute('aria-pressed',String(option===button));buildGuide.update(configuration);};
+for(const id of ['print-method','print-bed'])$(id).onchange=()=>{
+ const next=copy(configuration);next.print_setup={mode:$('print-method').value,bed:Number($('print-bed').value)};
+ applyConfiguration(next);
+};
+const capLoads=new Map();
+let offlineCaps;
+async function keycapStl(id,signal){
+ const variant=catalog.variants.find(v=>v.id===id);
+ const embedded=$('offline-caps');
+ if(!embedded.firstChild?.length){
+  const asset=data.keycapAssets?.[id];
+  if(signal||!asset)return buildFile(variant.path,__FLAN_BUILD_ASSETS__,signal);
+  if(!capLoads.has(id))capLoads.set(id,printLoader(asset,{textContent:''},gunzip));
+  return capLoads.get(id)();
+ }
+ offlineCaps??=JSON.parse(embedded.textContent);
+ const bytes=await gunzip(decodeBytes(offlineCaps[id]));
+ if(await sha256(bytes)!==variant.sha256)throw Error('File mismatch: '+variant.path);
+ return bytes;
+}
+async function makePrintKit(selected,{half='both',scope='complete',projectOnly=false,signal,progress=()=>{}}={}){
  await buildWait(loadVariant(selected.variant),signal);signal?.throwIfAborted();
  const base=await buildWait(loadPrinting(),signal),variant=selected.variant;
  let registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing},fasteners:family[variant].fasteners};
@@ -576,17 +593,35 @@ async function makePrintKit(selected,{half='both',scope='complete',strict=false,
  let keycaps=null;
  if(scope==='complete'){
   const plan=keycapPlan(selected,catalog,variant===baseVariant?[]:family[variant].added||[],half),ids=[...new Set(plan.groups.map(g=>g.variant))];
-  keycaps={plan,stl:Object.fromEntries(await Promise.all(ids.map(async id=>[id,strict?await buildFile(catalog.variants.find(v=>v.id===id).path,__FLAN_BUILD_ASSETS__,signal):await keycapStl(id)])))};
+  keycaps={plan,stl:Object.fromEntries(await Promise.all(ids.map(async id=>[id,await keycapStl(id,signal)])))};
  }
  signal?.throwIfAborted();
- return printKit(selected,registry,{half,scope,keycaps,title:family[variant].title+(selected.fasteners?'-'+selected.fasteners:''),progress:(i,n)=>{signal?.throwIfAborted();progress(i,n);}});
+ return printKit(selected,registry,{half,scope,keycaps,projectOnly,title:family[variant].title+(selected.fasteners?'-'+selected.fasteners:''),progress:(i,n)=>{signal?.throwIfAborted();progress(i,n);}});
 }
-$('print-kit').onclick=async()=>{const b=$('print-kit');printBusy=true;b.disabled=true;syncBuildAvailability();try{
- const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;b.textContent=t('kit.loading');
- const {bytes,manifest}=await makePrintKit(selected,{half,scope,progress:(i,n)=>b.textContent=t('kit.preparing',{i,n})});
- const url=URL.createObjectURL(new Blob([bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=family[selected.variant].title+(selected.fasteners?'-'+selected.fasteners:'')+'-'+manifest.half+'-'+manifest.scope+'.zip';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
- say('print-status',manifest.keycaps?(manifest.keycaps.missing.length?'kit.doneCapsMissing':'kit.doneCaps'):'kit.done',{n:manifest.parts.length,caps:manifest.keycaps?.groups.reduce((n,g)=>n+g.count,0)});
- }catch(e){say('print-status','kit.failed',{error:e.message});}finally{printBusy=false;syncBuildAvailability();b.textContent=t('kit.download');}};
+let lastPlateConfig='';
+async function downloadPrint(projectOnly){
+ const button=$(projectOnly?'print-project':'print-kit');
+ printBusy=true;syncBuildAvailability();
+ try{
+  const selected=copy(configuration),half=$('print-half').querySelector('[aria-pressed=true]').dataset.value,scope=$('print-scope').querySelector('[aria-pressed=true]').dataset.value;
+  button.textContent=t('kit.loading');
+  const result=await makePrintKit(selected,{half,scope,projectOnly,progress:(i,n)=>button.textContent=t('kit.preparing',{i,n})});
+  const filename=projectOnly?result.filename:result.manifest.project.replace(/\.3mf$/,'.zip');
+  const url=URL.createObjectURL(new Blob([result.bytes],{type:projectOnly?'model/3mf':'application/zip'}));
+  const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
+  const plan=$('print-plate-plan');
+  if(JSON.stringify(selected)===JSON.stringify(configuration)&&half===$('print-half').querySelector('[aria-pressed=true]').dataset.value&&scope===$('print-scope').querySelector('[aria-pressed=true]').dataset.value){
+   plan.querySelector('ol').replaceChildren(...(result.plates||result.manifest.plates).map(plate=>{
+    const li=document.createElement('li');li.textContent=plate.name+' · '+t('print.objects',{n:plate.objects});
+    const colors=document.createElement('small');colors.textContent=plate.filaments.map(f=>'#'+f.slot+' '+f.name).join(' / ');li.append(colors);return li;
+   }));lastPlateConfig=JSON.stringify(selected);plan.hidden=false;
+  }
+  say('print-status',projectOnly?'kit.projectDone':'kit.archiveDone',{name:projectOnly?filename:result.manifest.project});
+ }catch(e){say('print-status','kit.failed',{error:e.message});}
+ finally{printBusy=false;syncBuildAvailability();button.textContent=t(projectOnly?'kit.project':'kit.download');}
+}
+$('print-project').onclick=()=>downloadPrint(true);
+$('print-kit').onclick=()=>downloadPrint(false);
 let buildController=null;
 $('build-cancel').onclick=()=>buildController?.abort();
 $('download-build').onclick=async()=>{
@@ -603,7 +638,7 @@ $('download-build').onclick=async()=>{
   const snapshot=buildGuide.capture({complete:true,bundled:true});
   const guide=await snapshot.guide;buildController.signal.throwIfAborted();
   const result=await completeBuild({configuration:selected,assets:__FLAN_BUILD_ASSETS__,editions:data.silkscreen.editions,catalog,signal:buildController.signal,
-   print:(c,options)=>makePrintKit(c,{...options,strict:true}),guide,csv:snapshot.csv,
+   print:(c,options)=>makePrintKit(c,options),guide,csv:snapshot.csv,
    progress:(phase,i,n)=>{$('build-export-status').textContent=t('build.progress.'+phase,{i:i||0,n:n||0});}});
   const url=URL.createObjectURL(new Blob([result.bytes],{type:'application/zip'})),a=document.createElement('a');a.href=url;a.download=family[selected.variant].title+(selected.fasteners?'-'+selected.fasteners:'')+'-complete-build.zip';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
   $('build-export-status').textContent=t('build.ready',{name:family[selected.variant].title});
@@ -679,7 +714,7 @@ function applyConfiguration(next,{record=true,persist=true,fetch=true}={}){
       mat=material(choice.color);userData.color=choice.color;geometry=geometryFor(v.path);rotation=THREE.MathUtils.degToRad(k.angle+choice.rotation_deg);userData.base[1]=v.seating_z_mm;
       userData.variant=v.id;userData.cap_rotation_deg=choice.rotation_deg;
     }
-    if(group==='lid'&&userData.frame_style!==undefined){const f=next.frames[side],path=swapped(`${side}-frame-${f.style}`);if(!here(path||frameMesh(next,side)))return waiting;const finish=frameFinish(f.style,side,f.color,f.accents,path);geometry=finish.geometry;mat=finish.material;userData.frame_style=f.style;userData.frame_palette=finish.palette;userData.mesh_source=path||frameMesh(next,side);}
+    if(group==='lid'&&userData.frame_style!==undefined){const f=next.frames[side],path=swapped(`${side}-frame-${f.style}`);if(!here(path||frameMesh(next,side)))return waiting;const finish=frameFinish(f.style,side,f.color,f.accents,path);geometry=finish.geometry;mat=setupOf(next).mode==='ams'?finish.material:material(f.color);userData.frame_style=f.style;userData.frame_palette=finish.palette;userData.mesh_source=path||frameMesh(next,side);}
     if(group==='battery'){const path=batteryMesh(next,side);if(!here(path))return waiting;geometry=geometryFor(path);userData.battery_profile=next.batteries[side];}
     if(userData.part_id===`${side}-pcb`){const mask=pcbMask(next,side),path=`mechanical/${dir}/${side}-pcb.stl`;if(!here(path))return waiting;geometry=geometryFor(path);mat=material(data.silkscreen.masks.find(m=>m.id===mask).mask);userData.pcb_mask=mask;}
     if(Number.isInteger(userData.battery_lead_index)){const wire=leadWires(next,side).find(p=>p.index===userData.battery_lead_index);if(!here(wire.geometry))return waiting;geometry=geometryFor(wire.geometry);mat=material(wire.color);userData.battery_profile=next.batteries[side];}
@@ -785,7 +820,7 @@ function labelFrames(){
   for(const button of $('swatches').children){const label=t('swatch.'+swatchNames[button.dataset.color]);button.title=label;button.setAttribute('aria-label',label);}
 }
 labelFrames();onLanguage(labelFrames);
-const frameHex=enhanceColorInput($('frame-color'),()=>t('frame.color'));
+const frameHex=enhanceColorInput($('frame-color'),()=>t('frame.color'),spool=>applyConfiguration(bindSpool(setColor(configuration,frameTargets(),'frame','body',spool.hex.toLowerCase()),frameTargets(),spool)));
 $('frame-color').oninput=e=>applyConfiguration(setColor(configuration,frameTargets(),'frame','body',e.target.value));
 $('theme-colors').onclick=()=>{const cfg=copy(configuration);for(const side of frameTargets()){const p=framePalette(cfg.frames[side].style);cfg.frames[side].color=p.body;cfg.frames[side].accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,p[k]]));if(cfg.cases[side].match_frame){cfg.cases[side].base_color=p.body;if(cfg.cases[side].style==='level')cfg.cases[side].plate_color=p.body;}}applyConfiguration(cfg);};
 for(const [id,label] of [['default','Original'],['normal-sculpted','Sculpted'],['saddle-sculpted','Saddle']]){
@@ -892,7 +927,12 @@ function showUnderside(){
 }
 $('build-focus-toggle').onclick=()=>{buildFocus=!buildFocus;layoutPanel();};
 $('build-edit').onclick=()=>openPanel(activePanel,$('build-edit'));
-const buildGuide=createBuildGuide({catalog,family,inventory:__FLAN_PRINT_INVENTORY__,getDesignLink:shareLink,illustrations:partIllustrations});
+const buildGuide=createBuildGuide({catalog,family,inventory:__FLAN_PRINT_INVENTORY__,getDesignLink:shareLink,illustrations:partIllustrations,
+  editFilaments:opener=>{
+    openPanel('themes',opener);
+    const section=$('theme-filaments');section.open=true;
+    section.querySelector('summary').focus();section.scrollIntoView({block:'start'});
+  }});
 $('pcb-order').onclick=()=>{openPanel('files',$('pcb-order'));refreshRecovery();$('build-boards').scrollIntoView({block:'start'});};
 const raw=path=>'https://raw.githubusercontent.com/eduarbo/flan/main/'+path;
 for(const edition of silk.editions){
@@ -949,6 +989,9 @@ function syncConfigurationUI(){
   const failed=Boolean(configuration.fasteners)&&fastenerFailure===configuration.fasteners&&!fastenerProfiles[screws]?.loaded;
   $('fasteners-note').textContent=failed?t('msg.fasteners')+' '+t('fasteners.note.retry'):t(screwChoice?'fasteners.note.'+screws:'fasteners.note.size',{name:sizeInfo.title})+(tight<.3?' '+t('fasteners.note.tight',{gap:tight.toFixed(2)}):'');
   $('fasteners-note').dataset.error=String(failed);
+  if(lastPlateConfig!==JSON.stringify(configuration))$('print-plate-plan').hidden=true;
+  const setup=setupOf(configuration);$('print-method').value=setup.mode;$('print-bed').value=String(setup.bed);
+  $('print-method-note').textContent=t('print.method.'+setup.mode);
   buildGuide.update(configuration);
   showSilk();
   for(const b of $('battery-target').children)b.setAttribute('aria-pressed',String(b.dataset.side===batterySide));

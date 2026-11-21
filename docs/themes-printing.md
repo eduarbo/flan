@@ -10,7 +10,7 @@ All five finger columns share the same base color. Each thumb gets its own coord
 2. Pick a theme. It changes colors while preserving shapes, keycap geometry and installed covers.
 3. In **Base**, edit the base/rim and key plate. In **Frame**, edit the body and flush inlays. Every color also has a HEX field and **Copy** button.
 4. Enable **Match frame and rim** for continuous color. Editing either linked color updates the other; with Level, the upper shell joins the linked base and frame color.
-5. Use **Build → Print the parts → Download print kit**; the complete kit also carries your keycaps.
+5. Use **Build → Print the parts → Download one 3MF**; the complete kit also carries your keycaps.
 
 The [six installed approved frames](frames-extra.md) have four solid-color regions. Talavera is the default. Each design has a matching global palette; **Restore design colors** restores the selected frame palette.
 
@@ -28,7 +28,19 @@ Eye, Solo, camera and exploded views are inspection controls. They do not remove
 
 ## Printable parts and joining
 
-**Shells** exports each selected case, key plate and installed frame. For Level, the switch-retaining plate and raised upper shell export as one removable part. The **Complete kit**, the default, also includes the open-bottom battery locator, cage, controller support and display support, and a printed washer for each M2 × 6 fastener: three per half on Flan36, one or three more on the larger sizes. It carries your keycaps too: each KLP Lamé file the design uses, unchanged, with `Keycaps/plan.csv` and a per-color list in the READ-ME. The online explorer fetches those files when you download; the offline copy lists them with a repository link instead. Commercial parts are excluded; [keycap fit guidance](customize.md#klp-lamé) remains separate.
+**Shells** exports each selected case, key plate and installed frame. For Level, the switch-retaining plate and raised upper shell export as one removable part. The **Complete kit**, the default, also includes the open-bottom battery locator, cage, controller support and display support, and a printed washer for each M2 × 6 fastener: three per half on Flan36, one or three more on the larger sizes. It carries your keycaps too: each KLP Lamé file the design uses, unchanged, with `Keycaps/plan.csv` and a per-color list in the READ-ME. The combined 3MF places every selected keycap in the requested quantity. Both the online and offline explorer include the meshes. Commercial parts are excluded; [keycap fit guidance](customize.md#klp-lamé) remains separate.
+
+Open the single 3MF **as a project** in Bambu Studio. Select **Shells + frame** for just the bases, switch plates and installed display frames. Choose your printer, review plate layout and orientation, match the project colors to your spools and set the pauses for captive magnets. The case follows Flan’s PCB and pinky stagger. A 36-key Corne uses a different layout.
+
+In **Design → Theme → Filaments for this theme**, apply the closest spools to the current palette or pick a substitute for an individual color. For a custom palette, use **Choose filament** in the base, frame or keycap color editor. Search by commercial name, filter by range or color family, and compare the nearest alternatives. The catalog uses manufacturer HEX values from [Bambu PLA Basic](https://bambulab-us.myshopify.com/products/pla-basic-filament), [Bambu PLA Matte](https://bambulab-us.myshopify.com/products/pla-matte), [Polymaker Panchroma Basic](https://shop.polymaker.com/products/panchroma-pla) and [Panchroma Matte](https://shop.polymaker.com/products/matte-pla). Compare physical swatches in your light. **Save theme** downloads your colors and spool selections. **Open theme** applies them to another Flan while preserving its geometry. Sharing the full design also preserves spool assignments and print method.
+
+| Print method | What the 3MF contains |
+| --- | --- |
+| AMS · multicolor | Registered frame artwork. Each plate uses up to four spools. Map the colors for the plate you intend to print. |
+| AMS · by object | Single-color objects, a smooth frame, and sequential printing set on each plate. Check toolhead clearance in your machine profile before slicing. |
+| One spool per plate | Each plate groups parts and keycaps by spool. Frames use the fused mesh in their body color. Reload between plates with either a manual feeder or an AMS. |
+
+Select a square bed of 180, 220 or 256 mm and review the arrangement on your actual printer. Color-matched designs and the two single-color methods reuse the base spool for internal supports. The 3MF includes a plate-to-spool list under `Metadata/Flan/Filaments.csv`. **Individual files · ZIP** also carries the project at its root. The combined project enables supports on keycaps and display sleds. Check one printed key for fit before printing a full set. Captive magnets require part-specific pauses before their pockets close.
 
 The [historical support study](slim-mount-study.md) includes experimental plates with integrated washers and bases with integrated saddles. These reduce loose parts, not height. They predate the current floor-mounted battery and Level shell; their separate downloads are comparison geometry, not replacements in the current print kit.
 

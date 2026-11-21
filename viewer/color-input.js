@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Keep the native swatch, but make every color usable as plain copyable text.
+import {chooseFilament} from './filament-picker.js';
 import {t,onLanguage} from './i18n.js';
 export function normalizeHex(value){
  const hex=value.trim().replace(/^#/,'');
@@ -7,15 +8,17 @@ export function normalizeHex(value){
  return /^[0-9a-f]{6}$/i.test(hex)?'#'+hex.toLowerCase():null;
 }
 // name: what the swatch colours, in the page's language
-export function enhanceColorInput(swatch,name=()=>swatch.getAttribute('aria-label')){
+export function enhanceColorInput(swatch,name=()=>swatch.getAttribute('aria-label'),selectSpool){
  const editor=document.createElement('div');editor.className='color-editor';
  swatch.before(editor);editor.append(swatch);
  const hex=document.createElement('input');hex.id=swatch.id+'-hex';hex.type='text';hex.className='hex-input';hex.spellcheck=false;hex.autocomplete='off';hex.setAttribute('autocapitalize','off');
  const copy=document.createElement('button');copy.type='button';copy.className='copy-color';
  const notice=document.createElement('small');notice.id=hex.id+'-notice';notice.className='color-notice';notice.setAttribute('role','status');hex.setAttribute('aria-describedby',notice.id);
- editor.append(hex,copy,notice);
+ const spoolButton=document.createElement('button');spoolButton.type='button';spoolButton.className='choose-spool';
+ spoolButton.onclick=()=>chooseFilament(swatch.value,selectSpool);
+ editor.append(hex,copy);if(selectSpool)editor.append(spoolButton);editor.append(notice);
  let mixed=false,committing=false,last='';
- function label(){hex.setAttribute('aria-label',t('hex.label',{name:name()}));copy.textContent=t('hex.copyText');copy.setAttribute('aria-label',t('hex.copy',{name:name()}));hex.placeholder=mixed?t('hex.mixed'):'#RRGGBB';}
+ function label(){spoolButton.textContent=t('spool.pick');spoolButton.setAttribute('aria-label',name()+' · '+t('spool.pick'));hex.setAttribute('aria-label',t('hex.label',{name:name()}));copy.textContent=t('hex.copyText');copy.setAttribute('aria-label',t('hex.copy',{name:name()}));hex.placeholder=mixed?t('hex.mixed'):'#RRGGBB';}
  label();onLanguage(label);
  function clear(){hex.removeAttribute('aria-invalid');notice.textContent='';}
  function commit(){
@@ -33,7 +36,7 @@ export function enhanceColorInput(swatch,name=()=>swatch.getAttribute('aria-labe
   catch{hex.focus();hex.select();notice.textContent=t('hex.selected');}
  };
  return {sync(values,disabled=swatch.disabled){
-  mixed=new Set(values.map(v=>v.toLowerCase())).size>1;swatch.disabled=disabled;hex.disabled=disabled;
+  mixed=new Set(values.map(v=>v.toLowerCase())).size>1;swatch.disabled=disabled;hex.disabled=disabled;spoolButton.disabled=disabled;
   const current=JSON.stringify(values);
   if(committing||current!==last||document.activeElement!==hex){hex.value=mixed?'':values[0].toLowerCase();clear();}last=current;
   hex.placeholder=mixed?t('hex.mixed'):'#RRGGBB';copy.disabled=disabled||!normalizeHex(hex.value);

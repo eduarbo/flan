@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+import {bindSpool} from './filament-swatches.js';
 import {enhanceColorInput} from './color-input.js';
 import library from '../design/keycap-themes.json';
 import {copy} from './config.js';
@@ -26,7 +27,7 @@ export function validatePaletteFile(value,catalog){
  return copy(value.palettes);
 }
 export function createKeycapColors({$,catalog,get,apply,message,storageNotice=message}){
- const colorHex=enhanceColorInput($('cap-color'),()=>t('keys.colorLabel'));
+ const colorHex=enhanceColorInput($('cap-color'),()=>t('keys.colorLabel'),spool=>{const targets=resolved();apply(bindSpool(paintKeys(get(),targets,spool.hex.toLowerCase()),[...new Set(targets.map(([side])=>side))],spool));});
  let selection={side:'both',mode:'all',row:0,column:1,keySide:'left',key:'K01'},custom=[],initialWarning='';
  const paletteStore=createStore({key:paletteStorageSlot,validate:v=>{validatePaletteFile(v,catalog);return v;},notify:storageNotice});
  try{const saved=paletteStore.initialRaw;if(saved)custom=validatePaletteFile(JSON.parse(saved),catalog);}catch{initialWarning=t('keys.unreadable');}
