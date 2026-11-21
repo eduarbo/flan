@@ -1,6 +1,6 @@
 # Using the explorer
 
-[Open the 3D explorer](https://flankbd.com/explore/) · [Download the complete offline explorer (ZIP)](https://flankbd.com/explore/offline.zip)
+[Open the 3D explorer](https://flankbd.com/explore/) · [Download the complete offline explorer (ZIP)](explore/offline.zip?raw=true)
 
 ![The 3D explorer on a desktop: the top bar, the model with its layers apart, and Design beside it](images/site-explorer.webp)
 

@@ -1732,11 +1732,11 @@
     },
     {
       "path": "viewer/template.html",
-      "sha256": "d6c69ccf30c17bf05b4ebf6708f13f996d5c20f5c86a88143ea64373a9029589"
+      "sha256": "d70d74c3fc9af78b1f151b9816a3c116f8a06f14e2670886523f1ea4c5e0cca7"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "86b85e4a4a3548d0308104898071c6f01bb1a8afc2574eb3859202697a74edaf"
+      "sha256": "3b7ed2dda18a356c54f49d1282d8652ea41bcdf1ce6dbcc001f4ae265dc7f8d5"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -1779,7 +1779,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "0f182fc039c359f93aeafeb9a7dcd9e82f52f8455f58cf1667ad1e0864fe530b",
+  "viewer_sha256": "a3e15190da5eac09623f4b106b3d0bcbd3713e2a91d411ca74ea73ab881377d8",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2764,7 +2764,7 @@
     "bytes": 335912
   },
   "geometry_aliases": 18,
-  "online_bytes": 1192941,
+  "online_bytes": 1192956,
   "offline_bytes": 56300226,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",

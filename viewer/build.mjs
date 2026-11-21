@@ -209,7 +209,8 @@ const mark=fs.readFileSync(path.join(root,'docs/branding/flan/flan-mark-color.sv
 // the offline copy carries them inline
 const fonts=offline=>[['Fraunces','Fraunces-latin.woff2','300 500'],['Inter','Inter-latin.woff2','400 600'],['JetBrains Mono','JetBrainsMono-latin.woff2','400 500']]
   .map(([family,file,weight])=>`@font-face{font-family:"${family}";src:url(${offline?'data:font/woff2;base64,'+fs.readFileSync(path.join(here,'home/fonts',file)).toString('base64'):'../assets/fonts/'+file}) format("woff2");font-weight:${weight};font-display:swap}`).join('');
-function page(offline){return template.replace('/*__FONTS__*/',()=>fonts(offline)).replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(here,'style.css'),'utf8'))
+function page(offline,offlineVersion=''){return template.replace('/*__FONTS__*/',()=>fonts(offline)).replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(here,'style.css'),'utf8'))
+ .replace('__OFFLINE_VERSION__',()=>offlineVersion)
  .replace('<!--__MARK__-->',()=>mark)
  .replaceAll('__OG_VERSION__',()=>hash('viewer/home/home-og.png').slice(0,12))   // sharing services cache the image by address
  .replace('<!--__LICENSES__-->',()=>credits+licenses)
@@ -223,14 +224,16 @@ function page(offline){return template.replace('/*__FONTS__*/',()=>fonts(offline
  .replace('href="../" id="nav-home"',()=>offline?'href="https://flankbd.com/" id="nav-home"':'href="../" id="nav-home"')
  .replace('/*__APP__*/',()=>bundle.outputFiles[0].text.replaceAll('</script','<\\/script'))
  .replaceAll('\r\n','\n');}
-const html=page(false),offlineHtml=page(true);
-new Script([...html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g)].at(-1)[1]);
-fs.writeFileSync(path.join(root,'docs/explore/index.html'),html);
+const offlineHtml=page(true);
 // The single-file offline copy is built here for the checks and published inside a ZIP: Git keeps one
 // compressed binary instead of an 86 MB page of base64 (docs/explore/offline.html is ignored).
 fs.writeFileSync(path.join(root,'docs/explore/offline.html'),offlineHtml);
 const offlineZip=Buffer.from(zipSync({'Flan36-revI.html':[Buffer.from(offlineHtml),{level:6,mtime:new Date(2026,0,1)}]}));
 fs.writeFileSync(path.join(root,'docs/explore/offline.zip'),offlineZip);
+const offlineHash=crypto.createHash('sha256').update(offlineZip).digest('hex');
+const html=page(false,'?v='+offlineHash.slice(0,12));
+new Script([...html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g)].at(-1)[1]);
+fs.writeFileSync(path.join(root,'docs/explore/index.html'),html);
 fs.writeFileSync(path.join(root,'docs/.nojekyll'),'');
 const sources=[...scene.sources,...['viewer/app.js','viewer/build-guide.js','viewer/design-url.js','viewer/part-illustrations.js','viewer/build-package.js','design/build-parts.json','viewer/i18n.js','viewer/config.js','viewer/storage.js','viewer/history.js','viewer/assets.js','viewer/geometry.js','viewer/studio.js','viewer/home/options.js','viewer/keycap-colors.js','viewer/color-input.js','design/keycap-themes.json','viewer/appearance.js','viewer/printing.js','design/themes.json','viewer/explorer.js','viewer/previews.js','viewer/finishes.js','design/frame-finishes.json','viewer/style.css','viewer/template.html','viewer/build.mjs','viewer/home/tokens.js','docs/branding/flan/flan-mark-color.svg',...['Fraunces','Inter','JetBrainsMono'].map(f=>`viewer/home/fonts/${f}-latin.woff2`),...['flan36','flan42','flan46','flan54'].map(id=>`viewer/thumbs/size-${id}.webp`),'viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}))];
 const receipt={revision:scene.revision,units:'mm',objects:scene.parts.length,unique_meshes:Object.keys(scene.geometries).length,
@@ -241,7 +244,7 @@ const receipt={revision:scene.revision,units:'mm',objects:scene.parts.length,uni
   geometry:{method:'One file per option. Positions and triangle indices are stored exactly (meshopt vertex and index-sequence codecs, read back byte for byte at build time); normals as 16-bit octahedral vectors.',
    normal_error_deg:Number(normalError.toFixed(5)),published_meshes:Object.keys(geometryIndex).length,unpublished_meshes:Object.keys(unique).length-Object.keys(geometryIndex).length,
    bytes:Object.values(geometryAssets).reduce((n,a)=>n+a.bytes.length,0),
-   chunks:Object.fromEntries(Object.entries(geometryAssets).map(([name,a])=>[name,{path:a.file,sha256:a.hash,bytes:a.bytes.length,meshes:a.meshes}]))},offline_zip:{path:'docs/explore/offline.zip',sha256:crypto.createHash('sha256').update(offlineZip).digest('hex'),bytes:offlineZip.length},
+   chunks:Object.fromEntries(Object.entries(geometryAssets).map(([name,a])=>[name,{path:a.file,sha256:a.hash,bytes:a.bytes.length,meshes:a.meshes}]))},offline_zip:{path:'docs/explore/offline.zip',sha256:offlineHash,bytes:offlineZip.length},
   still:{look:stillLook,fingerprint:stillPrint,published:still?stillFiles.map(f=>'docs/explore/assets/'+f):[]},
   build_assets:packageAssets,offline_sha256:hash('docs/explore/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},variants:Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),fasteners:Object.fromEntries(Object.entries(fastenerAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),silkscreen:{path:silkPath,sha256:silkHash,bytes:silkBytes.length,editions:scene.silkscreen.editions.map(e=>e.id)},silk_thumbnails:{path:thumbPath,sha256:thumbHash,bytes:thumbBytes.length},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
   limitations:scene.limits};
