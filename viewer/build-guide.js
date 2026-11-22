@@ -145,9 +145,16 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   for(const [id,title,fn] of [['build-csv',say('Download shopping list · CSV','Descargar lista de compra · CSV'),()=>download(size.title+'-shopping.csv',csv(),'text/csv;charset=utf-8')],['build-plan',say('Save build guide · HTML / print','Guardar guía · HTML / imprimir'),exportPlan]]){
    const button=node('button','',title);button.id=id;button.onclick=fn;actions.append(button);
   }
-  const nav=$('build-nav');nav.setAttribute('aria-label',say('Build sections','Secciones de construcción'));nav.replaceChildren();
+  const nav=$('build-nav');nav.setAttribute('aria-label',say('Build sections','Secciones de construcción'));
   for(const [id,en,es] of [['build-buy','Parts','Piezas'],['build-boards','PCBs','PCB'],['build-print','Print','Imprimir'],['build-solder','Solder','Soldar'],['build-program','Firmware','Firmware'],['build-close','Assemble','Armar']]){
-   const b=node('button','',say(en,es));b.dataset.target=id;b.setAttribute('aria-controls',id);b.prepend(node('span','',String(sectionIds.indexOf(id)+1)));b.onclick=()=>$(id).scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});nav.append(b);
+   let button=nav.querySelector('[data-target="'+id+'"]');
+   if(!button){
+    button=node('button');button.dataset.target=id;button.setAttribute('aria-controls',id);
+    button.append(node('span','',String(sectionIds.indexOf(id)+1)),document.createTextNode(''));
+    button.onclick=()=>$(id).scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    nav.append(button);
+   }
+   button.lastChild.data=say(en,es);
   }
  }
  function renderOrder(){

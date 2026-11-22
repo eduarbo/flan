@@ -24,6 +24,10 @@ const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
     await page.waitForFunction(id=>document.querySelector('#build-nav [aria-current]')?.dataset.target===id,id);
     const active=await page.locator('#build-nav [aria-current]').boundingBox(),nav=await page.locator('#build-nav').boundingBox();assert(active.x>=nav.x-1&&active.x+active.width<=nav.x+nav.width+1,'active item stays visible');
    }
+   const focusedStep=page.locator('#build-nav [data-target=build-boards]');
+   await focusedStep.focus();
+   await page.locator('#print-half [aria-pressed=true]').evaluate(n=>n.click());
+   assert(await focusedStep.evaluate(n=>n===document.activeElement),'refreshing the Build guide preserves keyboard focus');
    await page.locator('#build-nav button[data-target=build-boards]').evaluate(n=>n.click());
    await page.waitForFunction(()=>document.querySelector('#build-nav [aria-current]')?.dataset.target==='build-boards');
    const nav=await page.locator('#build-nav').boundingBox(),card=await page.locator('#build-boards').boundingBox();assert(card.y>=nav.y+nav.height+10,'sticky nav has a gap before the card');
