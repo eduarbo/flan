@@ -56,7 +56,7 @@ function makePlate(parts,context){
   if(sequence==='by object')items.sort((a,b)=>a.object.slots[0]-b.object.slots[0]||a.y-b.y||a.x-b.x);
   // A fresh plate costs a bed change, warm-up and first-layer setup. Express
   // that fixed cost in equivalent changes; this is a ranking, not a time quote.
-  const score=12+changes+(mode==='object'&&mixed&&sequence==='by layer'?6:0);
+  const score=(context.plateCost||12)+changes+(mode==='object'&&mixed&&sequence==='by layer'?6:0);
   if(!best||score<best.score)best={parts,items,slots:new Set(heights.keys()),sequence,score};
  }
  const z=[...heights.values()];
@@ -76,7 +76,7 @@ function planBatch(parts,context){
   const plates=[];
   for(const part of order){
    const single=makePlate([part],context);
-   if(!single)throw Error('Part exceeds the selected plate or filament capacity: '+part.name);
+   if(!single)throw Object.assign(Error('Part exceeds the selected plate or filament capacity: '+part.name),{code:'part-fit'});
    let choice=single,target=plates.length,delta=single.score;
    for(const [i,plate] of plates.entries()){
     const merged=makePlate([...plate.parts,part],context);
@@ -145,11 +145,13 @@ export function planPlates(objects,setup){
   const batch=object.family==='Keycaps'?caps:hardware;
   for(let i=0;i<object.count;i++)batch.push(object);
  }
- const clustered=groupedKeys(caps,context);
- const keyPlates=clustered?[clustered]:planBatch(caps,context);
- // If the whole keyboard cannot print sequentially together, combine compatible
- // smaller color batches without forcing every layer to change spool.
- if(!clustered&&mode!=='manual'){
+ // Keycaps are individually single-color. Compare a sequential layout with
+ // single-spool plates so a dense bed never forces recurring changes by layer.
+ const singleSpool={...context,mode:'manual'};
+ const allowGroups=mode!=='manual'&&!setup.split_keycaps;
+ const clustered=allowGroups?groupedKeys(caps,context):null;
+ const keyPlates=clustered?[clustered]:planBatch(caps,singleSpool);
+ if(allowGroups&&!clustered){
   for(let i=0;i<keyPlates.length;i++)for(let j=i+1;j<keyPlates.length;){
    const joined=groupedKeys([...keyPlates[i].parts,...keyPlates[j].parts],context);
    if(joined){keyPlates[i]=joined;keyPlates.splice(j,1);}else j++;
@@ -160,6 +162,14 @@ export function planPlates(objects,setup){
   const shared=planBatch([...hardware,...caps],context);
   if(shared.length<plates.length)plates=shared;
  }
+ // A generic machine can still export many individually colored keys in a
+ // single project if separating them would exceed Studio's 36-plate limit.
+ if(plates.length>36&&allowGroups){
+  const compact={...context,plateCost:10000};
+  const fallback=[...planBatch(hardware,compact),...planBatch(caps,compact)];
+  if(fallback.length<plates.length)plates=fallback;
+ }
+ if(plates.length>36)throw Object.assign(Error('Bambu Studio: 36 plates maximum. Export one half or use fewer colors. / Máximo 36 placas. Exporta una mitad o usa menos colores.'),{code:'plate-limit'});
  for(const plate of plates){
   const families=new Set(plate.parts.map(p=>p.family));
   plate.family=families.size===1?[...families][0]:families.has('Keycaps')?'Case + keycaps':'Case parts';

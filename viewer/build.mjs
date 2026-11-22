@@ -6,6 +6,7 @@ import crypto from 'node:crypto';
 import {gzipSync,gunzipSync} from 'node:zlib';
 import {Script} from 'node:vm';
 import {build} from 'esbuild';
+import {buildPlateShapes} from './build-plate-shapes.mjs';
 import {zipSync} from 'three/addons/libs/fflate.module.js';
 import {MeshoptEncoder,MeshoptDecoder} from 'meshoptimizer';
 import {DEFAULT as homeLook} from './home/options.js';
@@ -16,7 +17,7 @@ const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,
 const scene=JSON.parse(fs.readFileSync(path.join(root,'build/viewer-scene.json'),'utf8'));
 for(const item of scene.sources)if(hash(item.path)!==item.sha256)throw Error(`Stale input: ${item.path}`);
 // Lightweight print metadata uses the same registry as the downloadable kit.
-const printMeta=assets=>Object.fromEntries(Object.entries(assets).map(([id,a])=>[id,{id:a.id,path:a.path,...(a.material_parts?.length?{material_parts:a.material_parts.map(({role})=>({role}))}:{})}]));
+const printMeta=assets=>Object.fromEntries(Object.entries(assets).map(([id,a])=>[id,{id:a.id,path:a.path,...(a.print_path?{print_path:a.print_path}:{}),...(a.material_parts?.length?{material_parts:a.material_parts.map(({role})=>({role}))}:{})}]));
 const printInventory=Object.fromEntries(Object.entries(scene.variants).map(([id,v])=>[id,{
  assets:printMeta({...scene.printing.assets,...v.printing}),supports:scene.printing.supports,fasteners:v.fasteners
 }]));
@@ -56,6 +57,10 @@ function deferred(prefix,value){
  }
  return gzipSync(raw,{level:9});
 }
+const plateBytes=deferred('plate-shapes',buildPlateShapes(scene,root)),plateHash=crypto.createHash('sha256').update(plateBytes).digest('hex');
+const plateName='plate-shapes-'+plateHash+'.bin';
+fs.writeFileSync(path.join(root,'docs/explore/assets',plateName),plateBytes);
+for(const f of fs.readdirSync(path.join(root,'docs/explore/assets')))if(/^plate-shapes-[0-9a-f]{64}\.bin$/.test(f)&&f!==plateName)fs.rmSync(path.join(root,'docs/explore/assets',f));
 const printBytes=deferred('printing',scene.printing);
 const printHash=crypto.createHash('sha256').update(printBytes).digest('hex');
 const assetPath=`docs/explore/assets/printing-${printHash}.bin`;fs.writeFileSync(path.join(root,assetPath),printBytes);
@@ -185,7 +190,7 @@ for(const [name,ids] of [...chunks].sort(([a],[b])=>a<b?-1:1)){
 for(const f of fs.readdirSync(path.join(root,'docs/explore/assets')))
  if(/^geometry-[a-z0-9_-]+-[0-9a-f]{64}\.bin$/.test(f)&&!Object.values(geometryAssets).some(a=>path.basename(a.file)===f))fs.rmSync(path.join(root,'docs/explore/assets',f));
 const {geometries:_meshes,...sceneRest}=scene;
-const packedScene={...sceneRest,geometry:{index:geometryIndex,chunks:Object.fromEntries(Object.entries(geometryAssets).map(([name,a])=>[name,{url:`./assets/geometry-${name}-${a.hash}.bin`,sha256:a.hash,bytes:a.bytes.length}]))},
+const packedScene={...sceneRest,plateShapes:{url:`./assets/${plateName}`,sha256:plateHash},geometry:{index:geometryIndex,chunks:Object.fromEntries(Object.entries(geometryAssets).map(([name,a])=>[name,{url:`./assets/geometry-${name}-${a.hash}.bin`,sha256:a.hash,bytes:a.bytes.length}]))},
   geometryAliases:Object.fromEntries(Object.entries(geometryAliases).filter(([,id])=>geometryIndex[id])),printing:{url:`./assets/printing-${printHash}.bin`,sha256:printHash},
   silkscreen:{...scene.silkscreen,textures:{url:`./assets/silkscreen-${silkHash}.bin`,sha256:silkHash},thumbnails:{url:`./assets/silkthumbs-${thumbHash}.bin`,sha256:thumbHash}},variants,keycapAssets,...(fasteners?{fasteners}:{})};
 // Online, the page fetches the scene's description as its own hashed file, then the meshes its design shows:
@@ -225,6 +230,7 @@ function page(offline,offlineVersion=''){return template.replace('/*__FONTS__*/'
  .replace('<!--__LICENSES__-->',()=>credits+licenses)
  .replace('/*__DATA__*/',()=>offline?sceneBytes.toString('base64'):JSON.stringify({url:`./assets/scene-${sceneHash}.bin`,sha256:sceneHash}))
  .replace('/*__OFFLINE_CAPS__*/',()=>offline?JSON.stringify(offlineCaps):'')
+ .replace('/*__PLATE_SHAPES__*/',()=>offline?plateBytes.toString('base64'):'')
  .replace('/*__PRINT__*/',()=>offline?printBytes.toString('base64'):'')
  .replace('/*__SILK__*/',()=>offline?silkBytes.toString('base64'):'')
  .replace('/*__SILKTHUMBS__*/',()=>offline?thumbBytes.toString('base64'):'')
@@ -245,7 +251,7 @@ const html=page(false,'?v='+offlineHash.slice(0,12));
 new Script([...html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g)].at(-1)[1]);
 fs.writeFileSync(path.join(root,'docs/explore/index.html'),html);
 fs.writeFileSync(path.join(root,'docs/.nojekyll'),'');
-const sources=[...scene.sources,...['viewer/app.js','viewer/build-guide.js','viewer/design-url.js','viewer/part-illustrations.js','viewer/build-package.js','design/build-parts.json','viewer/i18n.js','viewer/config.js','viewer/storage.js','viewer/history.js','viewer/assets.js','viewer/geometry.js','viewer/studio.js','viewer/home/options.js','viewer/keycap-colors.js','viewer/color-input.js','design/keycap-themes.json','viewer/appearance.js','viewer/printing.js','viewer/print-geometry.js','viewer/print-project.js','viewer/plate-layout.js','viewer/printer-presets.js','design/bambu-presets.json','viewer/filament-swatches.js','viewer/preset-filaments.js','design/preset-filaments.json','viewer/filament-picker.js','viewer/spool-library.js','viewer/quick-print.js','viewer/filament-identity.js','viewer/filament-reel.css','viewer/thumbs/filament-reel-mask.webp','viewer/thumbs/filament-reel-light.webp','design/themes.json','viewer/explorer.js','viewer/previews.js','viewer/finishes.js','design/frame-finishes.json','viewer/style.css','viewer/template.html','viewer/build.mjs','viewer/home/tokens.js','docs/branding/flan/flan-mark-color.svg',...['Fraunces','Inter','JetBrainsMono'].map(f=>`viewer/home/fonts/${f}-latin.woff2`),...['flan36','flan42','flan46','flan54'].map(id=>`viewer/thumbs/size-${id}.webp`),'viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}))];
+const sources=[...scene.sources,...['viewer/app.js','viewer/build-guide.js','viewer/design-url.js','viewer/part-illustrations.js','viewer/build-package.js','design/build-parts.json','viewer/i18n.js','viewer/config.js','viewer/storage.js','viewer/history.js','viewer/assets.js','viewer/geometry.js','viewer/studio.js','viewer/home/options.js','viewer/keycap-colors.js','viewer/color-input.js','design/keycap-themes.json','viewer/appearance.js','viewer/printing.js','viewer/print-geometry.js','viewer/print-project.js','viewer/plate-layout.js','viewer/build-plate-shapes.mjs','viewer/print-pose.js','viewer/project-objects.js','viewer/plate-preview.js','viewer/printer-presets.js','design/bambu-presets.json','viewer/filament-swatches.js','viewer/preset-filaments.js','design/preset-filaments.json','viewer/filament-picker.js','viewer/spool-library.js','viewer/quick-print.js','viewer/filament-identity.js','viewer/filament-reel.css','viewer/thumbs/filament-reel-mask.webp','viewer/thumbs/filament-reel-light.webp','design/themes.json','viewer/explorer.js','viewer/previews.js','viewer/finishes.js','design/frame-finishes.json','viewer/style.css','viewer/template.html','viewer/build.mjs','viewer/home/tokens.js','docs/branding/flan/flan-mark-color.svg',...['Fraunces','Inter','JetBrainsMono'].map(f=>`viewer/home/fonts/${f}-latin.woff2`),...['flan36','flan42','flan46','flan54'].map(id=>`viewer/thumbs/size-${id}.webp`),'viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}))];
 const receipt={revision:scene.revision,units:'mm',objects:scene.parts.length,unique_meshes:Object.keys(scene.geometries).length,
   keycaps:scene.parts.filter(p=>p.group==='keycaps').length,geometry_changed:false,
   sources,viewer_sha256:hash('docs/explore/index.html'),measurements:scene.measurements,
@@ -256,7 +262,7 @@ const receipt={revision:scene.revision,units:'mm',objects:scene.parts.length,uni
    bytes:Object.values(geometryAssets).reduce((n,a)=>n+a.bytes.length,0),
    chunks:Object.fromEntries(Object.entries(geometryAssets).map(([name,a])=>[name,{path:a.file,sha256:a.hash,bytes:a.bytes.length,meshes:a.meshes}]))},offline_zip:{path:'docs/explore/offline.zip',sha256:offlineHash,bytes:offlineZip.length},
   still:{look:stillLook,fingerprint:stillPrint,published:still?stillFiles.map(f=>'docs/explore/assets/'+f):[]},
-  build_assets:packageAssets,offline_sha256:hash('docs/explore/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},variants:Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),fasteners:Object.fromEntries(Object.entries(fastenerAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),silkscreen:{path:silkPath,sha256:silkHash,bytes:silkBytes.length,editions:scene.silkscreen.editions.map(e=>e.id)},silk_thumbnails:{path:thumbPath,sha256:thumbHash,bytes:thumbBytes.length},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
+  plate_preview:{path:`docs/explore/assets/${plateName}`,sha256:plateHash,bytes:plateBytes.length},build_assets:packageAssets,offline_sha256:hash('docs/explore/offline.html'),printing:{path:assetPath,sha256:printHash,bytes:printBytes.length},variants:Object.fromEntries(Object.entries(variantAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),fasteners:Object.fromEntries(Object.entries(fastenerAssets).map(([id,a])=>[id,{path:a.file,sha256:a.hash,bytes:a.bytes.length}])),silkscreen:{path:silkPath,sha256:silkHash,bytes:silkBytes.length,editions:scene.silkscreen.editions.map(e=>e.id)},silk_thumbnails:{path:thumbPath,sha256:thumbHash,bytes:thumbBytes.length},geometry_aliases:Object.keys(geometryAliases).length,online_bytes:Buffer.byteLength(html),offline_bytes:Buffer.byteLength(offlineHtml),
   limitations:scene.limits};
 fs.writeFileSync(path.join(root,`validation/rev${scene.revision}-viewer.json`),JSON.stringify(receipt,null,2)+'\n');
 console.log(`Online viewer: ${(Buffer.byteLength(html)/1048576).toFixed(2)} MiB; ${scene.parts.length} objects; scene ${(sceneBytes.length/1024).toFixed(0)} KiB; meshes ${(receipt.geometry.bytes/1048576).toFixed(2)} MiB in ${Object.keys(geometryAssets).length} files.`);

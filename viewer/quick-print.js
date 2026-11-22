@@ -3,7 +3,7 @@ import {filamentLabel,filamentReel} from './filament-identity.js';
 import {closestSwatch} from './filament-swatches.js';
 import {t} from './i18n.js';
 
-export function createQuickPrint({$,getUses}){
+export function createQuickPrint({$,getUses,onOpen}){
  const dialog=$('quick-print'),opener=$('quick-print-open');
  // The sheet uses the Build controls and exporter, including their selected values and download status.
  const sections=[['print-controls','quick-settings'],['print-export','quick-download'],['print-plate-plan','quick-plan']].map(([id,destination])=>{
@@ -21,8 +21,9 @@ export function createQuickPrint({$,getUses}){
  }
  opener.onclick=()=>{
   for(const {node,destination} of sections)destination.append(node);
-  dialog.showModal();sync();$('quick-title').focus({preventScroll:true});
+  dialog.showModal();sync();onOpen();$('quick-title').focus({preventScroll:true});
  };
+ $('quick-adjust').onclick=()=>{const first=$('print-controls').querySelector('button');first.focus({preventScroll:true});$('quick-settings').scrollIntoView({block:'start'});};
  dialog.querySelector('[data-quick-close]').onclick=()=>dialog.close();
  dialog.addEventListener('close',()=>{
   for(const {node,anchor} of sections)anchor.after(node);

@@ -54,6 +54,7 @@ export function check(config,c){
  if('print_setup' in config){
   const setup=config.print_setup;
   if(!record(setup)||!modes.includes(setup.mode)||![180,220,256].includes(setup.bed))return {errors:[t('spool.invalid')]};
+  if('split_keycaps' in setup&&typeof setup.split_keycaps!=='boolean')return {errors:[t('spool.invalid')]};
   if('printer' in setup||'nozzle' in setup){
    const machine=printerFor(setup.printer);
    if(!machine||machine.bed!==setup.bed||typeof setup.nozzle!=='string'||!Object.hasOwn(machine.nozzles,setup.nozzle))return {errors:[t('spool.invalid')]};

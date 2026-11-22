@@ -18,6 +18,7 @@ import {decodeBytes,unpack,unpackVariant,printLoader,gunzip} from './assets.js';
 import {createGeometryStore} from './geometry.js';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
 import {createQuickPrint} from './quick-print.js';
+import {createPlatePreview} from './plate-preview.js';
 import {printerModels,printerFor} from './printer-presets.js';
 import {bindSpool,commonSpool,setupOf,mapThemeToSpools} from './filament-swatches.js';
 import {enhanceColorInput} from './color-input.js';
@@ -565,6 +566,13 @@ $('locate-magnets').onclick=()=>{
 $('credits').onclick=()=>{$('licenses').showModal();$('licenses').querySelector('.dialog-body').scrollTop=0;};
 $('close-credits').onclick=()=>$('licenses').close();$('licenses').addEventListener('close',()=>$('credits').focus({preventScroll:true}));
 canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();$('error').hidden=false;$('error').textContent=t('msg.contextLost');});
+let downloadSelection='';
+function downloadKey(){return JSON.stringify([configuration,printSelection()]);}
+function resetPrintStatus(){
+ if(downloadSelection&&downloadSelection!==downloadKey()){
+  downloadSelection='';say('print-status','kit.status');
+ }
+}
 function printSelection(){
  const active=id=>$(id).querySelector('[aria-pressed=true]').dataset.value;
  return {half:active('print-half'),scope:active('print-scope')};
@@ -575,12 +583,27 @@ function printUses(config){
  const keys=scope!=='shells'?keycapPlan(config,catalog,family[config.variant].added||[],half).keys:[];
  return printSpoolUses(config,parts,keys);
 }
-const quickPrint=createQuickPrint({$,getUses:()=>printUses(configuration)});
-for(const id of ['print-half','print-scope'])for(const button of $(id).children)button.onclick=()=>{$('print-plate-plan').hidden=true;for(const option of $(id).children)option.setAttribute('aria-pressed',String(option===button));buildGuide.update(configuration);appearance?.sync();quickPrint.sync();};
+const platePreview=createPlatePreview({$,getConfig:()=>configuration,selection:printSelection,
+ loadShapes:printLoader(data.plateShapes,$('plate-shapes-data'),undefined,'plate preview'),
+ entriesFor:(c,half,scope,atlas)=>{
+  const source=printInventory[c.variant],registry=c.fasteners?{...source,assets:{...source.assets,...atlas.screws[c.fasteners]}}:source;
+  return {parts:selectedParts(c,registry,half,scope),groups:scope==='shells'?[]:keycapPlan(c,catalog,family[c.variant].added||[],half).groups};
+ },
+ setSplit:split=>{
+  const next=copy(configuration);next.print_setup=setupOf(next);
+  if(split)next.print_setup.split_keycaps=true;else delete next.print_setup.split_keycaps;
+  applyConfiguration(next);
+ }
+});
+const quickPrint=createQuickPrint({$,getUses:()=>printUses(configuration),onOpen:()=>platePreview.sync()});
+for(const id of ['print-half','print-scope'])for(const button of $(id).children)button.onclick=()=>{
+ for(const option of $(id).children)option.setAttribute('aria-pressed',String(option===button));
+ buildGuide.update(configuration);appearance?.sync();quickPrint.sync();platePreview.sync();resetPrintStatus();
+};
 for(const model of Object.keys(printerModels))$('print-printer').add(new Option('Bambu Lab '+model,model));
 for(const id of ['print-method','print-printer','print-nozzle','print-bed'])$(id).onchange=()=>{
  const next=copy(configuration),printer=$('print-printer').value,machine=printerFor(printer);
- const setup={mode:$('print-method').value,bed:machine?.bed??Number($('print-bed').value)};
+ const setup={...(next.print_setup?.split_keycaps?{split_keycaps:true}:{}),mode:$('print-method').value,bed:machine?.bed??Number($('print-bed').value)};
  if(machine){
   const nozzle=$('print-nozzle').value;
   Object.assign(setup,{printer,nozzle:Object.hasOwn(machine.nozzles,nozzle)?nozzle:'0.4'});
@@ -623,10 +646,10 @@ async function makePrintKit(selected,{half='both',scope='complete',projectOnly=f
  signal?.throwIfAborted();
  return printKit(selected,registry,{half,scope,keycaps,projectOnly,title:family[variant].title+(selected.fasteners?'-'+selected.fasteners:''),progress:(i,n)=>{signal?.throwIfAborted();progress(i,n);}});
 }
-let lastPlateConfig='';
 async function downloadPrint(projectOnly){
  const button=$(projectOnly?'print-project':'print-kit');
  printBusy=true;syncBuildAvailability();
+ const key=downloadKey();
  try{
   const selected=copy(configuration),{half,scope}=printSelection();
   button.textContent=t('kit.loading');
@@ -634,17 +657,8 @@ async function downloadPrint(projectOnly){
   const filename=projectOnly?result.filename:result.manifest.project.replace(/\.3mf$/,'.zip');
   const url=URL.createObjectURL(new Blob([result.bytes],{type:projectOnly?'model/3mf':'application/zip'}));
   const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
-  const plan=$('print-plate-plan');
-  if(JSON.stringify(selected)===JSON.stringify(configuration)&&half===$('print-half').querySelector('[aria-pressed=true]').dataset.value&&scope===$('print-scope').querySelector('[aria-pressed=true]').dataset.value){
-   plan.querySelector('ol').replaceChildren(...(result.plates||result.manifest.plates).map(plate=>{
-    const family=plate.name.split(' · ')[0],key={'Bases':'bases','Switch plates':'switch','Display frames':'frames','Internal parts':'internals','Keycaps':'caps','Case parts':'case','Case + keycaps':'mixed'}[family];
-    const label=key?t('print.family.'+key)+plate.name.slice(family.length):plate.name;
-    const li=document.createElement('li');li.textContent=label+' · '+t('print.objects',{n:plate.objects})+' · '+t(plate.sequence==='by object'?'print.sequential':'print.layers');
-    const colors=document.createElement('small');colors.textContent=plate.filaments.map(f=>'#'+f.slot+' '+f.name).join(' / ');li.append(colors);return li;
-   }));lastPlateConfig=JSON.stringify(selected);plan.hidden=false;
-  }
-  say('print-status',projectOnly?'kit.projectDone':'kit.archiveDone',{name:projectOnly?filename:result.manifest.project});
- }catch(e){say('print-status','kit.failed',{error:e.message});}
+  if(key===downloadKey()){downloadSelection=key;say('print-status',projectOnly?'kit.projectDone':'kit.archiveDone',{name:projectOnly?filename:result.manifest.project});}
+ }catch(e){if(key===downloadKey()){downloadSelection=key;say('print-status','kit.failed',{error:e.message});}}
  finally{printBusy=false;syncBuildAvailability();button.textContent=t(projectOnly?'kit.project':'kit.download');}
 }
 $('print-project').onclick=()=>downloadPrint(true);
@@ -1037,7 +1051,6 @@ function syncConfigurationUI(){
   const failed=Boolean(configuration.fasteners)&&fastenerFailure===configuration.fasteners&&!fastenerProfiles[screws]?.loaded;
   $('fasteners-note').textContent=failed?t('msg.fasteners')+' '+t('fasteners.note.retry'):t(screwChoice?'fasteners.note.'+screws:'fasteners.note.size',{name:sizeInfo.title})+(tight<.3?' '+t('fasteners.note.tight',{gap:tight.toFixed(2)}):'');
   $('fasteners-note').dataset.error=String(failed);
-  if(lastPlateConfig!==JSON.stringify(configuration))$('print-plate-plan').hidden=true;
   const setup=setupOf(configuration),machine=printerFor(setup.printer),nozzle=$('print-nozzle');
   $('print-method').value=setup.mode;$('print-bed').value=String(setup.bed);$('print-printer').value=setup.printer||'';
   $('print-bed-field').hidden=Boolean(machine);$('print-nozzle-field').hidden=!machine;
@@ -1048,7 +1061,7 @@ function syncConfigurationUI(){
   if(machine)nozzle.value=setup.nozzle;
   $('print-profile-note').textContent=machine?t('print.profileNote',{process:machine.nozzles[setup.nozzle].process.split(' @')[0],bed:setup.bed+' × '+setup.bed}):t('print.genericNote');
   $('print-method-note').textContent=t('print.method.'+setup.mode);
-  buildGuide.update(configuration);quickPrint.sync();
+  buildGuide.update(configuration);quickPrint.sync();platePreview.sync();resetPrintStatus();
   showSilk();
   for(const b of $('battery-target').children)b.setAttribute('aria-pressed',String(b.dataset.side===batterySide));
   const batteries=(batterySide==='both'?['left','right']:[batterySide]).map(side=>configuration.batteries[side]);

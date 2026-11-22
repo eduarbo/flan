@@ -2,20 +2,13 @@
 import {zipSync,strToU8} from 'three/addons/libs/fflate.module.js';
 import {printSettings} from './printer-presets.js';
 import {planPlates} from './plate-layout.js';
-import {setupOf,spoolFor,spoolById} from './filament-swatches.js';
-import {readMaterials,meshObject,xml,printPlacement} from './print-geometry.js';
+import {projectEntries,projectObject,projectSetup} from './project-objects.js';
+import {readMaterials,meshObject,xml} from './print-geometry.js';
 
 const meta=(key,value)=>`<metadata key="${key}" value="${xml(String(value))}"/>`;
 const modelNS='http://schemas.microsoft.com/3dmanufacturing/core/2015/02';
 const relType='http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel';
 
-// Separate jobs by part type so the case can be printed without the keycaps.
-function plateFamily(id){
- if(id.endsWith('-base'))return 'Bases';
- if(id.endsWith('-plate'))return 'Switch plates';
- if(id.includes('-frame-'))return 'Display frames';
- return 'Internal parts';
-}
 function bedTransform(object,x,y,turned){
  const pose=object.placement?.transform()||[1,0,0,0,1,0,0,0,1,0,0,0];
  if(turned)return [-pose[1],pose[0],pose[2],-pose[4],pose[3],pose[5],-pose[7],pose[6],pose[8],
@@ -24,46 +17,29 @@ function bedTransform(object,x,y,turned){
 }
 
 export async function combinedProject(parts,keycaps,title,config,progress){
- const setup=setupOf(config),{bed}=setup;
- const entries=parts.map(part=>({part,count:1,family:plateFamily(part.id)}));
- for(const group of keycaps?.plan.groups||[]){
-  const stl=keycaps.stl[group.variant];
-  if(!stl)throw Error('Missing keycap: '+group.file);
-  entries.push({part:{spool:group.spool,id:group.label+' '+group.color,stl,colors:{body:group.color}},count:group.count,family:'Keycaps'});
- }
+ const setup=projectSetup(config),{bed}=setup;
+ const entries=projectEntries(parts,keycaps?.plan.groups||[]);
  const spools=[],resources=[],settings=[],objects=[];
  let nextId=2;
- for(const [index,{part,count,family}] of entries.entries()){
+ for(const [index,entry] of entries.entries()){
+  const {part,family}=entry;
   progress(index+1,entries.length);await new Promise(requestAnimationFrame);
-  const materials=readMaterials(part);
-  const placement=printPlacement(part.id,materials),{size,shift}=placement,volumes=[],heights=new Map();
-  const matrix=placement.transform();
-  for(const m of materials){
-   const color=(part.colors[m.role]||part.colors.body).toUpperCase();
-   const spool=spoolById(part.spool)||spoolFor(config,part.side,color);
-   const key=spool?.id||color;
-   let slot=spools.findIndex(s=>s.key===key);
-   if(slot<0){slot=spools.length;spools.push({key,color,series:spool?.series,label:spool?spool.series+' · '+spool.name:color});}
-   let z=matrix[11];
-   for(let axis=0;axis<3;axis++){
-    const factor=matrix[axis*3+2];
-    z+=factor*((factor<0?m.minimum:m.maximum)[axis]+shift[axis]);
-   }
-   heights.set(slot,Math.max(z,heights.get(slot)||0));
+  const materials=readMaterials(family==='Keycaps'?{...part,stl:keycaps.stl[part.variant]}:part);
+  const object=projectObject(entry,materials,spools,config),volumes=[];
+  for(const [index,m] of materials.entries()){
+   const slot=object.materialSlots[index],{color}=spools[slot],spool=spools[slot];
    const id=nextId++;
-   resources.push(meshObject(m,shift,id,part.id+' '+m.role,slot));
-   volumes.push({id,slot,name:m.role+' '+color+(spool?' · '+spool.series+' '+spool.name:'')});
+   resources.push(meshObject(m,object.placement.shift,id,part.id+' '+m.role,slot));
+   volumes.push({id,slot,name:m.role+' '+color+(spool.series?' · '+spool.series+' '+spool.name:'')});
   }
   const id=nextId++;
   resources.push(`<object id="${id}" type="model" name="${xml(part.id)}"><components>${volumes.map(v=>`<component objectid="${v.id}"/>`).join('')}</components></object>`);
   const locator=family==='Bases'?meta('detect_thin_wall','1'):'';
   const support=family==='Keycaps'||part.id.endsWith('-display-sled')?meta('enable_support','1'):'';
   settings.push(`<object id="${id}">${meta('name',part.id)}${meta('extruder',volumes[0].slot+1)}${support}${locator}${volumes.map(v=>`<part id="${v.id}" subtype="normal_part">${meta('name',v.name)}${meta('extruder',v.slot+1)}</part>`).join('')}</object>`);
-  const slots=[...new Set(volumes.map(v=>v.slot))];
-  objects.push({id,name:part.id,count,size,slots,heights,placement,family,volumes});
+  objects.push({...object,id,volumes});
  }
  const {plates,towerX,towerY}=planPlates(objects,setup);
- if(plates.length>36)throw Error('Bambu Studio: 36 plates maximum. Export one half or use fewer colors. / Máximo 36 camas. Exporta una mitad o usa menos colores.');
  const cols=Math.ceil(Math.sqrt(plates.length)),items=[],instances=new Map();
  for(const [i,plate] of plates.entries()){
   const members=[];

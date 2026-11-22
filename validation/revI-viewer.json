@@ -1964,7 +1964,7 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "58ab4b12f6781a5771a53ed80edb6c0d3374826823d84b93a683023a05c76f42"
+      "sha256": "7effb1b69ce3334d607d50ff0951f7ee036683ca5011410d74e32167e0f01ebf"
     },
     {
       "path": "viewer/build-guide.js",
@@ -1988,11 +1988,11 @@
     },
     {
       "path": "viewer/i18n.js",
-      "sha256": "041715285eec3f1a6a1aea8c1afc4da944885602afb7848fd25dba3dee165062"
+      "sha256": "16c2f70137a42931ce1bf75907e704f733c30f1dfa42550952a9492c76b124f0"
     },
     {
       "path": "viewer/config.js",
-      "sha256": "136d3d29a22a7c08d213bbbeedf4b1f82b1fd54424b9d217c1575da8a1676bb4"
+      "sha256": "79a846fbe2d435ae3523bcc2ed702997f0ddfdd908a2060dec7e07ce8dc68b8c"
     },
     {
       "path": "viewer/storage.js",
@@ -2036,19 +2036,35 @@
     },
     {
       "path": "viewer/printing.js",
-      "sha256": "487317e6bc15b1063bb024ce1170016055603c69781757d2488f4dd32fc53b78"
+      "sha256": "d379c6de8572cbbd50a489323f68d11c7c4a5fb3f85930232ac39922c12e33c9"
     },
     {
       "path": "viewer/print-geometry.js",
-      "sha256": "3a197c90a5e8763300cb97b7d5c4bdcfb97310df4cd4e112d8d1cad674adde3d"
+      "sha256": "91b838b701c41efd90d6ab5b1eaad667dc5ac0df9a6c8dc8b172e6d2c83646bd"
     },
     {
       "path": "viewer/print-project.js",
-      "sha256": "7377567d7624f48dd5842f1a9b5e6001b1299cb9cce0768fd356b6456bff54b0"
+      "sha256": "379c0aa00580c0b532d272b553a96ff2f8be2b3ac41efd01088e9f419f748382"
     },
     {
       "path": "viewer/plate-layout.js",
-      "sha256": "16b1de44dbb1c493418d7a36ff92df772f7c64fb4c289ad95509379fca04076e"
+      "sha256": "e6e2b5c4f4d2c639d74b0a97e1be66b933430612c020a44da51a67f482aab90a"
+    },
+    {
+      "path": "viewer/build-plate-shapes.mjs",
+      "sha256": "53f3771c660288a1b76f1c9c36d5157096bbdd263877be4307939f933ad69d9f"
+    },
+    {
+      "path": "viewer/print-pose.js",
+      "sha256": "32b207be6eaeb2b94b013eab5dfc810208cea788049b8a2ad54e67ec186dab3f"
+    },
+    {
+      "path": "viewer/project-objects.js",
+      "sha256": "f858ed88cfbadb565161eb87b9c8a49f16fe56968e9ff74cabca9671af4ef3c9"
+    },
+    {
+      "path": "viewer/plate-preview.js",
+      "sha256": "2e64ab39b0ffd47cf94ab0feb4e8be053d9dbf6a105389c4f172437dc66a41d3"
     },
     {
       "path": "viewer/printer-presets.js",
@@ -2080,7 +2096,7 @@
     },
     {
       "path": "viewer/quick-print.js",
-      "sha256": "38359a7307c8fcceb42e514acd67812fb34d666ce3ad07047fc4d57bc42c299c"
+      "sha256": "beb769006477683ef8c605ad3a3ac22af689db10505051000faf2d62f42618ea"
     },
     {
       "path": "viewer/filament-identity.js",
@@ -2120,15 +2136,15 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "b7325d4dbff991ea86d3568ae97b357ffbd6b8bd00907d8c9c670e745ebd30f8"
+      "sha256": "2822e84b58f20057f37b06b802c8755fc032bb10483bb8d67109a1c0f4e50fac"
     },
     {
       "path": "viewer/template.html",
-      "sha256": "a917212e8627f4fceedee15dfe2e2b4cfab4a122811776b485742bf871b15f1c"
+      "sha256": "744782600b8884e1631298bb5ff460f19d295fb77405fc50a6f68baf237f2a9c"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "a5d92455cdadfb42be695585f60b6934eb5c966eca2f98e5772b5886ff001cd8"
+      "sha256": "cf62aa981481071c9467a98d959a994f6fa066929924205720e69f7eaeaa6175"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -2171,7 +2187,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "fd81fc2491b6e2b17ade0d2f2e4fe4200b3849542f919714ec15ca8da173c78f",
+  "viewer_sha256": "9c72fd9e52bc3996d88f8a028b18f8a64fb517d8fdf38b3acd2f7d3e849f0a59",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2184,9 +2200,9 @@
   },
   "offline": "docs/explore/offline.zip holds the single-file offline copy, which embeds geometry, scripts, styles, deferred print files, silkscreen textures and licenses; docs/explore/offline.html is that file, built locally and not published. docs/explore/index.html fetches the hashed scene description and the meshes its design shows at start, other meshes when an option needs them, the print payload on export and the silkscreen textures when an edition is shown.",
   "scene": {
-    "path": "docs/explore/assets/scene-141b4c9c667ce3c500c9ee23cdd3f15aebbda89fc9239a4c6323074e1d49d843.bin",
-    "sha256": "141b4c9c667ce3c500c9ee23cdd3f15aebbda89fc9239a4c6323074e1d49d843",
-    "bytes": 97339
+    "path": "docs/explore/assets/scene-172fe35d051572df31f5194a2cf48e1a89cf2bb7571dbb1d4b2459a513e4384f.bin",
+    "sha256": "172fe35d051572df31f5194a2cf48e1a89cf2bb7571dbb1d4b2459a513e4384f",
+    "bytes": 97402
   },
   "geometry": {
     "method": "One file per option. Positions and triangle indices are stored exactly (meshopt vertex and index-sequence codecs, read back byte for byte at build time); normals as 16-bit octahedral vectors.",
@@ -2457,8 +2473,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "41497947472da35bf7f44f55eb4a7edd6ce7c974baa9799076c532536c6ab1cd",
-    "bytes": 74273341
+    "sha256": "b41686314637a6839b44100f56b8597871090cb8133051c1ecd61ad51b60671f",
+    "bytes": 74367661
   },
   "still": {
     "look": {
@@ -2473,6 +2489,11 @@
       "docs/explore/assets/still-wide-80e3320eed6b08f5.webp",
       "docs/explore/assets/still-tall-a408247baee85a05.webp"
     ]
+  },
+  "plate_preview": {
+    "path": "docs/explore/assets/plate-shapes-6608422b08dbfc5995631cc014cad7e4d9f130d6dcd3514b6ce6ac8ead10b0d6.bin",
+    "sha256": "6608422b08dbfc5995631cc014cad7e4d9f130d6dcd3514b6ce6ac8ead10b0d6",
+    "bytes": 101610
   },
   "build_assets": {
     "LICENSE": {
@@ -3106,7 +3127,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "d5920d85ed3054219a916d9bfa79b790e52c81fcc3f1c76baf108f9fb84306b1",
+  "offline_sha256": "678c56668176c4f9287e33a6020e8ab4e7f828a2566010b430bdc1a6c8ccac30",
   "printing": {
     "path": "docs/explore/assets/printing-56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475.bin",
     "sha256": "56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475",
@@ -3156,8 +3177,8 @@
     "bytes": 335912
   },
   "geometry_aliases": 16,
-  "online_bytes": 1309603,
-  "offline_bytes": 98576074,
+  "online_bytes": 1329260,
+  "offline_bytes": 98731295,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

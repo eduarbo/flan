@@ -5,6 +5,7 @@ import {decode,xml,readMaterials,meshObject,printPlacement} from './print-geomet
 import {printerSuffix} from './printer-presets.js';
 import {setupOf,spoolFor} from './filament-swatches.js';
 import {combinedProject} from './print-project.js';
+import {projectSetup} from './project-objects.js';
 import {templateRef} from './config.js';
 export {templateRef} from './config.js';
 const utf8=x=>strToU8(typeof x==='string'?x:JSON.stringify(x,null,2)+'\n');
@@ -72,8 +73,9 @@ export function mesh3MF(part){
 }
 export async function printKit(config,registry,{half='both',scope='shells',keycaps=null,title='Flan36',projectOnly=false,progress=()=>{}}={}){
  const selected=selectedParts(config,registry,half,scope),files={},records=[];
- const setup=setupOf(config),suffix=setup.mode==='ams'?'':'-'+setup.mode;
- const projectName=title+'-'+half+'-'+scope+suffix+printerSuffix(setup)+'.3mf';
+ const setup=projectSetup(config),suffix=setup.mode==='ams'?'':'-'+setup.mode;
+ const keyLayout=setup.split_keycaps&&scope!=='shells'&&setup.mode!=='manual'?'-by-spool':'';
+ const projectName=title+'-'+half+'-'+scope+suffix+keyLayout+printerSuffix(setup)+'.3mf';
  const project=await combinedProject(selected,keycaps,projectName,config,progress);
  if(projectOnly)return {...project,filename:projectName};
  files[projectName]=project.bytes;
