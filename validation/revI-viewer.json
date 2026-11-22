@@ -2012,7 +2012,7 @@
     },
     {
       "path": "viewer/studio.js",
-      "sha256": "3971d69f54e2c0495a33314e3ab2cc34943bda7b6bc6fa3b9f9d5ad95d9ca7bc"
+      "sha256": "0f32f3554e5e44e02518b8c5060bd92ccd1a6d9f49da59497a2306b1d38fb417"
     },
     {
       "path": "viewer/contact-light.js",
@@ -2195,7 +2195,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "8fd40ec08b225152821310557b4ba63678ad262792576a36c2f73726b13382ac",
+  "viewer_sha256": "2ab055f7ca2a676e2c65c299735d11ff1f677172af789fe5b6d486f66d36659e",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2481,8 +2481,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "78d0dc45d98d923adee103e87aedac0b0576deeea90be21ca93e1b865f70e7ab",
-    "bytes": 74378022
+    "sha256": "2f7c42307354bcef61cf5a9b3b9828f654147becee8c1672206679590407340a",
+    "bytes": 74378770
   },
   "still": {
     "look": {
@@ -2492,10 +2492,10 @@
       "keys": "original",
       "frame": "snes,phone"
     },
-    "fingerprint": "196d31ff09f1015662358cc800200080db1015922c8d9a26a521084e6d5c60c0",
+    "fingerprint": "ee29d4b393c0d8c6ba15f8604ad06192ceee12dac1ddf388f7b1cdaabb726e2c",
     "published": [
-      "docs/explore/assets/still-wide-4e6d4a0e297434b9.webp",
-      "docs/explore/assets/still-tall-4f5417b28aa10c59.webp"
+      "docs/explore/assets/still-wide-028ccf254aca7dc1.webp",
+      "docs/explore/assets/still-tall-dcb4d94e8c2980f8.webp"
     ]
   },
   "plate_preview": {
@@ -3135,7 +3135,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "1dc88672cb9e007656ff23e1e76740661d2cd19db2a5363e5b9551aff24736b6",
+  "offline_sha256": "0134a3296f09656146ca35090eff109ebaadb46038403924e50a860da2f314ea",
   "printing": {
     "path": "docs/explore/assets/printing-56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475.bin",
     "sha256": "56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475",
@@ -3185,8 +3185,8 @@
     "bytes": 335912
   },
   "geometry_aliases": 16,
-  "online_bytes": 1362628,
-  "offline_bytes": 98764663,
+  "online_bytes": 1365465,
+  "offline_bytes": 98767500,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

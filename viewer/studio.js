@@ -1,10 +1,11 @@
-// Shared window light for the home keyboard and explorer. Render materials stay separate from the design and its exports.
+// Shared low side light for the home keyboard and explorer. Render materials stay separate from the design and its exports.
 // SPDX-License-Identifier: GPL-3.0-or-later
 import * as THREE from 'three';
 import {contactLight} from './contact-light.js';
 
-const PRINTED={roughness:.62};
+const PRINTED={roughness:.62,ior:1.47};
 const SURFACES={
+  keycaps:{...PRINTED,roughness:.55},
   switches:{roughness:.36,clearcoat:.22,clearcoatRoughness:.3},
   pcb:{roughness:.42,clearcoat:.5,clearcoatRoughness:.2},
   mcu:{roughness:.45,clearcoat:.3,clearcoatRoughness:.25},
@@ -13,43 +14,51 @@ const SURFACES={
   metal:{roughness:.34,metalness:1},
 };
 const METAL=/magnet|screw|washer/i;
-const WINDOW_DIRECTION=new THREE.Vector3(-.84,1,.18).normalize();
+// The Talavera lighting study places a low warm panel behind the left half and a wide cool fill in front.
+const KEY_OFFSET=new THREE.Vector3(-230,160,-150),FILL_OFFSET=new THREE.Vector3(120,230,300);
+const WINDOW_DIRECTION=KEY_OFFSET.clone().normalize(),FILL_DIRECTION=FILL_OFFSET.clone().normalize();
+const KEY_COLOR='#ffe9d3',FILL_COLOR='#e5eeff';
 
-const SHADOW_WIDTH=590,SHADOW_NEAR=5,SHADOW_FAR=890;
-const WINDOW_SLOPE=.40;
+const SPOT_ANGLE=Math.PI/3,SHADOW_NEAR=32,SHADOW_FAR=900;
+const WINDOW_SLOPE=.26;
 
 // The floor sees a larger penumbra where the keyboard stands farther above it.
-// Sample the single window's depth map in its orthographic coordinates (distances in mm).
+// Convert perspective depths to millimetres before estimating the penumbra.
 function softFloorShadow(shader){
   shader.fragmentShader=shader.fragmentShader.replace('#include <shadowmask_pars_fragment>', `
-    #if defined(USE_SHADOWMAP) && NUM_DIR_LIGHT_SHADOWS == 1
+    #if defined(USE_SHADOWMAP) && NUM_SPOT_LIGHT_SHADOWS == 1
     vec2 diskPoint(int i, int count, float rotation) {
       float angle = float(i) * 2.39996323 + rotation;
       return vec2(cos(angle), sin(angle)) * sqrt((float(i) + 0.5) / float(count));
     }
+    float lightDistance(float depth) {
+      return ${(SHADOW_NEAR*SHADOW_FAR).toFixed(1)} / (${SHADOW_FAR.toFixed(1)} - depth * ${(SHADOW_FAR-SHADOW_NEAR).toFixed(1)});
+    }
     float getShadowMask() {
-      vec3 p = vDirectionalShadowCoord[0].xyz / vDirectionalShadowCoord[0].w;
+      vec3 p = vSpotLightCoord[0].xyz / vSpotLightCoord[0].w;
       if (any(lessThan(p, vec3(0.0))) || any(greaterThan(p, vec3(1.0)))) return 1.0;
-      float receiver = p.z + directionalLightShadows[0].shadowBias;
-      vec2 texel = 1.0 / directionalLightShadows[0].shadowMapSize;
-      float depth = unpackRGBAToDepth(texture2D(directionalShadowMap[0], p.xy));
+      float receiver = p.z + spotLightShadows[0].shadowBias;
+      vec2 texel = 1.0 / spotLightShadows[0].shadowMapSize;
+      float depth = unpackRGBAToDepth(texture2D(spotShadowMap[0], p.xy));
       float blocked = step(depth, receiver);
-      float separation = max(0.0, receiver - depth);
-      const float search = 14.0 / ${SHADOW_WIDTH.toFixed(1)};
+      float distanceToFloor = lightDistance(receiver);
+      float separation = max(0.0, distanceToFloor - lightDistance(depth));
+      float span = ${(2*Math.tan(SPOT_ANGLE)).toFixed(5)} * distanceToFloor;
+      float search = 14.0 / span;
       for (int i = 0; i < 12; ++i) {
         vec2 uv = p.xy + search * diskPoint(i, 12, 0.0);
-        depth = unpackRGBAToDepth(texture2D(directionalShadowMap[0], uv));
+        depth = unpackRGBAToDepth(texture2D(spotShadowMap[0], uv));
         blocked += step(depth, receiver);
-        separation += max(0.0, receiver - depth);
+        separation += max(0.0, distanceToFloor - lightDistance(depth));
       }
       if (blocked == 0.0) return 1.0;
-      float radius = clamp(separation / blocked * ${((SHADOW_FAR-SHADOW_NEAR)*WINDOW_SLOPE/SHADOW_WIDTH).toFixed(5)}, texel.x, search);
+      float radius = clamp(separation / blocked * ${WINDOW_SLOPE.toFixed(2)} / span, texel.x, search);
       // A stable rotation in light space breaks up sampling bands during camera orbits.
       float rotation = 6.2831853 * fract(dot(floor(p.xy / texel), vec2(0.75487767, 0.56984029)));
       float lit = 0.0;
       for (int i = 0; i < 40; ++i) {
         vec2 uv = p.xy + radius * diskPoint(i, 40, rotation);
-        lit += texture2DCompare(directionalShadowMap[0], uv, receiver);
+        lit += texture2DCompare(spotShadowMap[0], uv, receiver);
       }
       return lit / 40.0;
     }
@@ -59,36 +68,50 @@ function softFloorShadow(shader){
   `);
 }
 
-// One broad window in a neutral room. The same direction lights the surfaces and casts their shadow.
+// The panels contribute soft reflections; only the key casts a directional shadow.
 function windowEnvironment(renderer){
   const room=new THREE.Scene();
-  room.background=new THREE.Color().setRGB(.24,.26,.29);
-  const pane=new THREE.Mesh(new THREE.PlaneGeometry(6.2,5.6),new THREE.MeshBasicMaterial({
-    color:new THREE.Color().setRGB(3.6,3.55,3.45),toneMapped:false
-  }));
-  pane.position.copy(WINDOW_DIRECTION).multiplyScalar(4);
-  pane.lookAt(0,0,0);
-  room.add(pane);
+  room.background=new THREE.Color().setRGB(.17,.19,.22);
+  function panel(direction,width,height,color,radiance){
+    const material=new THREE.MeshBasicMaterial({color,toneMapped:false});
+    material.color.multiplyScalar(radiance);
+    const pane=new THREE.Mesh(new THREE.PlaneGeometry(width,height),material);
+    pane.position.copy(direction).multiplyScalar(4);pane.lookAt(0,0,0);room.add(pane);
+  }
+  // Apparent sizes subtended by 23 × 13 cm at 32 cm, and 38 × 32 cm at 40 cm.
+  panel(WINDOW_DIRECTION,2.9,1.6,KEY_COLOR,9);
+  panel(FILL_DIRECTION,3.8,3.2,FILL_COLOR,1.9);
   const pmrem=new THREE.PMREMGenerator(renderer);
   const texture=pmrem.fromScene(room,.04,.1,20,{size:128}).texture;
-  pmrem.dispose();pane.geometry.dispose();pane.material.dispose();
+  pmrem.dispose();
+  for(const pane of room.children){pane.geometry.dispose();pane.material.dispose();}
   return texture;
 }
 
 export function windowLighting(renderer,scene,lightweight){
-  renderer.toneMapping=THREE.NeutralToneMapping;
-  renderer.toneMappingExposure=.70;
-  const fill=new THREE.HemisphereLight('#f4f7ff','#eee3d3',lightweight?1.85:.68);
-  const key=new THREE.DirectionalLight('#fffaf3',lightweight?2.35:1.82);
-  key.position.copy(WINDOW_DIRECTION).multiplyScalar(440);
-  scene.add(fill,key,key.target);
-  // A reflector below the assembly keeps the PCB visible when inspecting its underside.
-  const bounce=new THREE.DirectionalLight('#ffffff',1.28);
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.16;
+  const room=new THREE.HemisphereLight('#e5ebf4','#cfc2b4',lightweight?.50:.24);
+  // Two finite sources recreate the falloff across the two halves. The software renderer uses the centre directions.
+  const key=lightweight?new THREE.DirectionalLight(KEY_COLOR,2.18):
+    new THREE.SpotLight(KEY_COLOR,2.18*KEY_OFFSET.lengthSq(),0,SPOT_ANGLE,.2,2);
+  const fill=lightweight?new THREE.DirectionalLight(FILL_COLOR,.85):
+    new THREE.PointLight(FILL_COLOR,.85*FILL_OFFSET.lengthSq(),0,2);
+  function aim(centre){
+    key.target.position.copy(centre);
+    key.position.copy(centre).add(KEY_OFFSET);
+    fill.position.copy(lightweight?FILL_DIRECTION:centre);
+    if(!lightweight)fill.position.add(FILL_OFFSET);
+  }
+  aim(new THREE.Vector3());
+  scene.add(room,key,key.target,fill);
+  // Keep the PCB readable when the user turns the keyboard over.
+  const bounce=new THREE.DirectionalLight('#ffffff',.86);
   bounce.position.set(.12,-1,.10);scene.add(bounce);
   if(lightweight)return null;
 
   scene.environment=windowEnvironment(renderer);
-  scene.environmentIntensity=.73;
+  scene.environmentIntensity=.28;
   renderer.shadowMap.enabled=true;
   renderer.shadowMap.type=THREE.PCFShadowMap;
   key.castShadow=true;
@@ -96,12 +119,12 @@ export function windowLighting(renderer,scene,lightweight){
   const mapSize=small?1024:2048;
   key.shadow.mapSize.set(mapSize,mapSize);
   key.shadow.radius=mapSize/900;
-  key.shadow.bias=-.00035;
+  key.shadow.bias=-.00012;
   key.shadow.normalBias=.32;
-  Object.assign(key.shadow.camera,{left:-SHADOW_WIDTH/2,right:SHADOW_WIDTH/2,top:SHADOW_WIDTH/2,bottom:-SHADOW_WIDTH/2,near:SHADOW_NEAR,far:SHADOW_FAR});
+  Object.assign(key.shadow.camera,{near:SHADOW_NEAR,far:SHADOW_FAR});
   key.shadow.camera.updateProjectionMatrix();
 
-  return key;
+  return aim;
 }
 
 export function studioMaterial(color,kind,contact){
@@ -119,8 +142,8 @@ export function studioFloor(scene,contact){
 }
 
 export function createStudio({renderer,scene,camera,objects,ground,lightweight}){
-  const key=windowLighting(renderer,scene,lightweight);
-  if(!key)return null;
+  const aim=windowLighting(renderer,scene,lightweight);
+  if(!aim)return null;
   ground.material.visible=false;
   const contact=contactLight(renderer,scene,camera);
   const floor=studioFloor(scene,contact);
@@ -135,23 +158,19 @@ export function createStudio({renderer,scene,camera,objects,ground,lightweight})
     return surfaces.get(id);
   }
   const wants=m=>m.isMeshStandardMaterial&&!m.userData.studio;
-  const centre=new THREE.Vector3();
+  const centre=new THREE.Vector3(),bounds=new THREE.Box3();
   function dress(){
-    centre.set(0,0,0);let count=0;
+    bounds.makeEmpty();
     for(const o of objects){
       const kind=METAL.test(o.name)||o.userData.group==='fasteners'?'metal':o.userData.group;
       if(Array.isArray(o.material)){if(o.material.some(wants))o.material=o.material.map(m=>wants(m)?surface(m,kind):m);}
       else if(wants(o.material))o.material=surface(o.material,kind);
       o.castShadow=o.receiveShadow=true;
-      if(o.visible){centre.add(o.position);count++;}
+      if(o.visible)bounds.expandByObject(o);
     }
     const halves=Object.values(ground.halves).filter(h=>h.visible);
     floor.visible=halves.length>0;if(floor.visible)floor.position.y=Math.min(...halves.map(h=>h.position.y));
-    if(count){
-      centre.divideScalar(count);
-      key.target.position.copy(centre);
-      key.position.copy(centre).addScaledVector(WINDOW_DIRECTION,440);
-    }
+    if(!bounds.isEmpty())aim(bounds.getCenter(centre));
     contact?.update();
   }
   const back=m=>m.userData.plain||m;

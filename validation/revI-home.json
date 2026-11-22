@@ -2,24 +2,24 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "b389d324b5c5168802a4d240e204e6441b2138fa16fd6fdd7e72db0d529a95b2",
+    "sha256": "94de744708e343696d0c7eba7dc102e1cf6a728807a31c1a5031bc4ab4db4206",
     "bytes": 116101
   },
   "engine": {
-    "path": "docs/assets/home-engine-15d16eb03a3f8452.js",
-    "sha256": "15d16eb03a3f8452b234ffc8bc5e1d25f21b4e4ef3449a0c488a3cd65f0b4411",
-    "bytes": 635209
+    "path": "docs/assets/home-engine-0a7d02581031c9a2.js",
+    "sha256": "0a7d02581031c9a268d6c6accf8dc7e8caa5ba3b914ec91c2f3ae64f0f35b3a8",
+    "bytes": 638109
   },
   "posters": [
     {
       "path": "docs/assets/home-poster.webp",
-      "sha256": "a14e466cc6487258a6990cde9383903af53ae51c441ec2f58584b6159d1d151d",
-      "bytes": 128792
+      "sha256": "b223ef729c6a11a9ea7e260c86ca0d6b05a3151910b656db631b477c206eb404",
+      "bytes": 176878
     },
     {
       "path": "docs/assets/home-poster-800.webp",
-      "sha256": "e8a80c1fac0789e14cd1ea6c036243c20ed1591b602d3bb7d8bd03116aee321e",
-      "bytes": 48758
+      "sha256": "b6c9bc3154187fb36dc27ccf63e2215385eabbf48219c1ad12492feffc9e9160",
+      "bytes": 64098
     }
   ],
   "packs": {
@@ -2072,7 +2072,7 @@
     },
     {
       "path": "viewer/studio.js",
-      "sha256": "3971d69f54e2c0495a33314e3ab2cc34943bda7b6bc6fa3b9f9d5ad95d9ca7bc"
+      "sha256": "0f32f3554e5e44e02518b8c5060bd92ccd1a6d9f49da59497a2306b1d38fb417"
     },
     {
       "path": "viewer/contact-light.js",
