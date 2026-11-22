@@ -43,7 +43,10 @@ export function contactLight(renderer,scene,camera){
     bind(shader);
     shader.fragmentShader=shader.fragmentShader.replace('#include <tonemapping_fragment>',`
       float contact = texture2D(flanContactMap, gl_FragCoord.xy * flanInverseSize).r;
-      gl_FragColor.a = 1.0 - (1.0 - gl_FragColor.a) * mix(1.0, contact, 0.32);
+      // Deepen the short-range occlusion at the supports. Open floor keeps the raking shadow.
+      float occlusion = 1.0 - contact;
+      float support = 0.32 * occlusion + 0.38 * smoothstep(0.04, 0.60, occlusion);
+      gl_FragColor.a += (1.0 - gl_FragColor.a) * support;
       #include <tonemapping_fragment>`);
   }
   return {update,surface,floor};

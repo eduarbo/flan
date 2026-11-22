@@ -4307,7 +4307,10 @@ uniform vec2 flanInverseSize;
       reflectedLight.indirectDiffuse *= mix(1.0, contact, 0.78);
       reflectedLight.indirectSpecular *= mix(1.0, contact, 0.35);`)}function d(u){h(u),u.fragmentShader=u.fragmentShader.replace("#include <tonemapping_fragment>",`
       float contact = texture2D(flanContactMap, gl_FragCoord.xy * flanInverseSize).r;
-      gl_FragColor.a = 1.0 - (1.0 - gl_FragColor.a) * mix(1.0, contact, 0.32);
+      // Deepen the short-range occlusion at the supports. Open floor keeps the raking shadow.
+      float occlusion = 1.0 - contact;
+      float support = 0.32 * occlusion + 0.38 * smoothstep(0.04, 0.60, occlusion);
+      gl_FragColor.a += (1.0 - gl_FragColor.a) * support;
       #include <tonemapping_fragment>`)}return{update:o,surface:c,floor:d}}var Fh={roughness:.62,ior:1.47},h0={keycaps:{...Fh,roughness:.55},switches:{roughness:.36,clearcoat:.22,clearcoatRoughness:.3},pcb:{roughness:.42,clearcoat:.5,clearcoatRoughness:.2},mcu:{roughness:.45,clearcoat:.3,clearcoatRoughness:.25},display:{roughness:.22,clearcoat:.9,clearcoatRoughness:.06},battery:{roughness:.3,metalness:.55},connectors:{roughness:.5},metal:{roughness:.34,metalness:1}};var Dc=new L(-230,160,-150),Ic=new L(120,230,300),u0=Dc.clone().normalize(),Nh=Ic.clone().normalize(),Lc="#ffe9d3",Uc="#e5eeff",Oh=Math.PI/3,Fc=32,ao=900,d0=.26;function f0(i){i.fragmentShader=i.fragmentShader.replace("#include <shadowmask_pars_fragment>",`
     #if defined(USE_SHADOWMAP) && NUM_SPOT_LIGHT_SHADOWS == 1
     vec2 diskPoint(int i, int count, float rotation) {
