@@ -33,7 +33,7 @@ export function validatePaletteFile(value,catalog){
  }
  return copy(value.palettes);
 }
-export function createKeycapColors({$,catalog,get,apply,message,storageNotice=message}){
+export function createKeycapColors({$,catalog,get,apply,message,onTargets=()=>{},storageNotice=message}){
  const colorHex=enhanceColorInput($('cap-color'),()=>t('keys.colorLabel'),spool=>{
   const keys=resolved(),affected=[...new Set(keys.map(([side])=>side))];
   apply(bindSpool(paintKeys(get(),keys,spool.hex.toLowerCase()),affected,spool));
@@ -79,6 +79,7 @@ export function createKeycapColors({$,catalog,get,apply,message,storageNotice=me
  $('cap-palette-file').onchange=async e=>{try{const file=e.target.files[0];if(!file)return;if(file.size>100000)throw Error(t('keys.big'));const imported=validatePaletteFile(JSON.parse(await file.text()),catalog);if(custom.length+imported.length>24)throw Error(t('keys.over'));custom.push(...imported);const saved=remember();renderCustom();if(saved)message(t('keys.imported'));}catch(error){message(error.message,true);}finally{e.target.value='';}};
  function sync(){
   const c=get(),targets=resolved(),ids=new Set(targets.map(([s,k])=>s+':'+k.ref));
+  onTargets(ids);
   for(const {b,side,k} of buttons){const color=c.keycaps[side][k.ref].color||defaultCapColor(k);b.style.setProperty('--cap-color',color);const value=parseInt(color.slice(1),16),l=((value>>16)*.2126+(value>>8&255)*.7152+(value&255)*.0722);b.style.color=l>140?'#23332e':'#fff';b.setAttribute('aria-pressed',String(ids.has(side+':'+k.ref)));}
   for(const b of $('cap-side').children)b.setAttribute('aria-pressed',String(b.dataset.side===selection.side));
   for(const [id,value] of [['cap-mode',selection.mode],['cap-row',selection.row],['cap-column',selection.column]])for(const b of $(id).querySelectorAll('[data-value]'))b.setAttribute('aria-pressed',String(b.dataset.value===String(value)));$('cap-row-label').hidden=selection.mode!=='row';$('cap-column-label').hidden=selection.mode!=='column';

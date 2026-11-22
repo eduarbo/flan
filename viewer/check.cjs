@@ -286,6 +286,8 @@ async function framePixel(page){
   await frameLabel.click();
   assert.equal(await page.locator('#selection-title').textContent(),'Display frame');
   assert.equal(await page.locator('#part-lid').getAttribute('aria-expanded'),'true');
+  await page.mouse.move(10,20);
+  assert.notEqual(await canvasHash(page),withoutHighlight,'The selected frame stays outlined after the pointer leaves');
   await page.click('#edit-selection');assert.equal(await page.locator('#panel-frames').isVisible(),true);
   assert.equal(await page.locator('#frame-target [data-side=both]').getAttribute('aria-pressed'),'true');
   await panel(page,'files');
@@ -351,6 +353,15 @@ async function framePixel(page){
   await page.click('#panel-back');await checkDirectory(page);
   await page.screenshot({path:path.join(root,'build/viewer-sidebar/desktop-linked.png')});
   await page.evaluate(()=>document.querySelector('#inspector').scrollTop=10000);await checkDirectory(page);
+  // Individual parts remain marked after pointer hover ends, including two keys with the same filament.
+  await page.locator('#part-keycaps').click();
+  const keyButtons=page.locator('#part-visibility-list [data-select-object]:enabled');
+  await keyButtons.nth(0).click();await page.mouse.move(10,20);
+  const firstKey=await canvasHash(page);
+  await keyButtons.nth(1).click();await page.mouse.move(10,20);
+  assert.notEqual(await canvasHash(page),firstKey,'Selecting a neighbouring key moves the visible outline');
+  assert.equal(await keyButtons.nth(1).getAttribute('aria-current'),'true');
+  await page.click('#panel-back');
   // Tap the left frame in the model itself.
   const pick=await framePixel(page);
   await page.mouse.click(pick.x,pick.y);assert.equal(await page.locator('#selection-title').textContent(),'Display frame');

@@ -1,4 +1,4 @@
-// Window light for the explorer. Render materials stay separate from the design and its exports.
+// Shared window light for the home keyboard and explorer. Render materials stay separate from the design and its exports.
 // SPDX-License-Identifier: GPL-3.0-or-later
 import * as THREE from 'three';
 import {contactLight} from './contact-light.js';
@@ -75,7 +75,7 @@ function windowEnvironment(renderer){
   return texture;
 }
 
-export function createStudio({renderer,scene,camera,objects,ground,lightweight}){
+export function windowLighting(renderer,scene,lightweight){
   renderer.toneMapping=THREE.NeutralToneMapping;
   renderer.toneMappingExposure=.70;
   const fill=new THREE.HemisphereLight('#f4f7ff','#eee3d3',lightweight?1.85:.68);
@@ -101,19 +101,35 @@ export function createStudio({renderer,scene,camera,objects,ground,lightweight})
   Object.assign(key.shadow.camera,{left:-SHADOW_WIDTH/2,right:SHADOW_WIDTH/2,top:SHADOW_WIDTH/2,bottom:-SHADOW_WIDTH/2,near:SHADOW_NEAR,far:SHADOW_FAR});
   key.shadow.camera.updateProjectionMatrix();
 
-  ground.material.visible=false;
+  return key;
+}
+
+export function studioMaterial(color,kind,contact){
+  const m=new THREE.MeshPhysicalMaterial({color,...SURFACES[kind]||PRINTED});
+  if(contact)m.onBeforeCompile=contact.surface;
+  return m;
+}
+
+export function studioFloor(scene,contact){
   const floor=new THREE.Mesh(new THREE.PlaneGeometry(2400,2400).rotateX(-Math.PI/2),
     new THREE.ShadowMaterial({opacity:.27,depthWrite:false}));
-  const contact=contactLight(renderer,scene,camera);
   floor.material.onBeforeCompile=shader=>{softFloorShadow(shader);contact?.floor(shader);};
   floor.receiveShadow=true;floor.renderOrder=-1;floor.raycast=()=>{};scene.add(floor);
+  return floor;
+}
+
+export function createStudio({renderer,scene,camera,objects,ground,lightweight}){
+  const key=windowLighting(renderer,scene,lightweight);
+  if(!key)return null;
+  ground.material.visible=false;
+  const contact=contactLight(renderer,scene,camera);
+  const floor=studioFloor(scene,contact);
 
   const surfaces=new Map();
   function surface(source,kind){
     const id=kind+'|'+source.color.getHexString();
     if(!surfaces.has(id)){
-      const m=new THREE.MeshPhysicalMaterial({color:source.color,...SURFACES[kind]||PRINTED});
-      if(contact)m.onBeforeCompile=contact.surface;
+      const m=studioMaterial(source.color,kind,contact);
       m.userData.studio=true;m.userData.plain=source;surfaces.set(id,m);
     }
     return surfaces.get(id);

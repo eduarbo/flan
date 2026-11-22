@@ -4,7 +4,8 @@
 // Built as the page's 3D engine, a script of its own (viewer/home-build.mjs): home/app.js loads it alongside the mesh packs.
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {windowLighting,studioMaterial,studioFloor} from '../studio.js';
+import {contactLight} from '../contact-light.js';
 import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
 import {gunzipSync} from 'three/addons/libs/fflate.module.js';
 import {MeshoptDecoder} from 'meshoptimizer/decoder';
@@ -67,9 +68,6 @@ function lights(scene){
   }
 }
 const surface=color=>new THREE.MeshStandardMaterial({color,roughness:.78,metalness:0});
-// the live model's satin plastic under the room light; the small previews keep the plain surface
-const skin=color=>new THREE.MeshPhysicalMaterial({color,roughness:.5,metalness:0,clearcoat:.12,clearcoatRoughness:.5});
-
 export function createModel({canvas,frame:area=canvas,packs,fetched={},onChange=()=>{}}){
   // A browser without hardware acceleration renders on the CPU: find out before creating the context,
   // then skip antialiasing, render smaller and keep still until the reader moves the keyboard.
@@ -81,23 +79,10 @@ export function createModel({canvas,frame:area=canvas,packs,fetched={},onChange=
   // long, up once when there is room.
   const quality={max:Math.min(devicePixelRatio,software?.75:1.75),ratio:Math.min(devicePixelRatio,software?.6:1.5),min:software?.5:.75,samples:[],raised:false};
   renderer.setPixelRatio(quality.ratio);
-  const scene=new THREE.Scene();lights(scene);
-  // With hardware rendering the model gets the explorer's look (studio.js): room light, a neutral tone curve
-  // and soft shadows the parts cast on each other, which keep parts of one colour apart.
-  const lit=!software,paint=lit?skin:surface;
-  if(lit){
-    renderer.toneMapping=THREE.NeutralToneMapping;renderer.toneMappingExposure=.96;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-    scene.traverse(o=>{if(o.isLight)o.intensity*=o.isHemisphereLight?.12:.16;});
-    const small=matchMedia('(max-width: 760px), (pointer: coarse)').matches;
-    // a key lamp, and a second one almost straight above whose shadow darkens the gaps between keys. This page
-    // keeps moving, so both shadow maps are drawn every frame: they are half the explorer's size.
-    for(const [x,z,power,size,normal] of [[-170,230,3.1,small?1024:2048,1.4],[-12,18,1.5,small?512:1024,2]]){
-      const lamp=new THREE.DirectionalLight('#ffffff',power);lamp.position.set(x,340,z);lamp.castShadow=true;
-      lamp.shadow.mapSize.set(size,size);lamp.shadow.bias=-.0006;lamp.shadow.normalBias=normal;
-      Object.assign(lamp.shadow.camera,{left:-300,right:300,top:300,bottom:-300,near:10,far:1400});lamp.shadow.camera.updateProjectionMatrix();scene.add(lamp);
-    }
-  }
+  const scene=new THREE.Scene();
   const camera=new THREE.PerspectiveCamera(20,1,10,6000);
+  let contact,floor,baseY=0;
+  canvas.classList.toggle('flat-light',software);
   const controls=new OrbitControls(camera,canvas);
   Object.assign(controls,{enablePan:false,enableZoom:false,enableDamping:true,dampingFactor:.08,rotateSpeed:.7,minPolarAngle:.18,maxPolarAngle:1.42});
   // vertical swipes keep scrolling the page; a horizontal drag turns the keyboard
@@ -118,17 +103,21 @@ export function createModel({canvas,frame:area=canvas,packs,fetched={},onChange=
     const arriving=Promise.all([ask(packs.common),load(look.size)]);arriving.catch(()=>{});
     // a request made ahead for a size the reader has since left is let go
     for(const url of Object.keys(fetched)){fetched[url].then(response=>response.body?.cancel()).catch(()=>{});delete fetched[url];}
-    if(lit){await breathe();const pmrem=new THREE.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(new RoomEnvironment(),.04).texture;scene.environmentIntensity=.42;pmrem.dispose();}
+    await breathe();
+    windowLighting(renderer,scene,software);
+    if(!software){contact=contactLight(renderer,scene,camera);floor=studioFloor(scene,contact);}
     await MeshoptDecoder.ready;
     const [first,sized]=await arriving;common=first;
     await prepare(common,[...common.parts.filter(p=>p.kind==='fixed').map(p=>p.mesh),...SIDES.flatMap(side=>[`${side}-battery`,`${side}-frame-${look.frame[side]}`,
       ...Object.values(common.presets[look.keys][side]).map(([variant])=>common.caps[variant].mesh)])]);
     await prepare(sized,SIDES.flatMap(side=>[`${side}-case-${look.case}-base`,`${side}-case-${look.case}-plate`,`${side}-pcb`]));
     for(const p of common.parts){
+      const paint=color=>software?surface(color):studioMaterial(color,p.group,contact);
       const mesh=p.kind==='screen'?screenMesh(p.screen):new THREE.Mesh(undefined,p.kind==='fixed'&&p.c.length>1?p.c.map(paint):paint(p.c?.[0]||'#888'));
       mesh.position.fromArray(p.p);mesh.rotation.y=THREE.MathUtils.degToRad(p.a);mesh.userData={...p,base:[...p.p]};
       if(p.kind==='fixed'||p.kind==='battery')mesh.geometry=common.mesh(p.kind==='battery'?`${p.side}-battery`:p.mesh);
       if(p.kind==='frame')mesh.material=finishes.roles.map(()=>paint('#ffffff'));
+      mesh.castShadow=mesh.receiveShadow=!software;
       model.add(mesh);objects.push(mesh);
     }
     instance();
@@ -164,6 +153,7 @@ export function createModel({canvas,frame:area=canvas,packs,fetched={},onChange=
       }
       if(colors)next.push([o,colors]);
     }
+    if(floor)baseY=Math.min(...objects.filter(o=>o.visible&&o.userData.group==='base').map(o=>o.userData.base[1]+o.geometry.boundingBox.min.y));
     tweens=[];
     for(const [o,colors] of next){
       const mats=Array.isArray(o.material)?o.material:[o.material];
@@ -182,7 +172,7 @@ export function createModel({canvas,frame:area=canvas,packs,fetched={},onChange=
     const groups=new Map();
     for(const o of objects)if(o.userData.kind==='fixed'){const id=o.userData.mesh;if(!groups.has(id))groups.set(id,[]);groups.get(id).push(o);}
     for(const list of groups.values())if(list.length>=8){
-      const mesh=new THREE.InstancedMesh(list[0].geometry,list[0].material,list.length);mesh.frustumCulled=false;model.add(mesh);
+      const mesh=new THREE.InstancedMesh(list[0].geometry,list[0].material,list.length);mesh.frustumCulled=false;mesh.castShadow=mesh.receiveShadow=!software;model.add(mesh);
       for(const o of list)o.layers.set(1);
       instanced.push({mesh,proxies:list});
     }
@@ -252,7 +242,9 @@ export function createModel({canvas,frame:area=canvas,packs,fetched={},onChange=
     // the standby motion alone draws every other frame; the intro, a drag and colour changes draw them all
     const full=needs||state.intro||state.interacting||tweens.length>0||Math.abs(state.target-state.explode)>.0005;
     state.skip=!full&&moving&&!state.skip;
-    if((needs||moving)&&!state.skip){if(lit)model.traverse(o=>{if(o.isMesh&&!o.castShadow)o.castShadow=o.receiveShadow=true;});renderer.render(scene,camera);needs=false;pace(now,full);}
+    if((needs||moving)&&!state.skip){
+      if(floor)floor.position.y=model.position.y+turntable.position.y+baseY-.4;
+      contact?.update();renderer.render(scene,camera);needs=false;pace(now,full);}
     // a 'change' from controls.update() may already have scheduled the next frame
     if((moving||state.standby)&&state.onscreen){if(!frameId)frameId=requestAnimationFrame(tick);}
     else quality.last=0;
@@ -329,6 +321,10 @@ export function createModel({canvas,frame:area=canvas,packs,fetched={},onChange=
       if(p.kind==='pcb')g=pack.mesh('left-pcb');
       if(p.kind==='frame'){g=common.mesh(`left-frame-${look.frame.left}`);material=framePalette({...look,own:{left:kind==='frame'?false:look.own?.left}},theme,'left').map(mat);}
       if(p.kind==='cap'){const [variant,turn]=common.presets[look.keys].left[p.k],cap=common.caps[variant],key=common.layout.left[p.k];g=common.mesh(cap.mesh);rot=THREE.MathUtils.degToRad(key.angle+turn);y=cap.seat;material=mat(capColor(theme.keycaps,key));}
+      if(material===o.material&&p.kind!=='screen'){
+        const plain=m=>mat(m.color);
+        material=Array.isArray(material)?material.map(plain):plain(material);
+      }
       const m=new THREE.Mesh(g,material);m.position.set(p.p[0],y,p.p[2]);m.rotation.y=rot;m.userData={kind:p.kind,group:p.group,k:p.k,r:p.r};s.add(m);picked.push(m);
     }
     const focus=new THREE.Box3();

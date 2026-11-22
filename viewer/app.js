@@ -272,7 +272,10 @@ let explorer,appearance,keycapColors,renderFrame=0,silkHook=null;   // silkHook:
 const software=(()=>{try{const gl=renderer.getContext(),info=gl.getExtension('WEBGL_debug_renderer_info');return /swiftshader|llvmpipe|software|basic render/i.test(info?gl.getParameter(info.UNMASKED_RENDERER_WEBGL):'');}catch{return false;}})();
 const lightweight=software||new URLSearchParams(location.search).get('render')==='flat';
 const studio=createStudio({renderer,scene,camera,objects,ground,lightweight});
-function draw(){renderFrame=0;explorer?.update();studio?.dress();renderer.render(scene,camera);$('loading').hidden=true;}
+let capTargets=null,capEditorActive=false;
+function draw(){renderFrame=0;
+  const editing=capEditorActive&&panelOpen&&activeMode==='customize'&&!detailRef&&tunes.has('keycaps')&&!$('panel-keycaps').hidden;
+  explorer?.update(editing?capTargets:null);studio?.dress();renderer.render(scene,camera);explorer?.draw(renderer);$('loading').hidden=true;}
 function render(){if(!renderFrame)renderFrame=requestAnimationFrame(draw);}
 // right away: after a card's picture was drawn on this canvas, so no frame shows it
 function renderNow(){cancelAnimationFrame(renderFrame);draw();}
@@ -447,7 +450,11 @@ function setTune(name,open){
   button.setAttribute('aria-expanded',String(open));$(button.getAttribute('aria-controls')).hidden=!open;
   const act=button.querySelector('.act');if(act)act.textContent=t(open?(stacked()?'act.done':'act.hide'):'act.'+name);
 }
-for(const button of document.querySelectorAll('.tune'))button.onclick=()=>{const name=button.closest('.sec').id.slice(6);setTune(name,!tunes.has(name));};
+$('inspector').addEventListener('focusin',event=>{
+  const section=event.target.closest('.sec');
+  if(section){capEditorActive=section.id==='panel-keycaps';render();}
+});
+for(const button of document.querySelectorAll('.tune'))button.onclick=()=>{const name=button.closest('.sec').id.slice(6);setTune(name,!tunes.has(name));capEditorActive=name==='keycaps';render();};
 function revealPanel(name){if(stacked()&&!$('panel-'+name).hidden)$('panel-'+name).scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
 function showWorkspace(){
   document.body.dataset.mode=activeMode;document.body.dataset.detail=String(Boolean(detailRef));
@@ -502,7 +509,7 @@ function editPart(ref){
   else if(ref.group==='keycaps')keycapColors?.focus(ref.side,ref.key);
   else if(['base','plate'].includes(ref.group)){caseSide=ref.side||'both';syncConfigurationUI();}
   else if(ref.group==='battery'){batterySide=ref.side||'both';syncConfigurationUI();}
-  openPanel(editablePanel[ref.group]);revealPanel(editablePanel[ref.group]);
+  capEditorActive=ref.group==='keycaps';openPanel(editablePanel[ref.group]);revealPanel(editablePanel[ref.group]);
 }
 $('edit-selection').onclick=()=>editPart(explorer.selected);
 $('layers').replaceChildren();
@@ -1115,9 +1122,17 @@ function populatePartVisibility(ref){
   for(const o of matching){
     const row=document.createElement('div');row.className='part-row individual-row';
     const input=document.createElement('input');input.type='checkbox';input.dataset.objectVisibility=String(o.userData.objectIndex);input.checked=o.visible;input.disabled=o.userData.installed===false;
-    const text=document.createElement('span');text.className='part-label';text.textContent=t('side.'+o.userData.side)+' · '+(o.userData.ref||o.userData.key||partName(o.name.replace(/^(left|right)[\s·-]*/i,'')));
+    const text=document.createElement('button');text.type='button';text.className='part-label';
+    text.dataset.selectObject=String(o.userData.objectIndex);text.disabled=o.userData.installed===false;
+    if(o.userData.objectIndex===ref.objectIndex)text.setAttribute('aria-current','true');
+    text.textContent=t('side.'+o.userData.side)+' · '+(o.userData.ref||o.userData.key||partName(o.name.replace(/^(left|right)[\s·-]*/i,'')));
     input.dataset.name=text.textContent;input.setAttribute('aria-label',t('vis.show',{name:text.textContent}));const label=eyeToggle(input,t('vis.toggle',{name:text.textContent}));
     const current={group:o.userData.group,side:o.userData.side,key:o.userData.key,objectIndex:o.userData.objectIndex};
+    text.onclick=()=>{
+      explorer.select(current);
+      const chosen=list.querySelector('[aria-current="true"]');
+      chosen?.focus({preventScroll:true});chosen?.scrollIntoView({block:'nearest'});
+    };
     input.onchange=()=>{if(input.checked){hiddenObjects.delete(o.userData.objectIndex);state.layers[o.userData.group]=true;if(state.half!==o.userData.side)state.half='both';}else hiddenObjects.add(o.userData.objectIndex);sync();};
     row.onpointerenter=e=>{if(e.pointerType!=='touch')explorer.highlight(current);};row.onpointerleave=()=>explorer.highlight(null);
     row.onfocusin=()=>explorer.highlight(current);row.onfocusout=e=>{if(!row.contains(e.relatedTarget))explorer.highlight(null);};
@@ -1156,7 +1171,7 @@ $('show-all').onclick=showAll;
 for(const side of ['left','right'])$('install-frame-'+side).onchange=e=>{const cfg=copy(configuration);cfg.cases[side].cover=e.target.checked;applyConfiguration(cfg);};
 function describeSelection(ref){
   const magnets=ref.collection==='magnets';
-  $('selection-meta').textContent=magnets?t('sel.magnets.meta'):(ref.side?t('sel.half',{side:t('half.'+ref.side)}):t('sel.both'))+(ref.key?' / '+ref.key:'');
+  $('selection-meta').textContent=magnets?t('sel.magnets.meta'):(ref.side?t('sel.half',{side:t('half.'+ref.side)}):t('sel.both'))+(ref.key?' / '+(objects[ref.objectIndex]?.userData.ref||ref.key):'');
   $('selection-title').textContent=magnets?t('sel.magnets.title'):partInfo(ref.group).name;
   $('selection-info').textContent=magnets?t('sel.magnets.info'):partInfo(ref.group).info;
 }
@@ -1214,7 +1229,7 @@ async function copyLink(button){
   catch{if(activeMode!=='files'||!panelOpen)openPanel('files',button);$('share-link').focus();$('share-link').select();say('share-status','files.copyManual');return false;}
 }
 appearance=createAppearance({$,get:()=>configuration,apply:applyConfiguration,targets:kind=>kind==='case'?caseTargets():frameTargets(),preview,frameFinish,material,resize,catalog,geometryFor,printUses,printSelection,catalogLabel:id=>family[id].title});
-keycapColors=createKeycapColors({$,catalog,get:()=>configuration,apply:applyConfiguration,message,storageNotice:(text,error)=>storageNotice(text,error,'palettes')});
+keycapColors=createKeycapColors({$,catalog,onTargets:ids=>{capTargets=ids;render();},get:()=>configuration,apply:applyConfiguration,message,storageNotice:(text,error)=>storageNotice(text,error,'palettes')});
 applyConfiguration(configuration,{record:false,persist:false,fetch:!opening});
 if(storageMessage)storageNotice(storageMessage,true,'configuration');else if(restored){message(t('msg.restored'));saveState('save.done','saved');}else{message(t('msg.local'));saveState('','');}
 if(keycapColors.initialWarning)storageNotice(keycapColors.initialWarning,true,'palettes');

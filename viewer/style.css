@@ -363,7 +363,8 @@ details > :not(summary) { margin-top: 10px; }
 .part-list-heading { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
 #part-visibility-list { display: flex; flex-direction: column; }
 .individual-row { min-height: 48px; }
-.part-label { display: flex; align-items: center; flex: 1; min-width: 0; padding: 8px 6px; font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+.part-label { min-height:44px; text-align:left; border-radius:8px; display: flex; align-items: center; flex: 1; min-width: 0; padding: 8px 6px; font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+.part-label[aria-current=true] { font-weight:650; box-shadow:inset 3px 0 var(--accent); padding-left:10px; }
 #frame-install-options { padding: 16px; border-radius: 18px; background: var(--card); }
 
 /* Build: the way on at the end of Design (in line, never over the options), then numbered steps */

@@ -2,24 +2,24 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "e00abb092235d534466c336f643076e946bd9f43bc9abdbe4cd4085972cb5ac0",
-    "bytes": 116098
+    "sha256": "b389d324b5c5168802a4d240e204e6441b2138fa16fd6fdd7e72db0d529a95b2",
+    "bytes": 116101
   },
   "engine": {
-    "path": "docs/assets/home-engine-1ff039d322d4801b.js",
-    "sha256": "1ff039d322d4801bc20e2b4206ebfdf44d6cb46997a5907a267b018b1c852706",
-    "bytes": 603852
+    "path": "docs/assets/home-engine-15d16eb03a3f8452.js",
+    "sha256": "15d16eb03a3f8452b234ffc8bc5e1d25f21b4e4ef3449a0c488a3cd65f0b4411",
+    "bytes": 635209
   },
   "posters": [
     {
       "path": "docs/assets/home-poster.webp",
-      "sha256": "a13ab7f0cfbbc5c7d40edb5c40c6050038437e04dcbef967082baebf1abe2e0b",
-      "bytes": 87956
+      "sha256": "a14e466cc6487258a6990cde9383903af53ae51c441ec2f58584b6159d1d151d",
+      "bytes": 128792
     },
     {
       "path": "docs/assets/home-poster-800.webp",
-      "sha256": "838320c0f912ab18e7ab74379f51058436ad6ad3a8530a1158604fc84c09de94",
-      "bytes": 36860
+      "sha256": "e8a80c1fac0789e14cd1ea6c036243c20ed1591b602d3bb7d8bd03116aee321e",
+      "bytes": 48758
     }
   ],
   "packs": {
@@ -2052,7 +2052,7 @@
   "sources": [
     {
       "path": "viewer/home-build.mjs",
-      "sha256": "6627fb1afb0b839cd8fd326431fc30f3947625949681de19cd32b343f7b05aa9"
+      "sha256": "f6a1c7ea75dbbba742ccfe98198fc8a05cf589786b53aa6b73a923065fc8bc81"
     },
     {
       "path": "viewer/home/app.js",
@@ -2068,7 +2068,15 @@
     },
     {
       "path": "viewer/home/model.js",
-      "sha256": "4b4a302ba86b56c7091a46b49d62bc623cba068c2506495273ef6a6a4613cd80"
+      "sha256": "ce8c9ee03d1c5b39c827c6aa7cc5e4339db4374d8b0387d75c2fdd3ec38c2697"
+    },
+    {
+      "path": "viewer/studio.js",
+      "sha256": "3971d69f54e2c0495a33314e3ab2cc34943bda7b6bc6fa3b9f9d5ad95d9ca7bc"
+    },
+    {
+      "path": "viewer/contact-light.js",
+      "sha256": "edd83edd60ea87f6ca8bfc926d612d061e7a324017336ed9ba68ba390481c43c"
     },
     {
       "path": "viewer/home/creased.js",
@@ -2080,7 +2088,7 @@
     },
     {
       "path": "viewer/home/style.css",
-      "sha256": "b003bb0fc8bdcc0b55bf0ea51ef7997a2331f60c6bcf171a6a46b0f2a955f30b"
+      "sha256": "e4d0ded35f19c4e3c6b717877ff40e2c384771a7e2fa32c477169042405a7476"
     },
     {
       "path": "viewer/home/template.html",

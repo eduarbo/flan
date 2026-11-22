@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+import {selectionOutline} from './selection-outline.js';
 import * as THREE from 'three';
 import {t,language} from './i18n.js';
 
@@ -36,10 +37,9 @@ export const isMagnet=o=>/^(left|right)-(magnet|frame-target)-[0-2]$/.test(o.use
 export const matchesPart=(o,ref)=>Boolean(ref)&&(ref.collection==='magnets'?isMagnet(o):o.userData.group===ref.group)&&(!ref.side||o.userData.side===ref.side)&&(!ref.key||o.userData.key===ref.key)&&(ref.objectIndex===undefined||o.userData.objectIndex===ref.objectIndex);
 
 export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,requestRender}){
-  const $=id=>document.getElementById(id),ray=new THREE.Raycaster(),pointer=new THREE.Vector2(),overlay=new THREE.Group(),bounds=new Map(),highlights=new Map();
-  scene.add(overlay);
-  const glow=new THREE.MeshBasicMaterial({color:'#4285e8',transparent:true,opacity:.25,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2});
-  const xray=new THREE.MeshBasicMaterial({color:'#2785ff',transparent:true,opacity:.8,depthTest:false,depthWrite:false});
+  const $=id=>document.getElementById(id),ray=new THREE.Raycaster(),pointer=new THREE.Vector2(),overlay=new THREE.Scene(),bounds=new Map(),highlights=new Map();
+  const outline=selectionOutline();
+  const xray=new THREE.MeshBasicMaterial({color:'#2785ff',transparent:true,opacity:.66,toneMapped:false,depthTest:false,depthWrite:false});
   // Screen-sized locator dots remain legible when the 2 mm magnets are tiny.
   // These are annotations; the actual magnet geometry stays unchanged.
   const dotCanvas=document.createElement('canvas');dotCanvas.width=dotCanvas.height=64;
@@ -78,13 +78,21 @@ export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,req
   canvas.addEventListener('pointerup',e=>{const tap=down&&down.id===e.pointerId&&!down.moved&&pointers.size===1;pointers.delete(e.pointerId);down=null;if(tap){const found=hit(e);if(found)select(refOf(found.object));else clear();}});
   canvas.addEventListener('pointercancel',e=>{pointers.delete(e.pointerId);down=null;clearTimeout(pickTimer);});
   canvas.addEventListener('pointerleave',()=>{clearTimeout(pickTimer);setHover(null);canvas.style.cursor='';});
-  function update(){
-    const active=hovered||selected,highlighted=hovered||(['lid','keycaps'].includes(selected?.group)?null:selected),stamp=key(active)+':'+key(highlighted)+':'+revision;
-    if(stamp!==highlightStamp){
-      highlightStamp=stamp;for(const mesh of highlights.values())mesh.visible=false;
+  let previousKeys=null,hasOverlay=false;
+  function update(editorKeys=null){
+    const active=hovered||selected,stamp=key(hovered)+':'+key(selected)+':'+revision;
+    if(stamp!==highlightStamp||editorKeys!==previousKeys){
+      highlightStamp=stamp;previousKeys=editorKeys;
+      const outlined=objects.filter(o=>o.visible&&(selected?match(o,selected):
+        editorKeys&&o.userData.group==='keycaps'&&editorKeys.has(o.userData.side+':'+o.userData.key)));
+      outline.set(outlined);
+      for(const mesh of highlights.values())mesh.visible=false;
+      const highlighted=hovered&&key(hovered)!==key(selected)?hovered:(selected?.collection==='magnets'?selected:null);
+      hasOverlay=false;
       for(const o of objects)if((o.visible||hovered)&&match(o,highlighted)){
-        let mesh=highlights.get(o);if(!mesh){mesh=new THREE.Mesh(o.geometry,glow);highlights.set(o,mesh);overlay.add(mesh);}
-        const through=Boolean(hovered)||highlighted?.collection==='magnets';mesh.material=through?xray:glow;mesh.renderOrder=through?1000:0;mesh.geometry=o.geometry;mesh.position.copy(o.position);mesh.rotation.copy(o.rotation);mesh.scale.copy(o.scale);mesh.visible=true;
+        let mesh=highlights.get(o);if(!mesh){mesh=new THREE.Mesh(o.geometry,xray);highlights.set(o,mesh);overlay.add(mesh);}
+        mesh.geometry=o.geometry;mesh.position.copy(o.position);mesh.rotation.copy(o.rotation);mesh.scale.copy(o.scale);mesh.visible=true;
+        hasOverlay=true;
       }
       const positions=[];
       if(highlighted?.collection==='magnets'){
@@ -105,8 +113,15 @@ export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,req
     }
     if(activeKey!==key(active)){activeKey=key(active);for(const row of document.querySelectorAll('.part-row'))row.classList.toggle('is-highlighted',!active?.collection&&active?.group===row.dataset.group);}
   }
-  return {update,highlight:setHover,select,clear,
+  function draw(renderer){
+    if(hasOverlay){
+      const auto=renderer.autoClear;
+      try{renderer.autoClear=false;renderer.render(overlay,camera);}finally{renderer.autoClear=auto;}
+    }
+    outline.draw(renderer,camera);
+  }
+  return {update,draw,highlight:setHover,select,clear,
     invalidate(){revision++;requestRender();},layoutChanged(){requestRender();},cameraChanged(){requestRender();},
-    tint(color){glow.color.set(color);xray.color.set(color);requestRender();},
+    tint(color){xray.color.set(color);requestRender();},
     motion(value){moving=value;clearTimeout(pickTimer);if(value)hovered=null;requestRender();},get selected(){return selected;}};
 }
