@@ -6,5 +6,16 @@ export const KEYS=[['original','Original'],['normal','Sculpted'],['saddle','Sadd
 export const GROUPS=['size','theme','case','keys','frame'];
 // The look the page opens with and the one its fallback poster shows.
 export const DEFAULT={size:'flan36',theme:'eva-01',case:'rim',keys:'original',frame:{left:'snes',right:'phone'},own:{left:false,right:false}};
+export function themeName(theme, lang) {
+  return lang === 'es' ? theme.name_es ?? theme.name : theme.name;
+}
+
+export function labelThemeButton(button, theme, lang) {
+  const name = themeName(theme, lang);
+  button.title = name;
+  button.setAttribute('aria-label', name);
+  button.querySelector('span').textContent = name;
+}
+
 // a phone shows one group at a time
 export const TAB='theme';

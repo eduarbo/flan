@@ -1,6 +1,8 @@
 # Make it yours
 
-Open [the 3D explorer](https://flankbd.com/explore/) and pick a swatch under **Design → Theme**. The 31 presets use named Bambu Lab or Polymaker filaments for the case, frame and keycaps; **Per half** applies one to a single half.
+Open [the 3D explorer](https://flankbd.com/explore/) and pick a swatch under **Design → Theme**. The 32 presets use named Bambu Lab or Polymaker filaments for the case, frame and keycaps; **Per half** applies one to a single half.
+
+[Kokiri Forest](https://flankbd.com/explore/?theme=kokiri-forest) takes its palette from *The Legend of Zelda: Ocarina of Time*. With the Color rim case, forest green keys sit above an emerald plate. Blue and gold accent the thumbs and the display frames. In the Spanish selector, look for **Bosque Kokiri**.
 
 All five finger columns share the same base color. Each thumb gets its own coordinated accent, mirrored between halves. In **Caps → Colors**, eight independent palettes use the same filament catalog: **Sunset rows** colors whole finger rows and **Arcade thumbs** puts its bright accents on the three thumbs. **Original** keeps matching green thumbs.
 

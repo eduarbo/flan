@@ -39,7 +39,7 @@ Tools: soldering iron, 3D printer, an M2 tap and a small hex key. The parts guid
 
 - Case styles: Level, Solid, Color rim and Terrace.
 - Magnetic display frames: Talavera, Game Boy, SNES, 2000s Phone, iPod and Hanafuda. They are held by magnets instead of screws.
-- Colour themes: 31 presets that coordinate case, frame and keycaps, plus per-key, per-row and per-column keycap colours. Theme and frame names that refer to other products only describe a palette or a look; Flan is not affiliated with their owners.
+- Colour themes: 32 presets that coordinate case, frame and keycaps, plus per-key, per-row and per-column keycap colours. Theme and frame names that refer to other products only describe a palette or a look; Flan is not affiliated with their owners.
 - PCB looks: six back-silkscreen editions (Asanoha, Kikko, Sayagata, Seigaiha, Meandro, Vias) and seven solder-mask colours, previewed in the explorer.
 - Screws: low-head reference screws, or an option for ordinary M2 machine screws (Flan36).
 

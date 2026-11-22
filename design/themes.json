@@ -171,6 +171,27 @@
       }
     },
     {
+      "id": "kokiri-forest",
+      "name": "Kokiri Forest",
+      "name_es": "Bosque Kokiri",
+      "base": "#60ad70",
+      "plate": "#22624f",
+      "frame": {
+        "body": "#60ad70",
+        "detail": "#22624f",
+        "accent": "#5472d0",
+        "secondary": "#e4bd68"
+      },
+      "keycaps": {
+        "base": "#60ad70",
+        "thumbs": [
+          "#22624f",
+          "#5472d0",
+          "#e4bd68"
+        ]
+      }
+    },
+    {
       "id": "phone",
       "name": "2000s Phone",
       "recommended_frame": "phone",

@@ -8,7 +8,8 @@ import {printThemes,printableTheme,bindPresetColors} from './preset-filaments.js
 import {copy} from './config.js';
 import {paletteColor} from './keycap-colors.js';
 import {framePalette,finishes} from './finishes.js';
-import {t,tOr,onLanguage} from './i18n.js';
+import {themeName,labelThemeButton} from './home/options.js';
+import {t,tOr,onLanguage,language} from './i18n.js';
 export {savedKey} from './storage.js';
 export function applyTheme(config,source,sides){
  const c=copy(config),theme=printThemes.includes(source)?source:printableTheme(source);
@@ -31,7 +32,7 @@ export function createAppearance({$,get,apply,targets,preview,frameFinish,materi
  decorateFilamentDisclosure($('theme-filaments'));
  let themeSide='both';const sides=()=>themeSide==='both'?['left','right']:[themeSide];
  // A theme is a swatch, as on the home page: the case on top, the plate below, the frame's accent as a dot.
- for(const t of printThemes){const b=document.createElement('button');b.type='button';b.dataset.theme=t.id;b.title=t.name;b.setAttribute('aria-pressed','false');b.setAttribute('aria-label',t.name);b.style.cssText=`--a:${t.base};--b:${t.plate};--c:${t.frame.accent}`;const name=document.createElement('span');name.textContent=t.name;b.append(name);b.onclick=()=>apply(applyTheme(get(),t,sides()));$('themes-grid').append(b);}
+ for(const t of printThemes){const b=document.createElement('button');b.type='button';b.dataset.theme=t.id;b.setAttribute('aria-pressed','false');b.style.cssText=`--a:${t.base};--b:${t.plate};--c:${t.frame.accent}`;b.append(document.createElement('span'));labelThemeButton(b,t,language());b.onclick=()=>apply(applyTheme(get(),t,sides()));$('themes-grid').append(b);}
  const library=createSpoolLibrary({$,getCurrentUses:()=>printUses(get()),getThemeUses:theme=>printUses(applyTheme(get(),theme,sides())),
   selectionLabel:()=>{const {scope,half}=printSelection();return [t('kit.'+scope),t('print.'+(get().print_setup?.mode||'ams')),t(half==='both'?'seg.both':'side.'+half)].join(' · ');}});
  for(const b of $('theme-target').children)b.onclick=()=>{themeSide=b.dataset.side;sync();};
@@ -111,7 +112,7 @@ export function createAppearance({$,get,apply,targets,preview,frameFinish,materi
  }
  function sync(){
   const c=get();if($('theme-filaments').open)renderSpools(c);for(const b of $('theme-target').children)b.setAttribute('aria-pressed',String(themeSide===b.dataset.side));
-  let selected=null;for(const t of printThemes){const same=sides().every(side=>{const cs=c.cases[side],f=c.frames[side];return cs.base_color.toLowerCase()===t.base&&cs.plate_color.toLowerCase()===(cs.style==='level'?t.frame.body:t.plate)&&f.color.toLowerCase()===t.frame.body&&['detail','accent','secondary'].every(k=>f.accents[k].toLowerCase()===t.frame[k])&&catalog.layout[side].every(k=>c.keycaps[side][k.ref].color.toLowerCase()===paletteColor(t.keycaps,k));});$ ('themes-grid').querySelector(`[data-theme="${t.id}"]`).setAttribute('aria-pressed',String(same));if(same)selected=t.name;}
+  let selected=null;for(const t of printThemes){const same=sides().every(side=>{const cs=c.cases[side],f=c.frames[side];return cs.base_color.toLowerCase()===t.base&&cs.plate_color.toLowerCase()===(cs.style==='level'?t.frame.body:t.plate)&&f.color.toLowerCase()===t.frame.body&&['detail','accent','secondary'].every(k=>f.accents[k].toLowerCase()===t.frame[k])&&catalog.layout[side].every(k=>c.keycaps[side][k.ref].color.toLowerCase()===paletteColor(t.keycaps,k));});$ ('themes-grid').querySelector(`[data-theme="${t.id}"]`).setAttribute('aria-pressed',String(same));if(same)selected=themeName(t,language());}
   $('theme-current').textContent=selected||t('themes.custom');
   $('mobile-print-design').textContent=[catalogLabel(c.variant),themeSide==='both'?(selected||t('themes.custom')):null].filter(Boolean).join(' · ');
   const {half,scope}=printSelection();library.sync(c,[themeSide,half,scope].join('/'));
@@ -119,6 +120,8 @@ export function createAppearance({$,get,apply,targets,preview,frameFinish,materi
   for(const kind of ['case','frame']){const values=targets(kind).map(side=>c.cases[side].match_frame),input=$(`${kind}-link-colors`);input.checked=values.every(Boolean);input.indeterminate=values.some(Boolean)&&!input.checked;}
   $('theme-preview-note').textContent=themeSide==='both'?t('themes.note'):t('themes.noteHalf',{side:t('half.'+themeSide)});
  }
- onLanguage(()=>{for(const x of inputs){x.input.setAttribute('aria-label',t(x.label));if(x.part==='case')x.text.textContent=t(x.label);}sync();});
+ onLanguage(()=>{
+  for(const theme of printThemes)labelThemeButton($('themes-grid').querySelector(`[data-theme="${theme.id}"]`),theme,language());
+  for(const x of inputs){x.input.setAttribute('aria-label',t(x.label));if(x.part==='case')x.text.textContent=t(x.label);}sync();});
  return {sync};
 }

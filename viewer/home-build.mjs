@@ -178,7 +178,7 @@ async function homePage({scene,files}){
   const engineFile=`home-engine-${crypto.createHash('sha256').update(engine).digest('hex').slice(0,16)}.js`;
   fs.writeFileSync(path.join(assets,engineFile),engine);
   for(const f of fs.readdirSync(assets))if(/^home-engine-[0-9a-f]{16}\.js$/.test(f)&&f!==engineFile)fs.rmSync(path.join(assets,f));
-  const themes=printThemes.map(({id,name,base,plate,frame,keycaps,recommended_frame})=>({id,name,base,plate,frame,keycaps,recommended_frame}));
+  const themes=printThemes.map(({id,name,name_es,base,plate,frame,keycaps,recommended_frame})=>({id,name,name_es,base,plate,frame,keycaps,recommended_frame}));
   const family=read('design/variants.json').variants;
   const data={packs:Object.fromEntries(Object.entries(files).map(([k,f])=>[k,'assets/'+f])),engine:'assets/'+engineFile,themes,
     sizes:SIZES.map(id=>({id,title:family[id].title,grid:family[id].grid_per_half,keys:family[id].keys_total})),
@@ -216,6 +216,7 @@ async function homePage({scene,files}){
   if(!template.includes(`<div class="grp active" data-group="${TAB}">`))throw Error('The template must open on the '+TAB+' group.');
   for(const [slot,markup] of Object.entries(rail)){if(!template.includes(`<!--__${slot}__-->`))throw Error('Rail slot missing: '+slot);template=template.replace(`<!--__${slot}__-->`,()=>markup);}
   const html=template
+    .replaceAll('__THEME_COUNT__',String(themes.length))
     .replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(dir,'style.css'),'utf8'))
     .replaceAll('__OG_VERSION__',()=>crypto.createHash('sha256').update(fs.readFileSync(path.join(dir,'home-og.png'))).digest('hex').slice(0,12))   // sharing services cache by address
     .replace('<!--__SPECS__-->',()=>data.specs.map(([label,,value,note])=>
