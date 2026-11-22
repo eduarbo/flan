@@ -813,7 +813,7 @@ for(const [id,v] of Object.entries(family)){
     if(configuration.variant===id&&shownVariant(configuration)===id)return;
     say('size-note','size.loading',{name:v.title});
     try{const c=copy(configuration),dropped=Boolean(c.fasteners)&&!fastenersFit(c.fasteners,id);c.variant=id;if(dropped)delete c.fasteners;applyConfiguration(c);fit();
-      if(id===baseVariant)say('size-note',null,'');else say('size-note',dropped?'size.noteScrews':'size.note',{name:v.title,added:v.added.join(', ')});}
+      say('size-note',dropped?'size.noteScrews':null);}
     catch(e){say('size-note',null,e.message);}
   };
   $('size-grid').append(button);
