@@ -2,24 +2,24 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "0644aba9b1de0d65ff4c990beb5361fad32df614a947e9ef4b9422ca68726cd6",
+    "sha256": "a0c510cca6892461976c84cbcd152fb6f2d60919cea18f1c6c51189e6aba0ed0",
     "bytes": 116101
   },
   "engine": {
-    "path": "docs/assets/home-engine-3dc63e0ceb04b9fb.js",
-    "sha256": "3dc63e0ceb04b9fb4cad422874fa6d2d64b765f191f6191196971bb330899797",
-    "bytes": 638305
+    "path": "docs/assets/home-engine-99d3431793f0331d.js",
+    "sha256": "99d3431793f0331df209fbc14446492385fdf4db653decdcd0f9a8c24ff4f4f5",
+    "bytes": 640486
   },
   "posters": [
     {
       "path": "docs/assets/home-poster.webp",
-      "sha256": "1c01468e4e25a6aaf51b1ed9957562aa43c3c6df03f47c41e58487b93eaba8af",
-      "bytes": 178096
+      "sha256": "9a39e01759df3250363103d61e7335a5f27fe0853a2f876ef2a3dbe7921803e4",
+      "bytes": 158144
     },
     {
       "path": "docs/assets/home-poster-800.webp",
-      "sha256": "915bfd26b3cea62633d540b977f3edb554c0c4c680d66a9ca7ce86ecf5138970",
-      "bytes": 64760
+      "sha256": "4bc7e406f15538e06c584a295183e78ace85b6fa41fb1fe6ba7ed33720328dcc",
+      "bytes": 61322
     }
   ],
   "packs": {
@@ -2072,11 +2072,11 @@
     },
     {
       "path": "viewer/studio.js",
-      "sha256": "0f32f3554e5e44e02518b8c5060bd92ccd1a6d9f49da59497a2306b1d38fb417"
+      "sha256": "56ff6636645d15e9d7d9352bf0cbe8287ca8166d00a61c4da448c282159b386d"
     },
     {
       "path": "viewer/contact-light.js",
-      "sha256": "ab4b3761e09c83e6c648a1ca50ab345e2fc779d5ce22751f6fad21b436471dbe"
+      "sha256": "e3cb805ced336cce84151ef704c6eb637eec4f1ea0a457970b4b19f910e3bebd"
     },
     {
       "path": "viewer/home/creased.js",

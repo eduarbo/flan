@@ -27,8 +27,8 @@ const WINDOW_SLOPE=.26;
 function softFloorShadow(shader){
   shader.fragmentShader=shader.fragmentShader.replace('#include <shadowmask_pars_fragment>', `
     #if defined(USE_SHADOWMAP) && NUM_SPOT_LIGHT_SHADOWS == 1
-    vec2 diskPoint(int i, int count, float rotation) {
-      float angle = float(i) * 2.39996323 + rotation;
+    vec2 diskPoint(int i, int count) {
+      float angle = float(i) * 2.39996323;
       return vec2(cos(angle), sin(angle)) * sqrt((float(i) + 0.5) / float(count));
     }
     float lightDistance(float depth) {
@@ -46,18 +46,17 @@ function softFloorShadow(shader){
       float span = ${(2*Math.tan(SPOT_ANGLE)).toFixed(5)} * distanceToFloor;
       float search = 14.0 / span;
       for (int i = 0; i < 12; ++i) {
-        vec2 uv = p.xy + search * diskPoint(i, 12, 0.0);
+        vec2 uv = p.xy + search * diskPoint(i, 12);
         depth = unpackRGBAToDepth(texture2D(spotShadowMap[0], uv));
         blocked += step(depth, receiver);
         separation += max(0.0, distanceToFloor - lightDistance(depth));
       }
       if (blocked == 0.0) return 1.0;
       float radius = clamp(separation / blocked * ${WINDOW_SLOPE.toFixed(2)} / span, texel.x, search);
-      // A stable rotation in light space breaks up sampling bands during camera orbits.
-      float rotation = 6.2831853 * fract(dot(floor(p.xy / texel), vec2(0.75487767, 0.56984029)));
+      // Keep the disk fixed in light space so adjacent floor texels share a continuous penumbra.
       float lit = 0.0;
       for (int i = 0; i < 40; ++i) {
-        vec2 uv = p.xy + radius * diskPoint(i, 40, rotation);
+        vec2 uv = p.xy + radius * diskPoint(i, 40);
         lit += texture2DCompare(spotShadowMap[0], uv, receiver);
       }
       return lit / 40.0;
