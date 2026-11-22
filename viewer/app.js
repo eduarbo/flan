@@ -171,12 +171,6 @@ const controls=new OrbitControls(camera,canvas);
 controls.enableDamping=false;controls.minZoom=.2;controls.maxZoom=14;
 controls.minPolarAngle=0;controls.maxPolarAngle=Math.PI;
 controls.touches.ONE=THREE.TOUCH.ROTATE;controls.touches.TWO=THREE.TOUCH.DOLLY_PAN;
-scene.add(new THREE.HemisphereLight('#ffffff','#9cafa0',2));
-// The last light is a neutral fill from below: it only reaches downward faces, so the PCB's
-// mask colour reads true in the Bottom view without changing the usual views.
-for(const [pos,power] of [[[20,250,160],2.4],[[-220,100,-180],1.1],[[360,30,20],.7],[[30,-300,60],1.9]]){
-  const light=new THREE.DirectionalLight('#ffffff',power);light.position.fromArray(pos);scene.add(light);
-}
 // A soft contact shadow under what is shown. It belongs to the scene, so it turns with the model and is
 // seen only from above; it is not a part, so picking, fitting and exports ignore it.
 const ground=(()=>{
@@ -275,10 +269,9 @@ for(const part of data.parts){
 }
 // Runtime scene uses x=CAD x, y=CAD z, z=CAD y; right-hand meshes are not mirrored again.
 let explorer,appearance,keycapColors,renderFrame=0,silkHook=null;   // silkHook: set once the silkscreen layer exists
-// The lit, shadowed look (studio.js). ?render=flat keeps the earlier evenly lit one, and so does a browser
-// without hardware acceleration, where shadow maps on the CPU would be too slow.
 const software=(()=>{try{const gl=renderer.getContext(),info=gl.getExtension('WEBGL_debug_renderer_info');return /swiftshader|llvmpipe|software|basic render/i.test(info?gl.getParameter(info.UNMASKED_RENDERER_WEBGL):'');}catch{return false;}})();
-const studio=software||new URLSearchParams(location.search).get('render')==='flat'?null:createStudio({renderer,scene,objects,ground});
+const lightweight=software||new URLSearchParams(location.search).get('render')==='flat';
+const studio=createStudio({renderer,scene,camera,objects,ground,lightweight});
 function draw(){renderFrame=0;explorer?.update();studio?.dress();renderer.render(scene,camera);$('loading').hidden=true;}
 function render(){if(!renderFrame)renderFrame=requestAnimationFrame(draw);}
 // right away: after a card's picture was drawn on this canvas, so no frame shows it
