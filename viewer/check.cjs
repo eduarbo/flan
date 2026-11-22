@@ -32,7 +32,13 @@ const settle=page=>page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>re
 async function panel(page,mode){if(await page.locator('body').getAttribute('data-panel-open')!=='true'||await page.locator('body').getAttribute('data-mode')!==mode||await page.locator('body').getAttribute('data-detail')==='true')await press(page,'#nav-'+mode);await settle(page);}
 // A Design section, with its Fine-tune open so every control in it is reachable.
 async function category(page,name){await panel(page,'customize');await press(page,`#editor-tabs [data-panel="${name}"]`);assert.equal(await page.locator('#panel-'+name).isVisible(),true);const tune=page.locator(`#panel-${name} .tune[aria-expanded=false]`);if(await tune.count()&&await tune.isVisible())await press(page,`#panel-${name} .tune`);}
-async function close(page){if(await page.locator('#workspace').isVisible())await press(page,'#panel-close');await settle(page);}
+async function close(page){
+  if(!await page.locator('#workspace').isVisible())return;
+  // The full-width Build guide has its own way back to the design and its camera.
+  if(await page.locator('body[data-build-focus=true] #build-edit').isVisible())await press(page,'#build-edit');
+  await press(page,'#panel-close');
+  await settle(page);
+}
 async function recovery(page){await panel(page,'files');if(await page.locator('#recovery').getAttribute('open')===null)await press(page,'#recovery summary');}
 // Installed display frames live in Parts → Frame; eyes, Solo and Show all never change them.
 async function installFrames(page,sides){await panel(page,'inspect');await press(page,'#part-lid');for(const [side,on] of Object.entries(sides))await page.locator('#install-frame-'+side).setChecked(on);await press(page,'#panel-back');}
@@ -100,6 +106,8 @@ async function framePixel(page){
 }
 
 (async()=>{
+ const {printFrameColors}=await import('./preset-filaments.js');
+ const frameColors=Object.fromEntries(frameStyles.map(style=>[style,printFrameColors(palettes.styles[style].colors)]));
  const browser=await chromium.launch({headless:true,...(process.env.FLAN36_BROWSER?{executablePath:process.env.FLAN36_BROWSER}:{})});
  try{
   const context=await browser.newContext({viewport:{width:1440,height:960},acceptDownloads:true});
@@ -156,7 +164,7 @@ async function framePixel(page){
   const legacy=JSON.parse(JSON.stringify(scene.catalog.default_configuration));delete legacy.cases;
   await page.locator('#load-config').setInputFiles({name:'legacy.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(legacy))});
   assert.equal(await page.locator('#config-status').getAttribute('data-error'),'false');
-  await page.click('#reset');assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount} visible`));
+  await close(page);await page.click('#reset');assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount} visible`));
   await category(page,'cases');await page.click('[data-case=rim]');await installFrames(page,{left:false,right:false});await close(page);await page.mouse.move(10,20);
   await page.click('[data-view=top]');await settle(page);
   await page.locator('#canvas').screenshot({path:path.join(root,'build/case-variants/rim-open-top.png'),style:bare});
@@ -249,9 +257,9 @@ async function framePixel(page){
   // Keyboard activation changes shape without erasing custom colors; restore explicitly selects its design palette.
   await page.locator('[data-style=phone]').focus();await page.keyboard.press('Enter');
   assert.equal(await page.locator('#color-current').textContent(),'Mixed colors');await page.click('#theme-colors');
-  assert.equal(await page.locator('#frame-color').inputValue(),palettes.styles.phone.colors.body.toLowerCase());
+  assert.equal(await page.locator('#frame-color').inputValue(),frameColors.phone.body);
   await page.click('#frame-target [data-side=left]');await page.locator('#frame-link-colors').uncheck();await page.click('[data-style=hanafuda]');
-  assert.equal(await page.locator('#frame-color').inputValue(),palettes.styles.hanafuda.colors.body.toLowerCase(),'An uncustomized, unlinked frame adopts the newly selected palette');
+  assert.equal(await page.locator('#frame-color').inputValue(),frameColors.hanafuda.body,'An uncustomized, unlinked frame adopts the newly selected palette');
   await page.locator('#frame-color').fill('#ad7656');
   await page.click('#frame-target [data-side=right]');await page.click('[data-color="#ded8c6"]');
   await page.click('#frame-target [data-side=left]');
@@ -310,7 +318,7 @@ async function framePixel(page){
     const primitives=gltf.meshes[node.mesh].primitives,style=node.extras.frame_style;
     assert.equal(primitives.length,4,'Themed GLB retains four surface colors');
     for(const [i,role] of palettes.roles.entries()){
-      const hex=role==='body'?config.frames[node.extras.side].color:palettes.styles[style].colors[role];
+      const hex=role==='body'?config.frames[node.extras.side].color:frameColors[style][role];
       const expected=[1,3,5].map(at=>linear(parseInt(hex.slice(at,at+2),16)));
       const actual=gltf.materials[primitives[i].material].pbrMetallicRoughness.baseColorFactor;
       expected.forEach((n,j)=>assert.ok(Math.abs(n-actual[j])<1e-5,'GLB '+style+' '+role+' color'));
@@ -327,9 +335,9 @@ async function framePixel(page){
     const battery=gltf.nodes.find(n=>n.extras?.side===side&&n.extras?.group==='battery');
     assert.equal(battery.extras.battery_profile,'301230');
     assert.deepEqual(positionBytes(battery),Buffer.from(scene.geometries[`mechanical/revI/${side}-battery-301230.stl`].positions,'base64'));
-    const frameMagnets=gltf.nodes.filter(n=>n.extras?.side===side&&n.name.includes('Captive frame magnet'));
+    const frameMagnets=gltf.nodes.filter(n=>n.extras?.side===side&&/^.+-frame-target-\d+$/.test(n.extras?.part_id||''));
     assert.equal(frameMagnets.length,3);
-    for(const [i,magnet] of frameMagnets.entries())assert.deepEqual(positionBytes(magnet),Buffer.from(scene.geometries[`mechanical/revI/${side}-frame-target-${i}.stl`].positions,'base64'),'Frame selection preserves captive frame magnets');
+    for(const [i,magnet] of frameMagnets.entries())assert.deepEqual(positionBytes(magnet),Buffer.from(scene.geometries[`mechanical/revI/${side}-frame-target-${i}.stl`].positions,'base64'),'Frame selection preserves each frame magnet');
   }
   const capPath=scene.catalog.variants.find(v=>v.id===config.keycaps.left.K30.variant).path;
   assert.deepEqual(positionBytes(customCap),Buffer.from(scene.geometries[capPath].positions,'base64'),'GLB must contain selected cap vertices');
@@ -416,16 +424,16 @@ async function framePixel(page){
   await page.click('#reset');await category(page,'frames');await page.click('#frame-target [data-side=both]');
   for(const style of frameStyles){
     await page.click(`[data-style=${style}]`);await page.click('#theme-colors');await page.mouse.move(10,100);
-    assert.equal(await page.locator('#frame-color').inputValue(),palettes.styles[style].colors.body.toLowerCase());
+    assert.equal(await page.locator('#frame-color').inputValue(),frameColors[style].body);
     await page.screenshot({path:path.join(root,`build/viewer-multicolor/${style}.png`)});
   }
   await page.locator('#frame-color').fill('#ad7656');await page.click('#theme-colors');
-  assert.equal(await page.locator('#frame-color').inputValue(),palettes.styles.hanafuda.colors.body.toLowerCase());
+  assert.equal(await page.locator('#frame-color').inputValue(),frameColors.hanafuda.body);
   await page.locator('#frame-grid').screenshot({path:path.join(root,'build/viewer-multicolor/previews.png')});
   await phone.setViewportSize({width:390,height:844});await phone.locator('#reset').tap();await category(phone,'frames');await phone.locator('[data-style=hanafuda]').tap();
   await phone.evaluate(()=>document.querySelector('#inspector').scrollTop=0);
   await phone.screenshot({path:path.join(root,'build/viewer-multicolor/mobile.png')});await checkDirectory(phone);
-  await recovery(page);await page.click('#default-config');await page.click('#reset');await category(page,'cases');await page.click('#case-target [data-side=both]');await page.click('[data-case=rim]');await page.mouse.move(10,20);await page.evaluate(()=>document.querySelector('#inspector').scrollTop=0);
+  await recovery(page);await page.click('#default-config');await close(page);await page.click('#reset');await category(page,'cases');await page.click('#case-target [data-side=both]');await page.click('[data-case=rim]');await page.mouse.move(10,20);await page.evaluate(()=>document.querySelector('#inspector').scrollTop=0);
   assert.equal(await page.locator('#case-grid').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length),4);
   await page.screenshot({path:path.join(root,'build/viewer-cases-desktop.png')});await checkDirectory(page);
   await category(phone,'cases');await phone.locator('[data-case=rim]').tap();await phone.evaluate(()=>document.querySelector('#inspector').scrollTop=0);
@@ -436,7 +444,7 @@ async function framePixel(page){
     all_12_layer_filters:true,individual_visibility:true,individual_and_group_solo:true,selection_visible_toggle:true,show_all_recovery:true,occluded_hover_xray_pixel_verified:true,floating_view_controls_clear_of_fitted_model:true,fit_actual_pixels_after_zoom:true,fit_empty_feedback:true,full_row_hover:true,orbit_drag:true,bottom_view:true,full_reset_pixel_identical:true,
     component_rows_reachable:true,keyboard_component_selection:true,direct_canvas_picking:true,frame_change_preserves_hidden_cover:true,orbit_does_not_select:true,touch_orbit_and_pinch_do_not_select:true,small_320px_viewport:true,
     approved_preview_cards:frameStyles.length,multicolor_glb_roles:true,one_click_frames:true,keyboard_frame_activation:true,mixed_style_and_color_state:true,theme_applies_palette_and_body_overrides_roundtrip:true,sidebar_hover_highlight:true,part_page_customizes_frame:true,touch_frame_cards_and_sidebar:true,hidden_selection_marked:true,highlight_excluded_from_glb:true,
-    dual_battery_selection_and_exact_glb:true,captive_frame_magnets_preserved:true,keycap_variant_from_design_file:true,frame_style_and_color:true,distinct_themed_geometries:frameStyles.length,json_roundtrip:true,invalid_combination_rejected:true,glb_matches_custom_configuration:true,glb_selected_vertices_exact:true,glb_objects:expectedCount,glb_keycaps:36,glb_units:'metres',case_variants:Object.keys(scene.catalog.case_styles).length,case_previews_distinct:true,case_glb_meshes_exact:true,open_cover_configuration:true,legacy_case_default:true,runtime_errors:errors,offline_network_requests:requests.length};
+    dual_battery_selection_and_exact_glb:true,frame_magnets_preserved:true,keycap_variant_from_design_file:true,frame_style_and_color:true,distinct_themed_geometries:frameStyles.length,json_roundtrip:true,invalid_combination_rejected:true,glb_matches_custom_configuration:true,glb_selected_vertices_exact:true,glb_objects:expectedCount,glb_keycaps:36,glb_units:'metres',case_variants:Object.keys(scene.catalog.case_styles).length,case_previews_distinct:true,case_glb_meshes_exact:true,open_cover_configuration:true,legacy_case_default:true,runtime_errors:errors,offline_network_requests:requests.length};
   // Case captures stay under build/; capture-readme.cjs owns the README images.
   const caseImages={};for(const [name,source] of [['level','level'],['solid','solid'],['rim','rim'],['terrace','terrace'],['rim-open','rim-open-top']])caseImages[name]=hash(fs.readFileSync(path.join(root,`build/case-variants/${source}.png`)));
   fs.writeFileSync(path.join(root,'build/case-variants/render.json'),JSON.stringify({viewer_sha256:hash(Buffer.from(html)),checker_sha256:hash(fs.readFileSync(__filename)),images:caseImages,source:'Unretouched screenshots of the actual selected native STL meshes in the viewer'},null,2)+'\n');
