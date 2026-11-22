@@ -10,7 +10,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/build-controls
   const page=await browser.newPage({viewport:{width:1440,height:1000},reducedMotion:'reduce'}),errors=[],cases=[];page.setDefaultTimeout(60000);page.on('pageerror',e=>errors.push(e.message));
   await page.goto(server.base+'explore/?diagnostics');await page.waitForFunction(()=>window.flan36,null,{timeout:120000});await page.click('#nav-files');
   const inspect=async(name)=>{
-   await page.locator('#build-print').evaluate(n=>n.scrollIntoView({block:'start'}));
+   console.log('Checking',name);await page.locator('#build-nav [data-target=build-print]').click();
    await page.waitForFunction(()=>document.querySelector('#build-nav [aria-current]')?.dataset.target==='build-print');
    const metrics=await page.locator('#build-print').evaluate(card=>{
     const c=card.getBoundingClientRect(),measure=e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return {label:e.textContent.trim(),width:r.width,height:r.height,left:r.left,right:r.right,clipped:e.scrollWidth>e.clientWidth+1||e.scrollHeight>e.clientHeight+1,ellipsis:s.textOverflow==='ellipsis'};};
@@ -34,9 +34,16 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/build-controls
   await page.locator('#print-half [data-value=both]').focus();await page.keyboard.press('Tab');assert.equal(await page.locator('#print-half [data-value=left]').evaluate(n=>n===document.activeElement),true);await page.keyboard.press('Tab');await page.keyboard.press('Space');
   assert.equal(await page.locator('#print-half [data-value=right]').getAttribute('aria-pressed'),'true');await page.keyboard.press('Tab');assert.equal(await page.locator('#print-scope [data-value=complete]').evaluate(n=>n===document.activeElement),true);await page.keyboard.press('Tab');await page.keyboard.press('Enter');
   assert.equal(await page.locator('#print-scope [data-value=shells]').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('#print-half [aria-pressed=true]').count(),1);assert.equal(await page.locator('#print-scope [aria-pressed=true]').count(),1);
-  assert.match(await page.locator('#build-print-contents summary').textContent(),/Right.*Shells/);assert.equal(await page.locator('[data-cap-count]').count(),0);const parts=await page.locator('[data-print-part]').evaluateAll(es=>es.map(e=>e.dataset.printPart).sort());assert(parts.length>0&&parts.every(id=>id.startsWith('right-')));
-  for(const id of ['print-method','print-bed']){await page.keyboard.press('Tab');assert.equal(await page.locator('#'+id).evaluate(n=>n===document.activeElement),true);}
-  await page.keyboard.press('Tab');assert.equal(await page.locator('#build-print-contents summary').evaluate(n=>n===document.activeElement),true);await page.keyboard.press('Tab');assert.equal(await page.locator('#print-project').evaluate(n=>n===document.activeElement),true);
+  assert.match(await page.locator('#build-print-contents summary').textContent(),/Right.*Case \+ frames/);assert.equal(await page.locator('[data-cap-count]').count(),0);const parts=await page.locator('[data-print-part]').evaluateAll(es=>es.map(e=>e.dataset.printPart).sort());assert(parts.length>0&&parts.every(id=>id.startsWith('right-')));
+  await page.keyboard.press('Tab');assert(await page.locator('#print-scope [data-value=caps]').evaluate(n=>n===document.activeElement));
+  for(const id of ['print-printer','print-method','print-bed']){await page.keyboard.press('Tab');assert.equal(await page.locator('#'+id).evaluate(n=>n===document.activeElement),true);}
+  await page.keyboard.press('Tab');assert.equal(await page.locator('#build-print-contents summary').evaluate(n=>n===document.activeElement),true);
+  await page.locator('#print-plate-plan').scrollIntoViewIfNeeded();await page.locator('.pp-figure canvas').waitFor();
+  const preview=page.locator('#print-plate-plan').locator('button:visible:enabled,summary:visible');
+  for(const control of await preview.all()){
+   await page.keyboard.press('Tab');assert(await control.evaluate(n=>n===document.activeElement),'plate controls follow inventory in keyboard order');
+  }
+  await page.keyboard.press('Tab');assert(await page.locator('#print-project').evaluate(n=>n===document.activeElement));
   const projectEvent=page.waitForEvent('download');await page.keyboard.press('Enter');const project=await projectEvent;
   assert.match(project.suggestedFilename(),/-right-shells\.3mf$/);const projectPath=path.join(out,project.suggestedFilename());await project.saveAs(projectPath);
   const model=cp.execFileSync('unzip',['-p',projectPath,'3D/3dmodel.model'],{encoding:'utf8',maxBuffer:30e6});
@@ -46,7 +53,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/build-controls
   const event=page.waitForEvent('download');await page.keyboard.press('Enter');const d=await event,file=path.join(out,d.suggestedFilename());await d.saveAs(file);const manifest=JSON.parse(cp.execFileSync('unzip',['-p',file,'manifest.json'],{encoding:'utf8',maxBuffer:2e6}));assert.equal(manifest.half,'right');assert.equal(manifest.scope,'shells');assert.deepEqual(manifest.parts.map(p=>p.id).sort(),parts);
   assert.equal(manifest.project,project.suggestedFilename());
   assert.deepEqual(cp.execFileSync('unzip',['-p',file,manifest.project],{maxBuffer:10e6}),fs.readFileSync(projectPath));
-  await page.locator('#build-more').evaluate(n=>n.open=true);const guideEvent=page.waitForEvent('download');await page.click('#build-plan');const guide=await guideEvent,guidePath=path.join(out,guide.suggestedFilename());await guide.saveAs(guidePath);const html=fs.readFileSync(guidePath,'utf8');assert.doesNotMatch(html,/class="print-options"/);assert.match(html,/Right.*Shells/);assert.match(html,/HASL/);
+  await page.locator('#build-more').evaluate(n=>n.open=true);const guideEvent=page.waitForEvent('download');await page.click('#build-plan');const guide=await guideEvent,guidePath=path.join(out,guide.suggestedFilename());await guide.saveAs(guidePath);const html=fs.readFileSync(guidePath,'utf8');assert.doesNotMatch(html,/class="print-options"/);assert.match(html,/Right.*Case \+ frames/);assert.match(html,/HASL/);
   assert.deepEqual(errors,[]);const report={cases:cases.map(c=>({name:c.name,card_width:c.card.width,download_width:c.download.width,labels:c.buttons.map(b=>b.label)})),all_labels_visible:true,content_sized_download:true,wrapped_fields:true,shared_panel_minimum:280,keyboard_selection_and_download:true,single_3mf_matches_selection:true,individual_zip_matches_selection:true,portable_guide_preserved:true,browser:await browser.version(),errors};
   fs.writeFileSync(path.join(root,'validation/build-controls.json'),JSON.stringify(report,null,2)+'\n');console.log(report);
  }finally{await browser.close();server.close();}

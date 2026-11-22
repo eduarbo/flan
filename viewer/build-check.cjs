@@ -38,7 +38,13 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/build-workflow
    console.log('Checking list and files',variant);await page.click('#nav-customize');await page.click('[data-panel="size"]');await page.click('#size-grid [data-variant="'+variant+'"]');
    await page.waitForFunction(id=>window.flan36.snapshot().configuration.variant===id,variant);await ready();await open();
    assert.equal(await count('switch'),keys);assert.equal(await count('m6'),screws);
-   assert.equal(Number(await page.locator('[data-part="diode"]').getAttribute('data-buy')),buy);
+   const diode=page.locator('[data-part="diode"]');
+   assert.equal(await diode.count(),1);assert.equal(await diode.locator('input').count(),1);
+   assert.equal(Number(await diode.getAttribute('data-buy')),buy);
+   assert.equal(await diode.locator('.shopping-alternative a').textContent(),'Order '+keys+' pieces at DigiKey ↗');
+   assert.match(await diode.locator('.shopping-alternative a').getAttribute('href'),/1N4148W\/6022450$/);
+   assert.equal(await page.locator('[data-part="m6"]').getAttribute('data-buy'),'50');
+   assert.equal(await page.locator('[data-part="m4"]').getAttribute('data-buy'),'10');
    if(variant!=='flan36')assert.equal(await page.locator('[data-part="switch"] input').isChecked(),false,'changed quantities need checking again');
    assert(await page.locator('[data-part="nano"] input').isChecked(),'unchanged lines retain progress');
    const pcb=await page.locator('#build-pcb-downloads a').evaluateAll(es=>es.map(e=>({url:e.href,text:e.textContent})));
@@ -51,7 +57,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/build-workflow
   assert.equal(await page.locator('[data-print-part]').count(),2);assert.equal(await page.locator('[data-cap-count]').count(),0);
   assert.equal(await count('switch'),54,'printing one half does not shrink whole-build shopping');
   await page.click('#print-half [data-value=both]');await page.click('#print-scope [data-value=complete]');
-  const csv=fs.readFileSync(await download('#build-csv'),'utf8');assert.match(csv,/"54","60","6"/);assert.match(csv,/301230/);assert.match(csv,/https:\/\/typeractive.xyz/);
+  const csv=fs.readFileSync(await download('#build-csv'),'utf8');assert.match(csv,/"54","60","6"/);assert.match(csv,/301230/);assert.match(csv,/"DigiKey","54","Cut Tape · SMC Diode Solutions · 1655-1N4148WCT-ND"/);assert.match(csv,/https:\/\/typeractive.xyz/);
   const plan=fs.readFileSync(await download('#build-plan'),'utf8');assert.match(plan,/Flan54/);assert.match(plan,/HASL/);assert.match(plan,/2.80 mm/);assert.match(plan,/54 keys/);assert.match(plan,/one data cable in turn/);assert.match(plan,/Q–P positions in the alphabetic block/);assert.match(plan,/left-flan|flan54-left/);
   const planPage=await context.newPage();await planPage.goto('file://'+path.join(out,'Flan54-build-plan.html'));
   assert.equal(await planPage.locator('[data-part="switch"]').getAttribute('data-required'),'54');assert.equal(await planPage.locator('details:not([open])').count(),0);
@@ -73,8 +79,8 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/build-workflow
   const overflowing=await page.locator('#panel-files').evaluate(root=>[...root.querySelectorAll('*')].filter(e=>e.getClientRects().length&&!e.closest('.build-jumps')&&e.getBoundingClientRect().right>innerWidth+1).map(e=>e.id||e.className));
   assert.deepEqual(overflowing,[]);
   await page.setViewportSize({width:320,height:740});await jump('#build-buy');assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.screenshot({path:path.join(out,'shopping-small-phone.png')});await page.setViewportSize({width:390,height:844});
-  const esGuide=fs.readFileSync(await download('#build-plan'),'utf8');assert.match(esGuide,/Plan de construcción/);assert.match(esGuide,/Necesitas/);
-  const esCsv=fs.readFileSync(await download('#build-csv'),'utf8');assert.match(esCsv,/Necesarias/);assert.match(esCsv,/Derecha/);
+  const esGuide=fs.readFileSync(await download('#build-plan'),'utf8');assert.match(esGuide,/Plan de construcción/);assert.match(esGuide,/Necesitas/);assert.match(esGuide,/Pide 54 unidades en DigiKey/);
+  const esCsv=fs.readFileSync(await download('#build-csv'),'utf8');assert.match(esCsv,/Necesarias/);assert.match(esCsv,/"DigiKey","54","Cinta cortada/);assert.match(esCsv,/Derecha/);
   // A real generated print kit still matches the inventory shown before download.
   console.log('Generating selected print kit');const kit=await download('#print-kit');
   const manifest=JSON.parse(require('node:child_process').execFileSync('unzip',['-p',kit,'manifest.json'],{encoding:'utf8',maxBuffer:2e6}));

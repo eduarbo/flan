@@ -14,14 +14,15 @@ This is the selected purchasing BOM for the routed revI prototype, an original d
 
 ## Quantities by size
 
-Everything not listed here is the same for every size: two controllers, two displays, two batteries, two power switches, two reset buttons, the controller connectors, magnets, feet, cable and tape. Packs of switches, sockets and diodes come in tens; each count keeps at least four spares.
+Everything not listed here is the same for every size: two controllers, two displays, two batteries, two power switches, two reset buttons, the controller connectors, magnets, feet, cable and tape. Typeractive sells switches, sockets and diodes in packs of ten. The pack counts below include at least four spares. DigiKey also sells the diodes by the piece.
 
 | | Flan36 | Flan42 | Flan46 | Flan54 |
 |---|:-:|:-:|:-:|:-:|
 | Keys per half | 3 × 5 + 3 | 3 × 6 + 3 | 4 × 5 + 3 | 4 × 6 + 3 |
 | Choc v1 switches | 36 · **4 packs** | 42 · **5 packs** | 46 · **5 packs** | 54 · **6 packs** |
 | Choc hot-swap sockets | 36 · **4 packs** | 42 · **5 packs** | 46 · **5 packs** | 54 · **6 packs** |
-| 1N4148W diodes | 36 · **4 packs** | 42 · **5 packs** | 46 · **5 packs** | 54 · **6 packs** |
+| 1N4148W diodes · Typeractive | 36 · **4 packs** | 42 · **5 packs** | 46 · **5 packs** | 54 · **6 packs** |
+| Same diodes · DigiKey Cut Tape | 36 pieces | 42 pieces | 46 pieces | 54 pieces |
 | KLP Lamé keycaps (printed) | 36 | 42 | 46 | 54 |
 | M2 × 6 screws | 6 | 8 | 8 | 12 |
 | M2 × 4 screws | 4 | 4 | 4 | 4 |
@@ -38,10 +39,12 @@ Every key has its own diode. The added fasteners (H6 on Flan42, H7 on Flan46, H6
 | [nice!view](https://typeractive.xyz/products/nice-view) | **2 units** | Use each display's supplied 5-pin socket and header; 7.00 mm board separation |
 | [Choc v1 switches](https://typeractive.xyz/products/choc-switches) | **4 packs of 10**; Pro Red baseline | 36 required, 4 spares |
 | [Kailh hot-swap sockets](https://typeractive.xyz/products/hotswap-sockets) | **4 packs of 10; select Choc** | Do not select MX |
-| [1N4148W SMD diodes](https://typeractive.xyz/products/smd-diodes) | **4 packs of 10** | SOD-123 family; verify supplied marking/footprint |
+| [1N4148W SMD diodes](https://typeractive.xyz/products/smd-diodes) | **4 packs of 10** | Semtech 1N4148W, SOD-123. Align the cathode band with the PCB marking. |
 | [Battery jack](https://typeractive.xyz/products/battery-jack) | **1 pack of 2; white** | JST S2B-PH-K-S side-entry reference; 2 mm nominal footprint |
 
 No additional display connector pack is needed. The selected controller connectors, battery, power switch and reset button are in the following list; the similarly named Typeractive alternatives are not the selected parts.
+
+As an alternative to the Typeractive diode packs, DigiKey sells [SMC Diode Solutions 1N4148W in SOD-123, Cut Tape 1655-1N4148WCT-ND](https://www.digikey.com/en/products/detail/smc-diode-solutions/1N4148W/6022450). Enter the number of individual diodes you want. Either supplier covers the full diode row. For Flan54, 54 pieces covers the build and 60 leaves six spares. Compare the total at the displayed price breaks, including shipping if this adds another store.
 
 ## DigiKey shopping list
 
@@ -60,14 +63,16 @@ The 64-position strip replaces the unavailable 12-position version in the same 3
 
 ## Supply check 2026-10-20
 
+The dated subtotals below cover selected parts for Flan36. A complete build also needs the remaining electronics, two PCB orders and filament. For filament cost, use the sliced project’s total grams including purge and supports, divided by 1,000 and multiplied by your price per kilogram.
+
 Observed catalog availability is a snapshot, not a reservation or a delivery promise. Recheck the exact selection and final shipping/tax total at checkout.
 
 | Supplier / line | Observed result |
 |---|---|
 | Typeractive: nice!nano v2, nice!view, Pro Red, Choc sockets, diodes, white battery jack | All selected variants marked available in the supplier's product data. Two controllers, two displays, four packs each of switches/sockets/diodes and one jack pack: **US$128** before shipping/tax. Product links are above. |
 | DigiKey: Adafruit 1570, PCM12SMTR, TL3342F160QG/TR, 315-43-164-41-003000, 3320-0-00-15-00-00-03-0 | All five selected lines listed in stock. The PCM12SMTR remains obsolete; do not treat its remaining inventory as a production supply plan. Exact product links are above. |
-| [NBK SLH-M2-6](https://www.nbk1560.com/en-US/products/specialscrew/nedzicom/socketheadcapscrew/SLH/) | Exact low-head reference: Ø3.8 × 1.3 mm head, M2 × 6. Catalog pack of **50**, US$27.54; six used. Dispatch availability not verified. |
-| [NBK SSH-M2-4](https://www.nbk1560.com/en-US/products/specialscrew/nedzicom/socketheadcapscrew/SSH/) | Exact ultra-low-head reference: Ø4 × 1.1 mm head, M2 × 4. Catalog pack of **10**, US$15.91; four used. Dispatch availability not verified. |
+| [NBK SLH-M2-6](https://www.nbk1560.com/en-US/products/specialscrew/nedzicom/lowsmallheadscrew/SLH/SLH-M2/SLH-M2-6/?SelectedLanguage=en-US) | Exact low-head reference: Ø3.8 × 1.3 mm head, M2 × 6. Catalog pack of **50**, US$27.54; six used. Dispatch availability not verified. |
+| [NBK SSH-M2-4](https://www.nbk1560.com/en-US/products/specialscrew/nedzicom/ornament/SSH/SSH-M2/SSH-M2-4/?SelectedLanguage=en-US) | Exact ultra-low-head reference: Ø4 × 1.1 mm head, M2 × 4. Catalog pack of **10**, US$15.91; four used. Dispatch availability not verified. |
 
 The two NBK packs are **US$43.45** before shipping/tax. An ordinary M2 socket-head screw does not fit these head pockets; for Flan36, the explorer's optional [common M2 screws](common-fasteners.md) setting prints plates and frames with deeper pockets for them instead. These are catalog selections, not placed orders. Feet, cable and tape retain their existing references; their October 10 prices are historical.
 
@@ -91,7 +96,7 @@ Alternatives: clones require independent pinout, charger and idle-current checks
 
 <a href="https://typeractive.xyz/products/nice-view"><img src="https://cdn.shopify.com/s/files/1/0618/5674/3655/products/niceviewangle-cleaned-more-small.jpg?v=1671314667" width="210" alt="nice!view — supplier product photo"></a>
 
-**2 × nice!view**, with a single left display as the fallback. Reflective memory LCD; selected for low power. Each cover leaves the glass visible and hides the surrounding electronics.
+**2 × nice!view**, with a single left display as the fallback. The reflective memory LCD shows ZMK status. The right display reports its local peripheral status. For a single left display, order one and use the right-hand no-display UF2 for your keyboard size. Each cover leaves the glass visible and hides the surrounding electronics.
 
 **Technical reference:** [dimensions, pinout and schematic](https://nicekeyboards.com/docs/nice-view/pinout-schematic/). **Full specifications/setup:** [nice!view documentation](https://nicekeyboards.com/docs/nice-view/). **Buy:** [Typeractive](https://typeractive.xyz/products/nice-view).
 
@@ -101,7 +106,7 @@ A separate board PDF datasheet is not linked by the manufacturer; its dimensione
 
 <a href="https://typeractive.xyz/products/choc-switches"><img src="https://cdn.shopify.com/s/files/1/0618/5674/3655/products/choc-four.jpg?v=1674353978" width="210" alt="Kailh Choc v1 Low Profile Switches — supplier product photo"></a>
 
-**36 × Kailh Choc v1; 40 provides spares.** Pro Red 35 gf is the baseline; Pink 20 gf is lighter, Red 50 gf firmer, Brown tactile and White clicky. Silent Ambients are another Choc-family option to measure before adopting.
+**36 × Kailh Choc v1; 40 provides spares.** The PCB and printable keycaps target Choc v1 PG1350. Choc v2 requires a different mounting arrangement. Pro Red 35 gf is the baseline; Pink 20 gf is lighter, Red 50 gf firmer, Brown tactile and White clicky. Silent Ambients are another Choc-family option to measure before adopting.
 
 **Technical information:** [Kailh PG1350 family](https://www.kailhswitch.com/info/kailh-kl-switches-pg1350-series-23772219.html). **Variant specifications and purchase:** [Typeractive Choc v1](https://typeractive.xyz/products/choc-switches). **Silent alternative:** [LowproKB Ambients](https://lowprokb.ca/products/ambients-silent-choc-switches).
 

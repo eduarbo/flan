@@ -1038,7 +1038,7 @@ function syncConfigurationUI(){
   $('pcb-mask-current').textContent=pcbSide==='both'?maskSummary:maskName(selectedMasks[pcbSide]);
   for(const b of $('pcb-masks').children)b.setAttribute('aria-pressed',String(pcbTargets().every(side=>b.dataset.mask===selectedMasks[side].id)));
   paintThumbs();
-  $('pcb-downloads').replaceChildren(...['left','right'].map(side=>{const edition=selectedEditions[side],packages=flan36?edition.packages:edition.variants?.[variant]||family[variant].gerbers;const a=document.createElement('a');a.href=raw(packages[side]);const note=document.createElement('span');note.textContent=t('pcb.package',{edition:editionName(edition),mask:maskName(selectedMasks[side]).toLowerCase()});a.append(t('pcb.'+side),note);return a;}));
+  $('pcb-downloads').replaceChildren(...['left','right'].map(side=>{const edition=selectedEditions[side],packages=flan36?edition.packages:edition.variants?.[variant]||family[variant].gerbers;const a=document.createElement('a');a.href=raw(packages[side]);const note=document.createElement('span');note.textContent=t('pcb.package',{edition:editionName(edition),mask:maskName(selectedMasks[side]).toLowerCase()});const title=document.createElement('strong');title.textContent=t('pcb.'+side);a.append(title,note);return a;}));
   // Build: the same Gerbers, and the parts and firmware of the chosen size
   const sizeInfo=family[variant]||{title:'Flan36',keys_total:36};
   $('build-parts').textContent=t('build.parts.text',{size:sizeInfo.title,keys:sizeInfo.keys_total});

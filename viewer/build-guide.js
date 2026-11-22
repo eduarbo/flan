@@ -21,7 +21,7 @@ export function shoppingList(config,family){
   if(!required)return [];
   const packs=item.pack?Math.ceil((required+(item.quantity==='keys'?4:0))/item.pack):null;
   const buy=packs?packs*item.pack:item.buy||required;
-  return [{...item,required,packs,buy,halves,token:[item.id,required,buy,...halves].join(':')}];
+  return [{...item,required,packs,buy,halves,token:[item.id,required,item.fasteners?required:buy,...halves].join(':')}];
  });
 }
 const node=(tag,className,text)=>{const n=document.createElement(tag);if(className)n.className=className;if(text!==undefined)n.textContent=text;return n;};
@@ -30,6 +30,12 @@ const download=(filename,content,type)=>{const url=URL.createObjectURL(new Blob(
 const list=(items,ordered=true)=>{const n=node(ordered?'ol':'ul','build-instructions');for(const text of items)n.append(node('li','',text));return n;};
 function details(id,title,contents){const d=node('details','build-detail');d.id=id;d.append(node('summary','',title),...contents);return d;}
 const orderText=row=>row.packs?say('Buy '+row.packs+' pack'+(row.packs===1?'':'s')+' × '+row.pack+' = '+row.buy,'Compra '+row.packs+' paquete'+(row.packs===1?'':'s')+' × '+row.pack+' = '+row.buy):say('Order '+row.buy,'Pide '+row.buy);
+
+function alternativeNote(row){
+ const nextTier=row.required<50?50:100;
+ return say('One per key. Order '+row.buy+' for the same spares as the pack option. Compare your total at '+nextTier+' pieces if you want extras.',
+  'Uno por tecla. Pide '+row.buy+' para tener los mismos repuestos que con los paquetes. Si quieres más, compara el total al pedir '+nextTier+' unidades.');
+}
 
 export function createBuildGuide({catalog,family,inventory,getDesignLink,illustrations,editFilaments}){
  const $=id=>document.getElementById(id),storageKey='flan.build-parts.v1';
@@ -46,27 +52,41 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
     input.setAttribute('aria-label',say('Ready: ','Listo: ')+local(row.name));
     label.append(input,node('span','',say('Ready','Listo')));
     input.onchange=()=>{if(input.checked)checked[row.id]=row.token;else delete checked[row.id];try{localStorage.setItem(storageKey,JSON.stringify(checked));}catch{$('build-shopping-status').textContent=say('Checklist stays in this tab. Download the list to keep it.','La lista marcada queda en esta pestaña. Descárgala para conservarla.');}progress();};
-    const body=node('div','shopping-body'),name=node('strong','',local(row.name)),art=node('img','shopping-art');
+    const body=node('span','shopping-body'),name=node('strong','',local(row.name)),art=node('img','shopping-art');
     illustrations.show(art,row.id);art.alt='';art.width=240;art.height=180;
-    const quantity=node('p','shopping-quantity',say('Need ','Necesitas ')+row.required+(row.halves.length?' · '+row.halves.map(s=>t('side.'+s)).join(' + '):''));
+    const quantity=node('span','shopping-quantity',say('Need ','Necesitas ')+row.required+(row.halves.length?' · '+row.halves.map(s=>t('side.'+s)).join(' + '):''));
     body.append(name,quantity);
     const info=details('part-'+row.id,say('Details','Detalles'),[node('p','micro',local(row.note))]);info.className='shopping-info';
-    info.querySelector('summary').setAttribute('aria-label',say('Details: ','Detalles: ')+local(row.name));
+    if(row.alternative){
+     const offer=row.alternative,other=node('div','shopping-alternative');
+     const buy=link(say('Order '+row.required+' pieces at '+offer.supplier,'Pide '+row.required+' unidades en '+offer.supplier)+' ↗',offer.url);
+     buy.className='shopping-buy';
+     other.append(buy,node('p','micro',local(offer.packaging)+' · '+offer.reference),node('p','micro',alternativeNote(row)));
+     info.append(other);
+    }
+    const summary=info.querySelector('summary'),more=node('span','shopping-more',row.alternative?say('2 stores','2 tiendas'):summary.textContent);
+    more.setAttribute('aria-hidden','true');summary.replaceChildren(art,body,more);
+    summary.setAttribute('aria-label',say('Details: ','Detalles: ')+local(row.name)+(row.alternative?say(', 2 stores',', 2 tiendas'):''));
+    quantity.id='needed-'+row.id;summary.setAttribute('aria-describedby',quantity.id);
     const footer=node('div','shopping-footer');footer.append(label);
-    if(row.url){const a=link(orderText(row)+' ↗',row.url);a.className='shopping-buy';footer.append(a);}
-    item.append(art,body,info,footer);grid.append(item);
+    if(row.url){
+     const order=row.alternative?row.supplier+' · '+row.packs+' × '+row.pack+' = '+row.buy:orderText(row);
+     const a=link(order+' ↗',row.url);a.className='shopping-buy';footer.append(a);
+    }
+    item.append(info,footer);grid.append(item);
    }target.append(group);
   }progress();
  }
  function csv(){
-  const header=say(['Item','Supplier','Required','Order quantity','Packs','Ready','For half','Selection / notes','URL'],['Pieza','Proveedor','Necesarias','Cantidad de compra','Paquetes','Lista','Mitad','Selección / notas','URL']);
-  const values=rows.map(r=>[local(r.name),r.supplier==='workbench'?say('Workbench','Taller'):r.supplier,r.required,r.buy,r.packs||'',checked[r.id]===r.token?say('Yes','Sí'):'',r.halves.map(s=>t('side.'+s)).join(' + '),local(r.note),r.url]);
+  const header=say(['Item','Supplier','Required','Order quantity','Packs','Ready','For half','Selection / notes','URL','Alternative supplier (same part)','Order there (pieces)','Packaging / reference','Alternative URL'],['Pieza','Proveedor','Necesarias','Cantidad de compra','Paquetes','Lista','Mitad','Selección / notas','URL','Proveedor alternativo (misma pieza)','Pedido alternativo (unidades)','Presentación / referencia','URL alternativa']);
+  const values=rows.map(r=>[local(r.name),r.supplier==='workbench'?say('Workbench','Taller'):r.supplier,r.required,r.buy,r.packs||'',checked[r.id]===r.token?say('Yes','Sí'):'',r.halves.map(s=>t('side.'+s)).join(' + '),local(r.note),r.url,r.alternative?.supplier||'',r.alternative?r.required:'',r.alternative?local(r.alternative.packaging)+' · '+r.alternative.reference:'',r.alternative?.url||'']);
   return '\uFEFF'+[header,...values].map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n')+'\r\n';
  }
  async function planHTML({complete=false,bundled=false}={}){
   const copy=$('build-workflow').cloneNode(true),title=family[current.variant].title+' · '+say('Build plan','Plan de construcción');
   const exactLink=getDesignLink(),locale=language(),footer=say('Generated from your design. Use your browser’s Print command to save as PDF.','Generado con tu diseño. Usa Imprimir en el navegador para guardarlo como PDF.');
   if(complete)renderPrint({half:'both',scope:'complete',host:copy.querySelector('#build-print-list'),fitHost:copy.querySelector('#build-fit')});
+  copy.querySelector('#build-toolbar')?.remove();
   copy.querySelector('.build-export')?.remove();
   copy.querySelector('#print-plate-plan')?.remove();
   if(bundled){
@@ -88,7 +108,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   copy.querySelectorAll('details').forEach(n=>n.open=true);
   copy.querySelectorAll('input').forEach(n=>{if(n.type==='checkbox'){if(n.checked)n.setAttribute('checked','');n.disabled=true;}else n.remove();});
   const designLabel=say('Reopen this exact design','Volver a abrir este diseño exacto');const a=link(designLabel,await exactLink);a.id='build-design-link';copy.prepend(a);
-  const css='body{font:15px/1.6 system-ui,sans-serif;color:#172b35;max-width:920px;margin:32px auto;padding:0 24px}h2,h3{line-height:1.2}h3{margin-top:32px}h4{margin-bottom:8px}a{color:#715719}li{margin-bottom:8px}summary{font-weight:600;margin:16px 0 8px}.steps{padding-left:24px}.step{break-inside:auto;margin-bottom:28px}.shopping-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;align-items:start}.shopping-row{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px 12px;border:1px solid #ddd;border-radius:10px;padding:12px;break-inside:avoid}.shopping-art{width:80px;height:72px;object-fit:contain;align-self:center}.shopping-body{min-width:0;align-self:center;overflow-wrap:anywhere}.shopping-body p{margin:4px 0}.shopping-info,.shopping-footer{grid-column:1/-1}.shopping-info summary{margin:0}.shopping-footer{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;border-top:1px solid #ddd;padding-top:8px}.shopping-check{display:flex;gap:6px;align-items:center}.micro{font-size:13px;color:#485b63}.shopping-quantity{font-weight:600;font-size:12px}.downloads a{display:block;margin:12px 0}.downloads span{display:block;font-size:13px}dl>div{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #ddd;padding:6px 0}dd{margin:0;text-align:right}.config-actions,.sr-only,.segments,.field-label,#print-status{display:none}.build-summary{padding:12px 0;border-bottom:1px solid #ddd}.print-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #ddd}.print-row small{display:block}.color-dot{display:inline-block;width:10px;height:10px;border:1px solid #888;border-radius:50%;margin-right:5px;background:var(--sample)}@media print{body{margin:0;font-size:11pt}a{color:inherit;text-decoration:none}details{break-inside:auto}h3,h4,summary{break-after:avoid}}';
+  const css='body{font:15px/1.6 system-ui,sans-serif;color:#172b35;max-width:920px;margin:32px auto;padding:0 24px}h2,h3{line-height:1.2}h3{margin-top:32px}h4{margin-bottom:8px}a{color:#715719}li{margin-bottom:8px}summary{font-weight:600;margin:16px 0 8px}.steps{padding-left:24px}.step{break-inside:auto;margin-bottom:28px}.shopping-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;align-items:start}.shopping-row{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px 12px;border:1px solid #ddd;border-radius:10px;padding:12px;break-inside:avoid}.shopping-art{width:80px;height:72px;object-fit:contain;align-self:center}.shopping-body{min-width:0;align-self:center;overflow-wrap:anywhere}.shopping-body p{margin:4px 0}.shopping-info,.shopping-footer{grid-column:1/-1}.shopping-info summary{margin:0;display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center;gap:8px}.shopping-info summary .shopping-art{width:64px;height:56px}.shopping-body strong,.shopping-quantity{display:block}.shopping-more{display:none}.shopping-footer{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;border-top:1px solid #ddd;padding-top:8px}.shopping-check{display:flex;gap:6px;align-items:center}.micro{font-size:13px;color:#485b63}.shopping-quantity{font-weight:600;font-size:12px}.downloads a{display:block;margin:12px 0}.downloads span{display:block;font-size:13px}dl>div{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #ddd;padding:6px 0}dd{margin:0;text-align:right}.config-actions,.sr-only,.segments,.field-label,#print-status{display:none}.build-summary{padding:12px 0;border-bottom:1px solid #ddd}.print-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #ddd}.print-row small{display:block}.color-dot{display:inline-block;width:10px;height:10px;border:1px solid #888;border-radius:50%;margin-right:5px;background:var(--sample)}@media print{body{margin:0;font-size:11pt}a{color:inherit;text-decoration:none}details{break-inside:auto}h3,h4,summary{break-after:avoid}}';
   const credits=say('Part illustrations: original Flan nominal models and drawings; Choc switch/socket © 2019–2022 keyswitch-kicad-library contributors (MIT); power/reset models by KiCad library contributors (CC-BY-SA-4.0, library exception). Rendered for this guide.','Ilustraciones: modelos nominales y dibujos originales de Flan; switch/socket Choc © 2019–2022 keyswitch-kicad-library contributors (MIT); modelos de interruptor/reset por KiCad library contributors (CC-BY-SA-4.0, excepción de biblioteca). Renderizados para esta guía.');
   return '<!doctype html><html lang="'+locale+'"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>'+css+$('filament-reel-style').textContent+'</style><body>'+copy.outerHTML+'<p>'+footer+'</p><p class="micro">'+credits+' <a href="https://github.com/eduarbo/flan/blob/main/components/README.md">'+say('Sources & licenses','Fuentes y licencias')+'</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA-4.0</a> · <a href="https://github.com/eduarbo/flan/blob/main/components/sources/KiSwitch-MIT.txt">MIT</a></p></body></html>';
  }
@@ -234,7 +254,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
  }
  function renderFirmware(){
   const target=$('build-firmware');target.replaceChildren();
-  for(const side of sides){const a=link(t('build.firmware.'+side)+' · UF2 ↓',raw('firmware/uf2/'+current.variant+'-'+side+'.uf2'));a.append(node('span','',say(side==='left'?'Central · USB / Bluetooth to your computer':'Peripheral · connects to the left half',side==='left'?'Central · USB / Bluetooth a tu computadora':'Periférica · se conecta a la mitad izquierda')));target.append(a);}
+  for(const side of sides){const a=link('',raw('firmware/uf2/'+current.variant+'-'+side+'.uf2'));a.append(node('strong','',t('build.firmware.'+side)+' · UF2 ↓'),node('span','',say(side==='left'?'Central · USB / Bluetooth to your computer':'Peripheral · connects to the left half',side==='left'?'Central · USB / Bluetooth a tu computadora':'Periférica · se conecta a la mitad izquierda')));target.append(a);}
   target.append(link(say('Firmware sources & licenses','Fuentes y licencias del firmware'),'https://github.com/eduarbo/flan/blob/main/firmware/NOTICE.md'));
   const alternative=link(t('build.firmware.rightNoDisplay')+' · UF2 ↓',raw('firmware/uf2/'+current.variant+'-right-no-display.uf2'));
   $('build-firmware-alt').replaceChildren(details('build-single-display',say('Alternative: omit the right display','Alternativa: omitir la pantalla derecha'),[node('p','micro',say('The design above includes two displays. Use this file instead of the normal right UF2 only if you intentionally leave the right display out; reduce the shopping list to one display. Hiding a frame alone does not select this option.','El diseño de arriba incluye dos pantallas. Usa este archivo en lugar del UF2 derecho normal solo si decides omitir su pantalla; reduce entonces la compra a una pantalla. Quitar un marco no selecciona esta opción.')),alternative]));
@@ -253,6 +273,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   renderOverview();renderShopping();renderOrder();renderPrint();renderAssembly();renderFirmware();scheduleSection();
   for(const id of savedDetails){const d=$(id);if(d)d.open=true;}
   $('build-shopping-note').textContent=say('Quantities cover the complete keyboard, even when you export one half for printing. Mark parts you already have. Confirm price, stock and pack sizes at checkout.','Las cantidades cubren el teclado completo, aunque exportes una sola mitad para imprimir. Marca lo que ya tienes. Confirma precio, stock y tamaño de paquete al comprar.');
+  $('build-shopping-note').append(' ',link(say('Flan36 cost breakdown ↗','Costos de referencia de Flan36 ↗'),'https://github.com/eduarbo/flan/blob/main/docs/parts.md#supply-check-2026-10-20'));
  }
  return {update,capture:options=>({csv:csv(),guide:planHTML(options)})};
 }
