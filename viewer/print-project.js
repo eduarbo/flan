@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {zipSync,strToU8} from 'three/addons/libs/fflate.module.js';
-import {printerFor,printSettings} from './printer-presets.js';
+import {printSettings} from './printer-presets.js';
+import {planPlates} from './plate-layout.js';
 import {setupOf,spoolFor,spoolById} from './filament-swatches.js';
 import {readMaterials,meshObject,xml,printPlacement} from './print-geometry.js';
 
-const margin=8,frontMargin=32; // Leave the front-left calibration/exclusion area clear.
 const meta=(key,value)=>`<metadata key="${key}" value="${xml(String(value))}"/>`;
 const modelNS='http://schemas.microsoft.com/3dmanufacturing/core/2015/02';
 const relType='http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel';
@@ -16,41 +16,15 @@ function plateFamily(id){
  if(id.includes('-frame-'))return 'Display frames';
  return 'Internal parts';
 }
-function placeOnPlates(objects,{mode,bed,printer}){
- const left=margin+(printerFor(printer)?.leftInset||0);
- const gap=mode==='object'?82:6;
- const groups=new Map();
- for(const object of objects){
-  if(!groups.has(object.family))groups.set(object.family,[]);
-  groups.get(object.family).push(object);
- }
- const plates=[];
- for(const [family,group] of groups){
-  let plate,x,y,rowHeight;
-  function nextPlate(){
-   plate={family,items:[],slots:new Set()};plates.push(plate);x=left;y=frontMargin;rowHeight=0;
-  }
-  nextPlate();
-  if(mode==='object')group.sort((a,b)=>a.slots[0]-b.slots[0]);
-  for(const object of group){
-   // Allow the slicer to generate supports and brims around the side-lying sled.
-   const clearance=mode!=='object'&&object.name.endsWith('-display-sled')?8:0;
-   const w=object.size[0]+2*clearance,h=object.size[1]+2*clearance;
-   if(w>bed-left-margin||h>bed-frontMargin-margin)throw Error('Part exceeds the layout area: '+object.name);
-   for(let copy=0;copy<object.count;copy++){
-    if(mode!=='manual'&&new Set([...plate.slots,...object.slots]).size>4)nextPlate();
-    if(x+w>bed-margin){x=left;y+=rowHeight+gap;rowHeight=0;}
-    if(y+h>bed-margin)nextPlate();
-    for(const slot of object.slots)plate.slots.add(slot);
-    plate.items.push({object,copy,x:x+clearance,y:y+clearance});x+=w+gap;rowHeight=Math.max(rowHeight,h);
-   }
-  }
- }
- return plates;
+function bedTransform(object,x,y,turned){
+ const pose=object.placement?.transform()||[1,0,0,0,1,0,0,0,1,0,0,0];
+ if(turned)return [-pose[1],pose[0],pose[2],-pose[4],pose[3],pose[5],-pose[7],pose[6],pose[8],
+  x+object.size[1]-pose[10],y+pose[9],pose[11]];
+ pose[9]+=x;pose[10]+=y;return pose;
 }
 
 export async function combinedProject(parts,keycaps,title,config,progress){
- const setup=setupOf(config),{mode,bed}=setup;
+ const setup=setupOf(config),{bed}=setup;
  const entries=parts.map(part=>({part,count:1,family:plateFamily(part.id)}));
  for(const group of keycaps?.plan.groups||[]){
   const stl=keycaps.stl[group.variant];
@@ -62,13 +36,20 @@ export async function combinedProject(parts,keycaps,title,config,progress){
  for(const [index,{part,count,family}] of entries.entries()){
   progress(index+1,entries.length);await new Promise(requestAnimationFrame);
   const materials=readMaterials(part);
-  const placement=printPlacement(part.id,materials),{size,shift}=placement,volumes=[];
+  const placement=printPlacement(part.id,materials),{size,shift}=placement,volumes=[],heights=new Map();
+  const matrix=placement.transform();
   for(const m of materials){
    const color=(part.colors[m.role]||part.colors.body).toUpperCase();
    const spool=spoolById(part.spool)||spoolFor(config,part.side,color);
    const key=spool?.id||color;
    let slot=spools.findIndex(s=>s.key===key);
    if(slot<0){slot=spools.length;spools.push({key,color,series:spool?.series,label:spool?spool.series+' · '+spool.name:color});}
+   let z=matrix[11];
+   for(let axis=0;axis<3;axis++){
+    const factor=matrix[axis*3+2];
+    z+=factor*((factor<0?m.minimum:m.maximum)[axis]+shift[axis]);
+   }
+   heights.set(slot,Math.max(z,heights.get(slot)||0));
    const id=nextId++;
    resources.push(meshObject(m,shift,id,part.id+' '+m.role,slot));
    volumes.push({id,slot,name:m.role+' '+color+(spool?' · '+spool.series+' '+spool.name:'')});
@@ -79,27 +60,40 @@ export async function combinedProject(parts,keycaps,title,config,progress){
   const support=family==='Keycaps'||part.id.endsWith('-display-sled')?meta('enable_support','1'):'';
   settings.push(`<object id="${id}">${meta('name',part.id)}${meta('extruder',volumes[0].slot+1)}${support}${locator}${volumes.map(v=>`<part id="${v.id}" subtype="normal_part">${meta('name',v.name)}${meta('extruder',v.slot+1)}</part>`).join('')}</object>`);
   const slots=[...new Set(volumes.map(v=>v.slot))];
-  const plateName=mode==='manual'?spools[slots[0]].label:family;
-  objects.push({id,name:part.id,count,size,slots,placement,family:plateName});
+  objects.push({id,name:part.id,count,size,slots,heights,placement,family,volumes});
  }
- const plates=placeOnPlates(objects,setup);
+ const {plates,towerX,towerY}=planPlates(objects,setup);
  if(plates.length>36)throw Error('Bambu Studio: 36 plates maximum. Export one half or use fewer colors. / Máximo 36 camas. Exporta una mitad o usa menos colores.');
- const cols=Math.ceil(Math.sqrt(plates.length)),items=[];
+ const cols=Math.ceil(Math.sqrt(plates.length)),items=[],instances=new Map();
  for(const [i,plate] of plates.entries()){
   const members=[];
-  for(const {object,copy,x,y} of plate.items){
+  for(const {object,turned,x,y} of plate.items){
    // Bambu Studio spaces plate origins by 120% of the nominal bed dimensions.
    const dx=x+i%cols*bed*1.2,dy=y-Math.floor(i/cols)*bed*1.2;
-   items.push(`<item objectid="${object.id}" transform="${object.placement.transform(dx,dy).join(' ')}" printable="1"/>`);
+   if(object.members){
+    const slot=object.slots[0],label='Keycaps · '+spools[slot].label;
+    object.id=nextId++;
+    const components=object.members.map(({object:key,x,y,turned})=>
+     `<component objectid="${key.volumes[0].id}" transform="${bedTransform(key,x,y,turned).join(' ')}"/>`);
+    resources.push(`<object id="${object.id}" type="model" name="${xml(label)}"><components>${components.join('')}</components></object>`);
+    settings.push(`<object id="${object.id}">${meta('name',label)}${meta('extruder',slot+1)}${meta('enable_support',1)}</object>`);
+   }
+   const transform=bedTransform(object,dx,dy,turned);
+   const copy=instances.get(object.id)||0;instances.set(object.id,copy+1);
+   items.push(`<item objectid="${object.id}" transform="${transform.join(' ')}" printable="1"/>`);
    members.push(`<model_instance>${meta('object_id',object.id)}${meta('instance_id',copy)}${meta('identify_id',items.length)}</model_instance>`);
   }
-  settings.push(`<plate>${meta('plater_id',i+1)}${meta('plater_name',plate.family)}${meta('locked','false')}${meta('print_sequence',mode==='object'?'by object':'by layer')}${members.join('')}</plate>`);
+  settings.push(`<plate>${meta('plater_id',i+1)}${meta('plater_name',plate.family)}${meta('locked','false')}${meta('print_sequence',plate.sequence)}${members.join('')}</plate>`);
  }
  const bases=spools.map(s=>`<base name="${xml(s.label)}" displaycolor="${s.color}FF"/>`).join('');
- const model=`<?xml version="1.0" encoding="UTF-8"?><model unit="millimeter" xml:lang="en-US" xmlns="${modelNS}" xmlns:BambuStudio="http://schemas.bambulab.com/package/2021"><metadata name="Application">BambuStudio-02.00.00.00</metadata><metadata name="BambuStudio:3mfVersion">1</metadata><metadata name="Designer">Eduardo Ruiz · Flan; KLP Lamé keycaps by braindefender</metadata><metadata name="Title">${xml(title)}</metadata><metadata name="Description">Glue magnets after printing. Each base takes three axial Ø2 × 3 mm magnets from above; each frame takes three Ø2 × 4 mm from below. The same pole faces out in all bases, the opposite in all frames. Pega los imanes después de imprimir: tres Ø2 × 3 mm por base desde arriba y tres Ø2 × 4 mm por marco desde abajo. Mismo polo visible en todas las bases, opuesto en todos los marcos.</metadata><metadata name="License">Flan GPL-3.0-or-later; KLP Lamé CC-BY-SA-4.0. See Metadata/Flan/.</metadata><resources><basematerials id="1">${bases}</basematerials>${resources.join('')}</resources><build>${items.join('')}</build></model>`;
+ const keyNote='Keycaps print finger surface up, with supports below. Check one stem for fit. / Teclas con la cara de los dedos arriba y soportes debajo. Prueba el ajuste de un vástago.';
+ const description=parts.length?'Glue magnets after printing. Each base takes three axial Ø2 × 3 mm magnets from above; each frame takes three Ø2 × 4 mm from below. The same pole faces out in all bases, the opposite in all frames. Pega los imanes después de imprimir: tres Ø2 × 3 mm por base desde arriba y tres Ø2 × 4 mm por marco desde abajo. Mismo polo visible en todas las bases, opuesto en todos los marcos.':keyNote;
+ const model=`<?xml version="1.0" encoding="UTF-8"?><model unit="millimeter" xml:lang="en-US" xmlns="${modelNS}" xmlns:BambuStudio="http://schemas.bambulab.com/package/2021"><metadata name="Application">BambuStudio-02.00.00.00</metadata><metadata name="BambuStudio:3mfVersion">1</metadata><metadata name="Designer">Eduardo Ruiz · Flan; KLP Lamé keycaps by braindefender</metadata><metadata name="Title">${xml(title)}</metadata><metadata name="Description">${description}</metadata><metadata name="License">Flan GPL-3.0-or-later; KLP Lamé CC-BY-SA-4.0. See Metadata/Flan/.</metadata><resources><basematerials id="1">${bases}</basematerials>${resources.join('')}</resources><build>${items.join('')}</build></model>`;
  // Studio reads the Application signature to select its project importer. Designer and
  // Description identify Flan as the generator. These are layout defaults, not toolpaths.
  const projectSettings=printSettings(setup,spools);
+ projectSettings.wipe_tower_x=plates.map(()=>String(towerX));
+ projectSettings.wipe_tower_y=plates.map(()=>String(towerY));
  const files={
   '[Content_Types].xml':strToU8('<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="model" ContentType="application/vnd.ms-package.3dmanufacturing-3dmodel+xml"/><Default Extension="config" ContentType="application/octet-stream"/><Default Extension="txt" ContentType="text/plain"/><Default Extension="csv" ContentType="text/csv"/></Types>'),
   '_rels/.rels':strToU8(`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Target="/3D/3dmodel.model" Id="model" Type="${relType}"/></Relationships>`),
@@ -112,7 +106,7 @@ export async function combinedProject(parts,keycaps,title,config,progress){
  for(const [index,plate] of plates.entries())for(const slot of plate.slots){
   const spool=spools[slot];spoolRows.push([index+1,plate.family,slot+1,spool.label,spool.color].join(','));
  }
- files['Metadata/Flan/Print-notes.txt']=strToU8(
+ files['Metadata/Flan/Print-notes.txt']=strToU8(!parts.length?keyNote+'\n':
   'Bases: floor down. Switch plates: flat. Frames: decorated face on the bed, all colors registered. Battery cage: top down. Display sled: long side down. Keycaps: finger surface up, supports under the body. Check a single stem.\n'+
   'Bases: piso abajo. Placas: horizontales. Marcos: dibujo contra la cama. Jaula: techo abajo. Soporte de pantalla: costado largo abajo. Teclas: cara de los dedos arriba, con soporte bajo el cuerpo. Prueba un vástago.\n'+
   'Glue after printing: three axial Ø2 × 3 mm magnets per base from above, three Ø2 × 4 mm per installed frame from below. Dry-fit an attracting pair. Keep one exposed pole in all bases, the opposite in all frames. Use compatible adhesive; cure the parts separately before installing electronics.\n'+
@@ -123,7 +117,7 @@ export async function combinedProject(parts,keycaps,title,config,progress){
   const rows=keycaps.plan.keys.map(k=>[k.side,k.key,k.file,k.color,k.rotation_deg].join(','));
   files['Metadata/Flan/Keycaps.csv']=strToU8([header,...rows].join('\n')+'\n');
  }
- const plan=plates.map((plate,i)=>({number:i+1,name:plate.family,objects:plate.items.length,
+ const plan=plates.map((plate,i)=>({number:i+1,name:plate.family,sequence:plate.sequence,objects:plate.parts.length,
   filaments:[...plate.slots].map(slot=>({slot:slot+1,name:spools[slot].label,color:spools[slot].color}))}));
  return {bytes:zipSync(files,{level:4,mtime:new Date(2026,0,1)}),plates:plan};
 }

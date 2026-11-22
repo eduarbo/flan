@@ -140,8 +140,9 @@ const read=(file,entry)=>cp.execFileSync('unzip',['-p',file,entry],{encoding:'ut
    assert.equal(project.filament_colour.filter(hex=>hex==='#FFFFFF').length,2);
    const slots=new Map();for(const row of spools.trim().split('\n').slice(1)){const [plate,,slot]=row.split(',');if(!slots.has(plate))slots.set(plate,new Set());slots.get(plate).add(slot);}
    assert([...slots.values()].every(s=>s.size<=(mode==='manual'?1:4)));
-   assert(settings.includes('key="print_sequence" value="'+(mode==='object'?'by object':'by layer')+'"'));
-   assert(!settings.includes('key="print_sequence" value="'+(mode==='object'?'by layer':'by object')+'"'));
+   // This generic bed has no machine-specific clearance for sequential printing.
+   assert.equal((settings.match(/key="print_sequence" value="by layer"/g)||[]).length,slots.size);
+   assert(!settings.includes('key="print_sequence" value="by object"'));
    assert(read(file,'Metadata/Flan/Print-notes.txt').includes('Ø2 × 3 mm magnets per base from above'));
    const frames=[...settings.matchAll(/<object id="\d+"><metadata key="name" value="[^"]*-frame-[^"]*"\/>.*?<\/object>/g)];
    assert.equal(frames.length,2);assert(frames.every(m=>(m[0].match(/<part /g)||[]).length===(mode==='ams'?4:1)));

@@ -572,7 +572,7 @@ function printSelection(){
 const printInventory=__FLAN_PRINT_INVENTORY__;
 function printUses(config){
  const {half,scope}=printSelection(),parts=selectedParts(config,printInventory[config.variant],half,scope);
- const keys=scope==='complete'?keycapPlan(config,catalog,family[config.variant].added||[],half).keys:[];
+ const keys=scope!=='shells'?keycapPlan(config,catalog,family[config.variant].added||[],half).keys:[];
  return printSpoolUses(config,parts,keys);
 }
 const quickPrint=createQuickPrint({$,getUses:()=>printUses(configuration)});
@@ -604,15 +604,19 @@ async function keycapStl(id,signal){
  return bytes;
 }
 async function makePrintKit(selected,{half='both',scope='complete',projectOnly=false,signal,progress=()=>{}}={}){
- await buildWait(loadVariant(selected.variant),signal);signal?.throwIfAborted();
- const base=await buildWait(loadPrinting(),signal),variant=selected.variant;
- let registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing},fasteners:family[variant].fasteners};
- if(selected.fasteners){
-  await buildWait(loadFasteners(selected.fasteners),signal);signal?.throwIfAborted();const profile=fastenerProfiles[selected.fasteners];
-  registry={...registry,assets:{...registry.assets,...profile.printing},joining:{...registry.joining,case:profile.joining_case,profile:profile.spec}};
+ const variant=selected.variant;
+ let registry;
+ if(scope!=='caps'){
+  await buildWait(loadVariant(variant),signal);signal?.throwIfAborted();
+  const base=await buildWait(loadPrinting(),signal);
+  registry=variant===baseVariant?base:{...base,assets:{...base.assets,...family[variant].printing},fasteners:family[variant].fasteners};
+  if(selected.fasteners){
+   await buildWait(loadFasteners(selected.fasteners),signal);signal?.throwIfAborted();const profile=fastenerProfiles[selected.fasteners];
+   registry={...registry,assets:{...registry.assets,...profile.printing},joining:{...registry.joining,case:profile.joining_case,profile:profile.spec}};
+  }
  }
  let keycaps=null;
- if(scope==='complete'){
+ if(scope!=='shells'){
   const plan=keycapPlan(selected,catalog,variant===baseVariant?[]:family[variant].added||[],half),ids=[...new Set(plan.groups.map(g=>g.variant))];
   keycaps={plan,stl:Object.fromEntries(await Promise.all(ids.map(async id=>[id,await keycapStl(id,signal)])))};
  }
@@ -633,9 +637,9 @@ async function downloadPrint(projectOnly){
   const plan=$('print-plate-plan');
   if(JSON.stringify(selected)===JSON.stringify(configuration)&&half===$('print-half').querySelector('[aria-pressed=true]').dataset.value&&scope===$('print-scope').querySelector('[aria-pressed=true]').dataset.value){
    plan.querySelector('ol').replaceChildren(...(result.plates||result.manifest.plates).map(plate=>{
-    const family=plate.name.split(' · ')[0],key={'Bases':'bases','Switch plates':'switch','Display frames':'frames','Internal parts':'internals','Keycaps':'caps'}[family];
+    const family=plate.name.split(' · ')[0],key={'Bases':'bases','Switch plates':'switch','Display frames':'frames','Internal parts':'internals','Keycaps':'caps','Case parts':'case','Case + keycaps':'mixed'}[family];
     const label=key?t('print.family.'+key)+plate.name.slice(family.length):plate.name;
-    const li=document.createElement('li');li.textContent=label+' · '+t('print.objects',{n:plate.objects});
+    const li=document.createElement('li');li.textContent=label+' · '+t('print.objects',{n:plate.objects})+' · '+t(plate.sequence==='by object'?'print.sequential':'print.layers');
     const colors=document.createElement('small');colors.textContent=plate.filaments.map(f=>'#'+f.slot+' '+f.name).join(' / ');li.append(colors);return li;
    }));lastPlateConfig=JSON.stringify(selected);plan.hidden=false;
   }

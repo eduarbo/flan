@@ -11,6 +11,8 @@
       "height": 180,
       "extruders": 1,
       "leftInset": 0,
+      "headRadius": 73.0,
+      "gantryHeight": 25.0,
       "nozzles": {
         "0.2": {
           "machine": "Bambu Lab A1 mini 0.2 nozzle",
@@ -55,6 +57,8 @@
       "height": 256,
       "extruders": 1,
       "leftInset": 0,
+      "headRadius": 73.0,
+      "gantryHeight": 25.0,
       "nozzles": {
         "0.2": {
           "machine": "Bambu Lab A1 0.2 nozzle",
@@ -99,6 +103,8 @@
       "height": 250,
       "extruders": 1,
       "leftInset": 0,
+      "headRadius": 68.0,
+      "gantryHeight": 34.0,
       "nozzles": {
         "0.2": {
           "machine": "Bambu Lab P1P 0.2 nozzle",
@@ -143,6 +149,8 @@
       "height": 250,
       "extruders": 1,
       "leftInset": 0,
+      "headRadius": 68.0,
+      "gantryHeight": 34.0,
       "nozzles": {
         "0.2": {
           "machine": "Bambu Lab P1S 0.2 nozzle",
@@ -187,6 +195,8 @@
       "height": 256,
       "extruders": 1,
       "leftInset": 0,
+      "headRadius": 72.0,
+      "gantryHeight": 32.5,
       "nozzles": {
         "0.2": {
           "machine": "Bambu Lab P2S 0.2 nozzle",
@@ -231,6 +241,8 @@
       "height": 250,
       "extruders": 1,
       "leftInset": 0,
+      "headRadius": 68.0,
+      "gantryHeight": 34.0,
       "nozzles": {
         "0.2": {
           "machine": "Bambu Lab X1 0.2 nozzle",
@@ -275,6 +287,8 @@
       "height": 250,
       "extruders": 1,
       "leftInset": 0,
+      "headRadius": 68.0,
+      "gantryHeight": 34.0,
       "nozzles": {
         "0.2": {
           "machine": "Bambu Lab X1 Carbon 0.2 nozzle",
@@ -319,6 +333,8 @@
       "height": 250,
       "extruders": 1,
       "leftInset": 0,
+      "headRadius": 68.0,
+      "gantryHeight": 34.0,
       "nozzles": {
         "0.2": {
           "machine": "Bambu Lab X1E 0.2 nozzle",
@@ -363,6 +379,8 @@
       "height": 261,
       "extruders": 2,
       "leftInset": 20.5,
+      "headRadius": 60.0,
+      "gantryHeight": 32.8,
       "nozzles": {
         "0.2": {
           "machine": "Bambu Lab X2D 0.2 nozzle",

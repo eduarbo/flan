@@ -33,7 +33,7 @@ export function createAppearance({$,get,apply,targets,preview,frameFinish,materi
  // A theme is a swatch, as on the home page: the case on top, the plate below, the frame's accent as a dot.
  for(const t of printThemes){const b=document.createElement('button');b.type='button';b.dataset.theme=t.id;b.title=t.name;b.setAttribute('aria-pressed','false');b.setAttribute('aria-label',t.name);b.style.cssText=`--a:${t.base};--b:${t.plate};--c:${t.frame.accent}`;const name=document.createElement('span');name.textContent=t.name;b.append(name);b.onclick=()=>apply(applyTheme(get(),t,sides()));$('themes-grid').append(b);}
  const library=createSpoolLibrary({$,getCurrentUses:()=>printUses(get()),getThemeUses:theme=>printUses(applyTheme(get(),theme,sides())),
-  selectionLabel:()=>{const {scope,half}=printSelection();return [t(scope==='complete'?'kit.complete':'kit.shells'),t('print.'+(get().print_setup?.mode||'ams')),t(half==='both'?'seg.both':'side.'+half)].join(' · ');}});
+  selectionLabel:()=>{const {scope,half}=printSelection();return [t('kit.'+scope),t('print.'+(get().print_setup?.mode||'ams')),t(half==='both'?'seg.both':'side.'+half)].join(' · ');}});
  for(const b of $('theme-target').children)b.onclick=()=>{themeSide=b.dataset.side;sync();};
  const inputs=[];
  // label: a dictionary key; a frame's own palette names its roles in sync()

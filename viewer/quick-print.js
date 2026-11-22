@@ -6,7 +6,7 @@ import {t} from './i18n.js';
 export function createQuickPrint({$,getUses}){
  const dialog=$('quick-print'),opener=$('quick-print-open');
  // The sheet uses the Build controls and exporter, including their selected values and download status.
- const sections=[['print-controls','quick-settings'],['print-export','quick-download']].map(([id,destination])=>{
+ const sections=[['print-controls','quick-settings'],['print-export','quick-download'],['print-plate-plan','quick-plan']].map(([id,destination])=>{
   const node=$(id),anchor=document.createComment(id);
   node.before(anchor);return {node,anchor,destination:$(destination)};
  });

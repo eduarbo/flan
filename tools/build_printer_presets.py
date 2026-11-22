@@ -46,7 +46,10 @@ def build(root):
         areas = machine.get('extruder_printable_area', [])
         left = max((min(float(p.split('x')[0]) for p in area.split(',')) for area in areas), default=0)
         result[model] = {'bed': bed, 'height': int(machine['printable_height']),
-                         'extruders': len(machine['nozzle_diameter']), 'leftInset': left, 'nozzles': nozzles}
+                         'extruders': len(machine['nozzle_diameter']), 'leftInset': left,
+                         'headRadius': float(machine['extruder_clearance_max_radius']),
+                         'gantryHeight': float(machine['extruder_clearance_height_to_rod']),
+                         'nozzles': nozzles}
     ids = {material: next(p['filament_id'] for name, p in filaments.items() if name.split(' @')[0] == material)
            for material in MATERIALS}
     return {'vendorVersion': manifest['version'], 'filamentIds': ids, 'models': result}
