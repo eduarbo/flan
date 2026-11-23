@@ -219,3 +219,6 @@ footer .support-pill:hover { background: color-mix(in srgb, var(--accent) 20%, t
 .resume-design { display: inline-flex; align-items: center; align-self: flex-start; min-height: 44px; color: var(--accent); font-size: 13px; text-decoration: none; }
 .resume-design:hover { text-decoration: underline; }
 .resume-design[hidden] { display: none; }
+
+.spool-cta { align-self: flex-start; font-size: 12px; line-height: 1.5; padding-block: 4px; }
+.grp .pinned-themes { min-width: 0; }

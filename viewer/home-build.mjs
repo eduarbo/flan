@@ -146,7 +146,7 @@ export async function buildHome({scene=read('build/viewer-scene.json')}={}){
   const bytes=Object.fromEntries(Object.entries(files).map(([k,f])=>[k,fs.statSync(path.join(assets,f)).size]));
   const page=await homePage({scene,files});
   const hash=p=>crypto.createHash('sha256').update(fs.readFileSync(path.join(root,p))).digest('hex');
-  const sources=['viewer/home-build.mjs','viewer/home/app.js','viewer/home/options.js','viewer/design-url.js','viewer/home/model.js','viewer/studio.js','viewer/contact-light.js','viewer/home/creased.js','viewer/home/tokens.js','viewer/home/style.css','viewer/home/template.html',
+  const sources=['viewer/home-build.mjs','viewer/home/app.js','viewer/pinned-themes.js','viewer/pinned-themes.css','viewer/owned-themes.js','design/filament-ranges.json','viewer/home/options.js','viewer/design-url.js','viewer/home/model.js','viewer/studio.js','viewer/contact-light.js','viewer/home/creased.js','viewer/home/tokens.js','viewer/home/style.css','viewer/home/template.html',
     'design/themes.json','viewer/preset-filaments.js','viewer/filament-swatches.js','design/preset-filaments.json','design/frame-finishes.json','design/variants.json','docs/branding/flan/flan-mark-color.svg','viewer/package-lock.json'].map(p=>({path:p,sha256:hash(p)}));
   const published=p=>({path:p,sha256:hash(p),bytes:fs.statSync(path.join(root,p)).size});
   const receipt={revision:scene.revision,page:{path:'docs/index.html',sha256:hash('docs/index.html'),bytes:page.bytes},
@@ -217,7 +217,7 @@ async function homePage({scene,files}){
   for(const [slot,markup] of Object.entries(rail)){if(!template.includes(`<!--__${slot}__-->`))throw Error('Rail slot missing: '+slot);template=template.replace(`<!--__${slot}__-->`,()=>markup);}
   const html=template
     .replaceAll('__THEME_COUNT__',String(themes.length))
-    .replace('/*__STYLE__*/',()=>fs.readFileSync(path.join(dir,'style.css'),'utf8'))
+    .replace('/*__STYLE__*/',()=>['style.css','../pinned-themes.css'].map(file=>fs.readFileSync(path.join(dir,file),'utf8')).join('\n'))
     .replaceAll('__OG_VERSION__',()=>crypto.createHash('sha256').update(fs.readFileSync(path.join(dir,'home-og.png'))).digest('hex').slice(0,12))   // sharing services cache by address
     .replace('<!--__SPECS__-->',()=>data.specs.map(([label,,value,note])=>
       `<div class="spec"><span class="lab">${text(label)}</span><b>${text(Array.isArray(value)?value[0]:value)}</b><p>${text(note)}</p></div>`).join(''))

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {decorateFilamentDisclosure,filamentReel,filamentLabel,flatSwatch} from './filament-identity.js';
+import {ownedRecipe} from './owned-themes.js';
 import {createSpoolLibrary} from './spool-library.js';
 import {chooseFilament} from './filament-picker.js';
 import {bindSpool,commonSpool,closestSwatch,colorFields,mapThemeToSpools,spoolFor} from './filament-swatches.js';
@@ -29,12 +30,28 @@ export function applyTheme(config,source,sides){
  return c;
 }
 export function setColor(config,sides,part,role,color){const c=copy(config);for(const side of sides){const cs=c.cases[side],f=c.frames[side];if(part==='case')cs[role]=color;else if(role==='body')f.color=color;else f.accents[role]=color;if(cs.match_frame){if(part==='case'&&(role==='base_color'||(cs.style==='level'&&role==='plate_color')))f.color=cs.base_color=color;if(part==='frame'&&role==='body')cs.base_color=color;if(cs.style==='level')cs.plate_color=f.color;}}return c;}
-export function createAppearance({$,get,apply,targets,preview,frameFinish,material,resize,catalog,geometryFor,printUses,printSelection,catalogLabel}){
+export function createAppearance({$,get,apply,targets,recipePreview,catalog,printUses,printSelection,catalogLabel}){
  decorateFilamentDisclosure($('theme-filaments'));
  let themeSide='both';const sides=()=>themeSide==='both'?['left','right']:[themeSide];
  // A theme is a swatch, as on the home page: the case on top, the plate below, the frame's accent as a dot.
  for(const t of printThemes){const b=document.createElement('button');b.type='button';b.dataset.theme=t.id;b.setAttribute('aria-pressed','false');b.style.cssText=`--a:${t.base};--b:${t.plate};--c:${t.frame.accent}`;b.append(document.createElement('span'));labelThemeButton(b,t,language());b.onclick=()=>apply(applyTheme(get(),t,sides()));$('themes-grid').append(b);}
- const library=createSpoolLibrary({$,applyOwnedTheme:theme=>apply(applyTheme(get(),theme,sides())),themeTarget:()=>t(themeSide==='both'?'seg.both':'side.'+themeSide),getCurrentUses:()=>printUses(get()),getThemeUses:theme=>printUses(applyTheme(get(),theme,sides())),
+ function matchesTheme(theme){
+  return sides().every(side=>{
+   const c=get(),cs=c.cases[side],f=c.frames[side];
+   return cs.base_color.toLowerCase()===theme.base&&cs.plate_color.toLowerCase()===(cs.style==='level'?theme.frame.body:theme.plate)
+    &&f.color.toLowerCase()===theme.frame.body&&['detail','accent','secondary'].every(role=>f.accents[role].toLowerCase()===theme.frame[role])
+    &&catalog.layout[side].every(key=>c.keycaps[side][key.ref].color.toLowerCase()===paletteColor(theme.keycaps,key))
+    &&(!theme.roles||theme.spools.every(spool=>spoolFor(c,side,spool.hex)?.id===spool.id));
+  });
+ }
+ function currentRecipe(){
+  const c=get(),side=sides()[0],frame=c.frames[side];
+  const roles=[c.cases[side].base_color,frame.accents.detail,frame.accents.accent].map(color=>spoolFor(c,side,color));
+  if(!roles.every(spool=>spool&&spool.material===roles[0].material))return null;
+  const recipe=ownedRecipe(...roles);
+  return matchesTheme(recipe)?recipe:null;
+ }
+ const library=createSpoolLibrary({$,onInventoryChange:sync,choices:{apply:theme=>apply(applyTheme(get(),theme,sides())),scope:()=>themeSide,currentRecipe,onChange:sync,preview:recipePreview},getCurrentUses:()=>printUses(get()),getThemeUses:theme=>printUses(applyTheme(get(),theme,sides())),
   selectionLabel:()=>{const {scope,half}=printSelection();return [t('kit.'+scope),t('print.'+(get().print_setup?.mode||'ams')),t(half==='both'?'seg.both':'side.'+half)].join(' · ');}});
  for(const b of $('theme-target').children)b.onclick=()=>{themeSide=b.dataset.side;sync();};
  const inputs=[];
@@ -113,10 +130,10 @@ export function createAppearance({$,get,apply,targets,preview,frameFinish,materi
  }
  function sync(){
   const c=get();if($('theme-filaments').open)renderSpools(c);for(const b of $('theme-target').children)b.setAttribute('aria-pressed',String(themeSide===b.dataset.side));
-  let selected=null;for(const t of printThemes){const same=sides().every(side=>{const cs=c.cases[side],f=c.frames[side];return cs.base_color.toLowerCase()===t.base&&cs.plate_color.toLowerCase()===(cs.style==='level'?t.frame.body:t.plate)&&f.color.toLowerCase()===t.frame.body&&['detail','accent','secondary'].every(k=>f.accents[k].toLowerCase()===t.frame[k])&&catalog.layout[side].every(k=>c.keycaps[side][k.ref].color.toLowerCase()===paletteColor(t.keycaps,k));});$ ('themes-grid').querySelector(`[data-theme="${t.id}"]`).setAttribute('aria-pressed',String(same));if(same)selected=themeName(t,language());}
+  let selected=null;for(const t of printThemes){const same=matchesTheme(t);$ ('themes-grid').querySelector(`[data-theme="${t.id}"]`).setAttribute('aria-pressed',String(same));if(same)selected=themeName(t,language());}
+  const {half,scope}=printSelection();selected=library.sync(c,[themeSide,half,scope].join('/'))||selected;
   $('theme-current').textContent=selected||t('themes.custom');
   $('mobile-print-design').textContent=[catalogLabel(c.variant),themeSide==='both'?(selected||t('themes.custom')):null].filter(Boolean).join(' · ');
-  const {half,scope}=printSelection();library.sync(c,[themeSide,half,scope].join('/'));
   for(const x of inputs){const values=targets(x.target).map(side=>x.part==='case'?c.cases[side][x.role]:c.frames[side].accents[x.role]);x.input.value=values[0];x.value.textContent=new Set(values.map(v=>v.toLowerCase())).size===1?values[0]:t('mixed');if(x.part==='frame'){const styles=targets('frame').map(side=>c.frames[side].style),labels=styles.map(s=>finishes.styles[s]?.labels[x.role]);x.text.textContent=labels.every(v=>v&&v===labels[0])?tOr('palette.'+labels[0],labels[0]):t(x.label);x.input.disabled=styles.every(s=>!finishes.styles[s]);}x.hex.sync(values);}
   for(const kind of ['case','frame']){const values=targets(kind).map(side=>c.cases[side].match_frame),input=$(`${kind}-link-colors`);input.checked=values.every(Boolean);input.indeterminate=values.some(Boolean)&&!input.checked;}
   $('theme-preview-note').textContent=themeSide==='both'?t('themes.note'):t('themes.noteHalf',{side:t('half.'+themeSide)});

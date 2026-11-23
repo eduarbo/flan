@@ -5,7 +5,7 @@ import {catalogSpools,spoolById} from './filament-swatches.js';
 import {printThemes} from './preset-filaments.js';
 import {t,language} from './i18n.js';
 import {ownedSpools,onlyInTab,toggleSpool,watchSpools} from './owned-spools.js';
-import {ownedThemes} from './owned-themes.js';
+import {ownedThemeChoices} from './owned-theme-choices.js';
 const say=(en,es)=>language()==='es'?es:en;
 
 const alphabetical=[...catalogSpools].sort((a,b)=>a.name.localeCompare(b.name,'en')||a.series.localeCompare(b.series,'en'));
@@ -13,8 +13,9 @@ function element(tag,cls,text){
  const node=document.createElement(tag);if(cls)node.className=cls;if(text)node.textContent=text;return node;
 }
 
-export function createSpoolLibrary({$,getThemeUses,getCurrentUses,selectionLabel,applyOwnedTheme,themeTarget}){
+export function createSpoolLibrary({$,getThemeUses,getCurrentUses,selectionLabel,choices,onInventoryChange}){
  const owned=ownedSpools(),opener=$('my-spools'),filter=$('printable-filter'),note=$('theme-match-note');
+ const themesPanel=ownedThemeChoices({$,...choices});
  let filtered=false,manager=null,context=null,selection='',requirements=null;
  function update(){
   $('library-count').textContent=String(owned.size);
@@ -31,6 +32,7 @@ export function createSpoolLibrary({$,getThemeUses,getCurrentUses,selectionLabel
   filter.textContent=owned.size||filtered?t('library.ready',{n:count}):t('library.filter');
   note.hidden=!filtered;
   if(filtered)note.textContent=(count?t('library.showing',{n:count}):t('library.none'))+' · '+selectionLabel();
+  return themesPanel.update(owned);
  }
  function open(trigger){
   const dialog=element('dialog','filament-picker spool-library');dialog.setAttribute('aria-labelledby','library-title');
@@ -40,15 +42,17 @@ export function createSpoolLibrary({$,getThemeUses,getCurrentUses,selectionLabel
   const body=element('div','dialog-body'),intro=element('p','library-intro',t('library.hint'));
   const {filters,matches,search}=filamentFilters(render);
   const views=element('div','library-views'),all=element('button','',t('library.catalog')),mine=element('button');
-  const themes=element('button','',say('Generate themes','Generar temas'));
-  let view='all',page=0;
-  for(const [button,name] of [[all,'all'],[mine,'mine'],[themes,'themes']]){
+  const themes=element('button','',t('library.try'));
+  let view='all',focusThemes=false;
+  for(const [button,name] of [[all,'all'],[mine,'mine']]){
    button.onclick=()=>{view=name;render();};views.append(button);
   }
+  themes.onclick=()=>{if(owned.size){focusThemes=true;dialog.close();}else{view='themes';render();}};views.append(themes);
   const status=element('p','micro');status.setAttribute('role','status');const results=element('div');
   const current=new Set(getCurrentUses().map(u=>u.chosen?.id).filter(Boolean));
   function render(keepFocus){
    const focusId=keepFocus===true?document.activeElement?.dataset.ownedSpool:null;
+   if(view==='themes'&&owned.size)view='all';
    const mineOnly=view==='mine';
    const list=alphabetical.filter(s=>matches(s)&&(!mineOnly||owned.has(s.id)));
    all.setAttribute('aria-pressed',String(view==='all'));mine.setAttribute('aria-pressed',String(mineOnly));
@@ -56,25 +60,8 @@ export function createSpoolLibrary({$,getThemeUses,getCurrentUses,selectionLabel
    themes.setAttribute('aria-pressed',String(view==='themes'));filters.hidden=view==='themes';
    status.textContent=onlyInTab()?t('library.tabOnly'):t('library.total',{n:owned.size});results.replaceChildren();
    if(view==='themes'){
-    if(!owned.size){
-     results.append(element('p','',say('Add a spool to get your first theme.','Agrega una bobina para crear tu primer tema.')));
-     const add=element('button','',say('Choose spools','Elegir bobinas'));add.onclick=()=>all.click();results.append(add);return;
-    }
-    const recipes=ownedThemes([...owned].map(spoolById),page);
-    for(const recipe of recipes){
-     const [base,keys,accent]=recipe.roles,button=element('button','owned-theme');
-     button.type='button';button.dataset.recipe=recipe.material;
-     const preview=element('span','owned-preview');preview.setAttribute('aria-hidden','true');
-     preview.style.setProperty('--case',base.hex);preview.style.setProperty('--keys',keys.hex);preview.style.setProperty('--spot',accent.hex);
-     for(let i=0;i<12;i++)preview.append(element('i'));
-     const text=element('span');text.append(element('strong','',recipe.material+' · '+base.name),
-      element('small','',say('Keys','Teclas')+' · '+keys.name+' / '+say('Accents','Acentos')+' · '+accent.name),
-      element('small','',say('Apply to','Aplicar a')+' '+themeTarget().toLowerCase()));
-     button.append(preview,text);button.onclick=()=>{dialog.close();applyOwnedTheme(recipe);};results.append(button);
-    }
-    if(['PLA','PETG'].some(material=>new Set([...owned].map(spoolById).filter(s=>s.material===material).map(s=>s.hex)).size>3)){
-     const more=element('button','',say('More combinations','Más combinaciones'));more.onclick=()=>{page++;render();results.lastElementChild.focus();};results.append(more);
-    }
+    results.append(element('p','',say('Add a spool to get your first theme.','Agrega una bobina para crear tu primer tema.')));
+    const add=element('button','',say('Choose spools','Elegir bobinas'));add.onclick=()=>all.click();results.append(add);
     return;
    }
    const groups=mineOnly?[[null,list]]:[[t('library.forDesign'),list.filter(s=>current.has(s.id))],[t('library.more'),list.filter(s=>!current.has(s.id))]];
@@ -101,7 +88,7 @@ export function createSpoolLibrary({$,getThemeUses,getCurrentUses,selectionLabel
   dialog.addEventListener('close',()=>{
    manager=null;dialog.remove();
    if(!owned.size&&filtered){filtered=false;update();}
-   trigger.focus({preventScroll:true});
+   if(focusThemes)themesPanel.focus();else trigger.focus({preventScroll:true});
   },{once:true});
   render();dialog.showModal();(matchMedia('(pointer: coarse)').matches?title:search).focus({preventScroll:true});
  }
@@ -110,9 +97,9 @@ export function createSpoolLibrary({$,getThemeUses,getCurrentUses,selectionLabel
   filtered=!filtered;update();
   if(filtered&&!owned.size)open(filter);
  };
- watchSpools(()=>{update();manager?.();});
+ watchSpools(()=>{onInventoryChange();manager?.();});
  return {sync(config,options){
   if(config!==context||options!==selection){context=config;selection=options;requirements=null;}
-  update();
+  return update();
  }};
 }

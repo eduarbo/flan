@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Flan Keyboard home: a live, simplified configurator that opens the explorer on the same look.
+import {themeFromId,themePins,pinnedStrip,recipeChip} from '../pinned-themes.js';
 import finishes from '../../design/frame-finishes.json';
 import {pageTokens} from './tokens.js';
 import {createDesignURL,designKeys} from '../design-url.js';
@@ -9,7 +10,7 @@ const data=JSON.parse(document.getElementById('home-data').textContent);
 const $=id=>document.getElementById(id);
 const themes=new Map(data.themes.map(t=>[t.id,t])),frameIds=data.frames.map(f=>f.id);
 const T={
-  en:{'f.credits':'Credits & licenses','nav.explore':'Explore in 3D','nav.build':'Build guide','hero.eyebrow':'Open-source wireless keyboard','hero.title':'Homemade, like a good flan.','hero.sub':`Four sizes, ${data.themes.length} themes and six magnetic frames. Turn it, take it apart, make it yours.`,
+  en:{'pins.example':'Try a PLA filament palette','pins.title':'Pinned themes','pins.create':'Create a theme with your 3D printing filaments →','f.credits':'Credits & licenses','nav.explore':'Explore in 3D','nav.build':'Build guide','hero.eyebrow':'Open-source wireless keyboard','hero.title':'Homemade, like a good flan.','hero.sub':`Four sizes, ${data.themes.length} themes and six magnetic frames. Turn it, take it apart, make it yours.`,
     'stage.label':'3D keyboard','stage.canvas':'Drag to turn the keyboard','stage.poster':'Flan36 in the EVA-01 theme, layers apart','stage.hint':'Drag to turn · pinch to zoom','stage.pause':'Pause the standby motion','stage.play':'Resume the standby motion','stage.reset':'Reset the view',
     'stage.loading':'Loading 3D keyboard…','stage.nogl':'The live 3D view needs WebGL. The explorer shows every part.','stage.failed':'The 3D model could not load. Check the connection and reload.',
     'layers.apart':'Apart','layers.together':'Together','layers.label':'Separate the layers','rail.label':'Make it yours','g.size':'Size','g.theme':'Theme','g.case':'Case','g.keys':'Keycaps','g.frame':'Frame','g.frames':'Frames',
@@ -17,7 +18,7 @@ const T={
     'side.both':'Both halves','side.left':'Left','side.right':'Right','cta.open':'Customize this look','cta.resume':'Continue my saved design →','keys':'keys','specs.eyebrow':'Spec sheet','specs.title':'What’s under the frame',
     'f.parts':'Parts','f.pcbs':'Order PCBs','f.support':'Support Flan on Ko-fi','nav.support':'Support','f.media':'Media kit','f.experiments':'More experiments at @eduarbo.lab ↗','f.by':'by',
     'role.body':'Body','role.detail':'Detail','role.accent':'Accent','role.secondary':'Secondary'},
-  es:{'f.credits':'Créditos y licencias','nav.explore':'Explorar en 3D','nav.build':'Guía de armado','hero.eyebrow':'Teclado inalámbrico de código abierto','hero.title':'Hecho en casa, como el buen flan.','hero.sub':`Cuatro tamaños, ${data.themes.length} temas y seis marcos magnéticos. Gíralo, sepáralo y hazlo tuyo.`,
+  es:{'pins.example':'Prueba una paleta de filamentos PLA','pins.title':'Temas fijados','pins.create':'Crea un tema con tus filamentos de impresión 3D →','f.credits':'Créditos y licencias','nav.explore':'Explorar en 3D','nav.build':'Guía de armado','hero.eyebrow':'Teclado inalámbrico de código abierto','hero.title':'Hecho en casa, como el buen flan.','hero.sub':`Cuatro tamaños, ${data.themes.length} temas y seis marcos magnéticos. Gíralo, sepáralo y hazlo tuyo.`,
     'stage.label':'Teclado en 3D','stage.canvas':'Arrastra para girar el teclado','stage.poster':'Flan36 con el tema EVA-01, capas separadas','stage.hint':'Arrastra para girar · pellizca para acercar','stage.pause':'Pausar el movimiento en reposo','stage.play':'Reanudar el movimiento en reposo','stage.reset':'Restablecer la vista',
     'stage.loading':'Cargando el teclado 3D…','stage.nogl':'La vista 3D necesita WebGL. El explorador muestra cada pieza.','stage.failed':'No se pudo cargar el modelo 3D. Revisa la conexión y recarga.',
     'layers.apart':'Separado','layers.together':'Unido','layers.label':'Separar las capas','rail.label':'Hazlo tuyo','g.size':'Tamaño','g.theme':'Tema','g.case':'Caja','g.keys':'Keycaps','g.frame':'Marco','g.frames':'Marcos',
@@ -41,8 +42,14 @@ const t=(key,vars={})=>(T[lang][key]??T.en[key]??key).replace(/\{(\w+)\}/g,(_,k)
 const store={get(k){try{return localStorage.getItem(k);}catch{return null;}},set(k,v){try{localStorage.setItem(k,v);}catch{}}};
 
 // the look: what the rail shows and what the explorer opens
+const resolveTheme=id=>themes.get(id)||themeFromId(id);
+const pins=themePins(()=>syncRail());
+const renderPins=pinnedStrip($('home-pins'),$('home-pin-grid'),recipe=>choose('theme',recipe.id));
+const example=themeFromId('spools:Bambu PLA Matte/Ash Gray|Bambu PLA Basic/Jade White|Bambu PLA Basic/Sunflower Yellow');
+const exampleChip=recipeChip(example,recipe=>choose('theme',recipe.id));
+$('example-chip').append(exampleChip);
 function valid(l){
-  return l&&data.sizes.some(s=>s.id===l.size)&&themes.has(l.theme)&&CASES.some(c=>c[0]===l.case)&&KEYS.some(k=>k[0]===l.keys)
+  return l&&data.sizes.some(s=>s.id===l.size)&&resolveTheme(l.theme)&&CASES.some(c=>c[0]===l.case)&&KEYS.some(k=>k[0]===l.keys)
     &&['left','right'].every(s=>frameIds.includes(l.frame?.[s])&&typeof l.own?.[s]==='boolean');
 }
 let look=structuredClone(DEFAULT);
@@ -51,11 +58,11 @@ const incoming=new URLSearchParams(location.search);
 if(designKeys.some(key=>key!=='design'&&incoming.has(key))){
  const next=structuredClone(DEFAULT);
  for(const key of ['size','theme','case','keys'])if(incoming.has(key))next[key]=incoming.get(key);
- const fallback=themes.get(next.theme)?.recommended_frame,frames=(incoming.get('frame')||(frameIds.includes(fallback)?fallback:'snes')).split(','),palette=(incoming.get('palette')||'').split(',');
+ const fallback=resolveTheme(next.theme)?.recommended_frame,frames=(incoming.get('frame')||(frameIds.includes(fallback)?fallback:'snes')).split(','),palette=(incoming.get('palette')||'').split(',');
  for(const [i,side] of ['left','right'].entries()){next.frame[side]=frames[i]||frames[0];next.own[side]=(palette[i]||palette[0])==='frame';}
  if(valid(next))look=next;
 }
-const theme=()=>themes.get(look.theme);
+const theme=()=>resolveTheme(look.theme);
 const sizeOf=id=>data.sizes.find(s=>s.id===id);
 function exploreUrl(l=look){
   const q=new URLSearchParams({size:l.size,theme:l.theme,case:l.case,keys:l.keys,frame:l.frame.left===l.frame.right?l.frame.left:`${l.frame.left},${l.frame.right}`});
@@ -98,6 +105,10 @@ function syncRail(){
   const s=sizeOf(look.size),frames=look.frame.left===look.frame.right?frameName(look.frame.left):`${frameName(look.frame.left)} / ${frameName(look.frame.right)}`;
   $('v-size').innerHTML=`${s.title} <i>· ${s.grid}</i>`;$('v-theme').innerHTML=`${themeName(theme(),lang)} <i>· ${data.themes.length}</i>`;
   $('v-case').textContent=caseName(look.case);$('v-keys').innerHTML=`${keysName(look.keys)} <i>· KLP Lamé</i>`;$('v-frame').textContent=frames;
+  const saved=pins.all();
+  renderPins(saved,look.theme);$('home-filament-example').hidden=Boolean(saved.length);
+  exampleChip.setAttribute('aria-pressed',String(look.theme===example.id));
+  $('create-spool-theme').href=exploreUrl()+'#spool-themes';
   const current={size:look.size,case:look.case,keys:look.keys,theme:look.theme};
   for(const [g,v] of Object.entries(current))for(const b of $('o-'+g).children)b.setAttribute('aria-pressed',String(b.dataset.value===v));
   for(const b of $('o-frame').children)b.setAttribute('aria-pressed',String(b.dataset.value===look.frame.left||b.dataset.value===look.frame.right));
@@ -121,7 +132,8 @@ function choose(group,value){
   const next=structuredClone(look);
   if(group==='theme'){
     // a frame that came with the old theme follows the new one when that theme has an installed frame
-    const old=theme().recommended_frame,rec=themes.get(value).recommended_frame;
+    const old=theme().recommended_frame,rec=resolveTheme(value).recommended_frame;
+    if(themeFromId(value))next.own={left:false,right:false};
     for(const s of ['left','right'])if(frameIds.includes(rec)&&(look.frame[s]===old||!frameIds.includes(old)))next.frame[s]=rec;
     next.theme=value;
   }else if(group==='frame'){next.frame={left:value,right:value};next.own={left:false,right:false};}

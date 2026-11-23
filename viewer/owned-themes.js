@@ -1,6 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {contrastRatio} from './home/tokens.js';
 
+export function ownedRecipe(base,keys,accent){
+ const plate=base.hex.toLowerCase(),key=keys.hex.toLowerCase(),spot=accent.hex.toLowerCase();
+ return {material:base.material,base:plate,plate,frame:{body:plate,accent:spot,detail:key,secondary:spot},
+  keycaps:{base:key,thumbs:[spot,key,spot]},spools:[...new Set([base,keys,accent])],roles:[base,keys,accent]};
+}
+
 // Spool bindings are indexed by color on each half. Within one recipe, one physical
 // spool owns each color. Keep separate polymers in separate proposals.
 export function ownedThemes(spools,page=0){
@@ -9,7 +15,7 @@ export function ownedThemes(spools,page=0){
   if(!materials.has(spool.material))materials.set(spool.material,[]);
   materials.get(spool.material).push(spool);
  }
- for(const [material,group] of materials){
+ for(const group of materials.values()){
   const colors=[...new Map(group.map(s=>[s.hex,s])).values()].sort((a,b)=>a.lab[0]-b.lab[0]||a.id.localeCompare(b.id));
   const count=colors.length;
   const anchors=count>2?[0,Math.floor(count/2),count-1]:Array.from({length:count},(_,i)=>i);
@@ -19,9 +25,7 @@ export function ownedThemes(spools,page=0){
    const keys=opposites[0]||base;
    const accents=opposites.slice(1).sort((a,b)=>Math.min(contrastRatio(b.hex,base.hex),contrastRatio(b.hex,keys.hex))-Math.min(contrastRatio(a.hex,base.hex),contrastRatio(a.hex,keys.hex)));
    const accent=accents.length?accents[page%accents.length]:base;
-   const plate=base.hex.toLowerCase(),key=keys.hex.toLowerCase(),spot=accent.hex.toLowerCase();
-   recipes.push({material,base:plate,plate,frame:{body:plate,accent:spot,detail:key,secondary:spot},
-    keycaps:{base:key,thumbs:[spot,key,spot]},spools:[...new Set([base,keys,accent])],roles:[base,keys,accent]});
+   recipes.push(ownedRecipe(base,keys,accent));
   }
  }
  return recipes;

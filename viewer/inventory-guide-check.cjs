@@ -48,7 +48,7 @@ const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
   }
   await page.click('#nav-customize');await page.click('#editor-tabs [data-panel=themes]');await page.click('#my-spools');
   const library=page.locator('dialog.spool-library'),search=library.getByRole('searchbox');
-  await library.getByRole('button',{name:'Generar temas'}).click();assert.match(await library.innerText(),/Agrega una bobina/);
+  await library.getByRole('button',{name:'Probar temas'}).click();assert.match(await library.innerText(),/Agrega una bobina/);
   await library.getByRole('button',{name:'Elegir bobinas'}).click();
   const codes={'11102':'Ash Gray','10402':'Sunflower Yellow','10200':'Red','10501':'Bambu Green','10603':'Cyan','10502':'Mistletoe Green','10100':'Jade White','10101':'Black','33102':'Black'};
   for(const [code,name] of Object.entries(codes)){
@@ -65,10 +65,16 @@ const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
    assert.match(badge,/data:image\/png/);
    await library.getByRole('button',{name:'Limpiar filtros'}).click();
   }
-  await library.getByRole('button',{name:'Generar temas'}).click();
-  assert.equal(await library.locator('[data-recipe=PLA]').count(),3);
-  assert.equal(await library.locator('[data-recipe=PETG]').count(),1);
-  await library.locator('[data-recipe=PETG]').click();
+  await library.getByRole('button',{name:'Probar temas'}).click();
+  const choices=page.locator('#owned-theme-grid');
+  await library.waitFor({state:'detached'});
+  assert.equal(await choices.locator('[data-recipe=PLA]').count(),3);
+  assert.equal(await choices.locator('[data-recipe=PETG]').count(),1);
+  await choices.locator('img[src^="data:image/png"]').first().waitFor({state:'visible'});
+  await choices.locator('[data-recipe=PLA]').first().click();
+  await choices.locator('[data-recipe=PETG]').click();
+  assert.equal(await choices.locator('[data-recipe=PETG]').getAttribute('aria-pressed'),'true');
+  assert.equal(await page.locator('dialog[open]').count(),0);
   const config=()=>page.evaluate(()=>flan36.snapshot().configuration);
   for(const half of ['left','right'])assert.deepEqual((await config()).filaments[half],{'#000000':'Bambu PETG HF/Black'});
   await page.click('#quick-print-open');await page.selectOption('#print-printer','X2D');await page.click('#print-scope [data-value=shells]');
@@ -86,6 +92,19 @@ const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
   await picker.locator('[data-spool]').click();
   await page.reload();await page.waitForFunction(()=>window.flan36?.settled);
   assert.equal((await config()).filaments.left['#000000'],'Bambu PETG HF/Black');
+  await page.click('#nav-customize');await page.click('#editor-tabs [data-panel=themes]');await page.click('#my-spools');
+  for(const code of ['10200','10100']){
+   await library.getByRole('searchbox').fill(code);await library.locator('[data-owned-spool]').click();
+  }
+  await library.getByRole('button',{name:'Probar temas'}).click();await page.click('#owned-next');
+  const recipe=choices.locator('[data-recipe=PLA]').first();await recipe.click();
+  const themeName=await page.locator('#theme-current').innerText(),saved=(await config()).filaments;
+  assert.match(themeName,/^PLA · /);
+  await page.click('#owned-previous');
+  assert.equal(await choices.locator('[aria-pressed=true]').count(),0);
+  assert.equal(await page.locator('#theme-current').innerText(),themeName);
+  await page.reload();await page.waitForFunction(()=>window.flan36?.settled);await page.evaluate(()=>flan36.settled());
+  assert.deepEqual((await config()).filaments,saved);assert.equal(await page.locator('#theme-current').innerText(),themeName);
   assert.deepEqual(errors,[]);console.log('PASS: integrated solder maps, product codes, logos, owned filters and recipes, PETG HF X2D 3MF and reload.');
  }finally{await browser.close();server.close();fs.rmSync(scratch,{recursive:true,force:true});}
 })().catch(e=>{console.error(e);process.exitCode=1;});

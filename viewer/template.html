@@ -105,7 +105,19 @@
   </section>
   <section id="panel-themes" class="sec" role="tabpanel" aria-labelledby="themes-title">
     <div class="sec-head"><h2 id="themes-title" class="lab" data-t="theme">Theme</h2><button class="tune" aria-expanded="false" aria-controls="tune-themes"><span id="theme-current" class="cur"></span><span class="act" data-label="Per half" data-t="act.themes">Per half</span></button></div>
+    <section id="pinned-themes" class="pinned-themes" aria-labelledby="pins-title" hidden>
+      <div class="owned-theme-head"><h3 class="lab" id="pins-title" data-t="pins.title">Pinned themes</h3><button id="unpin-theme" type="button" hidden data-t="pins.remove">Unpin</button></div>
+      <div id="pinned-theme-grid" class="pin-strip" role="group" aria-labelledby="pins-title"></div>
+    </section>
     <div class="spool-library-bar"><button id="my-spools" type="button" aria-haspopup="dialog"><span id="library-icon" aria-hidden="true"></span><span data-t="library.title">My spools</span><span id="library-count" class="library-count">0</span></button><button id="printable-filter" type="button" aria-pressed="false" aria-controls="themes-grid"></button></div>
+    <section id="owned-themes" aria-labelledby="owned-themes-title" hidden>
+      <div class="owned-theme-head"><h3 class="lab" id="owned-themes-title" data-t="library.themes">Themes from my spools</h3><div class="owned-theme-tools"><button id="pin-theme" type="button" aria-pressed="false" disabled></button><div id="owned-pages" hidden>
+        <button type="button" id="owned-previous" aria-controls="owned-theme-grid" data-t-label="library.previous" data-t-title="library.previous" aria-label="Previous combinations">←</button><button type="button" id="owned-next" aria-controls="owned-theme-grid" data-t-label="library.next" data-t-title="library.next" aria-label="More combinations">→</button>
+      </div></div></div>
+      <div id="owned-theme-grid" class="preview-grid" role="group" aria-labelledby="owned-themes-title"></div>
+      <p id="owned-theme-detail" class="micro" role="status"></p>
+    </section>
+    <p id="pin-status" class="micro" role="status"></p>
     <p id="theme-match-note" class="micro" role="status" hidden></p>
     <div id="themes-grid" class="theme-grid" role="group" aria-label="Color themes" data-t-label="themes.grid"></div>
     <details class="build-detail" id="theme-filaments"><summary data-t="spool.theme">Filaments for this theme</summary><p class="micro" data-t="spool.themeHint">Pick alternatives for individual colors or apply all suggested spools to your design.</p><div id="theme-spool-list"></div><button type="button" class="palette-reset" id="match-theme-spools" data-t="spool.match">Use suggested filaments</button><div class="theme-files"><button type="button" id="save-print-theme" data-t="spool.save">Save theme</button><button type="button" id="open-print-theme" data-t="spool.open">Open theme</button><input type="file" id="print-theme-file" accept=".json,application/json" hidden></div><p class="micro" role="status" id="theme-file-status"></p></details>

@@ -1964,7 +1964,7 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "9ce19be4a657e38745c9b32eed43080b14ac4aabd600c506cccde413a7330d1c"
+      "sha256": "796c612086c937da879f4600260f45aad48e76fe6d7dd65e256710d208920ab8"
     },
     {
       "path": "viewer/build-guide.js",
@@ -2380,7 +2380,7 @@
     },
     {
       "path": "viewer/i18n.js",
-      "sha256": "bfa938d611bc74a423da65b445ade7de27377139f0350a12ac8003b909fd27ea"
+      "sha256": "da47309d9c9e29cbc0c29ff0c833e0b4e6ccc153c302a6b99040b9658bf26336"
     },
     {
       "path": "viewer/config.js",
@@ -2428,7 +2428,7 @@
     },
     {
       "path": "viewer/appearance.js",
-      "sha256": "dfef638ff674dc054337e315051a6fdf45fa5809af5af08d7a2460d2aeac324e"
+      "sha256": "8551d184b7ac6a2d779c1c2c8378f5a0001bbe8548c000350b4e94050a1f1dff"
     },
     {
       "path": "viewer/printing.js",
@@ -2488,7 +2488,7 @@
     },
     {
       "path": "viewer/spool-library.js",
-      "sha256": "9f7830d943411ee13171f2e5a4721e5a85893a072ca7c85ce53b11aedbf1487c"
+      "sha256": "edfd504429e7a92c59048be1889ad7bc1ea3ce388066ad7ccda0b84de09bd4c0"
     },
     {
       "path": "viewer/quick-print.js",
@@ -2512,7 +2512,19 @@
     },
     {
       "path": "viewer/owned-themes.js",
-      "sha256": "e79d4279b68db21c0e33b1bc428ab174030bad7bd05e050bd8670fb14ff9d76a"
+      "sha256": "f82e06dafd7ba50bb345b0a2220689a28fa460931b2c13e49d9fa730269d3ae4"
+    },
+    {
+      "path": "viewer/owned-theme-choices.js",
+      "sha256": "17e637f37219d58e62ca56f059bfbc1062607c45ac0003f1700426f8eed6d026"
+    },
+    {
+      "path": "viewer/pinned-themes.js",
+      "sha256": "5b017f4f35e1598a686fb4351e8688eb7d67aaa3c61219f69316b51675528778"
+    },
+    {
+      "path": "viewer/pinned-themes.css",
+      "sha256": "a4c7ee3a4fad4a0066109c332906847a29b45767a8d98a54e0ee466dd081aada"
     },
     {
       "path": "viewer/thumbs/filament-brand-sunlu.png",
@@ -2560,7 +2572,7 @@
     },
     {
       "path": "viewer/previews.js",
-      "sha256": "10c1cdb8b8803948068ae3ac3d0d35a97c382cbf2dc16f6e0e3841f7becedc7d"
+      "sha256": "55a029e77976581b7b5ff3308b322afdc99ec5c288ca343f212b3ab50d2969b0"
     },
     {
       "path": "viewer/finishes.js",
@@ -2572,15 +2584,15 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "a86f30d3d297f5cf335c6f2713a4570f38aa943cd33bddc2279e88918378ac26"
+      "sha256": "17a4043124a1558682d05f99d3b5c2e6985e7f07ce333ddd309ae49f417fc646"
     },
     {
       "path": "viewer/template.html",
-      "sha256": "705bd29af36a4a3e7c3b5a80f109dbb67110a02e5307d06473ae7f2cbc1d312f"
+      "sha256": "66a2ed381455d3d2daf00b4dd9123678ca1b225c4be3e6b0f0bcca15301051f9"
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "3092e85b8bee17da37c9e2389df7e94372b14beef172ad1588dce55e98db7f7f"
+      "sha256": "e9f3384f4e24cd833c9100a37eee72cc7636eaa3b24aab41abad53dae0327299"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -2623,7 +2635,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "bc8e7c78d935f5e77c8e2b6a467ec58fdde55bf4d498c00ecce25ca4e1c5a3e3",
+  "viewer_sha256": "2807452a8cb93aabe094ab255743163847528eba6153351b42af8d74a108c0d4",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2909,8 +2921,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "5f092142b0b82163c43651d89fa516f83de7714767bf6ceec1d4b21d6a56e54b",
-    "bytes": 85840779
+    "sha256": "7443d3c824d4fc51282f4aacad35322a77e5af8d03d62804492e31cb5108715d",
+    "bytes": 85843414
   },
   "still": {
     "look": {
@@ -3563,7 +3575,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "b4878c23a2c8f38cff38a166fcd4694a32627221cfaefdddd4b07450b3474eef",
+  "offline_sha256": "1c7f78bdc691bd7c0aa52b32db3e641c54ad701377a0aab527cd2b5cf6922af1",
   "printing": {
     "path": "docs/explore/assets/printing-56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475.bin",
     "sha256": "56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475",
@@ -3613,8 +3625,8 @@
     "bytes": 335912
   },
   "geometry_aliases": 16,
-  "online_bytes": 1616049,
-  "offline_bytes": 113778563,
+  "online_bytes": 1624433,
+  "offline_bytes": 113786947,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

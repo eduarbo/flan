@@ -27,7 +27,8 @@ import {createExplorer,partInfo,matchesPart,isMagnet} from './explorer.js';
 import {createPreviewRenderer} from './previews.js';
 import {applyFramePreset,createFrameFinishes,framePalette,finishes} from './finishes.js';
 import {pageTokens} from './home/tokens.js';
-import {createStudio} from './studio.js';
+import {themeFromId} from './pinned-themes.js';
+import {createStudio,windowLighting} from './studio.js';
 import {t,tOr,translate,setLanguage,onLanguage,setText,partName} from './i18n.js';
 
 // The page speaks the visitor's language from the first frame; what the scripts write follows onLanguage.
@@ -1229,7 +1230,34 @@ async function copyLink(button){
   try{await navigator.clipboard.writeText(link);say('share-status','files.copied');return true;}
   catch{if(activeMode!=='files'||!panelOpen)openPanel('files',button);$('share-link').focus();$('share-link').select();say('share-status','files.copyManual');return false;}
 }
-appearance=createAppearance({$,get:()=>configuration,apply:applyConfiguration,targets:kind=>kind==='case'?caseTargets():frameTargets(),preview,frameFinish,material,resize,catalog,geometryFor,printUses,printSelection,catalogLabel:id=>family[id].title});
+const recipeScene=new THREE.Scene();
+windowLighting(renderer,recipeScene,true);
+recipeScene.environment=scene.environment;
+recipeScene.environmentIntensity=scene.environmentIntensity;
+// Match the size and component cards using the installed meshes at their assembled positions.
+const recipePreview={
+ shape(side){
+  if(awaitedMeshes||shownVariant(configuration)!==configuration.variant)return null;
+  const installed=objects.filter(o=>o.userData.side===side&&o.userData.installed!==false);
+  return [side,pcbMask(configuration,side),setupOf(configuration).mode,...installed.map(o=>[o.geometry.id,o.rotation.y,o.userData.base].join('/'))].join('|');
+ },
+ image(recipe,side){
+  const next=applyTheme(configuration,recipe,[side]),frame=next.frames[side],entries=[];
+  for(const object of objects){
+   const part=object.userData;
+   if(part.side!==side||part.installed===false)continue;
+   let mat=object.material;
+   if(part.group==='base'||part.group==='plate')mat=material(next.cases[side][part.group+'_color']);
+   else if(part.group==='keycaps')mat=material(next.keycaps[side][part.key].color);
+   else if(part.frame_style!==undefined)mat=setupOf(next).mode==='ams'?frameFinish(frame.style,side,frame.color,frame.accents,part.mesh_source).material:material(frame.color);
+   else if(!Array.isArray(mat))mat=mat.userData.plain||mat;
+   entries.push({geometry:object.geometry,position:part.base,rotation:THREE.MathUtils.radToDeg(object.rotation.y),material:mat});
+  }
+  return preview.image(entries,directions.iso,{width:270,height:180,scene:recipeScene});
+ },
+ batch(draw){preview.begin();try{draw();}finally{preview.end();resize();renderNow();}}
+};
+appearance=createAppearance({$,get:()=>configuration,apply:applyConfiguration,targets:kind=>kind==='case'?caseTargets():frameTargets(),recipePreview,catalog,printUses,printSelection,catalogLabel:id=>family[id].title});
 keycapColors=createKeycapColors({$,catalog,onTargets:ids=>{capTargets=ids;render();},get:()=>configuration,apply:applyConfiguration,message,storageNotice:(text,error)=>storageNotice(text,error,'palettes')});
 applyConfiguration(configuration,{record:false,persist:false,fetch:!opening});
 if(storageMessage)storageNotice(storageMessage,true,'configuration');else if(restored){message(t('msg.restored'));saveState('save.done','saved');}else{message(t('msg.local'));saveState('','');}
@@ -1241,7 +1269,7 @@ function lookConfiguration(q){
   const size=q.get('size')||c.variant;if(!variantIds.includes(size))throw Error(t('msg.size',{v:size}));c.variant=size;
   const preset={original:'default',normal:'normal-sculpted',saddle:'saddle-sculpted'}[q.get('keys')||'original'];if(!preset)throw Error(t('msg.keys',{v:q.get('keys')}));
   const style=q.get('case')||'rim';if(!catalog.case_styles[style])throw Error(t('msg.case',{v:style}));
-  const theme=printThemes.find(t=>t.id===(q.get('theme')||'snes'));if(!theme)throw Error(t('msg.theme',{v:q.get('theme')}));
+  const theme=printThemes.find(t=>t.id===(q.get('theme')||'snes'))||themeFromId(q.get('theme'));if(!theme)throw Error(t('msg.theme',{v:q.get('theme')}));
   const frames=(q.get('frame')||(catalog.frame_styles[theme.recommended_frame]?theme.recommended_frame:c.frames.left.style)).split(',');
   for(const [i,side] of sides.entries()){
     const frame=frames[i]||frames[0];if(!catalog.frame_styles[frame])throw Error(t('msg.frame',{v:frame}));
@@ -1283,8 +1311,13 @@ onLanguage(()=>{
 // The design opens beside the model, as the home page's rail does.
 showWorkspace();setPanelOpen(true);resize();reset();
 drawPictures();live=true;
-openBuildStep(location.hash.slice(1));
-window.addEventListener('hashchange',()=>openBuildStep(location.hash.slice(1)));
+function openLinkedSection(){
+ if(location.hash!=='#spool-themes'){openBuildStep(location.hash.slice(1));return;}
+ openPanel('themes');revealPanel('themes');
+ if($('owned-themes').hidden)$('my-spools').click();
+}
+openLinkedSection();
+window.addEventListener('hashchange',openLinkedSection);
 portraitLayout.addEventListener('change',()=>{showWorkspace();if(activeMode==='customize')revealPanel(activePanel);});
 // ground(false) hides the contact shadow so checks and captures measure only the model.
 // resolves once no mesh a design or a card asked for is still being fetched, and what arrived is drawn

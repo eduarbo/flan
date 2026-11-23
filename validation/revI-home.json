@@ -2,8 +2,8 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "1522e9777d45b826d124360f0e0e6259e11f2d0a853e927d7094acd68975395b",
-    "bytes": 116837
+    "sha256": "c40fe5cdc9b32eca3c11148d669499817610366143fcda054c9fb3ef22bbedb0",
+    "bytes": 128879
   },
   "engine": {
     "path": "docs/assets/home-engine-fe7748edcdf10f5e.js",
@@ -2052,11 +2052,27 @@
   "sources": [
     {
       "path": "viewer/home-build.mjs",
-      "sha256": "a0722bf113f30abad17df7fe50abc21cbca12144c7c1d72433424975db1f38f9"
+      "sha256": "58a1dd1525713a7cc81488dc494132e309037d391193163ccc78c213c921bad5"
     },
     {
       "path": "viewer/home/app.js",
-      "sha256": "6ad2485dd3598cdd9b36cd44104de2d64e469c0774e71d7419b90f0e29397825"
+      "sha256": "51b5cf18e4a5c486e9673e18b3e5dc97f075b520ecedb14107cedd36df8294b0"
+    },
+    {
+      "path": "viewer/pinned-themes.js",
+      "sha256": "5b017f4f35e1598a686fb4351e8688eb7d67aaa3c61219f69316b51675528778"
+    },
+    {
+      "path": "viewer/pinned-themes.css",
+      "sha256": "a4c7ee3a4fad4a0066109c332906847a29b45767a8d98a54e0ee466dd081aada"
+    },
+    {
+      "path": "viewer/owned-themes.js",
+      "sha256": "f82e06dafd7ba50bb345b0a2220689a28fa460931b2c13e49d9fa730269d3ae4"
+    },
+    {
+      "path": "design/filament-ranges.json",
+      "sha256": "10e03aab77f14bce95c623662855c7afd1d4db3b6c0bf83863e04c69266eb6b4"
     },
     {
       "path": "viewer/home/options.js",
@@ -2088,11 +2104,11 @@
     },
     {
       "path": "viewer/home/style.css",
-      "sha256": "e4d0ded35f19c4e3c6b717877ff40e2c384771a7e2fa32c477169042405a7476"
+      "sha256": "f5d54185398121e833e1ab3ff47451800b6ec08a26f289ed6063eab6181e3ae2"
     },
     {
       "path": "viewer/home/template.html",
-      "sha256": "c6eb7b6aec6a54a366f8d95c2dc362b009774b8890ae65083212adf45f03f79f"
+      "sha256": "9e258bff3a43689620983dc62b23c9a3b0b95e69082ee66fd9fb20c0c023e9af"
     },
     {
       "path": "design/themes.json",

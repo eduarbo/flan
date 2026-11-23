@@ -818,9 +818,25 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
  .spool-filters label:last-of-type { grid-column: 1/-1; }
 }
 .spool-library .spool-filters[hidden], .clear-spool-filters[hidden] { display:none; }
-.owned-theme { display:flex; align-items:center; gap:14px; width:100%; padding:12px; margin-block:6px; text-align:left; background:var(--soft); border-radius:10px; }
-.owned-theme strong,.owned-theme small { display:block; }
-.owned-theme small { margin-top:3px; }
-.owned-preview { display:grid; flex:none; grid-template-columns:repeat(4,9px); gap:2px; padding:5px; border-radius:6px; background:var(--case); box-shadow:inset 0 0 0 1px #8888; }
-.owned-preview i { height:8px; background:var(--keys); border-radius:2px; box-shadow:inset 0 0 0 1px #8887; }
-.owned-preview i:is(:nth-last-child(1),:nth-last-child(3)) { background:var(--spot); }
+#owned-themes { min-width: 0; }
+.owned-theme-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.owned-theme-head h3 { margin: 0; }
+#owned-pages { display: flex; }
+#owned-pages[hidden] { display: none; }
+#owned-pages button { min-width: 44px; height: 44px; color: var(--ink); border-radius: 50%; }
+#owned-pages button:hover:enabled { background: var(--soft); }
+#owned-pages button:disabled { opacity: .35; }
+#owned-theme-grid { grid-template-columns: repeat(auto-fit,minmax(min(76px,100%),1fr)); }
+#owned-theme-grid img { height: auto; aspect-ratio: 3/2; max-height: 80px; }
+#owned-theme-grid small { font: 10px/1.2 var(--mono); color: var(--muted); }
+#owned-theme-detail { margin: 6px 0 0; }
+#owned-theme-detail:empty { display: none; }
+@media (max-width: 700px), (max-width: 1000px) and (orientation: portrait) {
+ #owned-theme-grid .preview-card { width: 94px; }
+}
+
+.owned-theme-tools { display: flex; align-items: center; }
+#pin-theme, #unpin-theme { min-height: 44px; font-size: 12px; color: var(--accent); padding: 4px 7px; }
+#pin-theme:disabled { color: var(--muted); opacity: .6; }
+#pin-theme[aria-pressed=true] { font-weight: 600; }
+#pin-status:empty { display: none; }
