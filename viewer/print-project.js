@@ -89,8 +89,8 @@ export async function combinedProject(parts,keycaps,title,config,progress){
   'Pega después de imprimir: tres imanes axiales Ø2 × 3 mm por base desde arriba y tres Ø2 × 4 mm por marco desde abajo. Prueba en seco una pareja que se atraiga. Deja el mismo polo visible en todas las bases y el opuesto en los marcos. Usa adhesivo compatible y deja curar las piezas separadas antes de montar la electrónica.\n');
  files['Metadata/Flan/Filaments.csv']=strToU8(spoolRows.join('\n')+'\n');
  if(keycaps){
-  const header='side,key,file,color,rotation_deg';
-  const rows=keycaps.plan.keys.map(k=>[k.side,k.key,k.file,k.color,k.rotation_deg].join(','));
+  const header='side,key,file,color,rotation_deg,spool';
+  const rows=keycaps.plan.keys.map(k=>[k.side,k.key,k.file,k.color,k.rotation_deg,k.spool||''].join(','));
   files['Metadata/Flan/Keycaps.csv']=strToU8([header,...rows].join('\n')+'\n');
  }
  const plan=plates.map((plate,i)=>({number:i+1,name:plate.family,sequence:plate.sequence,objects:plate.parts.length,

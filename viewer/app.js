@@ -10,7 +10,7 @@ import {createDesignURL} from './design-url.js';
 import {deflateSync} from 'three/addons/libs/fflate.module.js';
 import {createPartIllustrations} from './part-illustrations.js';
 import {buildFile,buildWait,completeBuild,sha256} from './build-package.js';
-import {createAppearance,setColor,savedKey,applyTheme} from './appearance.js';
+import {createAppearance,setColor,assignThemeParts,savedKey,applyTheme} from './appearance.js';
 import {printThemes,printFrameColors,presetSpool} from './preset-filaments.js';
 import {restoreConfiguration,createStore,recoveryPrefix} from './storage.js';
 import {createHistory} from './history.js';
@@ -20,7 +20,7 @@ import {toCreasedNormals} from 'three/addons/utils/BufferGeometryUtils.js';
 import {createQuickPrint} from './quick-print.js';
 import {createPlatePreview} from './plate-preview.js';
 import {printerModels,printerFor} from './printer-presets.js';
-import {bindSpool,commonSpool,setupOf,mapThemeToSpools} from './filament-swatches.js';
+import {commonPartSpool,setupOf,mapThemeToSpools} from './filament-swatches.js';
 import {enhanceColorInput} from './color-input.js';
 import {createKeycapColors} from './keycap-colors.js';
 import {createExplorer,partInfo,matchesPart,isMagnet} from './explorer.js';
@@ -874,9 +874,8 @@ function labelFrames(){
 }
 labelFrames();onLanguage(labelFrames);
 const frameHex=enhanceColorInput($('frame-color'),()=>t('frame.color'),spool=>{
-  const sides=frameTargets(),next=setColor(configuration,sides,'frame','body',spool.hex.toLowerCase());
-  applyConfiguration(bindSpool(next,sides,spool));
-},hex=>commonSpool(configuration,frameTargets(),hex));
+  applyConfiguration(assignThemeParts(configuration,frameTargets().map(side=>[side,'frame']),spool,{respectColorLink:true}));
+},hex=>commonPartSpool(configuration,frameTargets().map(side=>[side,'frame']),hex));
 $('frame-color').oninput=e=>applyConfiguration(setColor(configuration,frameTargets(),'frame','body',e.target.value));
 $('theme-colors').onclick=()=>{
  const cfg=copy(configuration);
@@ -991,12 +990,13 @@ function showUnderside(){
 }
 $('build-focus-toggle').onclick=()=>{buildFocus=!buildFocus;layoutPanel();};
 $('build-edit').onclick=()=>openPanel(activePanel,$('build-edit'));
+function openThemeFilaments(opener){
+ openPanel('themes',opener);
+ const section=$('theme-filaments');section.open=true;
+ section.querySelector('summary').focus({preventScroll:true});section.scrollIntoView({block:'start'});
+}
 const buildGuide=createBuildGuide({catalog,family,inventory:printInventory,getDesignLink:shareLink,illustrations:partIllustrations,
-  editFilaments:opener=>{
-    openPanel('themes',opener);
-    const section=$('theme-filaments');section.open=true;
-    section.querySelector('summary').focus();section.scrollIntoView({block:'start'});
-  }});
+  editFilaments:openThemeFilaments});
 $('pcb-order').onclick=()=>{openPanel('files',$('pcb-order'));refreshRecovery();$('build-boards').scrollIntoView({block:'start'});};
 const raw=path=>'https://raw.githubusercontent.com/eduarbo/flan/main/'+path;
 for(const edition of silk.editions){
@@ -1312,6 +1312,7 @@ onLanguage(()=>{
 showWorkspace();setPanelOpen(true);resize();reset();
 drawPictures();live=true;
 function openLinkedSection(){
+ if(location.hash==='#theme-filaments'){openThemeFilaments();return;}
  if(location.hash!=='#spool-themes'){openBuildStep(location.hash.slice(1));return;}
  openPanel('themes');revealPanel('themes');
  if($('owned-themes').hidden)$('my-spools').click();

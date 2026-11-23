@@ -2,12 +2,12 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "c40fe5cdc9b32eca3c11148d669499817610366143fcda054c9fb3ef22bbedb0",
+    "sha256": "9f454d344f1b2fded30ca13dcc3a4741e5fcc6966f51cd5fdc84567f2f6980a5",
     "bytes": 128879
   },
   "engine": {
-    "path": "docs/assets/home-engine-fe7748edcdf10f5e.js",
-    "sha256": "fe7748edcdf10f5e7653a4bfee41463896a94fb195f1b8b6e38f296156137051",
+    "path": "docs/assets/home-engine-4e7cede658045260.js",
+    "sha256": "4e7cede658045260450cf754149e901e86c880133bb9b63558b1d74226473e18",
     "bytes": 644527
   },
   "posters": [
@@ -2116,11 +2116,11 @@
     },
     {
       "path": "viewer/preset-filaments.js",
-      "sha256": "a8cb7b73bff2d606eca48cdef937a9da99abdaccc1e7274511e433e33e862231"
+      "sha256": "8c3ed64fa5ba1f1502a251ddb6b82c0c7aced257b32606fd3829c658884c06fc"
     },
     {
       "path": "viewer/filament-swatches.js",
-      "sha256": "8ecce545fd4e761d4f1cf97d6c37ae2fb25139ff1ffdfe31e3b52f138c16bf55"
+      "sha256": "e0e15b5239df8ad76cea805fab6630a6c49749feba5f3d408dcab2305f9b40db"
     },
     {
       "path": "design/preset-filaments.json",

@@ -1964,7 +1964,7 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "796c612086c937da879f4600260f45aad48e76fe6d7dd65e256710d208920ab8"
+      "sha256": "511f612233bbd9a43bfce51ac477e86bdb705134bdea4c14378de614b516df6b"
     },
     {
       "path": "viewer/build-guide.js",
@@ -2380,11 +2380,11 @@
     },
     {
       "path": "viewer/i18n.js",
-      "sha256": "da47309d9c9e29cbc0c29ff0c833e0b4e6ccc153c302a6b99040b9658bf26336"
+      "sha256": "b37e3f0a7dab177808e780a6393f54ee932a327ebdd3fc3fc67e5721ed0a2be0"
     },
     {
       "path": "viewer/config.js",
-      "sha256": "79a846fbe2d435ae3523bcc2ed702997f0ddfdd908a2060dec7e07ce8dc68b8c"
+      "sha256": "886b7849c8a89121ba00a1a48882d23470757707e35f8221b2b7fc7f9387a491"
     },
     {
       "path": "viewer/storage.js",
@@ -2416,7 +2416,7 @@
     },
     {
       "path": "viewer/keycap-colors.js",
-      "sha256": "9a8b6dcb22b8ff7d72c7fca5463960a9b403018738b582d508adca3c6ba95f84"
+      "sha256": "04be8c54d57604b25dd70eefb96149f595367ea07e57c527e0d13cb09cf347e6"
     },
     {
       "path": "viewer/color-input.js",
@@ -2428,11 +2428,11 @@
     },
     {
       "path": "viewer/appearance.js",
-      "sha256": "8551d184b7ac6a2d779c1c2c8378f5a0001bbe8548c000350b4e94050a1f1dff"
+      "sha256": "593e095894378e6308ea84a57f677bd3f03807d8471dec5d98cb4034676d50cf"
     },
     {
       "path": "viewer/printing.js",
-      "sha256": "d379c6de8572cbbd50a489323f68d11c7c4a5fb3f85930232ac39922c12e33c9"
+      "sha256": "3ec28bfede589988ad3ab57f68e5d8be176d3774466df413acc70699e4d4433d"
     },
     {
       "path": "viewer/print-geometry.js",
@@ -2440,7 +2440,7 @@
     },
     {
       "path": "viewer/print-project.js",
-      "sha256": "379c0aa00580c0b532d272b553a96ff2f8be2b3ac41efd01088e9f419f748382"
+      "sha256": "09e11c7db1dab4267a8cee7963b4910e3aa641362b489f08548a73889d044b2b"
     },
     {
       "path": "viewer/plate-layout.js",
@@ -2456,11 +2456,11 @@
     },
     {
       "path": "viewer/project-objects.js",
-      "sha256": "158c8698ca7119ffd3d94e4b306740dc352c383c87757cf7247405b230712810"
+      "sha256": "ef3690f226b63c1d9cd19e752857dbede8d4332e55497d3041a133538b5a367b"
     },
     {
       "path": "viewer/plate-preview.js",
-      "sha256": "2e64ab39b0ffd47cf94ab0feb4e8be053d9dbf6a105389c4f172437dc66a41d3"
+      "sha256": "a467f05a0b3f958c87d07e5966ba6fda321b8784de4a01546718612beda520e3"
     },
     {
       "path": "viewer/printer-presets.js",
@@ -2472,11 +2472,11 @@
     },
     {
       "path": "viewer/filament-swatches.js",
-      "sha256": "8ecce545fd4e761d4f1cf97d6c37ae2fb25139ff1ffdfe31e3b52f138c16bf55"
+      "sha256": "e0e15b5239df8ad76cea805fab6630a6c49749feba5f3d408dcab2305f9b40db"
     },
     {
       "path": "viewer/preset-filaments.js",
-      "sha256": "a8cb7b73bff2d606eca48cdef937a9da99abdaccc1e7274511e433e33e862231"
+      "sha256": "8c3ed64fa5ba1f1502a251ddb6b82c0c7aced257b32606fd3829c658884c06fc"
     },
     {
       "path": "design/preset-filaments.json",
@@ -2484,7 +2484,7 @@
     },
     {
       "path": "viewer/filament-picker.js",
-      "sha256": "d77e1031099af9e924f0f1501bbf1219a950b0cd21a6df7ddbf620963a2bab64"
+      "sha256": "482675b38a2c1b07b31dd97821231a7815723e2f6100766e30c20c048a3fe231"
     },
     {
       "path": "viewer/spool-library.js",
@@ -2576,7 +2576,7 @@
     },
     {
       "path": "viewer/finishes.js",
-      "sha256": "00fe281116e18d9f452427f9bc8a608c7acb55d4df0159100c750c7bdbd6c10e"
+      "sha256": "cf4e31b9af36cc3eee8e686148559228a7257ab63cd965eaabbf60a91d3ce9d5"
     },
     {
       "path": "design/frame-finishes.json",
@@ -2584,11 +2584,11 @@
     },
     {
       "path": "viewer/style.css",
-      "sha256": "17a4043124a1558682d05f99d3b5c2e6985e7f07ce333ddd309ae49f417fc646"
+      "sha256": "df521cc07f2d31e69522625b81a4023d013a6e85b41dc7bf47c3def3d1597d9c"
     },
     {
       "path": "viewer/template.html",
-      "sha256": "66a2ed381455d3d2daf00b4dd9123678ca1b225c4be3e6b0f0bcca15301051f9"
+      "sha256": "49bf51c510fecddb551ad18ac9f9d720844a8de9dd54b91a8fc992bee85e3e64"
     },
     {
       "path": "viewer/build.mjs",
@@ -2635,7 +2635,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "2807452a8cb93aabe094ab255743163847528eba6153351b42af8d74a108c0d4",
+  "viewer_sha256": "18a9e39bf9ce770571f6f8121cbec9d40b7ebcc3d282039ffa297e5828eed501",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2921,8 +2921,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "7443d3c824d4fc51282f4aacad35322a77e5af8d03d62804492e31cb5108715d",
-    "bytes": 85843414
+    "sha256": "db941469412aeb896908798cff258db10a767d796cf33417f6060ba08e844f58",
+    "bytes": 85844807
   },
   "still": {
     "look": {
@@ -2932,10 +2932,10 @@
       "keys": "original",
       "frame": "snes,phone"
     },
-    "fingerprint": "ce8f464c0c84b62d424ca7f3348f182167e82268b4574b732ca80fdfe4b2b821",
+    "fingerprint": "ca6cde48374c4c823fef648cf76153d201dbc3b6268d9b04a1424e20865b0bfd",
     "published": [
-      "docs/explore/assets/still-wide-7c1c9cd46161dae8.webp",
-      "docs/explore/assets/still-tall-d12fce4e81130bb8.webp"
+      "docs/explore/assets/still-wide-5346705439711fd4.webp",
+      "docs/explore/assets/still-tall-5ba80b77186e88fd.webp"
     ]
   },
   "plate_preview": {
@@ -3575,7 +3575,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "1c7f78bdc691bd7c0aa52b32db3e641c54ad701377a0aab527cd2b5cf6922af1",
+  "offline_sha256": "314e3a1337e59f604f5c5b4314ad68c972491a1b5d6e29b80b4d9adb19d3be23",
   "printing": {
     "path": "docs/explore/assets/printing-56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475.bin",
     "sha256": "56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475",
@@ -3625,8 +3625,8 @@
     "bytes": 335912
   },
   "geometry_aliases": 16,
-  "online_bytes": 1624433,
-  "offline_bytes": 113786947,
+  "online_bytes": 1628668,
+  "offline_bytes": 113791182,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

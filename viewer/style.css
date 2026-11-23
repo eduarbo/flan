@@ -840,3 +840,7 @@ body[data-mode=files][data-build-focus=true] #panel-files { width: min(100%,1120
 #pin-theme:disabled { color: var(--muted); opacity: .6; }
 #pin-theme[aria-pressed=true] { font-weight: 600; }
 #pin-status:empty { display: none; }
+
+#spool-view { margin-top: 10px; }
+.filament-part-name { display: flex; align-items: center; gap: 6px; font-weight: 600; }
+.filament-label:has(.filament-part-name) strong { font-size: 13px; font-weight: 500; }

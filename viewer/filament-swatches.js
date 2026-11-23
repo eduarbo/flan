@@ -74,10 +74,13 @@ export const catalogSpools=filamentRanges.flatMap(({series,brand,line,material,c
 });
 const byId=new Map(catalogSpools.map(s=>[s.id,s]));
 export const spoolById=id=>byId.get(id);
-export const spoolFor=(config,side,hex)=>spoolById(config.filaments?.[side]?.[hex.toLowerCase()]);
-export function commonSpool(config,sides,hex){
- const first=spoolFor(config,sides[0],hex);
- return first&&sides.every(side=>spoolFor(config,side,hex)===first)?first:undefined;
+export function spoolFor(config,side,hex,slot){
+ const color=hex.toLowerCase(),override=spoolById(config.part_filaments?.[side]?.[slot]);
+ return override?.hex.toLowerCase()===color?override:spoolById(config.filaments?.[side]?.[color]);
+}
+export function commonPartSpool(config,targets,hex){
+ const choices=targets.map(([side,slot])=>spoolFor(config,side,hex,slot));
+ return choices.every(choice=>choice===choices[0])?choices[0]:undefined;
 }
 export function rankedSwatchDistances(hex){
  const target=oklab(hex);
@@ -93,17 +96,53 @@ export function bindSpool(config,sides,spool){
 }
 export function colorFields(config,side){
  const cs=config.cases[side],frame=config.frames[side];
- return [[cs,'base_color','base'],[cs,'plate_color','plate'],[frame,'color','frame'],...Object.keys(frame.accents).map(k=>[frame.accents,k,k]),...Object.values(config.keycaps[side]).map(k=>[k,'color','keycaps'])];
+ return [[cs,'base_color','base','base'],[cs,'plate_color','plate','plate'],[frame,'color','frame','frame'],
+  ...Object.keys(frame.accents).map(k=>[frame.accents,k,k,k]),
+  ...Object.entries(config.keycaps[side]).map(([ref,k])=>[k,'color','keycaps',ref])];
+}
+
+// Use a part override only when another part needs a different spool at the same RGB.
+export function assignPartSpool(config,side,slots,spool){
+ if(!slots.length)return;
+ const fields=colorFields(config,side),targets=new Set(slots),hex=spool.hex.toLowerCase();
+ const shared=fields.some(([record,key,,slot])=>!targets.has(slot)&&record[key].toLowerCase()===hex);
+ if(!shared)bindSpool(config,[side],spool);
+ for(const [record,key,,slot] of fields){
+  if(!targets.has(slot))continue;
+  record[key]=hex;
+  if(config.filaments?.[side]?.[hex]===spool.id){
+   if(config.part_filaments?.[side])delete config.part_filaments[side][slot];
+  }else{
+   config.part_filaments??={};config.part_filaments[side]??={};config.part_filaments[side][slot]=spool.id;
+  }
+ }
+}
+export function prunePartFilaments(config){
+ if(!config.part_filaments)return;
+ for(const [side,bindings] of Object.entries(config.part_filaments)){
+  for(const [record,key,,slot] of colorFields(config,side)){
+   const color=record[key].toLowerCase(),id=bindings[slot];
+   if(id&&(spoolById(id)?.hex.toLowerCase()!==color||config.filaments?.[side]?.[color]===id))delete bindings[slot];
+  }
+  if(!Object.keys(bindings).length)delete config.part_filaments[side];
+ }
+ if(!Object.keys(config.part_filaments).length)delete config.part_filaments;
 }
 export function mapThemeToSpools(config,sides,choose){
  const next=JSON.parse(JSON.stringify(config));
  for(const side of sides){
-  for(const [record,key] of colorFields(next,side)){
-   const hex=record[key].toLowerCase(),spool=choose(hex,side);
-   if(spool){record[key]=spool.hex.toLowerCase();bindSpool(next,[side],spool);}
+  const groups=new Map();
+  for(const [record,key,,slot] of colorFields(config,side)){
+   const spool=choose(record[key].toLowerCase(),side,slot);
+   if(spool){if(!groups.has(spool))groups.set(spool,[]);groups.get(spool).push(slot);}
   }
+  for(const [spool,slots] of groups)assignPartSpool(next,side,slots,spool);
  }
- return next;
+ prunePartFilaments(next);return next;
+}
+export function partMaterialSlot(part,role){
+ if(part.id.includes('-frame-'))return role==='body'?'frame':role;
+ return part.id.endsWith('-plate')?'plate':'base';
 }
 export const modes=['ams','object','manual'];
 export function setupOf(config){

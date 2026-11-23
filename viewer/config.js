@@ -4,7 +4,7 @@ import pcbOptions from '../design/pcb-options.json';
 import family from '../design/variants.json';
 import fastenerProfiles from '../design/fastener-profiles.json';
 import {printerFor} from './printer-presets.js';
-import {spoolById,modes} from './filament-swatches.js';
+import {prunePartFilaments,spoolById,modes} from './filament-swatches.js';
 import {t} from './i18n.js';
 export const pcbEditionIds=pcbOptions.editions.map(e=>e.id),pcbMaskIds=pcbOptions.masks.map(m=>m.id);
 export const variantIds=Object.keys(family.variants),defaultVariant=family.base;
@@ -41,7 +41,7 @@ export function gap(a,b){
  return result;
 }
 export const retiredFrames=(config,c)=>['left','right'].filter(side=>Object.hasOwn(c.retired_frame_styles||{},config?.frames?.[side]?.style));
-export function normalize(config,c){const result=copy(config);result.schema="flan36-config-1";result.variant??=defaultVariant;if(result.fasteners===defaultFasteners)delete result.fasteners;result.pcb_edition??=pcbOptions.default_edition;result.pcb_mask??=pcbOptions.default_mask;for(const [side,keys] of Object.entries(c.layout))for(const key of keys)result.keycaps[side][key.ref].color??=key.row===3?'#45967b':'#e9dfc6';if(!('cases' in result))result.cases=Object.fromEntries(['left','right'].map(side=>[side,{style:'solid',cover:true}]));for(const side of ['left','right']){const cs=result.cases[side],style=c.case_styles[cs.style];cs.base_color??=style.base_color;cs.plate_color??=style.plate_color;cs.match_frame??=false;const f=result.frames[side],retired=Object.hasOwn(c.retired_frame_styles||{},f.style),paletteStyle=retired?(c.retired_frame_palette_styles?.[f.style]||c.retired_frame_styles[f.style]):f.style;const p=framePalette(paletteStyle,f.color,f.accents);if(retired)f.style=c.retired_frame_styles[f.style];f.accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,p[k]]));}return result;}
+export function normalize(config,c){const result=copy(config);result.schema="flan36-config-1";result.variant??=defaultVariant;if(result.fasteners===defaultFasteners)delete result.fasteners;result.pcb_edition??=pcbOptions.default_edition;result.pcb_mask??=pcbOptions.default_mask;for(const [side,keys] of Object.entries(c.layout))for(const key of keys)result.keycaps[side][key.ref].color??=key.row===3?'#45967b':'#e9dfc6';if(!('cases' in result))result.cases=Object.fromEntries(['left','right'].map(side=>[side,{style:'solid',cover:true}]));for(const side of ['left','right']){const cs=result.cases[side],style=c.case_styles[cs.style];cs.base_color??=style.base_color;cs.plate_color??=style.plate_color;cs.match_frame??=false;const f=result.frames[side],retired=Object.hasOwn(c.retired_frame_styles||{},f.style),paletteStyle=retired?(c.retired_frame_palette_styles?.[f.style]||c.retired_frame_styles[f.style]):f.style;const p=framePalette(paletteStyle,f.color,f.accents);if(retired)f.style=c.retired_frame_styles[f.style];f.accents=Object.fromEntries(['detail','accent','secondary'].map(k=>[k,p[k]]));}prunePartFilaments(result);return result;}
 export function retiredReplacementNames(config,c){return [...new Set(retiredFrames(config,c).map(side=>c.frame_styles[c.retired_frame_styles[config.frames[side].style]]))].join(', ');}
 export function check(config,c){
  const record=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
@@ -60,6 +60,9 @@ export function check(config,c){
    if(!machine||machine.bed!==setup.bed||typeof setup.nozzle!=='string'||!Object.hasOwn(machine.nozzles,setup.nozzle))return {errors:[t('spool.invalid')]};
   }
  }
+ if('part_filaments' in config&&(!record(config.part_filaments)||Object.entries(config.part_filaments).some(([side,slots])=>
+  !['left','right'].includes(side)||!record(slots)||Object.entries(slots).some(([slot,id])=>
+   !spoolById(id)||!(['base','plate','frame','detail','accent','secondary'].includes(slot)||c.layout[side].some(k=>k.ref===slot))))))return {errors:[t('spool.invalid')]};
  if('filaments' in config&&(!record(config.filaments)||Object.entries(config.filaments).some(([side,slots])=>!['left','right'].includes(side)||!record(slots)||Object.entries(slots).some(([hex,id])=>spoolById(id)?.hex.toLowerCase()!==hex))))return {errors:[t('spool.invalid')]};
  if('fasteners' in config){if(typeof config.fasteners!=='string'||!fastenerIds.includes(config.fasteners))return {errors:[t('cfg.fasteners')]};if(!fastenersFit(config.fasteners,config.variant))return {errors:[t('cfg.fastenersSize')]};}
  if('pcb_edition' in config&&!pcbEditionIds.includes(config.pcb_edition))return {errors:[t('cfg.edition')]};

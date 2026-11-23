@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-import {setupOf,spoolById,spoolFor} from './filament-swatches.js';
+import {partMaterialSlot,setupOf,spoolById,spoolFor} from './filament-swatches.js';
 import {printPlacement} from './print-pose.js';
 
 export function projectSetup(config){
@@ -23,7 +23,7 @@ export function projectObject({part,count,family},materials,spools,config){
  const placement=printPlacement(part.id,materials),pose=placement.transform(),heights=new Map();
  const materialSlots=materials.map(m=>{
   const color=(part.colors[m.role]||part.colors.body).toUpperCase();
-  const spool=spoolById(part.spool)||spoolFor(config,part.side,color),key=spool?.id||color;
+  const spool=spoolById(part.spool)||spoolFor(config,part.side,color,partMaterialSlot(part,m.role)),key=spool?.id||color;
   let slot=spools.findIndex(s=>s.key===key);
   if(slot<0){slot=spools.length;spools.push({key,color,series:spool?.series,material:spool?.material,name:spool?.name,label:spool?spool.series+' · '+spool.name:color});}
   let z=pose[11];

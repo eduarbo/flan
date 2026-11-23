@@ -2,7 +2,7 @@
 import stock from '../design/preset-filaments.json' with {type:'json'};
 import designs from '../design/themes.json' with {type:'json'};
 import keycaps from '../design/keycap-themes.json' with {type:'json'};
-import {rankedSwatchDistances,bindSpool} from './filament-swatches.js';
+import {rankedSwatchDistances,bindSpool,assignPartSpool,colorFields} from './filament-swatches.js';
 
 import {contrastRatio} from './home/tokens.js';
 
@@ -71,4 +71,14 @@ export const printThemes=designs.themes.map(printableTheme);
 export const printCapPalettes=keycaps.palettes.map(palette=>printableCaps(palette));
 export function bindPresetColors(config,side,colors){
  for(const color of new Set(colors))bindSpool(config,[side],presetSpool(color));
+}
+
+export function bindPresetParts(config,side,slots){
+ const selected=new Set(slots),groups=new Map();
+ for(const [record,key,,slot] of colorFields(config,side)){
+  if(!selected.has(slot))continue;
+  const spool=presetSpool(record[key]);
+  if(!groups.has(spool))groups.set(spool,[]);groups.get(spool).push(slot);
+ }
+ for(const [spool,parts] of groups)assignPartSpool(config,side,parts,spool);
 }

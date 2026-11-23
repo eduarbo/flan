@@ -3,9 +3,9 @@ import {decorateFilamentDisclosure,filamentReel,filamentLabel,flatSwatch} from '
 import {ownedRecipe} from './owned-themes.js';
 import {createSpoolLibrary} from './spool-library.js';
 import {chooseFilament} from './filament-picker.js';
-import {bindSpool,commonSpool,closestSwatch,colorFields,mapThemeToSpools,spoolFor} from './filament-swatches.js';
+import {assignPartSpool,bindSpool,commonPartSpool,closestSwatch,colorFields,mapThemeToSpools,spoolFor} from './filament-swatches.js';
 import {enhanceColorInput} from './color-input.js';
-import {printThemes,printableTheme,bindPresetColors} from './preset-filaments.js';
+import {printThemes,printableTheme,bindPresetColors,presetSpool} from './preset-filaments.js';
 import {copy} from './config.js';
 import {paletteColor} from './keycap-colors.js';
 import {framePalette,finishes} from './finishes.js';
@@ -23,6 +23,7 @@ export function applyTheme(config,source,sides){
   for(const [ref,key] of Object.entries(c.keycaps[side])){
    key.color=paletteColor(theme.keycaps,{row:Number(ref[1]),col:Number(ref[2])});
   }
+  if(c.part_filaments)delete c.part_filaments[side];
   c.filaments[side]={};
   if(theme.spools){for(const spool of theme.spools)bindSpool(c,[side],spool);}
   else bindPresetColors(c,side,colorFields(c,side).map(([record,field])=>record[field]));
@@ -30,6 +31,21 @@ export function applyTheme(config,source,sides){
  return c;
 }
 export function setColor(config,sides,part,role,color){const c=copy(config);for(const side of sides){const cs=c.cases[side],f=c.frames[side];if(part==='case')cs[role]=color;else if(role==='body')f.color=color;else f.accents[role]=color;if(cs.match_frame){if(part==='case'&&(role==='base_color'||(cs.style==='level'&&role==='plate_color')))f.color=cs.base_color=color;if(part==='frame'&&role==='body')cs.base_color=color;if(cs.style==='level')cs.plate_color=f.color;}}return c;}
+export function assignThemeParts(config,targets,spool,{respectColorLink=false}={}){
+ const next=copy(config);
+ for(const side of new Set(targets.map(([side])=>side))){
+  const slots=targets.filter(([s])=>s===side).map(([,slot])=>slot);
+  const cs=next.cases[side];
+  if(respectColorLink&&cs.match_frame){
+   const linked=cs.style==='level'?['base','frame','plate']:['base','frame'];
+   if(slots.some(slot=>linked.includes(slot)))slots.push(...linked);
+  }
+  assignPartSpool(next,side,slots,spool);
+  const frame=next.frames[side].color.toLowerCase();
+  if(cs.base_color.toLowerCase()!==frame||(cs.style==='level'&&cs.plate_color.toLowerCase()!==frame))cs.match_frame=false;
+ }
+ return next;
+}
 export function createAppearance({$,get,apply,targets,recipePreview,catalog,printUses,printSelection,catalogLabel}){
  decorateFilamentDisclosure($('theme-filaments'));
  let themeSide='both';const sides=()=>themeSide==='both'?['left','right']:[themeSide];
@@ -41,12 +57,16 @@ export function createAppearance({$,get,apply,targets,recipePreview,catalog,prin
    return cs.base_color.toLowerCase()===theme.base&&cs.plate_color.toLowerCase()===(cs.style==='level'?theme.frame.body:theme.plate)
     &&f.color.toLowerCase()===theme.frame.body&&['detail','accent','secondary'].every(role=>f.accents[role].toLowerCase()===theme.frame[role])
     &&catalog.layout[side].every(key=>c.keycaps[side][key.ref].color.toLowerCase()===paletteColor(theme.keycaps,key))
-    &&(!theme.roles||theme.spools.every(spool=>spoolFor(c,side,spool.hex)?.id===spool.id));
+    &&colorFields(c,side).every(([record,field,,slot])=>{
+     const hex=record[field],assigned=spoolFor(c,side,hex,slot);
+     if(!theme.roles)return !assigned||assigned===presetSpool(hex);
+     return assigned&&theme.spools.includes(assigned);
+    });
   });
  }
  function currentRecipe(){
   const c=get(),side=sides()[0],frame=c.frames[side];
-  const roles=[c.cases[side].base_color,frame.accents.detail,frame.accents.accent].map(color=>spoolFor(c,side,color));
+  const roles=[['base',c.cases[side].base_color],['detail',frame.accents.detail],['accent',frame.accents.accent]].map(([slot,color])=>spoolFor(c,side,color,slot));
   if(!roles.every(spool=>spool&&spool.material===roles[0].material))return null;
   const recipe=ownedRecipe(...roles);
   return matchesTheme(recipe)?recipe:null;
@@ -63,9 +83,9 @@ export function createAppearance({$,get,apply,targets,recipePreview,catalog,prin
   input.oninput=()=>apply(setColor(get(),targets(target),part,role,input.value));
   row.append(text,value,input);$(container).append(row);
   const hex=enhanceColorInput(input,()=>t(label),spool=>{
-   const sides=targets(target),next=setColor(get(),sides,part,role,spool.hex.toLowerCase());
-   apply(bindSpool(next,sides,spool));
-  },color=>commonSpool(get(),targets(target),color));
+   apply(assignThemeParts(get(),partTargets(),spool,{respectColorLink:true}));
+  },color=>commonPartSpool(get(),partTargets(),color));
+  function partTargets(){return targets(target).map(side=>[side,part==='case'?role.replace('_color',''):role]);}
   inputs.push({input,value,part,role,target,text,label,hex});
  }
  colorInput('case-colors','color.base','case','base_color','case');colorInput('case-colors','color.plate','case','plate_color','case');
@@ -76,7 +96,7 @@ export function createAppearance({$,get,apply,targets,recipePreview,catalog,prin
   for(const side of ['left','right']){
    const cs=c.cases[side],f=c.frames[side];
    palette.sides[side]={base:cs.base_color,plate:cs.plate_color,linked:cs.match_frame,frame:f.color,accents:f.accents,
-    keys:Object.fromEntries(Object.entries(c.keycaps[side]).map(([id,k])=>[id,k.color])),filaments:c.filaments?.[side]||{}};
+    keys:Object.fromEntries(Object.entries(c.keycaps[side]).map(([id,k])=>[id,k.color])),filaments:c.filaments?.[side]||{},...(c.part_filaments?.[side]?{part_filaments:c.part_filaments[side]}:{})};
   }
   const url=URL.createObjectURL(new Blob([JSON.stringify(palette,null,2)],{type:'application/json'}));
   const a=document.createElement('a');a.href=url;a.download='Flan-theme.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
@@ -96,35 +116,46 @@ export function createAppearance({$,get,apply,targets,recipePreview,catalog,prin
     Object.assign(next.frames[side],{color:palette.frame,accents:palette.accents});
     for(const [id,key] of Object.entries(next.keycaps[side])){if(!/^#[0-9a-f]{6}$/i.test(palette.keys[id]))throw Error();key.color=palette.keys[id];}
     next.filaments??={};next.filaments[side]=palette.filaments||{};
+    if(next.part_filaments)delete next.part_filaments[side];
+    if(palette.part_filaments){next.part_filaments??={};next.part_filaments[side]=palette.part_filaments;}
    }
    apply(next);$('theme-file-status').textContent=t('spool.loaded');
   }catch{$('theme-file-status').textContent=t('spool.invalid');}finally{e.target.value='';}
  };
  $('theme-filaments').ontoggle=()=>{if($('theme-filaments').open)renderSpools(get());};
- $('match-theme-spools').onclick=()=>apply(mapThemeToSpools(get(),sides(),(hex,side)=>spoolFor(get(),side,hex)||closestSwatch(hex)));
+ let spoolView='parts';
+ for(const button of $('spool-view').children)button.onclick=()=>{spoolView=button.dataset.view;renderSpools(get());};
+ $('match-theme-spools').onclick=()=>apply(mapThemeToSpools(get(),sides(),(hex,side,slot)=>spoolFor(get(),side,hex,slot)||closestSwatch(hex)));
  function renderSpools(c){
-  const rows=new Map();
-  for(const side of sides())for(const [obj,field,role] of colorFields(c,side)){
-   const hex=obj[field].toLowerCase(),chosen=spoolFor(c,side,hex),key=hex+'|'+(chosen?.id||'');
-   if(!rows.has(key))rows.set(key,{hex,chosen,roles:new Set(),sides:new Set()});
-   rows.get(key).roles.add(role);rows.get(key).sides.add(side);
+  const rows=new Map(),halves=sides(),byPart=spoolView==='parts';
+  for(const view of $('spool-view').children)view.setAttribute('aria-pressed',String(view.dataset.view===spoolView));
+  for(const side of halves)for(const [obj,field,role,slot] of colorFields(c,side)){
+   const hex=obj[field].toLowerCase(),chosen=spoolFor(c,side,hex,slot);
+   const key=[byPart?role:'',hex,chosen?.id||''].join('|');
+   if(!rows.has(key))rows.set(key,{hex,chosen,roles:new Set(),members:[],sides:new Set()});
+   const row=rows.get(key);row.roles.add(role);row.members.push([side,slot]);row.sides.add(side);
   }
   const needsMatch=[...rows.values()].some(row=>!row.chosen);
   $('match-theme-spools').hidden=!needsMatch;
   const hint=$('theme-filaments').querySelector('.micro');
-  hint.dataset.t=needsMatch?'spool.themeHint':'spool.assignedHint';hint.textContent=t(hint.dataset.t);
+  hint.dataset.t=byPart?'spool.partHint':needsMatch?'spool.themeHint':'spool.bulkHint';hint.textContent=t(hint.dataset.t);
   $('theme-spool-list').replaceChildren(...[...rows.values()].map(row=>{
-   const spool=row.chosen||closestSwatch(row.hex),button=document.createElement('button');button.type='button';button.className='theme-spool';button.dataset.themeColor=row.hex;button.dataset.spool=row.chosen?.id||'';
-   const label=filamentLabel(spool,row.chosen?'selected':'suggested'),roles=document.createElement('small');
-   roles.className='filament-reference';
-   roles.append(flatSwatch(row.hex),[...row.roles].map(r=>t('spool.role.'+r)).join(' / '));label.append(roles);
+   const spool=row.chosen||closestSwatch(row.hex),button=document.createElement('button');
+   button.type='button';button.className='theme-spool';button.dataset.themeColor=row.hex;button.dataset.spool=row.chosen?.id||'';
+   const [side,slot]=row.members[0];button.dataset.part=slot;button.dataset.half=side;
+   const label=filamentLabel(spool,row.chosen?'selected':'suggested'),roles=document.createElement('span');
+   const names=[...row.roles].map(r=>byPart&&r==='keycaps'?t('spool.matchingKeys'):t('spool.role.'+r));
+   if(row.sides.size===1)names.push(t('side.'+side));
+   const subject=names.join(' / ');
+   roles.className=byPart?'filament-part-name':'filament-reference';roles.append(flatSwatch(row.hex),subject);
+   if(byPart)label.prepend(roles);else label.append(roles);
    const arrow=document.createElement('span');arrow.className='spool-arrow';arrow.setAttribute('aria-hidden','true');arrow.textContent='›';
    button.append(filamentReel(spool),label,arrow);
    button.onclick=()=>chooseFilament(row.hex,s=>{
-    apply(mapThemeToSpools(get(),[...row.sides],hex=>hex===row.hex?s:null));
-    const replacement=[...$('theme-spool-list').children].find(b=>b.dataset.themeColor===s.hex.toLowerCase()&&b.dataset.spool===s.id);
-    replacement?.focus({preventScroll:true});
-   },row.chosen);
+    apply(assignThemeParts(get(),row.members,s));
+    const choices=[...$('theme-spool-list').children].filter(b=>b.dataset.themeColor===s.hex.toLowerCase()&&b.dataset.spool===s.id);
+    (choices.find(b=>b.dataset.part===slot&&b.dataset.half===side)||choices[0])?.focus({preventScroll:true});
+   },row.chosen,subject);
    return button;
   }));
  }

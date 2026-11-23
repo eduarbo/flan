@@ -41,14 +41,14 @@ export function filamentFilters(onChange){
  }
  return {filters,matches,search};
 }
-export function chooseFilament(color,onSelect,selected){
+export function chooseFilament(color,onSelect,selected,subject){
  const dialog=document.createElement('dialog');dialog.className='filament-picker';dialog.setAttribute('aria-labelledby','spool-picker-title');
  const heading=el('div');heading.className='dialog-heading';
  const title=el('h2',say('Choose a filament','Elegir filamento'));title.className='title';title.id='spool-picker-title';title.tabIndex=-1;
  const close=el('button',say('Close','Cerrar'));close.onclick=()=>dialog.close();heading.append(title,close);
  const body=el('div');body.className='dialog-body';const {filters,matches,search}=filamentFilters(render);
  const target=el('p');target.className='target-swatch';const sample=el('i');sample.style.backgroundColor=color;
- target.append(sample,el('span',say('Design color','Color del diseño')),el('code',color.toUpperCase()));const results=el('div');const sorted=rankedSwatches(color);
+ target.append(sample,el('span',subject||say('Design color','Color del diseño')),el('code',color.toUpperCase()));const results=el('div');const sorted=rankedSwatches(color);
  const sources=el('div');sources.className='filament-sources';
  sources.append(el('span',say('Manufacturer swatches','Muestras del fabricante')));
  for(const [label,url] of Object.entries(swatchSources)){

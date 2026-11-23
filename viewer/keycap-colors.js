@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-import {bindSpool,commonSpool} from './filament-swatches.js';
+import {assignPartSpool,commonPartSpool} from './filament-swatches.js';
 import {enhanceColorInput} from './color-input.js';
-import {printCapPalettes,printableCaps,bindPresetColors} from './preset-filaments.js';
+import {printCapPalettes,printableCaps,bindPresetParts} from './preset-filaments.js';
 import {copy} from './config.js';
 import {createStore} from './storage.js';
 import {t,onLanguage} from './i18n.js';
@@ -21,7 +21,7 @@ export function applyCapPalette(config,catalog,palette,targets=sides){
  const c=copy(config),printed=printableCaps(palette);
  for(const side of targets){
   for(const key of catalog.layout[side])c.keycaps[side][key.ref].color=paletteColor(printed,key);
-  bindPresetColors(c,side,Object.values(c.keycaps[side]).map(key=>key.color));
+  bindPresetParts(c,side,Object.keys(c.keycaps[side]));
  }
  return c;
 }
@@ -35,9 +35,10 @@ export function validatePaletteFile(value,catalog){
 }
 export function createKeycapColors({$,catalog,get,apply,message,onTargets=()=>{},storageNotice=message}){
  const colorHex=enhanceColorInput($('cap-color'),()=>t('keys.colorLabel'),spool=>{
-  const keys=resolved(),affected=[...new Set(keys.map(([side])=>side))];
-  apply(bindSpool(paintKeys(get(),keys,spool.hex.toLowerCase()),affected,spool));
- },hex=>commonSpool(get(),resolved().map(([side])=>side),hex));
+  const keys=resolved(),next=copy(get());
+  for(const side of activeSides())assignPartSpool(next,side,keys.filter(([s])=>s===side).map(([,key])=>key.ref),spool);
+  apply(next);
+ },hex=>commonPartSpool(get(),resolved().map(([side,key])=>[side,key.ref]),hex));
  let selection={side:'both',mode:'all',row:0,column:1,keySide:'left',key:'K01'},custom=[],initialWarning='';
  const paletteStore=createStore({key:paletteStorageSlot,validate:v=>{validatePaletteFile(v,catalog);return v;},notify:storageNotice});
  try{const saved=paletteStore.initialRaw;if(saved)custom=validatePaletteFile(JSON.parse(saved),catalog);}catch{initialWarning=t('keys.unreadable');}

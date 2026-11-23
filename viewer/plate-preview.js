@@ -109,7 +109,7 @@ export function createPlatePreview({$,getConfig,selection,loadShapes,entriesFor,
  }
  async function sync(){
   const c=getConfig(),{scope,half}=selection(),setup=projectSetup(c);
-  const key=JSON.stringify([c.variant,c.cases,c.frames,c.filaments,c.keycaps,c.fasteners,setup,half,scope,language()]);
+  const key=JSON.stringify([c.variant,c.cases,c.frames,c.filaments,c.part_filaments,c.keycaps,c.fasteners,setup,half,scope,language()]);
   if(current===key)return;
   const ticket=++revision;plan=null;host.hidden=true;status.hidden=false;status.textContent=t('pp.loading');$('plate-retry').hidden=true;
   $('quick-contents').textContent=t('kit.'+scope)+' · '+t(half==='both'?'seg.both':'side.'+half);

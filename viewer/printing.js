@@ -3,7 +3,7 @@ import {zipSync,strToU8} from 'three/addons/libs/fflate.module.js';
 import {framePalette,finishes} from './finishes.js';
 import {decode,xml,readMaterials,meshObject,printPlacement} from './print-geometry.js';
 import {printerSuffix} from './printer-presets.js';
-import {setupOf,spoolFor} from './filament-swatches.js';
+import {partMaterialSlot,setupOf,spoolFor} from './filament-swatches.js';
 import {combinedProject} from './print-project.js';
 import {projectSetup} from './project-objects.js';
 import {templateRef} from './config.js';
@@ -17,7 +17,7 @@ export function selectedParts(config,registry,half='both',scope='shells'){
    for(const [h,f] of Object.entries(registry.fasteners?.[side]||{})){const from=`${side}-washer-${f.copy_of.slice(1)}`;if(registry.assets[from])parts.push({...registry.assets[from],id:`${side}-washer-${h.slice(1)}`,copy_of:from,side,colors:{body:'#78908a'}});}}}
  const solidFrames=setupOf(config).mode!=='ams';
  return parts.map(part=>{
-  if((solidFrames||config.filaments?.[part.side])&&!part.id.includes('-case-')&&!part.id.includes('-frame-')){
+  if((solidFrames||config.filaments?.[part.side]||config.part_filaments?.[part.side])&&!part.id.includes('-case-')&&!part.id.includes('-frame-')){
    return {...part,colors:{body:config.cases[part.side].base_color}};
   }
   if(solidFrames&&part.id.includes('-frame-'))return {...part,style:undefined,material_parts:[],colors:{body:part.colors.body},solid_frame:true};
@@ -31,7 +31,7 @@ export function keycapPlan(config,catalog,added=[],half='both'){
  const byId=new Map(catalog.variants.map(v=>[v.id,v])),keys=[],groups=new Map();
  for(const side of half==='both'?['left','right']:[half])for(const ref of [...catalog.layout[side].map(k=>k.ref),...added]){
   const from=config.keycaps[side][ref]?ref:templateRef(ref),c=config.keycaps[side][from],v=byId.get(c.variant),file=v.path.split('/').pop();
-  const spool=spoolFor(config,side,c.color),assignment=spool?{spool:spool.id}:{};
+  const spool=spoolFor(config,side,c.color,from),assignment=spool?{spool:spool.id}:{};
   keys.push({side,key:ref,...assignment,...(from===ref?{}:{copies:from}),variant:c.variant,file,color:c.color.toLowerCase(),rotation_deg:c.rotation_deg});
   const id=file+'|'+c.color.toLowerCase()+'|'+(spool?.id||'');if(!groups.has(id))groups.set(id,{...assignment,variant:c.variant,label:v.label,file,color:c.color.toLowerCase(),count:0,keys:[]});
   const g=groups.get(id);g.count++;g.keys.push(`${side==='left'?'L':'R'} ${ref}`);
@@ -41,21 +41,21 @@ export function keycapPlan(config,catalog,added=[],half='both'){
 // Count exactly the materials used by the selection. Unassigned design colors keep their own identity.
 export function printSpoolUses(config,parts,keys=[]){
  const uses=new Map();
- function add(side,color,role){
-  const hex=color.toUpperCase(),chosen=spoolFor(config,side,hex),id=chosen?.id||hex;
+ function add(side,color,role,slot){
+  const hex=color.toUpperCase(),chosen=spoolFor(config,side,hex,slot),id=chosen?.id||hex;
   if(!uses.has(id))uses.set(id,{hex,chosen,roles:new Set()});
   uses.get(id).roles.add(role);
  }
  for(const part of parts){
   if(part.id.includes('-frame-')){
    const materials=part.material_parts?.length?part.material_parts:[{role:'body'}];
-   for(const {role} of materials)add(part.side,part.colors[role]||part.colors.body,role);
+   for(const {role} of materials)add(part.side,part.colors[role]||part.colors.body,role,partMaterialSlot(part,role));
   }else{
    const role=part.id.endsWith('-base')?'base':part.id.endsWith('-plate')?'plate':'internals';
-   add(part.side,part.colors.body,role);
+   add(part.side,part.colors.body,role,partMaterialSlot(part,'body'));
   }
  }
- for(const key of keys)add(key.side,key.color,'keycaps');
+ for(const key of keys)add(key.side,key.color,'keycaps',key.copies||key.key);
  return [...uses.values()];
 }
 export function mesh3MF(part){
@@ -86,7 +86,7 @@ export async function printKit(config,registry,{half='both',scope='shells',keyca
  if(keycaps){
   const bundled=[],missing=[];
   for(const g of keycaps.plan.groups){const stl=keycaps.stl[g.variant];if(stl){files[`Keycaps/${g.file}`]=stl;if(!bundled.includes(g.file))bundled.push(g.file);}else if(!missing.includes(g.file))missing.push(g.file);}
-  files['Keycaps/plan.csv']=utf8('side,key,copies,file,color,rotation_deg\n'+keycaps.plan.keys.map(k=>[k.side,k.key,k.copies||'',k.file,k.color,k.rotation_deg].join(',')).join('\n')+'\n');
+  files['Keycaps/plan.csv']=utf8('side,key,copies,file,color,rotation_deg,spool\n'+keycaps.plan.keys.map(k=>[k.side,k.key,k.copies||'',k.file,k.color,k.rotation_deg,k.spool||''].join(',')).join('\n')+'\n');
   caps={source:'KLP Lamé by braindefender, unchanged meshes, pinned 4a67a824232d3054c61599ea047c56a340faaba2: https://github.com/braindefender/KLP-Lame-Keycaps',
    license:'CC-BY-SA-4.0, https://creativecommons.org/licenses/by-sa/4.0/',groups:keycaps.plan.groups,bundled,missing,
    missing_from:missing.length?'https://github.com/eduarbo/flan/tree/main/keycaps/variants':undefined};
@@ -101,9 +101,9 @@ ${projectName}
 Open the 3MF as a project. It contains ${keycaps.plan.keys.length} keycaps. Match the spools, slice and check one stem for fit. The plate sequence is set in the project.
 Abre el 3MF como proyecto. Asigna las bobinas, lamina y prueba el ajuste de un vástago. El proyecto indica la secuencia de cada cama.
 
-Keycaps/plan.csv · key, side, shape and color / tecla, mitad, perfil y color.
+Keycaps/plan.csv · key, side, shape, color and spool / tecla, mitad, perfil, color y bobina.
 KLP Lamé · braindefender · CC-BY-SA-4.0
-`:`${title.toUpperCase()} / PRINT KIT / mm\n\nOpen / Abre: ${projectName}\nOne project for this selection. Open as a project in Bambu Studio. Confirm the printer, nozzle and spools before slicing.\nUn proyecto con la selección. Ábrelo como proyecto en Bambu Studio. Confirma impresora, boquilla y bobinas antes de laminar.\n${setup.printer?'Bambu Lab '+setup.printer+' · '+setup.nozzle+' mm. ':''}Mode / Modo: ${setup.mode}. Bed / Cama: ${setup.bed} × ${setup.bed} mm.\n${setup.mode==='ams'?'AMS: up to four colors per plate.':'Frames use a single fused mesh in their body color / Marcos lisos en el color del cuerpo.'}\n\nIndividual alternatives / Alternativas por pieza\nSTL: print geometry in assembly coordinates, with open glue-in magnet sockets.\n3MF: exact native material volumes as one registered assembly. One rigid placement orients the whole part on the bed. All inlays stay registered.\nFrames print face down. Glue magnets after printing.\nMaterials/: native role STLs in assembly coordinates for manual multipart import.\nOne file per physical part. No printer profile, G-code or verified print process.\n\nJOINING\n${registry.joining.case}.\n${registry.joining.installed_frame}.\n\nPOLARITY\n${registry.joining.polarity}\n\nGLUE AFTER PRINTING / PEGA DESPUÉS DE IMPRIMIR\n${registry.joining.capture}\nPrueba en seco: tres imanes Ø2 × 3 mm por base desde arriba; tres Ø2 × 4 mm por marco desde abajo. Un mismo polo visible en todas las bases y el opuesto en los marcos. Pega antes de montar la electrónica y deja curar las piezas separadas.\nA single-station coupon checks bond and attraction; test a complete\nframe for north-edge peel, sliding and repeated removal.\n${registry.joining.acceptance}.\nNo clips are modeled.${washers?` This kit includes ${washers} washer${washers>1?'s':''}.`:''}\n\nIn AMS multicolor mode, decorated frames contain closed body/detail/accent/secondary material volumes.\nThese are co-printed regions, not separate fitted inserts. Import each 3MF as one\nassembly. For manual STL import, import all Materials/ files for a frame together\nas parts of one object and preserve their relative positions. The STL/ frame is\na complete single-color fallback.\n\nAdd filaments in body/detail/accent/secondary order using manifest HEX colors.\nVerify each material assignment and every sliced layer. Automatic slicer palette\nimport and printer-specific process settings are not qualified. Choose your actual\nfilaments and process before slicing.\n${caps?`\nKEYCAPS\nKeycaps/ holds each KLP Lamé file the design uses, once; print it as many times as\nlisted. Keycaps/plan.csv says which key gets which file and color (copies: a larger\nsize's added key repeats that key's choice). Print orientation, stems and tolerances:\nhttps://github.com/braindefender/KLP-Lame-Keycaps\n${caps.groups.map(g=>`${String(g.count).padStart(3)} × ${g.file}  ${g.color.toUpperCase()}  ${g.keys.join(' ')}`).join('\n')}\n${caps.missing.length?`Not in this kit (offline copy or a file outside the presets): ${caps.missing.join(', ')}.\nDownload them from ${caps.missing_from}\n`:''}KLP Lamé by braindefender, CC-BY-SA-4.0 (https://creativecommons.org/licenses/by-sa/4.0/).\n`:''}\nhttps://github.com/eduarbo/flan/blob/main/docs/build.md\nFlan cases and frames by Eduardo Ruiz. Key positions derived from Piantor by beekeeb.\nGPL-3.0-or-later. See LICENSE and ATTRIBUTION.md in this kit.\nSource credits and references: https://github.com/eduarbo/flan/blob/main/ATTRIBUTION.md\n`);
+`:`${title.toUpperCase()} / PRINT KIT / mm\n\nOpen / Abre: ${projectName}\nOne project for this selection. Open as a project in Bambu Studio. Confirm the printer, nozzle and spools before slicing.\nUn proyecto con la selección. Ábrelo como proyecto en Bambu Studio. Confirma impresora, boquilla y bobinas antes de laminar.\n${setup.printer?'Bambu Lab '+setup.printer+' · '+setup.nozzle+' mm. ':''}Mode / Modo: ${setup.mode}. Bed / Cama: ${setup.bed} × ${setup.bed} mm.\n${setup.mode==='ams'?'AMS: up to four colors per plate.':'Frames use a single fused mesh in their body color / Marcos lisos en el color del cuerpo.'}\n\nIndividual alternatives / Alternativas por pieza\nSTL: print geometry in assembly coordinates, with open glue-in magnet sockets.\n3MF: exact native material volumes as one registered assembly. One rigid placement orients the whole part on the bed. All inlays stay registered.\nFrames print face down. Glue magnets after printing.\nMaterials/: native role STLs in assembly coordinates for manual multipart import.\nOne file per physical part. No printer profile, G-code or verified print process.\n\nJOINING\n${registry.joining.case}.\n${registry.joining.installed_frame}.\n\nPOLARITY\n${registry.joining.polarity}\n\nGLUE AFTER PRINTING / PEGA DESPUÉS DE IMPRIMIR\n${registry.joining.capture}\nPrueba en seco: tres imanes Ø2 × 3 mm por base desde arriba; tres Ø2 × 4 mm por marco desde abajo. Un mismo polo visible en todas las bases y el opuesto en los marcos. Pega antes de montar la electrónica y deja curar las piezas separadas.\nA single-station coupon checks bond and attraction; test a complete\nframe for north-edge peel, sliding and repeated removal.\n${registry.joining.acceptance}.\nNo clips are modeled.${washers?` This kit includes ${washers} washer${washers>1?'s':''}.`:''}\n\nIn AMS multicolor mode, decorated frames contain closed body/detail/accent/secondary material volumes.\nThese are co-printed regions, not separate fitted inserts. Import each 3MF as one\nassembly. For manual STL import, import all Materials/ files for a frame together\nas parts of one object and preserve their relative positions. The STL/ frame is\na complete single-color fallback.\n\nAdd filaments in body/detail/accent/secondary order using manifest HEX colors.\nVerify each material assignment and every sliced layer. Automatic slicer palette\nimport and printer-specific process settings are not qualified. Choose your actual\nfilaments and process before slicing.\n${caps?`\nKEYCAPS\nKeycaps/ holds each KLP Lamé file the design uses, once; print it as many times as\nlisted. Keycaps/plan.csv says which key gets which file, color and spool (copies: a larger\nsize's added key repeats that key's choice). Print orientation, stems and tolerances:\nhttps://github.com/braindefender/KLP-Lame-Keycaps\n${caps.groups.map(g=>`${String(g.count).padStart(3)} × ${g.file}  ${g.color.toUpperCase()}  ${g.spool?g.spool+'  ':''}${g.keys.join(' ')}`).join('\n')}\n${caps.missing.length?`Not in this kit (offline copy or a file outside the presets): ${caps.missing.join(', ')}.\nDownload them from ${caps.missing_from}\n`:''}KLP Lamé by braindefender, CC-BY-SA-4.0 (https://creativecommons.org/licenses/by-sa/4.0/).\n`:''}\nhttps://github.com/eduarbo/flan/blob/main/docs/build.md\nFlan cases and frames by Eduardo Ruiz. Key positions derived from Piantor by beekeeb.\nGPL-3.0-or-later. See LICENSE and ATTRIBUTION.md in this kit.\nSource credits and references: https://github.com/eduarbo/flan/blob/main/ATTRIBUTION.md\n`);
 
  return {bytes:zipSync(files,{level:6}),manifest};
 }
