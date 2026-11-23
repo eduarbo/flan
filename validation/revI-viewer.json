@@ -1968,11 +1968,15 @@
     },
     {
       "path": "viewer/build-guide.js",
-      "sha256": "66dc4d0d674f084b789de4c2befa6919ef50f7019328adc964e1ce5f832fe5e8"
+      "sha256": "66d424d78335e9be447a782594bfe3db45396801e26259016b1421bf8eb93dc3"
     },
     {
       "path": "viewer/build-views.js",
-      "sha256": "a00d186c8c5c9832d34837505812c5c9d0ad967eba673fc0bb4031db9d2934c0"
+      "sha256": "908df4b2bfb7ad263ca21f635c467a782f7b3a76edb495732ad8a5b5448a7724"
+    },
+    {
+      "path": "viewer/build-assembly.js",
+      "sha256": "276d963b4125356a94ccf0b6a9e2ec0914c94d463af2c0a4286d4cb5044a5984"
     },
     {
       "path": "viewer/solder-guide.js",
@@ -1988,7 +1992,7 @@
     },
     {
       "path": "viewer/solder-motion.js",
-      "sha256": "85dec50840f137b9d3d91dd4e36b77406bb06694bf93135c6381a7773ebf7449"
+      "sha256": "960e85124ba3b167801323ce2e6ae2f1b22a9ea92aa4de38639cfbf27e694a5c"
     },
     {
       "path": "viewer/build-guide-art.cjs",
@@ -2760,7 +2764,7 @@
     },
     {
       "path": "viewer/previews.js",
-      "sha256": "58e5f8c929bc12d31d4e3d84cac4cd73aca76b846ebe316ccd3111f5c9c25434"
+      "sha256": "a25f5da70b836dc966e58a43d07ee9d21efc15db390b5a47078bb558bdfc186c"
     },
     {
       "path": "viewer/finishes.js",
@@ -2780,7 +2784,7 @@
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "a20d480d70ec5e4c683a7cd99935212ff1a42d481693e539fc1042d084ad582e"
+      "sha256": "451f6744b1c2098222265302596a2655c85719fdbfcd1fc40b76a07485cb1e34"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -2823,7 +2827,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "58a02a3ca00a243da4cc581c2a29f59cf3aa26c09c278e9048180f966a6ddbdc",
+  "viewer_sha256": "96155c1ea0a17085ec760a217e68b57112ef216b09067b754624c87be78325a6",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -3109,8 +3113,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "1bace6311104916513390398911199c67c40a73c6940a4dee3c7e7e5545a36d8",
-    "bytes": 86429782
+    "sha256": "00a00777ee2e765a9c561d559a735e77f1646212f2612db5b184b89d957c18d5",
+    "bytes": 86548165
   },
   "still": {
     "look": {
@@ -3763,7 +3767,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "97f3c591e5f8d88eeabff91b8f933c89e4cabb370b523267cb774a7aa4b4a0e9",
+  "offline_sha256": "454af595bc5776d1b287f47611ff809d28253a287b9e49ac018b48fb06fe7c2e",
   "printing": {
     "path": "docs/explore/assets/printing-56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475.bin",
     "sha256": "56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475",
@@ -3813,8 +3817,8 @@
     "bytes": 335912
   },
   "geometry_aliases": 16,
-  "online_bytes": 1658429,
-  "offline_bytes": 114598442,
+  "online_bytes": 1669479,
+  "offline_bytes": 114798648,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

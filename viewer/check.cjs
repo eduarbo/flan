@@ -136,7 +136,7 @@ async function framePixel(page){
     await page.locator('#canvas').screenshot({path:path.join(root,`build/case-variants/${style}.png`),style:bare});
   }
   await category(page,'cases');await page.click('#case-target [data-side=left]');await page.click('[data-case=rim]');await installFrames(page,{left:false});
-  await page.click('#reset');assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount-coverCount('left')} visible`),'Open cover omits its three frame magnets and cover, preserves display');
+  await page.click('#reset');assert.match(await page.locator('#status.lab').textContent(),new RegExp(`${expectedCount-coverCount('left')} visible`),'Open cover omits its three frame magnets and cover, preserves display');
   await category(page,'cases');await page.click('#case-target [data-side=both]');assert.equal(await page.locator('#case-current').textContent(),'Mixed cases');
   // Mixed installation stays explicit per half.
   await panel(page,'inspect');await page.click('#part-lid');
@@ -164,7 +164,7 @@ async function framePixel(page){
   const legacy=JSON.parse(JSON.stringify(scene.catalog.default_configuration));delete legacy.cases;
   await page.locator('#load-config').setInputFiles({name:'legacy.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(legacy))});
   assert.equal(await page.locator('#config-status').getAttribute('data-error'),'false');
-  await close(page);await page.click('#reset');assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount} visible`));
+  await close(page);await page.click('#reset');assert.match(await page.locator('#status.lab').textContent(),new RegExp(`${expectedCount} visible`));
   await category(page,'cases');await page.click('[data-case=rim]');await installFrames(page,{left:false,right:false});await close(page);await page.mouse.move(10,20);
   await page.click('[data-view=top]');await settle(page);
   await page.locator('#canvas').screenshot({path:path.join(root,'build/case-variants/rim-open-top.png'),style:bare});
@@ -181,26 +181,26 @@ async function framePixel(page){
   await page.click('#fit');assert.match(await page.locator('#view-feedback').textContent(),/centered and fitted/);await settle(page);await checkFramedPixels(page);
   await panel(page,'inspect');for(const group of new Set(scene.parts.map(p=>p.group)))await page.locator('#layer-'+group).uncheck();
   await page.click('#fit');assert.match(await page.locator('#view-feedback').textContent(),/Nothing visible/);await page.click('#show-all');
-  assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount} visible`));
+  assert.match(await page.locator('#status.lab').textContent(),new RegExp(`${expectedCount} visible`));
   await page.click('#part-base');
   assert.equal(await page.locator('[data-object-visibility]').count(),2);
   await page.locator('[data-object-visibility]').first().uncheck();
-  assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount-1} visible`));
+  assert.match(await page.locator('#status.lab').textContent(),new RegExp(`${expectedCount-1} visible`));
   assert.equal(await page.locator('#layer-base').evaluate(e=>e.indeterminate),true);
   await page.locator('[data-object-visibility]').first().check();
   await page.locator('[data-solo-object]').first().click();
-  assert.match(await page.locator('#status').textContent(),/1 visible/);
-  await page.click('#show-all');assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount} visible`));
+  assert.match(await page.locator('#status.lab').textContent(),/1 visible/);
+  await page.click('#show-all');assert.match(await page.locator('#status.lab').textContent(),new RegExp(`${expectedCount} visible`));
   await page.click('#panel-back');await page.click('#part-mcu');await page.click('#selection-solo');
-  assert.match(await page.locator('#status').textContent(),/2 visible/);
-  await page.locator('#selection-visible').uncheck();assert.match(await page.locator('#status').textContent(),/0 visible/);
-  await page.locator('#selection-visible').check();assert.match(await page.locator('#status').textContent(),/2 visible/);
+  assert.match(await page.locator('#status.lab').textContent(),/2 visible/);
+  await page.locator('#selection-visible').uncheck();assert.match(await page.locator('#status.lab').textContent(),/0 visible/);
+  await page.locator('#selection-visible').check();assert.match(await page.locator('#status.lab').textContent(),/2 visible/);
   await page.click('#show-all');await page.click('[data-view=top]');await page.click('#panel-back');await page.mouse.move(10,20);
   const beforeXray=await canvasHash(page);
   await page.locator('#part-mcu').hover();
   const duringXray=await canvasHash(page);
   assert.notEqual(duringXray,beforeXray,'Hover must reveal the controller through the assembled display/frame');
-  assert.match(await page.locator('#status').textContent(),new RegExp(`${expectedCount} visible`),'X-ray hover never changes visibility');
+  assert.match(await page.locator('#status.lab').textContent(),new RegExp(`${expectedCount} visible`),'X-ray hover never changes visibility');
   await page.mouse.move(10,20);
   assert.equal(await canvasHash(page),beforeXray,'Leaving hover restores the original assembly');
   await restoreAll(page);
@@ -208,7 +208,7 @@ async function framePixel(page){
   // Compare WebGL output without the overlaid DOM controls.
   // Opacity keeps hover/focus active; the separate full-page captures include UI.
   const baseline=await canvasHash(page);
-  const count=async()=>Number((await page.locator('#status').textContent()).match(/(\d+) visible components/)[1]);
+  const count=async()=>Number((await page.locator('#status.lab').textContent()).match(/(\d+) visible components/)[1]);
   assert.equal(await count(),expectedCount);
   await category(page,'battery');
   await page.click('#battery-options [data-battery="301230"]');
@@ -391,7 +391,7 @@ async function framePixel(page){
   await phone.locator('#edit-selection').tap();assert.equal(await phone.locator('#frame-target [data-side=both]').getAttribute('aria-pressed'),'true');
   await checkDirectory(phone);
 
-  await phone.locator('#inside').tap();assert.ok((await phone.locator('#status').textContent()).includes('components'));
+  await phone.locator('#inside').tap();assert.ok((await phone.locator('#status.lab').textContent()).includes('components'));
   await phone.locator('#layer-display').uncheck();
   await phone.locator('#part-display').tap();
   assert.equal(await phone.locator('#selection-visible').isChecked(),false);assert.equal(await phone.locator('#selection-view .view-label').textContent(),'Hidden','A hidden selection says so on its page');
@@ -416,7 +416,7 @@ async function framePixel(page){
   await category(phone,'frames');await phone.locator('[data-style=phone]').tap();await checkDirectory(phone);
   await phone.locator('#part-lid').tap();assert.equal(await phone.locator('#selection-title').textContent(),'Display frame');
   await phone.locator('#panel-back').tap();await checkDirectory(phone);
-  const stage=await phone.locator('.stage').boundingBox();assert.ok(stage.y>=0&&stage.y+stage.height<568,'3D view stays visible at the smallest tested viewport');
+  const stage=await phone.locator('section.stage').boundingBox();assert.ok(stage.y>=0&&stage.y+stage.height<568,'3D view stays visible at the smallest tested viewport');
   await phone.screenshot({path:path.join(root,'build/viewer-ux/mobile-small.png'),animations:'disabled'});
   await phone.setViewportSize({width:844,height:390});await checkDirectory(phone);
   // Capture the actual designs and readable palette cards, including mobile.

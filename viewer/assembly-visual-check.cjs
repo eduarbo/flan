@@ -29,26 +29,66 @@ const expected=[['diode','tweezers'],['socket','switch'],['reset'],['power'],['j
   await page.locator('#load-config').setInputFiles({name:'asymmetric.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(asym))});
   await page.waitForFunction(()=>flan36.snapshot().configuration.cases.right.cover===false);
   await page.click('#build-nav [data-target=build-close]');
-  const final=page.locator('#build-final');
+  const final=page.locator('#build-final'),nav=final.locator('.assembly-nav'),step=final.locator('.assembly-step:not([hidden])');
+  const previous=nav.locator('[data-move="-1"]'),next=nav.locator('[data-move="1"]');
+  const views=side=>[['base-magnets',...(side==='left'?['frame-magnets']:[])],['battery-stack'],['board-screws','plate-screws'],['key-stack'],['battery-port'],['display-stack'],['base-feet']];
   for(const side of ['left','right']){
    await final.locator('[data-assembly-side='+side+']').click();
-   for(const img of await final.locator('img[data-build-view]').all()){
-    await img.scrollIntoViewIfNeeded();await img.evaluate(el=>new Promise((ok,bad)=>{
-     if(el.complete&&el.naturalWidth)return ok();el.addEventListener('load',ok,{once:true});el.addEventListener('error',bad,{once:true});
-    }));assert.equal(await img.getAttribute('data-side'),side);
+   await nav.locator('select').selectOption('0');assert(await previous.isDisabled());
+   for(const [i,ids] of views(side).entries()){
+    assert.equal(await step.count(),1);assert.equal(await step.getAttribute('data-assembly-step'),String(i));
+    assert.equal(await nav.locator('.assembly-progress').innerText(),'Paso '+(i+1)+' de 7');
+    // Moving on leaves the bar pinned and the new title in view below it.
+    if(i)assert(await step.locator('h4').evaluate(h=>{const bar=h.closest('#build-final').querySelector('.assembly-nav').getBoundingClientRect(),box=h.getBoundingClientRect();return box.top>=bar.bottom-1&&box.bottom<innerHeight;}));
+    const still=ids[0]==='battery-port',pictures=step.locator('.assembly-preview');
+    assert.deepEqual(await pictures.evaluateAll(list=>list.map(img=>img.dataset.buildView)),ids);
+    assert.equal(await step.locator('.fit-motion').count(),still?0:ids.length);
+    for(const img of await pictures.all()){
+     await img.scrollIntoViewIfNeeded();await img.locator('xpath=self::img[starts-with(@src,"data:image/")]').waitFor();
+     assert.equal(await img.getAttribute('data-side'),side);
+     // Eleven frames side by side where parts come down, and the first differs from the last.
+     const frames=await img.evaluate(async el=>{await el.decode();return el.naturalWidth/680;});
+     assert.equal(frames,still?1:11);
+     assert(await img.evaluate(el=>{
+      const canvas=document.createElement('canvas');canvas.width=680;canvas.height=528;const ctx=canvas.getContext('2d');ctx.drawImage(el,0,0);
+      const data=ctx.getImageData(0,0,680,528).data;let solid=0;for(let k=3;k<data.length;k+=4)if(data[k]>200)solid++;
+      return solid>20000;
+     }),'the picture shows parts');
+     if(!still)assert(await img.evaluate(el=>{
+      const canvas=document.createElement('canvas');canvas.width=680;canvas.height=528;const ctx=canvas.getContext('2d',{willReadFrequently:true});
+      const frame=f=>{ctx.clearRect(0,0,680,528);ctx.drawImage(el,-680*f,0);return ctx.getImageData(0,0,680,528).data;};
+      const apart=frame(0),seated=frame(10);let moved=0;for(let k=0;k<apart.length;k++)if(Math.abs(apart[k]-seated[k])>40)moved++;
+      return moved>100;
+     }));
+    }
+    if(i===1){
+     assert(await step.locator('[data-guide-part="'+(side==='left'?'adafruit-1570':'301230')+'"]').isVisible());
+     const motion=step.locator('.fit-motion');assert.equal(await motion.getAttribute('data-pose'),'seated');
+     await motion.getByRole('button',{name:'Separado',exact:true}).click();assert.equal(await motion.getAttribute('data-pose'),'open');
+    }
+    if(i===4)assert(await step.locator('[data-guide-part=meter]').isVisible(),'the polarity check has its multimeter');
+    if(i===5)assert.equal(await step.locator('[data-guide-part=frame]').count(),side==='left'?1:0);
+    assert.equal(await final.locator('.assembly-finish').isVisible(),i===6);
+    if(i<6)await next.click();
    }
-   assert.equal(await final.locator('.assembly-preview[src^="data:image/png"]').count(),2);
-   assert.equal(await final.locator('.build-assembly-stages>li').count(),7);
+   assert(await next.isDisabled());
   }
+  await final.locator('.assembly-finish button').click();
+  assert.equal(await final.locator('[data-assembly-side][aria-pressed=true]').getAttribute('data-assembly-side'),'left');
+  assert.equal(await nav.locator('select').inputValue(),'0');
   await page.locator('#build-more').evaluate(el=>el.open=true);
   const planEvent=page.waitForEvent('download');await page.click('#build-plan');
   const planFile=path.join(scratch,'plan.html');await (await planEvent).saveAs(planFile);
   const plan=await context.newPage();await plan.route(/^https?:/,route=>route.abort());await plan.goto(pathToFileURL(planFile).href);
   for(const side of ['left','right']){
    const section=plan.locator('#build-final [data-guide-half="'+side+'"]');
-   assert.equal(await section.locator('[data-guide-part="'+(side==='left'?'adafruit-1570':'301230')+'"]').count(),3);
-   assert.equal(await section.locator('[data-guide-part=frame]').count(),side==='left'?2:0);
-   assert.equal(await section.locator('.assembly-preview[src^="data:image/png"]').count(),2);
+   assert.equal(await section.locator('.assembly-step').count(),7);
+   assert.equal(await section.locator('[data-guide-part="'+(side==='left'?'adafruit-1570':'301230')+'"]').count(),1);
+   assert.equal(await section.locator('[data-guide-part=frame]').count(),side==='left'?1:0);
+   assert.equal(await section.locator('.fit-controls').count(),0);
+   const stills=section.locator('.assembly-preview');
+   assert.deepEqual(await stills.evaluateAll(imgs=>imgs.map(img=>img.dataset.buildView)),views(side).flat());
+   assert(await stills.evaluateAll(async imgs=>{await Promise.all(imgs.map(img=>img.decode()));return imgs.every(img=>img.src.startsWith('data:image/')&&img.naturalWidth===680);}));
   }
   const standalone=await context.newPage();
   await standalone.goto(base+'solder.html?size=flan36&lang=en&leftBattery=301230&rightBattery=301230');

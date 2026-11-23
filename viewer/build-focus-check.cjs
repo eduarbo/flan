@@ -13,7 +13,7 @@ const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
   const ready=async()=>{await page.waitForFunction(()=>window.flan36,null,{timeout:120000});await page.evaluate(()=>window.flan36.idle());};
   const importConfig=async c=>{await page.locator('#load-config').setInputFiles({name:'build.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(c))});await page.waitForFunction(()=>document.querySelector('#load-config').value==='');await ready();assert.deepEqual(await page.evaluate(()=>window.flan36.snapshot().configuration),c,await page.locator('#config-status').textContent());};
   const top=()=>page.locator('#inspector').evaluate(n=>n.scrollTop=0);
-  const focus=async()=>{assert.equal(await page.locator('.stage').isVisible(),false);assert.equal(await page.locator('#build-toolbar').isVisible(),true);};
+  const focus=async()=>{assert.equal(await page.locator('section.stage').isVisible(),false);assert.equal(await page.locator('#build-toolbar').isVisible(),true);};
   console.log('Focus, responsive layout and scrollspy');await page.goto(server.base+'explore/?diagnostics');await ready();await page.click('#nav-files');await focus();
   const original=await page.evaluate(()=>window.flan36.snapshot().configuration);
   await page.screenshot({path:path.join(out,'desktop-overview.png')});
@@ -41,8 +41,8 @@ const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
     return button.getAttribute('aria-pressed')==='true'&&button===document.activeElement&&b.left>=n.left-1&&b.right<=n.right+1;
    }),'last plate can be reached by keyboard within its own scroll area');
   }
-  await page.setViewportSize({width:1440,height:1000});await top();await page.click('#build-focus-toggle');assert(await page.locator('.stage').isVisible());await page.screenshot({path:path.join(out,'shared-3d.png')});await page.click('#build-focus-toggle');await focus();
-  await page.click('#build-edit');assert(await page.locator('.stage').isVisible());assert.deepEqual(await page.evaluate(()=>window.flan36.snapshot().configuration),original);
+  await page.setViewportSize({width:1440,height:1000});await top();await page.click('#build-focus-toggle');assert(await page.locator('section.stage').isVisible());await page.screenshot({path:path.join(out,'shared-3d.png')});await page.click('#build-focus-toggle');await focus();
+  await page.click('#build-edit');assert(await page.locator('section.stage').isVisible());assert.deepEqual(await page.evaluate(()=>window.flan36.snapshot().configuration),original);
   await page.click('#nav-files');await focus();await page.click('[data-lang=es]');await top();assert.match(await page.locator('#build-focus-toggle').textContent(),/Mostrar/);await page.screenshot({path:path.join(out,'desktop-es.png')});await page.click('[data-lang=en]');
   // Published assets for every size/edition have exact source bytes.
   const receipt=JSON.parse(fs.readFileSync(path.join(root,'validation/revI-viewer.json'))),assets=receipt.build_assets;

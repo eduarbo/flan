@@ -60,7 +60,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/build-workflow
   const csv=fs.readFileSync(await download('#build-csv'),'utf8');assert.match(csv,/"54","60","6"/);assert.match(csv,/301230/);assert.match(csv,/"DigiKey","54","Cut Tape · SMC Diode Solutions · 1655-1N4148WCT-ND"/);assert.match(csv,/https:\/\/typeractive.xyz/);
   const plan=fs.readFileSync(await download('#build-plan'),'utf8');assert.match(plan,/Flan54/);assert.match(plan,/HASL/);assert.match(plan,/2.80 mm/);assert.match(plan,/54 keys/);assert.match(plan,/one data cable in turn/);assert.match(plan,/Q–P positions in the alphabetic block/);assert.match(plan,/left-flan|flan54-left/);
   const planPage=await context.newPage();await planPage.goto('file://'+path.join(out,'Flan54-build-plan.html'));
-  assert.equal(await planPage.locator('[data-part="switch"]').getAttribute('data-required'),'54');assert.equal(await planPage.locator('details:not([open])').count(),0);
+  assert.equal(await planPage.locator('[data-part="switch"]').getAttribute('data-required'),'54');assert.equal(await planPage.locator('details:not([open]):not(#workbench-tools)').count(),0);
   const designLink=await planPage.locator('#build-design-link').getAttribute('href');assert.match(designLink,/design=/);const reopened=await browser.newContext(),reopenedPage=await reopened.newPage();await reopenedPage.goto(designLink+'&diagnostics');await reopenedPage.waitForFunction(()=>window.flan36,null,{timeout:120000});assert.deepEqual(await reopenedPage.evaluate(()=>window.flan36.snapshot().configuration.pcb_masks),{left:'white',right:'purple'});assert.equal(await reopenedPage.evaluate(()=>window.flan36.snapshot().configuration.variant),'flan54');await reopened.close();await planPage.close();
   await jump('#build-buy');await page.screenshot({path:path.join(out,'shopping-desktop.png')});
   await jump('#build-boards');await page.screenshot({path:path.join(out,'ordering-desktop.png')});
@@ -76,7 +76,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/build-workflow
   await jump('#recovery');await page.screenshot({path:path.join(out,'recovery-mobile.png')});
   assert.match(await page.locator('#build-shopping-note').textContent(),/teclado completo/);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-  const overflowing=await page.locator('#panel-files').evaluate(root=>[...root.querySelectorAll('*')].filter(e=>e.getClientRects().length&&!e.closest('.build-jumps')&&e.getBoundingClientRect().right>innerWidth+1).map(e=>e.id||e.className));
+  const overflowing=await page.locator('#panel-files').evaluate(root=>[...root.querySelectorAll('*')].filter(e=>e.getClientRects().length&&!e.closest('.build-jumps,.fit-viewport')&&e.getBoundingClientRect().right>innerWidth+1).map(e=>e.id||e.className));
   assert.deepEqual(overflowing,[]);
   await page.setViewportSize({width:320,height:740});await jump('#build-buy');assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.screenshot({path:path.join(out,'shopping-small-phone.png')});await page.setViewportSize({width:390,height:844});
   const esGuide=fs.readFileSync(await download('#build-plan'),'utf8');assert.match(esGuide,/Plan de construcción/);assert.match(esGuide,/Necesitas/);assert.match(esGuide,/Pide 54 unidades en DigiKey/);

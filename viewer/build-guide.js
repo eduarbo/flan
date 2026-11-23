@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+import {assemblySteps} from './build-assembly.js';
+import {viewMoves} from './build-views.js';
 import {portableSolder} from './solder-portable.js';
 import {mountSolderGuide} from './solder-guide.js';
+import {fitMotion,motionStyles} from './solder-motion.js';
 import {guideCards,cardStyles,batteryId,inlinePart} from './guide-parts.js';
 import parts from '../design/build-parts.json';
 import {presetStock} from './preset-filaments.js';
@@ -43,22 +46,63 @@ function alternativeNote(row){
 export function createBuildGuide({catalog,family,inventory,getDesignLink,illustrations,editFilaments}){
  const $=id=>document.getElementById(id),storageKey='flan.build-parts.v1';
  let current,rows=[],checked={},savedDetails=new Set();
- let assemblySide='left';
- const artStyles=node('style');artStyles.textContent=cardStyles+
-  '.build-assembly-stages>li{margin:18px 0}.build-assembly-stages h4{margin:0 0 4px}.assembly-preview{display:block;width:min(100%,540px);height:auto;margin:8px 0}.assembly-header{display:flex;gap:8px;align-items:center;flex-wrap:wrap}';
+ let assemblySide='left',assemblyIndex=0;
+ // The assembly steps take the layout and controls of the soldering guide above them.
+ const artStyles=node('style');artStyles.textContent=cardStyles+motionStyles+`
+ #build-final{container-type:inline-size}
+ .assembly-half{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+ #build-final .assembly-nav{position:sticky;top:var(--build-nav-height,0px);z-index:2;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:6px;padding:5px 0;background:var(--bg0,#faf7ef);border-block:1px solid var(--line,#cad1c8)}
+ #build-final .assembly-nav :is(button,select),#build-final .fit-controls button,#build-final .assembly-finish button{min-height:44px;max-width:100%;margin:0;padding:6px 10px;border:1px solid var(--line,#a7b2a8);border-radius:8px;background:var(--field,#fff);color:inherit;font:inherit}
+ #build-final .assembly-nav select{width:100%}
+ #build-final .assembly-nav [data-move="1"],#build-final .fit-controls button[aria-pressed=true]{background:var(--ink,#22342e);color:var(--bg0,#fff)}
+ #build-final .assembly-nav button:disabled{opacity:.45}
+ #build-final .fit-controls button{min-height:36px;font-size:13px}
+ .assembly-choice{position:relative;min-width:0}.assembly-progress{display:none}
+ @container(max-width:500px){
+  #build-final .assembly-choice select{color:transparent}#build-final .assembly-choice option{color:var(--ink,#222e2b)}
+  .assembly-progress{display:block;position:absolute;inset:0;padding-inline:11px;align-content:center;pointer-events:none}
+  .assembly-progress::after{content:'⌄';float:right}
+ }
+ .assembly-step{display:grid;grid-template-areas:"head" "parts" "motion";gap:12px;padding:14px 0 0}
+ .assembly-head{grid-area:head}.assembly-motion{grid-area:motion}.assembly-parts{grid-area:parts}
+ .assembly-motion,.assembly-parts{min-width:0}
+ .assembly-face{margin:0 0 4px;color:var(--muted,#465a50);font-size:13px}
+ .assembly-head h4{margin:0;font-family:var(--serif,Georgia),serif;font-weight:500;font-size:clamp(25px,3vw,32px);line-height:1.1}
+ .assembly-head h4:focus{outline:none}
+ .assembly-motion{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:12px;align-items:start}
+ .assembly-motion figure{margin:0;min-width:0}
+ .assembly-motion .fit-viewport,.assembly-still{max-width:520px}
+ .assembly-still{display:block;width:100%;height:auto;aspect-ratio:340/264;background:#e7eae5;border-radius:9px}
+ .assembly-motion figcaption{margin-top:5px;font-size:14px;line-height:1.45}
+ .assembly-parts h5{margin:0;font-size:16px;font-weight:600}
+ .assembly-parts .guide-parts{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .assembly-parts .guide-parts:has(figure:only-child){grid-template-columns:minmax(120px,180px)}
+ .assembly-parts ol{padding-left:1.4em;margin:4px 0 12px;font-size:15px;line-height:1.5}.assembly-parts li+li{margin-top:5px}
+ .assembly-parts p{margin:0 0 12px}
+ .assembly-finish{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+ @container(min-width:680px){.assembly-step{grid-template-areas:"head head" "motion parts";grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:start;gap:10px 20px}}
+ `;
  $('build-workflow').prepend(artStyles);
+ // Pictures are drawn from the design when their step first comes into view.
  const previewObserver=new IntersectionObserver(entries=>{
   for(const {target,isIntersecting} of entries)if(isIntersecting){
    previewObserver.unobserve(target);const {buildView,side}=target.dataset;
-   illustrations.view(buildView,side).then(url=>{target.src=url;}).catch(()=>{target.alt=say('View unavailable','Vista no disponible');});
+   const motion=target.closest('.fit-motion');
+   illustrations.view(buildView,side,Boolean(motion)).then(view=>{target.src=motion?view.strip:view.still;}).catch(()=>{
+    // Say so in place of the picture and its controls.
+    const failed=node('p','micro',say('This picture could not be drawn. Reload the page to try again.','No se pudo dibujar esta imagen. Recarga la página para intentarlo de nuevo.'));
+    (motion?motion.querySelector('.fit-viewport'):target).replaceWith(failed);motion?.querySelector('.fit-controls').remove();
+   });
   }
  },{rootMargin:'180px'});
  function liveImage(img,id,side,observe){
-  if(!['base','frame','plate','keycap','pcb','battery-stack','shell-stack'].includes(id))return false;
   img.dataset.buildView=id;img.dataset.side=side;if(observe)previewObserver.observe(img);return true;
  }
- function assemblyCards(ids,side,observe){
-  return guideCards(ids.map(id=>id==='battery'?batteryId(current.batteries[side]):id),language(),{live:(img,id)=>liveImage(img,id,side,observe)});
+ // A printed part or the board is pictured in this design's own colors.
+ function assemblyCards(parts,side,observe){
+  const id=part=>part==='battery'?batteryId(current.batteries[side]):part;
+  return guideCards(parts.map(([part])=>id(part)),language(),{quantity:Object.fromEntries(parts.map(([part,n])=>[id(part),n])),
+   live:(img,part)=>['base','frame','plate','keycap','pcb'].includes(part)&&liveImage(img,part,side,observe)});
  }
 
  try{const value=JSON.parse(localStorage.getItem(storageKey)||'{}');if(value&&typeof value==='object'&&!Array.isArray(value))checked=value;}catch{}
@@ -134,7 +178,8 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   const solder=copy.querySelector('.solder-map'), liveMap=$('build-assembly').querySelector('.solder-map')?.shadowRoot;
   if(solder&&liveMap){solder.id='guide';solder.nextElementSibling?.remove();solder.replaceChildren(...['face','heading','instruction','map','caption','detail'].map(id=>liveMap.getElementById(id).cloneNode(true)));}
   await Promise.all([...copy.querySelectorAll('img[data-guide-art],img[data-build-view]')].map(async img=>{
-   img.src=img.dataset.buildView?await illustrations.view(img.dataset.buildView,img.dataset.side):await inlinePart(img.dataset.guideArt);
+   img.removeAttribute('loading');   // a saved page shows and prints every picture without waiting for a scroll
+   img.src=img.dataset.buildView?(await illustrations.view(img.dataset.buildView,img.dataset.side)).still:await inlinePart(img.dataset.guideArt);
   }));
   copy.querySelectorAll('details').forEach(n=>n.open=true);
   copy.querySelectorAll('input').forEach(n=>{if(n.type==='checkbox'){if(n.checked)n.setAttribute('checked','');n.disabled=true;}else n.remove();});
@@ -313,49 +358,66 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
  }
  function renderFinal(host=$('build-final'),side=assemblySide,interactive=true){
   if(interactive)previewObserver.disconnect();
-  const cs=current.cases[side],common=fastenersOf(current)==='common-m2',hardware=common?'-common':'';
-  const photos=ids=>assemblyCards(ids,side,interactive);
-  const label=node('div','assembly-header');label.append(node('strong','',say('Build this half','Armar esta mitad')));
-  const chooser=node('div','segments');chooser.setAttribute('role','group');chooser.setAttribute('aria-label',say('Assembly half','Mitad para armar'));
-  for(const s of sides){const b=node('button','',t('side.'+s));b.type='button';b.dataset.assemblySide=s;b.setAttribute('aria-pressed',String(s===side));b.onclick=()=>{assemblySide=s;renderFinal();$('build-final').querySelector('[data-assembly-side='+s+']').focus({preventScroll:true});};chooser.append(b);}label.append(chooser);
-  const stages=node('ol','build-instructions build-assembly-stages');
-  function step(title,lines,ids,view){
-   const li=node('li'),body=node('p','',lines);li.append(node('h4','',title),body,photos(ids));
-   if(view){const img=node('img','assembly-preview');img.alt=title+' · '+t('side.'+side);img.width=540;img.height=365;liveImage(img,view,side,interactive);li.append(img);}
-   stages.append(li);
+  const size=family[current.variant];
+  const steps=assemblySteps({cover:current.cases[side].cover,common:fastenersOf(current)==='common-m2',
+   structural:3+Object.keys(size.fasteners?.[side]||{}).length,keys:size.keys_total},say);
+  if(!steps[assemblyIndex])assemblyIndex=0;
+  function panel(step,index){
+   const article=node('article','assembly-step'),head=node('div','assembly-head'),motion=node('div','assembly-motion'),parts=node('div','assembly-parts');
+   article.dataset.assemblyStep=index;
+   if(interactive)head.append(node('p','assembly-face',size.title+' · '+t('side.'+side)));
+   const title=node('h4','',interactive?step.title:(index+1)+'. '+step.title);title.tabIndex=-1;head.append(title);
+   for(const [id,caption] of step.views){
+    // The saved plan and a view where nothing moves show one picture.
+    if(interactive&&viewMoves(id)){
+     const {figure,strip}=fitMotion(language(),{alt:caption,caption});strip.classList.add('assembly-preview');
+     liveImage(strip,id,side,true);motion.append(figure);
+    }else{
+     const figure=node('figure'),img=node('img','assembly-preview assembly-still');img.alt=caption;img.width=340;img.height=264;
+     liveImage(img,id,side,interactive);figure.append(img,node('figcaption','',caption));motion.append(figure);
+    }
+   }
+   const todo=node('ol');for(const line of step.steps)todo.append(node('li','',line));
+   parts.append(node('h5','',say('Parts for this step','Piezas de este paso')),assemblyCards(step.parts,side,interactive),todo);
+   if(step.note)parts.append(node('p','micro',step.note));
+   article.append(head,motion,parts);return article;
   }
-  step(say('Fit the magnets before the electronics','Coloca los imanes antes de la electrónica'),
-   cs.cover?say('Dry-fit one attracting pair. Insert three Ø2 × 3 mm magnets into the base from above and three Ø2 × 4 mm magnets into the underside of the frame. Mark the same pole facing out in both bases and the opposite pole in both frames. Glue and let the pieces cure apart.',
-   'Prueba que un par se atraiga. Inserta tres imanes de Ø2 × 3 mm por arriba de la base y tres de Ø2 × 4 mm por debajo del marco. Marca el mismo polo hacia fuera en ambas bases y el opuesto en los marcos. Pégalos y deja curar las piezas por separado.')
-   :say('Insert three Ø2 × 3 mm magnets into the base from above, all with the same pole outward. Allow the adhesive to cure before adding electronics.','Inserta tres imanes de Ø2 × 3 mm por arriba de la base, todos con el mismo polo hacia fuera. Deja curar el adhesivo antes de montar la electrónica.'),
-   ['base','base-magnets',...(cs.cover?['frame','frame-magnets']:[]),'adhesive']);
-  step(say('Place the battery under the PCB','Coloca la batería debajo de la PCB'),
-   say('Unplug USB and the cell. Check the delivered cell size, polarity and charge-current limit. Seat the open locator in the base. Rest the cell on the 1.4 mm floor, place the cage over it and lower the PCB over the cage feet. Keep the leads clear of posts. Insulate exposed edges with tape and leave the pouch uncompressed.',
-   'Desconecta el USB y la celda. Comprueba dimensiones, polaridad y límite de carga de la batería recibida. Asienta la guía sin fondo en la base, apoya la celda sobre el piso de 1.4 mm y cúbrela con la jaula. Baja la PCB sobre los pies de la jaula. Aleja los cables de los postes y aísla los bordes expuestos con cinta sin comprimir la bolsa.'),
-   ['cable','base','locator','battery','cage','pcb','meter','tape'],'battery-stack');
-  const structural=3+Object.keys(family[current.variant].fasteners?.[side]||{}).length;
-  step(say('Fasten the stack','Fija el conjunto'),
-   say('First fasten the PCB with two short M2 × 4 screws. Place the printed spacers at the structural posts, lower the switch plate onto them, then secure it with the '+structural+' M2 × 6 screws for this half. Keep countersunk, self-tapping and longer screws out of these mounts.',
-   'Primero fija la PCB con los dos tornillos cortos M2 × 4. Pon los separadores impresos en los postes estructurales, baja la placa de switches sobre ellos y fíjala con los '+structural+' tornillos M2 × 6 de esta mitad. Evita los avellanados, autorroscantes o más largos en estos alojamientos.')+
-   (common?say(' Common heads fit up to Ø4 × 2 mm. Use a 1.5 mm hex key for socket caps.',' Las cabezas comunes admitidas miden hasta Ø4 × 2 mm. Para cabeza cilíndrica usa llave Allen de 1.5 mm.'):''),
-   ['base','pcb','plate','m6'+hardware,'spacer','m4'+hardware,'driver']);
-  step(say('Fit the switches and keycaps','Coloca los switches y las teclas'),
-   say('Guide each switch straight through the plate into the socket on the PCB. Check its pins are straight, then press the keycap onto the stem.',
-   'Introduce cada switch recto a través de la placa hasta el zócalo de la PCB. Comprueba que los pines estén rectos y presiona la tecla sobre el vástago.'),
-   ['plate','pcb','switch','socket','keycap'],'shell-stack');
-  step(say('Connect the cell while J1 is accessible','Conecta la celda con J1 accesible'),
-   say('Unplug USB and turn SW1 off. Seat the controller in its sockets on the printed support if it was removed after the USB test. With J1 still accessible, insert the battery plug whose polarity you measured.',
-   'Desconecta el USB y apaga SW1. Si retiraste el controlador después de probarlo por USB, asiéntalo en sus zócalos sobre el soporte. Con J1 todavía accesible, inserta el enchufe de la batería cuya polaridad mediste.'),
-   ['cable','power','nano','strip','riser','jack','plug','battery']);
-  step(say('Seat the display','Asienta la pantalla'),
-   say('Guide all five display posts straight into their socket on the printed support.','Guía los cinco postes de la pantalla rectos al zócalo sobre el soporte impreso.')+
-   (cs.cover?say(' Lower the frame over the display and check the glass remains free of pressure.',' Baja el marco sobre la pantalla y comprueba que el vidrio quede libre de presión.'):''),
-   ['view','header','view-socket','sled',...(cs.cover?['frame']:[])]);
-  step(say('Fit the feet and test this half','Coloca las patas y prueba esta mitad'),
-   say('Stick four feet underneath, clear of reset and screw holes. Check USB access and full key travel. Test the power switch and charging within the cell rating. After pairing the left half, test both halves, all '+family[current.variant].keys_total+' keys, press/release, chords, thumb tap/hold, all four layers, reconnect and wake after 15 minutes. Check frame retention and battery access. Stop if a component heats unexpectedly.',
-   'Pega cuatro patas debajo, dejando libres el reset y los tornillos. Comprueba el acceso USB y el recorrido de las teclas. Prueba el encendido y la carga dentro del límite de la celda. Empareja la izquierda y prueba ambas mitades, las '+family[current.variant].keys_total+' teclas, pulsación y liberación, combinaciones, tap/hold de pulgares, las cuatro capas, reconexión y despertar tras 15 minutos. Comprueba la retención del marco y el acceso a la batería. Detén la prueba si algo se calienta de forma inesperada.'),
-   ['feet','reset','m6'+hardware,'m4'+hardware,'cable','power','battery','keycap']);
-  host.replaceChildren(interactive?label:node('h3','',t('side.'+side)),stages,node('p','micro',say('Digital prototype. Physical fit and electrical checks are still pending. Record your measured results.','Prototipo digital. El ajuste físico y las pruebas eléctricas siguen pendientes. Registra los resultados medidos.')));
+  const pending=node('p','micro',say('Digital prototype: physical fit and electrical checks are still pending. Record what you measure.','Prototipo digital: el ajuste físico y las pruebas eléctricas siguen pendientes. Registra lo que midas.'));
+  if(!interactive){host.replaceChildren(node('h3','',t('side.'+side)),...steps.map(panel),pending);return;}
+  const half=node('div','assembly-half'),chooser=node('div','segments'),halfLabel=say('Half','Mitad');
+  half.append(node('span','',halfLabel),chooser);chooser.setAttribute('role','group');chooser.setAttribute('aria-label',halfLabel);
+  const choose=(next,index=assemblyIndex)=>{assemblySide=next;assemblyIndex=index;renderFinal();return $('build-final');};
+  for(const s of sides){
+   const b=node('button','',t('side.'+s));b.type='button';b.dataset.assemblySide=s;b.setAttribute('aria-pressed',String(s===side));
+   b.onclick=()=>choose(s).querySelector('[data-assembly-side="'+s+'"]').focus({preventScroll:true});
+   chooser.append(b);
+  }
+  const nav=node('nav','assembly-nav'),label=say('Assembly steps','Pasos de ensamble');nav.setAttribute('aria-label',label);
+  const prev=node('button','','←'),select=node('select'),next=node('button','',say('Next →','Siguiente →'));
+  prev.type=next.type='button';prev.dataset.move=-1;next.dataset.move=1;
+  prev.title=say('Previous','Anterior');prev.setAttribute('aria-label',prev.title);select.setAttribute('aria-label',say('Step','Paso'));
+  for(const [i,step] of steps.entries())select.add(new Option((i+1)+'/'+steps.length+' · '+step.title,String(i)));
+  const choice=node('div','assembly-choice'),progress=node('span','assembly-progress');progress.setAttribute('aria-hidden','true');
+  choice.append(select,progress);nav.append(prev,choice,next);
+  const panels=steps.map(panel),finish=node('div','assembly-finish'),other=node('button','',say('Assemble the other half','Armar la otra mitad'));
+  other.type='button';finish.append(other);
+  // One step at a time. The others stay in the page, hidden, and their pictures are drawn when their turn comes.
+  function show(index){
+   assemblyIndex=index;select.value=String(index);prev.disabled=index===0;next.disabled=index===steps.length-1;
+   progress.textContent=say('Step '+(index+1)+' of '+steps.length,'Paso '+(index+1)+' de '+steps.length);
+   panels.forEach((article,i)=>{article.hidden=i!==index;});
+   finish.hidden=pending.hidden=index!==steps.length-1;
+  }
+  // Bring the new step's title under the two pinned bars, as the soldering guide does.
+  function reveal(control){
+   const panel=$('inspector'),inset=panel.getBoundingClientRect().top+$('build-nav').offsetHeight+nav.offsetHeight+8;
+   panel.scrollBy({top:panels[assemblyIndex].getBoundingClientRect().top-inset,behavior:'instant'});
+   if(control.disabled)(control===prev?next:prev).focus({preventScroll:true});   // keep the keyboard in the bar at either end
+  }
+  prev.onclick=()=>{show(assemblyIndex-1);reveal(prev);};next.onclick=()=>{show(assemblyIndex+1);reveal(next);};
+  select.onchange=()=>{show(Number(select.value));reveal(select);};
+  other.onclick=()=>{const host=choose(side==='left'?'right':'left',0);host.closest('#build-close').scrollIntoView({block:'start',behavior:'instant'});host.querySelector('[data-assembly-side][aria-pressed=true]').focus({preventScroll:true});};
+  host.replaceChildren(half,nav,...panels,finish,pending);show(assemblyIndex);
  }
  function renderFirmware(){
   const target=$('build-firmware');target.replaceChildren();
