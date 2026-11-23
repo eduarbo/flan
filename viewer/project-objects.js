@@ -25,7 +25,7 @@ export function projectObject({part,count,family},materials,spools,config){
   const color=(part.colors[m.role]||part.colors.body).toUpperCase();
   const spool=spoolById(part.spool)||spoolFor(config,part.side,color),key=spool?.id||color;
   let slot=spools.findIndex(s=>s.key===key);
-  if(slot<0){slot=spools.length;spools.push({key,color,series:spool?.series,name:spool?.name,label:spool?spool.series+' · '+spool.name:color});}
+  if(slot<0){slot=spools.length;spools.push({key,color,series:spool?.series,material:spool?.material,name:spool?.name,label:spool?spool.series+' · '+spool.name:color});}
   let z=pose[11];
   for(let axis=0;axis<3;axis++){
    const f=pose[axis*3+2];z+=f*((f<0?m.minimum:m.maximum)[axis]+placement.shift[axis]);

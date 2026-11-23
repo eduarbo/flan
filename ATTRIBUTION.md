@@ -55,3 +55,12 @@ The 2026-10-09 wording said Piantor only inspired the key count. That understate
 ## Firmware authorship clarification · 2026-11-20
 
 The earlier references to original firmware describe Eduardo’s Flan-specific ZMK shields, pin assignments and keymaps. The firmware also contains upstream ZMK, Zephyr and libraries under their respective licenses.
+
+## Filament identification
+
+The filament catalog uses the manufacturers’ marks to identify their products. The Bambu Lab and Polymaker logos belong to their respective owners. The images are the manufacturers’ store icons, embedded locally for offline use. [Bambu Lab icon](https://bambu-lab-ca.myshopify.com/cdn/shop/files/favicon_96x.png?v=1657263517) · [Polymaker icon](https://shop.polymaker.com/cdn/shop/files/Polymaker_Full_Logo_Teal_copy.png?crop=center&height=180&v=1721934767&width=180)
+
+The five-digit Bambu Lab color identifiers were matched by filament line, English color name and HEX against the [Bambu Studio color catalog](https://github.com/bambulab/BambuStudio/blob/19843bf27197d55fb571e419aa58a29b60bab535/resources/profiles/BBL/filament/filaments_color_codes.json).
+
+Additional digital color samples come from [Bambu Studio's PETG HF color table](https://github.com/bambulab/BambuStudio/blob/19843bf27197d55fb571e419aa58a29b60bab535/resources/profiles/BBL/filament/filaments_color_codes.json), [Overture's color chart](https://wiki.overture3d.com/en/Basics/HexCode), [SUNLU PETG](https://www.sunlu.com/products/331), [SUNLU PLA+ 2.0](https://store.sunlu.com/products/moq-6kg-pla-2-0-upgraded-pla-pla-plus-3d-printer-filament-1kg) and [ELEGOO Rapid PETG](https://us.elegoo.com/products/rapid-petg-filament-1-75mm-colored-1kg).
+The brand icons of [SUNLU](https://store.sunlu.com), [Overture](https://overture3d.com) and [ELEGOO](https://us.elegoo.com) come from their respective official stores and identify the manufacturers. Their owners retain all trademark rights.

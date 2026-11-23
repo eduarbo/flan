@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+import {mountSolderGuide} from './solder-guide.js';
 import parts from '../design/build-parts.json';
 import {presetStock} from './preset-filaments.js';
 import {language,t} from './i18n.js';
@@ -105,6 +106,8 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   }
   const setup=setupOf(current);copy.querySelector('.print-settings')?.replaceWith(node('p','micro',(setup.printer?'Bambu Lab '+setup.printer+' · '+setup.nozzle+' mm · ':'')+t('print.'+setup.mode)+' · '+setup.bed+' × '+setup.bed+' mm'));
   copy.querySelectorAll('.filament-disclosure > summary [aria-hidden=true],button,.build-jumps,.print-options,.build-options,[role=status]').forEach(n=>n.remove());
+  const solder=copy.querySelector('.solder-map'), liveMap=$('build-assembly').querySelector('.solder-map')?.shadowRoot;
+  if(solder&&liveMap){solder.replaceChildren(...['face','heading','instruction','map','caption','detail'].map(id=>liveMap.getElementById(id).cloneNode(true)));}
   copy.querySelectorAll('details').forEach(n=>n.open=true);
   copy.querySelectorAll('input').forEach(n=>{if(n.type==='checkbox'){if(n.checked)n.setAttribute('checked','');n.disabled=true;}else n.remove();});
   const designLabel=say('Reopen this exact design','Volver a abrir este diseño exacto');const a=link(designLabel,await exactLink);a.id='build-design-link';copy.prepend(a);
@@ -242,8 +245,15 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   say('After printing, insert three axial Ø2 × 3 mm magnets per base from above and three Ø2 × 4 mm per frame from underneath. Dry-fit an attracting pair. Mark the same exposed pole in all bases and the opposite in all frames. Use adhesive compatible with the plastic and coating. Let the pieces cure apart before installing the electronics.','Después de imprimir, coloca tres imanes axiales Ø2 × 3 mm por base desde arriba y tres Ø2 × 4 mm por marco desde abajo. Prueba en seco una pareja que se atraiga. Marca el mismo polo visible en todas las bases y el opuesto en los marcos. Usa adhesivo compatible con el plástico y el recubrimiento. Deja curar las piezas separadas antes de instalar la electrónica.'),
   say('Tap the Ø1.7 mm printed pilots with an M2 tap. Test that the selected screw grips without bottoming or splitting the part.','Rosca los pilotos impresos de Ø1.7 mm con un macho M2. Comprueba que el tornillo sujete sin tocar fondo ni partir la pieza.')
  ])];}
+ let solderView,solderKey;
  function renderAssembly(){
-  $('build-assembly').replaceChildren(list([
+  const key=current.variant+'/'+language();
+  if(key!==solderKey){
+   solderKey=key;solderView=node('section','solder-map');
+   mountSolderGuide(solderView,current.variant,language(),'left',true,illustrations.show);
+  }
+  const fullMap=link(say('Open the full-size soldering guide','Abrir la guía de soldadura a tamaño completo'),new URL('solder.html?size='+current.variant+'&lang='+language(),location.protocol==='file:'?'https://flankbd.com/explore/':location.href).href);
+  $('build-assembly').replaceChildren(solderView,fullMap,list([
    say('Disconnect USB and leave both batteries unplugged. Solder diodes, hot-swap sockets, power/reset switches and battery jacks; match the PCB markings, diode bands and each component orientation.','Desconecta USB y deja ambas baterías sin conectar. Suelda diodos, sockets hot-swap, interruptores, reset y jacks de batería; respeta marcas de PCB, bandas de diodos y orientación.'),
    say('Cut four 12-contact controller sockets from the 64-contact strip. Use 48 round pins. Hold the controller level on its printed support: 2.80 mm above the main PCB, underside at Z8.20 mm. The pin length does not set this gap.','Corta cuatro zócalos de 12 contactos de la tira de 64. Usa 48 pines redondos. Apoya el controlador nivelado en su soporte: 2.80 mm sobre la PCB principal, cara inferior en Z8.20 mm. La longitud del pin no determina la separación.'),
    say('Use the connectors supplied with nice!view: 7.00 mm PCB separation, display underside at Z12.40 mm. Put the short solder tails into the display; do not trim the mating posts.','Usa los conectores incluidos con nice!view: separación de 7.00 mm entre PCB, cara inferior de pantalla en Z12.40 mm. Las colas cortas se sueldan a la pantalla; no cortes los postes de acoplamiento.'),

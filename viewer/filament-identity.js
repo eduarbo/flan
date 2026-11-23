@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {language,t} from './i18n.js';
+import manufacturerCodes from '../design/filament-color-codes.json' with {type:'json'};
+
+export const filamentColorCode=spool=>manufacturerCodes[spool.series]?.[spool.name];
 
 export function filamentReel(spool){
  const reel=document.createElement('i');
@@ -38,8 +41,10 @@ export function filamentLabel(spool,state){
   mark.className='filament-state';mark.setAttribute('role','img');mark.setAttribute('aria-label',description);
   mark.title=description;mark.textContent=selected?'✓':'≈';name.append(mark);
  }
- const brand=document.createElement('b');brand.textContent=spool.brand;
+ const brand=document.createElement('b');brand.textContent=spool.brand;brand.dataset.brand=spool.brand;
  name.append(spool.name);series.append(brand,' · '+spool.line);
+ const code=filamentColorCode(spool);
+ if(code)series.append(' · '+code);
  label.append(name,series);
  return label;
 }

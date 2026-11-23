@@ -897,10 +897,11 @@ let partArt=null;const artWaiting=new Map();
 const artSeen=new IntersectionObserver(entries=>{
   if(!entries.some(entry=>entry.isIntersecting))return;artSeen.disconnect();
   preview.begin();partArt=createPartIllustrations({preview,parts:data.parts,material});preview.end();if(live){resize();renderNow();}
-  for(const [id,img] of artWaiting)img.src=partArt[id];artWaiting.clear();
+  for(const [img,id] of artWaiting)if(img.isConnected)img.src=partArt[id];artWaiting.clear();
 });
-const partIllustrations={show(img,id){if(partArt)img.src=partArt[id];else{img.src=BLANK;artWaiting.set(id,img);}}};
+const partIllustrations={show(img,id){if(partArt)img.src=partArt[id];else{img.src=BLANK;artWaiting.set(img,id);}}};
 artSeen.observe($('build-shopping'));
+artSeen.observe($('build-assembly'));
 // Legacy files contain literal per-key choices, without preset provenance.
 // Repair only on an explicit click, preserving custom variants and colors.
 const rowRepair=document.createElement('button');rowRepair.id='fix-cap-rows';rowRepair.type='button';

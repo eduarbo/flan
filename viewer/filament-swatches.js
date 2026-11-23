@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Published 1.75 mm PLA color tables. Catalog inclusion does not imply local stock.
+import extraRanges from '../design/filament-ranges.json' with {type:'json'};
+// Published 1.75 mm filament color tables. Catalog inclusion does not imply local stock.
 export const matteSource='https://us.store.bambulab.com/products/pla-matte';
 export const basicSource='https://us.store.bambulab.com/products/pla-basic-filament';
 const matte={
@@ -28,7 +29,8 @@ const panchromaBasic={
 export const swatchSources={
  'Bambu PLA Matte':matteSource,'Bambu PLA Basic':basicSource,
  'Polymaker Panchroma Matte':'https://shop.polymaker.com/products/matte-pla',
- 'Polymaker Panchroma Basic':'https://shop.polymaker.com/products/panchroma-pla'
+ 'Polymaker Panchroma Basic':'https://shop.polymaker.com/products/panchroma-pla',
+ ...Object.fromEntries(extraRanges.map(r=>[r.series,r.source]))
 };
 function oklab(hex){
  const [r,g,b]=hex.slice(1).match(/../g).map(pair=>{
@@ -63,10 +65,12 @@ export function hueFamily(spool){
  return 'pink';
 }
 const ranges={'Bambu PLA Matte':matte,'Bambu PLA Basic':basic,'Polymaker Panchroma Matte':panchromaMatte,'Polymaker Panchroma Basic':panchromaBasic};
-export const catalogSpools=Object.entries(ranges).flatMap(([series,colors])=>{
- const brand=series.startsWith('Bambu ')?'Bambu Lab':'Polymaker';
- const line=series.slice(series.indexOf(' ')+1),finish=series.endsWith(' Matte')?'matte':'basic';
- return Object.entries(colors).map(([name,hex])=>({id:series+'/'+name,name,series,brand,line,finish,hex,lab:oklab(hex)}));
+export const filamentRanges=[...Object.entries(ranges).map(([series,colors])=>({
+ series,colors,brand:series.startsWith('Bambu ')?'Bambu Lab':'Polymaker',line:series.slice(series.indexOf(' ')+1),material:'PLA'
+})),...extraRanges];
+export const catalogSpools=filamentRanges.flatMap(({series,brand,line,material,colors})=>{
+ const finish=line.endsWith(' Matte')?'matte':'basic';
+ return Object.entries(colors).map(([name,hex])=>({id:series+'/'+name,name,series,brand,line,finish,material,hex,lab:oklab(hex)}));
 });
 const byId=new Map(catalogSpools.map(s=>[s.id,s]));
 export const spoolById=id=>byId.get(id);
@@ -81,7 +85,7 @@ export function rankedSwatchDistances(hex){
  return catalogSpools.map(spool=>({spool,d:distance(spool)})).sort((a,b)=>a.d-b.d);
 }
 export const rankedSwatches=hex=>rankedSwatchDistances(hex).map(x=>x.spool);
-export const closestSwatch=hex=>rankedSwatches(hex)[0];
+export const closestSwatch=hex=>rankedSwatches(hex).find(spool=>spool.material==='PLA');
 export function bindSpool(config,sides,spool){
  config.filaments??={};
  for(const side of sides){config.filaments[side]??={};config.filaments[side][spool.hex.toLowerCase()]=spool.id;}

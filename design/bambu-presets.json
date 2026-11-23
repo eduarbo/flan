@@ -3,7 +3,9 @@
   "filamentIds": {
     "Bambu PLA Basic": "GFA00",
     "Bambu PLA Matte": "GFA01",
-    "Generic PLA": "GFL99"
+    "Generic PLA": "GFL99",
+    "Generic PETG": "GFG99",
+    "Bambu PETG HF": "GFG02"
   },
   "models": {
     "A1 mini": {
@@ -20,7 +22,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL A1M 0.2 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL A1M 0.2 nozzle",
-            "Generic PLA": "Generic PLA @BBL A1M 0.2 nozzle"
+            "Generic PLA": "Generic PLA @BBL A1M 0.2 nozzle",
+            "Generic PETG": "Generic PETG @BBL A1M 0.2 nozzle",
+            "Bambu PETG HF": "Bambu PETG HF @BBL A1M 0.2 nozzle"
           }
         },
         "0.4": {
@@ -29,7 +33,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL A1M",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL A1M",
-            "Generic PLA": "Generic PLA @BBL A1M"
+            "Generic PLA": "Generic PLA @BBL A1M",
+            "Generic PETG": "Generic PETG @BBL A1M",
+            "Bambu PETG HF": "Bambu PETG HF @BBL A1M"
           }
         },
         "0.6": {
@@ -38,7 +44,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL A1M",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL A1M",
-            "Generic PLA": "Generic PLA @BBL A1M"
+            "Generic PLA": "Generic PLA @BBL A1M",
+            "Generic PETG": "Generic PETG @BBL A1M",
+            "Bambu PETG HF": "Bambu PETG HF @BBL A1M 0.8 nozzle"
           }
         },
         "0.8": {
@@ -47,7 +55,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL A1M",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL A1M",
-            "Generic PLA": "Generic PLA @BBL A1M"
+            "Generic PLA": "Generic PLA @BBL A1M",
+            "Generic PETG": "Generic PETG @BBL A1M",
+            "Bambu PETG HF": "Bambu PETG HF @BBL A1M 0.8 nozzle"
           }
         }
       }
@@ -66,7 +76,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL A1 0.2 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL A1 0.2 nozzle",
-            "Generic PLA": "Generic PLA @BBL A1 0.2 nozzle"
+            "Generic PLA": "Generic PLA @BBL A1 0.2 nozzle",
+            "Generic PETG": "Generic PETG @BBL A1 0.2 nozzle",
+            "Bambu PETG HF": "Bambu PETG HF @BBL A1 0.2 nozzle"
           }
         },
         "0.4": {
@@ -75,7 +87,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL A1",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL A1",
-            "Generic PLA": "Generic PLA @BBL A1"
+            "Generic PLA": "Generic PLA @BBL A1",
+            "Generic PETG": "Generic PETG @BBL A1",
+            "Bambu PETG HF": "Bambu PETG HF @BBL A1"
           }
         },
         "0.6": {
@@ -84,7 +98,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL A1",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL A1",
-            "Generic PLA": "Generic PLA @BBL A1"
+            "Generic PLA": "Generic PLA @BBL A1",
+            "Generic PETG": "Generic PETG @BBL A1",
+            "Bambu PETG HF": "Bambu PETG HF @BBL A1 0.8 nozzle"
           }
         },
         "0.8": {
@@ -93,7 +109,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL A1",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL A1",
-            "Generic PLA": "Generic PLA @BBL A1"
+            "Generic PLA": "Generic PLA @BBL A1",
+            "Generic PETG": "Generic PETG @BBL A1",
+            "Bambu PETG HF": "Bambu PETG HF @BBL A1 0.8 nozzle"
           }
         }
       }
@@ -112,7 +130,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL P1P 0.2 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL P1P 0.2 nozzle",
-            "Generic PLA": "Generic PLA @BBL P1P 0.2 nozzle"
+            "Generic PLA": "Generic PLA @BBL P1P 0.2 nozzle",
+            "Generic PETG": "Generic PETG @BBL P1P 0.2 nozzle",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.2 nozzle"
           }
         },
         "0.4": {
@@ -121,7 +141,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL P1P",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL P1P",
-            "Generic PLA": "Generic PLA @BBL P1P"
+            "Generic PLA": "Generic PLA @BBL P1P",
+            "Generic PETG": "Generic PETG @BBL P1P",
+            "Bambu PETG HF": "Bambu PETG HF @BBL P1P 0.4 nozzle"
           }
         },
         "0.6": {
@@ -130,7 +152,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL P1P 0.6 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL P1P 0.6 nozzle",
-            "Generic PLA": "Generic PLA @BBL P1P"
+            "Generic PLA": "Generic PLA @BBL P1P",
+            "Generic PETG": "Generic PETG @BBL P1P",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.8 nozzle"
           }
         },
         "0.8": {
@@ -139,7 +163,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL P1P",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL P1P",
-            "Generic PLA": "Generic PLA @BBL P1P"
+            "Generic PLA": "Generic PLA @BBL P1P",
+            "Generic PETG": "Generic PETG @BBL P1P",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.8 nozzle"
           }
         }
       }
@@ -158,7 +184,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.2 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.2 nozzle",
-            "Generic PLA": "Generic PLA @0.2 nozzle"
+            "Generic PLA": "Generic PLA @0.2 nozzle",
+            "Generic PETG": "Generic PETG @0.2 nozzle",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.2 nozzle"
           }
         },
         "0.4": {
@@ -167,7 +195,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL P1S 0.4 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL P1S 0.4 nozzle",
-            "Generic PLA": "Generic PLA"
+            "Generic PLA": "Generic PLA",
+            "Generic PETG": "Generic PETG",
+            "Bambu PETG HF": "Bambu PETG HF @BBL P1S 0.4 nozzle"
           }
         },
         "0.6": {
@@ -176,7 +206,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL P1S 0.6 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL P1S 0.6 nozzle",
-            "Generic PLA": "Generic PLA"
+            "Generic PLA": "Generic PLA",
+            "Generic PETG": "Generic PETG",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.8 nozzle"
           }
         },
         "0.8": {
@@ -185,7 +217,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.8 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.8 nozzle",
-            "Generic PLA": "Generic PLA"
+            "Generic PLA": "Generic PLA",
+            "Generic PETG": "Generic PETG",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.8 nozzle"
           }
         }
       }
@@ -204,7 +238,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL P2S 0.2 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL P2S 0.2 nozzle",
-            "Generic PLA": "Generic PLA @BBL P2S 0.2 nozzle"
+            "Generic PLA": "Generic PLA @BBL P2S 0.2 nozzle",
+            "Generic PETG": "Generic PETG @BBL P2S 0.2 nozzle",
+            "Bambu PETG HF": "Bambu PETG HF @BBL P2S 0.2 nozzle"
           }
         },
         "0.4": {
@@ -213,7 +249,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL P2S",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL P2S",
-            "Generic PLA": "Generic PLA @BBL P2S"
+            "Generic PLA": "Generic PLA @BBL P2S",
+            "Generic PETG": "Generic PETG @BBL P2S",
+            "Bambu PETG HF": "Bambu PETG HF @BBL P2S 0.4 nozzle"
           }
         },
         "0.6": {
@@ -222,7 +260,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL P2S 0.6 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL P2S 0.6 nozzle",
-            "Generic PLA": "Generic PLA @BBL P2S"
+            "Generic PLA": "Generic PLA @BBL P2S",
+            "Generic PETG": "Generic PETG @BBL P2S",
+            "Bambu PETG HF": "Bambu PETG HF @BBL P2S 0.6 nozzle"
           }
         },
         "0.8": {
@@ -231,7 +271,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL P2S 0.8 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL P2S 0.8 nozzle",
-            "Generic PLA": "Generic PLA @BBL P2S"
+            "Generic PLA": "Generic PLA @BBL P2S",
+            "Generic PETG": "Generic PETG @BBL P2S",
+            "Bambu PETG HF": "Bambu PETG HF @BBL P2S 0.8 nozzle"
           }
         }
       }
@@ -250,7 +292,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.2 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.2 nozzle",
-            "Generic PLA": "Generic PLA @0.2 nozzle"
+            "Generic PLA": "Generic PLA @0.2 nozzle",
+            "Generic PETG": "Generic PETG @0.2 nozzle",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.2 nozzle"
           }
         },
         "0.4": {
@@ -259,7 +303,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1",
-            "Generic PLA": "Generic PLA"
+            "Generic PLA": "Generic PLA",
+            "Generic PETG": "Generic PETG",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C"
           }
         },
         "0.6": {
@@ -268,7 +314,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1",
-            "Generic PLA": "Generic PLA"
+            "Generic PLA": "Generic PLA",
+            "Generic PETG": "Generic PETG",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.8 nozzle"
           }
         },
         "0.8": {
@@ -277,7 +325,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1",
-            "Generic PLA": "Generic PLA"
+            "Generic PLA": "Generic PLA",
+            "Generic PETG": "Generic PETG",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.8 nozzle"
           }
         }
       }
@@ -296,7 +346,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.2 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.2 nozzle",
-            "Generic PLA": "Generic PLA @0.2 nozzle"
+            "Generic PLA": "Generic PLA @0.2 nozzle",
+            "Generic PETG": "Generic PETG @0.2 nozzle",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.2 nozzle"
           }
         },
         "0.4": {
@@ -305,7 +357,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C",
-            "Generic PLA": "Generic PLA"
+            "Generic PLA": "Generic PLA",
+            "Generic PETG": "Generic PETG",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C"
           }
         },
         "0.6": {
@@ -314,7 +368,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.6 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.6 nozzle",
-            "Generic PLA": "Generic PLA"
+            "Generic PLA": "Generic PLA",
+            "Generic PETG": "Generic PETG",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.6 nozzle"
           }
         },
         "0.8": {
@@ -323,7 +379,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.8 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.8 nozzle",
-            "Generic PLA": "Generic PLA"
+            "Generic PLA": "Generic PLA",
+            "Generic PETG": "Generic PETG",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.8 nozzle"
           }
         }
       }
@@ -342,7 +400,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.2 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.2 nozzle",
-            "Generic PLA": "Generic PLA @0.2 nozzle"
+            "Generic PLA": "Generic PLA @0.2 nozzle",
+            "Generic PETG": "Generic PETG @0.2 nozzle",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.2 nozzle"
           }
         },
         "0.4": {
@@ -351,7 +411,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C",
-            "Generic PLA": "Generic PLA"
+            "Generic PLA": "Generic PLA",
+            "Generic PETG": "Generic PETG",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C"
           }
         },
         "0.6": {
@@ -360,7 +422,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C",
-            "Generic PLA": "Generic PLA"
+            "Generic PLA": "Generic PLA",
+            "Generic PETG": "Generic PETG",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.8 nozzle"
           }
         },
         "0.8": {
@@ -369,7 +433,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X1C 0.8 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X1C 0.8 nozzle",
-            "Generic PLA": "Generic PLA"
+            "Generic PLA": "Generic PLA",
+            "Generic PETG": "Generic PETG",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X1C 0.8 nozzle"
           }
         }
       }
@@ -388,7 +454,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X2D 0.2 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X2D 0.2 nozzle",
-            "Generic PLA": "Generic PLA @BBL X2D 0.2 nozzle"
+            "Generic PLA": "Generic PLA @BBL X2D 0.2 nozzle",
+            "Generic PETG": "Generic PETG @BBL X2D 0.2 nozzle",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X2D 0.2 nozzle"
           }
         },
         "0.4": {
@@ -397,7 +465,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X2D 0.4 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X2D 0.4 nozzle",
-            "Generic PLA": "Generic PLA @BBL X2D 0.4 nozzle"
+            "Generic PLA": "Generic PLA @BBL X2D 0.4 nozzle",
+            "Generic PETG": "Generic PETG @BBL X2D 0.4 nozzle",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X2D 0.4 nozzle"
           }
         },
         "0.6": {
@@ -406,7 +476,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X2D 0.6 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X2D",
-            "Generic PLA": "Generic PLA @BBL X2D"
+            "Generic PLA": "Generic PLA @BBL X2D",
+            "Generic PETG": "Generic PETG @BBL X2D",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X2D"
           }
         },
         "0.8": {
@@ -415,7 +487,9 @@
           "materials": {
             "Bambu PLA Basic": "Bambu PLA Basic @BBL X2D 0.8 nozzle",
             "Bambu PLA Matte": "Bambu PLA Matte @BBL X2D 0.8 nozzle",
-            "Generic PLA": "Generic PLA @BBL X2D"
+            "Generic PLA": "Generic PLA @BBL X2D",
+            "Generic PETG": "Generic PETG @BBL X2D",
+            "Bambu PETG HF": "Bambu PETG HF @BBL X2D 0.8 nozzle"
           }
         }
       }

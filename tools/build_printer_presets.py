@@ -6,7 +6,7 @@ from pathlib import Path
 
 # These models use a rectangular, square bed and the existing Flan plate layout.
 MODELS = ('A1 mini', 'A1', 'P1P', 'P1S', 'P2S', 'X1', 'X1 Carbon', 'X1E', 'X2D')
-MATERIALS = ('Bambu PLA Basic', 'Bambu PLA Matte', 'Generic PLA')
+MATERIALS = ('Bambu PLA Basic', 'Bambu PLA Matte', 'Generic PLA', 'Generic PETG', 'Bambu PETG HF')
 
 
 def build(root):

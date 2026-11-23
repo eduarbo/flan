@@ -12,7 +12,7 @@ import {themeName,labelThemeButton} from './home/options.js';
 import {t,tOr,onLanguage,language} from './i18n.js';
 export {savedKey} from './storage.js';
 export function applyTheme(config,source,sides){
- const c=copy(config),theme=printThemes.includes(source)?source:printableTheme(source);
+ const c=copy(config),theme=source.spools||printThemes.includes(source)?source:printableTheme(source);
  c.filaments??={};
  for(const side of sides){
   const base=c.cases[side],frame=c.frames[side];
@@ -23,7 +23,8 @@ export function applyTheme(config,source,sides){
    key.color=paletteColor(theme.keycaps,{row:Number(ref[1]),col:Number(ref[2])});
   }
   c.filaments[side]={};
-  bindPresetColors(c,side,colorFields(c,side).map(([record,field])=>record[field]));
+  if(theme.spools){for(const spool of theme.spools)bindSpool(c,[side],spool);}
+  else bindPresetColors(c,side,colorFields(c,side).map(([record,field])=>record[field]));
  }
  return c;
 }
@@ -33,7 +34,7 @@ export function createAppearance({$,get,apply,targets,preview,frameFinish,materi
  let themeSide='both';const sides=()=>themeSide==='both'?['left','right']:[themeSide];
  // A theme is a swatch, as on the home page: the case on top, the plate below, the frame's accent as a dot.
  for(const t of printThemes){const b=document.createElement('button');b.type='button';b.dataset.theme=t.id;b.setAttribute('aria-pressed','false');b.style.cssText=`--a:${t.base};--b:${t.plate};--c:${t.frame.accent}`;b.append(document.createElement('span'));labelThemeButton(b,t,language());b.onclick=()=>apply(applyTheme(get(),t,sides()));$('themes-grid').append(b);}
- const library=createSpoolLibrary({$,getCurrentUses:()=>printUses(get()),getThemeUses:theme=>printUses(applyTheme(get(),theme,sides())),
+ const library=createSpoolLibrary({$,applyOwnedTheme:theme=>apply(applyTheme(get(),theme,sides())),themeTarget:()=>t(themeSide==='both'?'seg.both':'side.'+themeSide),getCurrentUses:()=>printUses(get()),getThemeUses:theme=>printUses(applyTheme(get(),theme,sides())),
   selectionLabel:()=>{const {scope,half}=printSelection();return [t('kit.'+scope),t('print.'+(get().print_setup?.mode||'ams')),t(half==='both'?'seg.both':'side.'+half)].join(' · ');}});
  for(const b of $('theme-target').children)b.onclick=()=>{themeSide=b.dataset.side;sync();};
  const inputs=[];

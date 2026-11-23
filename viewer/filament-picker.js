@@ -1,26 +1,43 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-import {filamentReel,filamentLabel,flatSwatch} from './filament-identity.js';
+import {filamentReel,filamentLabel,filamentColorCode,flatSwatch} from './filament-identity.js';
 import {language} from './i18n.js';
-import {rankedSwatches,swatchSources,hueFamily} from './filament-swatches.js';
+import {ownedSpools,watchSpools} from './owned-spools.js';
+import {rankedSwatches,swatchSources,hueFamily,filamentRanges} from './filament-swatches.js';
 const say=(en,es)=>language()==='es'?es:en;
 const el=(tag,text)=>{const n=document.createElement(tag);if(text)n.textContent=text;return n;};
 export function filamentFilters(onChange){
  const filters=el('div');filters.className='spool-filters';
- const search=el('input');search.type='search';search.placeholder=say('Search color or brand','Buscar color o marca');search.setAttribute('aria-label',search.placeholder);
- const series=el('select');series.setAttribute('aria-label',say('Filament range','Línea de filamento'));
- series.add(new Option(say('All brands and finishes','Todas las marcas y acabados'),''));
- for(const range of Object.keys(swatchSources))series.add(new Option(range,range));
- const family=el('select');family.setAttribute('aria-label',say('Color family','Familia de color'));
- family.add(new Option(say('All color families','Todas las familias de color'),''));
+ const search=el('input');search.type='search';search.placeholder=say('Color, brand or code','Color, marca o código');search.setAttribute('aria-label',search.placeholder);
+ function select(name){
+  const label=el('label'),caption=el('span',name),control=el('select');
+  label.append(caption,control);filters.append(label);return control;
+ }
+ filters.append(search);
+ const brand=select(say('Brand','Marca')),series=select(say('Filament range','Línea de filamento')),family=select(say('Color family','Familia de color'));
+ brand.add(new Option(say('All brands','Todas las marcas'),''));
+ for(const value of [...new Set(filamentRanges.map(r=>r.brand))].sort())brand.add(new Option(value,value));
+ function ranges(){
+  const previous=series.value;
+  series.replaceChildren(new Option(say('All ranges','Todas las líneas'),''));
+  for(const r of filamentRanges.filter(r=>!brand.value||r.brand===brand.value))series.add(new Option(brand.value?r.line:r.series,r.series));
+  if([...series.options].some(o=>o.value===previous))series.value=previous;
+ }
+ ranges();
+ family.add(new Option(say('All families','Todas las familias'),''));
  const names={neutral:['Neutrals','Neutros'],brown:['Browns','Cafés'],red:['Reds','Rojos'],orange:['Oranges','Naranjas'],yellow:['Yellows','Amarillos'],green:['Greens','Verdes'],teal:['Teals','Turquesas'],blue:['Blues','Azules'],purple:['Purples','Morados'],pink:['Pinks','Rosas']};
  for(const [id,labels] of Object.entries(names))family.add(new Option(say(...labels),id));
- filters.append(search,series,family);
+ const clear=el('button',say('Clear filters','Limpiar filtros'));clear.type='button';clear.className='clear-spool-filters';filters.append(clear);
+ const changed=()=>{clear.hidden=!(brand.value||series.value||family.value||search.value);onChange();};
+ clear.hidden=true;
+ clear.onclick=()=>{brand.value='';ranges();series.value='';family.value='';search.value='';words=[];changed();search.focus();};
+ brand.onchange=()=>{ranges();changed();};
  let words=[];
- search.oninput=()=>{words=search.value.trim().toLowerCase().split(/\s+/).filter(Boolean);onChange();};
- series.onchange=family.onchange=onChange;
+ search.oninput=()=>{words=search.value.trim().toLowerCase().replace(/\((\d{5})\)|#(\d{5})\b/g,'$1$2').split(/\s+/).filter(Boolean);changed();};
+ series.onchange=family.onchange=changed;
  function matches(s){
-  const keywords=(s.id+' '+s.brand+' '+s.line+' '+s.hex).toLowerCase();
-  return (!series.value||s.series===series.value)&&(!family.value||hueFamily(s)===family.value)&&words.every(word=>keywords.includes(word));
+  const code=filamentColorCode(s)||'';
+  const keywords=(s.id+' '+s.brand+' '+s.line+' '+s.hex+' '+code).toLowerCase();
+  return (!brand.value||s.brand===brand.value)&&(!series.value||s.series===series.value)&&(!family.value||hueFamily(s)===family.value)&&words.every(word=>/^\d{5}$/.test(word)?word===code:keywords.includes(word));
  }
  return {filters,matches,search};
 }
@@ -39,8 +56,9 @@ export function chooseFilament(color,onSelect,selected){
  }
  function render(){
   results.replaceChildren();
-  const list=sorted.filter(matches);
-  for(const [label,rows] of [[say('Closest colors','Tonos más cercanos'),list.slice(0,5)],[say('More colors','Más colores'),list.slice(5)]]){
+  const list=sorted.filter(matches),owned=ownedSpools();
+  const mine=list.filter(s=>owned.has(s.id)),other=list.filter(s=>!owned.has(s.id));
+  for(const [label,rows] of [[say('My spools','Mis bobinas'),mine],[say('Closest colors','Tonos más cercanos'),other.slice(0,5)],[say('More colors','Más colores'),other.slice(5)]]){
    if(!rows.length)continue;results.append(el('h3',label));const grid=el('div');grid.className='spool-grid';
    for(const spool of rows){
     const b=el('button');b.type='button';b.dataset.spool=spool.id;
@@ -53,8 +71,8 @@ export function chooseFilament(color,onSelect,selected){
    }
    results.append(grid);
   }
-  if(!list.length)results.append(el('p',say('No matching color. Try another name or range.','Sin resultados. Prueba otro nombre o línea.')));
+  if(!list.length)results.append(el('p',say('No matching filament. Try another name or code.','Sin resultados. Prueba otro nombre o código.')));
  }
  body.append(target,filters,results,sources);dialog.append(heading,body);document.body.append(dialog);
- dialog.addEventListener('close',()=>dialog.remove(),{once:true});render();dialog.showModal();(matchMedia('(pointer: coarse)').matches?title:search).focus({preventScroll:true});
+ const unwatch=watchSpools(render);dialog.addEventListener('close',()=>{unwatch();dialog.remove();},{once:true});render();dialog.showModal();(matchMedia('(pointer: coarse)').matches?title:search).focus({preventScroll:true});
 }
