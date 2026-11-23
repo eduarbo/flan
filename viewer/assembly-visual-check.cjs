@@ -13,6 +13,7 @@ const expected=[['diode','tweezers'],['socket','switch'],['reset'],['power'],['j
   const page=await context.newPage();await page.addInitScript(()=>localStorage.setItem('flan.lang','es'));
   await page.goto(base+'?size=flan46&diagnostics#build-solder-u1');await page.waitForFunction(()=>window.flan36?.settled);
   const guide=page.locator('.solder-map');assert.equal(await guide.locator('#step').inputValue(),'5');
+  assert(await guide.locator('#workbench-tools').isHidden());assert(await guide.locator('#final-inspection').isHidden());
   assert.equal(await guide.locator('#part figure').count(),4);
   assert.match(await guide.locator('#part').innerText(),/2 × Tiras Mill-Max.*24 × Pines redondos/s);
   assert.equal(await guide.locator('.fit-motion').getAttribute('data-pose'),'seated');
@@ -58,6 +59,9 @@ const expected=[['diode','tweezers'],['socket','switch'],['reset'],['power'],['j
     await root.locator('#side').selectOption(side);
     for(const [i,ids] of expected.entries()){
      await root.locator('#step').selectOption(String(i));
+     assert.equal(await root.locator('#workbench-tools summary').isVisible(),i===0);
+     assert.equal(await root.locator('#bench').isVisible(),i===expected.length-1);
+     assert.equal(await root.locator('#checks').isVisible(),i===expected.length-1);
      const cards=root.locator('#part figure');
      assert.deepEqual(await cards.evaluateAll(rows=>rows.map(r=>r.dataset.guidePart)),ids);
      await cards.locator('img').evaluateAll(imgs=>Promise.all(imgs.map(i=>i.decode())));
@@ -78,12 +82,18 @@ const expected=[['diode','tweezers'],['socket','switch'],['reset'],['power'],['j
     }
    }
   }
+  await root.locator('#next').click();assert(await root.locator('#bench').evaluate(el=>el===el.getRootNode().activeElement));
+  await root.locator('#other-side').click();
+  const tools=root.locator('#workbench-tools');assert.equal(await tools.evaluate(el=>el.open),false);
+  await tools.locator('summary').click();assert.equal(await tools.locator('figure:visible').count(),3);
+  await root.locator('#next').click();assert(await tools.isHidden());assert(await root.locator('#checks').isHidden());
   await root.locator('#step').selectOption('5');
   const event=standalone.waitForEvent('download');await root.locator('#portable').click();
   const file=path.join(scratch,'guide.html');await (await event).saveAs(file);
   const offline=await context.newPage();
   await offline.route(/^https?:/,route=>route.abort());await offline.goto(pathToFileURL(file).href);
   const saved=offline.locator('#guide');await saved.locator('#side').selectOption('left');await saved.locator('#step').selectOption('6');
+  assert(await saved.locator('#tools-list').isHidden());assert(await saved.locator('#checks').isVisible());
   assert.equal(await saved.locator('#part img[src^="data:image/webp"]').count(),4);
   await saved.locator('.fit-viewport img[src^="data:image/webp"]').evaluate(img=>img.decode());
   assert.deepEqual(errors,[]);console.log('PASS: all seven steps, four sizes and both halves, named parts and nonempty CAD animation frames, motion controls, configured assembly and offline guide.');

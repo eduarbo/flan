@@ -48,13 +48,14 @@ export function mountSolderGuide(host,sizeId,initialLanguage,initialSide='left',
  root.innerHTML=`<style>${styles}</style><main>
  <header><h1 id="title"></h1><select aria-label="Idioma / Language" id="language"><option value="es">Español</option><option value="en">English</option></select></header>
  <p id="intro"></p><div class="tools"><label id="size-field"><span id="sizeLabel"></span><select id="size"></select></label><label><span id="sideLabel"></span><select id="side"></select></label></div>
+ <details id="workbench-tools" hidden><summary id="tools-title"></summary><div id="tools-list"></div></details>
  <nav id="controls"><button id="prev">←</button><div class="step-choice"><select id="step"></select><span id="progress" aria-hidden="true"></span></div><button id="next"></button></nav>
  <article class="stage"><div class="step-head" aria-live="polite" aria-atomic="true"><p id="face"></p><h2 id="heading" tabindex="-1"></h2></div>
  <figure class="board-figure"><svg id="map" role="img"></svg><figcaption id="caption" class="meta"></figcaption></figure>
  <div class="part-step"><h3 id="parts-title"></h3><div id="part"></div><div id="instruction"></div></div><div id="motion"></div>
  <div class="pad-detail"><div class="reference"><h3 id="zoom-title"></h3><button id="overview-link"></button><label id="ref-field"><span id="ref-label"></span><select id="reference"></select></label></div><div id="detail" class="detail"></div>
  <p role="status" id="status"></p><button id="retry" hidden></button></div></article>
- <div id="workbench-tools"></div><h3 id="bench" tabindex="-1"></h3><div id="inspection"></div><ol id="checks"></ol><div class="finish"><button id="other-side"></button><button id="firmware" hidden></button></div><p id="origin" class="meta"></p><button id="portable"></button></main>`;
+ <section id="final-inspection" hidden aria-labelledby="bench"><h3 id="bench" tabindex="-1"></h3><div id="inspection"></div><ol id="checks"></ol></section><div class="finish"><button id="other-side"></button><button id="firmware" hidden></button></div><p id="origin" class="meta"></p><button id="portable"></button></main>`;
  host.toggleAttribute('data-embedded',embedded);
  const $=id=>root.getElementById(id);
  let lang=initialLanguage==='en'?'en':'es',index=Number(settings.step)||0,selectedRef=settings.ref;
@@ -124,9 +125,13 @@ export function mountSolderGuide(host,sizeId,initialLanguage,initialSide='left',
    const ol=document.createElement('ol');for(const line of instructions[prefix]){const li=document.createElement('li');li.textContent=line;ol.append(li);}
    $('instruction').replaceChildren(ol);$('motion').replaceChildren(solderMotion(prefix,side,lang));
   }else $('motion').replaceChildren(...(prefix==='K'?[solderMotion(prefix,side,lang)]:[]));
-  const toolsHeading=document.createElement('h3');toolsHeading.textContent=tr('Herramientas para soldar','Soldering tools');
-  $('workbench-tools').replaceChildren(toolsHeading,guideCards(['iron','solder','tweezers'],lang));
-  $('inspection').replaceChildren(guideCards(inspectionParts.map(id=>id==='battery'?battery:id),lang));
+  const first=index===0,last=index===steps.length-1;
+  $('workbench-tools').hidden=!first;
+  if(first){
+   $('tools-title').textContent=tr('Herramientas para soldar','Soldering tools');
+   $('tools-list').replaceChildren(guideCards(['iron','solder','tweezers'],lang));
+  }
+  $('final-inspection').hidden=!last;
   const bounds=boxFor(board.outline),{left,right,top,bottom}=bounds,width=right-left,height=bottom-top;
   const X=x=>back?right+left-x:x;
   const refs=Object.keys(board.parts).filter(r=>prefix==='D'||prefix==='K'?r.startsWith(prefix):r===prefix);
@@ -179,8 +184,11 @@ export function mountSolderGuide(host,sizeId,initialLanguage,initialSide='left',
   J2:tr('Haz coincidir los cinco pines del nice!view con J2 antes de soldar el header. Del 1 al 5 son MOSI, SCK, VCC, GND y CS. El pin 1 está marcado en la ampliación.','Match all five nice!view pins to J2 before soldering the header. Pins 1 through 5 are MOSI, SCK, VCC, GND and CS. Pin 1 is marked in the close-up.')
  };
   if(descriptions[prefix]){const note=document.createElement('p');note.textContent=descriptions[prefix];detail.append(note);}
- $('bench').textContent=tr('Antes de conectar energía','Before applying power');$('checks').replaceChildren();
- for(const pair of [['Inspecciona ambos lados con lupa. Busca puentes de estaño, pines sin soldar y diodos invertidos.','Inspect both faces under magnification for solder bridges, unsoldered pins and reversed diodes.'],['Con baterías, USB y controladores desconectados, comprueba con el multímetro que no haya un corto sostenido entre alimentación y tierra. Si lo hay, localízalo antes de seguir.','With batteries, USB and controllers disconnected, use a meter to check for a sustained power-to-ground short. Resolve any short before proceeding.']]){const li=document.createElement('li');li.textContent=tr(...pair);$('checks').append(li);}
+  if(last){
+   $('inspection').replaceChildren(guideCards(inspectionParts.map(id=>id==='battery'?battery:id),lang));
+   $('bench').textContent=tr('Antes de conectar energía','Before applying power');$('checks').replaceChildren();
+   for(const pair of [['Inspecciona ambos lados con lupa. Busca puentes de estaño, pines sin soldar y diodos invertidos.','Inspect both faces under magnification for solder bridges, unsoldered pins and reversed diodes.'],['Con baterías, USB y controladores desconectados, comprueba con el multímetro que no haya un corto sostenido entre alimentación y tierra. Si lo hay, localízalo antes de seguir.','With batteries, USB and controllers disconnected, use a meter to check for a sustained power-to-ground short. Resolve any short before proceeding.']]){const li=document.createElement('li');li.textContent=tr(...pair);$('checks').append(li);}
+  }
   $('origin').textContent=tr('Vistas de las PCB de fabricación. Montaje físico del prototipo pendiente de validación.','Fabrication PCB views. Physical assembly of the prototype awaits validation.');
   const credits=document.createElement('a');credits.href='https://github.com/eduarbo/flan/blob/main/components/README.md';
   credits.textContent=tr('Modelos y créditos','Models and credits');$('origin').append(' ',credits);

@@ -46,6 +46,9 @@ figure { min-width:0; }
 #part .guide-parts {grid-template-columns:repeat(2,minmax(0,1fr))}
 #part .guide-parts:has(figure:only-child){grid-template-columns:minmax(120px,180px)}
 .part-step ol {padding-left:1.4em;margin:4px 0 12px}.part-step li+li{margin-top:5px}
+#workbench-tools{margin-bottom:10px}
+#workbench-tools summary{cursor:pointer;width:fit-content;padding:8px 0;font-weight:600}
+#workbench-tools summary:focus-visible{outline:3px solid #3472aa;outline-offset:1px}
 #workbench-tools .guide-parts,#inspection .guide-parts{max-width:560px}
 .detail svg { width:100%; max-height:215px; margin:6px 0; }
 .reference { justify-content:space-between; }
