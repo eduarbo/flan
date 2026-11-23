@@ -19,7 +19,7 @@ export function createPreviewRenderer(renderer, geometryFor) {
     renderer.setSize(width,height,false);
     const group=new THREE.Group();
     for(const e of entries){const mesh=new THREE.Mesh(e.geometry||geometryFor(e.path),e.material||mat);mesh.rotation.y=THREE.MathUtils.degToRad(e.rotation||0);if(e.center){const box=mesh.geometry.boundingBox;mesh.position.copy(box.getCenter(new THREE.Vector3()).negate().applyEuler(mesh.rotation)).add(new THREE.Vector3(...e.center));}if(e.position)mesh.position.fromArray(e.position);group.add(mesh);}
-    scene.add(group);const box=new THREE.Box3().setFromObject(group),center=box.getCenter(new THREE.Vector3());
+    scene.add(group);const box=options.bounds||new THREE.Box3().setFromObject(group),center=box.getCenter(new THREE.Vector3());
     camera.position.copy(center).add(new THREE.Vector3(...direction).normalize().multiplyScalar(300));camera.up.fromArray(options.up||[0,1,0]);camera.lookAt(center);camera.updateMatrixWorld();
     const right=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,0),up=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,1);
     let size=0;for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){const v=new THREE.Vector3(x,y,z).sub(center);size=Math.max(size,Math.abs(v.dot(right))/aspect,Math.abs(v.dot(up)));}

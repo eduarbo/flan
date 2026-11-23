@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import {portableSolder} from './solder-portable.js';
 import {mountSolderGuide} from './solder-guide.js';
+import {guideCards,cardStyles,batteryId,inlinePart} from './guide-parts.js';
 import parts from '../design/build-parts.json';
 import {presetStock} from './preset-filaments.js';
 import {language,t} from './i18n.js';
@@ -42,6 +43,24 @@ function alternativeNote(row){
 export function createBuildGuide({catalog,family,inventory,getDesignLink,illustrations,editFilaments}){
  const $=id=>document.getElementById(id),storageKey='flan.build-parts.v1';
  let current,rows=[],checked={},savedDetails=new Set();
+ let assemblySide='left';
+ const artStyles=node('style');artStyles.textContent=cardStyles+
+  '.build-assembly-stages>li{margin:18px 0}.build-assembly-stages h4{margin:0 0 4px}.assembly-preview{display:block;width:min(100%,540px);height:auto;margin:8px 0}.assembly-header{display:flex;gap:8px;align-items:center;flex-wrap:wrap}';
+ $('build-workflow').prepend(artStyles);
+ const previewObserver=new IntersectionObserver(entries=>{
+  for(const {target,isIntersecting} of entries)if(isIntersecting){
+   previewObserver.unobserve(target);const {buildView,side}=target.dataset;
+   illustrations.view(buildView,side).then(url=>{target.src=url;}).catch(()=>{target.alt=say('View unavailable','Vista no disponible');});
+  }
+ },{rootMargin:'180px'});
+ function liveImage(img,id,side,observe){
+  if(!['base','frame','plate','keycap','pcb','battery-stack','shell-stack'].includes(id))return false;
+  img.dataset.buildView=id;img.dataset.side=side;if(observe)previewObserver.observe(img);return true;
+ }
+ function assemblyCards(ids,side,observe){
+  return guideCards(ids.map(id=>id==='battery'?batteryId(current.batteries[side]):id),language(),{live:(img,id)=>liveImage(img,id,side,observe)});
+ }
+
  try{const value=JSON.parse(localStorage.getItem(storageKey)||'{}');if(value&&typeof value==='object'&&!Array.isArray(value))checked=value;}catch{}
  function progress(){const count=rows.filter(r=>checked[r.id]===r.token).length;$('build-shopping-progress').textContent=say(count+' of '+rows.length+' lines ready',count+' de '+rows.length+' partidas listas');}
  function renderShopping(){
@@ -88,6 +107,10 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   const personalGuide=portableSolder(current.variant,language(),solderView.solderState(),solderAppearance());
   const copy=$('build-workflow').cloneNode(true),title=family[current.variant].title+' · '+say('Build plan','Plan de construcción');
   const exactLink=getDesignLink(),locale=language(),footer=say('Generated from your design. Use your browser’s Print command to save as PDF.','Generado con tu diseño. Usa Imprimir en el navegador para guardarlo como PDF.');
+  const printed=copy.querySelector('#build-final');printed.replaceChildren();
+  for(const side of sides){
+   const section=node('section');section.dataset.guideHalf=side;printed.append(section);renderFinal(section,side,false);
+  }
   if(complete)renderPrint({half:'both',scope:'complete',host:copy.querySelector('#build-print-list'),fitHost:copy.querySelector('#build-fit')});
   copy.querySelector('#build-toolbar')?.remove();
   copy.querySelector('.build-export')?.remove();
@@ -110,6 +133,9 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   copy.querySelectorAll('.filament-disclosure > summary [aria-hidden=true],button,.build-jumps,.print-options,.build-options,[role=status]').forEach(n=>n.remove());
   const solder=copy.querySelector('.solder-map'), liveMap=$('build-assembly').querySelector('.solder-map')?.shadowRoot;
   if(solder&&liveMap){solder.id='guide';solder.nextElementSibling?.remove();solder.replaceChildren(...['face','heading','instruction','map','caption','detail'].map(id=>liveMap.getElementById(id).cloneNode(true)));}
+  await Promise.all([...copy.querySelectorAll('img[data-guide-art],img[data-build-view]')].map(async img=>{
+   img.src=img.dataset.buildView?await illustrations.view(img.dataset.buildView,img.dataset.side):await inlinePart(img.dataset.guideArt);
+  }));
   copy.querySelectorAll('details').forEach(n=>n.open=true);
   copy.querySelectorAll('input').forEach(n=>{if(n.type==='checkbox'){if(n.checked)n.setAttribute('checked','');n.disabled=true;}else n.remove();});
   const designLabel=say('Reopen this exact design','Volver a abrir este diseño exacto');const a=link(designLabel,await exactLink);a.id='build-design-link';copy.prepend(a);
@@ -249,7 +275,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
  ])];}
  let solderView,solderKey,fullMap;
  function solderAppearance(){
-  return Object.fromEntries(sides.map(side=>[side,{edition:pcbEdition(current,side),mask:pcbMask(current,side)}]));
+  return Object.fromEntries(sides.map(side=>[side,{edition:pcbEdition(current,side),mask:pcbMask(current,side),battery:current.batteries[side]}]));
  }
  function renderAssembly(){
   const appearance=solderAppearance();
@@ -269,9 +295,9 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
    const url=new URL('solder.html',location.protocol==='file:'?'https://flankbd.com/explore/':location.href);
    url.searchParams.set('size',current.variant);url.searchParams.set('lang',language());
    for(const side of sides){
-    url.searchParams.set(side+'Edition',appearance[side].edition);url.searchParams.set(side+'Mask',appearance[side].mask);
+    url.searchParams.set(side+'Edition',appearance[side].edition);url.searchParams.set(side+'Mask',appearance[side].mask);url.searchParams.set(side+'Battery',appearance[side].battery);
    }
-   mountSolderGuide(solderView,current.variant,language(),state?.side,true,illustrations.show,{...appearance,...state,onFirmware:()=>$('build-nav').querySelector('[data-target=build-program]').click(),onChange(next){
+   mountSolderGuide(solderView,current.variant,language(),state?.side,true,{...appearance,...state,onFirmware:()=>$('build-nav').querySelector('[data-target=build-program]').click(),onChange(next){
     for(const [key,value] of Object.entries(next))url.searchParams.set(key,value);
     fullMap.href=url.href;
    }});
@@ -283,14 +309,53 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
    say('Trim display solder tails to ≤0.30 mm above its PCB, with joints ≤0.50 mm. Main-board socket tails may extend ≤1.00 mm below the PCB. Inspect bridges and frame clearance.','Recorta las colas de soldadura de pantalla a ≤0.30 mm sobre su PCB, con uniones ≤0.50 mm. Las colas del zócalo principal pueden sobresalir ≤1.00 mm por debajo. Revisa puentes y espacio para el marco.'),
    say('Before inserting controllers or powering up, inspect all solder joints and verify continuity and no sustained power-to-ground short with a multimeter. Keep the nice!nano BOOST jumper open.','Antes de insertar controladores o dar energía, inspecciona las soldaduras y verifica continuidad y ausencia de cortocircuito sostenido entre alimentación y tierra con multímetro. Deja abierto el jumper BOOST del nice!nano.')
   ])]));
-  const m6=shoppingList(current,family).find(r=>r.quantity==='m6').required,common=fastenersOf(current)==='common-m2';
-  $('build-final').replaceChildren(list([
-   say('After the USB checks, disconnect power. Verify the delivered cell’s polarity, dimensions and charge-current limit. Insulate exposed PCB edges locally; never compress the pouch or cover connector contacts.','Después de las pruebas por USB, desconecta la energía. Verifica polaridad, dimensiones y límite de carga de la batería recibida. Aísla los bordes expuestos de PCB sin comprimir la bolsa ni tapar contactos.'),
-   say('Place the open-bottom locator, cell on the 1.4 mm case floor, and cage before lowering the PCB over them. Keep cage feet below the board and leads clear of screw posts and edges.','Coloca la guía sin fondo, la celda sobre el piso de 1.4 mm y la jaula antes de bajar la PCB. Deja los pies de la jaula bajo la placa y los cables libres de postes y bordes.'),
-   say('Across both halves, install '+m6+' M2 × 6 screws with their printed spacers, and four M2 × 4 PCB screws.'+(common?' This design uses common M2 machine screws: heads up to Ø4 × 2 mm, a 1.5 mm hex key for socket caps; no countersunk, longer or self-tapping screws.':'')+' Fit plates, switches, keycaps, displays and the selected frames without stressing glass or the cell.','Entre ambas mitades, instala '+m6+' tornillos M2 × 6 con sus separadores impresos y cuatro M2 × 4 para PCB.'+(common?' Este diseño usa tornillos de máquina M2 comunes: cabezas de hasta Ø4 × 2 mm, llave Allen de 1.5 mm para cabeza cilíndrica; no uses avellanados, más largos ni autorroscantes.':'')+' Coloca placas, switches, keycaps, pantallas y marcos elegidos sin forzar vidrio ni batería.'),
-   say('Fit four feet per half, clear of reset and screws. Check USB and power-switch access, full key travel, frame retention and battery service.','Coloca cuatro patas por mitad sin tapar reset ni tornillos. Comprueba acceso a USB e interruptor, recorrido de teclas, retención de marcos y acceso a la batería.'),
-   say('Connect the verified cells, test power switches and measure charging within each cell’s limit. Pair the left half, check the right and test all '+family[current.variant].keys_total+' keys for press and release, chords, thumb tap/hold and all four layers. Test reconnect and wake after 15 minutes of sleep. Stop if a component heats unexpectedly.','Conecta las celdas verificadas, prueba interruptores y mide la carga dentro del límite de cada celda. Empareja la mitad izquierda, verifica la derecha y prueba pulsación y liberación de las '+family[current.variant].keys_total+' teclas, combinaciones, tap/hold de pulgares y las cuatro capas. Prueba reconexión y despertar tras 15 minutos de reposo. Detén la prueba ante calentamiento inesperado.')
-  ]),node('p','micro',say('Record the build date, configuration, part references and measured results. A rendered model or downloaded file is not a physical acceptance test.','Registra fecha, configuración, referencias y mediciones. Un modelo renderizado o un archivo descargado no sustituye las pruebas físicas.')));
+  renderFinal();
+ }
+ function renderFinal(host=$('build-final'),side=assemblySide,interactive=true){
+  if(interactive)previewObserver.disconnect();
+  const cs=current.cases[side],common=fastenersOf(current)==='common-m2',hardware=common?'-common':'';
+  const photos=ids=>assemblyCards(ids,side,interactive);
+  const label=node('div','assembly-header');label.append(node('strong','',say('Build this half','Armar esta mitad')));
+  const chooser=node('div','segments');chooser.setAttribute('role','group');chooser.setAttribute('aria-label',say('Assembly half','Mitad para armar'));
+  for(const s of sides){const b=node('button','',t('side.'+s));b.type='button';b.dataset.assemblySide=s;b.setAttribute('aria-pressed',String(s===side));b.onclick=()=>{assemblySide=s;renderFinal();$('build-final').querySelector('[data-assembly-side='+s+']').focus({preventScroll:true});};chooser.append(b);}label.append(chooser);
+  const stages=node('ol','build-instructions build-assembly-stages');
+  function step(title,lines,ids,view){
+   const li=node('li'),body=node('p','',lines);li.append(node('h4','',title),body,photos(ids));
+   if(view){const img=node('img','assembly-preview');img.alt=title+' · '+t('side.'+side);img.width=540;img.height=365;liveImage(img,view,side,interactive);li.append(img);}
+   stages.append(li);
+  }
+  step(say('Fit the magnets before the electronics','Coloca los imanes antes de la electrónica'),
+   cs.cover?say('Dry-fit one attracting pair. Insert three Ø2 × 3 mm magnets into the base from above and three Ø2 × 4 mm magnets into the underside of the frame. Mark the same pole facing out in both bases and the opposite pole in both frames. Glue and let the pieces cure apart.',
+   'Prueba que un par se atraiga. Inserta tres imanes de Ø2 × 3 mm por arriba de la base y tres de Ø2 × 4 mm por debajo del marco. Marca el mismo polo hacia fuera en ambas bases y el opuesto en los marcos. Pégalos y deja curar las piezas por separado.')
+   :say('Insert three Ø2 × 3 mm magnets into the base from above, all with the same pole outward. Allow the adhesive to cure before adding electronics.','Inserta tres imanes de Ø2 × 3 mm por arriba de la base, todos con el mismo polo hacia fuera. Deja curar el adhesivo antes de montar la electrónica.'),
+   ['base','base-magnets',...(cs.cover?['frame','frame-magnets']:[]),'adhesive']);
+  step(say('Place the battery under the PCB','Coloca la batería debajo de la PCB'),
+   say('Unplug USB and the cell. Check the delivered cell size, polarity and charge-current limit. Seat the open locator in the base. Rest the cell on the 1.4 mm floor, place the cage over it and lower the PCB over the cage feet. Keep the leads clear of posts. Insulate exposed edges with tape and leave the pouch uncompressed.',
+   'Desconecta el USB y la celda. Comprueba dimensiones, polaridad y límite de carga de la batería recibida. Asienta la guía sin fondo en la base, apoya la celda sobre el piso de 1.4 mm y cúbrela con la jaula. Baja la PCB sobre los pies de la jaula. Aleja los cables de los postes y aísla los bordes expuestos con cinta sin comprimir la bolsa.'),
+   ['cable','base','locator','battery','cage','pcb','meter','tape'],'battery-stack');
+  const structural=3+Object.keys(family[current.variant].fasteners?.[side]||{}).length;
+  step(say('Fasten the stack','Fija el conjunto'),
+   say('First fasten the PCB with two short M2 × 4 screws. Place the printed spacers at the structural posts, lower the switch plate onto them, then secure it with the '+structural+' M2 × 6 screws for this half. Keep countersunk, self-tapping and longer screws out of these mounts.',
+   'Primero fija la PCB con los dos tornillos cortos M2 × 4. Pon los separadores impresos en los postes estructurales, baja la placa de switches sobre ellos y fíjala con los '+structural+' tornillos M2 × 6 de esta mitad. Evita los avellanados, autorroscantes o más largos en estos alojamientos.')+
+   (common?say(' Common heads fit up to Ø4 × 2 mm. Use a 1.5 mm hex key for socket caps.',' Las cabezas comunes admitidas miden hasta Ø4 × 2 mm. Para cabeza cilíndrica usa llave Allen de 1.5 mm.'):''),
+   ['base','pcb','plate','m6'+hardware,'spacer','m4'+hardware,'driver']);
+  step(say('Fit the switches and keycaps','Coloca los switches y las teclas'),
+   say('Guide each switch straight through the plate into the socket on the PCB. Check its pins are straight, then press the keycap onto the stem.',
+   'Introduce cada switch recto a través de la placa hasta el zócalo de la PCB. Comprueba que los pines estén rectos y presiona la tecla sobre el vástago.'),
+   ['plate','pcb','switch','socket','keycap'],'shell-stack');
+  step(say('Connect the cell while J1 is accessible','Conecta la celda con J1 accesible'),
+   say('Unplug USB and turn SW1 off. Seat the controller in its sockets on the printed support if it was removed after the USB test. With J1 still accessible, insert the battery plug whose polarity you measured.',
+   'Desconecta el USB y apaga SW1. Si retiraste el controlador después de probarlo por USB, asiéntalo en sus zócalos sobre el soporte. Con J1 todavía accesible, inserta el enchufe de la batería cuya polaridad mediste.'),
+   ['cable','power','nano','strip','riser','jack','plug','battery']);
+  step(say('Seat the display','Asienta la pantalla'),
+   say('Guide all five display posts straight into their socket on the printed support.','Guía los cinco postes de la pantalla rectos al zócalo sobre el soporte impreso.')+
+   (cs.cover?say(' Lower the frame over the display and check the glass remains free of pressure.',' Baja el marco sobre la pantalla y comprueba que el vidrio quede libre de presión.'):''),
+   ['view','header','view-socket','sled',...(cs.cover?['frame']:[])]);
+  step(say('Fit the feet and test this half','Coloca las patas y prueba esta mitad'),
+   say('Stick four feet underneath, clear of reset and screw holes. Check USB access and full key travel. Test the power switch and charging within the cell rating. After pairing the left half, test both halves, all '+family[current.variant].keys_total+' keys, press/release, chords, thumb tap/hold, all four layers, reconnect and wake after 15 minutes. Check frame retention and battery access. Stop if a component heats unexpectedly.',
+   'Pega cuatro patas debajo, dejando libres el reset y los tornillos. Comprueba el acceso USB y el recorrido de las teclas. Prueba el encendido y la carga dentro del límite de la celda. Empareja la izquierda y prueba ambas mitades, las '+family[current.variant].keys_total+' teclas, pulsación y liberación, combinaciones, tap/hold de pulgares, las cuatro capas, reconexión y despertar tras 15 minutos. Comprueba la retención del marco y el acceso a la batería. Detén la prueba si algo se calienta de forma inesperada.'),
+   ['feet','reset','m6'+hardware,'m4'+hardware,'cable','power','battery','keycap']);
+  host.replaceChildren(interactive?label:node('h3','',t('side.'+side)),stages,node('p','micro',say('Digital prototype. Physical fit and electrical checks are still pending. Record your measured results.','Prototipo digital. El ajuste físico y las pruebas eléctricas siguen pendientes. Registra los resultados medidos.')));
  }
  function renderFirmware(){
   const target=$('build-firmware');target.replaceChildren();
@@ -299,7 +364,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   const alternative=link(t('build.firmware.rightNoDisplay')+' · UF2 ↓',raw('firmware/uf2/'+current.variant+'-right-no-display.uf2'));
   $('build-firmware-alt').replaceChildren(details('build-single-display',say('Alternative: omit the right display','Alternativa: omitir la pantalla derecha'),[node('p','micro',say('The design above includes two displays. Use this file instead of the normal right UF2 only if you intentionally leave the right display out; reduce the shopping list to one display. Hiding a frame alone does not select this option.','El diseño de arriba incluye dos pantallas. Usa este archivo en lugar del UF2 derecho normal solo si decides omitir su pantalla; reduce entonces la compra a una pantalla. Quitar un marco no selecciona esta opción.')),alternative]));
   $('build-flash').replaceChildren(list([
-   say('With batteries still unplugged and BOOST open, connect one genuine nice!nano v2 by a USB data cable. Double-tap reset to open its bootloader drive.','Con baterías aún desconectadas y BOOST abierto, conecta un nice!nano v2 original con cable USB de datos. Pulsa reset dos veces para abrir su unidad de arranque.'),
+   say('After the unpowered continuity check, leave both batteries and USB unplugged. Seat one nice!nano v2 in its two socket strips on the printed support, USB-C facing the marked edge. Check BOOST is open, then connect the USB data cable. Double-tap reset to open its bootloader drive.','Después de comprobar continuidad sin energía, deja ambas baterías y el USB desconectados. Asienta el nice!nano v2 en sus dos tiras de zócalos sobre el soporte, con USB-C hacia el borde marcado. Comprueba que BOOST esté abierto y conecta el cable USB de datos. Pulsa reset dos veces para abrir su unidad de arranque.'),
    say('Copy the matching '+family[current.variant].title+' left or right UF2 to that drive. Repeat for the other half. Use one firmware file per half.','Copia el UF2 '+family[current.variant].title+' izquierdo o derecho que corresponda a esa unidad. Repite en la otra mitad. Usa un archivo por mitad.'),
    say('Using the one data cable in turn, check each display and reset/bootloader recovery with its battery unplugged. Disconnect USB after each check. The left provides USB keyboard input; full-key and wireless tests follow assembly.','Usa el mismo cable de datos por turnos para verificar cada pantalla y la recuperación por reset/bootloader, con su batería desconectada. Desconecta USB tras cada prueba. La izquierda da la entrada de teclado por USB; las pruebas de teclas y radio siguen después del armado.')
   ]),details('build-keymap',say('Layers & Bluetooth controls','Capas y controles Bluetooth'),[list([
@@ -307,6 +372,10 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
    say('Numbers: digits, navigation and F keys. Symbols: punctuation, volume and Alt/Delete.','Números: dígitos, navegación y teclas F. Símbolos: puntuación, volumen y Alt/Delete.'),
    say('Settings: hold Symbols, then Numbers. The Q–P positions in the alphabetic block select Bluetooth profiles 1–5, clear the active profile, select BLE or USB, enter the bootloader or reset. Added number-row and outer-column keys have no action on Settings. Pair the left central with your computer.','Ajustes: mantén Símbolos y luego Números. Las posiciones Q–P del bloque alfabético seleccionan perfiles Bluetooth 1–5, borran el activo, eligen BLE o USB y entran al bootloader o reinician. Las teclas añadidas de fila numérica y columna exterior no tienen acción en Ajustes. Empareja la central izquierda con la computadora.')
   ],false)]));
+  const flashRows=$('build-flash').querySelectorAll('ol:first-child > li');
+  const cells=[...new Set(sides.map(s=>batteryId(current.batteries[s])))];
+  const sets=[['nano','strip','riser','reset','cable',...cells],['nano','cable'],['view','reset','cable',...cells]];
+  flashRows.forEach((li,i)=>{if(sets[i])li.append(guideCards(sets[i],language()));});
  }
  function update(config){
   current=config;savedDetails=new Set([...$('build-workflow').querySelectorAll('details[open]')].map(d=>d.id));
@@ -315,5 +384,5 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   $('build-shopping-note').textContent=say('Quantities cover the complete keyboard, even when you export one half for printing. Mark parts you already have. Confirm price, stock and pack sizes at checkout.','Las cantidades cubren el teclado completo, aunque exportes una sola mitad para imprimir. Marca lo que ya tienes. Confirma precio, stock y tamaño de paquete al comprar.');
   $('build-shopping-note').append(' ',link(say('Flan36 cost breakdown ↗','Costos de referencia de Flan36 ↗'),'https://github.com/eduarbo/flan/blob/main/docs/parts.md#supply-check-2026-10-20'));
  }
- return {update,capture:options=>({csv:csv(),guide:planHTML(options)})};
+ return {update,showSolderStep:ref=>solderView?.showSolderStep(ref),capture:options=>({csv:csv(),guide:planHTML(options)})};
 }

@@ -1,5 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+import {cardStyles} from "./guide-parts.js";
+import {motionStyles} from "./solder-motion.js";
 export default `
+${cardStyles}
+${motionStyles}
 * { box-sizing:border-box; }
 :host { display:block; container-type:inline-size; color:var(--ink,#222e2b); font:15px/1.5 var(--sans,system-ui),sans-serif; }
 main { max-width:1050px; margin:auto; padding:clamp(16px,4vw,40px); }
@@ -29,7 +33,8 @@ nav select { width:100%; }
 }
 #next { background:var(--ink,#22342e); color:var(--bg0,#fff); }
 button:disabled { opacity:.45; }
-.stage { display:grid; gap:12px; padding:14px 0; }
+.stage { display:grid; grid-template-areas:"heading" "parts" "board" "detail" "motion"; gap:12px; padding:14px 0; }
+.step-head {grid-area:heading}.part-step{grid-area:parts}.board-figure{grid-area:board}.pad-detail{grid-area:detail;min-width:0}#motion{grid-area:motion;min-width:0}#motion:empty{display:none}
 #face,.meta { color:var(--muted,#465a50); font-size:13px; }
 #face { margin-bottom:4px; }
 #map,.detail svg { display:block; width:100%; height:auto; background:#e7eae5; border-radius:9px; }
@@ -37,9 +42,11 @@ button:disabled { opacity:.45; }
 #heading:focus { outline:none; }
 figure { min-width:0; }
 #caption { margin-top:5px; }
-.part-step { display:flex; gap:10px; align-items:center; margin-bottom:12px; }
-#part:empty { display:none; }
-#part img { width:70px; height:auto; display:block; }
+#instruction {margin:4px 0 12px}
+#part .guide-parts {grid-template-columns:repeat(2,minmax(0,1fr))}
+#part .guide-parts:has(figure:only-child){grid-template-columns:minmax(120px,180px)}
+.part-step ol {padding-left:1.4em;margin:4px 0 12px}.part-step li+li{margin-top:5px}
+#workbench-tools .guide-parts,#inspection .guide-parts{max-width:560px}
 .detail svg { width:100%; max-height:215px; margin:6px 0; }
 .reference { justify-content:space-between; }
 #overview-link { display:none; padding:2px 6px; min-height:36px; font-size:12px; }
@@ -50,7 +57,7 @@ figure { min-width:0; }
 #origin { margin-top:10px; }
 [hidden] { display:none!important; }
 @container(min-width:680px) {
- .stage { grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); align-items:start; gap:10px 20px; }
+ .stage { grid-template-areas:"heading heading" "board parts" "detail motion";grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); align-items:start; gap:10px 20px; }
  .step-head { grid-column:1/-1; }
 }
 :host([data-embedded]) header,:host([data-embedded]) #size-field { display:none; }

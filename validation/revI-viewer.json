@@ -1964,19 +1964,39 @@
     },
     {
       "path": "viewer/app.js",
-      "sha256": "511f612233bbd9a43bfce51ac477e86bdb705134bdea4c14378de614b516df6b"
+      "sha256": "aa23e8dd7ca8bf060a7e41894eaf87b436ffc14bd45be9fe9208fb7c005eb0ba"
     },
     {
       "path": "viewer/build-guide.js",
-      "sha256": "aa1ff9706fa2ff71bbf6afaa7e3b70033fd1c3941eb47560db8ae2d8e3ec3e5f"
+      "sha256": "66dc4d0d674f084b789de4c2befa6919ef50f7019328adc964e1ce5f832fe5e8"
+    },
+    {
+      "path": "viewer/build-views.js",
+      "sha256": "a00d186c8c5c9832d34837505812c5c9d0ad967eba673fc0bb4031db9d2934c0"
     },
     {
       "path": "viewer/solder-guide.js",
-      "sha256": "cce9487c3baf1fb9fe206df6c137c3b6d04fb0ebff5e7a8269c03955a53bd8c7"
+      "sha256": "78567776035f285a1a3c79b52b944641e6486a6fb94b2b7dfab43efb3b495861"
     },
     {
       "path": "viewer/solder-guide-styles.js",
-      "sha256": "545a3b58558f4f9d479c503fb63ca650a2faaae8faf4c1052604318b1038536a"
+      "sha256": "2631ed3e017fca13558cd10e0260dbbffdffcad3e4c887cc4f9efe9221575f2c"
+    },
+    {
+      "path": "viewer/guide-parts.js",
+      "sha256": "2bb0b5fc48452e83bd95f466e3ed57e4605f14acaacd740b43d83061576c9f83"
+    },
+    {
+      "path": "viewer/solder-motion.js",
+      "sha256": "85dec50840f137b9d3d91dd4e36b77406bb06694bf93135c6381a7773ebf7449"
+    },
+    {
+      "path": "viewer/build-guide-art.cjs",
+      "sha256": "bfd5cf108ce858df8f069418fed212353b678d33a2ce591b47fdc01c9814b056"
+    },
+    {
+      "path": "viewer/guide-art-render.js",
+      "sha256": "71e6dda06743b4a1bb6bb8f5b16708f88beb6398b1e8c5814011b275443654eb"
     },
     {
       "path": "viewer/solder-photo.js",
@@ -1984,7 +2004,7 @@
     },
     {
       "path": "viewer/solder-portable.js",
-      "sha256": "54a085d6061b847797559489d0a7e5facfd562b61bb225de218677eed16d05c2"
+      "sha256": "03b9d23108a6224944b407fb9bffc9fdf7d2d28343d5d5404132a35c55d24872"
     },
     {
       "path": "tools/build_solder_renders.py",
@@ -2359,6 +2379,174 @@
       "sha256": "b11b469dddac81f3d276e497540283b5c1caadf090f3483578dec1dfe6e2a13c"
     },
     {
+      "path": "docs/explore/assets/solder/part-301230.webp",
+      "sha256": "c2ee2aaedb5b14e6a5d3696791bac6a3c214535ce7d5b603fee7da2f7a40a210"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-adafruit-1570.webp",
+      "sha256": "6dd7b47c27d8b8b790a71581bd3d04f6276a2da1a36a5bcfa070b803cbbc6785"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-adhesive.webp",
+      "sha256": "aaebe090d52e8e375f9cfad72f8c66d9e5022fa52a6bc16ef02e978cdaf93eb1"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-base-magnets.webp",
+      "sha256": "a58d8e5b4ae602ebd33d7dc84fd3efe4ae4abff51a30e7a692b1fcdb1db65e00"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-cable.webp",
+      "sha256": "1c19af3ce1731d590e8c7ff74b0cb4a913bd7474e29c49e38fdfaba4335b8783"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-cage.webp",
+      "sha256": "6cfcdca87c6e875748c81e8d29a122afd7311a1af3454632fe7706c404a52cca"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-diode.webp",
+      "sha256": "6e1927822d52c565e3cf088185d37a0dffe288bf983bafd3260de11fa719fc6e"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-driver.webp",
+      "sha256": "545d860e723db2afa356765a6e832fdde5a2ed72719ea9c40be6273ee8b809c2"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-feet.webp",
+      "sha256": "ccaebfd3314f8c74186a5255ed5e7e7833933937f99a5cc77ed8a1134d0c4f3d"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-frame-magnets.webp",
+      "sha256": "19c4f9c22dbb1580e61f3f41239c384ce495906fb89aff53a60045c92d3e9e25"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-header.webp",
+      "sha256": "d7081c38ddb391411a75d48d82fa26f78efb19b705bada7165a2d03d2d97e4c3"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-iron.webp",
+      "sha256": "eec12e75232602fcbf7c7227c474ec326c8de65a14a9149a8e68cdbe615782b7"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-jack.webp",
+      "sha256": "b11fc62c30567854ec05d77a3252a21226b4158e938ae878487204ceffd06eeb"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-left-j2.webp",
+      "sha256": "685d7bb8a8f8b35c6ecd28c7e9de00c421e737226534db969f6d7c604ca8ae74"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-left-k.webp",
+      "sha256": "9a08aafa70094013c3b6c6d20ce89953968306af9cfadf6a6e373f8ec5d84472"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-left-u1.webp",
+      "sha256": "854cec860a2b242b488ed4fc17c83513ae349eb4cf1d07020f0bbb1f47b176d7"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-locator.webp",
+      "sha256": "4daad7214400bb5bacd7658b68ebc9a8aa753f21b65d3826c4fe17256269f194"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-loupe.webp",
+      "sha256": "2631e15b2838ec4a7278aa25ea2fa5ed909aa03dbb442eb23fe1ac7011c134be"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-m4-common.webp",
+      "sha256": "9e8aa89eab8df8215934d07e4a34f6f58f6f10e69ba08d7194fe37915603a068"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-m4.webp",
+      "sha256": "6f958a71f11c7570494918c37877158ebfa889c6ee44dca1272953fe42162def"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-m6-common.webp",
+      "sha256": "379e300bc54bf14605d142b59283ab108a5f6a85291a6362064a3861cff2abcf"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-m6.webp",
+      "sha256": "686230f66101d69c184ba1a90dae775f8be295aa0574b180d9698bca19c8fedd"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-meter.webp",
+      "sha256": "fe5b2eca77bf90f346ff6e43ae4bc2353ebc45b2bf98dc62bb6a035d9ce1f022"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-nano.webp",
+      "sha256": "1a9927d89a85d0073a403f2ab2ea33116fca868b4ba29c2c1619691aed5d7b4c"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-pins.webp",
+      "sha256": "88892ceb2472a6d084562a591c3de2f293b616998412f9c37acbcb5defd1129c"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-plug.webp",
+      "sha256": "3da67e3f715e70542399cd0e8d988b8c4703d46fa898da9d858e0a16ed637d9e"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-power.webp",
+      "sha256": "a7343379b9685e2b28e878980a96fd4248ffb3e9fb1e02deda326f947fbec349"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-reset.webp",
+      "sha256": "3afbee018490efe9137ed48056581fae629212b608e720c438fad35f6ff698c4"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-right-j2.webp",
+      "sha256": "622ffc0a92287cd894e3511d62da78de724407728144f662ee16f8b81639d68c"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-right-k.webp",
+      "sha256": "e8b96421e39d786fa6d40fe200b3ff4ea2a8a6b020c55a314904228da1619685"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-right-u1.webp",
+      "sha256": "064b2ef1d8e4054ad3e178c35272d4bc02a97dce131060e15b81cf348e34baae"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-riser.webp",
+      "sha256": "88545e257ae1a46ab85e66d3cdc026f06c73f00b5ed8229d1240d064f4fc63af"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-sled.webp",
+      "sha256": "ae38f527792c089bc6ec6202d67b1088f71fe3671f6fcc22694b8809f7890569"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-socket.webp",
+      "sha256": "4f94daa4b31f9b1f64d0d9c25a82444e3ec1f5f6f936d6b49e8ce48bbe6ac03e"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-solder.webp",
+      "sha256": "aef263f9e0ef5d0ea0338ca64deb879a5c23ef99a7132eea9a912088916c15b5"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-spacer.webp",
+      "sha256": "1cf7a99dac8615db2580165d22326d2644b8eee414283943dff0496cd8a22ee7"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-strip.webp",
+      "sha256": "1300cc3a0da3ef8d642fe3612fc165fd1c331b860ff0a6e5ad9343af3c493051"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-switch.webp",
+      "sha256": "32530fe829597ac8e41c2854570424868f81ec2337f47e4a97da4726f4822d70"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-tape.webp",
+      "sha256": "f0c8b0f91de7a6d9b675aa8ca983416e2b449df24de0bf800e94cb756a21bb56"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-tweezers.webp",
+      "sha256": "1e21290c05c128ba888d62c4920e9f5eb0da9d91ece5752f203c74e87b93adac"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-view-socket.webp",
+      "sha256": "01a138bf0ce11a2f7bcc4262b294c789fa780bd00f9925247f211bc93b17a2a1"
+    },
+    {
+      "path": "docs/explore/assets/solder/part-view.webp",
+      "sha256": "18573a09c6a88e53771360cfaefd987ea951c5979aff02a652fb42ed640c876c"
+    },
+    {
       "path": "design/solder-boards.json",
       "sha256": "5e41c0d44afc2f9fa43e4a8ef6287350e8938d10af95c3f8b5816882b156e70c"
     },
@@ -2572,7 +2760,7 @@
     },
     {
       "path": "viewer/previews.js",
-      "sha256": "55a029e77976581b7b5ff3308b322afdc99ec5c288ca343f212b3ab50d2969b0"
+      "sha256": "58e5f8c929bc12d31d4e3d84cac4cd73aca76b846ebe316ccd3111f5c9c25434"
     },
     {
       "path": "viewer/finishes.js",
@@ -2592,7 +2780,7 @@
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "e9f3384f4e24cd833c9100a37eee72cc7636eaa3b24aab41abad53dae0327299"
+      "sha256": "a20d480d70ec5e4c683a7cd99935212ff1a42d481693e539fc1042d084ad582e"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -2635,7 +2823,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "18a9e39bf9ce770571f6f8121cbec9d40b7ebcc3d282039ffa297e5828eed501",
+  "viewer_sha256": "ac0bee6016fbdf80ab0fc7ba2a73336a26adf893f5657ee497637a68722000cc",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2921,8 +3109,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "db941469412aeb896908798cff258db10a767d796cf33417f6060ba08e844f58",
-    "bytes": 85844807
+    "sha256": "973a8002c9f45f2c507ed27255b4ff476ce60b949ee77d02f671740d055ee17f",
+    "bytes": 86429490
   },
   "still": {
     "look": {
@@ -3575,7 +3763,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "314e3a1337e59f604f5c5b4314ad68c972491a1b5d6e29b80b4d9adb19d3be23",
+  "offline_sha256": "2410ab2d2ab2faaa446958c83107c7ee1ae227d9ca1efa01c66c5b7696babdf0",
   "printing": {
     "path": "docs/explore/assets/printing-56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475.bin",
     "sha256": "56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475",
@@ -3625,8 +3813,8 @@
     "bytes": 335912
   },
   "geometry_aliases": 16,
-  "online_bytes": 1628668,
-  "offline_bytes": 113791182,
+  "online_bytes": 1657538,
+  "offline_bytes": 114597551,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

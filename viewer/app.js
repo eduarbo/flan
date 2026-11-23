@@ -8,6 +8,7 @@ import {printSpoolUses,selectedParts,printKit,keycapPlan} from './printing.js';
 import {createBuildGuide} from './build-guide.js';
 import {createDesignURL} from './design-url.js';
 import {deflateSync} from 'three/addons/libs/fflate.module.js';
+import {createBuildViews} from './build-views.js';
 import {createPartIllustrations} from './part-illustrations.js';
 import {buildFile,buildWait,completeBuild,sha256} from './build-package.js';
 import {createAppearance,setColor,assignThemeParts,savedKey,applyTheme} from './appearance.js';
@@ -899,7 +900,7 @@ const artSeen=new IntersectionObserver(entries=>{
   preview.begin();partArt=createPartIllustrations({preview,parts:data.parts,material});preview.end();if(live){resize();renderNow();}
   for(const [img,id] of artWaiting)if(img.isConnected)img.src=partArt[id];artWaiting.clear();
 });
-const partIllustrations={show(img,id){if(partArt)img.src=partArt[id];else{img.src=BLANK;artWaiting.set(img,id);}}};
+const partIllustrations={view:createBuildViews({objects,preview,settled,design:()=>configuration,restore:()=>{resize();renderNow();}}),show(img,id){if(partArt)img.src=partArt[id];else{img.src=BLANK;artWaiting.set(img,id);}}};
 artSeen.observe($('build-shopping'));
 artSeen.observe($('build-assembly'));
 // Legacy files contain literal per-key choices, without preset provenance.
@@ -1312,6 +1313,8 @@ onLanguage(()=>{
 showWorkspace();setPanelOpen(true);resize();reset();
 drawPictures();live=true;
 function openLinkedSection(){
+ const solder=location.hash.match(/^#build-solder-(d|k|sw1|sw2|j1|u1|j2)$/i);
+ if(solder){openBuildStep('build-solder');buildGuide.showSolderStep(solder[1].toUpperCase());return;}
  if(location.hash==='#theme-filaments'){openThemeFilaments();return;}
  if(location.hash!=='#spool-themes'){openBuildStep(location.hash.slice(1));return;}
  openPanel('themes');revealPanel('themes');

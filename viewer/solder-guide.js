@@ -2,6 +2,8 @@
 import maps from '../design/solder-boards.json' with {type:'json'};
 import {portableSolder} from './solder-portable.js';
 import {solderPhoto} from './solder-photo.js';
+import {guideCards,stepParts,inspectionParts,batteryId} from './guide-parts.js';
+import {solderMotion} from './solder-motion.js';
 import styles from './solder-guide-styles.js';
 const steps=[
  ['D',true,['Diodos','Diodes'],['Empieza con un solo 1N4148W (SOD-123). Estaña un pad, sujeta el diodo con pinzas y calienta ese pad para fijarlo. Comprueba la banda y suelda el otro extremo. Repite por cada referencia D.','Start with one 1N4148W (SOD-123). Tin one pad, hold the diode with tweezers and reheat the pad to tack it down. Check the stripe, solder the opposite end, then repeat at each D reference.']],
@@ -41,18 +43,18 @@ function ring(svg,x,y,r){
  draw(svg,'circle',{cx:x,cy:y,r,fill:'none',stroke:'#ffcd70','stroke-width':r*.19});
 }
 
-export function mountSolderGuide(host,sizeId,initialLanguage,initialSide='left',embedded=false,illustrate,settings={}){
+export function mountSolderGuide(host,sizeId,initialLanguage,initialSide='left',embedded=false,settings={}){
  const root=host.attachShadow({mode:'open'});
  root.innerHTML=`<style>${styles}</style><main>
  <header><h1 id="title"></h1><select aria-label="Idioma / Language" id="language"><option value="es">Español</option><option value="en">English</option></select></header>
  <p id="intro"></p><div class="tools"><label id="size-field"><span id="sizeLabel"></span><select id="size"></select></label><label><span id="sideLabel"></span><select id="side"></select></label></div>
  <nav id="controls"><button id="prev">←</button><div class="step-choice"><select id="step"></select><span id="progress" aria-hidden="true"></span></div><button id="next"></button></nav>
  <article class="stage"><div class="step-head" aria-live="polite" aria-atomic="true"><p id="face"></p><h2 id="heading" tabindex="-1"></h2></div>
- <figure><svg id="map" role="img"></svg><figcaption id="caption" class="meta"></figcaption></figure>
- <div><div class="part-step"><div id="part"></div><p id="instruction"></p></div>
- <div class="reference"><h3 id="zoom-title"></h3><button id="overview-link"></button><label id="ref-field"><span id="ref-label"></span><select id="reference"></select></label></div><div id="detail" class="detail"></div>
+ <figure class="board-figure"><svg id="map" role="img"></svg><figcaption id="caption" class="meta"></figcaption></figure>
+ <div class="part-step"><h3 id="parts-title"></h3><div id="part"></div><div id="instruction"></div></div><div id="motion"></div>
+ <div class="pad-detail"><div class="reference"><h3 id="zoom-title"></h3><button id="overview-link"></button><label id="ref-field"><span id="ref-label"></span><select id="reference"></select></label></div><div id="detail" class="detail"></div>
  <p role="status" id="status"></p><button id="retry" hidden></button></div></article>
- <h3 id="bench" tabindex="-1"></h3><ol id="checks"></ol><div class="finish"><button id="other-side"></button><button id="firmware" hidden></button></div><p id="origin" class="meta"></p><button id="portable"></button></main>`;
+ <div id="workbench-tools"></div><h3 id="bench" tabindex="-1"></h3><div id="inspection"></div><ol id="checks"></ol><div class="finish"><button id="other-side"></button><button id="firmware" hidden></button></div><p id="origin" class="meta"></p><button id="portable"></button></main>`;
  host.toggleAttribute('data-embedded',embedded);
  const $=id=>root.getElementById(id);
  let lang=initialLanguage==='en'?'en':'es',index=Number(settings.step)||0,selectedRef=settings.ref;
@@ -85,6 +87,10 @@ export function mountSolderGuide(host,sizeId,initialLanguage,initialSide='left',
   if(wasPrevious&&index===0)$('next').focus({preventScroll:true});
  }
 
+ host.showSolderStep=ref=>{
+  const step=steps.findIndex(([prefix])=>prefix===ref);if(step>=0)changeStep(step);
+ };
+
  function render(){
   const size=$('size').value,side=$('side').value,board=maps[size][side],[prefix,back,names,copy]=steps[index];
   host.lang=lang;
@@ -103,11 +109,24 @@ export function mountSolderGuide(host,sizeId,initialLanguage,initialSide='left',
   const face=back?tr('Reverso · vista desde abajo','Underside · viewed from below'):tr('Cara de teclas · vista desde arriba','Key side · viewed from above');
   const descriptor=[size.replace('flan','Flan'),$('side').selectedOptions[0].text,face].join(' · ');
   $('face').textContent=descriptor;$('heading').textContent=tr(...names);$('instruction').textContent=tr(...copy);
-  const art=$('part');art.replaceChildren();
-  if(illustrate){
-   const component={D:'diode',K:'socket',SW2:'reset',SW1:'power',J1:'jack',U1:'nano',J2:'view'}[prefix];
-   const img=document.createElement('img');img.alt=tr(...names);img.width=120;img.height=90;art.append(img);illustrate(img,component);
-  }
+  const battery=batteryId(optionsFor(side).battery);
+  $('parts-title').textContent=tr('Piezas de este paso','Parts for this step');
+  $('part').replaceChildren(guideCards(stepParts(prefix,battery),lang,{quantity:prefix==='U1'?{strip:2,pins:24,riser:1,nano:1}:{}}));
+  const instructions={
+   U1:[tr('Pon las dos tiras de 12 contactos en U1, con las bocas hacia arriba. Fija un extremo de cada tira, nivélalas y suelda sus patillas por el reverso.','Place both 12-contact strips in U1, openings up. Tack one end of each, level them, then solder their tails on the underside.'),
+    tr('Presenta el nice!nano en el soporte con el USB-C hacia la flecha del mapa. Deja libres B+ y B−, los dos orificios más próximos al USB-C.','Rest the nice!nano on its support with USB-C toward the arrow on the board map. Leave the two holes closest to USB-C, B+ and B−, empty.'),
+    tr('Alinea los 24 pines redondos con los zócalos. Verifica la separación antes de soldar los pines al controlador. El puente de carga BOOST queda abierto.','Align the 24 round pins with the sockets. Check the gap before soldering the pins to the controller. Leave the BOOST charging jumper open.')],
+   J2:[tr('Introduce el zócalo hembra en J2 desde la cara de teclas y suelda por el reverso.','Insert the female socket into J2 from the key side and solder on the underside.'),
+    tr('Coloca las cinco colas cortas del conector macho en la pantalla y suéldalas allí. Conserva los postes largos para el acoplamiento.','Insert the five short header tails into the display and solder them there. Keep the long posts for mating.'),
+    tr('Presenta la pantalla sobre su soporte, alinea el pin 1 con el detalle de J2 e introduce los cinco postes rectos en el zócalo.','Rest the display on its support, align pin 1 with the J2 close-up and guide all five posts straight into the socket.')]
+  };
+  if(instructions[prefix]){
+   const ol=document.createElement('ol');for(const line of instructions[prefix]){const li=document.createElement('li');li.textContent=line;ol.append(li);}
+   $('instruction').replaceChildren(ol);$('motion').replaceChildren(solderMotion(prefix,side,lang));
+  }else $('motion').replaceChildren(...(prefix==='K'?[solderMotion(prefix,side,lang)]:[]));
+  const toolsHeading=document.createElement('h3');toolsHeading.textContent=tr('Herramientas para soldar','Soldering tools');
+  $('workbench-tools').replaceChildren(toolsHeading,guideCards(['iron','solder','tweezers'],lang));
+  $('inspection').replaceChildren(guideCards(inspectionParts.map(id=>id==='battery'?battery:id),lang));
   const bounds=boxFor(board.outline),{left,right,top,bottom}=bounds,width=right-left,height=bottom-top;
   const X=x=>back?right+left-x:x;
   const refs=Object.keys(board.parts).filter(r=>prefix==='D'||prefix==='K'?r.startsWith(prefix):r===prefix);
@@ -163,6 +182,8 @@ export function mountSolderGuide(host,sizeId,initialLanguage,initialSide='left',
  $('bench').textContent=tr('Antes de conectar energía','Before applying power');$('checks').replaceChildren();
  for(const pair of [['Inspecciona ambos lados con lupa. Busca puentes de estaño, pines sin soldar y diodos invertidos.','Inspect both faces under magnification for solder bridges, unsoldered pins and reversed diodes.'],['Con baterías, USB y controladores desconectados, comprueba con el multímetro que no haya un corto sostenido entre alimentación y tierra. Si lo hay, localízalo antes de seguir.','With batteries, USB and controllers disconnected, use a meter to check for a sustained power-to-ground short. Resolve any short before proceeding.']]){const li=document.createElement('li');li.textContent=tr(...pair);$('checks').append(li);}
   $('origin').textContent=tr('Vistas de las PCB de fabricación. Montaje físico del prototipo pendiente de validación.','Fabrication PCB views. Physical assembly of the prototype awaits validation.');
+  const credits=document.createElement('a');credits.href='https://github.com/eduarbo/flan/blob/main/components/README.md';
+  credits.textContent=tr('Modelos y créditos','Models and credits');$('origin').append(' ',credits);
   $('portable').hidden=embedded||Boolean(globalThis.flanSolderBuild);
   $('portable').textContent=tr('Guardar guía sin conexión','Save guide offline');
   const token=++revision;
