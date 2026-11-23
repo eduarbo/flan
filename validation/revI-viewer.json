@@ -1968,11 +1968,395 @@
     },
     {
       "path": "viewer/build-guide.js",
-      "sha256": "966a6c2dbd24d4abc6c18b2d47dd0b19726ec1c01ed22dd5a27680c0a1dab517"
+      "sha256": "aa1ff9706fa2ff71bbf6afaa7e3b70033fd1c3941eb47560db8ae2d8e3ec3e5f"
     },
     {
       "path": "viewer/solder-guide.js",
-      "sha256": "4d6ef2c5e0b9d90a2fb82747f453495382e4bc0ec560cb91c526e67f01b088b3"
+      "sha256": "cce9487c3baf1fb9fe206df6c137c3b6d04fb0ebff5e7a8269c03955a53bd8c7"
+    },
+    {
+      "path": "viewer/solder-guide-styles.js",
+      "sha256": "545a3b58558f4f9d479c503fb63ca650a2faaae8faf4c1052604318b1038536a"
+    },
+    {
+      "path": "viewer/solder-photo.js",
+      "sha256": "8b23e16382c192f7c8d195c15d4b4c70f08778d0819dad623afbcd4501bd2e61"
+    },
+    {
+      "path": "viewer/solder-portable.js",
+      "sha256": "54a085d6061b847797559489d0a7e5facfd562b61bb225de218677eed16d05c2"
+    },
+    {
+      "path": "tools/build_solder_renders.py",
+      "sha256": "044eaeb1c2a32d1d1c45d2a49d23bf8443cc0036d52ae6cbb089ff9f1d6189f2"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-asanoha-ink.webp",
+      "sha256": "f2af705909d19a2bf17e7e4c518b39e59cb68a2769ef9e0efb4c4f3ff4206853"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-asanoha-photo.webp",
+      "sha256": "05b7ff77d06e2673d953bf7cff847b4ef1599c577bd0ec8e6cd25d9823448ebf"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-base-ink.webp",
+      "sha256": "b3d0740a515dbc039635bcc807ce92a7e401e4573af6c4f34b84bea4bc498c8a"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-bottom.webp",
+      "sha256": "9fcdd32f331110fa33fc57649c1ed4f19c5ae2c02ed42cef43330cb5ec67362a"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-kikko-ink.webp",
+      "sha256": "25980bcdbdb266220e3028dcb6c98d443af9065a36ebd500ddce24b1406f98d0"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-kikko-photo.webp",
+      "sha256": "cb42f11628a403a94175aedaf0dc0b21cc3d98815ac2ea12e33184cf27b78159"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-meandro-ink.webp",
+      "sha256": "283de40050bf3b94fc2e49353600e81a2e1842c165b86fc0645e1988f2287dbe"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-meandro-photo.webp",
+      "sha256": "603c32250d293bda14de519c456929cebf98e9425c7ba031ae99f5c9b1b1d137"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-sayagata-ink.webp",
+      "sha256": "5b3306b6f8737887bb11db26d6369e4bf7ddc9c5a8e8c80a212d5c0e4189369d"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-sayagata-photo.webp",
+      "sha256": "82a04140bf9b1c59938497e71094320d562f53ff8b43428d1f719757c5c05549"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-seigaiha-ink.webp",
+      "sha256": "8313bc90e46e8c6d595f55e7d3cc3bc5fdeb76dc916a300ba040804102e6d52a"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-seigaiha-photo.webp",
+      "sha256": "bf80cb372fc74c851c7eb56634eb23643f3a37362ad5b0379263e3717704c9fb"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-top-ink.webp",
+      "sha256": "43401e890bb5183406cb35bafa782e3618b415e957b8736c5568b65cd402a6ca"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-top.webp",
+      "sha256": "369399ed9f75a2d9d1642472972349f0e792a3b3b30e3a801ba8779982b07ac0"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-vias-ink.webp",
+      "sha256": "3547e32da40fedbdaf295b138b0ac8996c758aeca87740b0a32b4bc927eb3d00"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-left-vias-photo.webp",
+      "sha256": "3c2b2b0be89de99d7a5601447a4cc58be307c492f4acc7e5b09b2c886352d461"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-asanoha-ink.webp",
+      "sha256": "9e9fa88881230d5e7251bafe568a1a2f6e8b711e11d8939e06539d6e7964768d"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-asanoha-photo.webp",
+      "sha256": "9d8b53783560e0a003d62842a3877a7ba9e34a7d800a75fbacfff01d59e8845e"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-base-ink.webp",
+      "sha256": "1c004e7b6ef441ca69ffe68304c0ef74499ef8c9a83755fe03bacd85638a6dc9"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-bottom.webp",
+      "sha256": "eafadeafc181a00bfa85f8bc0605ff46448289366be1c59d48da9e23161a5c96"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-kikko-ink.webp",
+      "sha256": "494e92f6fcca51cdce805bb7b36df95b12a4f1152a6b2a18fff75be3e7a0cc20"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-kikko-photo.webp",
+      "sha256": "435e7b741a9bc6acdfcbbb8c974f212807e0ed623ea872c01d33f621dba8d31d"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-meandro-ink.webp",
+      "sha256": "fc20caac87ef536e1ac04ed9f33c5fbebd6c137ab8c1a92dbecce1cc0e24e116"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-meandro-photo.webp",
+      "sha256": "0dcabb8a6f4153516d05644eec8ec4dc5d7d0d90940ce71cf6f974a75d1a13b6"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-sayagata-ink.webp",
+      "sha256": "3b68bfed81189c891ed0406a528775b6a327e183ded2e9603acaf1e315d5bca3"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-sayagata-photo.webp",
+      "sha256": "05343f9b77c2d316724d88ebca43ea36dd8a6a710fc61be2cbe1bafd339f585d"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-seigaiha-ink.webp",
+      "sha256": "06073a068dd1df6cf2509acb641ba3e8a298904df5563f5d9044d634bf348377"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-seigaiha-photo.webp",
+      "sha256": "1210c70e76489dae275f101596a2e1b934f3664e46e9d4d887b436ef7d94edd5"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-top-ink.webp",
+      "sha256": "3c8cbf73cb85b0d407e67e32ff8f6f9ebfb4d28be2f6c477b30aa408c145df50"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-top.webp",
+      "sha256": "359566e50f279915f289f922da58b21387bce047f38937452259c940617bf8d9"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-vias-ink.webp",
+      "sha256": "8ad955f41d9ada69b8d4d6f3119b5e15577eaeb20db10dcce23dfb93b2c0ebd8"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan36-right-vias-photo.webp",
+      "sha256": "de7f863abf1563298b31df3cde4a0ae5cd2138fba32f2b79cfdf52bfbaf854c2"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-left-asanoha-ink.webp",
+      "sha256": "f590616b50ff7a6f51ffc67a92a176b64a6dc56f86cac1c4baeb299f323f9f40"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-left-base-ink.webp",
+      "sha256": "71463c73c0a02965847818edb859b1985d84b0c689ff542e961e44bdeebd86fb"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-left-bottom.webp",
+      "sha256": "0de0897e3c75f713f90456d51b4f5e69d24d24ebdfb0a8863794a60bba18a8bd"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-left-kikko-ink.webp",
+      "sha256": "49277ecfebcd9f81a59ea539ff1e7d6eb5c276149acfc38a6ad93cdf3062081a"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-left-meandro-ink.webp",
+      "sha256": "57505cb76f53dbfaef6baa80bbaf0396d62cff8e0fca4aa96a8e704229b463bb"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-left-sayagata-ink.webp",
+      "sha256": "0b8c72fc6c505445a15ebce81515030661013707030d1f64a1b7f71e7349200c"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-left-seigaiha-ink.webp",
+      "sha256": "a29410ac3e2f8d8a2216ed5eef8c3d2b4257e3ef1c205956f74be0b81f7b7e63"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-left-top-ink.webp",
+      "sha256": "ec1b84efe72fe444c6ba00dff5ee62b5af545e0fd3ae9ab2a93314543ca074d3"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-left-top.webp",
+      "sha256": "c2221389a2558c1de3ef2aa3f97c909b4ed351807427e03046a40f7f25edf0fd"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-left-vias-ink.webp",
+      "sha256": "d78254666d8c183454d4338662540e6b7cba48b49c2c05ec526cf6510ede5b3a"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-right-asanoha-ink.webp",
+      "sha256": "1f814e80cb7601305db6368436648fd99109503524ac321f8e92cbfedd2ff085"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-right-base-ink.webp",
+      "sha256": "78f68fa2bed3423f81d55753124f4b502469a16cea8ee61ce52047f1bd6bf0ea"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-right-bottom.webp",
+      "sha256": "08a6fcbb22c8d6816a0632a15de25eba651fcd38bf063c8c3d67ea5bb2f836e3"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-right-kikko-ink.webp",
+      "sha256": "ff95a9bbcaa26a15e01799bc22f8935966005ff5b9cbad9b1f789a90e19b047c"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-right-meandro-ink.webp",
+      "sha256": "64653da1d11aa81c8903e6481287f2a411aed9f40cf9cdf3a07463f41b1eaa4d"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-right-sayagata-ink.webp",
+      "sha256": "bc94547f92068f1b715c640d378d2d108a7086696cdf0686dfba500899af2b9a"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-right-seigaiha-ink.webp",
+      "sha256": "80b150578783fda3139d607d934653544ba1039de96fbafa22643513ca1eddf7"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-right-top-ink.webp",
+      "sha256": "46879a5d04ee9425deaef3171c4357884db0ffd5badf6922f4638a486192e856"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-right-top.webp",
+      "sha256": "d18fc8928177f70675d339c15f8a8af7306ace1fa4777e3a8e0a44a6eee95a8d"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan42-right-vias-ink.webp",
+      "sha256": "4c42056b98207046489a0e34a1a4a3bfdcf4fea0d762ac6f54fb31c1302be3a1"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-left-asanoha-ink.webp",
+      "sha256": "d25ae3663c9a81078fff70487c752d4c061d6885e2b2009b2c79d5f872b25e0a"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-left-base-ink.webp",
+      "sha256": "a6b1814ff6833639a31c575982452bb3e539a91cb0d104a870d03f3e533ba955"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-left-bottom.webp",
+      "sha256": "004e01086b3b0e554e9af3da93ef152242abb840faf9a0bb17e3bcd7c561bb9a"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-left-kikko-ink.webp",
+      "sha256": "6bc4c08b6373fd5c631164682b9bfa159900663727dc3006f40a6fde116fcff0"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-left-meandro-ink.webp",
+      "sha256": "18024fd2e79073cae49ee9bb1390a15cc1db6bbfc538ceb3dd3e17413b9137af"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-left-sayagata-ink.webp",
+      "sha256": "17e3c248b8724dbd79942d6e2e4fc761ad8115a36f87039508cbc8951b78f836"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-left-seigaiha-ink.webp",
+      "sha256": "07751782f51bb8016db5e75115f2a042e198e9a562ecb040a2ce1851187991f8"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-left-top-ink.webp",
+      "sha256": "e228167b79c6a4952a5d69bffaedaa07fe3d2bae4ebfb5ef9858283102c341f8"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-left-top.webp",
+      "sha256": "260e20a6d6aa76df21a93510c8b6b2d9bd04018439045cea254622997dd4470f"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-left-vias-ink.webp",
+      "sha256": "b8281087c84e30d16b76f7f0d403b107498d7bf9d2cca48a47dfd27ba8cb1c7e"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-right-asanoha-ink.webp",
+      "sha256": "983d4ee16ceadc4835fffe19d3832492aa73be81abaa0ed7ff8e08c8f53fa821"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-right-base-ink.webp",
+      "sha256": "76f64cf9e596c2e6367a248d2e460a03e8a7d438564f240b879d77348f47c256"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-right-bottom.webp",
+      "sha256": "7fba2ee6651ea98191ff87643f2d9195fc53f4c1d204db8528a12ced803f6e4f"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-right-kikko-ink.webp",
+      "sha256": "5c714ddc03e1b5742d959d5ab457fab0fa6937239b2d23b54136e2a31b43ec31"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-right-meandro-ink.webp",
+      "sha256": "dd07fd604371cb80818b366965ed779f8f741fc63d4b47d4c6c0db68d44e5f2d"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-right-sayagata-ink.webp",
+      "sha256": "95687b3fb284aed324e677cd6d95cb524e5f7a43988cb4cda6ad37475627b54d"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-right-seigaiha-ink.webp",
+      "sha256": "09217fd8c78b5960a796388f2ec6ed107873963e0a1cc9c07521b25932794ee8"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-right-top-ink.webp",
+      "sha256": "5a1ee47103961ccc6410cb4f5f78d5d95d72a8ce82ff75368a9c1a87128a7bbe"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-right-top.webp",
+      "sha256": "5a06f6c20be35168de6fde7205bab57ba7ec14526fbdea9e96d3b77130d27dcc"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan46-right-vias-ink.webp",
+      "sha256": "e629de34f324b0af6e393b34d3f28cd61949b8992aac0a44c0ad44bed6a7adc5"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-left-asanoha-ink.webp",
+      "sha256": "a41805c2ff5b1fc1980c5ba3cdac8ed3978c9b09773a554b22a4cdebafac233a"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-left-base-ink.webp",
+      "sha256": "cc87a2eace479c269842b3efdbf48e1ec55968e6f457ba7a59ef5d058ea59ec4"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-left-bottom.webp",
+      "sha256": "fe88a5b524fb36bd01cbf3e8922a6aeb650c5f7843b132aec144e0193b6d67ac"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-left-kikko-ink.webp",
+      "sha256": "8f3d63cc4679691e017adab2e37aeb6d5eaed94852045e8a6387a7930af04fd4"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-left-meandro-ink.webp",
+      "sha256": "4a920ec6d491eca7a3957a3275b2901b3e9319a4198f235b3546f934c90aebb5"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-left-sayagata-ink.webp",
+      "sha256": "f80e74ae376bf9abba746cf9f54ebcbe3ff895b2f06a35ecd1ceea06b11180cf"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-left-seigaiha-ink.webp",
+      "sha256": "3f2ce93b3092d38bf1ae55c826e5af6adc60857963b6a4a11b758097cf785457"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-left-top-ink.webp",
+      "sha256": "3f8dc5f176abca5fd05a7bfc4244ef6de18acbce09089f25f93ec0e231bae1b5"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-left-top.webp",
+      "sha256": "5cde89216b8f297383338a652513666a3363fe7a24530522a7002ea9c075db2f"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-left-vias-ink.webp",
+      "sha256": "c804f074bdc66767c3d54562f38edf67151e12e4289af04aefa38712136b3556"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-right-asanoha-ink.webp",
+      "sha256": "a2f6009f2410c8f6e56bc0568cce1c77bf6dbadf2cb79fb0a13d05177c31bc33"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-right-base-ink.webp",
+      "sha256": "1e0dfe4890372004750a93ff003e1b00d7acb2bd449a4693ba00a6e5c787c510"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-right-bottom.webp",
+      "sha256": "ed172e000557fdd036a02cb1d6167b1074cc0b42d71a5492f8de541eb41016ba"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-right-kikko-ink.webp",
+      "sha256": "aeff4b79c105a2515bf53e11b3d20e2e5512d895a894ab2e283d4936af56ca80"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-right-meandro-ink.webp",
+      "sha256": "125bb896cdeb5d1ad45eec4828bcb94bd5ad97184969b1377306997968c0d1be"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-right-sayagata-ink.webp",
+      "sha256": "55fb5818cd447717679adec217f0db231fe16aed921cc5ae00e9f69dd5f18652"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-right-seigaiha-ink.webp",
+      "sha256": "96c0e7d6d4fd874f1607686d5e3b7becd17753f7887de9191e7ec3137cc2434d"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-right-top-ink.webp",
+      "sha256": "7b9b7aa3ebb0acb09014899443a4e37709bc885f4f52b54741d172c5c26a4fc1"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-right-top.webp",
+      "sha256": "b1ca26f3187ad8549e37a7f6ed2ad86930729d0152486c8a0ed143cb15953f1a"
+    },
+    {
+      "path": "docs/explore/assets/solder/flan54-right-vias-ink.webp",
+      "sha256": "b11b469dddac81f3d276e497540283b5c1caadf090f3483578dec1dfe6e2a13c"
     },
     {
       "path": "design/solder-boards.json",
@@ -2196,7 +2580,7 @@
     },
     {
       "path": "viewer/build.mjs",
-      "sha256": "3067fd84121dc27587de51df927f8eea5234a0fa7d4fcb5611b0a61b6dc18822"
+      "sha256": "3092e85b8bee17da37c9e2389df7e94372b14beef172ad1588dce55e98db7f7f"
     },
     {
       "path": "viewer/home/tokens.js",
@@ -2239,7 +2623,7 @@
       "sha256": "fca4c2591967af79699b836b4f76bbbae62e2976171d79254b4f4aebb46b1e22"
     }
   ],
-  "viewer_sha256": "5dbb0492c0d2d8ef64a924adcf495beda85e304da2376845f2c2a0ef7b53d6b8",
+  "viewer_sha256": "bc8e7c78d935f5e77c8e2b6a467ec58fdde55bf4d498c00ecce25ca4e1c5a3e3",
   "measurements": {
     "bay_width_mm": 24,
     "plate_top_mm": 7.6,
@@ -2525,8 +2909,8 @@
   },
   "offline_zip": {
     "path": "docs/explore/offline.zip",
-    "sha256": "522fc4aaefee88f554b234616ba49a00c4e4c0281d86bb56fae5a3de098c0d64",
-    "bytes": 74427825
+    "sha256": "5f092142b0b82163c43651d89fa516f83de7714767bf6ceec1d4b21d6a56e54b",
+    "bytes": 85840779
   },
   "still": {
     "look": {
@@ -3179,7 +3563,7 @@
       "bytes": 340992
     }
   },
-  "offline_sha256": "b39cb0d3d9cea165f34d1fbe7e76f63ee3cb8cdafb969349e8379227718b040e",
+  "offline_sha256": "b4878c23a2c8f38cff38a166fcd4694a32627221cfaefdddd4b07450b3474eef",
   "printing": {
     "path": "docs/explore/assets/printing-56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475.bin",
     "sha256": "56b6f189461b8c6c194b67e862179dacefb5f802c8068508ad33cb6967237475",
@@ -3229,8 +3613,8 @@
     "bytes": 335912
   },
   "geometry_aliases": 16,
-  "online_bytes": 1503206,
-  "offline_bytes": 98905241,
+  "online_bytes": 1616049,
+  "offline_bytes": 113778563,
   "limitations": [
     "Commercial representations combine documented nominal dimensions, licensed community CAD and inferred package detail; see components/README.md",
     "Routed PCB candidate; physical electrical, connector and RF qualification pending",

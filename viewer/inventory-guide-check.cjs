@@ -17,6 +17,19 @@ const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
   const guide=page.locator('#build-assembly .solder-map');
   assert.match(await guide.locator('#face').textContent(),/Flan46.*Izquierda.*Reverso/);
   assert.equal(await guide.locator('#map text').count(),23);
+  // A user reading the close-up must be able to advance without scrolling back to the toolbar.
+  await guide.locator('#detail svg').evaluate(node=>node.scrollIntoView({block:'start',behavior:'instant'}));
+  const nextPoint=await guide.locator('#next').evaluate(button=>{
+   const box=button.getBoundingClientRect(),x=box.x+box.width/2,y=box.y+box.height/2;
+   return {x,y,visible:button.getRootNode().elementFromPoint(x,y)===button};
+  });
+  assert(nextPoint.visible);await page.mouse.click(nextPoint.x,nextPoint.y);
+  assert.equal(await guide.locator('#step').inputValue(),'1');
+  for(const direction of ['prev','next']){
+   const title=await guide.locator('#heading').boundingBox(),controls=await guide.locator('#controls').boundingBox();
+   assert(title.y>=controls.y+controls.height&&title.y<controls.y+controls.height+65);
+   await guide.locator('#'+direction).press('Enter');
+  }
   await guide.locator('#side').selectOption('right');await guide.locator('#step').selectOption('4');
   assert.match(await guide.locator('#face').textContent(),/Derecha.*Cara de teclas/);
   assert.match(await guide.locator('#detail').textContent(),/Pin 1 positivo/);
@@ -25,10 +38,10 @@ const {chromium}=require(process.env.FLAN36_PLAYWRIGHT_MODULE||'playwright');
    const padLabels=await guide.locator('#detail [data-pin]').evaluateAll(labels=>labels.map(label=>({
     text:label.textContent,x:Number(label.getAttribute('x')),y:Number(label.getAttribute('y'))
    })));
-   const pads=await guide.locator('#detail rect,#detail circle').evaluateAll(elements=>{
-    const positive=elements.find(e=>e.getAttribute('fill')==='#fff8dc'),negative=elements.find(e=>e.getAttribute('fill')==='#ffbd65');
-    return [[Number(positive.getAttribute('x'))+.75,Number(positive.getAttribute('y'))+.75],[Number(negative.getAttribute('cx')),Number(negative.getAttribute('cy'))]];
-   });
+   // Compare the labels to the actual fabrication pad coordinates in the top-view bitmap.
+   const pins=require('../design/solder-boards.json').flan46[half].parts.J1;
+   const pads=['1','2'].map(n=>pins.find(p=>p[2]===n));
+   await guide.locator('#detail svg image[href^="data:image/"]').waitFor({state:'attached'});
    for(const [i,tag] of ['1 BAT+','2 GND'].entries()){
     const label=padLabels.find(l=>l.text===tag);assert(Math.abs(label.y-pads[i][1])<.1);assert(label.x>pads[i][0]+1);
    }

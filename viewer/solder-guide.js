@@ -1,26 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import maps from '../design/solder-boards.json' with {type:'json'};
-
-export function mountSolderGuide(host, sizeId, initialLanguage, initialSide='left', embedded=false, illustrate){
- const root=host.attachShadow({mode:'open'});
- root.innerHTML=`<style>
-*{box-sizing:border-box}:host{display:block;margin:0;background:#faf7ef;color:#252c26;font:16px/1.5 system-ui,sans-serif}main{max-width:980px;margin:auto;padding:clamp(16px,4vw,44px)}header,.tools,.detail{display:flex;gap:16px;align-items:center;flex-wrap:wrap}header{justify-content:space-between}h1,h2{font-family:Georgia,serif;font-weight:500;line-height:1.12;margin:.5em 0}h1{font-size:clamp(30px,5vw,50px)}h2{font-size:26px}label{display:grid;font-weight:600;gap:4px}select,button{font:inherit;color:inherit;background:white;border:1px solid #8b9489;border-radius:6px;padding:8px;min-height:44px}select:focus-visible,button:focus-visible{outline:3px solid #397184}.tools{margin:20px 0}.stage{background:white;border:1px solid #c7cdc0;border-radius:12px;padding:clamp(12px,3vw,24px)}svg{width:100%;height:auto;display:block}.diagram{background:#e9eee5;border-radius:8px}.card{margin:1em 0}.detail{align-items:center}.detail svg{max-width:190px;background:#e9eee5;border-radius:6px}.detail p{flex:1;min-width:160px}.meta{color:#516152;font-size:.9em}.steps{padding-left:22px}.steps li{padding:.25em 0}.face{font-weight:650}nav{display:flex;gap:.5em;justify-content:space-between;margin-top:16px}button:disabled{opacity:.45}@media print{:host,main{background:white;padding:0}.tools,header select,nav,button{display:none!important}.stage{break-inside:avoid}h1{font-size:23pt}.diagram{max-height:105mm}*{print-color-adjust:exact}}
-
- .part-step{display:flex;align-items:center;gap:10px}.part-step #part:empty{display:none}.part-step img{display:block;width:76px;height:auto}.part-step p{flex:1}
- :host([data-embedded]) main{padding:0;background:transparent}
- :host([data-embedded]) header,:host([data-embedded]) label:has(#size){display:none}
- :host([data-embedded]) .tools{gap:8px;margin:12px 0}
- :host([data-embedded]) .tools label{flex:1;min-width:105px}
- :host([data-embedded]) .tools select{width:100%;min-width:0}
- :host([data-embedded]) .stage{padding:12px}
- </style><main><header><h1 id="title"></h1><select aria-label="Idioma / Language" id="language"><option value="es">Español</option><option value="en">English</option></select></header>
-<p id="intro"></p><div class="tools"><label><span id="sizeLabel"></span><select id="size"></select></label><label><span id="sideLabel"></span><select id="side"></select></label><label><span id="stepLabel"></span><select id="step"></select></label></div>
-<article class="stage" aria-live="polite"><p id="face" class="face"></p><h2 id="heading"></h2><div class="part-step"><div id="part"></div><p id="instruction"></p></div><svg id="map" class="diagram" role="img"></svg><p id="caption" class="meta"></p><div id="detail" class="detail"></div><nav><button id="prev"></button><button id="next"></button></nav></article>
-<h2 id="bench"></h2><ol id="checks" class="steps"></ol><p id="origin" class="meta"></p></main>`;
- host.toggleAttribute('data-embedded',embedded);
- const $=id=>root.getElementById(id);
- let lang=initialLanguage==='en'?'en':'es',index=0;
-const tr=(es,en)=>lang==='es'?es:en;
+import {portableSolder} from './solder-portable.js';
+import {solderPhoto} from './solder-photo.js';
+import styles from './solder-guide-styles.js';
 const steps=[
  ['D',true,['Diodos','Diodes'],['Empieza con un solo 1N4148W (SOD-123). Estaña un pad, sujeta el diodo con pinzas y calienta ese pad para fijarlo. Comprueba la banda y suelda el otro extremo. Repite por cada referencia D.','Start with one 1N4148W (SOD-123). Tin one pad, hold the diode with tweezers and reheat the pad to tack it down. Check the stripe, solder the opposite end, then repeat at each D reference.']],
  ['K',true,['Zócalos de teclas','Switch sockets'],['Asienta cada zócalo Kailh Choc en el reverso. Alinea sus dos terminales metálicos con los dos pads resaltados y comprueba el asiento antes de soldarlos. Los switches se insertan después desde la cara de teclas.','Seat each Kailh Choc socket on the underside. Align both metal tabs with the two highlighted pads and check that the socket sits flush before soldering. The switches plug in later from the key side.']],
@@ -31,89 +13,208 @@ const steps=[
  ['J2',false,['Zócalo de la pantalla','Display socket'],['Coloca el zócalo de cinco contactos en J2 por esta cara y suelda por el reverso. El par de conectores del nice!view deja 7.00 mm entre placas. Inserta las colas cortas del header en la pantalla y conserva los postes largos para el acoplamiento.','Seat the five-contact socket at J2 on this face and solder on the underside. The supplied nice!view connectors give a 7.00 mm board gap. Insert the short header tails into the display and keep the long posts for mating.']]
 ];
 const ns='http://www.w3.org/2000/svg';
-function draw(parent,tag,attrs,content){const n=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,v);if(content)n.textContent=content;parent.append(n);return n;}
-function options(id,rows,value){const box=$(id);box.replaceChildren(...rows.map(([key,label])=>new Option(label,key)));box.value=value;}
-function render(){
- const size=$('size').value,side=$('side').value,board=maps[size][side],[prefix,back,names,copy]=steps[index];
- host.lang=lang;$('title').textContent=tr('Guía de soldadura Flan','Flan soldering guide');
- $('intro').textContent=tr('Trabaja con una mitad a la vez. Desconecta el USB y ambas baterías. Orienta la placa por su contorno y los agujeros grandes. D, K, J, SW y U son referencias del diagrama.','Work on one half at a time. Unplug USB and both batteries. Orient the physical board by its outline and large mounting holes. D, K, J, SW and U are diagram references.');
- $('sizeLabel').textContent=tr('Tamaño','Size');$('sideLabel').textContent=tr('Mitad','Half');$('stepLabel').textContent=tr('Paso','Step');
- options('side',[['left',tr('Izquierda','Left')],['right',tr('Derecha','Right')]],side);
- options('step',steps.map((s,i)=>[String(i),(i+1)+'. '+tr(...s[2])]),String(index));
- const face=back?tr('Reverso · vista desde abajo','Underside · viewed from below'):tr('Cara de teclas · vista desde arriba','Key side · viewed from above');
- const descriptor=size.replace('flan','Flan')+' · '+$('side').selectedOptions[0].text+' · '+face;
- $('face').textContent=descriptor;$('heading').textContent=tr(...names);$('instruction').textContent=tr(...copy);
- const art=$('part');art.replaceChildren();
- if(illustrate){
-  const component={D:'diode',K:'socket',SW2:'reset',SW1:'power',J1:'jack',U1:'nano',J2:'view'}[prefix];
-  const img=document.createElement('img');img.alt=tr(...names);img.width=120;img.height=90;
-  art.append(img);illustrate(img,component);
+
+function draw(parent,tag,attrs,text){
+ const node=document.createElementNS(ns,tag);
+ for(const [key,value] of Object.entries(attrs))node.setAttribute(key,value);
+ if(text)node.textContent=text;
+ parent.append(node);return node;
+}
+
+function options(select,rows,value){
+ select.replaceChildren(...rows.map(([key,label])=>new Option(label,key)));
+ select.value=value;
+}
+
+function boxFor(points){
+ const xs=points.map(p=>p[0]),ys=points.map(p=>p[1]);
+ return {left:Math.min(...xs),right:Math.max(...xs),top:Math.min(...ys),bottom:Math.max(...ys)};
+}
+
+function label(svg,x,y,text,scale,extra={}){
+ return draw(svg,'text',{x,y,'font-size':scale,'font-weight':650,'text-anchor':'middle',
+  'paint-order':'stroke','stroke-linejoin':'round',stroke:'#172623','stroke-width':scale*.27,fill:'white',...extra},text);
+}
+
+function ring(svg,x,y,r){
+ draw(svg,'circle',{cx:x,cy:y,r,fill:'none',stroke:'#182625','stroke-width':r*.40});
+ draw(svg,'circle',{cx:x,cy:y,r,fill:'none',stroke:'#ffcd70','stroke-width':r*.19});
+}
+
+export function mountSolderGuide(host,sizeId,initialLanguage,initialSide='left',embedded=false,illustrate,settings={}){
+ const root=host.attachShadow({mode:'open'});
+ root.innerHTML=`<style>${styles}</style><main>
+ <header><h1 id="title"></h1><select aria-label="Idioma / Language" id="language"><option value="es">Español</option><option value="en">English</option></select></header>
+ <p id="intro"></p><div class="tools"><label id="size-field"><span id="sizeLabel"></span><select id="size"></select></label><label><span id="sideLabel"></span><select id="side"></select></label></div>
+ <nav id="controls"><button id="prev">←</button><div class="step-choice"><select id="step"></select><span id="progress" aria-hidden="true"></span></div><button id="next"></button></nav>
+ <article class="stage"><div class="step-head" aria-live="polite" aria-atomic="true"><p id="face"></p><h2 id="heading" tabindex="-1"></h2></div>
+ <figure><svg id="map" role="img"></svg><figcaption id="caption" class="meta"></figcaption></figure>
+ <div><div class="part-step"><div id="part"></div><p id="instruction"></p></div>
+ <div class="reference"><h3 id="zoom-title"></h3><button id="overview-link"></button><label id="ref-field"><span id="ref-label"></span><select id="reference"></select></label></div><div id="detail" class="detail"></div>
+ <p role="status" id="status"></p><button id="retry" hidden></button></div></article>
+ <h3 id="bench" tabindex="-1"></h3><ol id="checks"></ol><div class="finish"><button id="other-side"></button><button id="firmware" hidden></button></div><p id="origin" class="meta"></p><button id="portable"></button></main>`;
+ host.toggleAttribute('data-embedded',embedded);
+ const $=id=>root.getElementById(id);
+ let lang=initialLanguage==='en'?'en':'es',index=Number(settings.step)||0,selectedRef=settings.ref;
+ if(globalThis.flanSolderBuild)$('size-field').hidden=true;
+ if(!Number.isInteger(index)||!steps[index])index=0;
+ const tr=(es,en)=>lang==='es'?es:en;
+ let visible=!embedded,observer,revision=0,photoRequest,photoKey;
+ const optionsFor=side=>settings[side]||{};
+ const getState=()=>({side:$('side').value,step:index,ref:selectedRef});
+ host.solderState=getState;
+
+ // The build panel has its own scroller and sticky section tabs. Scroll it once,
+ // after the new step's height is known, leaving both sets of controls visible.
+ function reveal(element){
+  const panel=embedded?host.closest('#inspector'):null;
+  const scroller=panel||document.scrollingElement;
+  const inset=panel?panel.getBoundingClientRect().top+host.closest('#build-workflow').querySelector('#build-nav').offsetHeight:0;
+  const top=$('controls').getBoundingClientRect().top;
+  const heading=element.getBoundingClientRect().top;
+  // At the start of the guide, leave the surrounding build page in place.
+  if(heading<inset+$('controls').offsetHeight||heading>inset+$('controls').offsetHeight+16||top>inset+1)
+   scroller.scrollBy({top:heading-inset-$('controls').offsetHeight-8,behavior:'instant'});
+  if(root.activeElement?.disabled)$(index===0?'next':'prev').focus({preventScroll:true});
  }
- const svg=$('map');svg.replaceChildren();svg.setAttribute('aria-label',descriptor+' · '+tr(...names));
- const xs=board.outline.map(p=>p[0]),ys=board.outline.map(p=>p[1]),xmin=Math.min(...xs),xmax=Math.max(...xs),ymin=Math.min(...ys),ymax=Math.max(...ys);
- const X=x=>back?xmax+xmin-x:x;
- svg.setAttribute('viewBox',[xmin-4,ymin-4,xmax-xmin+8,ymax-ymin+8].join(' '));
- draw(svg,'polygon',{points:board.outline.map(([x,y])=>[X(x),y].join(',')).join(' '),fill:'#244b43',stroke:'#15372e','stroke-width':.6});
- for(const [x,y] of board.holes)draw(svg,'circle',{cx:X(x),cy:y,r:1.4,fill:'#e9eee5'});
- const matches=ref=>prefix==='D'||prefix==='K'?ref.startsWith(prefix):ref===prefix;
- const refs=Object.entries(board.parts).filter(([r])=>matches(r));
- function footprint(target,ref,pads,detail){
-  const active=matches(ref);
-  const xs=pads.map(p=>X(p[0])),ys=pads.map(p=>p[1]),cx=(Math.min(...xs)+Math.max(...xs))/2;
-  if(active&&prefix==='J1'){
-   const [x,y,width,height]=board.bodies.J1;
-   draw(target,'rect',{x,y,width,height,fill:'none',stroke:'#b9d6c3','stroke-width':.25});
+
+ function changeStep(next){
+  if(!steps[next])return;
+  const wasPrevious=root.activeElement===$('prev');
+  index=next;selectedRef=null;render();reveal($('heading').parentElement);
+  if(wasPrevious&&index===0)$('next').focus({preventScroll:true});
+ }
+
+ function render(){
+  const size=$('size').value,side=$('side').value,board=maps[size][side],[prefix,back,names,copy]=steps[index];
+  host.lang=lang;
+  $('title').textContent=tr('Guía de soldadura Flan','Flan soldering guide');
+  $('intro').textContent=tr('Desconecta el USB y ambas baterías. Orienta la PCB por su contorno y los agujeros de montaje.','Disconnect USB and both batteries. Orient the PCB by its outline and mounting holes.');
+  $('sizeLabel').textContent=tr('Tamaño','Size');$('sideLabel').textContent=tr('Mitad','Half');
+  options($('side'),[['left',tr('Izquierda','Left')],['right',tr('Derecha','Right')]],side);
+  options($('step'),steps.map((s,i)=>[String(i),`${i+1}/${steps.length} · ${tr(...s[2])}`]),String(index));
+  $('progress').textContent=tr('Paso '+(index+1)+' de '+steps.length,'Step '+(index+1)+' of '+steps.length);
+  $('controls').setAttribute('aria-label',tr('Pasos de soldadura','Soldering steps'));
+  $('step').setAttribute('aria-label',tr('Paso','Step'));
+  $('prev').setAttribute('aria-label',tr('Anterior','Previous'));
+  $('prev').title=tr('Anterior','Previous');$('next').textContent=index===steps.length-1?tr('Revisar →','Inspect →'):tr('Siguiente →','Next →');
+  $('prev').disabled=index===0;$('other-side').textContent=tr('Soldar la otra mitad','Solder the other half');
+  $('firmware').hidden=!settings.onFirmware;$('firmware').textContent=tr('Continuar a firmware →','Continue to firmware →');
+  const face=back?tr('Reverso · vista desde abajo','Underside · viewed from below'):tr('Cara de teclas · vista desde arriba','Key side · viewed from above');
+  const descriptor=[size.replace('flan','Flan'),$('side').selectedOptions[0].text,face].join(' · ');
+  $('face').textContent=descriptor;$('heading').textContent=tr(...names);$('instruction').textContent=tr(...copy);
+  const art=$('part');art.replaceChildren();
+  if(illustrate){
+   const component={D:'diode',K:'socket',SW2:'reset',SW1:'power',J1:'jack',U1:'nano',J2:'view'}[prefix];
+   const img=document.createElement('img');img.alt=tr(...names);img.width=120;img.height=90;art.append(img);illustrate(img,component);
   }
-  if(active&&prefix==='D')draw(target,'line',{x1:xs[0],y1:ys[0],x2:xs[1],y2:ys[1],stroke:'#e7ca89','stroke-width':1.5});
-  pads.forEach(([x,y,num])=>{
-   const mark=active&&((['D','J1','J2'].includes(prefix)&&num==='1')||(prefix==='U1'&&num==='RAW'));
-   draw(target,mark?'rect':'circle',mark?{x:X(x)-.75,y:y-.75,width:1.5,height:1.5,fill:'#fff8dc',stroke:'#26281e','stroke-width':.15}:{cx:X(x),cy:y,r:active ? .75 : .35,fill:active?'#ffbd65':'#74968b'});
-   if(!detail)return;
-   const props={fill:'#fff','font-weight':650,'font-size':1.2};
-   if(prefix==='J1'){
-    draw(target,'text',{...props,x:X(x)+1.35,y:y+.04,'dominant-baseline':'middle','data-pin':num},num==='1'?'1 BAT+':'2 GND');
-   }else if(prefix==='U1'){
-    if(['D1','RAW','RST','VCC'].includes(num))draw(target,'text',{...props,x:X(x)+(num==='D1'?1.35:-1.35),y:y+.1,'text-anchor':num==='D1'?'start':'end','dominant-baseline':'middle'},num);
-   }else{
-    const labels=prefix==='D'?{'1':'K','2':'A'}:{'1':'1','2':'2','3':'3','4':'4','5':'5'};
-    draw(target,'text',{...props,x:X(x),y:y+2.25,'text-anchor':'middle'},labels[num]);
+  const bounds=boxFor(board.outline),{left,right,top,bottom}=bounds,width=right-left,height=bottom-top;
+  const X=x=>back?right+left-x:x;
+  const refs=Object.keys(board.parts).filter(r=>prefix==='D'||prefix==='K'?r.startsWith(prefix):r===prefix);
+  if(!refs.includes(selectedRef))selectedRef=refs[0];
+  $('ref-field').hidden=refs.length<2;
+  $('ref-label').textContent=tr('Posición','Position');
+  options($('reference'),refs.map(ref=>[ref,ref]),selectedRef);
+  const svg=$('map');svg.replaceChildren();svg.setAttribute('aria-label',descriptor+' · '+tr(...names));
+  svg.setAttribute('viewBox',[left-2,top-4,width+4,height+6].join(' '));
+  const photoAttrs={x:left,y:top,width,height,preserveAspectRatio:'none'};
+  const overview=draw(svg,'image',photoAttrs);
+  for(const ref of refs){
+   const points=board.parts[ref].map(([x,y,n])=>[X(x),y,n]),b=boxFor(points),cx=(b.left+b.right)/2;
+   const g=draw(svg,'g',{class:'photo-group','data-ref':ref});
+   draw(g,'rect',{x:b.left-1.5,y:b.top-1.3,width:b.right-b.left+3,height:b.bottom-b.top+2.6,rx:1.2,fill:'transparent',stroke:'#182625','stroke-width':.85});
+   draw(g,'rect',{x:b.left-1.5,y:b.top-1.3,width:b.right-b.left+3,height:b.bottom-b.top+2.6,rx:1.2,fill:'none',stroke:ref===selectedRef?'#ffcf70':'#fff8dc','stroke-width':.4});
+   label(g,cx,b.top-1.9,ref,2.7);
+   if(refs.length>1)g.onclick=()=>{
+    selectedRef=ref;render();
+    if(host.clientWidth<680)reveal($('zoom-title').parentElement);
+   };
+  }
+  $('overview-link').textContent=tr('Ver placa','View board');
+  $('caption').hidden=refs.length<2;
+  $('caption').textContent=refs.length>1?tr('Toca una referencia para ampliar esas soldaduras.','Tap a reference to enlarge those joints.'):descriptor;
+  const points=board.parts[selectedRef].map(([x,y,n])=>[X(x),y,n]),b=boxFor(points);
+  const detail=$('detail');detail.replaceChildren();$('zoom-title').textContent=tr('Detalle','Close-up')+' · '+selectedRef;
+  let zx=b.left-3.5,zy=b.top-3.5,zw=b.right-b.left+7,zh=b.bottom-b.top+7;
+  if(prefix==='J1'){zx=b.left-7;zw=16;zy=b.top-4;zh=10;}
+  if(prefix==='U1'){zx=b.left-3;zw=b.right-b.left+6;zy=b.top-5.5;zh=16;}
+  const zoom=draw(detail,'svg',{viewBox:[zx,zy,zw,zh].join(' '),role:'img','aria-label':selectedRef+' · '+tr('Ampliación','Close-up')});
+  const closeup=draw(zoom,'image',photoAttrs);
+  for(const [x,y,n] of points){
+   if(prefix==='D'||prefix==='J1'||prefix==='J2'){
+    if(n==='1')ring(zoom,x,y,prefix==='D'?1.0:.80);
+    if(prefix==='J1')label(zoom,x+1.4,y+.04,n==='1'?'1 BAT+':'2 GND',1.12,{'data-pin':n,'text-anchor':'start','dominant-baseline':'middle'});
+    else label(zoom,x,y+2.05,prefix==='D'?(n==='1'?'K':'A'):n,1.2);
+   }else if(prefix==='U1'&&['D1','RAW','RST','VCC'].includes(n)){
+    if(n==='RAW')ring(zoom,x,y,.92);
+    label(zoom,x+(n==='D1'?1.3:-1.3),y,n,1.25,{'text-anchor':n==='D1'?'start':'end','dominant-baseline':'middle'});
+   }else if(prefix==='K'||prefix==='SW1'||prefix==='SW2'){
+    ring(zoom,x,y,prefix==='K'?1.65:.66);
    }
-  });
-  if(detail&&prefix==='U1')draw(target,'text',{x:cx,y:Math.min(...ys)-2.4,'text-anchor':'middle',fill:'#fff','font-size':1.6},'↑ USB-C');
-  if(active&&!detail)draw(target,'text',{x:cx,y:Math.min(...ys)-1.55,'text-anchor':'middle','font-size':2.55,'font-weight':700,fill:'#fff'},ref);
- }
- for(const [ref,pads] of Object.entries(board.parts)){
-  if(!matches(ref)&&((back&&ref==='SW1')||(!back&&(/^[DK]/.test(ref)||ref==='SW2'))))continue;
-  footprint(svg,ref,pads,false);
- }
- $('caption').textContent=tr('Las marcas doradas señalan los pads de este paso. Los orificios grandes sirven de referencia para orientar la placa.','Gold marks show the pads for this step. Use the large mounting holes to orient the board.');
- const detail=$('detail');detail.replaceChildren();
- const descriptions={
-  D:tr('El cuadrado claro marca el pad 1 (K). Alinea aquí la banda del cátodo del diodo. El otro extremo es el ánodo (A).','The light square marks pad 1 (K). Align the diode cathode stripe with this pad. The other end is the anode (A).'),
-  J1:tr('Pin 1 positivo, pin 2 tierra. La línea verde dibuja el cuerpo del jack. Con la placa sin energía, usa continuidad para identificar el contacto del jack que llega al pad 1. Mide aparte el voltaje y la polaridad del enchufe de la batería y haz coincidir su positivo con ese contacto.','Pin 1 positive, pin 2 ground. The green outline shows the jack body. With the board unpowered, use continuity to locate the jack contact connected to pad 1. Separately measure the battery plug voltage and polarity, then match its positive contact to that jack contact.'),
-  U1:tr('Antes de soldar los pines, presenta el nice!nano con el USB-C hacia el borde indicado. Haz coincidir RAW, RST y VCC con el mapa. Los dos orificios B+ y B− del extremo USB del módulo quedan libres.','Before soldering the pins, dry-fit the nice!nano with USB-C at the indicated edge. Match RAW, RST and VCC to the map. Leave the two B+ and B− holes at the USB end of the module free.'),
-  J2:tr('Haz coincidir los cinco pines del nice!view con J2 antes de soldar el header. Del 1 al 5 son MOSI, SCK, VCC, GND y CS. El cuadrado claro marca MOSI.','Match all five nice!view pins to J2 before soldering the header. Pins 1 through 5 are MOSI, SCK, VCC, GND and CS. The light square marks MOSI.')
- };
- if(descriptions[prefix]){
-  const [ref,pads]=refs[0],xs=pads.map(p=>X(p[0])),ys=pads.map(p=>p[1]);
-  let bounds=[Math.min(...xs)-2.5,Math.min(...ys)-3,Math.max(...xs)+2.5,Math.max(...ys)+4];
-  if(prefix==='J1'){
-   const [x,y,w,h]=board.bodies.J1;
-   bounds=[Math.min(x,xs[0]-2)-1,y-1,Math.max(x+w,xs[0]+7)+1,y+h+1];
   }
-  if(prefix==='U1')bounds=[Math.min(...xs)-2,Math.min(...ys)-5.5,Math.max(...xs)+2,Math.min(...ys)+10];
-  const [x,y,right,bottom]=bounds,width=right-x,height=bottom-y;
-  const zoom=draw(detail,'svg',{viewBox:[x,y,width,height].join(' '),role:'img','aria-label':ref+' · '+tr('Detalle de orientación','Orientation detail')});
-  draw(zoom,'rect',{x,y,width,height,fill:'#244b43'});footprint(zoom,ref,pads,true);
-  const label=document.createElement('p');label.textContent=ref+' · '+descriptions[prefix];detail.append(label);
- }
+  if(prefix==='U1')label(zoom,(b.left+b.right)/2,b.top-2.5,'↑ USB-C',1.6);
+ const descriptions={
+  D:tr('K marca el pad 1 del render. Alinea aquí la banda del cátodo del diodo. El otro extremo es el ánodo (A).','K marks pad 1 on the render. Align the diode cathode stripe with this pad. The other end is the anode (A).'),
+  J1:tr('Pin 1 positivo, pin 2 tierra. Con la placa sin energía, usa continuidad para identificar el contacto del jack que llega al pad 1. Mide aparte el voltaje y la polaridad del enchufe de la batería y haz coincidir su positivo con ese contacto.','Pin 1 positive, pin 2 ground. With the board unpowered, use continuity to locate the jack contact connected to pad 1. Separately measure the battery plug voltage and polarity, then match its positive contact to that jack contact.'),
+  U1:tr('Antes de soldar los pines, presenta el nice!nano con el USB-C hacia el borde indicado. Haz coincidir RAW, RST y VCC con el mapa. Los dos orificios B+ y B− del extremo USB del módulo quedan libres.','Before soldering the pins, dry-fit the nice!nano with USB-C at the indicated edge. Match RAW, RST and VCC to the map. Leave the two B+ and B− holes at the USB end of the module free.'),
+  J2:tr('Haz coincidir los cinco pines del nice!view con J2 antes de soldar el header. Del 1 al 5 son MOSI, SCK, VCC, GND y CS. El pin 1 está marcado en la ampliación.','Match all five nice!view pins to J2 before soldering the header. Pins 1 through 5 are MOSI, SCK, VCC, GND and CS. Pin 1 is marked in the close-up.')
+ };
+  if(descriptions[prefix]){const note=document.createElement('p');note.textContent=descriptions[prefix];detail.append(note);}
  $('bench').textContent=tr('Antes de conectar energía','Before applying power');$('checks').replaceChildren();
  for(const pair of [['Inspecciona ambos lados con lupa. Busca puentes de estaño, pines sin soldar y diodos invertidos.','Inspect both faces under magnification for solder bridges, unsoldered pins and reversed diodes.'],['Con baterías, USB y controladores desconectados, comprueba con el multímetro que no haya un corto sostenido entre alimentación y tierra. Si lo hay, localízalo antes de seguir.','With batteries, USB and controllers disconnected, use a meter to check for a sustained power-to-ground short. Resolve any short before proceeding.']]){const li=document.createElement('li');li.textContent=tr(...pair);$('checks').append(li);}
- $('origin').textContent=tr('Mapas de las PCB KiCad de Flan36 rev I y Flan42/46/54. El montaje físico del prototipo está pendiente de validación.','Maps from the Flan36 rev I and Flan42/46/54 KiCad boards. Physical assembly of the prototype awaits validation.');
- $('prev').textContent=tr('← Anterior','← Previous');$('next').textContent=tr('Siguiente →','Next →');$('prev').disabled=index===0;$('next').disabled=index===steps.length-1;
-}
-options('size',Object.keys(maps).map(k=>[k,k.replace('flan','Flan')]),Object.hasOwn(maps,sizeId)?sizeId:'flan36');
-options('side',[['left',''],['right','']],initialSide==='right'?'right':'left');
-$('language').value=lang;$('language').onchange=e=>{lang=e.target.value;render()};$('size').onchange=$('side').onchange=render;
-$('step').onchange=e=>{index=Number(e.target.value);render()};$('prev').onclick=()=>{index--;render()};$('next').onclick=()=>{index++;render()};render();
+  $('origin').textContent=tr('Vistas de las PCB de fabricación. Montaje físico del prototipo pendiente de validación.','Fabrication PCB views. Physical assembly of the prototype awaits validation.');
+  $('portable').hidden=embedded||Boolean(globalThis.flanSolderBuild);
+  $('portable').textContent=tr('Guardar guía sin conexión','Save guide offline');
+  const token=++revision;
+  const appearance=optionsFor(side),key=JSON.stringify([size,side,back,appearance]);
+  const prepare=async()=>{
+   if(!photoRequest||key!==photoKey){photoKey=key;photoRequest=solderPhoto(size,side,back,appearance);}
+   try{
+    const url=await photoRequest;
+    if(token!==revision)return;
+    for(const img of [overview,closeup])img.setAttribute('href',url);
+    $('status').textContent='';$('retry').hidden=true;
+   }catch(error){
+    if(token===revision){
+     photoRequest=null;$('status').textContent=tr('No se pudo cargar la vista de la PCB.','The PCB view could not load.');
+     $('retry').textContent=tr('Reintentar','Retry');$('retry').hidden=false;
+    }
+    throw error;
+   }
+  };
+  host.prepareSolderPhoto=prepare;
+  if(visible)prepare().catch(()=>{});
+  settings.onChange?.(getState());
+ }
+ options($('size'),Object.keys(maps).map(k=>[k,k.replace('flan','Flan')]),Object.hasOwn(maps,sizeId)?sizeId:'flan36');
+ options($('side'),[['left',''],['right','']],initialSide==='right'?'right':'left');
+ $('language').value=lang;$('language').onchange=e=>{lang=e.target.value;render();};
+ $('size').onchange=$('side').onchange=()=>{render();};
+ $('step').onchange=e=>changeStep(Number(e.target.value));
+ $('reference').onchange=e=>{selectedRef=e.target.value;render();};
+ $('prev').onclick=()=>changeStep(index-1);$('next').onclick=()=>{
+  if(index<steps.length-1){changeStep(index+1);return;}
+  reveal($('bench'));$('bench').focus({preventScroll:true});
+ };
+ $('other-side').onclick=()=>{$('side').value=$('side').value==='left'?'right':'left';changeStep(0);};
+ $('firmware').onclick=()=>settings.onFirmware?.();
+ $('overview-link').onclick=()=>reveal($('heading').parentElement);
+ $('portable').onclick=async()=>{
+  $('portable').disabled=true;
+  try{
+   const {html}=await portableSolder($('size').value,lang,getState(),settings);
+   const url=URL.createObjectURL(new Blob([html],{type:'text/html'})),link=document.createElement('a');
+   link.href=url;link.download=$('size').value+'-solder.html';link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
+  }catch{$('status').textContent=tr('No se pudo guardar la guía. Inténtalo de nuevo.','The guide could not be saved. Try again.');}
+  finally{$('portable').disabled=false;}
+ };
+ $('retry').onclick=()=>host.prepareSolderPhoto().catch(()=>{});
+ render();
+ if(embedded){
+  observer=new IntersectionObserver(entries=>{
+   if(!entries.some(e=>e.isIntersecting))return;
+   visible=true;observer.disconnect();host.prepareSolderPhoto().catch(()=>{});
+  },{rootMargin:'160px'});observer.observe(host);
+ }
+ host.disconnectSolder=()=>observer?.disconnect();
 }

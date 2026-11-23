@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+import {portableSolder} from './solder-portable.js';
 import {mountSolderGuide} from './solder-guide.js';
 import parts from '../design/build-parts.json';
 import {presetStock} from './preset-filaments.js';
@@ -6,7 +7,7 @@ import {language,t} from './i18n.js';
 import {selectedParts,keycapPlan,printSpoolUses} from './printing.js';
 import {decorateFilamentDisclosure,filamentReel,filamentLabel} from './filament-identity.js';
 import {closestSwatch,swatchSources,setupOf} from './filament-swatches.js';
-import {fastenersOf} from './config.js';
+import {fastenersOf,pcbEdition,pcbMask} from './config.js';
 
 const sides=['left','right'],raw=p=>'https://raw.githubusercontent.com/eduarbo/flan/main/'+p;
 const say=(en,es)=>language()==='es'?es:en;
@@ -84,6 +85,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   return '\uFEFF'+[header,...values].map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\r\n')+'\r\n';
  }
  async function planHTML({complete=false,bundled=false}={}){
+  const personalGuide=portableSolder(current.variant,language(),solderView.solderState(),solderAppearance());
   const copy=$('build-workflow').cloneNode(true),title=family[current.variant].title+' · '+say('Build plan','Plan de construcción');
   const exactLink=getDesignLink(),locale=language(),footer=say('Generated from your design. Use your browser’s Print command to save as PDF.','Generado con tu diseño. Usa Imprimir en el navegador para guardarlo como PDF.');
   if(complete)renderPrint({half:'both',scope:'complete',host:copy.querySelector('#build-print-list'),fitHost:copy.querySelector('#build-fit')});
@@ -107,13 +109,13 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   const setup=setupOf(current);copy.querySelector('.print-settings')?.replaceWith(node('p','micro',(setup.printer?'Bambu Lab '+setup.printer+' · '+setup.nozzle+' mm · ':'')+t('print.'+setup.mode)+' · '+setup.bed+' × '+setup.bed+' mm'));
   copy.querySelectorAll('.filament-disclosure > summary [aria-hidden=true],button,.build-jumps,.print-options,.build-options,[role=status]').forEach(n=>n.remove());
   const solder=copy.querySelector('.solder-map'), liveMap=$('build-assembly').querySelector('.solder-map')?.shadowRoot;
-  if(solder&&liveMap){solder.replaceChildren(...['face','heading','instruction','map','caption','detail'].map(id=>liveMap.getElementById(id).cloneNode(true)));}
+  if(solder&&liveMap){solder.id='guide';solder.nextElementSibling?.remove();solder.replaceChildren(...['face','heading','instruction','map','caption','detail'].map(id=>liveMap.getElementById(id).cloneNode(true)));}
   copy.querySelectorAll('details').forEach(n=>n.open=true);
   copy.querySelectorAll('input').forEach(n=>{if(n.type==='checkbox'){if(n.checked)n.setAttribute('checked','');n.disabled=true;}else n.remove();});
   const designLabel=say('Reopen this exact design','Volver a abrir este diseño exacto');const a=link(designLabel,await exactLink);a.id='build-design-link';copy.prepend(a);
-  const css='body{font:15px/1.6 system-ui,sans-serif;color:#172b35;max-width:920px;margin:32px auto;padding:0 24px}h2,h3{line-height:1.2}h3{margin-top:32px}h4{margin-bottom:8px}a{color:#715719}li{margin-bottom:8px}summary{font-weight:600;margin:16px 0 8px}.steps{padding-left:24px}.step{break-inside:auto;margin-bottom:28px}.shopping-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;align-items:start}.shopping-row{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px 12px;border:1px solid #ddd;border-radius:10px;padding:12px;break-inside:avoid}.shopping-art{width:80px;height:72px;object-fit:contain;align-self:center}.shopping-body{min-width:0;align-self:center;overflow-wrap:anywhere}.shopping-body p{margin:4px 0}.shopping-info,.shopping-footer{grid-column:1/-1}.shopping-info summary{margin:0;display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center;gap:8px}.shopping-info summary .shopping-art{width:64px;height:56px}.shopping-body strong,.shopping-quantity{display:block}.shopping-more{display:none}.shopping-footer{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;border-top:1px solid #ddd;padding-top:8px}.shopping-check{display:flex;gap:6px;align-items:center}.micro{font-size:13px;color:#485b63}.shopping-quantity{font-weight:600;font-size:12px}.downloads a{display:block;margin:12px 0}.downloads span{display:block;font-size:13px}dl>div{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #ddd;padding:6px 0}dd{margin:0;text-align:right}.config-actions,.sr-only,.segments,.field-label,#print-status{display:none}.build-summary{padding:12px 0;border-bottom:1px solid #ddd}.print-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #ddd}.print-row small{display:block}.color-dot{display:inline-block;width:10px;height:10px;border:1px solid #888;border-radius:50%;margin-right:5px;background:var(--sample)}@media print{body{margin:0;font-size:11pt}a{color:inherit;text-decoration:none}details{break-inside:auto}h3,h4,summary{break-after:avoid}}';
+  const css='.solder-map svg{width:100%;max-height:520px;display:block}.solder-map #detail svg{max-width:360px}body{font:15px/1.6 system-ui,sans-serif;color:#172b35;max-width:920px;margin:32px auto;padding:0 24px}h2,h3{line-height:1.2}h3{margin-top:32px}h4{margin-bottom:8px}a{color:#715719}li{margin-bottom:8px}summary{font-weight:600;margin:16px 0 8px}.steps{padding-left:24px}.step{break-inside:auto;margin-bottom:28px}.shopping-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px;align-items:start}.shopping-row{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px 12px;border:1px solid #ddd;border-radius:10px;padding:12px;break-inside:avoid}.shopping-art{width:80px;height:72px;object-fit:contain;align-self:center}.shopping-body{min-width:0;align-self:center;overflow-wrap:anywhere}.shopping-body p{margin:4px 0}.shopping-info,.shopping-footer{grid-column:1/-1}.shopping-info summary{margin:0;display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center;gap:8px}.shopping-info summary .shopping-art{width:64px;height:56px}.shopping-body strong,.shopping-quantity{display:block}.shopping-more{display:none}.shopping-footer{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;border-top:1px solid #ddd;padding-top:8px}.shopping-check{display:flex;gap:6px;align-items:center}.micro{font-size:13px;color:#485b63}.shopping-quantity{font-weight:600;font-size:12px}.downloads a{display:block;margin:12px 0}.downloads span{display:block;font-size:13px}dl>div{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid #ddd;padding:6px 0}dd{margin:0;text-align:right}.config-actions,.sr-only,.segments,.field-label,#print-status{display:none}.build-summary{padding:12px 0;border-bottom:1px solid #ddd}.print-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #ddd}.print-row small{display:block}.color-dot{display:inline-block;width:10px;height:10px;border:1px solid #888;border-radius:50%;margin-right:5px;background:var(--sample)}@media print{body{margin:0;font-size:11pt}a{color:inherit;text-decoration:none}details{break-inside:auto}h3,h4,summary{break-after:avoid}}';
   const credits=say('Part illustrations: original Flan nominal models and drawings; Choc switch/socket © 2019–2022 keyswitch-kicad-library contributors (MIT); power/reset models by KiCad library contributors (CC-BY-SA-4.0, library exception). Rendered for this guide.','Ilustraciones: modelos nominales y dibujos originales de Flan; switch/socket Choc © 2019–2022 keyswitch-kicad-library contributors (MIT); modelos de interruptor/reset por KiCad library contributors (CC-BY-SA-4.0, excepción de biblioteca). Renderizados para esta guía.');
-  return '<!doctype html><html lang="'+locale+'"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>'+css+$('filament-reel-style').textContent+'</style><body>'+copy.outerHTML+'<p>'+footer+'</p><p class="micro">'+credits+' <a href="https://github.com/eduarbo/flan/blob/main/components/README.md">'+say('Sources & licenses','Fuentes y licencias')+'</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA-4.0</a> · <a href="https://github.com/eduarbo/flan/blob/main/components/sources/KiSwitch-MIT.txt">MIT</a></p></body></html>';
+  return '<!doctype html><html lang="'+locale+'"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>'+css+$('filament-reel-style').textContent+'</style><body>'+copy.outerHTML+'<p>'+footer+'</p><p class="micro">'+credits+' <a href="https://github.com/eduarbo/flan/blob/main/components/README.md">'+say('Sources & licenses','Fuentes y licencias')+'</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC-BY-SA-4.0</a> · <a href="https://github.com/eduarbo/flan/blob/main/components/sources/KiSwitch-MIT.txt">MIT</a></p>'+(await personalGuide).scripts+'</body></html>';
  }
  async function exportPlan(){
   const filename=family[current.variant].title+'-build-plan.html';
@@ -245,21 +247,42 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   say('After printing, insert three axial Ø2 × 3 mm magnets per base from above and three Ø2 × 4 mm per frame from underneath. Dry-fit an attracting pair. Mark the same exposed pole in all bases and the opposite in all frames. Use adhesive compatible with the plastic and coating. Let the pieces cure apart before installing the electronics.','Después de imprimir, coloca tres imanes axiales Ø2 × 3 mm por base desde arriba y tres Ø2 × 4 mm por marco desde abajo. Prueba en seco una pareja que se atraiga. Marca el mismo polo visible en todas las bases y el opuesto en los marcos. Usa adhesivo compatible con el plástico y el recubrimiento. Deja curar las piezas separadas antes de instalar la electrónica.'),
   say('Tap the Ø1.7 mm printed pilots with an M2 tap. Test that the selected screw grips without bottoming or splitting the part.','Rosca los pilotos impresos de Ø1.7 mm con un macho M2. Comprueba que el tornillo sujete sin tocar fondo ni partir la pieza.')
  ])];}
- let solderView,solderKey;
+ let solderView,solderKey,fullMap;
+ function solderAppearance(){
+  return Object.fromEntries(sides.map(side=>[side,{edition:pcbEdition(current,side),mask:pcbMask(current,side)}]));
+ }
  function renderAssembly(){
-  const key=current.variant+'/'+language();
+  const appearance=solderAppearance();
+  const key=JSON.stringify([current.variant,language(),appearance]);
   if(key!==solderKey){
+   const state=solderView?.solderState();solderView?.disconnectSolder();
    solderKey=key;solderView=node('section','solder-map');
-   mountSolderGuide(solderView,current.variant,language(),'left',true,illustrations.show);
+   fullMap=link(say('Open the full-size soldering guide','Abrir la guía de soldadura a tamaño completo'),'');
+   if(location.protocol==='file:'){
+    fullMap.textContent=say('Save the full-size soldering guide','Guardar la guía de soldadura a tamaño completo');
+    fullMap.onclick=async event=>{
+     event.preventDefault();const file=current.variant+'-solder.html';
+     try{const {html}=await portableSolder(current.variant,language(),solderView.solderState(),appearance);download(file,html,'text/html');}
+     catch{$('build-shopping-status').textContent=say('Could not save the guide.','No se pudo guardar la guía.');}
+    };
+   }
+   const url=new URL('solder.html',location.protocol==='file:'?'https://flankbd.com/explore/':location.href);
+   url.searchParams.set('size',current.variant);url.searchParams.set('lang',language());
+   for(const side of sides){
+    url.searchParams.set(side+'Edition',appearance[side].edition);url.searchParams.set(side+'Mask',appearance[side].mask);
+   }
+   mountSolderGuide(solderView,current.variant,language(),state?.side,true,illustrations.show,{...appearance,...state,onFirmware:()=>$('build-nav').querySelector('[data-target=build-program]').click(),onChange(next){
+    for(const [key,value] of Object.entries(next))url.searchParams.set(key,value);
+    fullMap.href=url.href;
+   }});
   }
-  const fullMap=link(say('Open the full-size soldering guide','Abrir la guía de soldadura a tamaño completo'),new URL('solder.html?size='+current.variant+'&lang='+language(),location.protocol==='file:'?'https://flankbd.com/explore/':location.href).href);
-  $('build-assembly').replaceChildren(solderView,fullMap,list([
+  $('build-assembly').replaceChildren(solderView,fullMap,details('build-solder-measurements',say('Connector heights and inspection','Alturas de conectores e inspección'),[list([
    say('Disconnect USB and leave both batteries unplugged. Solder diodes, hot-swap sockets, power/reset switches and battery jacks; match the PCB markings, diode bands and each component orientation.','Desconecta USB y deja ambas baterías sin conectar. Suelda diodos, sockets hot-swap, interruptores, reset y jacks de batería; respeta marcas de PCB, bandas de diodos y orientación.'),
    say('Cut four 12-contact controller sockets from the 64-contact strip. Use 48 round pins. Hold the controller level on its printed support: 2.80 mm above the main PCB, underside at Z8.20 mm. The pin length does not set this gap.','Corta cuatro zócalos de 12 contactos de la tira de 64. Usa 48 pines redondos. Apoya el controlador nivelado en su soporte: 2.80 mm sobre la PCB principal, cara inferior en Z8.20 mm. La longitud del pin no determina la separación.'),
    say('Use the connectors supplied with nice!view: 7.00 mm PCB separation, display underside at Z12.40 mm. Put the short solder tails into the display; do not trim the mating posts.','Usa los conectores incluidos con nice!view: separación de 7.00 mm entre PCB, cara inferior de pantalla en Z12.40 mm. Las colas cortas se sueldan a la pantalla; no cortes los postes de acoplamiento.'),
    say('Trim display solder tails to ≤0.30 mm above its PCB, with joints ≤0.50 mm. Main-board socket tails may extend ≤1.00 mm below the PCB. Inspect bridges and frame clearance.','Recorta las colas de soldadura de pantalla a ≤0.30 mm sobre su PCB, con uniones ≤0.50 mm. Las colas del zócalo principal pueden sobresalir ≤1.00 mm por debajo. Revisa puentes y espacio para el marco.'),
    say('Before inserting controllers or powering up, inspect all solder joints and verify continuity and no sustained power-to-ground short with a multimeter. Keep the nice!nano BOOST jumper open.','Antes de insertar controladores o dar energía, inspecciona las soldaduras y verifica continuidad y ausencia de cortocircuito sostenido entre alimentación y tierra con multímetro. Deja abierto el jumper BOOST del nice!nano.')
-  ]));
+  ])]));
   const m6=shoppingList(current,family).find(r=>r.quantity==='m6').required,common=fastenersOf(current)==='common-m2';
   $('build-final').replaceChildren(list([
    say('After the USB checks, disconnect power. Verify the delivered cell’s polarity, dimensions and charge-current limit. Insulate exposed PCB edges locally; never compress the pouch or cover connector contacts.','Después de las pruebas por USB, desconecta la energía. Verifica polaridad, dimensiones y límite de carga de la batería recibida. Aísla los bordes expuestos de PCB sin comprimir la bolsa ni tapar contactos.'),
