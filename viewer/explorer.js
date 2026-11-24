@@ -5,7 +5,7 @@ import {t,language} from './i18n.js';
 
 // Each group's name, short name and note, in the page's language.
 const parts={en:{
-  lid:{name:'Display frame',short:'Frame',info:'Removable frame with three glued-in Ø2 × 4 mm magnets per half. Opposite poles face the base magnets; check attraction before gluing. PCB and battery remain mechanically secured.'},
+  lid:{name:'Display frame',short:'Frame',info:'Removable display frame. It rests over the display; a version that holds on to the display is being redesigned. PCB and battery remain mechanically secured.'},
   keycaps:{name:'KLP Lamé keycaps',short:'Caps',info:'Original Choc-stem meshes. Choose a shape preset; color all keys, rows, columns or individual keys.'},
   display:{name:'nice!view display',short:'Display',info:'14 × 36 × 2.9 mm nominal nice!view. Illustrative screen content; flush frame details. Uses the supplied 7.00 mm connector pair. Glass sits 0.20 mm below the frame; physical fit remains untested.'},
   base:{name:'Printed base',short:'Base',info:'Key-aligned local curves and a shared contour. Use Customize this part to choose a case. Native parts are editable in FreeCAD.'},
@@ -16,9 +16,9 @@ const parts={en:{
   mcu:{name:'nice!nano v2 controller',short:'MCU',info:'Nominal v2 reconstruction with separate PCB, ENIG pads, mid-mount USB-C, ICs and passives. Community outline dimensions; package detail inferred from official photos.'},
   supports:{name:'Insulating supports',short:'Mounts',info:'Cradle, display sled and controller supports. Retention is a nominal CAD proposal.'},
   connectors:{name:'Connectors & controls',short:'Ports',info:'Supplied nice!view connectors, specified Mill-Max controller sockets, battery connector, reset and power switch. Exact purchasing references are in the build guide; verify delivered dimensions and solder clearances during assembly.'},
-  fasteners:{name:'Fasteners & feet',short:'Feet',info:'Per half: five internal M2 screws, three glued-in Ø2 × 3 mm base magnets and three Ø2 × 4 mm frame magnets. All magnets are axial. Printed threads, magnetic holding force and capture need physical tests.'}
+  fasteners:{name:'Fasteners & feet',short:'Feet',info:'Internal M2 screws, five per half in Flan36 and up to eight in Flan54, that cut their own thread in the printed Ø2.1 mm pilots. Printed threads and cap clearance need physical tests.'}
 },es:{
-  lid:{name:'Marco de pantalla',short:'Marco',info:'Marco removible con tres imanes pegados de Ø2 × 4 mm por mitad. Los polos opuestos miran hacia los imanes de la base; revisa que se atraigan antes de fijarlos. La PCB y la batería siguen sujetas mecánicamente.'},
+  lid:{name:'Marco de pantalla',short:'Marco',info:'Marco de pantalla removible. Queda apoyado sobre la pantalla; se está rediseñando una versión que se sujeta al display. La PCB y la batería siguen sujetas mecánicamente.'},
   keycaps:{name:'Keycaps KLP Lamé',short:'Keycaps',info:'Mallas originales con vástago Choc. Elige una forma; pinta todas las teclas, filas, columnas o teclas sueltas.'},
   display:{name:'Pantalla nice!view',short:'Pantalla',info:'nice!view nominal de 14 × 36 × 2.9 mm. Contenido de pantalla ilustrativo; detalles del marco al ras. Usa el par de conectores de 7.00 mm incluido. El vidrio queda 0.20 mm bajo el marco; el ajuste físico aún no se prueba.'},
   base:{name:'Base impresa',short:'Base',info:'Curvas locales alineadas a las teclas y un contorno común. Usa Personalizar esta pieza para elegir una caja. Las piezas nativas se editan en FreeCAD.'},
@@ -29,25 +29,16 @@ const parts={en:{
   mcu:{name:'Controlador nice!nano v2',short:'MCU',info:'Reconstrucción nominal de la v2 con PCB aparte, pads ENIG, USB-C de montaje medio, circuitos integrados y pasivos. Medidas del contorno de la comunidad; detalle de los encapsulados deducido de fotos oficiales.'},
   supports:{name:'Soportes aislantes',short:'Soportes',info:'Cuna, trineo de la pantalla y soportes del controlador. La sujeción es una propuesta nominal de CAD.'},
   connectors:{name:'Conectores y controles',short:'Puertos',info:'Conectores incluidos del nice!view, zócalos Mill-Max especificados para el controlador, conector de batería, botón de reset e interruptor de encendido. Las referencias exactas de compra están en la guía de armado; verifica las medidas recibidas y los espacios para soldar durante el armado.'},
-  fasteners:{name:'Sujetadores y patas',short:'Patas',info:'Por mitad: cinco tornillos M2 internos, tres imanes pegados de base de Ø2 × 3 mm y tres imanes de marco de Ø2 × 4 mm. Todos los imanes son axiales. Las roscas impresas, la fuerza magnética y la captura necesitan pruebas físicas.'}
+  fasteners:{name:'Sujetadores y patas',short:'Patas',info:'Tornillos M2 internos, cinco por mitad en Flan36 y hasta ocho en Flan54, que abren su propia rosca en los pilotos impresos de Ø2.1 mm. Las roscas impresas y el espacio para las cabezas necesitan pruebas físicas.'}
 }};
 export const partInfo=id=>parts[language()][id]??parts.en[id];
 
-export const isMagnet=o=>/^(left|right)-(magnet|frame-target)-[0-2]$/.test(o.userData.part_id||'');
-export const matchesPart=(o,ref)=>Boolean(ref)&&(ref.collection==='magnets'?isMagnet(o):o.userData.group===ref.group)&&(!ref.side||o.userData.side===ref.side)&&(!ref.key||o.userData.key===ref.key)&&(ref.objectIndex===undefined||o.userData.objectIndex===ref.objectIndex);
+export const matchesPart=(o,ref)=>Boolean(ref)&&o.userData.group===ref.group&&(!ref.side||o.userData.side===ref.side)&&(!ref.key||o.userData.key===ref.key)&&(ref.objectIndex===undefined||o.userData.objectIndex===ref.objectIndex);
 
 export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,requestRender}){
   const $=id=>document.getElementById(id),ray=new THREE.Raycaster(),pointer=new THREE.Vector2(),overlay=new THREE.Scene(),bounds=new Map(),highlights=new Map();
   const outline=selectionOutline();
   const xray=new THREE.MeshBasicMaterial({color:'#2785ff',transparent:true,opacity:.66,toneMapped:false,depthTest:false,depthWrite:false});
-  // Screen-sized locator dots remain legible when the 2 mm magnets are tiny.
-  // These are annotations; the actual magnet geometry stays unchanged.
-  const dotCanvas=document.createElement('canvas');dotCanvas.width=dotCanvas.height=64;
-  const dot=dotCanvas.getContext('2d');dot.fillStyle='#fff';dot.beginPath();dot.arc(32,32,30,0,Math.PI*2);dot.fill();dot.fillStyle='#3568ed';dot.beginPath();dot.arc(32,32,21,0,Math.PI*2);dot.fill();
-  const locatorTexture=new THREE.CanvasTexture(dotCanvas);locatorTexture.colorSpace=THREE.SRGBColorSpace;
-  const locatorGeometry=new THREE.BufferGeometry(),locator=new THREE.Points(locatorGeometry,new THREE.PointsMaterial({map:locatorTexture,toneMapped:false,size:12,sizeAttenuation:false,transparent:true,depthTest:false,depthWrite:false}));
-  locatorGeometry.setAttribute('position',new THREE.Float32BufferAttribute(new Float32Array(objects.filter(isMagnet).length*3),3));
-  locator.renderOrder=1001;locator.frustumCulled=false;locator.visible=false;overlay.add(locator);
   const match=(o,ref)=>o.userData.installed!==false&&matchesPart(o,ref);
   const key=ref=>ref?JSON.stringify(ref):'';
   const refOf=o=>({group:o.userData.group,side:o.userData.side,key:o.userData.key,objectIndex:o.userData.objectIndex});
@@ -87,23 +78,13 @@ export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,req
         editorKeys&&o.userData.group==='keycaps'&&editorKeys.has(o.userData.side+':'+o.userData.key)));
       outline.set(outlined);
       for(const mesh of highlights.values())mesh.visible=false;
-      const highlighted=hovered&&key(hovered)!==key(selected)?hovered:(selected?.collection==='magnets'?selected:null);
+      const highlighted=hovered&&key(hovered)!==key(selected)?hovered:null;
       hasOverlay=false;
       for(const o of objects)if((o.visible||hovered)&&match(o,highlighted)){
         let mesh=highlights.get(o);if(!mesh){mesh=new THREE.Mesh(o.geometry,xray);highlights.set(o,mesh);overlay.add(mesh);}
         mesh.geometry=o.geometry;mesh.position.copy(o.position);mesh.rotation.copy(o.rotation);mesh.scale.copy(o.scale);mesh.visible=true;
         hasOverlay=true;
       }
-      const positions=[];
-      if(highlighted?.collection==='magnets'){
-        scene.updateMatrixWorld(true);
-        for(const o of objects)if(o.visible&&match(o,highlighted)){
-          if(!o.geometry.boundingBox)o.geometry.computeBoundingBox();
-          const center=o.geometry.boundingBox.getCenter(new THREE.Vector3()).applyMatrix4(o.matrixWorld);positions.push(center.x,center.y,center.z);
-        }
-      }
-      locator.visible=positions.length>0;
-      locatorGeometry.attributes.position.array.set(positions);locatorGeometry.attributes.position.needsUpdate=true;locatorGeometry.setDrawRange(0,positions.length/3);
     }
     // Hovering a row and selecting it share a highlight stamp, so the note tracks selection and visibility on its own.
     const shown=key(selected)+':'+revision;
@@ -111,7 +92,7 @@ export function createExplorer({scene,camera,canvas,objects,onSelect,onClear,req
       visibilityStamp=shown;
       if(selected)$('selection-visibility').textContent=objects.some(o=>o.visible&&match(o,selected))?'':t(selected.group==='lid'&&!objects.some(o=>match(o,selected))?'vis.frames':'vis.hidden');
     }
-    if(activeKey!==key(active)){activeKey=key(active);for(const row of document.querySelectorAll('.part-row'))row.classList.toggle('is-highlighted',!active?.collection&&active?.group===row.dataset.group);}
+    if(activeKey!==key(active)){activeKey=key(active);for(const row of document.querySelectorAll('.part-row'))row.classList.toggle('is-highlighted',active?.group===row.dataset.group);}
   }
   function draw(renderer){
     if(hasOverlay){

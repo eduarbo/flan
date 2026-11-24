@@ -1,0 +1,199 @@
+{
+  "schema": "flan-base-supports-2",
+  "parent_source_sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399",
+  "installer_sha256": "43262bc4d1b065894856b012376ffdf6414145bd38990e57e146a016e3c7c761",
+  "pilot_diameter_mm": 2.1,
+  "support_post_diameter_mm": 3.0,
+  "station_socket_mm": {
+    "bore": 2.4,
+    "from_z": 3.1,
+    "open_at_z": 6.6
+  },
+  "halves": {
+    "left": {
+      "supports": {
+        "S1": {
+          "board_xy_mm": [
+            94.0,
+            24.5
+          ],
+          "nearest_parts_mm": {}
+        },
+        "S2": {
+          "board_xy_mm": [
+            38.5,
+            53.5
+          ],
+          "nearest_parts_mm": {
+            "hotswap-sockets": 2.385
+          }
+        },
+        "S3": {
+          "board_xy_mm": [
+            73.5,
+            36.0
+          ],
+          "nearest_parts_mm": {
+            "hotswap-sockets": 2.535
+          }
+        },
+        "S4": {
+          "board_xy_mm": [
+            110.0,
+            81.0
+          ],
+          "nearest_parts_mm": {}
+        },
+        "S5": {
+          "board_xy_mm": [
+            109.5,
+            43.0
+          ],
+          "nearest_parts_mm": {
+            "hotswap-sockets": 2.535
+          }
+        },
+        "S6": {
+          "board_xy_mm": [
+            73.5,
+            18.5
+          ],
+          "nearest_parts_mm": {}
+        }
+      },
+      "h3_pilot_web_mm": 1.1363,
+      "removed_objects": [
+        "L_Magnet0",
+        "L_SteelTarget0",
+        "L_Magnet1",
+        "L_SteelTarget1",
+        "L_Magnet2",
+        "L_SteelTarget2"
+      ],
+      "bases": {
+        "level": {
+          "volume_mm3": 14579.177,
+          "added_mm3": 101.788,
+          "removed_mm3": 30.298,
+          "valid_single_solid": true
+        },
+        "solid": {
+          "volume_mm3": 14579.177,
+          "added_mm3": 101.788,
+          "removed_mm3": 30.298,
+          "valid_single_solid": true
+        },
+        "rim": {
+          "volume_mm3": 14974.122,
+          "added_mm3": 101.788,
+          "removed_mm3": 30.298,
+          "valid_single_solid": true
+        },
+        "terrace": {
+          "volume_mm3": 14454.582,
+          "added_mm3": 101.788,
+          "removed_mm3": 30.298,
+          "valid_single_solid": true
+        }
+      }
+    },
+    "right": {
+      "supports": {
+        "S1": {
+          "board_xy_mm": [
+            66.0,
+            24.5
+          ],
+          "nearest_parts_mm": {}
+        },
+        "S2": {
+          "board_xy_mm": [
+            121.5,
+            53.5
+          ],
+          "nearest_parts_mm": {
+            "hotswap-sockets": 2.94
+          }
+        },
+        "S3": {
+          "board_xy_mm": [
+            86.5,
+            36.0
+          ],
+          "nearest_parts_mm": {}
+        },
+        "S4": {
+          "board_xy_mm": [
+            50.0,
+            81.0
+          ],
+          "nearest_parts_mm": {}
+        },
+        "S5": {
+          "board_xy_mm": [
+            50.5,
+            43.0
+          ],
+          "nearest_parts_mm": {}
+        },
+        "S6": {
+          "board_xy_mm": [
+            86.5,
+            18.5
+          ],
+          "nearest_parts_mm": {
+            "hotswap-sockets": 2.719
+          }
+        }
+      },
+      "h3_pilot_web_mm": 1.0477,
+      "removed_objects": [
+        "R_Magnet0",
+        "R_SteelTarget0",
+        "R_Magnet1",
+        "R_SteelTarget1",
+        "R_Magnet2",
+        "R_SteelTarget2"
+      ],
+      "bases": {
+        "level": {
+          "volume_mm3": 14578.822,
+          "added_mm3": 101.788,
+          "removed_mm3": 30.298,
+          "valid_single_solid": true
+        },
+        "solid": {
+          "volume_mm3": 14578.822,
+          "added_mm3": 101.788,
+          "removed_mm3": 30.298,
+          "valid_single_solid": true
+        },
+        "rim": {
+          "volume_mm3": 14973.767,
+          "added_mm3": 101.788,
+          "removed_mm3": 30.298,
+          "valid_single_solid": true
+        },
+        "terrace": {
+          "volume_mm3": 14454.228,
+          "added_mm3": 101.788,
+          "removed_mm3": 30.298,
+          "valid_single_solid": true
+        }
+      }
+    }
+  },
+  "physical_acceptance": false,
+  "source_sha256": "183f3ad665222207839752b82eaf9eb0fbb9e84bb58157219874e21c30babaf2",
+  "saved_reopened": true,
+  "unrelated_parts_unchanged": 54,
+  "unrelated_part_comparisons": {
+    "L_ActiveFrame": "same topology counts, volume, area and bounds",
+    "R_ActiveFrame": "same topology counts, volume, area and bounds",
+    "L_SlimPCBLeadNotch": "same topology counts, volume, area and bounds",
+    "R_SlimPCBLeadNotch": "same topology counts, volume, area and bounds",
+    "L_HotswapSockets": "same topology counts, volume, area and bounds",
+    "R_HotswapSockets": "same topology counts, volume, area and bounds"
+  },
+  "passed": true
+}

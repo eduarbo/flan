@@ -36,7 +36,7 @@ def prepare(print_kit, output):
     files['configuration.json'] = (json.dumps(config, indent=2) + '\n').encode()
     paths = pcb_packages(config)
     paths += [f'firmware/uf2/flan36-{side}.uf2' for side in ('left', 'right', 'right-no-display')]
-    paths += [f'mechanical/revI/coupon-{name}.stl' for name in ('magnet-base', 'magnet-frame', 'm2-thread')]
+    paths += ['mechanical/revI/coupon-m2-thread.stl']
     paths += [f'docs/{name}.md' for name in ('first-build', 'parts', 'build', 'electronics', 'firmware', 'launch')]
     paths += ['LICENSE', 'LICENSES/CC-BY-SA-4.0.txt', 'TRADEMARKS.md']
     for name in paths:
@@ -45,7 +45,7 @@ def prepare(print_kit, output):
         'FLAN36 — PRIMER PROTOTIPO / FIRST PROTOTYPE\n\n'
         'Empieza por docs/first-build.md y docs/parts.md. La aceptación física sigue pendiente.\n'
         'No hay compras realizadas ni perfiles de impresora/G-code calificados.\n'
-        'Imprime una copia de cada cap de samples/ y los tres cupones de mechanical/revI/.\n'
+        'Imprime una copia de cada cap de samples/ y el cupón M2 de mechanical/revI/.\n'
         'Después imprime las placas y comprueba el encaje del switch antes de las demás piezas.\n'
         'printing/ contiene el kit completo y sus licencias, instrucciones, STL y 3MF.\n'
         'hardware/ contiene los trabajos PCB izquierdo y derecho, cada uno con su edición elegida.\n'

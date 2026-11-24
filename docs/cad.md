@@ -21,7 +21,7 @@ The current mechanical source is [`mechanical/revI/Flan36.FCStd`](../mechanical/
 
 The frame is **0.30 mm lower** than the previous 14.8 mm design; this does not reduce the selected keycaps' overall height. The [current display connection](level-stack.md) uses the supplied 5 mm socket and 2 mm header. Heights exclude the feet; the purchased RBS-5BK feet add 1.6 mm externally, while the historical CAD feet are illustrative 1.2 mm envelopes. USB is only 0.045 mm behind the adjacent keycap’s north edge: this is a nominal alignment, not a physical tolerance guarantee.
 
-The local H3 support relief provides **0.25 mm nominal K30 socket clearance** on both halves while preserving the outer contour, floor and stack height. Remaining pilot material measures **1.336 mm left / 1.248 mm right**. [Saved/reopened geometry evidence](../validation/revI-socket-clearance.json); physical fit remains unqualified.
+The local H3 support relief provides **0.25 mm nominal K30 socket clearance** on both halves while preserving the outer contour, floor and stack height. With the 2.1 mm pilots the remaining material measures **1.136 mm left / 1.048 mm right** (it was 1.336 / 1.248 mm with the 1.7 mm pilots; the thinnest post leaves 0.75 mm and took the screw in print). [Relief evidence](../validation/revI-socket-clearance.json) · [current pilot web](../validation/revI-base-supports.json); physical fit remains unqualified.
 
 ## Files
 
@@ -32,7 +32,7 @@ The local H3 support relief provides **0.25 mm nominal K30 socket clearance** on
 - `mechanical/revI/*-frame-*-{body,detail,accent,secondary}.{step,stl}`: registered flush color volumes.
 - `mechanical/revI/*.step`, `*.stl`: individual prototype parts and identified envelopes.
 - `mechanical/revI/*-battery-{adafruit-1570,301230}.stl`: selectable nominal cell envelopes.
-- `mechanical/revI/coupon-*.{step,stl}`: actual magnetic/thread interface samples.
+- `mechanical/revI/coupon-m2-thread.{step,stl}`: the thinnest screw post, H2, with its real pilot.
 - `keycaps/variants/`: all 38 unchanged Choc-stem KLP files, including unqualified study variants.
 - `keycaps/catalog.json`: provenance, actual stem axes, convex envelopes and qualification.
 - `design/configurations/`: default and two sculpted preset examples.
@@ -42,7 +42,30 @@ The local H3 support relief provides **0.25 mm nominal K30 socket clearance** on
 
 Parts retain assembly coordinates. Screw envelopes and nominal engagement are modeled; physical fits, printing orientation and final slicing settings are not qualified. Historical revE/revF/revG/revH sources and receipts remain available for comparison. To rebuild an older viewer, use its historical Git commit; the current shared viewer code targets revI.
 
+## Base after the first printed build
+
+The first printed case (Bambu Lab X2D, 0.4 mm nozzle, PLA) changed three things in the shared base of every size, case style and half:
+
+- **Pilots Ø2.1 mm.** The Ø1.7 mm pilots did not take the M2 screws. In a coupon with pilots from 1.7 to 2.3 mm, the screw cut its own thread in Ø2.1 mm, also in a 3.6 mm post like H2. There is no tapping step. The plate holes stay Ø2.3 mm.
+- **No magnets.** The twelve magnets are gone. The three station posts of the base stay and are open from above as Ø2.4 mm sockets: the display frame will hold on to the display and plug three pins into them. The six published frames are unchanged until that redesign, so their magnet pockets are unused.
+- **Solid posts under the PCB.** They stand between the floor and the board underside, away from the screws, and have no hole: six in Flan36, seven in Flan42 and eight in Flan46 and Flan54. [`design/pcb-supports.json`](../design/pcb-supports.json) holds them for the left half; the right half mirrors x to 160 − x.
+
+`tools/plan_pcb_supports.py` chooses the positions from the routed boards: a post may stand only where nothing hangs below either half (drilled pads, socket, diode and reset bodies, the controller bay, the board edge and its cutouts), and each new post is the free spot that most reduces the board area farther than 13 mm from a screw post or support. `--check` verifies the saved positions against the current boards.
+
+```sh
+/Applications/FreeCAD.app/Contents/Resources/bin/python tools/plan_pcb_supports.py --check
+python3 tools/freecad/run_macos.py tools/freecad/install_base_supports.py \
+  --source mechanical/revI/Flan36.FCStd --output build/base-supports/Flan36.FCStd \
+  --report build/base-supports/installation.json
+```
+
+The installer refuses to overwrite its source. It checks, on all four case styles of both halves, that every pilot is open, that every station socket is open from above with its wall and floor in place, that each post reaches the board underside under solid board and stays at least 0.3 mm from every part below it, and that the only material added is the posts. After saving it reopens both files and compares every other part. [Receipt](../validation/revI-base-supports.json). `build_variant_case.py` then adds each larger size's own posts and checks them against that size's sockets.
+
+Printed fit of the posts, screw grip and cycling are not measured beyond that coupon.
+
 ## All-magnet frame closure
+
+*Historical: superseded by the section above. The magnets are no longer part of the build; their base stations remain as sockets.*
 
 The frame now uses six axial neodymium Ø2 × 4 mm magnets, paired with the six Ø2 × 3 mm base magnets. The pocket geometry, all printable exports and KiCad models are unchanged. Only six native labels and their secondary material/polarity descriptions change; `SteelTarget` object IDs stay stable. The [native identity receipt](../validation/revI-all-magnets-native.json) proves all other XML and opaque native members match commit `881735e`, and the [FreeCAD reopen check](../validation/revI-all-magnets-reopen.json) verifies the saved inserts. Earlier geometry checks remain evidence for the identical geometry, not new physical acceptance.
 

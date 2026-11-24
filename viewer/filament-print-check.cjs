@@ -143,7 +143,7 @@ const read=(file,entry)=>cp.execFileSync('unzip',['-p',file,entry],{encoding:'ut
    // This generic bed has no machine-specific clearance for sequential printing.
    assert.equal((settings.match(/key="print_sequence" value="by layer"/g)||[]).length,slots.size);
    assert(!settings.includes('key="print_sequence" value="by object"'));
-   assert(read(file,'Metadata/Flan/Print-notes.txt').includes('Ø2 × 3 mm magnets per base from above'));
+   const notes=read(file,'Metadata/Flan/Print-notes.txt');assert(notes.includes('Ø2.1 mm pilots')&&!/magnet|im[aá]n|glue|adhesiv/i.test(notes),'the print notes describe the screws and no magnets');
    const frames=[...settings.matchAll(/<object id="\d+"><metadata key="name" value="[^"]*-frame-[^"]*"\/>.*?<\/object>/g)];
    assert.equal(frames.length,2);assert(frames.every(m=>(m[0].match(/<part /g)||[]).length===(mode==='ams'?4:1)));
    await p.waitForFunction(()=>!document.querySelector('#print-plate-plan').hidden);

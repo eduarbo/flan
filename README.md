@@ -2,7 +2,7 @@
 
 # Flan Keyboard
 
-**Homemade, like a good flan.** Flan is an open-source, low-profile wireless split keyboard for DIY builders. All four sizes (36, 42, 46 and 54 keys) use Choc v1 hot-swap switches and ZMK firmware. The digital prototype has interchangeable cases, magnetic display frames, 32 themes and per-key colors. Physical testing is pending.
+**Homemade, like a good flan.** Flan is an open-source, low-profile wireless split keyboard for DIY builders. All four sizes (36, 42, 46 and 54 keys) use Choc v1 hot-swap switches and ZMK firmware. The digital prototype has interchangeable cases, display frames, 32 themes and per-key colors. Physical testing is pending.
 
 [Leer en español](README.es.md)
 
@@ -29,7 +29,7 @@
 Flan is a low-profile wireless split keyboard in development by [Eduardo Ruiz](https://github.com/eduarbo). Its original CAD is designed by Eduardo; Flan36 has five columns and three thumb keys per half.
 
 - **KLP Lamé choices:** all 38 Choc-stem variants catalogued; 28 qualify in at least one position. The explorer checks complete combinations and exports a configuration for FreeCAD.
-- **Magnetic frames:** six Ø2 × 3 mm base magnets pair with six Ø2 × 4 mm frame magnets from existing stock; [polarity and assembly](docs/build.md#magnetic-frame-and-service). Talavera (default), Game Boy, SNES, 2000s Phone, iPod and Hanafuda. Up to four solid colors in flush inlays, with matching rim and key palettes.
+- **Display frames:** each frame rests over its display, loose, while a frame that holds on to the display is redesigned; [frame and service](docs/build.md#display-frame-and-service). Talavera (default), Game Boy, SNES, 2000s Phone, iPod and Hanafuda. Up to four solid colors in flush inlays, with matching rim and key palettes.
 - **Keycap colors:** paint all keys, rows, columns or individual keys; save and share your own palettes.
 - **Free tools:** KiCad for electronics, FreeCAD for the case, StepUp for exchange. Editable source, STEP/STL, offline explorer and GLB included.
 - **Intended hardware:** Choc v1 hot-swap, two nice!nano controllers and two nice!view displays. One display remains the fallback.

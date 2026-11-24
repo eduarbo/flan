@@ -70,7 +70,7 @@
   "sources": [
     {
       "file": "viewer/marketing/content.json",
-      "sha256": "7d94a4729ee196d84e75e9c20deced7fc88a8cc379792dea36ecf7462852ef3b"
+      "sha256": "d86d9754b96bfdf2e2e21b4e51a4d9d7392d8f1e5aa2a3b6d1c90d1f2cfd2a43"
     },
     {
       "file": "viewer/marketing/capture.cjs",
@@ -114,8 +114,8 @@
     },
     {
       "file": "docs/marketing/assets/carousel-en-3.png",
-      "sha256": "94c2d0336176eac9de9da8d6e97bfa57695b9763f979c0d61efb35e69e5e498c",
-      "bytes": 503361
+      "sha256": "04825fd9d858545f344baf204b9986d2a398714c3b35f1363e8b190450c17a55",
+      "bytes": 504861
     },
     {
       "file": "docs/marketing/assets/carousel-en-4.png",
@@ -134,8 +134,8 @@
     },
     {
       "file": "docs/marketing/assets/share-en.png",
-      "sha256": "62b925428c94e2cdc6b71806baae5d3646e1c997f8f17a3637e2ba3a3a6e757e",
-      "bytes": 334764
+      "sha256": "a839034ebd0597bd78ec71d41ff28c13547862e0214e581116f5526d0c5dafbf",
+      "bytes": 334432
     },
     {
       "file": "docs/marketing/assets/square-en.png",
@@ -154,13 +154,13 @@
     },
     {
       "file": "docs/marketing/assets/teaser-en.srt",
-      "sha256": "8a58bb440397d9f1436f6921407c441495915fd37572834e8702423957a30c22",
-      "bytes": 779
+      "sha256": "f8fe78ec9d0799d55109efc7d9476059bb07315d7281ba25cf284c3c57adbc11",
+      "bytes": 786
     },
     {
       "file": "docs/marketing/assets/teaser-en.mp4",
-      "sha256": "e7342e68ef5fb5abc0ee3fb1af5c8de09db16622a6f6d396c6882f6b5368835a",
-      "bytes": 833585
+      "sha256": "5323f9f6090706bdf37fd647e94a9bfca3f5975d18b74edd5b8a754c1f1c4669",
+      "bytes": 835148
     },
     {
       "file": "docs/marketing/assets/carousel-es-1.png",
@@ -174,8 +174,8 @@
     },
     {
       "file": "docs/marketing/assets/carousel-es-3.png",
-      "sha256": "18d318fd09b84a3d8c9d6dfb294d49beeaeb2ed54f2737b6cc8a07e3e6b1cd0d",
-      "bytes": 497614
+      "sha256": "5b0cf93ec0d4dbc31c16c8fdb7c1fd3fd2b9bd39ed4f073883c41a6654a422f9",
+      "bytes": 499125
     },
     {
       "file": "docs/marketing/assets/carousel-es-4.png",
@@ -194,8 +194,8 @@
     },
     {
       "file": "docs/marketing/assets/share-es.png",
-      "sha256": "c69065077d19dcea5206e94db0f7e0738546592d0131d2e1bbedfbca189e2b40",
-      "bytes": 337206
+      "sha256": "df8e6697f77c53cc8bc0e8b7242beecb4f63c1bcd5b923b55e6aba2f5b718379",
+      "bytes": 336604
     },
     {
       "file": "docs/marketing/assets/square-es.png",
@@ -214,13 +214,13 @@
     },
     {
       "file": "docs/marketing/assets/teaser-es.srt",
-      "sha256": "6bfbe398513f8ca346e1b6f2d256164b75d4e53dd59c3e8f2fade5bc1c695510",
-      "bytes": 773
+      "sha256": "2c21623ab52e1f2b1b7a7278b4c3855a7097d795012f307837f42ec00f44221a",
+      "bytes": 777
     },
     {
       "file": "docs/marketing/assets/teaser-es.mp4",
-      "sha256": "8f4f386d7eedcf57a9a0afabc354974dab93ba5af4452b2319b4d99da34df90b",
-      "bytes": 825916
+      "sha256": "4bb220814d5fb212b722fbbf78dcc90d06ec1238192cc87d87c246971e431de8",
+      "bytes": 826227
     },
     {
       "file": "docs/marketing/assets/avatar.png",

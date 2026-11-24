@@ -27,7 +27,7 @@ The complete single-material STL has a continuous plain surface because the inla
 
 ## Access sequence
 
-1. Lift off the magnetic frame.
+1. Lift off the display frame.
 2. Lift the display, male header and sled together from the open-bottom cable reliefs.
 3. Remove the controller to expose the battery connector. The display socket stays on the PCB.
 4. Grip the battery plug housing from above, slide it 5 mm toward the keys, then lift it clear. Release the loose cable bends as needed.

@@ -7,7 +7,7 @@ The current design is a routed digital prototype. [Gerber/drill packages and ord
 The intended sequence is:
 
 1. Use the selected BOM and inspect the delivered components, dimensions and battery polarity.
-2. Print the three magnetic/thread coupons below and three KLP Lamé samples. Check stem fit, return and comfort before printing the full set.
+2. Print the [M2 thread coupon](../mechanical/revI/coupon-m2-thread.stl) and three KLP Lamé samples. Check screw grip, stem fit, return and comfort before printing the full set.
 3. Order the matching left and right prototype PCB packages. Solder the small parts, then sockets/connectors using the heights below; check continuity and polarity before fitting either controller.
 4. Follow the [firmware guide](firmware.md) to flash each half and test all keys of the selected size, combinations, layers and key releases.
 5. Install the supported battery, controller, display and frames without loading the pouch or glass.
@@ -32,26 +32,21 @@ python3 tools/build_variants.py      # needs Shapely
 
 The checker compares all 36 positions/rotations with the original boards. `build_variants.py` regenerates the [family layouts](variants.md) and their drawings in `docs/images/variants/`. `sources/piantor/` contains the original **wired** reference boards, not Flan36’s wireless PCB designs.
 
-## Magnetic frame and service
+## Display frame and service
 
-The frame is cosmetic and removable. The five internal structural screws per half keep the PCB and battery cage secured when the frame is lifted. Its three small locator lips resist sliding; magnets provide attraction. Do not use the frame as a carrying handle before retention is measured.
+The frame is cosmetic and removable. It has no magnets or clips: for now it rests over the display, loose, and a frame that holds on to the display is being redesigned. The five internal structural screws per half keep the PCB and battery cage secured when the frame is lifted. Do not use the frame as a carrying handle.
 
-1. **Try the glue-in samples first.** Print the [base socket](../mechanical/glue-in/revI/coupon-magnet-base.stl) floor down with thin-wall detection enabled for its centering lip, and the [frame socket](../mechanical/glue-in/revI/coupon-magnet-frame.stl) top face down. Their openings face the nozzle and remain accessible after printing. The [M2 thread coupon](../mechanical/revI/coupon-m2-thread.stl) checks the screw fit.
-2. **Dry-fit and mark one attracting pair.** Each base takes three axial Ø2 × 3 mm magnets from above. Each installed frame takes three axial Ø2 × 4 mm magnets from underneath. Use the same exposed pole in every base and the opposite exposed pole in every frame. Check attraction in the assembled position.
-3. **Glue after printing, before installing electronics.** Use a small amount of adhesive compatible with your printed plastic and magnet coating. Seat each magnet against the blind end. Wipe the mating surfaces and let the parts cure separately for the time on the adhesive label. Supermagnete advises against conventional superglue for its coated neodymium magnets. [Manufacturer guidance](https://www.supermagnete.de/eng/Magnet-applications/Create-your-own-glass-magnets)
-4. **Check seating and retention.** The base bore is Ø2.30 mm and the frame bore is Ø2.20 mm. The dry, fully seated magnet faces have a nominal 1.10 mm gap. Try the coupons, then check a full frame for peel, sliding and repeated removal. The physical bond and holding force still need testing.
-
-The [configurator](https://flankbd.com/explore/#build-print) exports glue-in sockets. The original revision I STEP and FreeCAD files retain their enclosed magnet pockets.
-
-5. **Tap and test the M2 pilot:** use an M2 tap in the Ø1.7 mm printed hole, then test the specified screw without bottoming or stripping. Do not assume the screws are self-tapping.
+On the printer this was tested with (Bambu Lab X2D, 0.4 mm nozzle, PLA) the M2 screws cut their own thread in the printed Ø2.1 mm pilots. Print the [M2 thread coupon](../mechanical/revI/coupon-m2-thread.stl) first. If the screw will not start, clear the hole with a 2 mm drill or an M2 tap; if it turns without gripping, reprint the sample with −0.1 mm X-Y hole compensation. Drive each screw straight and stop when the head seats; do not overtighten. Cases printed from files before 2026-11-24 have Ø1.7 mm pilots, which need an M2 tap, and magnet pockets that are no longer used.
 
 For the nominal assembly, seat the open-bottom locator, cell directly on the **1.4 mm case floor**, and cage before lowering the PCB over the cell. The cage’s wider feet remain below the board. Install the three plate spacers and structural screws, then the removable modules and frame. Do not compress the pouch. Actual lead exit and strain relief remain to be qualified.
 
-Use **three Ø2 × 4 mm axial magnets per frame**, paired with the three Ø2 × 3 mm base magnets. Both halves use twelve magnets from existing stock; each additional pair of frames needs six more Ø2 × 4 mm magnets. Fit the **eight Essentra RBS-5BK adhesive feet** on the external case underside, clear of reset access and screw holes. Their 1.6 mm height changes the external height only, not the internal assembly datums.
+Fit the **eight Essentra RBS-5BK adhesive feet** on the external case underside, clear of reset access and screw holes. Their 1.6 mm height changes the external height only, not the internal assembly datums.
+
+**Battery plug and switch.** JST PH plugs are not wired to one standard. The Typeractive 301230 measured on 2026-11-23 arrived reversed for J1 (−3.95 V between pad 1 and pad 2); its two wires were swapped in the plug. Measure every battery before connecting it: pad 1 of J1 is BAT+. SW1 connects the battery when its lever is toward its pad 1: toward the USB end on the right half, confirmed on a built keyboard (4.20 V on, 0 V off), and toward the thumb keys on the left half, from the board layout.
 
 Use the selected **Olimex KAPTON-TAPE10MM** for local electrical isolation, keeping connector contacts accessible and avoiding pressure on the battery pouch. The printed cage provides retention. The **Adafruit 4199 USB-C to USB-C data cable** connects directly to a USB-C computer for firmware transfer and charging; one cable serves both halves in sequence. Check that the plug seats fully without forcing the case.
 
-For service, power off and disconnect USB first. Lift the magnetic frame and use the [inherited nominal removal sequence](slim-flush.md) to expose and unplug the battery connector. Remove the caps, then the three plate screws and plate/Level upper shell, then the two short PCB screws and PCB before withdrawing the captured cage. The magnetic cover alone does not release the battery. Cable flex, connector grip and actual removal still need a physical trial. Reset is operated from the underside with a small tool through the recessed access hole.
+For service, power off and disconnect USB first. Lift the display frame and use the [inherited nominal removal sequence](slim-flush.md) to expose and unplug the battery connector. Remove the caps, then the three plate screws and plate/Level upper shell, then the two short PCB screws and PCB before withdrawing the captured cage. Lifting the frame alone does not release the battery. Cable flex, connector grip and actual removal still need a physical trial. Reset is operated from the underside with a small tool through the recessed access hole.
 
 The [historical support study](slim-mount-study.md) records why the earlier closed cable tunnels prevented display/sled removal. The [current Level stack](level-stack.md) retains the open-bottom support relief and lowered battery routes. The supplied 7.00 mm display connector puts the glass at **14.30 mm**, recessed 0.20 mm beneath the **14.50 mm** frame/shell plane. It supersedes the lower Samtec study without changing the battery, controller, key positions or PCB. Digital checks do not qualify bending forces or real terminal tolerances.
 
@@ -62,10 +57,10 @@ No item below has been physically accepted. Record the supplied part number, mea
 | Test | Acceptance evidence |
 |---|---|
 | Actual parts | Selected Adafruit 1570 envelope, protection wrapping, lead exit and polarity; specified controller/display connector seating and installed heights |
-| Printed interfaces | Choc stem/return, screw engagement, glued base/frame magnet retention and paired polarity, frame peel/sliding and battery service without pouch or glass loading |
+| Printed interfaces | Choc stem/return, screw grip in the Ø2.1 mm pilots, frame fit over the display and battery service without pouch or glass loading |
 | Bare assembly | Continuity, no power short, diode orientation and all switches of the selected size without stuck/reversed keys |
 | Firmware and displays | Correct half images, four layers, simultaneous keys, both screens or selected single-screen option, reset and wake recovery |
 | Wireless operation | Pairing, reconnect after power cycle, sleep/wake and usable range in the complete case |
 | Charging and power | Correct cell charge limit and polarity, SW1 behavior, measured active/idle/sleep current and no abnormal heating |
 
-The next physical step is to measure the exact connector pair and supplied cell, then print the small fit/retention coupons. The source and firmware candidates can be revised from those results without changing the key layout.
+The next physical step is to measure the exact connector pair and supplied cell, then print the M2 thread coupon and the keycap samples. The source and firmware candidates can be revised from those results without changing the key layout.

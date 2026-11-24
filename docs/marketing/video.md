@@ -16,7 +16,7 @@ Grabar con la voz real de Eduardo, ajustando el ritmo a los 30 segundos. El teas
 |---|---|---|---|
 | Apertura | Eduardo o render completo, con rótulo de prototipo | «Quería un teclado pequeño que pudiera construir y personalizar. Este es Flan.» | “I wanted a small keyboard I could build and make my own. This is Flan.” |
 | Distribución | Cambiar 36 → 42 → 46 → 54 en el sitio | «El diseño tiene cuatro tamaños. Flan36 tiene 18 teclas por mitad.» | “There are four sizes. Flan36 has 18 keys on each half.” |
-| Apariencia | Talavera/Hanafuda, un tema, un color por tecla | «Puedo elegir carcasa, marco magnético y colores por tecla. Esta combinación se puede guardar y compartir.» | “I can choose the case, magnetic frame and individual key colors, then save or share the combination.” |
+| Apariencia | Talavera/Hanafuda, un tema, un color por tecla | «Puedo elegir carcasa, marco de pantalla y colores por tecla. Esta combinación se puede guardar y compartir.» | “I can choose the case, display frame and individual key colors, then save or share the combination.” |
 | Construcción | Abrir Parts, separar capas y abrir Build | «Aquí se ven las piezas, la lista de compra y los archivos. Las fuentes están disponibles para quien quiera explorar el diseño o construir un prototipo.» | “Here are the parts, shopping list and files. The sources are available to explore or build a prototype.” |
 | Cierre | Dominio legible, una sola invitación | «Puedes probar tu diseño en flankbd.com.» | “Try your design at flankbd.com.” |
 

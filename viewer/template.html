@@ -6,25 +6,25 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'wasm-unsafe-eval'; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="theme-color" content="#e2dcee">
 <title>Flan Keyboard · Explore in 3D</title>
-<meta name="description" content="Design a Flan keyboard in 3D: choose the size, theme, case, keycaps and magnetic frame, inspect every part, then get the shopping list, PCB files, print kit and firmware for a prototype build.">
+<meta name="description" content="Design a Flan keyboard in 3D: choose the size, theme, case, keycaps and display frame, inspect every part, then get the shopping list, PCB files, print kit and firmware for a prototype build.">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://flankbd.com/explore/">
 <meta property="og:site_name" content="Flan Keyboard">
 <meta property="og:title" content="Flan Keyboard · Explore in 3D">
-<meta property="og:description" content="Design a Flan keyboard in 3D: choose the size, theme, case, keycaps and magnetic frame, inspect every part, then get the shopping list, PCB files, print kit and firmware for a prototype build.">
+<meta property="og:description" content="Design a Flan keyboard in 3D: choose the size, theme, case, keycaps and display frame, inspect every part, then get the shopping list, PCB files, print kit and firmware for a prototype build.">
 <meta property="og:image" content="https://flankbd.com/assets/home-og-__OG_VERSION__.png">
 <meta property="og:image:secure_url" content="https://flankbd.com/assets/home-og-__OG_VERSION__.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Flan36 in purple and lime with EVA-01 theme, Color rim case and SNES / 2000s Phone magnetic frames. CAD render; physical tests pending.">
+<meta property="og:image:alt" content="Flan36 in purple and lime with EVA-01 theme, Color rim case and SNES / 2000s Phone display frames. CAD render; physical tests pending.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://flankbd.com/explore/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Flan Keyboard · Explore in 3D">
-<meta name="twitter:description" content="Design a Flan keyboard in 3D: choose the size, theme, case, keycaps and magnetic frame, inspect every part, then get the shopping list, PCB files, print kit and firmware for a prototype build.">
+<meta name="twitter:description" content="Design a Flan keyboard in 3D: choose the size, theme, case, keycaps and display frame, inspect every part, then get the shopping list, PCB files, print kit and firmware for a prototype build.">
 <meta name="twitter:image" content="https://flankbd.com/assets/home-og-__OG_VERSION__.png">
-<meta name="twitter:image:alt" content="Flan36 in purple and lime with EVA-01 theme, Color rim case and SNES / 2000s Phone magnetic frames. CAD render; physical tests pending.">
+<meta name="twitter:image:alt" content="Flan36 in purple and lime with EVA-01 theme, Color rim case and SNES / 2000s Phone display frames. CAD render; physical tests pending.">
 <style>/*__FONTS__*//*__STYLE__*/</style>
 <style id="filament-reel-style">/*__FILAMENT_REEL__*/</style>
 </head>
@@ -87,7 +87,7 @@
   <div id="inspector" class="inspector" tabindex="-1">
     <section id="panel-inspect" hidden aria-labelledby="parts-title">
       <h2 id="parts-title" class="sr-only" data-t="parts.title">Components</h2><p id="status" class="lab" role="status" data-t="parts.loading">Loading geometry…</p>
-      <div class="component-presets" role="group" aria-label="Component previews" data-t-label="presets"><button id="inside" aria-pressed="false" data-t="preset.inside">Inside</button><button id="stack" aria-pressed="false" data-t="preset.stack">Stack</button><button id="locate-magnets" aria-pressed="false" data-t="preset.magnets">Magnets</button></div>
+      <div class="component-presets" role="group" aria-label="Component previews" data-t-label="presets"><button id="inside" aria-pressed="false" data-t="preset.inside">Inside</button><button id="stack" aria-pressed="false" data-t="preset.stack">Stack</button></div>
       <nav class="directory" aria-label="Components" data-t-label="parts.title"><div id="layers" tabindex="0" aria-label="Component directory" data-t-label="directory"></div></nav>
     </section>
     <section id="selection" class="selection" role="region" aria-live="polite" aria-label="Selected component" data-t-label="selection" hidden>
@@ -210,11 +210,11 @@
   </section>
   <section id="panel-about" aria-labelledby="about-title" hidden>
     <p class="lab" data-t="about.by">Designed by Eduardo Ruiz</p><h2 id="about-title" class="title about-title" data-t="about.claim">Homemade, like a good flan.</h2>
-    <p class="about-intro" data-t="about.intro">Flan is an original open-source wireless split keyboard in four sizes, with interchangeable cases and flush magnetic display frames.</p>
+    <p class="about-intro" data-t="about.intro">Flan is an original open-source wireless split keyboard in four sizes, with interchangeable cases and flush display frames.</p>
     <a class="support" href="https://ko-fi.com/eduarbo" target="_blank" rel="noopener" data-t="about.kofi">Support Flan on Ko-fi ↗</a>
     <div class="spec-strip"><div><strong>36</strong><span data-t="about.keys">keys in Flan36</span></div><div><strong>2</strong><span data-t="about.halves">wireless halves</span></div><div><strong>4</strong><span data-t="about.cases">case styles</span></div></div>
     <section class="content-card"><h3 class="lab" data-t="about.original">An original design</h3><p data-t="about.design">The keyboard and its CAD are designed by Eduardo Ruiz. It is inspired by Piantor by beekeeb and keeps its 36 key positions and angles; Eduardo designed the wireless PCBs, cases and frames and wrote the ZMK configurations and keymaps.</p><p data-t="about.libraries">Keycap meshes and some component models come from credited third-party libraries.</p><button id="credits" class="text-action" data-t="about.credits">Credits &amp; licenses <span aria-hidden="true">↗</span></button></section>
-    <details class="option-group"><summary data-t="about.status">Build status &amp; dimensions</summary><div class="notes"><p data-t="about.prototype">Routed digital prototype. PCB DRC, ERC and schematic parity checks pass. Physical assembly and hardware operation still need validation.</p><dl class="measurements"><div><dt data-t="about.bay">Electronics bay</dt><dd><span data-measurement="bay_width_mm"></span> mm</dd></div><div><dt data-t="about.roof">Frame roof</dt><dd><span data-measurement="cover_top_mm"></span> mm</dd></div><div><dt data-t="about.plate">Plate height</dt><dd><span data-measurement="plate_top_mm"></span> mm</dd></div></dl><p data-t="about.heights">Heights above the base, without feet. Magnetic frames, printed threads, cables and contacts require physical tests. Component models combine library CAD and nominal reconstructions.</p></div></details>
+    <details class="option-group"><summary data-t="about.status">Build status &amp; dimensions</summary><div class="notes"><p data-t="about.prototype">Routed digital prototype. PCB DRC, ERC and schematic parity checks pass. Physical assembly and hardware operation still need validation.</p><dl class="measurements"><div><dt data-t="about.bay">Electronics bay</dt><dd><span data-measurement="bay_width_mm"></span> mm</dd></div><div><dt data-t="about.roof">Frame roof</dt><dd><span data-measurement="cover_top_mm"></span> mm</dd></div><div><dt data-t="about.plate">Plate height</dt><dd><span data-measurement="plate_top_mm"></span> mm</dd></div></dl><p data-t="about.heights">Heights above the base, without feet. Printed threads, cables and contacts require physical tests. Component models combine library CAD and nominal reconstructions.</p></div></details>
     <div class="resource-links"><a href="https://github.com/eduarbo/flan/blob/main/components/README.md"><span data-t="about.models">Component models &amp; dimensions</span><span aria-hidden="true">↗</span></a><a href="https://github.com/eduarbo/flan/blob/main/docs/level-stack.md"><span data-t="about.stack">Stack &amp; frame construction</span><span aria-hidden="true">↗</span></a><a href="https://github.com/eduarbo/flan"><span data-t="about.source">Source repository</span><span aria-hidden="true">↗</span></a></div>
   </section>
   <button id="go-build" class="build-cta" data-t="build.cta">Build this keyboard →</button>

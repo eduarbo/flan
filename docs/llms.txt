@@ -9,7 +9,7 @@ Key facts:
 - Sizes: Flan36 (3 x 5 + 3 thumb keys per half), Flan42 (adds an outer pinky column), Flan46 (adds a number row), Flan54 (both).
 - Switches: Kailh Choc v1 low-profile, in hot-swap sockets.
 - Electronics: one nice!nano v2 controller per half, ZMK firmware with compiled UF2 files, Bluetooth Low Energy or USB, a nice!view display on each half (the right one is optional).
-- Case: 3D-printed in four styles (Level, Solid, Color rim, Terrace), with six interchangeable magnetic display frames (Talavera, Game Boy, SNES, 2000s Phone, iPod, Hanafuda). Frame and theme names that refer to other products only describe a look; Flan is not affiliated with their owners.
+- Case: 3D-printed in four styles (Level, Solid, Color rim, Terrace), with six interchangeable display frames (Talavera, Game Boy, SNES, 2000s Phone, iPod, Hanafuda). Frame and theme names that refer to other products only describe a look; Flan is not affiliated with their owners.
 - Looks: 32 colour themes, per-key colours and printable KLP Lame keycaps.
 - Tools: a 3D explorer in the browser where you choose a design and get its shopping list, PCB files, print kit, firmware and build guide. Sources are KiCad and FreeCAD files.
 - Not measured yet: battery life, wireless reliability, printed fit, typing comfort.

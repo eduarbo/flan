@@ -35,11 +35,11 @@ All decorative colors finish at the same roof height. The selected KLP Lamé cap
 
 The [historical support study](slim-mount-study.md) retains its original rejected candidates. Integrating washers or saddles reduces loose parts but gave **zero height reduction**. The current design keeps these supports independently replaceable.
 
-### Magnetic frame, independent structure
+### Display frame, independent structure
 
-Three captive **Ø2 × 3 mm axial magnets** in the base attract three captive **Ø2 × 4 mm axial magnets** in each frame. Both halves use twelve magnets from existing stock; each additional pair of frames needs six more Ø2 × 4 mm magnets. The printed pockets and insert envelopes are unchanged. Shallow guides locate the cover; it lifts vertically. The frame carries no battery or display load. Five internal M2 fasteners per half retain the plate/PCB independently, with no added perimeter lobes. Three use 6 mm shafts; the two hidden under the frame use 4 mm shafts.
+The display frame is a removable cover that lifts vertically. It carries no battery or display load and has no magnets: for now it rests over the display, loose, and a frame that holds on to the display is being redesigned. Five internal M2 fasteners per half retain the plate/PCB independently, with no added perimeter lobes. Three use 6 mm shafts; the two hidden under the frame use 4 mm shafts.
 
-The magnets are enclosed by a pause-and-insert print sequence. Check every pair's attraction in its final assembled orientation before capture. Force through the nominal **0.9 mm gap**, north-edge peel, print capture and thermal qualification of the actual magnet stock remain physical tests. [Assembly sequence and coupons](build.md#magnetic-frame-and-service).
+On the tested printer the screws cut their own thread in the printed Ø2.1 mm pilots, so the guide has no tapping step; the M2 sample is printed first. Thread strength and cycling remain physical tests. [Assembly sequence and coupon](build.md#display-frame-and-service).
 
 ## One or two displays
 
@@ -49,7 +49,7 @@ nice!view is a reflective memory LCD. OLED improves dark-room visibility but use
 
 ## Modularity
 
-Switch sockets, removable controller/display connectors, a battery connector, magnetic covers and independent screws allow servicing after initial soldering. The frames are separate from the display support. Service electronics with power off and USB disconnected; removable connectors are not a proposal for live module hot-plugging.
+Switch sockets, removable controller/display connectors, a battery connector, lift-off display frames and independent screws allow servicing after initial soldering. The frames are separate from the display support. Service electronics with power off and USB disconnected; removable connectors are not a proposal for live module hot-plugging.
 
 ## CAD views
 

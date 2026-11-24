@@ -39,7 +39,7 @@ for(const asset of selectedParts(configuration,registry,'both','complete')){
   }
   if((asset.id.includes('-case-')&&asset.id.endsWith('-plate')||asset.id.includes('-frame-'))&&!exported[asset.id])throw Error('Missing modified printable: '+asset.id);
 }
-registry.joining.case='Common-M2 variant: 3 M2x6 + 2 M2x4 machine screws per half, pitch 0.4 mm; head diameter <=4 mm and height <=2 mm. Tap the unchanged 1.7 mm pilots to M2. Use the 1.5 mm Allen key specified for the selected DIN 912 screws. No countersunk or self-tapping screws';
+registry.joining.case='Common-M2 variant: 3 M2x6 + 2 M2x4 machine screws per half, pitch 0.4 mm; head diameter <=4 mm and height <=2 mm. The screws cut their own thread in the printed 2.1 mm pilots on the tested printer; check it on the M2 sample first. Use the 1.5 mm Allen key specified for the selected DIN 912 screws. No countersunk or self-tapping screws';
 registry.joining.profile=spec;
 global.requestAnimationFrame=fn=>setImmediate(fn);
 const plan=keycapPlan(configuration,scene.catalog,[],'both');

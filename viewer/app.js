@@ -24,7 +24,7 @@ import {printerModels,printerFor} from './printer-presets.js';
 import {commonPartSpool,setupOf,mapThemeToSpools} from './filament-swatches.js';
 import {enhanceColorInput} from './color-input.js';
 import {createKeycapColors} from './keycap-colors.js';
-import {createExplorer,partInfo,matchesPart,isMagnet} from './explorer.js';
+import {createExplorer,partInfo,matchesPart} from './explorer.js';
 import {createPreviewRenderer} from './previews.js';
 import {applyFramePreset,createFrameFinishes,framePalette,finishes} from './finishes.js';
 import {pageTokens} from './home/tokens.js';
@@ -432,7 +432,6 @@ function sync(){
   const presetMatches=keys=>hiddenObjects.size===0&&Object.entries(state.layers).every(([key,shown])=>shown===keys.includes(key));
   $('inside').setAttribute('aria-pressed',String(state.explode===0&&presetMatches(['pcb','battery','mcu','display','connectors','supports'])));
   $('stack').setAttribute('aria-pressed',String(state.explode===.55&&presetMatches(['battery','mcu','display','supports','connectors'])));
-  $('locate-magnets').setAttribute('aria-pressed',String(explorer?.selected?.collection==='magnets'));
   render();
 }
 function reset(){
@@ -505,7 +504,7 @@ for(const button of document.querySelectorAll('button[data-mode]'))button.onclic
 for(const button of document.querySelectorAll('[data-panel]'))button.onclick=()=>{rememberPanelScroll();activePanel=button.dataset.panel;showWorkspace();revealPanel(activePanel);};
 $('editor-tabs').addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;const list=[...$('editor-tabs').querySelectorAll('[data-panel]')],at=list.indexOf(document.activeElement);if(at<0)return;e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?list.length-1:(at+(e.key==='ArrowRight'?1:-1)+list.length)%list.length;list[next].click();list[next].focus();});
 function editPart(ref){
-  if(!ref||!editablePanel[ref.group]||ref.collection)return;
+  if(!ref||!editablePanel[ref.group])return;
   setTune(editablePanel[ref.group],true);
   if(ref.group==='lid')setFrameSide(ref.side||'both');
   else if(ref.group==='keycaps')keycapColors?.focus(ref.side,ref.key);
@@ -559,12 +558,6 @@ $('reset').onclick=()=>{state.view='iso';sync();fit(directions.iso);$('view-feed
 $('fit').onclick=()=>{fit();$('view-feedback').textContent=t(objects.some(o=>o.visible)?'feedback.fit':'feedback.empty');};
 $('inside').onclick=()=>{reset();for(const k of ['base','plate','lid','keycaps','switches','fasteners'])state.layers[k]=false;sync();fit();};
 $('stack').onclick=()=>{reset();state.explode=.55;for(const k of groups)state.layers[k]=['battery','mcu','display','supports','connectors'].includes(k);sync();fit();};
-$('locate-magnets').onclick=()=>{
-  hiddenObjects.clear();state.half='both';state.explode=.65;state.view='iso';
-  for(const k of groups)state.layers[k]=['base','lid','fasteners'].includes(k);
-  for(const o of objects)if(o.userData.group==='fasteners'&&!isMagnet(o))hiddenObjects.add(o.userData.objectIndex);
-  sync();fit(directions.iso);explorer.select({group:'fasteners',collection:'magnets'});
-};
 $('credits').onclick=()=>{$('licenses').showModal();$('licenses').querySelector('.dialog-body').scrollTop=0;};
 $('close-credits').onclick=()=>$('licenses').close();$('licenses').addEventListener('close',()=>$('credits').focus({preventScroll:true}));
 canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();$('error').hidden=false;$('error').textContent=t('msg.contextLost');});
@@ -1120,7 +1113,7 @@ function refreshPartVisibility(){
   }
 }
 function populatePartVisibility(ref){
-  const list=$('part-visibility-list');list.replaceChildren();const matching=objects.filter(o=>ref.collection==='magnets'?isMagnet(o):o.userData.group===ref.group&&(!ref.side||o.userData.side===ref.side));
+  const list=$('part-visibility-list');list.replaceChildren();const matching=objects.filter(o=>o.userData.group===ref.group&&(!ref.side||o.userData.side===ref.side));
   $('individual-count').textContent=String(matching.length);
   for(const o of matching){
     const row=document.createElement('div');row.className='part-row individual-row';
@@ -1142,7 +1135,7 @@ function populatePartVisibility(ref){
     const solo=document.createElement('button');solo.type='button';solo.className='part-solo';solo.textContent=t('solo');solo.dataset.soloObject=String(o.userData.objectIndex);solo.dataset.name=text.textContent;solo.disabled=o.userData.installed===false;solo.onclick=()=>toggleSolo(current);
     row.append(text,label,solo);list.append(row);
   }
-  $('frame-install-options').hidden=ref.group!=='lid'&&ref.collection!=='magnets';
+  $('frame-install-options').hidden=ref.group!=='lid';
   refreshPartVisibility();
 }
 // Hide or show every piece of a selection without touching the rest of the assembly.
@@ -1173,21 +1166,20 @@ function toggleSolo(ref){
 $('show-all').onclick=showAll;
 for(const side of ['left','right'])$('install-frame-'+side).onchange=e=>{const cfg=copy(configuration);cfg.cases[side].cover=e.target.checked;applyConfiguration(cfg);};
 function describeSelection(ref){
-  const magnets=ref.collection==='magnets';
-  $('selection-meta').textContent=magnets?t('sel.magnets.meta'):(ref.side?t('sel.half',{side:t('half.'+ref.side)}):t('sel.both'))+(ref.key?' / '+(objects[ref.objectIndex]?.userData.ref||ref.key):'');
-  $('selection-title').textContent=magnets?t('sel.magnets.title'):partInfo(ref.group).name;
-  $('selection-info').textContent=magnets?t('sel.magnets.info'):partInfo(ref.group).info;
+  $('selection-meta').textContent=(ref.side?t('sel.half',{side:t('half.'+ref.side)}):t('sel.both'))+(ref.key?' / '+(objects[ref.objectIndex]?.userData.ref||ref.key):'');
+  $('selection-title').textContent=partInfo(ref.group).name;
+  $('selection-info').textContent=partInfo(ref.group).info;
 }
 explorer=createExplorer({scene,camera,canvas,objects,requestRender:render,
   onSelect(ref){
     if(!detailRef){rememberPanelScroll();detailReturn={mode:activeMode,panel:activePanel,scroll:$('inspector').scrollTop,open:panelOpen,ratio:panelSizes.get(sizeKey())??defaultPanelRatio(),opener:document.activeElement};}
     detailRef=ref;
     describeSelection(ref);populatePartVisibility(ref);
-    $('edit-selection').hidden=!editablePanel[ref.group]||Boolean(ref.collection);
+    $('edit-selection').hidden=!editablePanel[ref.group];
     for(const button of document.querySelectorAll('.part-item'))button.setAttribute('aria-expanded',String(button.dataset.group===ref.group));
     if(portraitLayout.matches&&(panelSizes.get(sizeKey())??defaultPanelRatio())*panelBounds().total<=77)panelSizes.set(sizeKey(),.48);
-    showWorkspace();setPanelOpen(true,{opener:panelOpen?undefined:canvas});$('locate-magnets').setAttribute('aria-pressed',String(ref.collection==='magnets'));$('inspector').scrollTop=0;$('panel-back').focus({preventScroll:true});
-  },onClear(){$('locate-magnets').setAttribute('aria-pressed','false');if(detailRef)leaveDetail();for(const button of document.querySelectorAll('.part-item'))button.setAttribute('aria-expanded','false');}
+    showWorkspace();setPanelOpen(true,{opener:panelOpen?undefined:canvas});$('inspector').scrollTop=0;$('panel-back').focus({preventScroll:true});
+  },onClear(){if(detailRef)leaveDetail();for(const button of document.querySelectorAll('.part-item'))button.setAttribute('aria-expanded','false');}
 });
 $('load-trigger').onclick=()=>$('load-config').click();
 function downloadJSON(){const url=URL.createObjectURL(new Blob([JSON.stringify(configuration,null,2)+'\n'],{type:'application/json'})),link=document.createElement('a');link.href=url;link.download=($('design-name').value.trim().replace(/[^a-z0-9_-]+/gi,'-').slice(0,60)||'Flan36-config')+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}

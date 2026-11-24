@@ -6,11 +6,11 @@ Borradores preparados; no publicados ni enviados. Origen: `viewer/marketing/copy
 
 ### Reddit / comunidad · versión en español
 
-**[ad] Flan: un teclado dividido de código abierto con marcos magnéticos**
+**[ad] Flan: un teclado dividido de código abierto con marcos de pantalla intercambiables**
 
 Soy Eduardo, el diseñador de Flan.
 
-Es un teclado dividido de perfil bajo, con cuatro distribuciones: 36, 42, 46 y 54 teclas. Quería que su apariencia también fuera parte del proyecto: cuatro carcasas, seis diseños de marco magnético para las pantallas, 31 temas y colores por tecla. El explorador 3D permite probar una combinación, mirar sus piezas y descargar los archivos del prototipo.
+Es un teclado dividido de perfil bajo, con cuatro distribuciones: 36, 42, 46 y 54 teclas. Quería que su apariencia también fuera parte del proyecto: cuatro carcasas, seis diseños de marco intercambiable para las pantallas, 31 temas y colores por tecla. El explorador 3D permite probar una combinación, mirar sus piezas y descargar los archivos del prototipo.
 
 Está diseñado para switches Choc v1 con sockets hot-swap, controladores nice!nano v2, ZMK y pantallas nice!view. Hay fuentes de KiCad y FreeCAD, Gerbers, archivos de impresión y firmware compilado. Flan36 conserva las posiciones de teclas de Piantor y usa keycaps KLP Lamé; los créditos están en el repositorio.
 
@@ -27,7 +27,7 @@ Uso: Usa esta versión en comunidades de habla hispana que permitan proyectos. P
 
 **Hazlo tuyo. Este es Flan.**
 
-Este es Flan, un teclado dividido y de código abierto que estoy construyendo: cuatro tamaños, marcos magnéticos para las pantallas y una apariencia que puedes hacer tuya. Desliza para ver las distribuciones y las capas.
+Este es Flan, un teclado dividido y de código abierto que estoy construyendo: cuatro tamaños, marcos de pantalla intercambiables y una apariencia que puedes hacer tuya. Desliza para ver las distribuciones y las capas.
 
 Explora el modelo CAD y descarga los archivos de código abierto en flankbd.com.
 
@@ -43,7 +43,7 @@ Uso: Sube carousel-es-1 a carousel-es-6, en orden. Coloca flankbd.com como enlac
 
 **Flan en seis escenas**
 
-Un teclado dividido para hacerlo tuyo. Este es Flan: archivos abiertos, cuatro tamaños y marcos magnéticos para las pantallas.
+Un teclado dividido para hacerlo tuyo. Este es Flan: archivos abiertos, cuatro tamaños y marcos de pantalla intercambiables.
 
 El modelo CAD muestra cómo encajan la carcasa, las teclas y los marcos de pantalla.
 
@@ -59,7 +59,7 @@ Uso: Archivo: teaser-es.mp4, vertical 1080 × 1920, 30 segundos y sin audio; el 
 
 **Flan: así diseñé mi primer teclado dividido de código abierto**
 
-Soy Eduardo y este es Flan: un diseño de teclado dividido y de perfil bajo, con cuatro tamaños y marcos magnéticos. En el explorador 3D puedes comparar las distribuciones y separar las capas de cada mitad.
+Soy Eduardo y este es Flan: un diseño de teclado dividido y de perfil bajo, con cuatro tamaños y marcos de pantalla intercambiables. En el explorador 3D puedes comparar las distribuciones y separar las capas de cada mitad.
 
 Explora: https://flankbd.com/
 Fuentes, créditos y guía: https://github.com/eduarbo/flan
@@ -78,7 +78,7 @@ Uso: Portada: youtube-es.png. El guion para grabar el video largo está en video
 
 **Este es Flan**
 
-Hola, soy Eduardo. Estoy diseñando Flan, un teclado dividido de código abierto con carcasas personalizables y marcos magnéticos para las pantallas.
+Hola, soy Eduardo. Estoy diseñando Flan, un teclado dividido de código abierto con carcasas personalizables y marcos de pantalla intercambiables.
 
 Puedes explorar el modelo CAD y descargar los archivos en https://flankbd.com/. ¿Qué distribución elegirías?
 
@@ -90,9 +90,9 @@ Uso: Borrador para el espacio de proyectos autorizado por cada grupo. No se ha v
 
 **Flan: un teclado abierto con marcos de pantalla intercambiables**
 
-Hola, soy Eduardo Ruiz, el diseñador de Flan. Es un teclado dividido de código abierto con cuatro tamaños, carcasas imprimibles y marcos magnéticos para las pantallas. Tiene un explorador 3D para personalizarlo y descargar los archivos del prototipo.
+Hola, soy Eduardo Ruiz, el diseñador de Flan. Es un teclado dividido de código abierto con cuatro tamaños, carcasas imprimibles y marcos de pantalla intercambiables. Tiene un explorador 3D para personalizarlo y descargar los archivos del prototipo.
 
-El kit de medios incluye renders CAD de los cuatro tamaños, las carcasas imprimibles y los marcos magnéticos.
+El kit de medios incluye renders CAD de los cuatro tamaños, las carcasas imprimibles y los marcos de pantalla intercambiables.
 
 Proyecto: https://flankbd.com/
 Fuentes: https://github.com/eduarbo/flan
@@ -128,11 +128,11 @@ Uso: Úsala cuando alguien interprete la presentación como un producto terminad
 
 ### Reddit · r/ErgoMechKeyboards
 
-**[ad] Flan: an open-source split keyboard with magnetic display frames**
+**[ad] Flan: an open-source split keyboard with interchangeable display frames**
 
 I’m Eduardo, the designer of Flan.
 
-Flan is a low-profile split keyboard with four layouts: 36, 42, 46 and 54 keys. I wanted the appearance to be something you can change as part of the build: four case styles, six magnetic display-frame designs, 31 themes and per-key colors. The browser explorer lets you try a combination, inspect its parts and download the corresponding prototype files.
+Flan is a low-profile split keyboard with four layouts: 36, 42, 46 and 54 keys. I wanted the appearance to be something you can change as part of the build: four case styles, six interchangeable display-frame designs, 31 themes and per-key colors. The browser explorer lets you try a combination, inspect its parts and download the corresponding prototype files.
 
 The intended hardware is Choc v1 hot-swap, nice!nano v2 controllers, ZMK and nice!view displays. Editable KiCad and FreeCAD sources, Gerbers, print files and compiled firmware are available. Flan36 follows the Piantor key positions; keycaps use KLP Lamé. Credits and licenses are in the repository.
 
@@ -149,7 +149,7 @@ Uso: Prepared draft. Apply the vendor flair for this promotional post. The verif
 
 **Make it yours. Meet Flan.**
 
-This is Flan, an open-source split keyboard I’m building: four sizes, magnetic display frames and a look you can make your own. Swipe to see the layouts and the layers.
+This is Flan, an open-source split keyboard I’m building: four sizes, interchangeable display frames and a look you can make your own. Swipe to see the layouts and the layers.
 
 Explore the CAD model and download the open-source files at flankbd.com.
 
@@ -165,7 +165,7 @@ Uso: Use carousel-en-1 through carousel-en-6, in order. The caption URL is plain
 
 **Flan in six frames**
 
-A split keyboard you can make your own. This is Flan: open-source files, four sizes and magnetic display frames.
+A split keyboard you can make your own. This is Flan: open-source files, four sizes and interchangeable display frames.
 
 The CAD model shows how the case, keys and display frames fit together.
 
@@ -181,7 +181,7 @@ Uso: Upload teaser-en.mp4: 1080 × 1920, 30 seconds, silent, text already visibl
 
 **Flan: designing my first open-source split keyboard**
 
-I’m Eduardo, and this is Flan: an open-source, low-profile split keyboard design with four sizes and magnetic display frames. The 3D explorer lets you compare layouts and take each half apart.
+I’m Eduardo, and this is Flan: an open-source, low-profile split keyboard design with four sizes and interchangeable display frames. The 3D explorer lets you compare layouts and take each half apart.
 
 Explore: https://flankbd.com/
 Source, credits and build guide: https://github.com/eduarbo/flan
@@ -200,7 +200,7 @@ Uso: Use youtube-en.png for the design-video thumbnail. The longer video is a re
 
 **Meet Flan**
 
-Hi, I’m Eduardo and I’m sharing a keyboard I designed: Flan, an open-source split with customizable cases and magnetic display frames.
+Hi, I’m Eduardo and I’m sharing a keyboard I designed: Flan, an open-source split with customizable cases and interchangeable display frames.
 
 Explore the CAD model and download the files at https://flankbd.com/. Which layout would you choose?
 
@@ -210,13 +210,13 @@ Uso: Use only in a group whose rules permit project promotion. Group access and 
 
 ### KBD.news · prepared editorial pitch
 
-**Flan: open-source split keyboard with interchangeable magnetic display frames**
+**Flan: open-source split keyboard with interchangeable display frames**
 
 Hi, I’m Eduardo Ruiz, the designer of Flan. I’m sharing an open-source keyboard project that may fit your prototype/design coverage.
 
-Flan combines four split layouts (36/42/46/54 keys), four printable case styles and six magnetic display-frame designs with a browser-based 3D explorer. The source includes KiCad, FreeCAD, Gerbers, printable parts and ZMK firmware.
+Flan combines four split layouts (36/42/46/54 keys), four printable case styles and six interchangeable display-frame designs with a browser-based 3D explorer. The source includes KiCad, FreeCAD, Gerbers, printable parts and ZMK firmware.
 
-The media kit includes CAD renders of all four layouts, printable cases and magnetic display frames.
+The media kit includes CAD renders of all four layouts, printable cases and interchangeable display frames.
 
 Project: https://flankbd.com/
 Source: https://github.com/eduarbo/flan

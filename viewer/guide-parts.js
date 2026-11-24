@@ -9,7 +9,7 @@ const names={
  tweezers:['Pinzas de precisión','Tweezers'],meter:['Multímetro con puntas','Multimeter and probes'],loupe:['Lupa','Magnifier'],iron:['Cautín','Soldering iron'],solder:['Estaño para electrónica','Electronics solder'],cable:['Cable USB de datos','USB data cable'],
  tape:['Cinta aislante','Insulating tape'],locator:['Guía de batería sin fondo','Open-bottom battery locator'],cage:['Jaula de batería','Battery cage'],spacer:['Separador impreso','Printed spacer'],
  m6:['Tornillo M2 × 6 mm','M2 × 6 mm screw'],m4:['Tornillo M2 × 4 mm','M2 × 4 mm screw'],'m6-common':['Tornillo M2 × 6 mm','M2 × 6 mm screw'],'m4-common':['Tornillo M2 × 4 mm','M2 × 4 mm screw'],
- feet:['Patas adhesivas','Adhesive feet'],driver:['Llave hexagonal','Hex driver'],adhesive:['Adhesivo compatible','Compatible adhesive'],'base-magnets':['Imanes de base · Ø2 × 3 mm','Base magnets · Ø2 × 3 mm'],'frame-magnets':['Imanes de marco · Ø2 × 4 mm','Frame magnets · Ø2 × 4 mm'],
+ feet:['Patas adhesivas','Adhesive feet'],driver:['Llave hexagonal','Hex driver'],
  base:['Base','Base'],plate:['Placa de switches','Switch plate'],frame:['Marco de pantalla','Display frame'],pcb:['PCB principal','Main PCB'],keycap:['Tecla','Keycap']
 };
 export const solderParts={D:['diode','tweezers'],K:['socket','switch'],SW2:['reset'],SW1:['power'],J1:['jack','plug','battery','meter'],U1:['strip','pins','riser','nano'],J2:['view-socket','header','view','sled']};

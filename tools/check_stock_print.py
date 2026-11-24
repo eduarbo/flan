@@ -50,11 +50,13 @@ for style in scene['catalog']['frame_styles']:
         manifest = json.loads(archive.read('manifest.json'))
         readme = archive.read('READ-ME.txt').decode('utf-8')
         assert manifest['joining'] == scene['printing']['joining']
-        for field in ('installed_frame', 'polarity', 'capture', 'acceptance'):
+        assert set(manifest['joining']) == {'case', 'installed_frame', 'clips', 'acceptance'} and manifest['joining']['clips'] is False
+        for field in ('case', 'installed_frame', 'acceptance'):
             assert manifest['joining'][field] in readme, field
-        assert '3 axial Ø2 × 3 mm magnets into each base' in readme
-        assert '3 axial Ø2 × 4 mm magnets into each installed frame' in readme
-        assert 'ferromagnetic' not in readme.lower() and 'steel' not in readme.lower()
+        assert '2.1 mm pilots' in manifest['joining']['case']
+        # The registry sentence says the frame has no magnets; nothing else in the kit text may mention them.
+        rest = readme.replace(manifest['joining']['installed_frame'], '').lower()
+        assert not any(word in rest for word in ('magnet', 'imán', 'imanes', 'glue', 'polarity', 'steel', 'tap the'))
         assert manifest['configuration'] == json.loads(archive.read('Flan36-config.json'))
         assert len(manifest['parts']) == 2 * (3 + len(scene['printing']['supports']))
         materials = 0
@@ -111,7 +113,7 @@ for style in scene['catalog']['frame_styles']:
 report = {'passed': True, 'method': 'Production printKit in Node; every STL byte and every translated 3MF triangle compared with native exports',
           'scene_sha256': sha(scene_path.read_bytes()), 'checker_sha256': sha(Path(__file__).read_bytes()),
           'frame_top_mm': metadata['parameter_values_mm']['FrameTop'],
-          'kits': results, 'all_magnet_joining_and_polarity_checked': True,
+          'kits': results, 'screw_joining_without_magnets_checked': True,
           'browser_download_tested': False, 'physical_acceptance': False}
 (OUT / 'validation.json').write_text(json.dumps(report, indent=2) + '\n')
 print(f'PASS: {len(results)} complete current print kits, exact STL bytes, registered 3MF triangles and roof height')

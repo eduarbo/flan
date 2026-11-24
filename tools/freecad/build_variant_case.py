@@ -1,4 +1,4 @@
-"""Build a Flan variant's case from the revI document: same stack, bay, frames, magnets,
+"""Build a Flan variant's case from the revI document: same stack, bay, frames, PCB supports,
 batteries and fasteners; the variant's outline, switch cuts and added fasteners.
 
 Opens mechanical/revI/Flan36.FCStd (never saved back) and, per half:
@@ -94,6 +94,10 @@ def write_sketch(sk, family, prof):
     sk.addGeometry(geo, False)
 
 # ---------------------------------------------------------------- document surgery
+def find(doc, name):
+    """An object of the revI document by name, or a copy made here by its label."""
+    return doc.getObject(name) or doc.getObjectsByLabel(name)[0]
+
 def containers(doc, obj):
     return [g for g in obj.InList if g.TypeId in ("App::DocumentObjectGroup", "App::Part") and obj in g.Group]
 
@@ -197,7 +201,7 @@ def add_fastener(doc, p, n, xy, src, report):
         for k, v in props.items():
             setattr(o, k, v)
         return o
-    # tray: ... WasherSeat5 -> TrayPillar6 -> TrayDrill6 -> WasherSeat6 -> (magnet posts)
+    # tray: ... WasherSeat5 -> TrayPillar6 -> TrayDrill6 -> WasherSeat6 -> (station sockets, PCB supports)
     last = doc.getObject(p + "TrayMagnetPost0").Shapes[0]
     pillar = op("Part::MultiFuse", f"TrayPillar{n}", "TrayPillar1", Shapes=[last, prim["Pillar"]])
     drill = op("Part::Cut", f"TrayDrill{n}", "TrayDrill1", Base=pillar, Tool=prim["Pilot"])
@@ -217,6 +221,21 @@ def add_fastener(doc, p, n, xy, src, report):
     openings = doc.getObject(p + "LevelUpperOpenings")
     openings.Shapes = list(openings.Shapes) + [prim["LevelDriverAccess"]]
     report.setdefault("fasteners", {})[f"H{n}"] = {"xy_mm": xy, "copy_of": f"H{src}"}
+
+def set_supports(doc, p, side, vid, report):
+    """The variant's PCB supports: the Flan36 posts it keeps, plus its own (design/pcb-supports.json)."""
+    plan = json.loads((ROOT / "design/pcb-supports.json").read_text())["supports"]
+    fuse = doc.getObject(p + "TraySupports")
+    have = [o for o in fuse.Shapes if o.Name.startswith(p + "SupportPost")]
+    base = plan["flan36"]
+    assert len(have) == len(base) and plan[vid][:len(base)] == base, (vid, "variant must extend the Flan36 supports")
+    made = []
+    for n, (x, y) in enumerate(plan[vid][len(base):], len(base) + 1):
+        x = x if side == "left" else MIRROR_X - x
+        h = have[0].Placement.Base
+        made.append(clone(doc, have[0], f"{p}SupportPost{n}", V(x - h.x, -y - h.y, 0)))
+    fuse.Shapes = list(fuse.Shapes) + made
+    report["supports"] = [[x if side == "left" else MIRROR_X - x, y] for x, y in plan[vid]]
 
 def cap_polygons(keys):
     """Every admitted keycap variant and orientation at every key (level_stack.cap_openings)."""
@@ -320,6 +339,7 @@ def main():
         for m in fasteners:
             xy = m["xy"] if side == "left" else [MIRROR_X - m["xy"][0], m["xy"][1]]
             add_fastener(doc, p, int(m["id"][1:]), xy, int(m["from"][1:]), rep)
+        set_supports(doc, p, side, vid, rep)
         cap_sweeps(doc, p, keys, rep)
         report["halves"][side] = rep
     if not a.reuse:
@@ -381,6 +401,19 @@ def main():
             x, y = f["xy_mm"]
             base = doc.getObject(f"{p}Case_solid_base").Shape
             assert base.isInside(V(x + 1.6, -y, 2.5), .001, True) and not base.isInside(V(x, -y, 2.5), .001, True), (side, n, "pillar or pilot missing")
+        # every support stands under the board, clear of the sockets of this size's own keys
+        sockets = [find(doc, f"{p}Hotswap_{k['ref']}").Shape for k in keys]
+        pcb = doc.getObject(p + "SlimPCBLeadNotch").Shape
+        near = {}
+        for n, (x, y) in enumerate(rep["supports"], 1):
+            for style in styles:
+                base = doc.getObject(f"{p}Case_{style}_base").Shape
+                assert base.isInside(V(x, -y, 3.7), .001, True) and not base.isInside(V(x, -y, 3.9), .001, True), (side, style, n, "support missing or too tall")
+            assert pcb.isInside(V(x, -y, 4.3), .001, True), (side, n, "no board above the support")
+            post = find(doc, f"{p}SupportPost{n}").Shape
+            near[f"S{n}"] = round(min(s.distToShape(post)[0] for s in sockets if abs(s.BoundBox.Center.x - x) < 14 and abs(s.BoundBox.Center.y + y) < 14), 3)
+            assert near[f"S{n}"] >= .3, (side, n, "support too close to a socket", near)
+        rep["support_to_nearest_socket_mm"] = near
     doc.save() if a.reuse else doc.saveAs(str(saved))
     report["fcstd"] = str(saved.relative_to(ROOT))
     report["seconds"] = round(time.time() - t0)

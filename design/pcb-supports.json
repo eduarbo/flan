@@ -1,0 +1,168 @@
+{
+ "schema": "flan-pcb-supports-1",
+ "units": "mm",
+ "frame": "KiCad board coordinates of the left half; the right half mirrors x to 160 - x",
+ "purpose": "Solid posts from the base floor to the PCB underside. They carry the board between the screw posts; they have no hole.",
+ "post_diameter_mm": 3.0,
+ "clearance_mm": 0.9,
+ "edge_distance_mm": 2.5,
+ "reach_mm": 13.0,
+ "supports": {
+  "flan36": [
+   [
+    94.0,
+    24.5
+   ],
+   [
+    38.5,
+    53.5
+   ],
+   [
+    73.5,
+    36.0
+   ],
+   [
+    110.0,
+    81.0
+   ],
+   [
+    109.5,
+    43.0
+   ],
+   [
+    73.5,
+    18.5
+   ]
+  ],
+  "flan42": [
+   [
+    94.0,
+    24.5
+   ],
+   [
+    38.5,
+    53.5
+   ],
+   [
+    73.5,
+    36.0
+   ],
+   [
+    110.0,
+    81.0
+   ],
+   [
+    109.5,
+    43.0
+   ],
+   [
+    73.5,
+    18.5
+   ],
+   [
+    20.5,
+    65.0
+   ]
+  ],
+  "flan46": [
+   [
+    94.0,
+    24.5
+   ],
+   [
+    38.5,
+    53.5
+   ],
+   [
+    73.5,
+    36.0
+   ],
+   [
+    110.0,
+    81.0
+   ],
+   [
+    109.5,
+    43.0
+   ],
+   [
+    73.5,
+    18.5
+   ],
+   [
+    93.5,
+    4.0
+   ],
+   [
+    37.5,
+    18.5
+   ]
+  ],
+  "flan54": [
+   [
+    94.0,
+    24.5
+   ],
+   [
+    38.5,
+    53.5
+   ],
+   [
+    73.5,
+    36.0
+   ],
+   [
+    110.0,
+    81.0
+   ],
+   [
+    109.5,
+    43.0
+   ],
+   [
+    73.5,
+    18.5
+   ],
+   [
+    93.5,
+    4.0
+   ],
+   [
+    20.5,
+    65.0
+   ]
+  ]
+ },
+ "coverage": {
+  "flan36": {
+   "screws": 5,
+   "board_beyond_reach_pct": [
+    66.9,
+    34.8
+   ]
+  },
+  "flan42": {
+   "screws": 6,
+   "board_beyond_reach_pct": [
+    65.6,
+    32.3
+   ]
+  },
+  "flan46": {
+   "screws": 6,
+   "board_beyond_reach_pct": [
+    68.3,
+    32.4
+   ]
+  },
+  "flan54": {
+   "screws": 8,
+   "board_beyond_reach_pct": [
+    63.9,
+    32.4
+   ]
+  }
+ },
+ "generator": "tools/plan_pcb_supports.py",
+ "physical_acceptance": false
+}

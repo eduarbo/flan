@@ -34,7 +34,7 @@ export async function completeBuild({configuration,assets,editions,print,guide,c
   requests.push(['Firmware/'+variant+'-'+side+'.uf2','firmware/uf2/'+variant+'-'+side+'.uf2']);
  }
  requests.push(['Firmware/optional/'+variant+'-right-no-display.uf2','firmware/uf2/'+variant+'-right-no-display.uf2']);
- for(const name of ['coupon-magnet-base','coupon-magnet-frame','coupon-m2-thread'])requests.push(['Fit-samples/'+name+'.stl',(name.startsWith('coupon-magnet')?'mechanical/glue-in/revI/':'mechanical/revI/')+name+'.stl']);
+ requests.push(['Fit-samples/coupon-m2-thread.stl','mechanical/revI/coupon-m2-thread.stl']);
  for(const path of Object.keys(assets)){
   if(path.startsWith('firmware/')&&!path.startsWith('firmware/uf2/'))requests.push(['Firmware/'+path.slice('firmware/'.length),path]);
  }

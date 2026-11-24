@@ -50,7 +50,6 @@ nextconfig['cases']['left'].update(base_color='#e4a266',plate_color='#202735',ma
 nextconfig['frames']['left'].update(color='#e4a266',accents={'detail':'#181c29','accent':'#abe8bc','secondary':'#9364c7'})
 margin=apply(doc,nextconfig);assert extract(doc)==nextconfig
 assert not doc.L_ActiveFrame.Visibility and doc.R_ActiveFrame.Visibility
-assert not doc.L_SteelTarget0.Visibility
 assert doc.L_ActiveTray.LinkedObject.CaseStyle=='rim' and doc.R_ActiveTray.LinkedObject.CaseStyle=='terrace'
 legacy=copy.deepcopy(original);legacy.pop('cases');apply(doc,legacy);assert extract(doc)==normalize(legacy)
 assert all(extract(doc)['cases'][side]['style']=='solid' for side in ['left','right'])

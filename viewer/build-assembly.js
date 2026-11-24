@@ -4,16 +4,6 @@
 export function assemblySteps({cover,common,structural,keys},say){
  const hardware=common?'-common':'';
  return [
-  {title:say('Magnets','Imanes'),
-   views:[['base-magnets',say('Base, seen from above','Base, vista desde arriba')],
-    ...(cover?[['frame-magnets',say('Frame, seen from underneath','Marco, visto desde abajo')]]:[])],
-   parts:[['base-magnets',3],...(cover?[['frame-magnets',3]]:[]),['adhesive']],
-   steps:[
-    ...(cover?[say('Hold a base magnet against a frame magnet and mark the two faces that attract.','Junta un imán de base con uno de marco y marca las dos caras que se atraen.')]:[]),
-    say('Glue the three Ø2 × 3 mm magnets into the base from above, the same pole facing out on both halves.','Pega los tres imanes de Ø2 × 3 mm en la base, desde arriba, con el mismo polo hacia fuera en ambas mitades.'),
-    ...(cover?[say('Glue the three Ø2 × 4 mm magnets into the frame from underneath, the opposite pole facing out.','Pega los tres imanes de Ø2 × 4 mm en el marco, desde abajo, con el polo opuesto hacia fuera.')]:[]),
-    cover?say('Let base and frame cure apart before fitting the electronics.','Deja secar la base y el marco por separado antes de montar la electrónica.')
-     :say('Let the adhesive cure before fitting the electronics.','Deja secar el adhesivo antes de montar la electrónica.')]},
   {title:say('Battery and PCB','Batería y PCB'),
    views:[['battery-stack',say('Base, locator, battery, cage and PCB','Base, guía, batería, jaula y PCB')]],
    parts:[['locator'],['battery'],['cage'],['tape']],
@@ -40,19 +30,20 @@ export function assemblySteps({cover,common,structural,keys},say){
     say('Press the switch straight through the plate until it seats in its socket on the PCB.','Presiona el switch recto a través de la placa hasta que asiente en su zócalo de la PCB.'),
     say('Press a keycap onto each stem.','Encaja una tecla sobre cada vástago.')]},
   {title:say('Battery connector','Conector de batería'),
-   views:[['battery-port',say('J1 takes the battery plug. SW1 is the power switch.','J1 recibe el enchufe de la batería. SW1 es el interruptor de encendido.')]],
+   views:[['battery-port',say('J1 takes the battery plug. SW1 is the power switch: on is toward the USB end on the right half and toward the thumb keys on the left half.','J1 recibe el enchufe de la batería. SW1 es el interruptor: enciende hacia el extremo del USB en la mitad derecha y hacia las teclas de pulgar en la izquierda.')]],
    parts:[['nano'],['plug'],['meter']],
    steps:[
     say('Unplug USB and switch SW1 off.','Desconecta el USB y apaga SW1.'),
     say('If you removed the controller after the USB test, seat it again.','Si retiraste el controlador tras la prueba por USB, vuelve a asentarlo.'),
     say('Measure the battery plug with the multimeter: its positive contact must meet pin 1 of J1, BAT+. Do not go by the wire colors, and do not plug it in if they differ.','Mide el enchufe de la batería con el multímetro: su contacto positivo debe coincidir con el pin 1 de J1, BAT+. No te guíes por el color de los cables y no la conectes si no coinciden.'),
+    say('The Typeractive 301230 we tested arrived with its plug reversed for this board. If yours is too, swap its two wires in the plug: lift each terminal latch with a pin, pull the wire out, put them back crossed and measure again.','La Typeractive 301230 que probamos llegó con el enchufe invertido para esta placa. Si la tuya también, intercambia sus dos cables en el enchufe: levanta la pestaña de cada terminal con una aguja, saca el cable, vuelve a meterlos cruzados y mide de nuevo.'),
     say('Plug the battery into J1 while J1 is still within reach.','Conecta la batería a J1 mientras J1 sigue accesible.')]},
   {title:cover?say('Display and frame','Pantalla y marco'):say('Display','Pantalla'),
    views:[['display-stack',cover?say('Display onto its support, then the frame','La pantalla sobre su soporte y después el marco'):say('Display onto its support and socket','La pantalla sobre su soporte y su zócalo')]],
    parts:[['view'],['view-socket'],['sled'],...(cover?[['frame']]:[])],
    steps:[
     say('Guide the five display pins straight into their socket until the display rests on its printed support.','Introduce los cinco pines de la pantalla rectos en su zócalo, hasta que la pantalla descanse en su soporte impreso.'),
-    ...(cover?[say('Lower the frame over it: the magnets hold it in place. Check that it does not press on the glass.','Baja el marco sobre ella: los imanes lo sujetan. Comprueba que no presione el vidrio.')]:[])]},
+    ...(cover?[say('Lower the frame over it. It rests in place, loose; a frame that grips the display is being redesigned. Check that it does not press on the glass.','Baja el marco sobre ella. Queda apoyado, sin sujeción; el marco que se sujeta al display está en rediseño. Comprueba que no presione el vidrio.')]:[])]},
   {title:say('Feet and final test','Patas y prueba final'),
    views:[['base-feet',say('Base, seen from underneath','Base, vista desde abajo')]],
    parts:[['feet',4]],
@@ -61,7 +52,7 @@ export function assemblySteps({cover,common,structural,keys},say){
     say('Check that the USB-C port is within reach and that every key goes down and comes back freely.','Comprueba que el puerto USB-C quede accesible y que cada tecla baje y regrese libremente.'),
     say('Switch it on and test charging over USB, within the battery rating. Stop if anything gets unexpectedly hot.','Enciéndela y prueba la carga por USB dentro del límite de la batería. Detente si algo se calienta de forma inesperada.'),
     say('Pair the left half, then test both: all '+keys+' keys, chords, thumb tap and hold, the four layers, reconnecting, and waking after 15 minutes.','Empareja la mitad izquierda y prueba ambas: las '+keys+' teclas, combinaciones, tap y hold de pulgares, las cuatro capas, la reconexión y el despertar tras 15 minutos.'),
-    cover?say('Check that the frame stays on and that lifting it still gives access to the battery plug.','Comprueba que el marco quede sujeto y que, al levantarlo, el enchufe de la batería siga accesible.')
+    cover?say('Check that lifting the frame still gives access to the battery plug.','Comprueba que, al levantar el marco, el enchufe de la batería siga accesible.')
      :say('Check that the battery plug is still within reach.','Comprueba que el enchufe de la batería siga accesible.')]}
  ];
 }

@@ -2,8 +2,8 @@
   "revision": "I",
   "page": {
     "path": "docs/index.html",
-    "sha256": "9f454d344f1b2fded30ca13dcc3a4741e5fcc6966f51cd5fdc84567f2f6980a5",
-    "bytes": 128879
+    "sha256": "a82d33f9fdce9391e26358778de05ca6853cd8743ade3f848ce034409f42fa74",
+    "bytes": 128762
   },
   "engine": {
     "path": "docs/assets/home-engine-4e7cede658045260.js",
@@ -24,29 +24,29 @@
   ],
   "packs": {
     "common": {
-      "path": "docs/assets/home-common-713653038184bbea.bin",
-      "sha256": "713653038184bbead521e63b67d733ed16f97e9def868b51296955f761542a09",
-      "bytes": 206235
+      "path": "docs/assets/home-common-d2634b68d0dbb54e.bin",
+      "sha256": "d2634b68d0dbb54e0d1259e8a5a0a7030ddeee26a8933c5c2df65c10ef4a246f",
+      "bytes": 203643
     },
     "flan36": {
-      "path": "docs/assets/home-flan36-03456d769e96a2af.bin",
-      "sha256": "03456d769e96a2aff25dd70aea40d0d34ec524b6fc9b4834a2f5d9c0f000cec6",
-      "bytes": 155022
+      "path": "docs/assets/home-flan36-5a3a11d75a9ed127.bin",
+      "sha256": "5a3a11d75a9ed1273f9c0b6646950d633304c16f23aba1efd5017e8ae950c2f2",
+      "bytes": 156391
     },
     "flan42": {
-      "path": "docs/assets/home-flan42-4addfdb9d587ad76.bin",
-      "sha256": "4addfdb9d587ad76b332a1225d3cac4a2a7739894a3b0a42a7d4d51dfac790b5",
-      "bytes": 166283
+      "path": "docs/assets/home-flan42-cddadcf738fab398.bin",
+      "sha256": "cddadcf738fab39872bc39bf2672cef55dda561d90ed8158f15007550ab5eee3",
+      "bytes": 168975
     },
     "flan46": {
-      "path": "docs/assets/home-flan46-fe6c3baad71725e6.bin",
-      "sha256": "fe6c3baad71725e65fedddfe73df292f88346abe68ea93134dca7f55dd8e73f2",
-      "bytes": 175730
+      "path": "docs/assets/home-flan46-6fa243874081d5c6.bin",
+      "sha256": "6fa243874081d5c6c2eb655db2f7844f901d3aa72ffbb8e32f8c0c01386e400f",
+      "bytes": 179128
     },
     "flan54": {
-      "path": "docs/assets/home-flan54-2d8c15ac3ba727e8.bin",
-      "sha256": "2d8c15ac3ba727e8f3c000e525b7cbf2b7145431aebc533d31968bb6b605af2f",
-      "bytes": 196627
+      "path": "docs/assets/home-flan54-d1e51af7b2cb4d5c.bin",
+      "sha256": "d1e51af7b2cb4d5c52dc3d92cc467945b1212505b93ce6149e1fabb365c52cfb",
+      "bytes": 200594
     }
   },
   "error_mm": {
@@ -65,8 +65,8 @@
       "triangles": 14338
     },
     "frames": {
-      "source": 131206,
-      "triangles": 32554
+      "source": 123502,
+      "triangles": 32186
     },
     "electronics": {
       "source": 441344,
@@ -81,15 +81,15 @@
       "triangles": 1998
     },
     "cases": {
-      "source": 679496,
-      "triangles": 157502
+      "source": 756776,
+      "triangles": 173386
     },
     "pcbs": {
       "source": 686272,
-      "triangles": 83910
+      "triangles": 83938
     }
   },
-  "omitted": "Fasteners, magnets, feet, the underside diodes and the reset switch; the battery is the default Adafruit 1570 profile.",
+  "omitted": "Fasteners, feet, the underside diodes and the reset switch; the battery is the default Adafruit 1570 profile.",
   "method": "Equal positions welded; each material group simplified with meshoptimizer 1.2.0 within an absolute error (borders locked between groups); positions quantized to 16 bits over each mesh box; meshopt vertex and index codecs; gzip.",
   "scene_sources": [
     {
@@ -134,7 +134,7 @@
     },
     {
       "path": "mechanical/revI/left-tray.stl",
-      "sha256": "f23889fd06eee746187e3c20a80e3323826be62458693fd362e626809e20ed9b"
+      "sha256": "31ba91df32c0ef75489280432f9e20e6225c355ebbb3203387f23a16a15131dd"
     },
     {
       "path": "mechanical/revI/left-key-plate.stl",
@@ -326,7 +326,7 @@
     },
     {
       "path": "mechanical/revI/left-case-solid-base.stl",
-      "sha256": "f23889fd06eee746187e3c20a80e3323826be62458693fd362e626809e20ed9b"
+      "sha256": "31ba91df32c0ef75489280432f9e20e6225c355ebbb3203387f23a16a15131dd"
     },
     {
       "path": "mechanical/revI/left-case-solid-plate.stl",
@@ -334,7 +334,7 @@
     },
     {
       "path": "mechanical/revI/left-case-rim-base.stl",
-      "sha256": "5786bcdb83306422f6bc9e7aa745d7877050c30259c863ef1c7fedb0873104a4"
+      "sha256": "8d4b85685be7c7ef5fa040e0eb445efd9302e23115bd66df4a3fee6002fb17c8"
     },
     {
       "path": "mechanical/revI/left-case-rim-plate.stl",
@@ -342,7 +342,7 @@
     },
     {
       "path": "mechanical/revI/left-case-terrace-base.stl",
-      "sha256": "e8956b6a916e85b7a6180e838e9cd08e92b7194315a0030d3710f4db3559711e"
+      "sha256": "d05edcd425956bacd43ff61f62e8494ff1addfd9d374f7859c0039fbffed5b83"
     },
     {
       "path": "mechanical/revI/left-case-terrace-plate.stl",
@@ -350,7 +350,7 @@
     },
     {
       "path": "mechanical/revI/left-case-level-base.stl",
-      "sha256": "f23889fd06eee746187e3c20a80e3323826be62458693fd362e626809e20ed9b"
+      "sha256": "31ba91df32c0ef75489280432f9e20e6225c355ebbb3203387f23a16a15131dd"
     },
     {
       "path": "mechanical/revI/left-case-level-plate.stl",
@@ -505,30 +505,6 @@
       "sha256": "2e0ae08eb6c5c500afe095a79b56eba2ebaeb4161e72a89a48ed9d0df81f05fd"
     },
     {
-      "path": "mechanical/revI/left-magnet-0.stl",
-      "sha256": "c22fee6c782e310991c885568ceea929a131df643b61fdc5cbc4733b64268d2a"
-    },
-    {
-      "path": "mechanical/revI/left-frame-target-0.stl",
-      "sha256": "fa198e17434d3ea3b2670782a30aa036bc216ab032300a3a10ea3a857b86ec3c"
-    },
-    {
-      "path": "mechanical/revI/left-magnet-1.stl",
-      "sha256": "1f053044a05d51a3db5b66e9c8805fbcbaea88b83608ed5e69173a5b170fb6cb"
-    },
-    {
-      "path": "mechanical/revI/left-frame-target-1.stl",
-      "sha256": "58cea2e89226fd5a78602cdd0ce7a586942295fdcb173d12b96ef8ff7b1395a0"
-    },
-    {
-      "path": "mechanical/revI/left-magnet-2.stl",
-      "sha256": "6ca094edbbbe601b6c39b941e76cf729fffb39f44d3837c08c8e66d65316e99a"
-    },
-    {
-      "path": "mechanical/revI/left-frame-target-2.stl",
-      "sha256": "94f0f60e8d87bfc991097e3a13942f965fc9755423f64a8c5bfdeef335511550"
-    },
-    {
       "path": "mechanical/revI/left-battery-lead-0.stl",
       "sha256": "65bbcedb0cc871098c7e9942be4befda7f765c1163a35840a0e1333a0d9c12ea"
     },
@@ -562,7 +538,7 @@
     },
     {
       "path": "mechanical/revI/right-tray.stl",
-      "sha256": "f2c27b6f53902061be6c6b47c6b71b31e95d282abfdd56e04f183a164ac5216c"
+      "sha256": "082661379cc51e9d1360e7853972eeb03e1b4294a975be8eece8c3f362563fbf"
     },
     {
       "path": "mechanical/revI/right-key-plate.stl",
@@ -754,7 +730,7 @@
     },
     {
       "path": "mechanical/revI/right-case-solid-base.stl",
-      "sha256": "f2c27b6f53902061be6c6b47c6b71b31e95d282abfdd56e04f183a164ac5216c"
+      "sha256": "082661379cc51e9d1360e7853972eeb03e1b4294a975be8eece8c3f362563fbf"
     },
     {
       "path": "mechanical/revI/right-case-solid-plate.stl",
@@ -762,7 +738,7 @@
     },
     {
       "path": "mechanical/revI/right-case-rim-base.stl",
-      "sha256": "c1df93458b176b477a626129d25b45282dcc4723d73add2106db13b345abfc7c"
+      "sha256": "893aa9ce409f4503c1e3950c4d2f2a9a4cf2d44866d5ab1436064639412dbdc5"
     },
     {
       "path": "mechanical/revI/right-case-rim-plate.stl",
@@ -770,7 +746,7 @@
     },
     {
       "path": "mechanical/revI/right-case-terrace-base.stl",
-      "sha256": "e1e5160ea8ffae8c4a63bcd9a93142f85d03a11cb0626ca79024c7a707cc4789"
+      "sha256": "1b1f6b3909844c4edf5545264c9d1fb6ff0f1fba4725ca71bf7898bbc8fbbc6d"
     },
     {
       "path": "mechanical/revI/right-case-terrace-plate.stl",
@@ -778,7 +754,7 @@
     },
     {
       "path": "mechanical/revI/right-case-level-base.stl",
-      "sha256": "f2c27b6f53902061be6c6b47c6b71b31e95d282abfdd56e04f183a164ac5216c"
+      "sha256": "082661379cc51e9d1360e7853972eeb03e1b4294a975be8eece8c3f362563fbf"
     },
     {
       "path": "mechanical/revI/right-case-level-plate.stl",
@@ -921,30 +897,6 @@
       "sha256": "7a3c3d47ae7f38ca5d8af2b4ef1eb3b0ab85d405d2ae498479a7de50b1db1256"
     },
     {
-      "path": "mechanical/revI/right-magnet-0.stl",
-      "sha256": "798f3474f5433c9c4abe9200e140723f2146882e083530f68fafce607ad3947e"
-    },
-    {
-      "path": "mechanical/revI/right-frame-target-0.stl",
-      "sha256": "c1ae7d487b9d64a3856d047fe43672c743d7adc06580ed5d42ea285c0df6de99"
-    },
-    {
-      "path": "mechanical/revI/right-magnet-1.stl",
-      "sha256": "6af7cd3e624e5c8993ce29b993b1e466da613dc2393ff73cbb2b828cd9ce232d"
-    },
-    {
-      "path": "mechanical/revI/right-frame-target-1.stl",
-      "sha256": "50de0ed6a02fe52809d1fa3ae9e6c6786d4c7676e8ee61aaa2bec60f9e594072"
-    },
-    {
-      "path": "mechanical/revI/right-magnet-2.stl",
-      "sha256": "de0e4fbaf4e775d01055258faa39a4f37e55df007107760e91857e7e9d83c940"
-    },
-    {
-      "path": "mechanical/revI/right-frame-target-2.stl",
-      "sha256": "c7d67da60e8dc638119383c6bd8237a2602142febce261cd66be5a6caddc8273"
-    },
-    {
       "path": "mechanical/revI/right-battery-lead-0.stl",
       "sha256": "813dbbc40f24418ab1419f56b0ceb82917a51cb449d9963c0c594ea142eea7a1"
     },
@@ -1082,11 +1034,11 @@
     },
     {
       "path": "validation/flan42-case.json",
-      "sha256": "7122d3af50d62cac7e77b60587953524f1c3466b1fb26d18c1746ed44108dcbf"
+      "sha256": "f3e18eba13a9c887d2bdbb6032905d09f16d169250e8b1c4616ff2f1a36ad2f5"
     },
     {
       "path": "mechanical/flan42/left-case-solid-base.stl",
-      "sha256": "2bd69b590b9ae223de64195a3deb0532dd6044c546faa14eae566f813e9ffa73"
+      "sha256": "1abd725b44bd47384f13e2b2e75d598320539f66fa53964afbd15d627ff04c99"
     },
     {
       "path": "mechanical/flan42/left-case-solid-plate.stl",
@@ -1094,7 +1046,7 @@
     },
     {
       "path": "mechanical/flan42/left-case-rim-base.stl",
-      "sha256": "9c2fad6a774ba178bd71aeaa7d0877a9b3285ba8ea3556e054e022f7a4e7825c"
+      "sha256": "6c731ea625d50accebc1b5a22dc4315b36706ad2f6ff3f15ea234c1b7561c383"
     },
     {
       "path": "mechanical/flan42/left-case-rim-plate.stl",
@@ -1102,7 +1054,7 @@
     },
     {
       "path": "mechanical/flan42/left-case-terrace-base.stl",
-      "sha256": "6adaf685bec53371336c4f6ea8675b08b89a735fc78cd6fa8cddfad5fd694e84"
+      "sha256": "e717e893db69e4b23d4dfc48ff0b44b52cc05020619974ff419bc56292741eb5"
     },
     {
       "path": "mechanical/flan42/left-case-terrace-plate.stl",
@@ -1110,7 +1062,7 @@
     },
     {
       "path": "mechanical/flan42/left-case-level-base.stl",
-      "sha256": "2bd69b590b9ae223de64195a3deb0532dd6044c546faa14eae566f813e9ffa73"
+      "sha256": "1abd725b44bd47384f13e2b2e75d598320539f66fa53964afbd15d627ff04c99"
     },
     {
       "path": "mechanical/flan42/left-case-level-plate.stl",
@@ -1118,11 +1070,11 @@
     },
     {
       "path": "mechanical/flan42/left-pcb.stl",
-      "sha256": "baee837106ffcadd7c74bc94fc1b2876152472b4a48757d7ec2f6732f38c316b"
+      "sha256": "16d0b47b8b11aaebb3c1a964f41527d865716c0ad37ad8ba466809c27b80f86c"
     },
     {
       "path": "mechanical/flan42/right-case-solid-base.stl",
-      "sha256": "bd1ed3064a603b00a37b40ef524f74e193869573189825ee1d99ef07003a4d6b"
+      "sha256": "c09de2c8924b473bcb3be99b7779422ca8d1b2fc93a203d3677f3bf1c29fc37d"
     },
     {
       "path": "mechanical/flan42/right-case-solid-plate.stl",
@@ -1130,7 +1082,7 @@
     },
     {
       "path": "mechanical/flan42/right-case-rim-base.stl",
-      "sha256": "66b0f9855ca6408d3d01a51a80869cfb28dbfd37725ca298e423fd806cc82fbf"
+      "sha256": "b830b30080919122a55dd5e98c7e8d43871878711765d1197deb00478e793a89"
     },
     {
       "path": "mechanical/flan42/right-case-rim-plate.stl",
@@ -1138,7 +1090,7 @@
     },
     {
       "path": "mechanical/flan42/right-case-terrace-base.stl",
-      "sha256": "4bbde26b7451ca50b8933fff8e40ecc6f062fd24015a8670fc096d3f8a1059cc"
+      "sha256": "cfc58821602c044c5a13f54b140f24874f23090aab9c2dad04bfcf8ce77677ea"
     },
     {
       "path": "mechanical/flan42/right-case-terrace-plate.stl",
@@ -1146,7 +1098,7 @@
     },
     {
       "path": "mechanical/flan42/right-case-level-base.stl",
-      "sha256": "bd1ed3064a603b00a37b40ef524f74e193869573189825ee1d99ef07003a4d6b"
+      "sha256": "c09de2c8924b473bcb3be99b7779422ca8d1b2fc93a203d3677f3bf1c29fc37d"
     },
     {
       "path": "mechanical/flan42/right-case-level-plate.stl",
@@ -1154,7 +1106,7 @@
     },
     {
       "path": "mechanical/flan42/right-pcb.stl",
-      "sha256": "1546e511aeca775b5ff4f4386e56eb48d52213507b7e5850420c67235eee1cff"
+      "sha256": "a5bdd8dbed43a04fbd031ee22d6b4c753fcc7ef443f0fd16c0f5a807972762db"
     },
     {
       "path": "hardware/flan42/fabrication/flan42-left-prototype.zip",
@@ -1214,11 +1166,11 @@
     },
     {
       "path": "validation/flan46-case.json",
-      "sha256": "f19fb2267ba9665ae23a2d1609bee9fa2e767ad8a4703a6c7152049df4c9cfb0"
+      "sha256": "3b15ca2ba2e71ae99ee49e7927b009ffdcb80a8d33b6851cd92c4fd7f6c0219a"
     },
     {
       "path": "mechanical/flan46/left-case-solid-base.stl",
-      "sha256": "f5d3e0356b7fd32967d8bf38a89e41f130b42704e0edbb4bc894f27fbc29c219"
+      "sha256": "96e0a94be8f28c95e0bd6523f3cf47543e91c2932e3572067a6ad8c41e34a653"
     },
     {
       "path": "mechanical/flan46/left-case-solid-plate.stl",
@@ -1226,7 +1178,7 @@
     },
     {
       "path": "mechanical/flan46/left-case-rim-base.stl",
-      "sha256": "7fb91eda75968a482d5eb29c6fb6566c2ea4468eb455aff0a069c631d8b7802a"
+      "sha256": "af8e86a5deb135277d1dd0c8b0cf27be714c8c1b74ec3f0ee79095eea06b09f9"
     },
     {
       "path": "mechanical/flan46/left-case-rim-plate.stl",
@@ -1234,7 +1186,7 @@
     },
     {
       "path": "mechanical/flan46/left-case-terrace-base.stl",
-      "sha256": "a8404870e6cbb0902f845ae8660753470bf8220728dd90724d53476015b1c62b"
+      "sha256": "bade4bf64141a5d4ab389798c727b661211085aa782de24b9a50f9510559f967"
     },
     {
       "path": "mechanical/flan46/left-case-terrace-plate.stl",
@@ -1242,7 +1194,7 @@
     },
     {
       "path": "mechanical/flan46/left-case-level-base.stl",
-      "sha256": "f5d3e0356b7fd32967d8bf38a89e41f130b42704e0edbb4bc894f27fbc29c219"
+      "sha256": "96e0a94be8f28c95e0bd6523f3cf47543e91c2932e3572067a6ad8c41e34a653"
     },
     {
       "path": "mechanical/flan46/left-case-level-plate.stl",
@@ -1250,11 +1202,11 @@
     },
     {
       "path": "mechanical/flan46/left-pcb.stl",
-      "sha256": "4b712d765266000aae6ec67ad75e7a1bec9cbc8e1c6a27fb25bb49a351425744"
+      "sha256": "2074b10400c4bdd89c0136c85d3c06bcd54fb68baac44b4b8c5e5b5da0f57be9"
     },
     {
       "path": "mechanical/flan46/right-case-solid-base.stl",
-      "sha256": "21406da7789a03bba92303f79ea06b7f606b9e15519d6e241f16b6e11496e61d"
+      "sha256": "c20cada2c23266ff0d495e4a3d7511b5b62b8e02d518c91cec0089fd5c5f3729"
     },
     {
       "path": "mechanical/flan46/right-case-solid-plate.stl",
@@ -1262,7 +1214,7 @@
     },
     {
       "path": "mechanical/flan46/right-case-rim-base.stl",
-      "sha256": "bfdba2f7dbdda61c1efc47bc8487c8730e8028f2a10b45b616930dfaab87bf20"
+      "sha256": "d824b2fd1c7e988eeffbfa84804ecd11b79c1b4b41a9e68be742a2e45605733e"
     },
     {
       "path": "mechanical/flan46/right-case-rim-plate.stl",
@@ -1270,7 +1222,7 @@
     },
     {
       "path": "mechanical/flan46/right-case-terrace-base.stl",
-      "sha256": "1263ef1fb033d15061170e8789b44677f0cfd2a39ed6d803344908d219f74cf2"
+      "sha256": "fddfa3cb86a7fbb00c45e6afd5be2c830a5393df10b076c22f9dfbc8cd9af9aa"
     },
     {
       "path": "mechanical/flan46/right-case-terrace-plate.stl",
@@ -1278,7 +1230,7 @@
     },
     {
       "path": "mechanical/flan46/right-case-level-base.stl",
-      "sha256": "21406da7789a03bba92303f79ea06b7f606b9e15519d6e241f16b6e11496e61d"
+      "sha256": "c20cada2c23266ff0d495e4a3d7511b5b62b8e02d518c91cec0089fd5c5f3729"
     },
     {
       "path": "mechanical/flan46/right-case-level-plate.stl",
@@ -1286,7 +1238,7 @@
     },
     {
       "path": "mechanical/flan46/right-pcb.stl",
-      "sha256": "e14536aa4dcf635bb75a37de626c13a8f379b1adce43f4a339c55fc4ccef2c13"
+      "sha256": "e26fac9f7e6a8b87256d310140a74f3f0f0e9e1972d78bd21d5908bf57b30a49"
     },
     {
       "path": "hardware/flan46/fabrication/flan46-left-prototype.zip",
@@ -1346,11 +1298,11 @@
     },
     {
       "path": "validation/flan54-case.json",
-      "sha256": "676807babcedacffe747cc8b73850e92a1d176a629bf8e86312ff19b67d7a183"
+      "sha256": "737f2acb9c15d5d60aa5492d64da0f3671a9013c09984dfb691263813f7cbfa7"
     },
     {
       "path": "mechanical/flan54/left-case-solid-base.stl",
-      "sha256": "c6d387eb516ba7fd67609fa5ee9b58908d1159e8c5f271589e76bcf69e4f012d"
+      "sha256": "8cf3257a37b87b28901e67f06b7f256e8a06a16778a4cb6638847275a77eaab2"
     },
     {
       "path": "mechanical/flan54/left-case-solid-plate.stl",
@@ -1358,7 +1310,7 @@
     },
     {
       "path": "mechanical/flan54/left-case-rim-base.stl",
-      "sha256": "c9aaf57120ee3c707800f0764d2ae80c7bfcaebd28496657c7de141d0bffea64"
+      "sha256": "89c6fec497553f2e315d1b460ff5ba8eef8562a8ef39c2541ec3c46526629903"
     },
     {
       "path": "mechanical/flan54/left-case-rim-plate.stl",
@@ -1366,7 +1318,7 @@
     },
     {
       "path": "mechanical/flan54/left-case-terrace-base.stl",
-      "sha256": "4db253cdf8902ca045863d39a8ef360d69a3e75e2e1bcc9efb2b2dfa3c47c4ad"
+      "sha256": "6d1ae7ec48050a705601acccce2ccb9c0c0e3e7e2ca0a238ff8c302d616d4f1d"
     },
     {
       "path": "mechanical/flan54/left-case-terrace-plate.stl",
@@ -1374,7 +1326,7 @@
     },
     {
       "path": "mechanical/flan54/left-case-level-base.stl",
-      "sha256": "c6d387eb516ba7fd67609fa5ee9b58908d1159e8c5f271589e76bcf69e4f012d"
+      "sha256": "8cf3257a37b87b28901e67f06b7f256e8a06a16778a4cb6638847275a77eaab2"
     },
     {
       "path": "mechanical/flan54/left-case-level-plate.stl",
@@ -1382,11 +1334,11 @@
     },
     {
       "path": "mechanical/flan54/left-pcb.stl",
-      "sha256": "1da029db0cf9927e4b2af9dfcfd4d3ea730e67b07e1953baf69fe8b545623940"
+      "sha256": "9b5f3ae77270dca7ebe0dd5e287939d70e1f499c8ae1ef5b0de78d8a6ee8114d"
     },
     {
       "path": "mechanical/flan54/right-case-solid-base.stl",
-      "sha256": "b976692b071ba6e4f511fff57f42f1af3d65a5d5f20ae6ea3ba107dd50d72b2b"
+      "sha256": "4107fb781459f740c6288e6458abed69066e24a0703dcd735c7a557b1ebed808"
     },
     {
       "path": "mechanical/flan54/right-case-solid-plate.stl",
@@ -1394,7 +1346,7 @@
     },
     {
       "path": "mechanical/flan54/right-case-rim-base.stl",
-      "sha256": "adbf8be22c3b8486c11982139a25b67e05bc8cb1085d6efd0185924e9568dfec"
+      "sha256": "72892e63de1b4897486bc333b5b764f264a6fc5ac315bf9959656a6beb28d78d"
     },
     {
       "path": "mechanical/flan54/right-case-rim-plate.stl",
@@ -1402,7 +1354,7 @@
     },
     {
       "path": "mechanical/flan54/right-case-terrace-base.stl",
-      "sha256": "8fd5815b465ef069d3ff1b1f7001b29bbab789de2f3bc5e5bff851746a0f94c2"
+      "sha256": "d7a15498931b8c52bb2997473d77ef2478e2ac4967291717dca17aab6f19538c"
     },
     {
       "path": "mechanical/flan54/right-case-terrace-plate.stl",
@@ -1410,7 +1362,7 @@
     },
     {
       "path": "mechanical/flan54/right-case-level-base.stl",
-      "sha256": "b976692b071ba6e4f511fff57f42f1af3d65a5d5f20ae6ea3ba107dd50d72b2b"
+      "sha256": "4107fb781459f740c6288e6458abed69066e24a0703dcd735c7a557b1ebed808"
     },
     {
       "path": "mechanical/flan54/right-case-level-plate.stl",
@@ -1418,7 +1370,7 @@
     },
     {
       "path": "mechanical/flan54/right-pcb.stl",
-      "sha256": "ab0eb692ee5159aa1daeff43c62951c6cafe175d3e629065c50c0ffd3ba571d0"
+      "sha256": "3007838c08a7f3d10f14a448616b7818c4e0d00bd00cca2264acd912bc3f8fdf"
     },
     {
       "path": "hardware/flan54/fabrication/flan54-left-prototype.zip",
@@ -1478,7 +1430,7 @@
     },
     {
       "path": "design/fastener-profiles.json",
-      "sha256": "94d3f369b89209c6a5f1fe7096ffcaae895198278a1e08e55fb6d996063613cb"
+      "sha256": "ded61c9b69345415b2f8659df123a61b8514112db37ce845a05d2fc4f1c402ab"
     },
     {
       "path": "mechanical/revI/common-m2/left-case-solid-plate.stl",
@@ -1614,15 +1566,19 @@
     },
     {
       "path": "validation/revI-common-fasteners.json",
-      "sha256": "ec8b28074a5805122f79ec9248092e503ab3b21937746b87065cda6c1522f4ca"
+      "sha256": "eda07f5b80cddfa737d33c965badc9b69419ec636f08c612f63a13667d482155"
     },
     {
       "path": "design/revI.json",
-      "sha256": "939da95663f38b8668cf4f07eedbb38e40d04fc12d104720f165440c01a4a78b"
+      "sha256": "b9a21e6ded9514a5c805f42c02fe31cdc99cfed146fe8f9402719a8b6eae889a"
     },
     {
-      "path": "design/revI-magnets.json",
-      "sha256": "abd1eddbe5f5b63de33a3b1404076af7f5e4d3a3f0ce0259cefc0ba969a0f8e9"
+      "path": "design/revI-mounts.json",
+      "sha256": "cf50006e11bf84db320f6c71e2ca7e32083f2dba6545ebfa572469cd737fb5a3"
+    },
+    {
+      "path": "design/pcb-supports.json",
+      "sha256": "f45cc5f4538b18c70b4e7400c16ef13a437d9b7d1522c949eef39a54acaee631"
     },
     {
       "path": "design/layout.json",
@@ -1630,7 +1586,7 @@
     },
     {
       "path": "tools/build_viewer_revI.py",
-      "sha256": "0007c12565dff98fa3e95b27039b85f4fc3bb347fd51006bc8fb85e2d2f1c560"
+      "sha256": "1405ffc3400217c0279871a74be0bf200186115d3b79ee74b33c1248fcc9cf9e"
     },
     {
       "path": "tools/viewer_frame_selection.py",
@@ -1715,348 +1671,16 @@
     {
       "path": "design/pcb-options.json",
       "sha256": "11ece185de58d70836dd030e228d08f1036648b0c384491c943467d55b00d616"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-case-level-base.stl",
-      "sha256": "4d3875a694f36b2e1325f8ac86e6e5f82eaf381d060d8dbdac619c8d27758c1b"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-case-rim-base.stl",
-      "sha256": "49d396e1235ca408ed0f45adf11a79cba5a0d9932ac371924762699d8057f82e"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-case-solid-base.stl",
-      "sha256": "4d3875a694f36b2e1325f8ac86e6e5f82eaf381d060d8dbdac619c8d27758c1b"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-case-terrace-base.stl",
-      "sha256": "1839eb27ed15b2628db237c8b5c99b8fff1e6ec6cfbf710e25b31c3ae2f2fd02"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-case-level-base.stl",
-      "sha256": "e0aae30bca08f5bee9210f618f445523e2ef68e3cae7f0d00c3be2f42a5ea18d"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-case-rim-base.stl",
-      "sha256": "136e835aa94e0a872e400a096aa41805b051ff42cd536392913c800d56592f25"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-case-solid-base.stl",
-      "sha256": "e0aae30bca08f5bee9210f618f445523e2ef68e3cae7f0d00c3be2f42a5ea18d"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-case-terrace-base.stl",
-      "sha256": "e94baae2e95db0c09866b470362f05424eb32e6a3522c2b3208b9692b8401093"
-    },
-    {
-      "path": "mechanical/glue-in/flan42/left-case-level-base.stl",
-      "sha256": "18916b1c084db72fa39dbc605ae3bf1f6560a7e0055bf8d277c35abfb54d103b"
-    },
-    {
-      "path": "mechanical/glue-in/flan42/left-case-rim-base.stl",
-      "sha256": "33dccf39f266dc50b764c32bf4a84fbf37fa85230f5521b1e38ebaef26183934"
-    },
-    {
-      "path": "mechanical/glue-in/flan42/left-case-solid-base.stl",
-      "sha256": "18916b1c084db72fa39dbc605ae3bf1f6560a7e0055bf8d277c35abfb54d103b"
-    },
-    {
-      "path": "mechanical/glue-in/flan42/left-case-terrace-base.stl",
-      "sha256": "4751c926ac22970e62f9c63fb4ff73e6fd1eeae66b615bc4d30befd2b65451a9"
-    },
-    {
-      "path": "mechanical/glue-in/flan42/right-case-level-base.stl",
-      "sha256": "72e99334db10e32ad193a4787db70267e55ad56dafa5efdde80faf15361eb015"
-    },
-    {
-      "path": "mechanical/glue-in/flan42/right-case-rim-base.stl",
-      "sha256": "624bf16ce1c730bdea4d01873702a8a8d2bd9b25531010914062901572272377"
-    },
-    {
-      "path": "mechanical/glue-in/flan42/right-case-solid-base.stl",
-      "sha256": "72e99334db10e32ad193a4787db70267e55ad56dafa5efdde80faf15361eb015"
-    },
-    {
-      "path": "mechanical/glue-in/flan42/right-case-terrace-base.stl",
-      "sha256": "0fb1d8006e8c235aa7f156f9c73ad025e136c4980d37cdd1d25e9f5e53f6c985"
-    },
-    {
-      "path": "mechanical/glue-in/flan46/left-case-level-base.stl",
-      "sha256": "7775a34d153b601a6df760802ebf9a4f59776d320d967654303f13b1c6af2083"
-    },
-    {
-      "path": "mechanical/glue-in/flan46/left-case-rim-base.stl",
-      "sha256": "34b3aaa2b1e0fb7e856b187f840ed9c681f9f4f937977db14c8ad37fc6ae1395"
-    },
-    {
-      "path": "mechanical/glue-in/flan46/left-case-solid-base.stl",
-      "sha256": "7775a34d153b601a6df760802ebf9a4f59776d320d967654303f13b1c6af2083"
-    },
-    {
-      "path": "mechanical/glue-in/flan46/left-case-terrace-base.stl",
-      "sha256": "25a13f389e52c994d2388a51c17d2a65488eb9d546a3ea6c7fd01c5167f48f0d"
-    },
-    {
-      "path": "mechanical/glue-in/flan46/right-case-level-base.stl",
-      "sha256": "bb5bc464a810519fc93680233891a06f9934bbcc9f33282a4f92fba22cc9fc46"
-    },
-    {
-      "path": "mechanical/glue-in/flan46/right-case-rim-base.stl",
-      "sha256": "06cabb04cae080dd1deeab752d022ceae4cdf42a4287493286d22e78ac79ccc8"
-    },
-    {
-      "path": "mechanical/glue-in/flan46/right-case-solid-base.stl",
-      "sha256": "bb5bc464a810519fc93680233891a06f9934bbcc9f33282a4f92fba22cc9fc46"
-    },
-    {
-      "path": "mechanical/glue-in/flan46/right-case-terrace-base.stl",
-      "sha256": "b2603e0d59091b0c15bc351f089ba0867c3c6e8bd7c67aa2114943c12060ba8a"
-    },
-    {
-      "path": "mechanical/glue-in/flan54/left-case-level-base.stl",
-      "sha256": "5c35a00386fd96787ad0c82dbd071ec781a9aebe20340610ff0542cf28934108"
-    },
-    {
-      "path": "mechanical/glue-in/flan54/left-case-rim-base.stl",
-      "sha256": "37fd15aed401a27a61611a5d11f54fae4a79af58e1a848c27d7ffa9d0f1dca68"
-    },
-    {
-      "path": "mechanical/glue-in/flan54/left-case-solid-base.stl",
-      "sha256": "5c35a00386fd96787ad0c82dbd071ec781a9aebe20340610ff0542cf28934108"
-    },
-    {
-      "path": "mechanical/glue-in/flan54/left-case-terrace-base.stl",
-      "sha256": "18b356596ab373924d3e446ddf44b46e496ca8a544cf7af836f201e1b863aaeb"
-    },
-    {
-      "path": "mechanical/glue-in/flan54/right-case-level-base.stl",
-      "sha256": "0fa9807f76560b1e69467f0696fabeba165d5e224cd3426d0738bc3b5a3ffdcc"
-    },
-    {
-      "path": "mechanical/glue-in/flan54/right-case-rim-base.stl",
-      "sha256": "dcbf9f8b97410787d73546ccbc0ca88c5591afd0b26ea8a26ae92fcd5c1f0ad1"
-    },
-    {
-      "path": "mechanical/glue-in/flan54/right-case-solid-base.stl",
-      "sha256": "0fa9807f76560b1e69467f0696fabeba165d5e224cd3426d0738bc3b5a3ffdcc"
-    },
-    {
-      "path": "mechanical/glue-in/flan54/right-case-terrace-base.stl",
-      "sha256": "d563ebdb1e30264b574e9f51a504d743e1d1f5a9ab3bf235a1703bca207474c3"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-frame-talavera.stl",
-      "sha256": "f3e77d4d13a43f772581e13b67c1c15d699d00dd562e735706c75173f2ffea5a"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-frame-talavera-body.stl",
-      "sha256": "5a0c49353018ee5220c045f0f7d00ee3911ac12c258c5f4bbad3fe1079bb5974"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-frame-gameboy.stl",
-      "sha256": "9d25a218b1080a0324b9657121614b46f9895b31ba7df748edcd5901713469ff"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-frame-gameboy-body.stl",
-      "sha256": "f20d6524f0b3641bdb8115c02044eee6afd10c8b86a504ef857209b9ff3dafc7"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-frame-snes.stl",
-      "sha256": "823cc0bafb33bd6f2e2925531ab7185694ae5be570d8e2d7b5553cc32441a03f"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-frame-snes-body.stl",
-      "sha256": "d281a2bbd79fb8cef2f421d65ae6619d9ad2819bde60665dfda0a3bd0cf10ea7"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-frame-phone.stl",
-      "sha256": "87cbde20b624b413624739a2750f58a5ee821febf3a6a290f559c85a2576ddf8"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-frame-phone-body.stl",
-      "sha256": "fffa84ab2114e52d522ea927a7ad05cb7b9101258e006f3115bcee3b19bae6ce"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-frame-ipod.stl",
-      "sha256": "86bd0c272716089a23626da93fdcb53a6e228619fe0e2c40b319e986f92f9b82"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-frame-ipod-body.stl",
-      "sha256": "e9e005b2a89b459367bff6292ecbad51caf9540835097fcbe30a78c8788e0793"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-frame-hanafuda.stl",
-      "sha256": "ecc7be4a2062b92a1f2d767cd0bee4d279ed8218145dd4e7862f430d97be1a2e"
-    },
-    {
-      "path": "mechanical/glue-in/revI/left-frame-hanafuda-body.stl",
-      "sha256": "6609d037554f1b599ca5002fa709e35395471ca6dc200acb19ac0d870c7fa861"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-frame-talavera.stl",
-      "sha256": "0a9c8637170f8261a146bcd50578c65aafecd290ffd561e9818afff8ca672d5c"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-frame-talavera-body.stl",
-      "sha256": "c70c2d232387c12f12692e2720acef86da97b275e4d5498c5038771837191204"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-frame-gameboy.stl",
-      "sha256": "2a5170877723b2d19753012d3bbfa98c7dae1aa7103b7433b792fc2091aa70eb"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-frame-gameboy-body.stl",
-      "sha256": "313404dea092e9f9841b4277e9ed40de6edac00e21a2ee45e7d798bc19861cff"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-frame-snes.stl",
-      "sha256": "b39be329090e49eb7ac1e9ba7abf45ee7829be6f6f61b5bab3cc5b2a21bd1516"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-frame-snes-body.stl",
-      "sha256": "02dfc63168c5e4723a25501aad561e5b8303dc88af3d039dd973add497b07667"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-frame-phone.stl",
-      "sha256": "a2fe08d38b97c8a2ce74df7343fecc757d15cd5cade1707624ccf7d1bf35fb00"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-frame-phone-body.stl",
-      "sha256": "e984c74cdaf36fcb20484dc9b8505841393d7924efaaf19bef6f34ee1b1e07f4"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-frame-ipod.stl",
-      "sha256": "1973cdd94cffb18c114a2372a389f9a44414b57b8031ef0aacf3c9a4f4f3323f"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-frame-ipod-body.stl",
-      "sha256": "9852a9c895e40cb377bfb5930a5a2760cf440ddd09cac532db7a2cf580c36611"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-frame-hanafuda.stl",
-      "sha256": "5a61a3290cad4aadefd06a9d492920097df6d343882711fe8278b2c20d00f65d"
-    },
-    {
-      "path": "mechanical/glue-in/revI/right-frame-hanafuda-body.stl",
-      "sha256": "5ce9dac1c43cad8d583ac3d49f6b1da82eacd77fd4aed73c3d2b7fd086328dda"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/left-frame-talavera.stl",
-      "sha256": "b063cb3080866fc3dd98718ecd218c768da7dbaa04e91815333bcba4fe96108f"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/left-frame-talavera-body.stl",
-      "sha256": "09dfe816f232b5ad47a62cdd4cb75010ad8b002e48569873c9891837bc277f38"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/left-frame-gameboy.stl",
-      "sha256": "2ddc774a2163c6451663553d210d455d2719422bb7a9be1733056b36ece9984e"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/left-frame-gameboy-body.stl",
-      "sha256": "c3e4865afd59eb6f4b131cf0ffba2c8f65045c6a195c997304b31f6c6223a764"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/left-frame-snes.stl",
-      "sha256": "145ddee23ff3a7e738c1521b0866e709525985897498f0a792748b2cc910d7c2"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/left-frame-snes-body.stl",
-      "sha256": "5a27e10fff0f72ceff1695a0bada71608bad55d0c81e621c3c35e71327e9c330"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/left-frame-phone.stl",
-      "sha256": "c6465c4708b0130bb54cc09c982be92d2a9edb9fde8a669da619e04cf2556ac1"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/left-frame-phone-body.stl",
-      "sha256": "b4c1f8897161c00f7a4bdfda3146c2d57fb2edda00fa66a688ab122ddd64e71b"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/left-frame-ipod.stl",
-      "sha256": "9da9a70230363d7d58eee7b1033b919c06d9b67c18a5f2c0d27705bfc1b48090"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/left-frame-ipod-body.stl",
-      "sha256": "50434cc118980154f9861a4ac6c4ac19cb6dfaa82032f5a9a41f809d3cc30376"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/left-frame-hanafuda.stl",
-      "sha256": "c27d8631f3eb81150540ce5f883c4bf95c56191676c904330e823f961dda2c06"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/left-frame-hanafuda-body.stl",
-      "sha256": "ebbde5516ac6d363632bd710b4b813c2f87799831af79f52de9ac9fcf7c43be5"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/right-frame-talavera.stl",
-      "sha256": "ee975443dbf9649a4b16771a6c9fccef962dbda9dab33e01af8888027a59849e"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/right-frame-talavera-body.stl",
-      "sha256": "0b0030fdbd410c9fa4246fc260f52f90cba6b3fb7ef9cf751ae966101cbd925a"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/right-frame-gameboy.stl",
-      "sha256": "19c198e31d90a619da77d98e8cc6367f015f4b61d7a1a9a0ad189163b3a18704"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/right-frame-gameboy-body.stl",
-      "sha256": "94f3a7c5bac7d4f508c1320bddf7a5731d5b74ff76a070a71dde6d2965b3a8fa"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/right-frame-snes.stl",
-      "sha256": "56e72fba9450b66e7c979ef00f4ab630840117477582a9f4cbb96db5fc652374"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/right-frame-snes-body.stl",
-      "sha256": "3008abeed180fba88e01f59edde8c521dd413bfcd429199b700007675ce05550"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/right-frame-phone.stl",
-      "sha256": "ea0652fbafbbb883943c8285148ceb2b4aac3b0e236c71c7d3b51f8fcc5ac2ff"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/right-frame-phone-body.stl",
-      "sha256": "80e0e6d5064b3078722d4ccf2926c935d46e3df475f109d3e111f0c898787ac0"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/right-frame-ipod.stl",
-      "sha256": "00b15b682e149369c3cc7a8da690826bac83534aa6e5384099bc6480826b0b33"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/right-frame-ipod-body.stl",
-      "sha256": "dc1161931b44fa651a95770319c6108197da46115dab6ad7ff875098a3e07170"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/right-frame-hanafuda.stl",
-      "sha256": "85096ce89888d3f5704421ba1c24d64800e3ce49f014771546eaa10d2b40ad10"
-    },
-    {
-      "path": "mechanical/glue-in/revI/common-m2/right-frame-hanafuda-body.stl",
-      "sha256": "1488ff98d5a5157afd42b5b523b5e81459cdb43f960f7c3f71fe2335fbeea09f"
-    },
-    {
-      "path": "mechanical/glue-in/revI/coupon-magnet-base.stl",
-      "sha256": "b45611efc4550751e12b9e25801c1786d7999b53c7f992875a9af8006da186c0"
-    },
-    {
-      "path": "mechanical/glue-in/revI/coupon-magnet-frame.stl",
-      "sha256": "97490eb5ebf56bf9a9dccdaff64724fbe38aed4f0e7dd4d7e236798e2e038957"
-    },
-    {
-      "path": "tools/glue_pockets.py",
-      "sha256": "7e273e9042798f86ef7b48ff11c1136fa1924d530b6d71ba8e75d11846539198"
     }
   ],
   "sources": [
     {
       "path": "viewer/home-build.mjs",
-      "sha256": "58a1dd1525713a7cc81488dc494132e309037d391193163ccc78c213c921bad5"
+      "sha256": "24c6dd29c502fe782e504162562246bcfbad5195421ff6efbb1952e11c5ffef9"
     },
     {
       "path": "viewer/home/app.js",
-      "sha256": "51b5cf18e4a5c486e9673e18b3e5dc97f075b520ecedb14107cedd36df8294b0"
+      "sha256": "8793bb598d16250d18dc25ca4886080ec1a92ee9982e84bde538d2e7fdde158f"
     },
     {
       "path": "viewer/pinned-themes.js",
@@ -2108,7 +1732,7 @@
     },
     {
       "path": "viewer/home/template.html",
-      "sha256": "9e258bff3a43689620983dc62b23c9a3b0b95e69082ee66fd9fb20c0c023e9af"
+      "sha256": "0330e5fb4c704e3fbab05ab51c411571ed9118e243e2e40d94e77d6fa5a3e905"
     },
     {
       "path": "design/themes.json",

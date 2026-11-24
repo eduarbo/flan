@@ -319,7 +319,7 @@ details > :not(summary) { margin-top: 10px; }
 
 /* Parts: the selected part leads, then quick views and every group with its eye and Solo */
 #panel-inspect { display: flex; flex-direction: column; gap: 14px; }
-.component-presets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.component-presets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .component-presets button { min-height: 44px; background: var(--card); font-size: 13.5px; font-weight: 500; }
 .component-presets button:hover { background: var(--field); }
 .component-presets button[aria-pressed=true] { background: var(--ink); color: var(--bg0); }

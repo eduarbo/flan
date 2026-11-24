@@ -121,7 +121,7 @@ for side,prefix in [('left','L_'),('right','R_')]:
             v=exact_common(sa,sb).Volume
             if v>.001:
                 screw=a if a.startswith('screw-') else b if b.startswith('screw-') else None
-                # Only the deliberate tapped M2 thread envelope may overlap.
+                # Only the M2 thread envelope may overlap; with the 2.1 mm pilot the nominal shaft no longer does.
                 allowed=0
                 if screw and 'tray' in (a,b):
                     index=int(screw.split('-')[-1])-1
@@ -289,6 +289,12 @@ if doc.getObject('StockDisplayConnector'):
 if doc.getObject('DisplaySeamCorrection'):
     for p in ['design/proposals/display-seam-r1/master.json','design/proposals/display-seam-r1/Seam-candidate.FCStd',
               'design/proposals/display-seam-r1/geometry-check.json','tools/freecad/install_display_seam.py']:
+        metadata['inputs'].append({'path':p,'sha256':hashlib.sha256((ROOT/p).read_bytes()).hexdigest()})
+if doc.getObject('BaseSupports'):
+    # Second-build base: 2.1 mm self-threading pilots, no magnet stations, solid posts under the PCB.
+    metadata['base_supports']=json.loads(doc.BaseSupports.RecipeJSON)
+    metadata.pop('all_magnets',None)
+    for p in ['design/revI-mounts.json','design/pcb-supports.json','tools/plan_pcb_supports.py','tools/freecad/install_base_supports.py']:
         metadata['inputs'].append({'path':p,'sha256':hashlib.sha256((ROOT/p).read_bytes()).hexdigest()})
 if doc.getObject('PortRefinement'):
     metadata['port_refinement']=json.loads(doc.PortRefinement.RecipeJSON)

@@ -108,8 +108,8 @@
       "quantity": "battery:301230",
       "url": "https://typeractive.xyz/products/lithium-battery-110mah?variant=43294731665639",
       "note": {
-        "en": "Select WHT PH 2.0mm; verify polarity, finished size and lead routing. The loose wired jack supplied with white is not the PCB jack.",
-        "es": "Elige WHT PH 2.0mm; verifica polaridad, tamaño final y recorrido del cable. El jack con cable de la versión blanca no sustituye el de PCB."
+        "en": "Select WHT PH 2.0mm. The unit we tested arrived with its plug reversed for this board: measure it and, if needed, swap the two wires in the plug before connecting. Verify finished size and lead routing. The loose wired jack supplied with white is not the PCB jack.",
+        "es": "Elige WHT PH 2.0mm. La unidad que probamos llegó con el enchufe invertido para esta placa: mídelo y, si hace falta, intercambia los dos cables en el enchufe antes de conectarla. Verifica tamaño final y recorrido del cable. El jack con cable de la versión blanca no sustituye el de PCB."
       }
     },
     {
@@ -288,34 +288,6 @@
       }
     },
     {
-      "id": "base-magnets",
-      "supplier": "workbench",
-      "name": {
-        "en": "Ø2 × 3 mm axial magnets",
-        "es": "Imanes axiales Ø2 × 3 mm"
-      },
-      "quantity": 6,
-      "url": "",
-      "note": {
-        "en": "Glue three into each base from above after printing.",
-        "es": "Pega tres en cada base desde arriba después de imprimir."
-      }
-    },
-    {
-      "id": "frame-magnets",
-      "supplier": "workbench",
-      "name": {
-        "en": "Ø2 × 4 mm axial magnets",
-        "es": "Imanes axiales Ø2 × 4 mm"
-      },
-      "quantity": "frame-magnets",
-      "url": "",
-      "note": {
-        "en": "Glue three into the underside of each installed frame. Check attraction against the base first.",
-        "es": "Pega tres en la cara inferior de cada marco. Comprueba antes que se atraigan con los de la base."
-      }
-    },
-    {
       "id": "solder-tools",
       "supplier": "workbench",
       "name": {
@@ -339,8 +311,8 @@
       "quantity": 1,
       "url": "",
       "note": {
-        "en": "3D printer, filament, M2 tap, matching hex drivers and adhesive compatible with your filament and magnet coating. Test the printed fit and polarity before gluing.",
-        "es": "Impresora 3D, filamento, macho M2, llaves hexagonales y adhesivo compatible con el filamento y el recubrimiento de los imanes. Comprueba el ajuste y la polaridad antes de pegarlos."
+        "en": "3D printer, filament and matching hex drivers. Print the M2 sample first and check that the screw grips.",
+        "es": "Impresora 3D, filamento y llaves hexagonales. Imprime primero la muestra M2 y comprueba que el tornillo agarre."
       }
     }
   ],

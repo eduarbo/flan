@@ -1,6 +1,6 @@
 # Flan36 with common M2 screws
 
-This optional Flan36 variant enlarges the hidden head pockets in the plate and display frame. It accepts ordinary M2 × 0.4 machine screws with a head **no larger than Ø4 × 2 mm**. It keeps the PCB holes, bearing seats, thread engagement, exterior height, battery cage and removable magnetic frame.
+This optional Flan36 variant enlarges the hidden head pockets in the plate and display frame. It accepts ordinary M2 × 0.4 machine screws with a head **no larger than Ø4 × 2 mm**. It keeps the PCB holes, bearing seats, thread engagement, exterior height, battery cage and removable display frame.
 
 **Choose it in the [explorer](https://flankbd.com/explore/):** open **Build → Buy the parts** and set **Screws** to **Common M2**. The model then shows the variant's plates and frames; the shopping list, the guide, the print kit and the complete build ZIP all follow that choice, and the link and saved design keep it. The reference low-head screws stay the default, so earlier designs and links open unchanged. The option is offered for Flan36 only; choosing another size returns to the low-head screws.
 
@@ -15,7 +15,7 @@ A saved design records the choice as `"fasteners": "common-m2"`; without that ke
 
 These stainless DIN 912 / ISO 4762 socket-cap examples specify a head diameter of 3.62–3.98 mm, height of 1.86–2.00 mm and a **1.5 mm hex key**. The required ten screws total **US$0.96 before shipping and tax**. Bolt Depot states [no minimum order or quantity](https://boltdepot.com/Service); delivered cost and availability must be checked at checkout. Equivalent local screws within the same dimensional limits also qualify for the nominal geometry.
 
-Tap the unchanged Ø1.7 mm pilots with an M2 tap. These are not self-tapping screws. Do not substitute countersunk heads or longer screws. Print the existing M2 coupon first; check actual thread grip, seating and repeated disassembly before the full build.
+The pilots are Ø2.1 mm and, on the tested printer, the screws cut their own thread in the print; the [build guide](build.md#display-frame-and-service) says what to do if yours differs. Do not substitute countersunk heads or longer screws. Print the existing M2 coupon first; check actual thread grip, seating and repeated disassembly before the full build.
 
 ## What changes
 
@@ -25,9 +25,9 @@ Level's added upper wall receives the same local relief. Its outer surface and t
 
 **Long screws.** The installer rejects any head that collides, but its 0.30 mm clearance rule covers only the two pocketed short screws. The [delivery receipt](../validation/revI-common-fasteners.json) therefore records the side gap around a Ø4 × 2 mm head at the three long screws, measured on the adopted plates between seat and head top. Solid, Color rim and Terrace have no wall within 6 mm. **Level's upper shell half-wraps the rear long screw (H3) and leaves 0.10 mm around a Ø4 mm head**, or 0.20 mm around a Ø3.8 mm head, the same as the reference screw there. With Level, choose screws whose head is Ø3.8 mm or test that screw in the printed shell first; the explorer shows this note when Level is selected. The screws drawn in the model keep the reference low-head shape.
 
-Keep the five structural screws per half. They retain the PCB and battery cage when the magnetic frame is removed. A screwless alternative would need independent positive retention, removal access and measured clip fatigue/creep; magnetic attraction alone does not replace that function.
+Keep the five structural screws per half. They retain the PCB and battery cage when the display frame is removed. A screwless alternative would need independent positive retention, removal access and measured clip fatigue/creep.
 
-For service, disconnect USB and power, remove the magnetic frame and keycaps, then remove the three M2×6 screws and plate. The two M2×4 screws then become accessible. Retain the existing battery-disconnection and module-removal sequence in the [assembly guide](build.md#magnetic-frame-and-service).
+For service, disconnect USB and power, lift off the display frame, remove the keycaps, then remove the three M2×6 screws and plate. The two M2×4 screws then become accessible. Retain the existing battery-disconnection and module-removal sequence in the [assembly guide](build.md#display-frame-and-service).
 
 ## Reproduce the optional kit
 

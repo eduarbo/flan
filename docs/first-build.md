@@ -6,7 +6,7 @@
 
 ## Order in two stages
 
-1. **Components and fit samples.** Use the exact [Typeractive](parts.md#typeractive-shopping-list), [DigiKey](parts.md#digikey-shopping-list) and [fastener](parts.md#fasteners-cable-and-tools) selections. Measure the received cell, connectors and magnets. Print the three keycap samples and the three magnetic/thread coupons before committing to the complete case. Use the twelve magnets already in stock.
+1. **Components and fit samples.** Use the exact [Typeractive](parts.md#typeractive-shopping-list), [DigiKey](parts.md#digikey-shopping-list) and [fastener](parts.md#fasteners-cable-and-tools) selections. Measure the received cell and connectors. Print the three keycap samples and the M2 thread coupon before committing to the complete case.
 2. **Prototype boards and complete prints.** Order one left design and one right design using the [PCB settings](electronics.md#order-the-two-pcbs). A fabricator's minimum lot may give spare boards; these are two different jobs, not two copies of one board. Choose the edition and solder mask color for each half in the explorer; its Build panel pairs each download with its ordering color. Keep the downloaded ZIPs, UF2s and configuration together. Print the switch plates first and check switch seating/retention; continue with the remaining complete kit only after sample fit passes.
 
 For Flan36 the purchase quantities are: 2 nice!nano v2, 2 nice!view with their supplied connectors, 40 Pro Red Choc v1 switches, 40 Choc sockets, 40 diodes, 2 white battery jacks, 2 Adafruit 1570 cells, 2 PCM12SMTR power switches, 2 TL3342F160QG/TR reset switches, one 64-contact Mill-Max strip, 50 round pins, 6 M2 × 6 low-head screws, 4 M2 × 4 ultra-low-head screws and 8 feet. With the explorer's [common M2 screws](common-fasteners.md) setting, the ten screws are ordinary M2 socket caps and the print kit changes to match. The [BOM](parts.md) includes the exact references, data cable, tape and tools.
@@ -26,7 +26,7 @@ Copy this section into your build notes. Leave results **NOT TESTED** until meas
 | Left/right UF2 filenames + SHA-256 | |
 | Print-kit filename + SHA-256 | |
 | Printer / material / nozzle / layer height / slicer version | |
-| Actual cell / switches / connectors / magnet sizes and grade | |
+| Actual cell / switches / connectors | |
 
 Use `shasum -a 256 FILE` to record a downloaded file. Preserve this candidate with the test results; do not mix a later PCB revision into the same record.
 
@@ -35,13 +35,13 @@ Use `shasum -a 256 FILE` to record a downloaded file. Preserve this candidate wi
 | Gate | Procedure and pass condition | Result / evidence |
 |---|---|---|
 | 1. Supplied parts | Record cell dimensions including wrapping, connector polarity and charge limit. Measure controller support at Z8.20 mm and display underside at Z12.40 mm. Parts seat without force or pouch/glass loading. | NOT TESTED |
-| 2. Printed samples | Three cap samples seat, return through full travel and detach without splitting. M2 pilot taps and retains its specified screw without bottoming. Both magnet coupons capture the measured magnets with opposite mating polarity. | NOT TESTED |
+| 2. Printed samples | Three cap samples seat, return through full travel and detach without splitting. The specified M2 screw cuts its own thread in the Ø2.1 mm pilot of the coupon and holds without bottoming; no tap is used. | NOT TESTED |
 | 3. Unpowered PCB | Inspect bridges, diode bands, socket orientation and MCU/display orientation. Verify intended continuity against the schematic and no sustained power-to-ground short. Battery remains unplugged; USB remains disconnected. | NOT TESTED |
 | 4. USB bring-up | Keep BOOST open. With the cell disconnected, flash each genuine nice!nano with its matching half's UF2. Left USB reports the keyboard. Confirm both screens, reset/bootloader recovery and absence of unexpected heating. | NOT TESTED |
 | 5. Keys and layers | Test each physical key independently for press **and release**; then chords, all four layers, tap/hold thumbs and profile keys. Record failures by side + PCB reference. Expected counts: 36, 42, 46 or 54 for the selected size. | NOT TESTED |
 | 6. Battery / charging | Only after gates 1–4, connect the verified-polarity pack. Measure charge current within the actual pack's limit (selected Adafruit listing: ≤100 mA), SW1 operation and active/idle/sleep current. Record instrument, voltage and display mode. Stop on unexpected heating or cell damage. | NOT TESTED |
 | 7. BLE and wake | Pair the left central; verify the right half. Repeat disconnect/reconnect and power-cycle recovery. After the configured 15-minute sleep, wake by keypress on each half; no stuck keys or lost pairing. Record host/OS, distance and failures. | NOT TESTED |
-| 8. Complete case | USB plug and switch remain accessible; no rubbing caps, stressed glass or compressed pouch. Test frame peel/sliding, repeated removal, magnet capture and battery service. Record repetitions and observations; no carrying-handle claim. | NOT TESTED |
+| 8. Complete case | USB plug and switch remain accessible; no rubbing caps, stressed glass or compressed pouch. Check that the loose frame rests over the display without pressing on the glass, and test battery service. Record repetitions and observations; no carrying-handle claim. | NOT TESTED |
 | 9. Real use | Use the assembled keyboard for a declared session, recording duration, battery voltage before/after, dropped/repeated keys and discomfort. Correct defects and repeat the affected gate before calling this unit accepted. | NOT TESTED |
 
 For the reference layout, test K01–K05, K11–K15, K21–K25 and K30–K32 on **each half**. Larger variants add the references in [the family guide](variants.md); their acceptance does not follow automatically from a successful Flan36.
@@ -54,7 +54,7 @@ The physical record remains with the builder. Report a failure with its build ID
 
 ## Freeze the files
 
-The local first-build ZIP includes one complete Flan36 print kit, its configuration, matching PCB edition, three UF2 choices, three cap samples, the magnetic/thread coupons, guides and a SHA-256 manifest. It contains no printer profile or G-code. Print one of each cap sample first; the complete kit records final quantities.
+The local first-build ZIP includes one complete Flan36 print kit, its configuration, matching PCB edition, three UF2 choices, three cap samples, the M2 thread coupon, guides and a SHA-256 manifest. It contains no printer profile or G-code. Print one of each cap sample first; the complete kit records final quantities.
 
 Regenerate from the repository root after building the viewer:
 

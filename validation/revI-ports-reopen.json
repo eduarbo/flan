@@ -1,7 +1,7 @@
 {
   "passed": true,
-  "native_sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399",
-  "checker_sha256": "ed797ea116bb7448a72efa5ce20ea471e6092c82bd97964edb12d87273678f4e",
+  "native_sha256": "183f3ad665222207839752b82eaf9eb0fbb9e84bb58157219874e21c30babaf2",
+  "checker_sha256": "2aa041d1fc585fa468a5b8e27f84771823c407cc3f91236644dc8096b2fa5559",
   "halves": {
     "left": {
       "usb_aperture_mm": [
@@ -71,7 +71,7 @@
           "usb_collision_mm3": 0.0,
           "actuator_sweep_collision_mm3": 0.0,
           "valid_solid": true,
-          "volume_mm3": 14507.686954223867
+          "volume_mm3": 14579.17703664897
         },
         "solid-plate": {
           "usb_collision_mm3": 0.0,
@@ -83,7 +83,7 @@
           "usb_collision_mm3": 0.0,
           "actuator_sweep_collision_mm3": 0.0,
           "valid_solid": true,
-          "volume_mm3": 14902.631823614838
+          "volume_mm3": 14974.121906039965
         },
         "rim-plate": {
           "usb_collision_mm3": 0.0,
@@ -95,7 +95,7 @@
           "usb_collision_mm3": 0.0,
           "actuator_sweep_collision_mm3": 0.0,
           "valid_solid": true,
-          "volume_mm3": 14383.092317352332
+          "volume_mm3": 14454.582399777435
         },
         "terrace-plate": {
           "usb_collision_mm3": 0.0,
@@ -107,7 +107,7 @@
           "usb_collision_mm3": 0.0,
           "actuator_sweep_collision_mm3": 0.0,
           "valid_solid": true,
-          "volume_mm3": 14507.686954223867
+          "volume_mm3": 14579.17703664897
         },
         "level-plate": {
           "usb_collision_mm3": 0.0,
@@ -185,7 +185,7 @@
           "usb_collision_mm3": 0.0,
           "actuator_sweep_collision_mm3": 0.0,
           "valid_solid": true,
-          "volume_mm3": 14507.332185406854
+          "volume_mm3": 14578.82226783195
         },
         "solid-plate": {
           "usb_collision_mm3": 0.0,
@@ -197,7 +197,7 @@
           "usb_collision_mm3": 0.0,
           "actuator_sweep_collision_mm3": 0.0,
           "valid_solid": true,
-          "volume_mm3": 14902.27705479784
+          "volume_mm3": 14973.767137222905
         },
         "rim-plate": {
           "usb_collision_mm3": 0.0,
@@ -209,7 +209,7 @@
           "usb_collision_mm3": 0.0,
           "actuator_sweep_collision_mm3": 0.0,
           "valid_solid": true,
-          "volume_mm3": 14382.737548535262
+          "volume_mm3": 14454.227630960395
         },
         "terrace-plate": {
           "usb_collision_mm3": 0.0,
@@ -221,7 +221,7 @@
           "usb_collision_mm3": 0.0,
           "actuator_sweep_collision_mm3": 0.0,
           "valid_solid": true,
-          "volume_mm3": 14507.332185406854
+          "volume_mm3": 14578.82226783195
         },
         "level-plate": {
           "usb_collision_mm3": 0.0,
@@ -232,87 +232,8 @@
       }
     }
   },
-  "magnets": [
-    {
-      "side": "left",
-      "station": 0,
-      "base_mm": [
-        2,
-        3
-      ],
-      "frame_mm": [
-        2,
-        4
-      ],
-      "gap_mm": 0.8999999999999995
-    },
-    {
-      "side": "left",
-      "station": 1,
-      "base_mm": [
-        2,
-        3
-      ],
-      "frame_mm": [
-        2,
-        4
-      ],
-      "gap_mm": 0.8999999999999995
-    },
-    {
-      "side": "left",
-      "station": 2,
-      "base_mm": [
-        2,
-        3
-      ],
-      "frame_mm": [
-        2,
-        4
-      ],
-      "gap_mm": 0.8999999999999995
-    },
-    {
-      "side": "right",
-      "station": 0,
-      "base_mm": [
-        2,
-        3
-      ],
-      "frame_mm": [
-        2,
-        4
-      ],
-      "gap_mm": 0.8999999999999995
-    },
-    {
-      "side": "right",
-      "station": 1,
-      "base_mm": [
-        2,
-        3
-      ],
-      "frame_mm": [
-        2,
-        4
-      ],
-      "gap_mm": 0.8999999999999995
-    },
-    {
-      "side": "right",
-      "station": 2,
-      "base_mm": [
-        2,
-        3
-      ],
-      "frame_mm": [
-        2,
-        4
-      ],
-      "gap_mm": 0.8999999999999995
-    }
-  ],
-  "magnet_count": 12,
+  "magnets": [],
+  "magnet_count": 0,
   "finger_nail_approach": {
     "left": {
       "lateral_reserve_mm": 0.4,

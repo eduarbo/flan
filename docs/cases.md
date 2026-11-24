@@ -25,7 +25,7 @@ The **Level** upper shell and frame share the **14.50 mm** plane; the display gl
 
 ## Open or covered
 
-Uncheck **Printed display cover** to expose the current stack. The display, controller, battery and structural supports remain; the printed cover and its three Ø2 × 4 mm frame magnets are omitted. The three Ø2 × 3 mm base magnets stay in place. Choose any display frame to reinstall it. This is the wireless nice!nano/nice!view stack, not the Raspberry Pi Pico arrangement in the inspiration photo.
+Uncheck **Printed display cover** to expose the current stack. The display, controller, battery and structural supports remain; the printed cover is omitted. Choose any display frame to reinstall it. This is the wireless nice!nano/nice!view stack, not the Raspberry Pi Pico arrangement in the inspiration photo.
 
 ![Color rim with the display stack exposed](images/revI-case-rim-open.png)
 
@@ -39,4 +39,4 @@ Download [Flan36.FCStd](../mechanical/revI/Flan36.FCStd) and use the [FreeCAD gu
 
 [All case parts](../mechanical/revI) use `left-case-{solid,rim,terrace,level}-{base,plate}.{step,stl}` and matching `right-` names. Exported parts retain assembly coordinates. The viewer saves per-half case and cover choices in JSON; import that JSON with the configuration macro. JSON without case settings inherits the current default with covers installed. The assembled GLB includes the selected meshes, including when view layers are hidden.
 
-Print the base and plate separately for contrasting colors; a multicolor printer is optional. Use the existing [fit coupons and rebuilding commands](cad.md) before a full shell. The raised rim and recessed bands are real geometry. Nominal CAD checks do not qualify their printed strength, snap or thread fit, magnetic holding force or actual electronics clearances.
+Print the base and plate separately for contrasting colors; a multicolor printer is optional. Use the existing [fit coupons and rebuilding commands](cad.md) before a full shell. The raised rim and recessed bands are real geometry. Nominal CAD checks do not qualify their printed strength, snap or thread fit, or actual electronics clearances.

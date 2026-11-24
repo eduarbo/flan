@@ -27,7 +27,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/build-workflow
   config.pcb_editions={left:'asanoha',right:'seigaiha'};config.pcb_masks={left:'white',right:'purple'};
   await page.locator('#load-config').setInputFiles({name:'mixed-build.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(config))});
   await page.waitForFunction(()=>window.flan36.snapshot().configuration.batteries.right==='301230');
-  assert.equal(await count('adafruit-1570'),1);assert.equal(await count('301230'),1);assert.equal(await count('frame-magnets'),3);
+  assert.equal(await count('adafruit-1570'),1);assert.equal(await count('301230'),1);
   assert.equal(await count('view'),2,'frame removal does not remove the display');
   assert.match(await page.locator('[data-part="socket"] a').getAttribute('href'),/variant=45742200324327/);
   assert.match(await page.locator('[data-part="301230"] a').getAttribute('href'),/variant=43294731665639/);

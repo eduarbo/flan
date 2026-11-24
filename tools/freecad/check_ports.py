@@ -17,15 +17,8 @@ def main():
     native=ROOT/'mechanical/revI/Flan36.FCStd';doc=A.openDocument(str(native))
     recipe=ROOT/'design/revI-ports.json'
     assert doc.PortRefinement.RecipeSHA256==hashlib.sha256(recipe.read_bytes()).hexdigest()
-    access=validate(doc);approach={};appearance={};magnets=[]
+    access=validate(doc);approach={};appearance={}
     for side,prefix in [('left','L_'),('right','R_')]:
-        for i in range(3):
-            base=doc.getObject(prefix+'Magnet'+str(i));frame=doc.getObject(prefix+'SteelTarget'+str(i))
-            assert abs(base.Radius.Value-1)<1e-8 and abs(base.Height.Value-3)<1e-8
-            assert abs(frame.Radius.Value-1)<1e-8 and abs(frame.Height.Value-4)<1e-8
-            gap=frame.Placement.Base.z-base.Placement.Base.z-base.Height.Value
-            assert abs(gap-.9)<1e-8 and 'frame magnet' in frame.Label
-            magnets.append({'side':side,'station':i,'base_mm':[2,3],'frame_mm':[2,4],'gap_mm':gap})
         sweep=actuator_envelope(doc,prefix).BoundBox
         x=sweep.XMax if side=='left' else 23
         end=137 if side=='left' else sweep.XMin
@@ -45,7 +38,7 @@ def main():
             appearance[obj.Name]={'faces':len(obj.Shape.Faces),'assignments':len(values),'verified':True}
     report={'passed':True,'native_sha256':hashlib.sha256(native.read_bytes()).hexdigest(),
             'checker_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-            'halves':access,'magnets':magnets,'magnet_count':12,'finger_nail_approach':approach,'native_frame_materials':appearance,
+            'halves':access,'magnets':[],'magnet_count':0,'finger_nail_approach':approach,'native_frame_materials':appearance,
             'physical_acceptance':False,'method':'Reopen saved FreeCAD file without recompute; check actual solids, USB corridor, actuator sweep, approach path and owning-face color assignment.'}
     (ROOT/'validation/revI-ports-reopen.json').write_text(json.dumps(report,indent=2)+'\n')
     print('PASS: saved refined ports and frame appearance',file=sys.__stdout__,flush=True)

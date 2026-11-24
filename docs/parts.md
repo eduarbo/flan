@@ -4,7 +4,7 @@
 
 **One complete split keyboard. Quantities cover both halves of Flan36; [other sizes](#quantities-by-size) change only the per-key parts and a few screws.**
 
-This is the selected purchasing BOM for the routed revI prototype, an original design by Eduardo Ruiz. The display uses the connector supplied with nice!view; the controller sockets and pins are specified below. **Physical assembly has not been qualified:** supplied-part tolerances, printed fit, magnetic retention and electrical operation still need the [build checks](build.md).
+This is the selected purchasing BOM for the routed revI prototype, an original design by Eduardo Ruiz. The display uses the connector supplied with nice!view; the controller sockets and pins are specified below. **Physical assembly has not been qualified:** supplied-part tolerances, printed fit and electrical operation still need the [build checks](build.md).
 
 [Custom PCBs](electronics.md) · [Quantities by size](#quantities-by-size) · [Typeractive shopping list](#typeractive-shopping-list) · [Controllers](#controllers) · [Displays](#displays) · [Switches](#switches-and-hot-swap) · [Battery](#battery) · [Connectors](#removable-connectors) · [Small parts](#small-electrical-parts) · [Printed parts](#printed-parts)
 
@@ -14,7 +14,7 @@ This is the selected purchasing BOM for the routed revI prototype, an original d
 
 ## Quantities by size
 
-Everything not listed here is the same for every size: two controllers, two displays, two batteries, two power switches, two reset buttons, the controller connectors, magnets, feet, cable and tape. Typeractive sells switches, sockets and diodes in packs of ten. The pack counts below include at least four spares. DigiKey also sells the diodes by the piece.
+Everything not listed here is the same for every size: two controllers, two displays, two batteries, two power switches, two reset buttons, the controller connectors, feet, cable and tape. Typeractive sells switches, sockets and diodes in packs of ten. The pack counts below include at least four spares. DigiKey also sells the diodes by the piece.
 
 | | Flan36 | Flan42 | Flan46 | Flan54 |
 |---|:-:|:-:|:-:|:-:|
@@ -76,12 +76,6 @@ Observed catalog availability is a snapshot, not a reservation or a delivery pro
 
 The two NBK packs are **US$43.45** before shipping/tax. An ordinary M2 socket-head screw does not fit these head pockets; for Flan36, the explorer's optional [common M2 screws](common-fasteners.md) setting prints plates and frames with deeper pockets for them instead. These are catalog selections, not placed orders. Feet, cable and tape retain their existing references; their October 10 prices are historical.
 
-## Magnets from existing stock
-
-Use **12 axially magnetized neodymium magnets from existing stock: 6 × Ø2 × 3 mm in the bases and 6 × Ø2 × 4 mm in the frames**, three of each per half. No magnetic hardware purchase is required. Each additional pair of frames needs six more Ø2 × 4 mm magnets; the base magnets stay in place. Measure the actual magnets before printing; the existing pocket geometry is unchanged.
-
-Before gluing the magnets into their open sockets, verify that every matching pair attracts in its final assembled orientation. Keep the same mating-face polarity across the bases and the opposite mating-face polarity across all interchangeable frames. Use the [polarity, adhesive and retention checks](build.md#magnetic-frame-and-service); the stock's grade, temperature limit and holding force have not been qualified.
-
 ## Controllers
 
 <a href="https://typeractive.xyz/products/nice-nano"><img src="https://cdn.shopify.com/s/files/1/0618/5674/3655/products/new-nano-side-small.jpg?v=1671313846" width="210" alt="nice!nano v2.0 — supplier product photo"></a>
@@ -130,7 +124,7 @@ All 36 sockets are represented in the nominal assembly and registered to their P
 
 <a href="https://typeractive.xyz/products/lithium-battery-110mah"><img src="https://cdn.shopify.com/s/files/1/0618/5674/3655/products/battery-corner-small.jpg?v=1671314267" width="210" alt="Lithium Battery 110mAh — supplier product photo"></a>
 
-**Typeractive alternative: 301230, 110 mAh, 3 × 12 × 30 mm.** [Product and connector variants](https://typeractive.xyz/products/lithium-battery-110mah). The black PH connector version has shorter leads; the white version includes a mating wired jack. No cell-specific datasheet is linked on the listing.
+**Typeractive alternative: 301230, 110 mAh, 3 × 12 × 30 mm.** [Product and connector variants](https://typeractive.xyz/products/lithium-battery-110mah). The unit tested arrived with its plug reversed for J1; [measure and swap the wires if needed](build.md). The black PH connector version has shorter leads; the white version includes a mating wired jack. No cell-specific datasheet is linked on the listing.
 
 **Both profiles use the same case, PCB opening, open-bottom locator and cage.** The cell rests at **Z = 1.4 mm** on the case floor; there is no printed saddle beneath it. Select the battery under **Design → Battery** in the explorer; configuration JSON and FreeCAD retain the choice per half.
 
@@ -191,9 +185,7 @@ Put the male header's **short solder tails into the display PCB** and its long m
 
 ## Fasteners, cable and tools
 
-- **6 × M2 × 6 low-head screws:** nominal NBK SLH envelope, Ø3.8 × 1.3 mm head. [Drawing](https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SLH-TZB/SLH-TZB_1.pdf). **4 × M2 × 4:** NBK SSH envelope, Ø4 × 1.1 mm head. [Drawing](https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SSH/SSH_1.pdf). Tap the printed Ø1.7 mm pilots M2; engagement is 2.2–2.4 mm. Thread strength remains untested. Flan36 alternative: [common M2 screws](common-fasteners.md), chosen in the explorer.
-- **6 × Ø2 × 3 mm axial neodymium magnets from existing stock:** three stay in each base. The original S-02-03-N, N45 reference has [product information](https://www.supermagnete.de/stabmagnete-neodym-rund/stabmagnet-2mm-3mm_S-02-03-N) and a [datasheet](https://www.supermagnete.fr/data_sheet_S-02-03-N.pdf); its 80°C limit does not establish the grade or thermal limit of the actual stock. Qualify the capture process using the actual magnets.
-- **6 × Ø2 × 4 mm axial neodymium magnets from existing stock:** three per frame; see [magnet quantities and polarity](#magnets-from-existing-stock). Every additional pair of frames needs six more. No steel targets are required.
+- **6 × M2 × 6 low-head screws:** nominal NBK SLH envelope, Ø3.8 × 1.3 mm head. [Drawing](https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SLH-TZB/SLH-TZB_1.pdf). **4 × M2 × 4:** NBK SSH envelope, Ø4 × 1.1 mm head. [Drawing](https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SSH/SSH_1.pdf). The screws cut their own thread in the printed Ø2.1 mm pilots; no tap is needed. Engagement is 2.2–2.4 mm. Thread strength remains untested. Flan36 alternative: [common M2 screws](common-fasteners.md), chosen in the explorer.
 - **8 × Essentra RBS-5BK adhesive feet:** Ø12.7 × 1.6 mm, [DigiKey RPC1381-ND](https://www.digikey.com/en/products/detail/essentra-components/RBS-5BK/1878940). The checked eight-piece line was $1.30. Their 1.6 mm height adds externally without changing the internal stack; place them clear of reset access and screw holes.
 - **1 roll Olimex KAPTON-TAPE10MM:** 10 mm × 30 m insulating tape for local electrical isolation. [Manufacturer specifications](https://www.olimex.com/Products/Tools/Soldering/KAPTON-TAPE10MM/) give 20 µm thickness. Do not cover connector contacts or use tape to compress the battery pouch; the printed locator and cage provide mechanical retention. Printed retention remains untested.
 - **1 × Adafruit 4199 USB-C to USB-C data cable, 1 m:** [manufacturer information](https://www.adafruit.com/product/4199). Use it to flash and charge each half in sequence from a USB-C computer. The cable carries data as well as power; inspect complete plug insertion without forcing the case. No second cable or USB-A adapter is required for that sequence. Omit this purchase only if an equivalent USB-C data cable is already available.
@@ -201,7 +193,7 @@ Put the male header's **short solder tails into the display PCB** and its long m
 
 ## Sources and images
 
-The selected Typeractive and DigiKey products and pack quantities were checked during the **2026-10-10** procurement review. Earlier battery and magnetic hardware references date from **2026-09-22**. Manufacturer/supplier documentation takes precedence over approximate CAD envelopes; the assembly checks apply to delivered parts, not merely their catalog names.
+The selected Typeractive and DigiKey products and pack quantities were checked during the **2026-10-10** procurement review. Earlier battery references date from **2026-09-22**. Manufacturer/supplier documentation takes precedence over approximate CAD envelopes; the assembly checks apply to delivered parts, not merely their catalog names.
 
 Product photos are embedded from Typeractive/Adafruit and linked to their original listings. They remain the property of their respective owners; they are not relicensed under this repository’s license. They need internet access and are not bundled in the offline 3D viewer. Flan36 renders have separate [attribution](../ATTRIBUTION.md).
 

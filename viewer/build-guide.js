@@ -23,7 +23,7 @@ export function shoppingList(config,family){
   if(item.fasteners&&item.fasteners!==fastenersOf(config))return [];   // screws of the other head profile
   const battery=String(item.quantity).startsWith('battery:')?String(item.quantity).slice(8):null;
   const halves=battery?sides.filter(side=>config.batteries[side]===battery):[];
-  const required=battery?halves.length:({keys,m6,'frame-magnets':sides.filter(side=>config.cases[side].cover).length*3}[item.quantity]??item.quantity);
+  const required=battery?halves.length:({keys,m6}[item.quantity]??item.quantity);
   if(!required)return [];
   const packs=item.pack?Math.ceil((required+(item.quantity==='keys'?4:0))/item.pack):null;
   const buy=packs?packs*item.pack:item.buy||required;
@@ -110,7 +110,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
  function renderShopping(){
   rows=shoppingList(current,family);const target=$('build-shopping');target.replaceChildren();
   for(const supplier of [...new Set(rows.map(r=>r.supplier))]){
-   const group=node('section','shopping-group'),grid=node('div','shopping-grid');group.append(node('h4','',supplier==='workbench'?say('Magnets & tools','Imanes y herramientas'):supplier),grid);
+   const group=node('section','shopping-group'),grid=node('div','shopping-grid');group.append(node('h4','',supplier==='workbench'?say('Tools','Herramientas'):supplier),grid);
    for(const row of rows.filter(r=>r.supplier===supplier)){
     const item=node('div','shopping-row');item.dataset.part=row.id;item.dataset.required=row.required;item.dataset.buy=row.buy;
     const label=node('label','shopping-check'),input=node('input');input.type='checkbox';input.checked=checked[row.id]===row.token;
@@ -265,7 +265,7 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
   if(scope!=='shells')counts.push(caps.keys.length+' keycaps');
   host.replaceChildren(details('build-print-contents',selection+' · '+counts.join(' + '),[...pockets,rows]));
   const samples=node('div','downloads');
-  for(const [name,file] of scope==='caps'?[]:[[say('Base magnet sample','Muestra de imán de base'),'coupon-magnet-base'],[say('Frame magnet sample','Muestra de imán de marco'),'coupon-magnet-frame'],[say('M2 thread sample','Muestra de rosca M2'),'coupon-m2-thread']])samples.append(link(name+' · STL ↓',raw((file.startsWith('coupon-magnet')?'mechanical/glue-in/revI/':'mechanical/revI/')+file+'.stl')));
+  for(const [name,file] of scope==='caps'?[]:[[say('M2 thread sample','Muestra de rosca M2'),'coupon-m2-thread']])samples.append(link(name+' · STL ↓',raw('mechanical/revI/'+file+'.stl')));
   const seen=new Set();
   for(const g of caps.groups){if(seen.has(g.file))continue;seen.add(g.file);samples.append(link(say('Keycap sample · ','Muestra de keycap · ')+g.label+' ↓',raw(catalog.variants.find(v=>v.id===g.variant).path)));}
   const uses=printSpoolUses(current,selected,scope==='shells'?[]:caps.keys);
@@ -297,26 +297,20 @@ export function createBuildGuide({catalog,family,inventory,getDesignLink,illustr
    ]));
    return;
   }
-  const mount=details('print-glue-magnets',say('Glue the magnets after printing','Pega los imanes después de imprimir'),[
-   node('p','micro',say('Base · 3 axial Ø2 × 3 mm magnets, inserted from above.','Base · 3 imanes axiales Ø2 × 3 mm, desde arriba.')),
-   node('p','micro',say('Display frame · 3 axial Ø2 × 4 mm magnets, inserted from underneath.','Marco · 3 imanes axiales Ø2 × 4 mm, desde abajo.')),
-   node('p','micro',say('Dry-fit a pair that attracts. Mark the same exposed pole in every base and the opposite in every frame. Use adhesive compatible with the plastic and magnet coating. Let the pieces cure apart before installing the electronics.','Prueba en seco una pareja que se atraiga. Marca el mismo polo visible en todas las bases y el opuesto en todos los marcos. Usa adhesivo compatible con el plástico y el recubrimiento del imán. Deja curar las piezas separadas antes de montar la electrónica.'))
-  ]);
   const orientation=details('print-orientation',say('How the parts sit on the bed','Orientación de las piezas'),[
    node('p','micro',say('Bases sit floor down and switch plates lie flat. Their broad faces and the material around the switch cutouts run along the layers.','Las bases apoyan el piso y las placas quedan planas. El material alrededor de los huecos de los switches queda en el plano de las capas.')),
    node('p','micro',say('Display frames sit face down. On decorated frames, the bed finish transfers to the artwork.','Los marcos apoyan la cara visible. La textura de la cama se transfiere al dibujo.')),
    node('p','micro',say('The battery cage rests on its top, the display sled on a long side, and the washers lie flat. Keycaps print finger side up with supports under the body. Try one stem on your switch before printing the set.','La jaula de batería apoya el techo, el soporte de pantalla descansa sobre su costado largo y las arandelas quedan planas. Las teclas se imprimen con la cara táctil arriba y soportes debajo. Prueba un vástago en tu switch antes de imprimir el juego.'))
   ]);
-  fitHost.replaceChildren(mount,orientation,filaments,details('build-fit-details',say('Start with fit samples','Empieza con las muestras de ajuste'),[
-   node('p','micro',say('Print one of each selected keycap shape, plus the magnet and M2 coupons. For the standalone base STL sample, enable thin-wall detection. Check stem fit, full key travel, the adhesive bond and tapped screw engagement before printing everything.','Imprime una de cada forma de keycap elegida, más las muestras de imán y M2. Para el STL de muestra de la base, activa la detección de paredes finas. Revisa el encaje del vástago, recorrido, pegado de imanes y rosca antes de imprimir todo.')),samples,
+  fitHost.replaceChildren(orientation,filaments,details('build-fit-details',say('Start with fit samples','Empieza con las muestras de ajuste'),[
+   node('p','micro',say('Print one of each selected keycap shape, plus the M2 sample. Check stem fit, full key travel and that the screw grips before printing everything.','Imprime una de cada forma de keycap elegida, más la muestra M2. Revisa el encaje del vástago, el recorrido y que el tornillo agarre antes de imprimir todo.')),samples,
    ...printInstructions()
   ]));
  }
  function printInstructions(){return [list([
   say('Open the combined 3MF as a project. Bases and switch plates each take one filament. AMS multicolor preserves the four frame regions. The by-object preference and one-spool modes use the fused frame in its body color. Match the project colors to your spools, or use the fused frame STL in the ZIP for a single-color print.','Abre el 3MF conjunto como proyecto. Cada base y cada placa usa un filamento. AMS multicolor conserva las cuatro zonas del marco. Las opciones de preferir por objeto y de una bobina por cama usan el marco liso del color del cuerpo. Asigna tus bobinas o usa el STL del marco en el ZIP para imprimirlo en un solo color.'),
-  say('The 3MF enables supports for keycaps and display sleds. Inspect supports and magnet pockets in the sliced preview. Studio generates the G-code when you slice. Print the plates first and test switch retention.','El 3MF activa soportes para las teclas y los soportes de pantalla. Revisa los soportes y los huecos de los imanes al laminar. Studio genera el G-code al laminar. Imprime primero las placas y prueba la retención de switches.'),
-  say('After printing, insert three axial Ø2 × 3 mm magnets per base from above and three Ø2 × 4 mm per frame from underneath. Dry-fit an attracting pair. Mark the same exposed pole in all bases and the opposite in all frames. Use adhesive compatible with the plastic and coating. Let the pieces cure apart before installing the electronics.','Después de imprimir, coloca tres imanes axiales Ø2 × 3 mm por base desde arriba y tres Ø2 × 4 mm por marco desde abajo. Prueba en seco una pareja que se atraiga. Marca el mismo polo visible en todas las bases y el opuesto en los marcos. Usa adhesivo compatible con el plástico y el recubrimiento. Deja curar las piezas separadas antes de instalar la electrónica.'),
-  say('Tap the Ø1.7 mm printed pilots with an M2 tap. Test that the selected screw grips without bottoming or splitting the part.','Rosca los pilotos impresos de Ø1.7 mm con un macho M2. Comprueba que el tornillo sujete sin tocar fondo ni partir la pieza.')
+  say('The 3MF enables supports for keycaps and display sleds. Inspect the supports in the sliced preview. Studio generates the G-code when you slice. Print the plates first and test switch retention.','El 3MF activa soportes para las teclas y los soportes de pantalla. Revisa los soportes al laminar. Studio genera el G-code al laminar. Imprime primero las placas y prueba la retención de switches.'),
+  say('On the printer this was tested with (Bambu Lab X2D, 0.4 mm nozzle, PLA) the M2 screws cut their own thread in the printed Ø2.1 mm pilots. Print the M2 sample first. If the screw will not start, clear the hole with a 2 mm drill or an M2 tap; if it turns without gripping, reprint the sample with −0.1 mm X-Y hole compensation. Drive them straight and stop when the head seats; do not overtighten.','En la impresora con la que se probó (Bambu Lab X2D, boquilla de 0.4 mm, PLA) los tornillos M2 abren su propia rosca en los pilotos impresos de Ø2.1 mm. Imprime primero la muestra M2. Si el tornillo no entra, repasa el agujero con una broca de 2 mm o un machuelo M2; si gira sin agarrar, reimprime la muestra con −0.1 mm de compensación de agujeros X-Y. Atornilla recto y detente cuando la cabeza asiente; no aprietes de más.')
  ])];}
  let solderView,solderKey,fullMap;
  function solderAppearance(){

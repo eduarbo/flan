@@ -83,7 +83,7 @@ The rebuild commands are the same as Flan42's with `--variant flan46` or `--vari
 
 ## Cases
 
-Every variant has the four case styles (Solid, Color rim, Terrace and Level), base and plate per half, as STEP and STL in `mechanical/<variant>/` with the same names as revI's (`left-case-level-plate.stl` and so on). [`tools/freecad/build_variant_case.py`](../tools/freecad/build_variant_case.py) builds them from the revI document, so the stack, bay, frames, magnets, batteries, ports and every Flan36 feature stay identical:
+Every variant has the four case styles (Solid, Color rim, Terrace and Level), base and plate per half, as STEP and STL in `mechanical/<variant>/` with the same names as revI's (`left-case-level-plate.stl` and so on). [`tools/freecad/build_variant_case.py`](../tools/freecad/build_variant_case.py) builds them from the revI document, so the stack, bay, frames, batteries, ports and every Flan36 feature stay identical:
 
 - **Outline:** each outline sketch (outer pad, cavity, plate, rim, terrace and PCB) gets the variant's profile, after a check that it held exactly the revI profile it stands for. The derived offsets follow `build_revI_profiles.py`; the script first proves that this runtime reproduces revI's.
 - **Keys:** each added key's switch cut, switch, hot-swap and keycap are copies of its template key, and its cut is spliced into the plate chain. The Level shell's cap openings are regenerated for every key with level_stack's rule.

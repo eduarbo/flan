@@ -23,7 +23,7 @@ export async function render({parts,shapes}){
  const original=createPartIllustrations({preview,parts,material});
  const images={},shots={};
  async function bitmap(src){const img=new Image();img.src=src;await img.decode();return img;}
- for(const id of ['diode','socket','switch','reset','power','jack','301230','adafruit-1570','strip','pins','nano','cable','tape','feet','m6','m4','m6-common','m4-common','base-magnets','frame-magnets']){
+ for(const id of ['diode','socket','switch','reset','power','jack','301230','adafruit-1570','strip','pins','nano','cable','tape','feet','m6','m4','m6-common','m4-common']){
   const img=await bitmap(original[id]),canvas=document.createElement('canvas');canvas.width=img.width;canvas.height=img.height;
   canvas.getContext('2d').drawImage(img,0,0);images[id]=canvas.toDataURL('image/webp',.92);
  }
@@ -41,7 +41,6 @@ export async function render({parts,shapes}){
  card('solder',[...Array.from({length:6},(_,i)=>primitive(new THREE.TorusGeometry(4,.45,10,32).rotateX(Math.PI/2),metal,[0,i*.65,0])),cyl(4.9,.6,coal,[0,-.4,0]),cyl(4.9,.6,coal,[0,3.8,0])]);
  card('plug',[box(5,2.8,4.6,'#e7e3d3',[0,0,0]),box(3.5,.8,2,'#dedbcc',[0,1.5,.4]),...[-1,1].map(k=>box(.7,.7,7,k===1?'#b64b41':coal,[k,0,5]))]);
  card('driver',[cyl(1.5,9,'#5c625e',[0,4,0]),primitive(new THREE.CylinderGeometry(.6,.6,8,6),metal,[0,-4,0])],[.6,.6,1]);
- card('adhesive',[cyl(2.2,6,'#d3c49f',[0,0,0]),cyl(1.4,1,coal,[0,3.5,0]),primitive(new THREE.ConeGeometry(1,3,18),'#dfd6bd',[0,5.5,0])]);
  function model(p,groups){
   const src=geometryFor(p.geometry);
   let geo=src;

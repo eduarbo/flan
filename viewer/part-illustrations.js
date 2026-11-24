@@ -35,7 +35,6 @@ export function createPartIllustrations({preview,parts,material}){
   const screw=[cylinder(1,length,silver,[0,length/2,0]),cylinder(radius,head,silver,[0,length+head/2,0]),entry(new THREE.CylinderGeometry(.8,.8,.02,6),dark,[0,length+head+.02,0])];
   for(let y=.3;y<length;y+=.45)screw.push(ring(1,.09,'#77868e',[0,y,0]));render(id,screw,[1,1,1]);
  }
- for(const [id,height] of [['base-magnets',3],['frame-magnets',4]])render(id,[-2.5,0,2.5].map((x,i)=>cylinder(1,height,silver,[x,i*.5,0])),[.6,1,1.4]);
  render('solder-tools',[box(7,2,10,'#b79b57',[-6,0,0]),box(5,.1,6,dark,[-6,1.1,-1]),cylinder(1,1,dark,[-6,1.5,2]),
   cylinder(1.5,10,'#376e78',[4,4,2]),cylinder(.6,5,silver,[4,-3,2]),entry(new THREE.ConeGeometry(.6,3,20),silver,[4,-7,2]),
   wire([[4,9,2],[8,9,4],[10,2,5],[4,0,8]],dark,.35)]);

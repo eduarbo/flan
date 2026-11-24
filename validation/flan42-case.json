@@ -5,7 +5,7 @@
   "physical_acceptance": false,
   "source": {
     "path": "mechanical/revI/Flan36.FCStd",
-    "sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399"
+    "sha256": "183f3ad665222207839752b82eaf9eb0fbb9e84bb58157219874e21c30babaf2"
   },
   "halves": {
     "left": {
@@ -41,6 +41,36 @@
           "copy_of": "H1"
         }
       },
+      "supports": [
+        [
+          94.0,
+          24.5
+        ],
+        [
+          38.5,
+          53.5
+        ],
+        [
+          73.5,
+          36.0
+        ],
+        [
+          110.0,
+          81.0
+        ],
+        [
+          109.5,
+          43.0
+        ],
+        [
+          73.5,
+          18.5
+        ],
+        [
+          20.5,
+          65.0
+        ]
+      ],
       "level_cap_openings": {
         "pieces": 3,
         "poses": 1176,
@@ -49,13 +79,13 @@
       "cases": {
         "solid": {
           "base": {
-            "volume_mm3": 16210.63,
+            "volume_mm3": 16294.55,
             "size_mm": [
               134.75,
               94.58,
               6.6
             ],
-            "stl_sha256": "2bd69b590b9ae223de64195a3deb0532dd6044c546faa14eae566f813e9ffa73"
+            "stl_sha256": "1abd725b44bd47384f13e2b2e75d598320539f66fa53964afbd15d627ff04c99"
           },
           "plate": {
             "volume_mm3": 5053.99,
@@ -70,13 +100,13 @@
         },
         "rim": {
           "base": {
-            "volume_mm3": 16647.7,
+            "volume_mm3": 16731.62,
             "size_mm": [
               134.75,
               94.58,
               7.6
             ],
-            "stl_sha256": "9c2fad6a774ba178bd71aeaa7d0877a9b3285ba8ea3556e054e022f7a4e7825c"
+            "stl_sha256": "6c731ea625d50accebc1b5a22dc4315b36706ad2f6ff3f15ea234c1b7561c383"
           },
           "plate": {
             "volume_mm3": 4520.78,
@@ -91,13 +121,13 @@
         },
         "terrace": {
           "base": {
-            "volume_mm3": 16075.24,
+            "volume_mm3": 16159.16,
             "size_mm": [
               134.75,
               94.58,
               6.6
             ],
-            "stl_sha256": "6adaf685bec53371336c4f6ea8675b08b89a735fc78cd6fa8cddfad5fd694e84"
+            "stl_sha256": "e717e893db69e4b23d4dfc48ff0b44b52cc05020619974ff419bc56292741eb5"
           },
           "plate": {
             "volume_mm3": 5053.99,
@@ -112,13 +142,13 @@
         },
         "level": {
           "base": {
-            "volume_mm3": 16210.63,
+            "volume_mm3": 16294.55,
             "size_mm": [
               134.75,
               94.57,
               6.6
             ],
-            "stl_sha256": "2bd69b590b9ae223de64195a3deb0532dd6044c546faa14eae566f813e9ffa73"
+            "stl_sha256": "1abd725b44bd47384f13e2b2e75d598320539f66fa53964afbd15d627ff04c99"
           },
           "plate": {
             "volume_mm3": 15337.35,
@@ -151,7 +181,16 @@
             1.714
           ]
         },
-        "stl_sha256": "baee837106ffcadd7c74bc94fc1b2876152472b4a48757d7ec2f6732f38c316b"
+        "stl_sha256": "16d0b47b8b11aaebb3c1a964f41527d865716c0ad37ad8ba466809c27b80f86c"
+      },
+      "support_to_nearest_socket_mm": {
+        "S1": 3.202,
+        "S2": 2.385,
+        "S3": 2.535,
+        "S4": 6.746,
+        "S5": 2.535,
+        "S6": 3.025,
+        "S7": 2.096
       }
     },
     "right": {
@@ -187,6 +226,36 @@
           "copy_of": "H1"
         }
       },
+      "supports": [
+        [
+          66.0,
+          24.5
+        ],
+        [
+          121.5,
+          53.5
+        ],
+        [
+          86.5,
+          36.0
+        ],
+        [
+          50.0,
+          81.0
+        ],
+        [
+          50.5,
+          43.0
+        ],
+        [
+          86.5,
+          18.5
+        ],
+        [
+          139.5,
+          65.0
+        ]
+      ],
       "level_cap_openings": {
         "pieces": 3,
         "poses": 1176,
@@ -195,13 +264,13 @@
       "cases": {
         "solid": {
           "base": {
-            "volume_mm3": 16210.28,
+            "volume_mm3": 16294.2,
             "size_mm": [
               134.75,
               94.58,
               6.6
             ],
-            "stl_sha256": "bd1ed3064a603b00a37b40ef524f74e193869573189825ee1d99ef07003a4d6b"
+            "stl_sha256": "c09de2c8924b473bcb3be99b7779422ca8d1b2fc93a203d3677f3bf1c29fc37d"
           },
           "plate": {
             "volume_mm3": 5053.99,
@@ -216,13 +285,13 @@
         },
         "rim": {
           "base": {
-            "volume_mm3": 16647.34,
+            "volume_mm3": 16731.26,
             "size_mm": [
               134.75,
               94.58,
               7.6
             ],
-            "stl_sha256": "66b0f9855ca6408d3d01a51a80869cfb28dbfd37725ca298e423fd806cc82fbf"
+            "stl_sha256": "b830b30080919122a55dd5e98c7e8d43871878711765d1197deb00478e793a89"
           },
           "plate": {
             "volume_mm3": 4520.78,
@@ -237,13 +306,13 @@
         },
         "terrace": {
           "base": {
-            "volume_mm3": 16074.88,
+            "volume_mm3": 16158.8,
             "size_mm": [
               134.75,
               94.58,
               6.6
             ],
-            "stl_sha256": "4bbde26b7451ca50b8933fff8e40ecc6f062fd24015a8670fc096d3f8a1059cc"
+            "stl_sha256": "cfc58821602c044c5a13f54b140f24874f23090aab9c2dad04bfcf8ce77677ea"
           },
           "plate": {
             "volume_mm3": 5053.99,
@@ -258,13 +327,13 @@
         },
         "level": {
           "base": {
-            "volume_mm3": 16210.28,
+            "volume_mm3": 16294.2,
             "size_mm": [
               134.75,
               94.57,
               6.6
             ],
-            "stl_sha256": "bd1ed3064a603b00a37b40ef524f74e193869573189825ee1d99ef07003a4d6b"
+            "stl_sha256": "c09de2c8924b473bcb3be99b7779422ca8d1b2fc93a203d3677f3bf1c29fc37d"
           },
           "plate": {
             "volume_mm3": 15337.27,
@@ -297,10 +366,19 @@
             1.714
           ]
         },
-        "stl_sha256": "1546e511aeca775b5ff4f4386e56eb48d52213507b7e5850420c67235eee1cff"
+        "stl_sha256": "a5bdd8dbed43a04fbd031ee22d6b4c753fcc7ef443f0fd16c0f5a807972762db"
+      },
+      "support_to_nearest_socket_mm": {
+        "S1": 4.109,
+        "S2": 2.94,
+        "S3": 3.086,
+        "S4": 6.502,
+        "S5": 3.193,
+        "S6": 2.719,
+        "S7": 2.502
       }
     }
   },
   "fcstd": "build/variants/flan42/Flan42.FCStd",
-  "seconds": 1304
+  "seconds": 2485
 }

@@ -82,7 +82,6 @@ def apply(doc,config):
             for o in doc.Objects:
                 if o.Name.startswith(prefix) and hasattr(o,'FrameStyle'):o.Visibility=False
             doc.getObject(prefix+'ActiveFrame').Visibility=case['cover']
-            for i in range(3):doc.getObject(prefix+'SteelTarget'+str(i)).Visibility=case['cover']
         doc.recompute()
         # Native boolean view providers remap face colors during recompute.
         # Apply the explicit palette after their geometry has settled.

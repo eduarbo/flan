@@ -9,7 +9,7 @@ Flan es un teclado dividido, inalámbrico y de perfil bajo diseñado por Eduardo
 | Flan46 | Añade una fila de números |
 | Flan54 | Combina la columna exterior y la fila de números |
 
-Los cuatro modelos usan interruptores Kailh Choc v1 intercambiables, un controlador nice!nano v2 por mitad y firmware para conexión Bluetooth LE o USB. Puedes elegir carcasa, colores y marcos magnéticos en el [explorador 3D](https://flankbd.com/explore/). En el apartado de armado se descargan la lista de compras, los archivos de fabricación de las placas, las piezas para imprimir, el firmware y la guía de la configuración elegida.
+Los cuatro modelos usan interruptores Kailh Choc v1 intercambiables, un controlador nice!nano v2 por mitad y firmware para conexión Bluetooth LE o USB. Puedes elegir carcasa, colores y marcos de pantalla en el [explorador 3D](https://flankbd.com/explore/). En el apartado de armado se descargan la lista de compras, los archivos de fabricación de las placas, las piezas para imprimir, el firmware y la guía de la configuración elegida.
 
 Los archivos editables de las placas y las carcasas están en formatos de KiCad y FreeCAD. Eduardo diseñó las placas inalámbricas y las carcasas. La disposición de las teclas deriva de Piantor, de beekeeb, y las teclas imprimibles son KLP Lamé, de braindefender. El diseño se distribuye bajo GPL-3.0-or-later y los componentes de terceros conservan sus licencias. [Créditos y licencias](ATTRIBUTION.md) · [Uso de la marca Flan](TRADEMARKS.md)
 

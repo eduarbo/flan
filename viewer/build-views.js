@@ -4,8 +4,6 @@
 // order of height. `ring` marks small parts where they end up, `label` names a connector and `focus` frames a close-up.
 // A view shows one key unless `keys` asks for all of them.
 const views={
- 'base-magnets':{parts:{base:0,'base-magnet':18},ring:['base-magnet'],from:[.45,1.15,1]},
- 'frame-magnets':{parts:{frame:0,'frame-magnet':-16},ring:['frame-magnet'],from:[.45,-1.15,1]},
  'battery-stack':{parts:{base:0,locator:14,battery:26,cage:38,board:58},from:[.5,.64,1.2]},
  'board-screws':{parts:{base:0,board:0,'short-screw':20},ring:['short-screw'],from:[.45,1.15,1]},
  'plate-screws':{parts:{base:0,board:0,spacer:12,plate:26,'long-screw':42},ring:['long-screw'],from:[.5,.8,1.2]},
@@ -33,8 +31,6 @@ function slotOf(obj,side){
  if(obj.name.includes(' · Washer '))return 'spacer';
  if(obj.name.includes(' · Foot '))return 'foot';
  if(!part)return null;
- if(part.startsWith('magnet-'))return 'base-magnet';
- if(part.startsWith('frame-target-'))return 'frame-magnet';
  if(part.startsWith('battery-lead-'))return 'lead';
  return ({tray:'base','key-plate':'plate',pcb:'board',cradle:'locator','battery-retainer':'cage',mcu:'controller','mcu-riser':'riser','display-sled':'sled'})[part]||part;
 }

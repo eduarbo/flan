@@ -35,9 +35,12 @@ def verify():
                       if sha((ROOT / source['path']).read_bytes()) != source['sha256']]
     for name, digest in mechanical['exported_files'].items():
         assert sha((ROOT / 'mechanical/revI' / name).read_bytes()) == digest, name
-    for filename in ('revI-ports', 'revI-ports-reopen'):
-        receipt = read(f'validation/{filename}.json')
-        assert receipt['passed'] and receipt['native_sha256'] == native
+    # The port refinement was installed on the parent of the base rework; the reopened check runs on the current file.
+    rework = read('validation/revI-base-supports.json')
+    assert rework['passed'] and rework['source_sha256'] == native
+    ports, reopened = read('validation/revI-ports.json'), read('validation/revI-ports-reopen.json')
+    assert ports['passed'] and ports['native_sha256'] in (native, rework['parent_source_sha256'])
+    assert reopened['passed'] and reopened['native_sha256'] == native
     result['mechanical'] = {'native_sha256': native, 'revI_exports': len(mechanical['exported_files']),
                             'generation_tools_changed_since_export': changed_inputs,
                             'verification': 'Current files match recorded CAD checks; no new physical or CAD-kernel test'}

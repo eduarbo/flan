@@ -136,7 +136,7 @@ async function framePixel(page){
     await page.locator('#canvas').screenshot({path:path.join(root,`build/case-variants/${style}.png`),style:bare});
   }
   await category(page,'cases');await page.click('#case-target [data-side=left]');await page.click('[data-case=rim]');await installFrames(page,{left:false});
-  await page.click('#reset');assert.match(await page.locator('#status.lab').textContent(),new RegExp(`${expectedCount-coverCount('left')} visible`),'Open cover omits its three frame magnets and cover, preserves display');
+  await page.click('#reset');assert.match(await page.locator('#status.lab').textContent(),new RegExp(`${expectedCount-coverCount('left')} visible`),'Open cover omits its cover, preserves display');
   await category(page,'cases');await page.click('#case-target [data-side=both]');assert.equal(await page.locator('#case-current').textContent(),'Mixed cases');
   // Mixed installation stays explicit per half.
   await panel(page,'inspect');await page.click('#part-lid');
@@ -335,10 +335,8 @@ async function framePixel(page){
     const battery=gltf.nodes.find(n=>n.extras?.side===side&&n.extras?.group==='battery');
     assert.equal(battery.extras.battery_profile,'301230');
     assert.deepEqual(positionBytes(battery),Buffer.from(scene.geometries[`mechanical/revI/${side}-battery-301230.stl`].positions,'base64'));
-    const frameMagnets=gltf.nodes.filter(n=>n.extras?.side===side&&/^.+-frame-target-\d+$/.test(n.extras?.part_id||''));
-    assert.equal(frameMagnets.length,3);
-    for(const [i,magnet] of frameMagnets.entries())assert.deepEqual(positionBytes(magnet),Buffer.from(scene.geometries[`mechanical/revI/${side}-frame-target-${i}.stl`].positions,'base64'),'Frame selection preserves each frame magnet');
   }
+  assert(!gltf.nodes.some(n=>/-(magnet|frame-target)-\d+$/.test(n.extras?.part_id||'')),'The model has no magnets');
   const capPath=scene.catalog.variants.find(v=>v.id===config.keycaps.left.K30.variant).path;
   assert.deepEqual(positionBytes(customCap),Buffer.from(scene.geometries[capPath].positions,'base64'),'GLB must contain selected cap vertices');
   assert.deepEqual(positionBytes(customFrame),Buffer.from(scene.geometries['mechanical/revI/left-frame-hanafuda.stl'].positions,'base64'),'GLB must contain selected frame vertices');
@@ -444,7 +442,7 @@ async function framePixel(page){
     all_12_layer_filters:true,individual_visibility:true,individual_and_group_solo:true,selection_visible_toggle:true,show_all_recovery:true,occluded_hover_xray_pixel_verified:true,floating_view_controls_clear_of_fitted_model:true,fit_actual_pixels_after_zoom:true,fit_empty_feedback:true,full_row_hover:true,orbit_drag:true,bottom_view:true,full_reset_pixel_identical:true,
     component_rows_reachable:true,keyboard_component_selection:true,direct_canvas_picking:true,frame_change_preserves_hidden_cover:true,orbit_does_not_select:true,touch_orbit_and_pinch_do_not_select:true,small_320px_viewport:true,
     approved_preview_cards:frameStyles.length,multicolor_glb_roles:true,one_click_frames:true,keyboard_frame_activation:true,mixed_style_and_color_state:true,theme_applies_palette_and_body_overrides_roundtrip:true,sidebar_hover_highlight:true,part_page_customizes_frame:true,touch_frame_cards_and_sidebar:true,hidden_selection_marked:true,highlight_excluded_from_glb:true,
-    dual_battery_selection_and_exact_glb:true,frame_magnets_preserved:true,keycap_variant_from_design_file:true,frame_style_and_color:true,distinct_themed_geometries:frameStyles.length,json_roundtrip:true,invalid_combination_rejected:true,glb_matches_custom_configuration:true,glb_selected_vertices_exact:true,glb_objects:expectedCount,glb_keycaps:36,glb_units:'metres',case_variants:Object.keys(scene.catalog.case_styles).length,case_previews_distinct:true,case_glb_meshes_exact:true,open_cover_configuration:true,legacy_case_default:true,runtime_errors:errors,offline_network_requests:requests.length};
+    dual_battery_selection_and_exact_glb:true,keycap_variant_from_design_file:true,frame_style_and_color:true,distinct_themed_geometries:frameStyles.length,json_roundtrip:true,invalid_combination_rejected:true,glb_matches_custom_configuration:true,glb_selected_vertices_exact:true,glb_objects:expectedCount,glb_keycaps:36,glb_units:'metres',case_variants:Object.keys(scene.catalog.case_styles).length,case_previews_distinct:true,case_glb_meshes_exact:true,open_cover_configuration:true,legacy_case_default:true,runtime_errors:errors,offline_network_requests:requests.length};
   // Case captures stay under build/; capture-readme.cjs owns the README images.
   const caseImages={};for(const [name,source] of [['level','level'],['solid','solid'],['rim','rim'],['terrace','terrace'],['rim-open','rim-open-top']])caseImages[name]=hash(fs.readFileSync(path.join(root,`build/case-variants/${source}.png`)));
   fs.writeFileSync(path.join(root,'build/case-variants/render.json'),JSON.stringify({viewer_sha256:hash(Buffer.from(html)),checker_sha256:hash(fs.readFileSync(__filename)),images:caseImages,source:'Unretouched screenshots of the actual selected native STL meshes in the viewer'},null,2)+'\n');

@@ -56,5 +56,5 @@ for(const file of ['docs/llms.txt','docs/llms-full.txt']){
   const own=url.match(/^https:\/\/flankbd\.com\/(.*)$/);if(own)assert(fs.existsSync(new URL('docs/'+(own[1]===''||own[1].endsWith('/')?own[1]+'index.html':own[1]),root)),file+': link to a missing page '+url);
   const doc=url.match(/^https:\/\/github\.com\/eduarbo\/flan\/blob\/main\/(.+)$/);if(doc)assert(fs.existsSync(new URL(doc[1],root)),file+': link to a missing file '+doc[1]);}
 }
-assert(frames.length===6&&read('docs/llms.txt').includes('six interchangeable magnetic display frames'));
+assert(frames.length===6&&read('docs/llms.txt').includes('six interchangeable display frames'));
 console.log(`PASS: home and explorer metadata, a 1200 x 630 share image, structured data, robots.txt, ${locs.length} sitemap entries and two summaries that agree with ${themes.length} themes and ${sizes.length} sizes`);

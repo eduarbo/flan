@@ -30,15 +30,15 @@ Every size keeps the same thumb cluster and electronics bay, and has routed PCBs
 - Choc v1 switches, Kailh Choc hot-swap sockets and one diode per key.
 - 2 small protected 1S LiPo cells (the reference is a 100 mAh cell), 2 power switches, 2 reset buttons, 2 battery connectors.
 - Machine-pin sockets and pins so the controllers can be removed.
-- M2 screws and small axial magnets: each printed frame is held by three magnet pairs.
+- M2 screws: five per half in Flan36, six in Flan42 and Flan46, eight in Flan54. On the tested printer they cut their own thread in the printed case; print the M2 sample first.
 - 3D-printed parts: case base, key plate, display frame and supports for each half, plus keycaps: the project uses printable KLP Lame keycaps by braindefender (CC-BY-SA-4.0).
 
-Tools: soldering iron, 3D printer, an M2 tap and a small hex key. The parts guide lists exact part numbers and suppliers; the 3D explorer builds the shopping list for the chosen size.
+Tools: soldering iron, 3D printer and a small hex key. The parts guide lists exact part numbers and suppliers; the 3D explorer builds the shopping list for the chosen size.
 
 ## Choices
 
 - Case styles: Level, Solid, Color rim and Terrace.
-- Magnetic display frames: Talavera, Game Boy, SNES, 2000s Phone, iPod and Hanafuda. They are held by magnets instead of screws.
+- Display frames: Talavera, Game Boy, SNES, 2000s Phone, iPod and Hanafuda. A frame rests over the display, loose; a version that holds on to the display is being redesigned.
 - Colour themes: 32 presets that coordinate case, frame and keycaps, plus per-key, per-row and per-column keycap colours. Theme and frame names that refer to other products only describe a palette or a look; Flan is not affiliated with their owners.
 - PCB looks: six back-silkscreen editions (Asanoha, Kikko, Sayagata, Seigaiha, Meandro, Vias) and seven solder-mask colours, previewed in the explorer.
 - Screws: low-head reference screws, or an option for ordinary M2 machine screws (Flan36).
@@ -54,7 +54,7 @@ ZMK, pinned to a specific release, compiled for each size: a left (central) file
 ## Status and limits
 
 - Checked digitally: both PCBs of each size pass design-rule, electrical-rule and schematic-parity checks with no unconnected items; firmware compiles; case and keycap geometry is checked for clearances.
-- Hardware limits: battery life, charging, wireless range and reliability, printed fit, magnet retention and typing comfort are unmeasured.
+- Hardware limits: battery life, charging, wireless range and reliability, printed fit, frame retention and typing comfort are unmeasured.
 
 ## Who it suits
 

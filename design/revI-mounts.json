@@ -65,8 +65,8 @@
   "head_diameter": 3.8,
   "head_height": 1.3,
   "shaft_diameter": 2,
-  "pilot_diameter": 1.7,
+  "pilot_diameter": 2.1,
   "source": "https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SLH-TZB/SLH-TZB_1.pdf",
-  "status": "Nominal screw envelope; printed pilot is tapped M2 before assembly. Thread strength and cycling require coupon; no inserts or self-tapping assumption.",
+  "status": "Nominal screw envelope. The screw cuts its own thread in the printed 2.1 mm pilot: on the first printed build (Bambu Lab X2D, 0.4 mm nozzle, PLA) a 1.7 mm pilot did not take the screw and 2.1 mm did, in a 3.6 mm post. Thread strength and cycling are not measured; no inserts.",
   "short_screw_source": "https://static.nbk1560.com/images/en/product/lowsmallheadscrew/SSH/SSH_1.pdf"
 }

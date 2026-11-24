@@ -238,3 +238,8 @@ The LCD-flank/curved-thumb and viewer correction is published. Anonymous source 
 ## 2026-10-11 — All-magnet frame closure
 
 The six Ø2 × 4 mm steel targets are superseded by six axial neodymium magnets of the same dimensions, paired with the six Ø2 × 3 mm base magnets. Native visible labels, the BOM, viewer and print-kit joining instructions now agree. Printed geometry is unchanged; historical magnet/steel descriptions above record earlier revisions. [Identity and delivery evidence](../validation/revI-all-magnets-delivery.json). Polarity, print-in capture/temperature and whole-frame holding force still require physical checks.
+
+## 2026-11-24 — Base after the first printed build
+
+The first printed Flan36 case showed that the Ø1.7 mm pilots did not take the M2 screws. Every base of the four sizes now has Ø2.1 mm pilots, which took the screw without tapping on the tested printer, and solid posts under the PCB. The magnets are removed from the model, parts list, guide and print kits; their three base stations remain as open Ø2.4 mm sockets for a display frame that will hold on to the display. The glue-in print files and the magnet samples are retired; the frames are unchanged. The guide also warns that a Typeractive 301230 arrived with its plug reversed for J1 and states which way SW1 is on in each half. [CAD notes](cad.md#base-after-the-first-printed-build) · [receipt](../validation/revI-base-supports.json). Earlier receipts that bind the previous native file are history. Physical fit beyond one screw coupon is not measured.
+

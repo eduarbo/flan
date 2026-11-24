@@ -31,13 +31,13 @@ const expected=[['diode','tweezers'],['socket','switch'],['reset'],['power'],['j
   await page.click('#build-nav [data-target=build-close]');
   const final=page.locator('#build-final'),nav=final.locator('.assembly-nav'),step=final.locator('.assembly-step:not([hidden])');
   const previous=nav.locator('[data-move="-1"]'),next=nav.locator('[data-move="1"]');
-  const views=side=>[['base-magnets',...(side==='left'?['frame-magnets']:[])],['battery-stack'],['board-screws','plate-screws'],['key-stack'],['battery-port'],['display-stack'],['base-feet']];
+  const views=()=>[['battery-stack'],['board-screws','plate-screws'],['key-stack'],['battery-port'],['display-stack'],['base-feet']];
   for(const side of ['left','right']){
    await final.locator('[data-assembly-side='+side+']').click();
    await nav.locator('select').selectOption('0');assert(await previous.isDisabled());
    for(const [i,ids] of views(side).entries()){
     assert.equal(await step.count(),1);assert.equal(await step.getAttribute('data-assembly-step'),String(i));
-    assert.equal(await nav.locator('.assembly-progress').innerText(),'Paso '+(i+1)+' de 7');
+    assert.equal(await nav.locator('.assembly-progress').innerText(),'Paso '+(i+1)+' de 6');
     // Moving on leaves the bar pinned and the new title in view below it.
     if(i)assert(await step.locator('h4').evaluate(h=>{const bar=h.closest('#build-final').querySelector('.assembly-nav').getBoundingClientRect(),box=h.getBoundingClientRect();return box.top>=bar.bottom-1&&box.bottom<innerHeight;}));
     const still=ids[0]==='battery-port',pictures=step.locator('.assembly-preview');
@@ -61,15 +61,15 @@ const expected=[['diode','tweezers'],['socket','switch'],['reset'],['power'],['j
       return moved>100;
      }));
     }
-    if(i===1){
+    if(i===0){
      assert(await step.locator('[data-guide-part="'+(side==='left'?'adafruit-1570':'301230')+'"]').isVisible());
      const motion=step.locator('.fit-motion');assert.equal(await motion.getAttribute('data-pose'),'seated');
      await motion.getByRole('button',{name:'Separado',exact:true}).click();assert.equal(await motion.getAttribute('data-pose'),'open');
     }
-    if(i===4)assert(await step.locator('[data-guide-part=meter]').isVisible(),'the polarity check has its multimeter');
-    if(i===5)assert.equal(await step.locator('[data-guide-part=frame]').count(),side==='left'?1:0);
-    assert.equal(await final.locator('.assembly-finish').isVisible(),i===6);
-    if(i<6)await next.click();
+    if(i===3)assert(await step.locator('[data-guide-part=meter]').isVisible(),'the polarity check has its multimeter');
+    if(i===4)assert.equal(await step.locator('[data-guide-part=frame]').count(),side==='left'?1:0);
+    assert.equal(await final.locator('.assembly-finish').isVisible(),i===5);
+    if(i<5)await next.click();
    }
    assert(await next.isDisabled());
   }
@@ -82,7 +82,7 @@ const expected=[['diode','tweezers'],['socket','switch'],['reset'],['power'],['j
   const plan=await context.newPage();await plan.route(/^https?:/,route=>route.abort());await plan.goto(pathToFileURL(planFile).href);
   for(const side of ['left','right']){
    const section=plan.locator('#build-final [data-guide-half="'+side+'"]');
-   assert.equal(await section.locator('.assembly-step').count(),7);
+   assert.equal(await section.locator('.assembly-step').count(),6);
    assert.equal(await section.locator('[data-guide-part="'+(side==='left'?'adafruit-1570':'301230')+'"]').count(),1);
    assert.equal(await section.locator('[data-guide-part=frame]').count(),side==='left'?1:0);
    assert.equal(await section.locator('.fit-controls').count(),0);
@@ -136,6 +136,6 @@ const expected=[['diode','tweezers'],['socket','switch'],['reset'],['power'],['j
   assert(await saved.locator('#tools-list').isHidden());assert(await saved.locator('#checks').isVisible());
   assert.equal(await saved.locator('#part img[src^="data:image/webp"]').count(),4);
   await saved.locator('.fit-viewport img[src^="data:image/webp"]').evaluate(img=>img.decode());
-  assert.deepEqual(errors,[]);console.log('PASS: all seven steps, four sizes and both halves, named parts and nonempty CAD animation frames, motion controls, configured assembly and offline guide.');
+  assert.deepEqual(errors,[]);console.log('PASS: all six steps, four sizes and both halves, named parts and nonempty CAD animation frames, motion controls, configured assembly and offline guide.');
  }finally{await browser.close();server.close();fs.rmSync(scratch,{recursive:true,force:true});}
 })().catch(error=>{console.error(error);process.exitCode=1;});

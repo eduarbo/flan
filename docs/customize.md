@@ -48,7 +48,7 @@ Open **Design → Frame** and click a frame thumbnail to apply it immediately. *
 
 See the [six installed frame designs](frames-extra.md): Talavera, Game Boy, SNES, 2000s Phone, iPod and Hanafuda. All use solid colors, with Talavera as the default.
 
-The controls are decorative. No logos, extra switches or LEDs are required. All six installed styles use the same window, cavity, three magnetic stations and independent display support. Each decorated design includes a closed shell plus complementary color volumes for co-printing. The assembled surface is flush and stays within the 24 mm bay. A fused single-material STL is also included.
+The controls are decorative. No logos, extra switches or LEDs are required. All six installed styles use the same window, cavity and independent display support. The three bosses of the earlier magnet stations remain and are unused. Each decorated design includes a closed shell plus complementary color volumes for co-printing. The assembled surface is flush and stays within the 24 mm bay. A fused single-material STL is also included.
 
 | Interface | Nominal dimension |
 |---|---:|
@@ -56,8 +56,6 @@ The controls are decorative. No logos, extra switches or LEDs are required. All 
 | Plain and decorated top | Same height; see the [current stack](level-stack.md) |
 | Structural roof / side wall | 1.4 / 1.2 mm |
 | Glass margin, each side | 0.10 mm |
-| Base magnet / frame magnet, both axial | Ø2 × 3 / Ø2 × 4 mm |
-| Magnetic gap / guide radial clearance | 0.9 / 0.2 mm nominal |
 | R4 surface inlay / backing | 0.4 / 1.0 mm outside display relief; co-print aligned volumes |
 
 The frame ends before the thumb key; the **low case and plate continue along the straight flank**. The power switch is recessed inside the side access cut. Key positions remain fixed.
@@ -66,17 +64,17 @@ The frame ends before the thumb key; the **low case and plate continue along the
 
 Open the native source and expand **Construction**. Duplicate a supplied theme, then edit the `FlushFrame_*` primitives or the frame section sketches. Preserve the cavity, mounting bosses, screen window and service cuts. The case outline is a native sketch with **21 intentional corners with locally bounded tangent arcs and straight faces parallel to each thumb**; mesh tessellation does not add design corners. Remove only the Block constraints you intend to edit.
 
-Keep decorations within the common envelope. Preserve the magnetic stations at left **(113, 52.8)**, **(133, 52.8)** and **(122.8, 64.7)**, the hidden structural screw reliefs at **(114.5, 65.5)** and **(130.6, 66.5)**, the current reset tool opening, and the glass window. Right-half coordinates mirror across X=80 mm. For the five approved R4 designs, preserve the exact ordinary, collar and pin-cover domains in the [master](../design/proposals/frame-master-r4/master.json). Ordinary inlays replace the upper 0.4 mm over 1.0 mm backing; the collar and pin cover use through-color volumes. All finish at Z14.50 mm.
+Keep decorations within the common envelope. Preserve the hidden structural screw reliefs at **(114.5, 65.5)** and **(130.6, 66.5)**, the current reset tool opening, and the glass window. The bosses at left **(113, 52.8)**, **(133, 52.8)** and **(122.8, 64.7)** belonged to the earlier magnet stations and are unused. Right-half coordinates mirror across X=80 mm. For the five approved R4 designs, preserve the exact ordinary, collar and pin-cover domains in the [master](../design/proposals/frame-master-r4/master.json). Ordinary inlays replace the upper 0.4 mm over 1.0 mm backing; the collar and pin cover use through-color volumes. All finish at Z14.50 mm.
 
 Use the viewer’s JSON for the six installed shapes. To share a new shape, save your FCStd, export STEP/STL, rebuild the viewer and repeat collision checks; JSON alone cannot carry arbitrary geometry.
 
 ### First print
 
-Start with **one frame in PLA Basic** as a fit sample. Keep all material volumes aligned in the slicer and check how its layers resolve the 0.4 mm inlay band. Choose orientation and supports after inspecting the roof and the open glue-in sockets. PETG HF and ABS remain alternatives to qualify with an actual print.
+Start with **one frame in PLA Basic** as a fit sample. Keep all material volumes aligned in the slicer and check how its layers resolve the 0.4 mm inlay band. Choose orientation and supports after inspecting the roof. PETG HF and ABS remain alternatives to qualify with an actual print.
 
 Use the multipart 3MF for multicolor printing, assigning its body, detail, accent and secondary parts to your filaments. The aligned material STLs offer the same geometry. These volumes are for co-printing; they do not include the clearance or retention needed for separately printed press-fit inserts. GLB and the FreeCAD configuration macro preserve the visual palette. Printer profiles and finished toolpaths are not included.
 
-Use magnets from existing stock; each additional pair of frames needs six Ø2 × 4 mm magnets while the six Ø2 × 3 mm base magnets stay installed. Dry-fit an attracting pair before applying adhesive. The explorer's printable variant accepts the magnets after printing; follow the [glue-in samples and assembly sequence](build.md#magnetic-frame-and-service). Confirm physical retention on a sample. The reset opening takes a tool. A nominal 12 × 5 mm USB plug and straight insertion corridor clear each theme; cable housings vary.
+The frame rests over the display, loose; a frame that holds on to the display is being redesigned. See [display frame and service](build.md#display-frame-and-service). The reset opening takes a tool. A nominal 12 × 5 mm USB plug and straight insertion corridor clear each theme; cable housings vary.
 
 The [new frame recipes](frames-extra.md) are editable native features. The [slim support study](slim-mount-study.md) separates fewer loose parts from lower stack height.
 
@@ -98,7 +96,7 @@ Configurations are tagged revision I. Older revision H JSON is not silently conv
 
 ## Case geometry
 
-Open **Design → Case** and choose **Level / Solid / Color rim / Terrace**. **Per half** opens the halves and the colors and finish in place. Use **Parts → Frame → Installed display frames** to omit or reinstall either printed display frame; the row eye is only a preview visibility toggle. Each half has its own `cases` entry, for example `"left": {"style": "rim", "cover": false}`. `cover: false` omits the printed display cover and its three frame magnets; it retains the display, supports and base magnets. JSON import validates both halves before changing anything. Older configurations without `cases` use Solid with covers. [Geometry, files and printing](cases.md).
+Open **Design → Case** and choose **Level / Solid / Color rim / Terrace**. **Per half** opens the halves and the colors and finish in place. Use **Parts → Frame → Installed display frames** to omit or reinstall either printed display frame; the row eye is only a preview visibility toggle. Each half has its own `cases` entry, for example `"left": {"style": "rim", "cover": false}`. `cover: false` omits the printed display cover; it retains the display and supports. JSON import validates both halves before changing anything. Older configurations without `cases` use Solid with covers. [Geometry, files and printing](cases.md).
 
 ## Coordinated themes and print kits
 
@@ -116,7 +114,7 @@ The flat reference caps share their switches' centers. In the source meshes, pai
 
 Reproduce the registration check and this diagram with `python tools/check_keycap_registration.py` in the CAD Python environment with `tools/requirements-registration.txt` installed. Results: [registration measurements](../validation/revI-keycap-registration.json).
 
-The current interface is documented in the [viewer guide](viewer.md); current CUA browser evidence belongs to [the interaction receipt](../validation/revI-interaction.json). The following older checks and gallery images retain their original scope. They do not establish acceptance of the redesigned controls. The responsive and key-color suites have been adapted, but this delivery does not claim a CLI browser run.
+The current interface is documented in the [viewer guide](viewer.md); current CUA browser evidence belongs to [the interaction receipt](../validation/revI-interaction.json), recorded before the 2026-11-24 base change. The following older checks and gallery images retain their original scope. They do not establish acceptance of the redesigned controls. The responsive and key-color suites have been adapted, but this delivery does not claim a CLI browser run.
 
 Historical focused viewer check (disposable Chromium profile; confirm its selectors match the target revision before running):
 

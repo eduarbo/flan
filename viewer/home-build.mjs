@@ -152,7 +152,7 @@ export async function buildHome({scene=read('build/viewer-scene.json')}={}){
   const receipt={revision:scene.revision,page:{path:'docs/index.html',sha256:hash('docs/index.html'),bytes:page.bytes},
     engine:published(page.engine),posters:page.posters.map(published),
     packs:Object.fromEntries(Object.entries(files).map(([k,f])=>[k,{path:'docs/assets/'+f,sha256:hash('docs/assets/'+f),bytes:bytes[k]}])),
-    error_mm:ERROR,triangles:stats,omitted:'Fasteners, magnets, feet, the underside diodes and the reset switch; the battery is the default Adafruit 1570 profile.',
+    error_mm:ERROR,triangles:stats,omitted:'Fasteners, feet, the underside diodes and the reset switch; the battery is the default Adafruit 1570 profile.',
     method:'Equal positions welded; each material group simplified with meshoptimizer 1.2.0 within an absolute error (borders locked between groups); positions quantized to 16 bits over each mesh box; meshopt vertex and index codecs; gzip.',
     scene_sources:scene.sources,sources};
   fs.writeFileSync(path.join(root,`validation/rev${scene.revision}-home.json`),JSON.stringify(receipt,null,2)+'\n');
@@ -191,7 +191,7 @@ async function homePage({scene,files}){
     ['Displays','Pantallas','2 × nice!view','Low-power memory LCD on each half, framed by the display cover.','LCD de memoria de bajo consumo en cada mitad, enmarcada por la cubierta.'],
     ['Sizes','Tamaños',['36–54 keys','36–54 teclas'],'36, 42, 46 or 54 keys: add the outer column, the number row or both. Same thumbs.','36, 42, 46 o 54 teclas: suma la columna exterior, la fila de números o ambas. Mismos pulgares.'],
     ['Battery','Batería','100 mAh','1S LiPo per half, under the controller. A 110 mAh alternative is modeled; actual pack fit is untested.','LiPo 1S por mitad, bajo el controlador. Hay una alternativa de 110 mAh modelada; falta probar el ajuste real.'],
-    ['Looks','Estilos',`${data.themes.length} · ${data.frames.length} · ${CASES.length}`,'Themes, magnetic display frames and case styles. Three KLP Lamé key shapes.','Temas, marcos magnéticos y estilos de caja. Tres formas de keycap KLP Lamé.'],
+    ['Looks','Estilos',`${data.themes.length} · ${data.frames.length} · ${CASES.length}`,'Themes, display frames and case styles. Three KLP Lamé key shapes.','Temas, marcos de pantalla y estilos de caja. Tres formas de keycap KLP Lamé.'],
     ['Open hardware','Hardware abierto','GPLv3+','Editable KiCad and FreeCAD sources, Gerbers, STEP, STL and 3MF. Digital prototype awaiting a physical build.','Fuentes editables de KiCad y FreeCAD, Gerbers, STEP, STL y 3MF. Prototipo digital pendiente de montaje físico.'],
   ];
   // the colour mark; its outline follows the page's theme here (style.css), not the system's

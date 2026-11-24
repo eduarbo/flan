@@ -6985,102 +6985,6 @@
       "visuals": [],
       "stl_sha256": "2e0ae08eb6c5c500afe095a79b56eba2ebaeb4161e72a89a48ed9d0df81f05fd"
     },
-    "left-magnet-0": {
-      "object": "L_Magnet0",
-      "role": "Captive magnet 2 x 3 mm",
-      "group": "fasteners",
-      "prototype_part": false,
-      "bounds_mm": [
-        112.00044756771649,
-        -53.79988810181027,
-        3.2,
-        114.0,
-        -51.800111898189726,
-        6.2
-      ],
-      "visuals": [],
-      "stl_sha256": "c22fee6c782e310991c885568ceea929a131df643b61fdc5cbc4733b64268d2a"
-    },
-    "left-frame-target-0": {
-      "object": "L_SteelTarget0",
-      "role": "Captive frame magnet 2 x 4 mm",
-      "group": "lid",
-      "prototype_part": false,
-      "bounds_mm": [
-        112.00044756771649,
-        -53.79988810181027,
-        7.1,
-        114.0,
-        -51.800111898189726,
-        11.1
-      ],
-      "visuals": [],
-      "stl_sha256": "fa198e17434d3ea3b2670782a30aa036bc216ab032300a3a10ea3a857b86ec3c"
-    },
-    "left-magnet-1": {
-      "object": "L_Magnet1",
-      "role": "Captive magnet 2 x 3 mm001",
-      "group": "fasteners",
-      "prototype_part": false,
-      "bounds_mm": [
-        132.0004475677165,
-        -53.79988810181027,
-        3.2,
-        134.0,
-        -51.800111898189726,
-        6.2
-      ],
-      "visuals": [],
-      "stl_sha256": "1f053044a05d51a3db5b66e9c8805fbcbaea88b83608ed5e69173a5b170fb6cb"
-    },
-    "left-frame-target-1": {
-      "object": "L_SteelTarget1",
-      "role": "Captive frame magnet 2 x 4 mm001",
-      "group": "lid",
-      "prototype_part": false,
-      "bounds_mm": [
-        132.0004475677165,
-        -53.79988810181027,
-        7.1,
-        134.0,
-        -51.800111898189726,
-        11.1
-      ],
-      "visuals": [],
-      "stl_sha256": "58cea2e89226fd5a78602cdd0ce7a586942295fdcb173d12b96ef8ff7b1395a0"
-    },
-    "left-magnet-2": {
-      "object": "L_Magnet2",
-      "role": "Captive magnet 2 x 3 mm002",
-      "group": "fasteners",
-      "prototype_part": false,
-      "bounds_mm": [
-        121.80044756771649,
-        -65.69988810181027,
-        3.2,
-        123.8,
-        -63.70011189818973,
-        6.2
-      ],
-      "visuals": [],
-      "stl_sha256": "6ca094edbbbe601b6c39b941e76cf729fffb39f44d3837c08c8e66d65316e99a"
-    },
-    "left-frame-target-2": {
-      "object": "L_SteelTarget2",
-      "role": "Captive frame magnet 2 x 4 mm002",
-      "group": "lid",
-      "prototype_part": false,
-      "bounds_mm": [
-        121.80044756771649,
-        -65.69988810181027,
-        7.1,
-        123.8,
-        -63.70011189818973,
-        11.1
-      ],
-      "visuals": [],
-      "stl_sha256": "94f0f60e8d87bfc991097e3a13942f965fc9755423f64a8c5bfdeef335511550"
-    },
     "left-tray": {
       "object": "L_ActiveTray",
       "role": "Base \u00b7 interchangeable",
@@ -7095,7 +6999,7 @@
         6.6
       ],
       "visuals": [],
-      "stl_sha256": "f23889fd06eee746187e3c20a80e3323826be62458693fd362e626809e20ed9b"
+      "stl_sha256": "31ba91df32c0ef75489280432f9e20e6225c355ebbb3203387f23a16a15131dd"
     },
     "left-key-plate": {
       "object": "L_ActivePlate",
@@ -7722,102 +7626,6 @@
       "visuals": [],
       "stl_sha256": "7a3c3d47ae7f38ca5d8af2b4ef1eb3b0ab85d405d2ae498479a7de50b1db1256"
     },
-    "right-magnet-0": {
-      "object": "R_Magnet0",
-      "role": "Captive magnet 2 x 3 mm003",
-      "group": "fasteners",
-      "prototype_part": false,
-      "bounds_mm": [
-        46.0004475677165,
-        -53.79988810181027,
-        3.2,
-        48.0,
-        -51.800111898189726,
-        6.2
-      ],
-      "visuals": [],
-      "stl_sha256": "798f3474f5433c9c4abe9200e140723f2146882e083530f68fafce607ad3947e"
-    },
-    "right-frame-target-0": {
-      "object": "R_SteelTarget0",
-      "role": "Captive frame magnet 2 x 4 mm003",
-      "group": "lid",
-      "prototype_part": false,
-      "bounds_mm": [
-        46.0004475677165,
-        -53.79988810181027,
-        7.1,
-        48.0,
-        -51.800111898189726,
-        11.1
-      ],
-      "visuals": [],
-      "stl_sha256": "c1ae7d487b9d64a3856d047fe43672c743d7adc06580ed5d42ea285c0df6de99"
-    },
-    "right-magnet-1": {
-      "object": "R_Magnet1",
-      "role": "Captive magnet 2 x 3 mm004",
-      "group": "fasteners",
-      "prototype_part": false,
-      "bounds_mm": [
-        26.000447567716495,
-        -53.79988810181027,
-        3.2,
-        28.0,
-        -51.800111898189726,
-        6.2
-      ],
-      "visuals": [],
-      "stl_sha256": "6af7cd3e624e5c8993ce29b993b1e466da613dc2393ff73cbb2b828cd9ce232d"
-    },
-    "right-frame-target-1": {
-      "object": "R_SteelTarget1",
-      "role": "Captive frame magnet 2 x 4 mm004",
-      "group": "lid",
-      "prototype_part": false,
-      "bounds_mm": [
-        26.000447567716495,
-        -53.79988810181027,
-        7.1,
-        28.0,
-        -51.800111898189726,
-        11.1
-      ],
-      "visuals": [],
-      "stl_sha256": "50de0ed6a02fe52809d1fa3ae9e6c6786d4c7676e8ee61aaa2bec60f9e594072"
-    },
-    "right-magnet-2": {
-      "object": "R_Magnet2",
-      "role": "Captive magnet 2 x 3 mm005",
-      "group": "fasteners",
-      "prototype_part": false,
-      "bounds_mm": [
-        36.2004475677165,
-        -65.69988810181027,
-        3.2,
-        38.2,
-        -63.70011189818973,
-        6.2
-      ],
-      "visuals": [],
-      "stl_sha256": "de0e4fbaf4e775d01055258faa39a4f37e55df007107760e91857e7e9d83c940"
-    },
-    "right-frame-target-2": {
-      "object": "R_SteelTarget2",
-      "role": "Captive frame magnet 2 x 4 mm005",
-      "group": "lid",
-      "prototype_part": false,
-      "bounds_mm": [
-        36.2004475677165,
-        -65.69988810181027,
-        7.1,
-        38.2,
-        -63.70011189818973,
-        11.1
-      ],
-      "visuals": [],
-      "stl_sha256": "c7d67da60e8dc638119383c6bd8237a2602142febce261cd66be5a6caddc8273"
-    },
     "right-tray": {
       "object": "R_ActiveTray",
       "role": "Base \u00b7 interchangeable001",
@@ -7832,7 +7640,7 @@
         6.6
       ],
       "visuals": [],
-      "stl_sha256": "f2c27b6f53902061be6c6b47c6b71b31e95d282abfdd56e04f183a164ac5216c"
+      "stl_sha256": "082661379cc51e9d1360e7853972eeb03e1b4294a975be8eece8c3f362563fbf"
     },
     "right-key-plate": {
       "object": "R_ActivePlate",
@@ -8500,11 +8308,11 @@
     },
     {
       "path": "tools/keycap_config.py",
-      "sha256": "299b18fa827e69cf8ff9e6293d8a7eecc9983596950318da1d38e019c8bd5d8f"
+      "sha256": "68fff1dd6d0be69c586450491414be1f44edf49b2025d11798d3dbad25bfef22"
     },
     {
       "path": "tools/freecad/configuration.py",
-      "sha256": "f444aef98a8d7e2ae088cdc28ecde7e8c55c551f368d5b5ad380fafd48ca5a59"
+      "sha256": "7d26648e44eac62f8741734fbea8b4fb7ac7f5f6b72ed128012c473b03f97569"
     },
     {
       "path": "design/layout.json",
@@ -8524,7 +8332,7 @@
     },
     {
       "path": "design/revI-mounts.json",
-      "sha256": "ee6a61232b1a8c308748af1174793664c41238a6c36cd166209e6d011d5592bd"
+      "sha256": "cf50006e11bf84db320f6c71e2ca7e32083f2dba6545ebfa572469cd737fb5a3"
     },
     {
       "path": "design/batteries.json",
@@ -8544,7 +8352,7 @@
     },
     {
       "path": "tools/freecad/export_revI.py",
-      "sha256": "9c52ac8363e1e1293253a42782dfa0fc1b78246ebb9700aaaa0e0efcc2f7a97d"
+      "sha256": "f035022c0e802fec5c3cc05909cc005fd27bf821e73615bed57b162d1775f27c"
     },
     {
       "path": "tools/freecad/install_stock_display.py",
@@ -8571,6 +8379,22 @@
       "sha256": "e020a04074455bef73b39f71c8e4ddf86d4f83ef9c55e893af883d6f7192336f"
     },
     {
+      "path": "design/revI-mounts.json",
+      "sha256": "cf50006e11bf84db320f6c71e2ca7e32083f2dba6545ebfa572469cd737fb5a3"
+    },
+    {
+      "path": "design/pcb-supports.json",
+      "sha256": "f45cc5f4538b18c70b4e7400c16ef13a437d9b7d1522c949eef39a54acaee631"
+    },
+    {
+      "path": "tools/plan_pcb_supports.py",
+      "sha256": "96c1ac11cc498f06a0eb6053328518a393f0594bdc0ca30f5a92bff240b71513"
+    },
+    {
+      "path": "tools/freecad/install_base_supports.py",
+      "sha256": "43262bc4d1b065894856b012376ffdf6414145bd38990e57e146a016e3c7c761"
+    },
+    {
       "path": "design/revI-ports.json",
       "sha256": "45b4e088b7a64fdeffea3094af66a7f7db13f75913f8f3e3bb203d3dbe68d349"
     },
@@ -8585,13 +8409,9 @@
     {
       "path": "tools/freecad/install_frame_orientation.py",
       "sha256": "7f4e9f05998112c3b08bbc6ff1554616f315e58d9804b5f0b382535bc1e1dd0c"
-    },
-    {
-      "path": "tools/preserve_export_bytes.py",
-      "sha256": "366824fffaea90e5b6595f2e677bbf704595bd911bdfdd453cbd50f2e5d7633a"
     }
   ],
-  "fcstd_sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399",
+  "fcstd_sha256": "183f3ad665222207839752b82eaf9eb0fbb9e84bb58157219874e21c30babaf2",
   "identity_migration": {
     "baseline_commit": "819a01883b2faec3682ac457328bc361dc43e355",
     "method": "Only branding tokens in native Document.xml changed; shape and mesh members preserved byte for byte",
@@ -10468,48 +10288,6 @@
     "socket_height_mm": 5.0,
     "supplier": "https://typeractive.xyz/products/5-pin-sockets"
   },
-  "all_magnets": {
-    "units": "mm",
-    "stations_left": [
-      [
-        113,
-        52.8
-      ],
-      [
-        133,
-        52.8
-      ],
-      [
-        122.8,
-        64.7
-      ]
-    ],
-    "post_radius": 1.85,
-    "pcb_clearance_radius": 2.05,
-    "guide_radius": 1.4,
-    "receiver_radius": 1.6,
-    "magnet_diameter": 2,
-    "magnet_height": 3,
-    "magnet_z": 3.2,
-    "nominal_axial_gap": 0.9,
-    "pocket_float_gap_range": [
-      0.7,
-      1.1
-    ],
-    "magnet_source": "https://www.supermagnete.de/stabmagnete-neodym-rund/stabmagnet-2mm-3mm_S-02-03-N",
-    "assembly": "Pause and insert before closing both captive pockets. Keep magnets below the next nozzle path and secure against movement during resume. Qualify capture and actual thermal exposure with the existing coupon; use the temperature rating of the actual magnets. No adhesive-only retention.",
-    "acceptance": "Digital clearance and vertical release only; measured north-edge peel, hold, sliding, insertion capture and cycling remain physical gates.",
-    "frame_magnet_diameter": 2,
-    "frame_magnet_height": 4,
-    "frame_magnet_z": 7.1,
-    "base_magnet_count": 6,
-    "frame_magnet_count": 6,
-    "magnetization": "axial",
-    "material": "neodymium; grade and thermal rating must be checked against actual stock",
-    "polarity": "All base mating faces use the same pole; every frame mating face uses the opposite pole. Verify each pair attracts in final assembled orientation before closing either pocket. Frames may print inverted: refer to the final mating face, not printer-up.",
-    "purchase": "Use existing magnet kit: six diameter 2 x 3 mm and six diameter 2 x 4 mm magnets; no steel targets. Each extra pair of frames needs six more diameter 2 x 4 mm magnets.",
-    "legacy_ids": "SteelTarget object names and frame-target PartIDs are stable historical identifiers; current visible labels and this specification define frame magnets."
-  },
   "port_refinement": {
     "physical_acceptance": false,
     "physical_checks": [
@@ -10553,16 +10331,201 @@
     }
   },
   "export_execution": {
-    "native_sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399",
-    "exporter_sha256": "9c52ac8363e1e1293253a42782dfa0fc1b78246ebb9700aaaa0e0efcc2f7a97d",
+    "native_sha256": "183f3ad665222207839752b82eaf9eb0fbb9e84bb58157219874e21c30babaf2",
+    "exporter_sha256": "f035022c0e802fec5c3cc05909cc005fd27bf821e73615bed57b162d1775f27c",
     "receipt": "validation/revI-mechanical.json",
-    "byte_preservation": {
-      "tool": "tools/preserve_export_bytes.py",
-      "sha256": "366824fffaea90e5b6595f2e677bbf704595bd911bdfdd453cbd50f2e5d7633a",
-      "receipt": "validation/revI-export-preservation.json",
-      "receipt_sha256": "ea7750015b9769e25c66c57d375a2ccc2b5daef110503f489d703a79c3e80c3d",
-      "baseline_commit": "b86574ae5366a4d0ee397d3c3683c709b899a67d",
-      "method": "Preserve exact baseline bytes only after timestamp-only STEP or complete binary STL facet-record equality proof"
+    "step_header_preservation": {
+      "method": "A STEP export whose DATA section equals the committed file keeps the committed bytes; only its header (FILE_NAME timestamp) differed. exported_files and step_sha256 bind the bytes on disk.",
+      "baseline_commit": "75ae21d9e0a35072ec1abf01836f976d8bb412ab",
+      "step_files_kept": 146,
+      "material_step_hashes_rebound": 96
     }
+  },
+  "base_supports": {
+    "halves": {
+      "left": {
+        "bases": {
+          "level": {
+            "added_mm3": 101.788,
+            "removed_mm3": 30.298,
+            "valid_single_solid": true,
+            "volume_mm3": 14579.177
+          },
+          "rim": {
+            "added_mm3": 101.788,
+            "removed_mm3": 30.298,
+            "valid_single_solid": true,
+            "volume_mm3": 14974.122
+          },
+          "solid": {
+            "added_mm3": 101.788,
+            "removed_mm3": 30.298,
+            "valid_single_solid": true,
+            "volume_mm3": 14579.177
+          },
+          "terrace": {
+            "added_mm3": 101.788,
+            "removed_mm3": 30.298,
+            "valid_single_solid": true,
+            "volume_mm3": 14454.582
+          }
+        },
+        "h3_pilot_web_mm": 1.1363,
+        "removed_objects": [
+          "L_Magnet0",
+          "L_SteelTarget0",
+          "L_Magnet1",
+          "L_SteelTarget1",
+          "L_Magnet2",
+          "L_SteelTarget2"
+        ],
+        "supports": {
+          "S1": {
+            "board_xy_mm": [
+              94.0,
+              24.5
+            ],
+            "nearest_parts_mm": {}
+          },
+          "S2": {
+            "board_xy_mm": [
+              38.5,
+              53.5
+            ],
+            "nearest_parts_mm": {
+              "hotswap-sockets": 2.385
+            }
+          },
+          "S3": {
+            "board_xy_mm": [
+              73.5,
+              36.0
+            ],
+            "nearest_parts_mm": {
+              "hotswap-sockets": 2.535
+            }
+          },
+          "S4": {
+            "board_xy_mm": [
+              110.0,
+              81.0
+            ],
+            "nearest_parts_mm": {}
+          },
+          "S5": {
+            "board_xy_mm": [
+              109.5,
+              43.0
+            ],
+            "nearest_parts_mm": {
+              "hotswap-sockets": 2.535
+            }
+          },
+          "S6": {
+            "board_xy_mm": [
+              73.5,
+              18.5
+            ],
+            "nearest_parts_mm": {}
+          }
+        }
+      },
+      "right": {
+        "bases": {
+          "level": {
+            "added_mm3": 101.788,
+            "removed_mm3": 30.298,
+            "valid_single_solid": true,
+            "volume_mm3": 14578.822
+          },
+          "rim": {
+            "added_mm3": 101.788,
+            "removed_mm3": 30.298,
+            "valid_single_solid": true,
+            "volume_mm3": 14973.767
+          },
+          "solid": {
+            "added_mm3": 101.788,
+            "removed_mm3": 30.298,
+            "valid_single_solid": true,
+            "volume_mm3": 14578.822
+          },
+          "terrace": {
+            "added_mm3": 101.788,
+            "removed_mm3": 30.298,
+            "valid_single_solid": true,
+            "volume_mm3": 14454.228
+          }
+        },
+        "h3_pilot_web_mm": 1.0477,
+        "removed_objects": [
+          "R_Magnet0",
+          "R_SteelTarget0",
+          "R_Magnet1",
+          "R_SteelTarget1",
+          "R_Magnet2",
+          "R_SteelTarget2"
+        ],
+        "supports": {
+          "S1": {
+            "board_xy_mm": [
+              66.0,
+              24.5
+            ],
+            "nearest_parts_mm": {}
+          },
+          "S2": {
+            "board_xy_mm": [
+              121.5,
+              53.5
+            ],
+            "nearest_parts_mm": {
+              "hotswap-sockets": 2.94
+            }
+          },
+          "S3": {
+            "board_xy_mm": [
+              86.5,
+              36.0
+            ],
+            "nearest_parts_mm": {}
+          },
+          "S4": {
+            "board_xy_mm": [
+              50.0,
+              81.0
+            ],
+            "nearest_parts_mm": {}
+          },
+          "S5": {
+            "board_xy_mm": [
+              50.5,
+              43.0
+            ],
+            "nearest_parts_mm": {}
+          },
+          "S6": {
+            "board_xy_mm": [
+              86.5,
+              18.5
+            ],
+            "nearest_parts_mm": {
+              "hotswap-sockets": 2.719
+            }
+          }
+        }
+      }
+    },
+    "installer_sha256": "43262bc4d1b065894856b012376ffdf6414145bd38990e57e146a016e3c7c761",
+    "parent_source_sha256": "c784b6e5483bb5cec6ecc80acb6c7440e459b45abb05ae72aa73694ff7f23399",
+    "physical_acceptance": false,
+    "pilot_diameter_mm": 2.1,
+    "schema": "flan-base-supports-2",
+    "station_socket_mm": {
+      "bore": 2.4,
+      "from_z": 3.1,
+      "open_at_z": 6.6
+    },
+    "support_post_diameter_mm": 3.0
   }
 }

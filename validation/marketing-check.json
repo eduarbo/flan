@@ -20,19 +20,19 @@
   "files": [
     {
       "file": "docs/index.html",
-      "sha256": "de5c2595e70e123114d4c07ff257028c7f7299352bfb4231ac5c982d989c6d8e"
+      "sha256": "a82d33f9fdce9391e26358778de05ca6853cd8743ade3f848ce034409f42fa74"
     },
     {
       "file": "docs/explore/index.html",
-      "sha256": "fd366f780b15eb1901fc7d41713c7c9f634b9ad3b5ae9acf3938ac9d096415ba"
+      "sha256": "7340a89aaa90f9e46a9da814680a55c3a36a38ecff918651b22efa4b5d5934db"
     },
     {
       "file": "docs/marketing/index.html",
-      "sha256": "a436210420243d1325325a119964a402a0baeeed0c5d7f20f190c94dc3a1720c"
+      "sha256": "dd7baeb9fd557aa76ea40bd10a7b0ac9942452d787a54b1f43116b6840871d5e"
     },
     {
       "file": "docs/marketing/flan-launch-kit.zip",
-      "sha256": "91ab014b4a34b760312e7b8b2d22a744917546fbf6ad2c6770c15f7cd0b20fd9"
+      "sha256": "d488dea1df2af20e95965c5fe312816a46b9c45de6c971a75ec67d5abdc8fb99"
     }
   ]
 }

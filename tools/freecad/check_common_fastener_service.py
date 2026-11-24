@@ -76,7 +76,7 @@ def run():
             x, y = m['xy']; x = x if side == 'left' else 160-x
             driver = Part.makeCylinder(1.5, 25, A.Vector(x, -y, m['seat_z']+2))
             obstacles = {n: s for n, s in parts.items()
-                         if n != 'electronics-lid' and not n.startswith(('screw-', 'frame-target-'))
+                         if n != 'electronics-lid' and not n.startswith('screw-')
                          and not (i > 3 and n == 'key-plate')}
             if i <= 3: obstacles.update(plates)
             hits = {}

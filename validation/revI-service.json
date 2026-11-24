@@ -25,16 +25,18 @@
       "pcb_lift_after_plate_modules_removed": [],
       "nominal_3mm_driver_shaft_collisions": [],
       "frame_lift_paths": {
-        "smooth": [],
-        "bevel": [],
-        "facet": [],
-        "handheld": [],
-        "tv": [],
-        "cyberpunk": [],
-        "cartridge": [],
-        "arcade": [],
-        "mecha": [],
-        "kintsugi": []
+        "flan": [],
+        "tape": [],
+        "orbit": [],
+        "manga": [],
+        "talavera": [],
+        "gameboy": [],
+        "nes": [],
+        "snes": [],
+        "phone": [],
+        "walkman": [],
+        "ipod": [],
+        "hanafuda": []
       },
       "cage_capture_overlap_at_0_2mm_lift_mm3": 0.07800000000000185,
       "cell_translation_bound_vs_leads_mm3": {
@@ -62,72 +64,24 @@
             "outside_attachment_overlap_mm3": 0.0
           }
         ]
-      },
-      "six_direction_insert_capture_mm3": {
-        "magnet-0": [
-          0.658503,
-          0.658503,
-          0.658503,
-          0.658503,
-          0.628319,
-          0.628319
-        ],
-        "frame-target-0": [
-          1.334666,
-          1.334666,
-          1.334666,
-          1.334666,
-          0.628319,
-          0.628319
-        ],
-        "magnet-1": [
-          0.658503,
-          0.658503,
-          0.658503,
-          0.658503,
-          0.628319,
-          0.628319
-        ],
-        "frame-target-1": [
-          1.334666,
-          1.334666,
-          1.334666,
-          1.334666,
-          0.628319,
-          0.628319
-        ],
-        "magnet-2": [
-          0.658503,
-          0.658503,
-          0.658503,
-          0.658503,
-          0.628319,
-          0.628319
-        ],
-        "frame-target-2": [
-          1.334666,
-          1.334666,
-          1.334666,
-          1.334666,
-          0.628319,
-          0.628319
-        ]
       }
     },
     "right": {
       "pcb_lift_after_plate_modules_removed": [],
       "nominal_3mm_driver_shaft_collisions": [],
       "frame_lift_paths": {
-        "smooth": [],
-        "bevel": [],
-        "facet": [],
-        "handheld": [],
-        "tv": [],
-        "cyberpunk": [],
-        "cartridge": [],
-        "arcade": [],
-        "mecha": [],
-        "kintsugi": []
+        "flan": [],
+        "tape": [],
+        "orbit": [],
+        "manga": [],
+        "talavera": [],
+        "gameboy": [],
+        "nes": [],
+        "snes": [],
+        "phone": [],
+        "walkman": [],
+        "ipod": [],
+        "hanafuda": []
       },
       "cage_capture_overlap_at_0_2mm_lift_mm3": 0.07800000000000178,
       "cell_translation_bound_vs_leads_mm3": {
@@ -155,74 +109,16 @@
             "outside_attachment_overlap_mm3": 0.0
           }
         ]
-      },
-      "six_direction_insert_capture_mm3": {
-        "magnet-0": [
-          0.658503,
-          0.658503,
-          0.658503,
-          0.658503,
-          0.628319,
-          0.628319
-        ],
-        "frame-target-0": [
-          1.334666,
-          1.334666,
-          1.334666,
-          1.334666,
-          0.628319,
-          0.628319
-        ],
-        "magnet-1": [
-          0.658503,
-          0.658503,
-          0.658503,
-          0.658503,
-          0.628319,
-          0.628319
-        ],
-        "frame-target-1": [
-          1.334666,
-          1.334666,
-          1.334666,
-          1.334666,
-          0.628319,
-          0.628319
-        ],
-        "magnet-2": [
-          0.658503,
-          0.658503,
-          0.658503,
-          0.658503,
-          0.628319,
-          0.628319
-        ],
-        "frame-target-2": [
-          1.334666,
-          1.334666,
-          1.334666,
-          1.334666,
-          0.628319,
-          0.628319
-        ]
       }
     }
   },
   "coupons": {
-    "magnet-base": {
-      "path": "mechanical/revI/coupon-magnet-base.stl",
-      "sha256": "c48717505265c6e0d932de1b4983b829a6a16640fe0531f9f70e6939c205a8d4"
-    },
-    "magnet-frame": {
-      "path": "mechanical/revI/coupon-magnet-frame.stl",
-      "sha256": "09f0c869fcae77114b4b15c48035786933dcdc830a06f5af4ecf6552f4aeda97"
-    },
     "m2-thread": {
       "path": "mechanical/revI/coupon-m2-thread.stl",
-      "sha256": "ccd732a7fb45d346d82a944c30918c84b2ca5eb4f17398a64a77de1ae7f62d0e"
+      "sha256": "7e9ebd5f505afba1a534a2c9eb750c16b96cb6207b162da6eeb3b986f3390d3d"
     }
   },
   "physical_acceptance": false,
-  "source_sha256": "1c9d3db85b360fea61ed891d6262d0b49055a3fde4ac0912038c96a59ded84cd",
-  "checker_sha256": "010fcf17ba8c97e490cbfdedd1f5e01e9034207aa3b484c72b2757fd7832679d"
+  "source_sha256": "183f3ad665222207839752b82eaf9eb0fbb9e84bb58157219874e21c30babaf2",
+  "checker_sha256": "cf485525f2488909070efb1236650592a199fdc4afbc3d740abaec2de225c046"
 }
